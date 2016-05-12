@@ -1,0 +1,6 @@
+[
+{"id":"data_source", "name":"Data Source"},
+{"id":"parameters", "name":"Parameters"},
+{"id":"time", "name":"Time"},
+{"id":"locations", "name":"Locations"}
+]

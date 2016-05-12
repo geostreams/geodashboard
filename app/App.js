@@ -9,6 +9,7 @@ class App extends Component {
 			<Search />
 		);
 	}
+
 }
 
 export default Search

@@ -1,0 +1,8 @@
+.root { 
+	display: inline-block;
+	width: 200px;
+	border: 1px black solid;
+	margin: 50px;
+	padding: 10px;
+	background: white;
+}
