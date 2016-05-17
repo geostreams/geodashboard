@@ -5,6 +5,7 @@ import sensorsData from '../data/sensors.json'
 import Sensors from './Sensors'
 import Map from './Map'
 import FilterList from './FilterList'
+import Menu from './Menu'
 
 class Search extends Component {
 	constructor(props) {
@@ -20,7 +21,8 @@ class Search extends Component {
 		var title = 'Sensors';
 		return (
 			<div className={styles.root}>
-				<div>{config.greetText}</div>
+				<Menu selected="search"/>
+				<h1>{config.searchHeader}</h1>
 				<Map sensors={sensorsData} />
 				<div>
 					<FilterList attribute="data_source" values={this.state.sources}/>
