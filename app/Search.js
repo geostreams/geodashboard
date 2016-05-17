@@ -9,6 +9,10 @@ import FilterList from './FilterList'
 class Search extends Component {
 	constructor(props) {
 		super(props);
+	    // this.state.parameters = this.collectParameters();
+	   	this.state = {
+	      parameters: this.collectParameters()
+	    };
 	}
 
 	render() {
@@ -18,18 +22,25 @@ class Search extends Component {
 				<div>{config.greetText}</div>
 				<Map sensors={sensorsData} />
 				<div>
-					<FilterList />
-					<FilterList />
-					<FilterList />
-					<FilterList />
-					<FilterList />
+					<FilterList attribute="parameters" values={this.state.parameters}/>
 				</div>
 				<div>
-					<Sensors title={title} sensors={sensorsData} />
+					<Sensors title={title} sensors={sensorsData}/>
 				</div>
 			</div>
 		);
 	}
+
+	collectParameters() {
+		var params = new Set();
+		sensorsData.map(s => {
+			s.parameters.map(p => {
+				params.add(p);
+			});
+		});
+		console.log(params);
+		return [...params];
+	}
 }
 
-export default Search
+export default Search;

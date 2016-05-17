@@ -12,33 +12,30 @@ class Map extends Component {
             <div style={{display: "none"}}>
               <a className="overlay" id="vienna" target="_blank" href="http://en.wikipedia.org/wiki/Vienna">Vienna</a>
               <div id="marker" title="Marker" className="marker"></div>
-              <div id="popup" title="Welcome to ol3"></div>
+              <div id="popup" title="Welcome to some location"></div>
             </div>
             </div>);
   }
 
   componentDidMount() {
 
-    var placeLayer = new ol.layer.Vector({
-      source: new ol.source.Vector({
-        format: new ol.format.GeoJSON(),
-        //url: "http://www.geoforall.org/locations/OSGEoLabs.json" raises
-        //Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at http://www.geoforall.org/locations/OSGEoLabs.json. (Reason: CORS header 'Access-Control-Allow-Origin' missing).
-        features: Sensors
-      })
-    });
-
-
-
-
-
+    // var placeLayer = new ol.layer.Vector({
+    //   source: new ol.source.Vector({
+    //     format: new ol.format.GeoJSON(),
+    //     //url: "http://www.geoforall.org/locations/OSGEoLabs.json" raises
+    //     //Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at http://www.geoforall.org/locations/OSGEoLabs.json. (Reason: CORS header 'Access-Control-Allow-Origin' missing).
+    //     features: Sensors
+    //   })
+    // });
 
     var features = Array();
+    
     this.props.sensors.map((sensor) => {
-      console.log("Adding marker " + sensor.geometry.coordinates[0] + ' ' + sensor.geometry.coordinates[1]);
+      
       var feature = new ol.Feature({
         geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
       });
+
       feature.setStyle(new ol.style.Style({
         // image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
         //   color: '#8959A8',
@@ -60,7 +57,7 @@ class Map extends Component {
       // });
       // map.addOverlay(marker);
     });
-    features.map((f)=>console.log(f));
+
     var vectorSource = new ol.source.Vector({
       features: features
     });

@@ -3,7 +3,6 @@ import Sensor from './Sensor';
 
 class Sensors extends Component {
 	render() {
-
 		var sensors = this.props.sensors.map((sensor) => {
 			return <Sensor id={sensor.id}
 						   key={sensor.id}

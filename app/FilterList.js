@@ -4,19 +4,32 @@ import FilterOption from './FilterOption';
 import dimensions from '../data/dimensions.json'
 
 class FilterList extends Component {
+	constructor(props) {
+		super(props);
+		console.log(props.attribute);
+	   	this.state = {
+	   		selectValue: props.attribute
+	    };
+	}
+
+	handleChange(event) {
+	    var value = event.target.value;
+	    console.log(value, " was selected");
+	    this.setState({selectValue: event.target.value});
+  	}
+
 	render() {
 		return (
 			<div className={styles.root}>
-				<select name="select">
+				<select value={this.state.selectValue} onChange={this.handleChange} className={styles.select}>
 				  {dimensions.map(d =>
-				  	<option value="{d.id}">{d.name}</option>
+				  	<option value={d.id} key={d.id}>{d.name}</option>
 				  )}
 				</select>
 				<div>
-					<FilterOption id="Entry 1"/>
-					<FilterOption id="Entry 2"/>
-					<FilterOption id="Entry 3"/>
-					<FilterOption id="Entry 4"/>
+					{this.props.values.map(p =>
+						<FilterOption id={p} key={p}/>
+					)}
 				</div>
 			</div>
 		);
