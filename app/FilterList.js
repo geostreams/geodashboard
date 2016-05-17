@@ -28,7 +28,7 @@ class FilterList extends Component {
 				</select>
 				<div>
 					{this.props.values.map(p =>
-						<FilterOption id={p} key={p}/>
+						<FilterOption id={p.id} label={p.label} key={p.id}/>
 					)}
 				</div>
 			</div>

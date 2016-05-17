@@ -16,7 +16,7 @@ class FilterOption extends Component {
 				<div className={styles.col}>
 					<input type="checkbox" name="{this.props.id}" value="{this.props.id}"></input>
 				</div>
-				<div className={styles.col}>{this.props.id}</div>
+				<div className={styles.col}>{this.props.label}</div>
 			</div>
 		);
 	}
