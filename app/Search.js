@@ -22,7 +22,6 @@ class Search extends Component {
 		return (
 			<div className={styles.root}>
 				<Menu selected="search"/>
-				<h1>{config.searchHeader}</h1>
 				<Map sensors={sensorsData} />
 				<div>
 					<FilterList attribute="data_source" values={this.state.sources}/>
