@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import Menu from '../Menu'
 import styles from './home.css'
-import SwitchAPI from '../SwitchAPI'
+import SwitchBackend from '../containers/SwitchBackend'
 
 class Home extends Component {
 	render() {
@@ -11,7 +11,7 @@ class Home extends Component {
 				<Menu selected='home'/>
 				<div className={styles.content}>
 					<div><h3>Welcome to the Geodashboard!</h3></div>
-					<SwitchAPI/>
+					<SwitchBackend/>
 				</div>
 			</div>
 		);
