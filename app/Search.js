@@ -26,10 +26,6 @@ class Search extends Component {
 				<div>
 					<FilterList attribute="data_source" values={this.state.sources}/>
 					<FilterList attribute="parameters" values={this.state.parameters}/>
-
-				</div>
-				<div>
-					<Sensors title={title} sensors={sensorsData}/>
 				</div>
 			</div>
 		);
