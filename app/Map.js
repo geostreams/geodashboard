@@ -13,6 +13,7 @@ class Map extends Component {
               <a className="overlay" id="vienna" target="_blank" href="http://en.wikipedia.org/wiki/Vienna">Vienna</a>
               <div id="marker" title="Marker" className="marker"></div>
               <div id="popup" title="Welcome to some location"></div>
+              <div id="ol-zoomslider" className="ol-zoomslider"></div>
             </div>
             </div>);
   }
@@ -90,8 +91,14 @@ class Map extends Component {
         center: [-84.44799549, 38.9203417],
         // center: ol.proj.fromLonLat([-84.44799549, 38.9203417]),
         zoom: 4
-      })
+      }),
+      controls: ol.control.defaults().extend([
+          new ol.control.ZoomSlider()
+        ]),
     });
+
+    // var zoomslider = new ol.control.ZoomSlider();
+    // map.addControl(zoomslider);
   }
 }
 

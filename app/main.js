@@ -8,11 +8,11 @@ import promise from 'redux-promise'
 import createLogger from 'redux-logger'
 import geodashboardApp from './reducers'
 import './main.css'
+import configureStore from './store/configureStore';
 
 console.log("Running App version " + VERSION)
 
-const logger = createLogger()
-let store = createStore(geodashboardApp, applyMiddleware(thunk, promise, logger))
+let store = configureStore()
 
 render(<Provider store={store}>
 		     <App />
