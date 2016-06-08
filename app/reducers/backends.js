@@ -4,7 +4,7 @@ const defaultState = {
     {url: "http://gltg.ncsa.illinois.edu/clowder", label: "GLTG"},
     {url: "http://data.imlczo.org/clowder", label: "IMLCZO"}
   ], 
-  selected: "http://gltg.ncsa.illinois.edu/clowder"}
+  selected: "https://greatlakesmonitoring.org/clowder"}
 
 const backends = (state = defaultState, action) => {
 	switch(action.type) {
