@@ -3,6 +3,7 @@ import Menu from '../Menu'
 import sensorsData from '../../data/sensors.json'
 import Sensors from '../Sensors'
 import styles from './explore.css'
+import { connect } from 'react-redux'
 
 class Explore extends Component {
 	render() {
@@ -12,12 +13,18 @@ class Explore extends Component {
 				<Menu selected='explore'/>
 				<div className={styles.content}>
 					<div>
-						<Sensors title={title} sensors={sensorsData}/>
+						<Sensors/>
 					</div>
 				</div>
 			</div>
-		);
+		)
 	}
 }
 
-export default Explore
+const mapStateToProps = (state, ownProps) => {
+  return {
+    sensorsData: state.sensors.data
+  }
+}
+
+export default connect(mapStateToProps)(Explore)

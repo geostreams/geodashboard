@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
-import { switchBackend } from '../actions'
+import { switchBackend, fetchSensors } from '../actions'
 import SwitchAPI from '../SwitchAPI'
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		selected: state.selected,
-    endpoints: state.backends.endpoints
+		selected: state.backends.selected,
+    	endpoints: state.backends.endpoints
 	}
 }
 
@@ -13,6 +13,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
 		onBackendChange: (selected) => {
 			dispatch(switchBackend(selected))
+			dispatch(fetchSensors(selected))
 		}
 	}
 }

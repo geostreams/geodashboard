@@ -5,17 +5,16 @@ import dimensions from '../data/dimensions.json'
 
 class FilterList extends Component {
 	constructor(props) {
-		super(props);
-		console.log(props.attribute);
+		super(props)
 	   	this.state = {
 	   		selectValue: props.attribute
-	    };
+	    }
 	}
 
 	handleChange(event) {
-	    var value = event.target.value;
-	    console.log(value, " was selected");
-	    this.setState({selectValue: event.target.value});
+	    var value = event.target.value
+	    console.log(value, " was selected")
+	    this.setState({selectValue: event.target.value})
   	}
 
 	render() {

@@ -3,6 +3,7 @@ var ol = require('openlayers')
 require("openlayers/css/ol.css")
 import styles from './map.css'
 import Sensors from './Sensors'
+import { connect } from 'react-redux'
 
 class Map extends Component {
 
@@ -17,6 +18,8 @@ class Map extends Component {
             </div>
             </div>);
   }
+
+
 
   componentDidMount() {
 
@@ -102,4 +105,10 @@ class Map extends Component {
   }
 }
 
-export default Map
+const mapStateToProps = (state, ownProps) => {
+  return {
+    sensors: state.sensors.data
+  }
+}
+
+export default connect(mapStateToProps)(Map)

@@ -8,9 +8,9 @@ class SwitchAPI extends Component {
 			<div className={styles.root}>
 				<h4>Pick an instance</h4>
 				<select value={this.props.selected} onChange={this.handleChange}>
-          {this.props.endpoints.map( (b, index) => 
-            <option value={b.url} key={index}>{b.label}</option>
-          )}
+		          {this.props.endpoints.map( (b, index) => 
+		            <option value={b.url} key={index}>{b.label}</option>
+		          )}
 				</select>
 			</div>
 		)

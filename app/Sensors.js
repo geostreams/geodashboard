@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import Sensor from './Sensor';
+import React, { Component } from 'react'
+import Sensor from './Sensor'
+import { connect } from 'react-redux'
 
 class Sensors extends Component {
 	render() {
-		var sensors = this.props.sensors.map((sensor) => {
+		var sensors = this.props.sensorsData.map((sensor) => {
 			return <Sensor id={sensor.id}
 						   key={sensor.id}
 						   title={sensor.name} 
@@ -14,11 +15,16 @@ class Sensors extends Component {
 
 		return (
 			<div>
-				<h1>{this.props.title}</h1>
+				<h1>Sensors</h1>
 				{sensors}
 			</div>
 		);
 	}
 }
+const mapStateToProps = (state, ownProps) => {
+  return {
+    sensorsData: state.sensors.data
+  }
+}
 
-export default Sensors;
+export default connect(mapStateToProps)(Sensors)
