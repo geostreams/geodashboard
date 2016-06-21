@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
-import config from './config.json';
-import sensorsData from '../data/sensors.json'
+import config from '../config.json';
+import sensorsData from '../../data/sensors.json'
 import { Router, Route, Link, browserHistory } from 'react-router'
 import Search from './Search'
-import Home from './pages/Home'
-import Explore from './pages/Explore'
-import RouteMismatch from './pages/RouteMismatch'
+import Home from '../pages/Home'
+import Explore from '../pages/Explore'
+import RouteMismatch from '../pages/RouteMismatch'
 import { connect } from 'react-redux'
-import { fetchSensors } from './actions'
+import { fetchSensors } from '../actions'
 
 class App extends Component {
 

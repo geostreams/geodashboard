@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import config from './config.json';
-import styles from './styles/search.css';
+import config from '../config.json';
+import styles from '../styles/search.css';
 import Sensors from './Sensors'
 import Map from './Map'
 import SourceFilterList from './SourceFilterList'

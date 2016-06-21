@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
-import Menu from '../Menu'
+import Menu from '../components/Menu'
 import sensorsData from '../../data/sensors.json'
-import Sensors from '../Sensors'
+import Sensors from '../components/Sensors'
 import styles from './explore.css'
 import { connect } from 'react-redux'
 

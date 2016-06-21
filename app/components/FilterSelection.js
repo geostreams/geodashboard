@@ -5,7 +5,7 @@ import LocationsFilterList from './LocationsFilterList'
 import TimeFilterList from './TimeFilterList'
 import FilterList from './FilterList'
 import { connect } from 'react-redux'
-import styles from './styles/filterSelection.css'
+import styles from '../styles/filterSelection.css'
 
 class FilterSelection extends Component {
 

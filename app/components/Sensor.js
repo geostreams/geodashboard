@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from './styles/sensor.css';
+import styles from '../styles/sensor.css';
 
 class Sensor extends Component {
 	render() {

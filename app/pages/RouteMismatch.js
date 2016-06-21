@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Menu from '../Menu'
+import Menu from '../components/Menu'
 
 class RouteMismatch extends Component {
 	render() {

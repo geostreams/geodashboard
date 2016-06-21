@@ -1,14 +1,14 @@
 import React, {Component} from 'react'
-import styles from './styles/filterList.css';
+import styles from '../styles/filterList.css';
 import FilterOption from './FilterOption';
-import dimensions from '../data/dimensions.json'
+import dimensions from '../../data/dimensions.json'
 import { connect } from 'react-redux'
 
-class TimeFilterList extends Component {
+class LocationsFilterList extends Component {
 	constructor(props) {
 		super(props)
 	   	this.state = {
-	   		selectValue: 'time'
+	   		selectValue: 'locations'
 	    }
 	}
 
@@ -27,7 +27,7 @@ class TimeFilterList extends Component {
 				  )}
 				</select>
 				<div>
-					Start time / End time
+					Locations
 				</div>
 			</div>
 		);
@@ -36,8 +36,8 @@ class TimeFilterList extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    parameters: state.sensors.time,
+    parameters: state.sensors.locations,
   }
 }
 
-export default connect(mapStateToProps)(TimeFilterList)
+export default connect(mapStateToProps)(LocationsFilterList)

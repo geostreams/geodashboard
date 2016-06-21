@@ -1,14 +1,13 @@
 import React, {Component} from 'react'
-import styles from './styles/filterList.css';
+import styles from '../styles/filterList.css';
 import FilterOption from './FilterOption';
-import dimensions from '../data/dimensions.json'
-import { connect } from 'react-redux'
+import dimensions from '../../data/dimensions.json'
 
-class SourceFilterList extends Component {
+class FilterList extends Component {
 	constructor(props) {
 		super(props)
 	   	this.state = {
-	   		selectValue: 'data_source'
+	   		selectValue: props.attribute
 	    }
 	}
 
@@ -27,7 +26,7 @@ class SourceFilterList extends Component {
 				  )}
 				</select>
 				<div>
-					{this.props.sources.map(p =>
+					{this.props.values.map(p =>
 						<FilterOption id={p.id} label={p.label} key={p.id}/>
 					)}
 				</div>
@@ -36,10 +35,4 @@ class SourceFilterList extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    sources: state.sensors.sources,
-  }
-}
-
-export default connect(mapStateToProps)(SourceFilterList)
+export default FilterList
