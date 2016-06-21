@@ -1,0 +1,22 @@
+.container {
+  background: lightblue;
+  display: table;
+  width:100%;
+}
+        
+input[type=button] {    
+  vertical-align: middle;
+  display: block;
+  width: 50%;
+  margin: 0 auto;
+}
+        
+.button-wrapper {
+  background: darkorange;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.add {
+	vertical-align: middle;
+}

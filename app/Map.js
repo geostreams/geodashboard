@@ -54,8 +54,8 @@ class Map extends Component {
       feature.setStyle(new ol.style.Style({
         image: new ol.style.Circle({
             radius: 5,
-            fill: new ol.style.Fill({color: '#666666'}),
-            stroke: new ol.style.Stroke({color: '#bada55', width: 1})
+            fill: new ol.style.Fill({color: '#17495B'}),
+            stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
           })
       }))
       features.push(feature);
@@ -84,7 +84,6 @@ class Map extends Component {
       view: new ol.View({
         projection: 'EPSG:4326',
         center: [-84.44799549, 38.9203417],
-        // center: ol.proj.fromLonLat([-84.44799549, 38.9203417]),
         zoom: 4
       }),
       controls: ol.control.defaults().extend([

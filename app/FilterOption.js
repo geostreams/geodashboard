@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import styles from './filterOption.css';
+import styles from './filterOption.css'
 
 class FilterOption extends Component {
 	constructor(props) {
@@ -13,10 +13,10 @@ class FilterOption extends Component {
 	render() {
 		return (
 			<div className={styles.row}>
-				<div className={styles.col}>
+				<div className={styles.col1}>
 					<input type="checkbox" name="{this.props.id}" value="{this.props.id}"></input>
 				</div>
-				<div className={styles.col}>{this.props.label}</div>
+				<div className={styles.col2}>{this.props.label}</div>
 			</div>
 		);
 	}

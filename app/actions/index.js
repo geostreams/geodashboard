@@ -24,6 +24,14 @@ function receiveSensors(api, json) {
   }
 }
 
+export const ADD_SEARCH_FILTER = 'ADD_SEARCH_FILTER'
+function addSearchFilter(filter) {
+  return {
+    type: ADD_SEARCH_FILTER,
+    filter
+  }
+}
+
 export function fetchSensors(api) {
   return dispatch => {
     dispatch(requestSensors(api))

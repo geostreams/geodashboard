@@ -3,9 +3,11 @@ import config from './config.json';
 import styles from './search.css';
 import Sensors from './Sensors'
 import Map from './Map'
-import FilterList from './FilterList'
+import SourceFilterList from './SourceFilterList'
+import ParamsFilterList from './ParamsFilterList'
 import Menu from './Menu'
 import { connect } from 'react-redux'
+import FilterSelection from './FilterSelection'
 
 class Search extends Component {
 
@@ -15,10 +17,7 @@ class Search extends Component {
 			<div className={styles.root}>
 				<Menu selected="search"/>
 				<Map sensors={this.props.sensorsData} />
-				<div>
-					<FilterList attribute="data_source" values={this.props.sources}/>
-					<FilterList attribute="parameters" values={this.props.parameters}/>
-				</div>
+				<FilterSelection/>
 			</div>
 		);
 	}
