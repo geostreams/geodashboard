@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import styles from './filterList.css';
+import styles from './styles/filterList.css';
 import FilterOption from './FilterOption';
 import dimensions from '../data/dimensions.json'
 

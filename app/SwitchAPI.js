@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import styles from './switchAPI.css'
+import styles from './styles/switchAPI.css'
 
 class SwitchAPI extends Component {
 

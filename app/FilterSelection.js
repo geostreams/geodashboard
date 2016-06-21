@@ -5,16 +5,16 @@ import LocationsFilterList from './LocationsFilterList'
 import TimeFilterList from './TimeFilterList'
 import FilterList from './FilterList'
 import { connect } from 'react-redux'
-import styles from './filterSelection.css'
+import styles from './styles/filterSelection.css'
 
 class FilterSelection extends Component {
 
 	render() {
-		const filters = this.props.filters.map(f => {
-			if (f.id === 'data_source') return <SourceFilterList values={this.props.sources}/>
-			else if (f.id === 'parameters') return <ParamsFilterList values={this.props.parameters}/>
-			else if (f.id === 'time') return <TimeFilterList value={this.props.time}/>
-			else if (f.id === 'locations') return <LocationsFilterList value={this.props.locations}/>
+		const filters = this.props.filters.map((f, key) => {
+			if (f.id === 'data_source') return <SourceFilterList key={key} values={this.props.sources}/>
+			else if (f.id === 'parameters') return <ParamsFilterList key={key} values={this.props.parameters}/>
+			else if (f.id === 'time') return <TimeFilterList key={key} value={this.props.time}/>
+			else if (f.id === 'locations') return <LocationsFilterList key={key} value={this.props.locations}/>
 			else console.log(`Filter selection widget type '${f.id}' not found`)
 		})
 		return (

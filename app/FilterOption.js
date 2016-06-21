@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import styles from './filterOption.css'
+import styles from './styles/filterOption.css'
 
 class FilterOption extends Component {
 	constructor(props) {

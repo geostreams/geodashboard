@@ -7,7 +7,7 @@ import thunk from 'redux-thunk'
 import promise from 'redux-promise'
 import createLogger from 'redux-logger'
 import geodashboardApp from './reducers'
-import './main.css'
+import './styles/main.css'
 import configureStore from './store/configureStore'
 
 console.log("Running App version " + VERSION)

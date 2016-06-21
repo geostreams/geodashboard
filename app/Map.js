@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 var ol = require('openlayers')
 require("openlayers/css/ol.css")
-import styles from './map.css'
+import styles from './styles/map.css'
 import Sensors from './Sensors'
 import { connect } from 'react-redux'
 
