@@ -10,6 +10,7 @@ class ParamsFilterList extends Component {
 	   	this.state = {
 	   		selectValue: 'parameters'
 	    }
+	    this.handleChange = this.handleChange.bind(this)
 	}
 
 	handleChange(event) {
@@ -19,6 +20,20 @@ class ParamsFilterList extends Component {
   	}
 
 	render() {
+		var divContents;
+		if(this.state.selectValue == "data_source") {
+			divContents = this.props.sources.map(p =>
+				<FilterOption id={p.id} label={p.label} key={p.id}/>
+			)
+		} else if(this.state.selectValue == "parameters") {
+			divContents = this.props.parameters.map(p =>
+						<FilterOption id={p.id} label={p.label} key={p.id}/>
+			)
+		} else if(this.state.selectValue == "time") {
+			divContents = "Start time / End time"
+		} else if(this.state.selectValue == "locations") {
+			divContents = "Locations"
+		}
 		return (
 			<div className={styles.root}>
 				<select value={this.state.selectValue} onChange={this.handleChange} className={styles.select}>
@@ -27,9 +42,7 @@ class ParamsFilterList extends Component {
 				  )}
 				</select>
 				<div>
-					{this.props.parameters.map(p =>
-						<FilterOption id={p.id} label={p.label} key={p.id}/>
-					)}
+					{divContents}
 				</div>
 			</div>
 		);
@@ -39,6 +52,7 @@ class ParamsFilterList extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     parameters: state.sensors.parameters,
+    sources: state.sensors.sources,
   }
 }
 
