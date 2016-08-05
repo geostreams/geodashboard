@@ -51,7 +51,7 @@ class SourceFilterList extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    ocations: state.sensors.locations,
+    locations: state.sensors.locations,
     sources: state.sensors.sources,
     parameters: state.sensors.parameters,
     time: state.sensors.time,

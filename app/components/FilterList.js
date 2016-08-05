@@ -2,13 +2,16 @@ import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
 import FilterOption from './FilterOption';
 import dimensions from '../../data/dimensions.json'
+import { connect } from 'react-redux'
 
 class FilterList extends Component {
 	constructor(props) {
 		super(props)
 	   	this.state = {
-	   		selectValue: props.attribute
+	   		selectValue: props.attribute,
+	   		divId: props.idx 
 	    }
+	    this.handleChange = this.handleChange.bind(this)
 	}
 
 	handleChange(event) {
@@ -18,21 +21,43 @@ class FilterList extends Component {
   	}
 
 	render() {
+		var divContents;
+		if(this.state.selectValue == "data_source") {
+			divContents = this.props.sources.map(p =>
+				<FilterOption id={p.id} label={p.label} key={p.id}/>
+			)
+		} else if(this.state.selectValue == "parameters") {
+			divContents = this.props.parameters.map(p =>
+						<FilterOption id={p.id} label={p.label} key={p.id}/>
+			)
+		} else if(this.state.selectValue == "time") {
+			divContents = "Start time / End time"
+		} else if(this.state.selectValue == "locations") {
+			divContents = "Locations"
+		}
+		console.log("Hello there");
 		return (
-			<div className={styles.root}>
+			<div className={styles.root} id={this.state.divId}>
 				<select value={this.state.selectValue} onChange={this.handleChange} className={styles.select}>
 				  {dimensions.map(d =>
 				  	<option value={d.id} key={d.id}>{d.name}</option>
 				  )}
 				</select>
 				<div>
-					{this.props.values.map(p =>
-						<FilterOption id={p.id} label={p.label} key={p.id}/>
-					)}
+					{divContents}
 				</div>
 			</div>
 		);
 	}
 }
 
-export default FilterList
+const mapStateToProps = (state, ownProps) => {
+  return {
+    locations: state.sensors.locations,
+    sources: state.sensors.sources,
+    parameters: state.sensors.parameters,
+    time: state.sensors.time,
+  }
+}
+
+export default connect(mapStateToProps)(FilterList)

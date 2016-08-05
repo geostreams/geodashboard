@@ -51,8 +51,10 @@ class ParamsFilterList extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    parameters: state.sensors.parameters,
+    locations: state.sensors.locations,
     sources: state.sensors.sources,
+    parameters: state.sensors.parameters,
+    time: state.sensors.time,
   }
 }
 

@@ -8,20 +8,47 @@ import { connect } from 'react-redux'
 import styles from '../styles/filterSelection.css'
 
 class FilterSelection extends Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			selectedValues: ['locations']
+		}
+	    this.handleClick = this.handleClick.bind(this)
+	}
+
+	handleClick(event) {
+		var notUsedFilters = []
+		this.props.filters.map((f, key) => {
+		 	if(!this.state.selectedValues.includes(f.id)) {
+		 		notUsedFilters.push(f.id)
+				
+			}
+		})
+		if(notUsedFilters.length > 0) {
+			var selectedVal = this.state.selectedValues.slice()
+			selectedVal.push(notUsedFilters[0]);
+			this.setState({selectedValues: selectedVal});
+			console.log("clicked");	
+			$('#addButton').removeClass("hidden");
+		}
+
+	}
 
 	render() {
+		
+		console.log(this.state.selectedValues)
 		const filters = this.props.filters.map((f, key) => {
-			if (f.id === 'data_source') return <SourceFilterList key={key} values={this.props.sources}/>
-			else if (f.id === 'parameters') return <ParamsFilterList key={key} values={this.props.parameters}/>
-			else if (f.id === 'time') return <TimeFilterList key={key} value={this.props.time}/>
-			else if (f.id === 'locations') return <LocationsFilterList key={key} value={this.props.locations}/>
-			else console.log(`Filter selection widget type '${f.id}' not found`)
+			console.log(f.id)
+			if(this.state.selectedValues.includes(f.id)) {
+				return <FilterList key={key} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id}/>
+			}
 		})
+		
 		return (
 			<div>
-				<div>
+				<div id="filters-div">
 					{filters}
-					<button className={styles.add}>+</button>
+					<button id="addButton" className={styles.add} onClick={this.handleClick}>+</button>
 				</div>
 			</div>
 		);
