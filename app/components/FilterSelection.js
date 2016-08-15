@@ -28,7 +28,6 @@ class FilterSelection extends Component {
 			var selectedVal = this.state.selectedValues.slice()
 			selectedVal.push(notUsedFilters[0]);
 			this.setState({selectedValues: selectedVal});
-			console.log("clicked");	
 			$('#addButton').removeClass("hidden");
 		}
 
@@ -36,7 +35,6 @@ class FilterSelection extends Component {
 
 	render() {
 		
-		console.log(this.state.selectedValues)
 		const filters = this.props.filters.map((f, key) => {
 			console.log(f.id)
 			if(this.state.selectedValues.includes(f.id)) {

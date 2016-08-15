@@ -7,6 +7,7 @@ const defaultState = {
   selected: "https://greatlakesmonitoring.org/clowder"}
 
 const backends = (state = defaultState, action) => {
+  console.log("Reducing")
 	switch(action.type) {
     case 'SWITCH_BACKEND':
       return Object.assign({}, state, {selected: action.selected})

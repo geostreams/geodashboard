@@ -27,7 +27,9 @@ const mapStateToProps = (state, ownProps) => {
   return {
   	sensorsData: state.sensors.data,
     parameters: state.sensors.parameters,
-    sources: state.sensors.sources
+    sources: state.sensors.sources,
+  	selectedParameters: state.selectedParameters.parameters,
+  	selectedDataSources: state.selectedDataSources.data_sources,
   }
 }
 
