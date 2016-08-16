@@ -38,7 +38,7 @@ class FilterSelection extends Component {
 		const filters = this.props.filters.map((f, key) => {
 			console.log(f.id)
 			if(this.state.selectedValues.includes(f.id)) {
-				return <FilterList key={key} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id}/>
+				return <FilterList key={key} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id}/>
 			}
 		})
 		

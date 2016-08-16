@@ -44,13 +44,19 @@ class FilterList extends Component {
 		} else if(this.state.selectValue == "locations") {
 			divContents = "Locations"
 		}
-		
+		const {selectedValues, idx} = this.props;
+		console.log(selectedValues);
+		// selectedValues.pop();
+		const options = dimensions.map(d => {
+			if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
+		  		return <option value={d.id} key={d.id}>{d.name}</option>
+		  	}
+		})
+				  	
 		return (
 			<div className={styles.root} id={this.state.divId}>
 				<select value={this.state.selectValue} onChange={this.handleChange} className={styles.select}>
-				  {dimensions.map(d =>
-				  	<option value={d.id} key={d.id}>{d.name}</option>
-				  )}
+					{options}
 				</select>
 				<div>
 					{divContents}
