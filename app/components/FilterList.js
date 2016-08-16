@@ -10,7 +10,7 @@ class FilterList extends Component {
 		super(props)
 	   	this.state = {
 	   		selectValue: props.attribute,
-	   		divId: props.idx ,
+	   		divId: props.idx
 	    }
 	    this.handleChange = this.handleChange.bind(this)
 	}

@@ -13,6 +13,7 @@ class Map extends Component {
   }
 
   render() {
+    // this.updateLayers()
     return (<div>
             <div id='map' className={styles.root}></div>
             <div style={{display: "none"}}>
@@ -40,8 +41,8 @@ class Map extends Component {
     var features = Array();
     this.props.sensors.map((sensor) => {
       var showSensor = false;
-      if(this.props.selectedParameters.length == 0 || this.inArray(sensor.parameters, this.props.selectedParameters)
-       && this.props.selectedDataSources.length == 0  || this.inArray(sensor.properties.type.id, this.props.selectedDataSources)) {
+      if((this.props.selectedParameters.length == 0 || this.inArray(sensor.parameters, this.props.selectedParameters))
+       && (this.props.selectedDataSources.length == 0  || this.props.selectedDataSources.indexOf(sensor.properties.type.id) > -1)) {
 
         var feature = new ol.Feature({
           geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
@@ -61,7 +62,7 @@ class Map extends Component {
     this.vectorSource.addFeatures(features);
   }
 
-  componentWillReceiveProps() {
+  componentDidUpdate() {
     // FIXME: this does not get called all the time
     // Try switching API and quickly switching to the search page
     console.log("Map component got new props");

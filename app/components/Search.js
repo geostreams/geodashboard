@@ -16,7 +16,7 @@ class Search extends Component {
 		return (
 			<div className={styles.root}>
 				<Menu selected="search"/>
-				<Map sensors={this.props.sensorsData} />
+				<Map sensors={this.props.sensorsData}/>
 				<FilterSelection/>
 			</div>
 		);
@@ -28,8 +28,6 @@ const mapStateToProps = (state, ownProps) => {
   	sensorsData: state.sensors.data,
     parameters: state.sensors.parameters,
     sources: state.sensors.sources,
-  	selectedParameters: state.selectedParameters.parameters,
-  	selectedDataSources: state.selectedDataSources.data_sources,
   }
 }
 
