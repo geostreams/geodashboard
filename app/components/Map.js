@@ -39,7 +39,6 @@ class Map extends Component {
   updateLayers() {
     var features = Array();
     this.props.sensors.map((sensor) => {
-      //TODO: The filtering should be done here!
       var showSensor = false;
       if(this.props.selectedParameters.length == 0 || this.inArray(sensor.parameters, this.props.selectedParameters)
        && this.props.selectedDataSources.length == 0  || this.inArray(sensor.properties.type.id, this.props.selectedDataSources)) {

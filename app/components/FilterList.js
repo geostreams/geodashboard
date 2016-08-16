@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
 import FilterOption from './FilterOption';
+import UpdateFilters from '../containers/UpdateFilters';
 import dimensions from '../../data/dimensions.json'
 import { connect } from 'react-redux'
 
@@ -31,12 +32,12 @@ class FilterList extends Component {
 		var divContents;
 		if(this.state.selectValue == "data_source") {
 			divContents = this.props.sources.map(p =>
-				<FilterOption id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
+				<UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
 			)
 
 		} else if(this.state.selectValue == "parameters") {
 			divContents = this.props.parameters.map(p =>
-				<FilterOption id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
+				<UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
 			)
 		} else if(this.state.selectValue == "time") {
 			divContents = "Start time / End time"

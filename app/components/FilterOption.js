@@ -15,37 +15,39 @@ class FilterOption extends Component {
 	}
 
 	handleChange(event) {
-		const {actions} = this.props;
+		const selectedParameters = Object.assign([], this.props.selectedParameters);
+		const selectedDataSources = Object.assign([], this.props.selectedDataSources);
 	    var value = event.target.value;
 	    console.log(value, " option was selected");
-	    if(event.target.checked){
-	    	if(event.target.name=="parameters") {
-		    	this.props.selectedParameters.push(value);
-		    	actions.addSearchParameter(this.props.selectedParameters);
+	    this.props.onOptionChange(event, selectedParameters, selectedDataSources);
+	   //  if(event.target.checked){
+	   //  	if(event.target.name=="parameters") {
+		  //   	this.props.selectedParameters.push(value);
+		  //   	actions.addSearchParameter(this.props.selectedParameters);
 		    		
-	    	} else if( event.target.name == "data_source") { 	
-		    	this.props.selectedDataSources.push(value);
-		    	actions.addSearchDataSource(this.props.selectedDataSources);
-	    	}
+	   //  	} else if( event.target.name == "data_source") { 	
+		  //   	this.props.selectedDataSources.push(value);
+		  //   	actions.addSearchDataSource(this.props.selectedDataSources);
+	   //  	}
 
-	    } else {
-	    	if(event.target.name=="parameters") {
-				var idx = this.props.selectedParameters.indexOf(value);
-				if(idx > -1) {
-					this.props.selectedParameters.splice(idx);
+	   //  } else {
+	   //  	if(event.target.name=="parameters") {
+				// var idx = this.props.selectedParameters.indexOf(value);
+				// if(idx > -1) {
+				// 	this.props.selectedParameters.splice(idx);
 					
-		    		actions.addSearchParameter(this.props.selectedParameters);
+		  //   		actions.addSearchParameter(this.props.selectedParameters);
 		    		
-				}
-	    	} else if(event.target.name=="data_source") {
-				var idx = this.props.selectedDataSources.indexOf(value);
-				if(idx > -1) {
-					this.props.selectedDataSources.splice(idx);
-					actions.addSearchDataSource(this.props.selectedDataSources);
+				// }
+	   //  	} else if(event.target.name=="data_source") {
+				// var idx = this.props.selectedDataSources.indexOf(value);
+				// if(idx > -1) {
+				// 	this.props.selectedDataSources.splice(idx);
+				// 	actions.addSearchDataSource(this.props.selectedDataSources);
 		    		
-				}
-	    	}
-	    }
+				// }
+	   //  	}
+	   //  }
 	    // this.setState({selectValue: event.target.value})
 	    // this.props.onFiltersChange(this.props.selectedParameters, this.props.selectedDataSources);
   	}
@@ -62,18 +64,20 @@ class FilterOption extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-  	selectedParameters: state.selectedParameters.parameters,
-  	selectedDataSources: state.selectedDataSources.data_sources,
-  }
-}
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//   	selectedParameters: state.selectedParameters.parameters,
+//   	selectedDataSources: state.selectedDataSources.data_sources,
+//   }
+// }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-  	 actions: bindActionCreators(ActionCreators, dispatch)
-  };
-}
+// const mapDispatchToProps = (dispatch, ownProps) => {
+//   return {
+//   	 actions: bindActionCreators(ActionCreators, dispatch)
+//   };
+// }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(FilterOption)
+// export default connect(mapStateToProps, mapDispatchToProps)(FilterOption)
+
+export default FilterOption
