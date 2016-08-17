@@ -12,13 +12,14 @@ class FilterSelection extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			selectedValues: ['locations']
+			selectedValues: ['locations'],
+			showAddButton: true
 		}
-	    this.handleClick = this.handleClick.bind(this)
+	    this.handleClickAddFilter = this.handleClickAddFilter.bind(this)
 	    this.handleChange = this.handleChange.bind(this)
 	}
 
-	handleClick(event) {
+	handleClickAddFilter(event) {
 		var notUsedFilters = []
 		this.props.filters.map((f, key) => {
 		 	if(!this.state.selectedValues.includes(f.id)) {
@@ -29,8 +30,10 @@ class FilterSelection extends Component {
 		if(notUsedFilters.length > 0) {
 			var selectedVal = this.state.selectedValues.slice()
 			selectedVal.push(notUsedFilters[0]);
-			this.setState({selectedValues: selectedVal});
-			$('#addButton').removeClass("hidden");
+			this.setState({selectedValues: selectedVal, showAddButton: true});
+		} 
+		if(notUsedFilters.length <=1) {
+			this.setState({showAddButton: false});
 		}
 
 	}
@@ -48,7 +51,9 @@ class FilterSelection extends Component {
 	    var newSelected = Object.assign([], this.state.selectedValues);
 	    newSelected = newSelected.splice(0, idx);
 	    newSelected.push(value);
-	    this.setState({selectedValues: newSelected});
+	    var showAdd = newSelected.length < this.props.filters.length;
+	    
+	    this.setState({selectedValues: newSelected, showAddButton: showAdd });
 	    
   	}
 
@@ -61,12 +66,15 @@ class FilterSelection extends Component {
 				return <FilterList key={key} onChangeSelection={this.handleChange} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id}/>
 			}
 		})
-		
+		var addButton;
+		if(this.state.showAddButton) {
+			addButton = <button id="addButton" className={styles.add} onClick={this.handleClickAddFilter}>+</button>
+		}
 		return (
 			<div>
 				<div id="filters-div">
 					{filters}
-					<button id="addButton" className={styles.add} onClick={this.handleClick}>+</button>
+					{addButton}
 				</div>
 			</div>
 		);
