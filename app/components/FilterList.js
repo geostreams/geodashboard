@@ -12,21 +12,7 @@ class FilterList extends Component {
 	   		selectValue: props.attribute,
 	   		divId: props.idx
 	    }
-	    this.handleChange = this.handleChange.bind(this)
 	}
-
-	handleChange(event) {
-	    var value = event.target.value
-	    console.log(value, " was selected")
-	    if(value=="parameters"){
-	    	this.setState({selectValue: event.target.value, selectedParameters: []})
-	    } else if(value == "data_source") {
-			this.setState({selectValue: event.target.value, selectedDataSources: []})
-	    } else {
-	    	this.setState({selectValue: event.target.value})
-	    }
-	    
-  	}
 
 	render() {
 		var divContents;
@@ -45,8 +31,6 @@ class FilterList extends Component {
 			divContents = "Locations"
 		}
 		const {selectedValues, idx} = this.props;
-		console.log(selectedValues);
-		// selectedValues.pop();
 		const options = dimensions.map(d => {
 			if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
 		  		return <option value={d.id} key={d.id}>{d.name}</option>
@@ -55,7 +39,7 @@ class FilterList extends Component {
 				  	
 		return (
 			<div className={styles.root} id={this.state.divId}>
-				<select value={this.state.selectValue} onChange={this.handleChange} className={styles.select}>
+				<select value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx} className={styles.select}>
 					{options}
 				</select>
 				<div>

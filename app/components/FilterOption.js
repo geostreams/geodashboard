@@ -17,8 +17,6 @@ class FilterOption extends Component {
 	handleChange(event) {
 		const selectedParameters = Object.assign([], this.props.selectedParameters);
 		const selectedDataSources = Object.assign([], this.props.selectedDataSources);
-	    var value = event.target.value;
-	    console.log(value, " option was selected");
 	    this.props.onOptionChange(event, selectedParameters, selectedDataSources);
   	}
 
