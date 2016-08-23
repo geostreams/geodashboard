@@ -60,11 +60,17 @@ class FilterSelection extends Component {
 
 	render() {
 		
-		const filters = this.props.filters.map((f, key) => {
-			console.log(f.id)
-			if(this.state.selectedValues.includes(f.id)) {
-				return <FilterList key={key} onChangeSelection={this.handleChange} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id}/>
-			}
+		// const filters = this.props.filters.map((f, key) => {
+			
+		// 	if(this.state.selectedValues.includes(f.id)) {
+		// 		return <FilterList key={key} onChangeSelection={this.handleChange} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id}/>
+		// 	}
+		// })
+		const filterIds = this.props.filters.map(f => f.id);
+		const filters = this.state.selectedValues.map((selected) => {
+			var idx = filterIds.indexOf(selected);
+			var f = this.props.filters[idx];
+			return <FilterList key={idx} onChangeSelection={this.handleChange} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id}/>
 		})
 		var addButton;
 		if(this.state.showAddButton) {

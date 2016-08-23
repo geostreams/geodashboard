@@ -28,7 +28,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		    	if(event.target.name=="parameters") {
 					var idx = selectedParameters.indexOf(value);
 					if(idx > -1) {
-						selectedParameters.splice(idx);
+						selectedParameters.splice(idx, 1);
 						
 			    		dispatch(addSearchParameter(selectedParameters));
 			    		
@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		    	} else if(event.target.name=="data_source") {
 					var idx = selectedDataSources.indexOf(value);
 					if(idx > -1) {
-						selectedDataSources.splice(idx);
+						selectedDataSources.splice(idx, 1);
 						dispatch(addSearchDataSource(selectedDataSources));
 			    		
 					}
