@@ -19,7 +19,10 @@ class Map extends Component {
             <div style={{display: "none"}}>
               <a className="overlay" id="vienna" target="_blank" href="http://en.wikipedia.org/wiki/Vienna">Vienna</a>
               <div id="marker" title="Marker" className="marker"></div>
-              <div id="popup" title="Welcome to some location"></div>
+              <div id="popup" className={styles.olPopup}>
+                <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
+                <div id="popup-content"></div>
+              </div>
               <div id="ol-zoomslider" className="ol-zoomslider"></div>
             </div>
             </div>);
@@ -54,6 +57,7 @@ class Map extends Component {
               stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
             })
         }));
+        feature.setId(sensor.name);
         features.push(feature);
       }
 
@@ -82,6 +86,7 @@ class Map extends Component {
             stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
           })
       }));
+      feature.setId(sensor.name);
       features.push(feature);
     });
 
@@ -102,7 +107,25 @@ class Map extends Component {
       vectorLayer
     ];
 
-    this.map = new ol.Map({
+    var container = document.getElementById('popup');
+    var content = document.getElementById('popup-content');
+    var closer = document.getElementById('popup-closer');
+
+    var overlay = new ol.Overlay({
+      element: container,
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250
+      }
+    });
+
+    closer.onclick = function() {
+      overlay.setPosition(undefined);
+      closer.blur();
+      return false;
+    };
+    var theMap;
+    theMap = new ol.Map({
       target: 'map',
       layers: layers,
       view: new ol.View({
@@ -110,10 +133,24 @@ class Map extends Component {
         center: [-84.44799549, 38.9203417],
         zoom: 4
       }),
+      overlays: [overlay],
       controls: ol.control.defaults().extend([
           new ol.control.ZoomSlider()
         ]),
     })
+    this.map = theMap;
+    this.map.on('singleclick', function(e){
+      theMap.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+        var id = feature.getId();
+        var coordinate = e.coordinate;
+
+        content.innerHTML = id;
+        overlay.setPosition(coordinate);
+
+
+      });
+
+    });
   }
 }
 
