@@ -8,6 +8,7 @@ import ParamsFilterList from './ParamsFilterList'
 import Menu from './Menu'
 import { connect } from 'react-redux'
 import FilterSelection from './FilterSelection'
+import DownloadButtons from './DownloadButtons'
 
 class Search extends Component {
 
@@ -17,6 +18,7 @@ class Search extends Component {
 			<div className={styles.root}>
 				<Menu selected="search"/>
 				<Map sensors={this.props.sensorsData}/>
+				<DownloadButtons/>
 				<FilterSelection/>
 			</div>
 		);
