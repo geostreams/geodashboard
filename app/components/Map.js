@@ -1,14 +1,13 @@
 import React, {Component} from 'react'
-var ol = require('openlayers')
-require("openlayers/css/ol.css")
+var ol = require('openlayers');
+require("openlayers/css/ol.css");
 import styles from '../styles/map.css'
-import Sensors from './Sensors'
-import { connect } from 'react-redux'
+
 
 class Map extends Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.updateLayers = this.updateLayers.bind(this)
   }
 
@@ -137,7 +136,7 @@ class Map extends Component {
       controls: ol.control.defaults().extend([
           new ol.control.ZoomSlider()
         ]),
-    })
+    });
     this.map = theMap;
     this.map.on('singleclick', function(e){
       theMap.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
@@ -154,12 +153,4 @@ class Map extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    sensors: state.sensors.data,
-    selectedParameters: state.selectedParameters.parameters,
-    selectedDataSources: state.selectedDataSources.data_sources,
-  }
-}
-
-export default connect(mapStateToProps)(Map)
+export default Map
