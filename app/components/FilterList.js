@@ -82,10 +82,15 @@ class FilterList extends Component {
 				  	
 		return (
 			<div className={styles.root} id={this.state.divId}>
+				<div className={styles.right}>
+					<IconButton onClick={this.props.onClickRemove} data-idx={idx}>
+						<ContentClear color={red500}/>
+					</IconButton>
+				</div>
 				<SelectField value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
 					{options}
 				</SelectField>
-				<IconButton onClick={this.props.onClickRemove} data-idx={idx}><ContentClear color={red500} /></IconButton>
+
 				{showButtons}
 				<div>
 					{divContents}

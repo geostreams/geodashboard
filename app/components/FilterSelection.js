@@ -65,7 +65,7 @@ class FilterSelection extends Component {
   	}
 
   	handleClickRemoveFilter(event) {
-		var idx =event.target.parentElement.parentElement.id;
+		var idx = event.target.parentElement.dataset.idx;
 		var value = this.state.selectedValues[idx];
 
 		console.log(value, " was removed");
