@@ -85,7 +85,7 @@ class FilterList extends Component {
 				<SelectField value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
 					{options}
 				</SelectField>
-				<IconButton onClick={this.remove}><ContentClear color={red500} /></IconButton>
+				<IconButton onClick={this.props.onClickRemove} data-idx={idx}><ContentClear color={red500} /></IconButton>
 				{showButtons}
 				<div>
 					{divContents}
