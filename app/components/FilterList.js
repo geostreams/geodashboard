@@ -1,10 +1,7 @@
 import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
-import FilterOption from './FilterOption';
-import UpdateFilters from '../containers/UpdateFilters';
+import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json'
-import { connect } from 'react-redux'
-import { addSearchParameter, addSearchDataSource } from '../actions'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import IconButton from 'material-ui/IconButton';
 import SelectField from 'material-ui/SelectField';
@@ -16,11 +13,11 @@ injectTapEventPlugin();
 
 class FilterList extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
 	   	this.state = {
 	   		selectValue: props.attribute,
 	   		divId: props.idx
-	    }
+	    };
 	    this.selectAll = this.selectAll.bind(this)
 	}
 
@@ -59,14 +56,14 @@ class FilterList extends Component {
 		if(this.state.selectValue == "data_source") {
 			divContents = this.props.sources.map(p =>
 				<UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
-			)
+			);
 
 			showButtons = hideShowContents;
 
 		} else if(this.state.selectValue == "parameters") {
 			divContents = this.props.parameters.map(p =>
 				<UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
-			)
+			);
 			showButtons = hideShowContents;
 		} else if(this.state.selectValue == "time") {
 			divContents = "Start time / End time"
@@ -78,7 +75,7 @@ class FilterList extends Component {
 			if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
 		  		return <MenuItem value={d.id} key={d.id} primaryText={d.name} data-idx={idx}/>
 		  	}
-		})
+		});
 				  	
 		return (
 			<div className={styles.root} id={this.state.divId}>
@@ -100,26 +97,4 @@ class FilterList extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    locations: state.sensors.locations,
-    sources: state.sensors.sources,
-    parameters: state.sensors.parameters,
-    time: state.sensors.time,
-	selectedParameters: state.selectedParameters.parameters,
-	selectedDataSources: state.selectedDataSources.data_sources,
-  }
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-	return {
-		onSelectAllParameters: (event, selectedParameters) => {
-			dispatch(addSearchParameter(selectedParameters));
-		},
-		onSelectAllDataSources: (event, selectedDataSources) => {
-			dispatch(addSearchDataSource(selectedDataSources));
-		}
-	}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FilterList)
+export default FilterList;

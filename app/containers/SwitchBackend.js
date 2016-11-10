@@ -7,20 +7,20 @@ const mapStateToProps = (state, ownProps) => {
 		selected: state.backends.selected,
     	endpoints: state.backends.endpoints
 	}
-}
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
 		onBackendChange: (selected) => {
-			dispatch(switchBackend(selected))
+			dispatch(switchBackend(selected));
 			dispatch(fetchSensors(selected))
 		}
 	}
-}
+};
 
 const SwitchBackend = connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(SwitchAPI)
+)(SwitchAPI);
 
 export default SwitchBackend
