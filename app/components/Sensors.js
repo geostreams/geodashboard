@@ -20,3 +20,5 @@ class Sensors extends Component {
 		);
 	}
 }
+
+export default Sensors
