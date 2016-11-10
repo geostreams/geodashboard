@@ -7,6 +7,12 @@ import FilterList from './FilterList'
 import { connect } from 'react-redux'
 import styles from '../styles/filterSelection.css'
 import { addSearchParameter, addSearchDataSource } from '../actions'
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+
+const styleAdd = {
+	marginRight: 20,
+};
 
 class FilterSelection extends Component {
 	constructor(props) {
@@ -74,7 +80,7 @@ class FilterSelection extends Component {
 		})
 		var addButton;
 		if(this.state.showAddButton) {
-			addButton = <button id="addButton" className={styles.add} onClick={this.handleClickAddFilter}>+</button>
+			addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter} style={styleAdd}><ContentAdd/></FloatingActionButton>
 		}
 		return (
 			<div>

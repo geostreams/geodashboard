@@ -5,6 +5,14 @@ import UpdateFilters from '../containers/UpdateFilters';
 import dimensions from '../../data/dimensions.json'
 import { connect } from 'react-redux'
 import { addSearchParameter, addSearchDataSource } from '../actions'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import IconButton from 'material-ui/IconButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import ContentClear from 'material-ui/svg-icons/content/clear';
+import {red500} from 'material-ui/styles/colors';
+
+injectTapEventPlugin();
 
 class FilterList extends Component {
 	constructor(props) {
@@ -68,15 +76,16 @@ class FilterList extends Component {
 		const {selectedValues, idx} = this.props;
 		const options = dimensions.map(d => {
 			if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
-		  		return <option value={d.id} key={d.id}>{d.name}</option>
+		  		return <MenuItem value={d.id} key={d.id} primaryText={d.name}/>
 		  	}
 		})
 				  	
 		return (
 			<div className={styles.root} id={this.state.divId}>
-				<select value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx} className={styles.select}>
+				<SelectField value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
 					{options}
-				</select>
+				</SelectField>
+				<IconButton onClick={this.remove}><ContentClear color={red500} /></IconButton>
 				{showButtons}
 				<div>
 					{divContents}
