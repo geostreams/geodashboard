@@ -2,9 +2,13 @@ import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
 import FilterOption from './FilterOption';
 import UpdateFilters from '../containers/UpdateFilters';
-import dimensions from '../../data/dimensions.json'
-import { connect } from 'react-redux'
-import { addSearchParameter, addSearchDataSource } from '../actions'
+import dimensions from '../../data/dimensions.json';
+import { connect } from 'react-redux';
+import { addSearchParameter, addSearchDataSource } from '../actions';
+import DatePicker from 'material-ui/DatePicker';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
 
 class FilterList extends Component {
 	constructor(props) {
@@ -61,7 +65,14 @@ class FilterList extends Component {
 			)
 			showButtons = hideShowContents;
 		} else if(this.state.selectValue == "time") {
-			divContents = "Start time / End time"
+			divContents =
+				<div><h5> Start Date</h5>
+
+				<DatePicker hintText="Start Date" container="inline" />
+
+				<h5> End Date</h5>
+			    <DatePicker hintText="End Date" container="inline" /></div>
+
 		} else if(this.state.selectValue == "locations") {
 			divContents = "Locations"
 		}

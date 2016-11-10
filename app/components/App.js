@@ -8,6 +8,7 @@ import Explore from '../pages/Explore'
 import RouteMismatch from '../pages/RouteMismatch'
 import { connect } from 'react-redux'
 import { fetchSensors } from '../actions'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class App extends Component {
 
@@ -19,12 +20,14 @@ class App extends Component {
 
 	render() {
 		return (
+		    <MuiThemeProvider>
 		  <Router history={browserHistory}>
 		    <Route path="/" component={Home}/>
 		    <Route path="/explore" component={Explore}/>
 		    <Route path="/search" component={Search}/>
 		    <Route path="*" component={RouteMismatch}/>
 		  </Router>
+            </MuiThemeProvider>
 		)
 	}
 }

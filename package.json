@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --progress",
+    "start": "webpack-dev-server --inline --host 127.0.0.1",
     "build": "NODE_ENV=production webpack --config ./webpack.production.config.js --progress"
   },
   "repository": {
@@ -29,6 +29,8 @@
     "react-transform-hmr": "^1.0.4",
     "style-loader": "^0.13.1",
     "webpack": "^1.12.15",
+    "material-ui": "0.16.1",
+    "react-tap-event-plugin": "*",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
