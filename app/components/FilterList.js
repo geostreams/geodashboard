@@ -76,7 +76,7 @@ class FilterList extends Component {
 		const {selectedValues, idx} = this.props;
 		const options = dimensions.map(d => {
 			if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
-		  		return <MenuItem value={d.id} key={d.id} primaryText={d.name}/>
+		  		return <MenuItem value={d.id} key={d.id} primaryText={d.name} data-idx={idx}/>
 		  	}
 		})
 				  	

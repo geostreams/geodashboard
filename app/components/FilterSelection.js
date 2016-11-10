@@ -45,9 +45,8 @@ class FilterSelection extends Component {
 
 	}
 
-	handleChange(event) {
-		var value = event.target.value;
-		var idx = event.target.dataset.idx;
+	handleChange(event, valueIdx, value) {
+		var idx = event.target.parentElement.parentElement.parentElement.dataset.idx; //Idx of the selected filter
 	    console.log(value, " was selected");
 	    if(value=="parameters" || this.state.selectedValues[idx] == "parameters"){
 	    	this.props.onClearFilter(true, false);
