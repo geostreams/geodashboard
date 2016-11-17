@@ -1,34 +1,28 @@
 import React, {Component} from 'react'
-import SourceFilterList from './SourceFilterList'
-import ParamsFilterList from './ParamsFilterList'
-import LocationsFilterList from './LocationsFilterList'
-import TimeFilterList from './TimeFilterList'
-import FilterList from './FilterList'
-import { connect } from 'react-redux'
+import FilterList from '../containers/FilterList'
 import styles from '../styles/filterSelection.css'
-import { addSearchParameter, addSearchDataSource } from '../actions'
 
 class FilterSelection extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
 			selectedValues: ['locations'],
 			showAddButton: true
-		}
-	    this.handleClickAddFilter = this.handleClickAddFilter.bind(this)
+		};
+	    this.handleClickAddFilter = this.handleClickAddFilter.bind(this);
 	    this.handleChange = this.handleChange.bind(this)
 	}
 
 	handleClickAddFilter(event) {
-		var notUsedFilters = []
+		var notUsedFilters = [];
 		this.props.filters.map((f, key) => {
 		 	if(!this.state.selectedValues.includes(f.id)) {
 		 		notUsedFilters.push(f.id)
 				
 			}
-		})
+		});
 		if(notUsedFilters.length > 0) {
-			var selectedVal = this.state.selectedValues.slice()
+			var selectedVal = this.state.selectedValues.slice();
 			selectedVal.push(notUsedFilters[0]);
 			this.setState({selectedValues: selectedVal, showAddButton: true});
 		} 
@@ -57,21 +51,13 @@ class FilterSelection extends Component {
 	    
   	}
 
-
 	render() {
-		
-		// const filters = this.props.filters.map((f, key) => {
-			
-		// 	if(this.state.selectedValues.includes(f.id)) {
-		// 		return <FilterList key={key} onChangeSelection={this.handleChange} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id}/>
-		// 	}
-		// })
 		const filterIds = this.props.filters.map(f => f.id);
 		const filters = this.state.selectedValues.map((selected) => {
 			var idx = filterIds.indexOf(selected);
 			var f = this.props.filters[idx];
 			return <FilterList key={idx} onChangeSelection={this.handleChange} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id}/>
-		})
+		});
 		var addButton;
 		if(this.state.showAddButton) {
 			addButton = <button id="addButton" className={styles.add} onClick={this.handleClickAddFilter}>+</button>
@@ -87,25 +73,4 @@ class FilterSelection extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-  	filters: state.searchFilters.filters,
-  }
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-	return {
-		onClearFilter: (clearSelectedParameters, clearSelectedDataSources) => {
-			if(clearSelectedParameters) {
-				const selectedParameters = [];
-				dispatch(addSearchParameter(selectedParameters));
-			} 
-			if(clearSelectedDataSources) {
-				const selectedDataSources = [];
-				dispatch(addSearchDataSource(selectedDataSources));
-			}
-		}
-	}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FilterSelection)
+export default FilterSelection

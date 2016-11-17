@@ -7,7 +7,7 @@ const mapStateToProps = (state, ownProps) => {
 		selectedParameters: state.selectedParameters.parameters,
   		selectedDataSources: state.selectedDataSources.data_sources,
 	}
-}
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
@@ -44,8 +44,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		    }
 		}
 	}
-}
+};
 
-const UpdateFilters = connect(mapStateToProps, mapDispatchToProps)(filterOption)
+const FilterOption = connect(mapStateToProps, mapDispatchToProps)(filterOption);
 
-export default UpdateFilters
+export default FilterOption

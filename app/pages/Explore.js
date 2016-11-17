@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import Menu from '../components/Menu'
-import sensorsData from '../../data/sensors.json'
-import Sensors from '../components/Sensors'
+import Sensors from '../containers/Sensors'
 import styles from './explore.css'
 import { connect } from 'react-redux'
 
@@ -25,6 +24,6 @@ const mapStateToProps = (state, ownProps) => {
   return {
     sensorsData: state.sensors.data
   }
-}
+};
 
 export default connect(mapStateToProps)(Explore)
