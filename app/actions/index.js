@@ -48,6 +48,14 @@ export function addSearchDataSource(data_source){
   }
 }
 
+export const ADD_START_DATE = 'ADD_START_DATE'
+export function addStartDate(date){
+  return {
+    type: ADD_START_DATE,
+    date
+  }
+}
+
 export function fetchSensors(api) {
   return dispatch => {
     dispatch(requestSensors(api))
