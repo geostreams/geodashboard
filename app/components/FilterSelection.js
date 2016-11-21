@@ -2,10 +2,7 @@ import React, {Component} from 'react'
 import FilterList from '../containers/FilterList'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-
-const styleAdd = {
-	marginRight: 20,
-};
+import styles from '../styles/filterSelection.css'
 
 class FilterSelection extends Component {
 	constructor(props) {
@@ -86,12 +83,14 @@ class FilterSelection extends Component {
 		})
 		var addButton;
 		if(this.state.showAddButton) {
-			addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter} style={styleAdd}><ContentAdd/></FloatingActionButton>
+			addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter} className={styles.styleAdd}><ContentAdd/></FloatingActionButton>
 		}
 		return (
 			<div>
-				<div id="filters-div">
+				<div id="filters-div" className={styles.inline}>
 					{filters}
+				</div>
+				<div className={styles.inline}>
 					{addButton}
 				</div>
 			</div>
