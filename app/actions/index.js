@@ -56,6 +56,14 @@ export function addStartDate(date){
   }
 }
 
+export const ADD_END_DATE = 'ADD_END_DATE'
+export function addEndDate(date){
+  return {
+    type: ADD_END_DATE,
+    date
+  }
+}
+
 export function fetchSensors(api) {
   return dispatch => {
     dispatch(requestSensors(api))

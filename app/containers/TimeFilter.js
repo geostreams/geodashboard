@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { addStartDate } from '../actions'
+import { addStartDate, addEndDate } from '../actions'
 import timeFilterComponent from '../components/TimeFilter'
 
 const mapStateToProps = (state, ownProps) => {
@@ -10,8 +10,13 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        onStartDateChange:(event, date) =>{
-            dispatch(addStartDate(date));
+        onDateChange:(event, date, isStart) =>{
+            if(isStart){
+                dispatch(addStartDate(date));
+            } else {
+                dispatch(addEndDate(date));
+            }
+
         }
     }
 };

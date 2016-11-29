@@ -1,12 +1,12 @@
 import update from 'react/lib/update'
 
-import { ADD_START_DATE} from '../actions'
+import { ADD_END_DATE} from '../actions'
 
 const defaultState = {date: new Date()}
 
-const start_date = (state = defaultState, action) => {
+const end_date = (state = defaultState, action) => {
     switch(action.type) {
-        case 'ADD_START_DATE':
+        case 'ADD_END_DATE':
             return Object.assign({}, state, {
                 date: action.date}
             )
@@ -15,4 +15,4 @@ const start_date = (state = defaultState, action) => {
     }
 }
 
-export default start_date
+export default end_date

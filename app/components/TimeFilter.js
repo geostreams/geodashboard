@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
 import dimensions from '../../data/dimensions.json';
 import { connect } from 'react-redux';
-import { addStartDate} from '../actions';
+import { addStartDate, addEndDate} from '../actions';
 import DatePicker from 'material-ui/DatePicker';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
@@ -20,11 +20,13 @@ class TimeFilter extends Component {
     }
 
 
-    changeStartDate = (event, date) => {
-        this.setState({
-            minDate: date,
-        });
-        this.props.onStartDateChange(event, date);
+    changeDate = (isStart, event, date) => {
+        if(isStart) {
+            this.setState({
+                minDate: date,
+            });
+        }
+        this.props.onDateChange(event, date, isStart);
     }
 
 
@@ -32,10 +34,10 @@ class TimeFilter extends Component {
         return (
                 <div>
                     <h5> Start Date</h5>
-                    <DatePicker id="startDate" hintText="Start Date" container="inline" onChange={this.changeStartDate.bind(this)}/>
+                    <DatePicker id="startDate" hintText="Start Date" container="inline" onChange={this.changeDate.bind(this, true)}/>
 
                     <h5> End Date</h5>
-                    <DatePicker id="endDate" hintText="End Date" container="inline" minDate={this.state.minDate}/>
+                    <DatePicker id="endDate" hintText="End Date" container="inline" minDate={this.state.minDate} onChange={this.changeDate.bind(this, false)}/>
                 </div>
 
         );
