@@ -1,22 +1,20 @@
 import React, {Component} from 'react'
-import FilterList from './FilterList'
-import { connect } from 'react-redux'
-import styles from '../styles/filterSelection.css'
-import { addSearchParameter, addSearchDataSource } from '../actions'
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import FilterList from '../containers/FilterList'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import styles from '../styles/filterSelection.css'
 
 class FilterSelection extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedValues: ['locations'],
-            showAddButton: true
-        };
-        this.handleClickAddFilter = this.handleClickAddFilter.bind(this);
-        this.handleChange = this.handleChange.bind(this)
-    }
+	constructor(props) {
+		super(props);
+		this.state = {
+			selectedValues: ['locations'],
+			showAddButton: true
+		};
+	    this.handleClickAddFilter = this.handleClickAddFilter.bind(this);
+	    this.handleChange = this.handleChange.bind(this)
+		this.handleClickRemoveFilter = this.handleClickRemoveFilter.bind(this);
+	}
 
     handleClickAddFilter(event) {
         let notUsedFilters = [];
@@ -35,23 +33,44 @@ class FilterSelection extends Component {
         }
     }
 
-    handleChange(event) {
-        let value = event.target.value;
-        let idx = event.target.dataset.idx;
-        console.log(value, " was selected");
-        if(value=="parameters" || this.state.selectedValues[idx] == "parameters"){
-            this.props.onClearFilter(true, false);
-        }
-        if(value == "data_source" || this.state.selectedValues[idx] == "data_source") {
-            this.props.onClearFilter(false, true);
-        }
-        let newSelected = Object.assign([], this.state.selectedValues);
-        newSelected = newSelected.splice(0, idx);
-        newSelected.push(value);
-        let showAdd = newSelected.length < this.props.filters.length;
+	handleChange(event, valueIdx, value) {
+		var idx = event.target.parentElement.parentElement.parentElement.dataset.idx; //Idx of the selected filter
+	    console.log(value, " was selected");
+	    if(value=="parameters" || this.state.selectedValues[idx] == "parameters"){
+	    	this.props.onClearFilter(true, false);
+	    }
+	    if(value == "data_source" || this.state.selectedValues[idx] == "data_source") {
+			this.props.onClearFilter(false, true);
+	    }
+	    var newSelected = Object.assign([], this.state.selectedValues);
+	    newSelected = newSelected.splice(0, idx);
+	    newSelected.push(value);
+	    var showAdd = newSelected.length < this.props.filters.length;
 
-        this.setState({selectedValues: newSelected, showAddButton: showAdd });
-    }
+	    this.setState({selectedValues: newSelected, showAddButton: showAdd });
+
+  	}
+
+  	handleClickRemoveFilter(event) {
+		var idx = event.target.parentElement.dataset.idx;
+		var value = this.state.selectedValues[idx];
+
+		console.log(value, " was removed");
+		if(value=="parameters" || this.state.selectedValues[idx] == "parameters"){
+			this.props.onClearFilter(true, false);
+		}
+		if(value == "data_source" || this.state.selectedValues[idx] == "data_source") {
+			this.props.onClearFilter(false, true);
+		}
+		var newSelected = Object.assign([], this.state.selectedValues);
+		newSelected.splice(idx, 1);
+		var showAdd = newSelected.length < this.props.filters.length;
+
+		this.setState({selectedValues: newSelected, showAddButton: showAdd});
+
+	}
+
+
 
     render() {
         const filterIds = this.props.filters.map(f => f.id);
@@ -75,25 +94,4 @@ class FilterSelection extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-  	    filters: state.searchFilters.filters,
-    }
-};
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        onClearFilter: (clearSelectedParameters, clearSelectedDataSources) => {
-            if(clearSelectedParameters) {
-                const selectedParameters = [];
-                dispatch(addSearchParameter(selectedParameters));
-            }
-            if(clearSelectedDataSources) {
-                const selectedDataSources = [];
-                dispatch(addSearchDataSource(selectedDataSources));
-            }
-        }
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FilterSelection);
+export default FilterSelection

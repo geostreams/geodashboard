@@ -1,12 +1,10 @@
-import React, {Component} from 'react';
-import { Router, Route, browserHistory } from 'react-router';
-import Search from './Search';
-import Home from '../pages/Home';
-import Explore from '../pages/Explore';
+import React, {Component} from 'react'
+import { Router, Route, browserHistory } from 'react-router'
+import Search from '../containers/Search'
+import Home from '../pages/Home'
+import Explore from '../pages/Explore'
 import About from '../pages/About';
-import RouteMismatch from '../pages/RouteMismatch';
-import { connect } from 'react-redux';
-import { fetchSensors } from '../actions';
+import RouteMismatch from '../pages/RouteMismatch'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class App extends Component {
@@ -33,20 +31,4 @@ class App extends Component {
 
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        sensors: state.sensors,
-        api: state.backends.selected,
-        sensors_url: state.backends.selected
-    }
-};
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        loadSensors: (selected) => {
-            dispatch(fetchSensors(selected))
-            }
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App

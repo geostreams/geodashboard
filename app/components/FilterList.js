@@ -1,10 +1,14 @@
 import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
-import UpdateFilters from '../containers/UpdateFilters';
-import dimensions from '../../data/dimensions.json';
-import { connect } from 'react-redux';
-import { addSearchParameter, addSearchDataSource } from '../actions';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import UpdateFilters from '../containers/FilterOption';
+import dimensions from '../../data/dimensions.json'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import IconButton from 'material-ui/IconButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import ContentClear from 'material-ui/svg-icons/content/clear';
+import {red500} from 'material-ui/styles/colors';
+
 injectTapEventPlugin();
 
 class FilterList extends Component {
@@ -76,9 +80,15 @@ class FilterList extends Component {
 
         return (
             <div className={styles.root} id={this.state.divId}>
-                <select value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx} className={styles.select}>
+                <div className={styles.right}>
+                    <IconButton onClick={this.props.onClickRemove} data-idx={idx}>
+                        <ContentClear color={red500}/>
+                    </IconButton>
+                </div>
+                <SelectField value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
                     {options}
-                </select>
+                </SelectField>
+
                 {showButtons}
                 <div>
                     {divContents}
@@ -89,26 +99,4 @@ class FilterList extends Component {
 
 }
 
-const mapStateToProps = (state, ownProps) => {
-  	return {
-		locations: state.sensors.locations,
-		sources: state.sensors.sources,
-		parameters: state.sensors.parameters,
-		time: state.sensors.time,
-		selectedParameters: state.selectedParameters.parameters,
-		selectedDataSources: state.selectedDataSources.data_sources,
-  	}
-};
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        onSelectAllParameters: (event, selectedParameters) => {
-            dispatch(addSearchParameter(selectedParameters));
-        },
-        onSelectAllDataSources: (event, selectedDataSources) => {
-            dispatch(addSearchDataSource(selectedDataSources));
-        }
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FilterList);
+export default FilterList;

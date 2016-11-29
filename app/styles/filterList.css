@@ -33,3 +33,7 @@
    height: 34px;
    width: 268px;
 }
+
+.right {
+    float: right;
+}

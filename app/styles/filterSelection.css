@@ -21,3 +21,11 @@ input[type=button] {
     vertical-align: 16em;
     margin-left: 1em;
 }
+
+.inline {
+  display: inline-block;
+}
+
+.styleAdd {
+  margin-right: 20;
+}
