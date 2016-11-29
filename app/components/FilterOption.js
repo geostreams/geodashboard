@@ -1,8 +1,5 @@
 import React, {Component} from 'react'
-import {bindActionCreators} from 'redux';
-import { connect } from 'react-redux'
 import styles from '../styles/filterOption.css'
-import * as ActionCreators from '../actions'
 
 class FilterOption extends Component {
 	constructor(props) {

@@ -1,14 +1,12 @@
 import React, {Component} from 'react'
-import config from '../config.json';
 import styles from '../styles/search.css';
-import Sensors from './Sensors'
-import Map from './Map'
-import SourceFilterList from './SourceFilterList'
-import ParamsFilterList from './ParamsFilterList'
+import Sensors from '../containers/Sensors'
+import Map from '../containers/Map'
 import Menu from './Menu'
 import { connect } from 'react-redux'
 import FilterSelection from './FilterSelection'
 import DownloadButtons from './DownloadButtons'
+import FilterSelection from '../containers/FilterSelection'
 
 class Search extends Component {
 
@@ -25,12 +23,4 @@ class Search extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-  	sensorsData: state.sensors.data,
-    parameters: state.sensors.parameters,
-    sources: state.sensors.sources,
-  }
-}
-
-export default connect(mapStateToProps)(Search)
+export default Search

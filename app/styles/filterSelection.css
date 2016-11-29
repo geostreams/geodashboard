@@ -18,5 +18,13 @@ input[type=button] {
 }
 
 .add {
-	vertical-align: middle;
+	marginRight: 20,
+}
+
+.inline {
+  display: inline-block;
+}
+
+.styleAdd {
+  margin-right: 20;
 }

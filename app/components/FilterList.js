@@ -1,18 +1,25 @@
 import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
 import FilterOption from './FilterOption';
-import UpdateFilters from '../containers/UpdateFilters';
+import TimeFilter from '../containers/TimeFilter';
+import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json'
-import { connect } from 'react-redux'
-import { addSearchParameter, addSearchDataSource } from '../actions'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import IconButton from 'material-ui/IconButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import ContentClear from 'material-ui/svg-icons/content/clear';
+import {red500} from 'material-ui/styles/colors';
+
+injectTapEventPlugin();
 
 class FilterList extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
 	   	this.state = {
 	   		selectValue: props.attribute,
 	   		divId: props.idx
-	    }
+	    };
 	    this.selectAll = this.selectAll.bind(this)
 	}
 
@@ -35,7 +42,6 @@ class FilterList extends Component {
 			}
 			this.props.onSelectAllParameters(event, selectedParameters)
 		}
-
 	}
 
 	render() {
@@ -51,32 +57,41 @@ class FilterList extends Component {
 		if(this.state.selectValue == "data_source") {
 			divContents = this.props.sources.map(p =>
 				<UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
-			)
+			);
 
 			showButtons = hideShowContents;
 
 		} else if(this.state.selectValue == "parameters") {
 			divContents = this.props.parameters.map(p =>
 				<UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
-			)
+			);
 			showButtons = hideShowContents;
 		} else if(this.state.selectValue == "time") {
-			divContents = "Start time / End time"
+			//the UI of date picker
+			divContents =
+				<TimeFilter />
+
 		} else if(this.state.selectValue == "locations") {
 			divContents = "Locations"
 		}
 		const {selectedValues, idx} = this.props;
 		const options = dimensions.map(d => {
 			if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
-		  		return <option value={d.id} key={d.id}>{d.name}</option>
+		  		return <MenuItem value={d.id} key={d.id} primaryText={d.name} data-idx={idx}/>
 		  	}
-		})
+		});
 				  	
 		return (
 			<div className={styles.root} id={this.state.divId}>
-				<select value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx} className={styles.select}>
+				<div className={styles.right}>
+					<IconButton onClick={this.props.onClickRemove} data-idx={idx}>
+						<ContentClear color={red500}/>
+					</IconButton>
+				</div>
+				<SelectField value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
 					{options}
-				</select>
+				</SelectField>
+
 				{showButtons}
 				<div>
 					{divContents}
@@ -86,26 +101,4 @@ class FilterList extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    locations: state.sensors.locations,
-    sources: state.sensors.sources,
-    parameters: state.sensors.parameters,
-    time: state.sensors.time,
-	selectedParameters: state.selectedParameters.parameters,
-	selectedDataSources: state.selectedDataSources.data_sources,
-  }
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-	return {
-		onSelectAllParameters: (event, selectedParameters) => {
-			dispatch(addSearchParameter(selectedParameters));
-		},
-		onSelectAllDataSources: (event, selectedDataSources) => {
-			dispatch(addSearchDataSource(selectedDataSources));
-		}
-	}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FilterList)
+export default FilterList;
