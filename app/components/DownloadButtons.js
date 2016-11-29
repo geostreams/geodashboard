@@ -16,7 +16,7 @@ class DownloadButtons extends Component {
 		//TODO: Needs Update when setting up the date and lakes
 		var link=this.state.clowderUrl;
 		var isFirst = true;
-		var params={}			
+		var params={};
 		//Update later
 		//params["geocode"]=;
 		var startTime="2005-01-01+01:00:00";
@@ -24,8 +24,8 @@ class DownloadButtons extends Component {
 		params["since"] = startTime;
 		params["until"] = endTime;
 		
-		if(this.props.selectedDataSources.length > 0) {params["sources"] = this.props.selectedDataSources;}
-		if(this.props.selectedParameters.length  > 0) {params["attributes"] = this.props.selectedParameters;}
+		//if(this.props.selectedDataSources.length > 0) {params["sources"] = this.props.selectedDataSources;}
+		//if(this.props.selectedParameters.length  > 0) {params["attributes"] = this.props.selectedParameters;}
 
 		//Add lake
 		//link=link+"geocode="+blabla+"&";
@@ -63,11 +63,4 @@ class DownloadButtons extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-	return {
-		selectedParameters: state.selectedParameters.parameters,
-  		selectedDataSources: state.selectedDataSources.data_sources,
-	}
-}
-
-export default connect(mapStateToProps)(DownloadButtons)
+export default DownloadButtons;
