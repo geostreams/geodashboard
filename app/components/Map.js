@@ -10,10 +10,8 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.updateLayers = this.updateLayers.bind(this)
-    this.updateCenter = this.updateCenter.bind(this)
     this.state = {
       center: [-84.44799549, 38.9203417],
-      initialCenter: [-84.44799549, 38.9203417]
     }
   }
 
@@ -47,11 +45,6 @@ class Map extends Component {
     return false;
   }
 
-  updateCenter(newCenter) {
-    this.setState({center: newCenter});
-  }
-
-
   updateLayers() {
     var features = Array();
     this.props.sensors.map((sensor) => {
@@ -76,6 +69,7 @@ class Map extends Component {
     });
     this.vectorSource.clear();
     this.vectorSource.addFeatures(features);
+    this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
   }
 
   componentDidUpdate() {
@@ -152,16 +146,16 @@ class Map extends Component {
       center: this.state.center,
       zoom: 4
     });
+    var theMap;
     var initialCenter = this.state.initialCenter;
     window.app = {};
     var app = window.app;
     app.centerControl = function(opt_options) {
       var options= opt_options || {};
       var centerButton = document.getElementById('centerButton');
-      // centerButton.innerHTML = {deviceGpsFixed};
       
       var handleCenterButton = function() {
-        view.setCenter(initialCenter);
+        view.fit(vectorSource.getExtent(), theMap.getSize());
       };
 
       centerButton.addEventListener('click', handleCenterButton, false);
@@ -179,7 +173,7 @@ class Map extends Component {
     };
     ol.inherits(app.centerControl, ol.control.Control);
 
-    var theMap;
+
     theMap = new ol.Map({
       target: 'map',
       layers: layers,
