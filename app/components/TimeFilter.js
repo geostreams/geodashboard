@@ -4,9 +4,6 @@ import dimensions from '../../data/dimensions.json';
 import { connect } from 'react-redux';
 import { addStartDate, addEndDate} from '../actions';
 import DatePicker from 'material-ui/DatePicker';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
-
 
 class TimeFilter extends Component {
     constructor(props) {
