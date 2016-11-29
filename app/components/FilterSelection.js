@@ -12,7 +12,7 @@ class FilterSelection extends Component {
 			showAddButton: true
 		};
 	    this.handleClickAddFilter = this.handleClickAddFilter.bind(this);
-	    this.handleChange = this.handleChange.bind(this)
+	    this.handleChange = this.handleChange.bind(this);
 		this.handleClickRemoveFilter = this.handleClickRemoveFilter.bind(this);
 	}
 
@@ -77,7 +77,7 @@ class FilterSelection extends Component {
         const filters = this.state.selectedValues.map((selected) => {
             let idx = filterIds.indexOf(selected);
             let f = this.props.filters[idx];
-            return <FilterList key={idx} onChangeSelection={this.handleChange} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id}/>
+            return <FilterList key={idx} onChangeSelection={this.handleChange} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id} onClickRemove={this.handleClickRemoveFilter}/>
         });
         let addButton;
         if(this.state.showAddButton) {
