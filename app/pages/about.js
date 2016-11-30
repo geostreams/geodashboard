@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Menu from '../components/Menu'
-import styles from './home.css'
+import styles from './about.css'
 
 class About extends Component {
 
