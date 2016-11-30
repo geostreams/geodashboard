@@ -1,11 +1,12 @@
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var path = require("path");
 
 module.exports = {
-  entry: __dirname + "/app/main.js",
+  entry: "./app/main.js",
   output: {
-    path: __dirname + "/build",
-    filename: "[name]-[hash].js"
+    path: path.resolve(__dirname, "build"),
+    filename: "bundle.js"
   },
   module: {
     loaders: [
@@ -20,7 +21,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules!postcss')
+        loader: 'style!css?modules!postcss'
       }
     ]
   },
@@ -29,11 +30,11 @@ module.exports = {
   ],
   plugins: [
     new webpack.DefinePlugin({
-      VERSION: JSON.stringify("0-prod")
+      VERSION: JSON.stringify("0.1-prod"),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin(),
-    new ExtractTextPlugin("[name]-[hash].css")
+    new HtmlWebpackPlugin({title: 'Geodashboard', hash: true, template: 'public/index.html'})
   ],
-
-}
+};

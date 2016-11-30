@@ -1,4 +1,5 @@
 build/
 node_modules/
-public/bundle.js
 .idea/
+*-compiled.js
+*-compiled.js.map

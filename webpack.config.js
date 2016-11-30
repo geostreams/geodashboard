@@ -1,10 +1,12 @@
 var webpack = require("webpack");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var path = require("path");
 
 module.exports = {
   devtool: 'eval-source-map',
-  entry:  __dirname + "/app/main.js",
+  entry: "./app/main.js",
   output: {
-    path: __dirname + "/public",
+    path: path.resolve(__dirname, "build"),
     filename: "bundle.js"
   },
   module: {
@@ -26,9 +28,10 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      VERSION: JSON.stringify("0-dev")
+      VERSION: JSON.stringify("0.1-dev")
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({title: 'Geodashboard', hash: true, template: 'public/index.html'})
   ],
   devServer: {
   	contentBase: "./public",
