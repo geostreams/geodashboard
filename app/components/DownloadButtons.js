@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { connect } from 'react-redux';
 import {RaisedButton, Dialog, FlatButton} from 'material-ui';
 
 var Config = require('Config');
@@ -74,9 +73,9 @@ class DownloadButtons extends Component {
 		// instead of onClick
 		return (
 			<div>
-				<FlatButton label="Download as CSV" onClick={this.onDownload.bind(this, "csv")} />
-				<FlatButton label="Download as JSON" onClick={this.onDownload.bind(this, "json")} />
-				<FlatButton label="Permalink" onTouchTap={this.handleOpen} />
+				<RaisedButton label="Download as CSV" onClick={this.onDownload.bind(this, "csv")} />
+				<RaisedButton label="Download as JSON" onClick={this.onDownload.bind(this, "json")} />
+				<RaisedButton label="Permalink" onTouchTap={this.handleOpen} />
 				<Dialog
 					title="Permalink"
 					actions={actions}
@@ -92,13 +91,4 @@ class DownloadButtons extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-	return {
-		selectedParameters: state.selectedParameters.parameters,
-		selectedDataSources: state.selectedDataSources.data_sources,
-		selectedStartDate: state.selectedDate.selectedStartDate,
-		selectedEndDate: state.selectedDate.selectedEndDate,
-	}
-}
-
-export default connect(mapStateToProps)(DownloadButtons);
+export default DownloadButtons
