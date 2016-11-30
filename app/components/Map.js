@@ -115,8 +115,7 @@ class Map extends Component {
       new ol.layer.Tile({
         source: new ol.source.XYZ({
           attributions: [attribution],
-          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/' +
-          'NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
+          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
         })
       }),
       vectorLayer
@@ -144,7 +143,9 @@ class Map extends Component {
     var view =  new ol.View({
       projection: 'EPSG:4326',
       center: this.state.center,
-      zoom: 4
+      zoom: 5.5,
+      minZoom: 5.5,
+      maxZoom: 12
     });
     var theMap;
     var initialCenter = this.state.initialCenter;
