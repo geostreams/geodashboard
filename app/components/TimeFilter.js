@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
-import dimensions from '../../data/dimensions.json';
 import { connect } from 'react-redux';
 import { addStartDate, addEndDate} from '../actions';
 import DatePicker from 'material-ui/DatePicker';

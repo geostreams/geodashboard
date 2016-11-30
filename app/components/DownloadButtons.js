@@ -1,66 +1,104 @@
-import React, {Component} from 'react'
-import { connect } from 'react-redux'
+import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import {RaisedButton, Dialog, FlatButton} from 'material-ui';
+
+var Config = require('Config');
 
 class DownloadButtons extends Component {
 	constructor (props) {
-		super(props)
+		super(props);
 		this.state = {
-			clowderUrl: "https://seagrant-dev.ncsa.illinois.edu/clowder/api/geostreams/datapoints?"
-		}
-		this.onPermalink = this.onPermalink.bind(this)
-		this.onVisualize = this.onVisualize.bind(this)
-		this.buildLink= this.buildLink.bind(this)
+			open: false,
+			link: Config.clowderUrl,
+		};
 	}
 
-	buildLink(type) {
-		//TODO: Needs Update when setting up the date and lakes
-		var link=this.state.clowderUrl;
+
+	handleOpen = () => {
+		var link= this.buildLink("json");
+		this.setState({open: true, link: link});
+	};
+
+	handleClose = () => {
+		this.setState({open: false});
+	};
+
+    //convert a map object to url parameters
+	serialize = function(obj) {
+		var str = [];
+		for(var p in obj)
+			if (obj.hasOwnProperty(p)) {
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+			}
+		return str.join("&");
+	};
+
+	buildLink = function(type)  {
+
+		var downloadApi= Config.clowderUrl +"api/geostreams/datapoints?";
 		var isFirst = true;
 		var params={};
-		//Update later
-		//params["geocode"]=;
-		var startTime="2005-01-01+01:00:00";
-		var endTime = "2005-01-31+23:59:59";
-		params["since"] = startTime;
-		params["until"] = endTime;
-		
-		//if(this.props.selectedDataSources.length > 0) {params["sources"] = this.props.selectedDataSources;}
-		//if(this.props.selectedParameters.length  > 0) {params["attributes"] = this.props.selectedParameters;}
+		params["key"] = Config.commKey;
+		params["format"] = type;
+		params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
+		params["until"] = this.props.selectedEndDate.toISOString().slice(0, 10);
 
+		if(this.props.selectedDataSources.length > 0) {params["sources"] = this.props.selectedDataSources;}
+		if(this.props.selectedParameters.length  > 0) {params["attributes"] = this.props.selectedParameters;}
+
+		//TODO: Needs Update when setting up the lakes
 		//Add lake
-		//link=link+"geocode="+blabla+"&";
-		// link = link+"since="+ encodeURIComponent(startTime) + "&until=" + encodeURIComponent(endTime);
-		// for(var i=0; i < this.props.selectedDataSources.length; i++){
-		// 	link=link+"&sources="+encodeURIComponent(this.props.selectedDataSources[i]);
-		// }
-		// for(var j=0; j < this.props.selectedParameters.length; j++){
-		// 	link = link + "&attributes=" + encodeURIComponent(this.props.selectedParameters[j]);
-		// }
+		params["sensor_id"] = 829;
 
-		link = link+ params.toString() + "&format="+type
+		var link = this.serialize(params);
 		console.log(link);
-		return link;
-	}
 
-	onPermalink(event) {
-		console.log("Permalink Clicked");
-		var link=this.buildLink("json");
-	}
+        return downloadApi + link;
+	};
 
-	onVisualize(event) {
-		console.log("Visualize clicked");
-	}
+   onDownload = (type) =>{
+	   var link= this.buildLink(type);
+	   window.open(link);
+   };
 
 	render() {
+		const actions = [
+			<FlatButton
+				label="Close"
+				primary={true}
+				onTouchTap={this.handleClose}
+			/>
+		];
+
+		// don't use a-href download for Download as CSV/JSON, otherwise buildLink will be executed as the page loading,
+		// instead of onClick
 		return (
 			<div>
-				<a class="btn btn-default" download target="_blank" href={this.buildLink("csv")}> Download as CSV </a>
-				<a class="btn btn-default" download target="_blank" href={this.buildLink("json")}> Download as JSON </a>
-				<a class="btn btn-default" download target="_blank" onClick={this.onPermalink}> Permalink </a>
-				<a class="btn btn-default" download target="_blank" onClick={this.onVisualize}> Visualize</a>
+				<FlatButton label="Download as CSV" onClick={this.onDownload.bind(this, "csv")} />
+				<FlatButton label="Download as JSON" onClick={this.onDownload.bind(this, "json")} />
+				<FlatButton label="Permalink" onTouchTap={this.handleOpen} />
+				<Dialog
+					title="Permalink"
+					actions={actions}
+					modal={false}
+					open={this.state.open}
+					onRequestClose={this.handleClose}
+				>
+					<a href={this.state.link} /> {this.state.link}
+				</Dialog>
+
 			</div>
 			);
 	}
 }
 
-export default DownloadButtons;
+const mapStateToProps = (state, ownProps) => {
+	return {
+		selectedParameters: state.selectedParameters.parameters,
+		selectedDataSources: state.selectedDataSources.data_sources,
+		selectedStartDate: state.selectedDate.selectedStartDate,
+		selectedEndDate: state.selectedDate.selectedEndDate,
+	}
+}
+
+export default connect(mapStateToProps)(DownloadButtons);

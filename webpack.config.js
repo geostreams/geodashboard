@@ -36,5 +36,13 @@ module.exports = {
     historyApiFallback: true,
     inline: true,
     hot: true
+  },
+  externals: {
+    //clowderUrl: "https://seagrant-dev.ncsa.illinois.edu/clowder/"
+    Config: JSON.stringify({
+      clowderUrl: "http://localhost:9002/",
+      commKey: "r1ek3rs"
+    })
   }
 }
+
