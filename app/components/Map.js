@@ -35,7 +35,6 @@ class Map extends Component {
         }
       }
     }
-    
     return false;
   }
 
