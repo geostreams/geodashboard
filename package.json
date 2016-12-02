@@ -1,12 +1,12 @@
 {
   "name": "geodashboard-search-react",
   "version": "1.0.0",
-  "description": "Prototype of a search page to interact with the geostreaming api available in Clowder.",
+  "description": "Prototype of a search page to interact with the geostreaming API available in Clowder.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --progress",
-    "build": "NODE_ENV=production webpack --config ./webpack.production.config.js --progress"
+    "start": "webpack-dev-server --progress --colors",
+    "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js --progress --colors"
   },
   "repository": {
     "type": "git",
@@ -16,6 +16,7 @@
   "license": "NCSA",
   "devDependencies": {
     "autoprefixer": "^6.3.6",
+    "babel-cli": "^6.18.0",
     "babel-core": "^6.7.6",
     "babel-loader": "^6.2.4",
     "babel-plugin-react-transform": "^2.0.2",
@@ -25,14 +26,15 @@
     "browser-sync": "2.13.0",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "html-webpack-plugin": "^2.24.1",
     "json-loader": "^0.5.4",
+    "material-ui": "0.16.1",
     "postcss-loader": "^0.8.2",
+    "react-tap-event-plugin": "*",
     "react-transform-hmr": "^1.0.4",
     "style-loader": "^0.13.1",
     "webpack": "^1.12.15",
-    "webpack-dev-server": "^1.14.1",
-    "material-ui": "0.16.1",
-    "react-tap-event-plugin": "*"
+    "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
     "openlayers": "^3.15.1",
