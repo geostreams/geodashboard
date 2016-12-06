@@ -53,3 +53,8 @@
 .olPopupCloser:after {
   content: "✖";
 }
+.olCenterButton {
+  bottom: 5px;
+  left: .5em;
+  border-radius: 2px 2px 0 0;
+}

@@ -14,14 +14,15 @@ import {red500} from 'material-ui/styles/colors';
 injectTapEventPlugin();
 
 class FilterList extends Component {
-	constructor(props) {
-		super(props);
-	   	this.state = {
-	   		selectValue: props.attribute,
-	   		divId: props.idx
-	    };
-	    this.selectAll = this.selectAll.bind(this)
-	}
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectValue: props.attribute,
+            divId: props.idx
+        };
+        this.selectAll = this.selectAll.bind(this)
+    }
 
 	selectAll(event) {
 		var name = event.target.getAttribute("data-name");
@@ -44,22 +45,22 @@ class FilterList extends Component {
 		}
 	}
 
-	render() {
-		var divContents;
-		var showButtons;
-		var isAllSelected = false; 
-		if(this.state.selectValue == "data_source") {
-			isAllSelected = this.props.selectedDataSources.length == this.props.sources.length
-		} else if(this.state.selectValue == "parameters") {
-			isAllSelected = this.props.selectedParameters.length == this.props.parameters.length
-		}
-		var hideShowContents = <div><input type="checkbox" data-name={this.state.selectValue} onChange={this.selectAll} checked={isAllSelected}></input> Select All</div>;
-		if(this.state.selectValue == "data_source") {
-			divContents = this.props.sources.map(p =>
-				<UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
-			);
+    render() {
+        let divContents;
+        let showButtons;
+        let isAllSelected = false;
+        if(this.state.selectValue == "data_source") {
+            isAllSelected = this.props.selectedDataSources.length == this.props.sources.length
+        } else if(this.state.selectValue == "parameters") {
+            isAllSelected = this.props.selectedParameters.length == this.props.parameters.length
+        }
+        let hideShowContents = <div><input type="checkbox" data-name={this.state.selectValue} onChange={this.selectAll} checked={isAllSelected}></input>Select All</div>;
+        if(this.state.selectValue == "data_source") {
+            divContents = this.props.sources.map(p =>
+                <UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
+            );
 
-			showButtons = hideShowContents;
+            showButtons = hideShowContents;
 
 		} else if(this.state.selectValue == "parameters") {
 			divContents = this.props.parameters.map(p =>
@@ -92,13 +93,14 @@ class FilterList extends Component {
 					{options}
 				</SelectField>
 
-				{showButtons}
-				<div>
-					{divContents}
-				</div>
-			</div>
-		);
-	}
+                {showButtons}
+                <div>
+                    {divContents}
+                </div>
+            </div>
+        );
+    }
+
 }
 
 export default FilterList;

@@ -1,24 +1,25 @@
 .container {
-  background: lightblue;
-  display: table;
-  width:100%;
+    background: lightblue;
+    display: table;
+    width:100%;
 }
         
 input[type=button] {    
-  vertical-align: middle;
-  display: block;
-  width: 50%;
-  margin: 0 auto;
+    vertical-align: middle;
+    display: block;
+    width: 50%;
+    margin: 0 auto;
 }
         
 .button-wrapper {
-  background: darkorange;
-  display: table-cell;
-  vertical-align: middle;
+    background: darkorange;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .add {
-	marginRight: 20,
+    vertical-align: 16em;
+    margin-left: 1em;
 }
 
 .inline {

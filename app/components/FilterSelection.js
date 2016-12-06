@@ -12,28 +12,26 @@ class FilterSelection extends Component {
 			showAddButton: true
 		};
 	    this.handleClickAddFilter = this.handleClickAddFilter.bind(this);
-	    this.handleChange = this.handleChange.bind(this)
+	    this.handleChange = this.handleChange.bind(this);
 		this.handleClickRemoveFilter = this.handleClickRemoveFilter.bind(this);
 	}
 
-	handleClickAddFilter(event) {
-		var notUsedFilters = [];
-		this.props.filters.map((f, key) => {
-		 	if(!this.state.selectedValues.includes(f.id)) {
-		 		notUsedFilters.push(f.id)
-				
-			}
-		});
-		if(notUsedFilters.length > 0) {
-			var selectedVal = this.state.selectedValues.slice();
-			selectedVal.push(notUsedFilters[0]);
-			this.setState({selectedValues: selectedVal, showAddButton: true});
-		} 
-		if(notUsedFilters.length <=1) {
-			this.setState({showAddButton: false});
-		}
-
-	}
+    handleClickAddFilter(event) {
+        let notUsedFilters = [];
+        this.props.filters.map((f, key) => {
+            if(!this.state.selectedValues.includes(f.id)) {
+                notUsedFilters.push(f.id)
+            }
+        });
+        if(notUsedFilters.length > 0) {
+            let selectedVal = this.state.selectedValues.slice();
+            selectedVal.push(notUsedFilters[0]);
+            this.setState({selectedValues: selectedVal, showAddButton: true});
+        }
+        if(notUsedFilters.length <=1) {
+            this.setState({showAddButton: false});
+        }
+    }
 
 	handleChange(event, valueIdx, value) {
 		var idx = event.target.parentElement.parentElement.parentElement.dataset.idx; //Idx of the selected filter
@@ -48,9 +46,9 @@ class FilterSelection extends Component {
 	    newSelected = newSelected.splice(0, idx);
 	    newSelected.push(value);
 	    var showAdd = newSelected.length < this.props.filters.length;
-	    
+
 	    this.setState({selectedValues: newSelected, showAddButton: showAdd });
-	    
+
   	}
 
   	handleClickRemoveFilter(event) {
@@ -74,28 +72,26 @@ class FilterSelection extends Component {
 
 
 
-	render() {
-		const filterIds = this.props.filters.map(f => f.id);
-		const filters = this.state.selectedValues.map((selected) => {
-			var idx = filterIds.indexOf(selected);
-			var f = this.props.filters[idx];
-			return <FilterList key={idx} onChangeSelection={this.handleChange} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id} onClickRemove={this.handleClickRemoveFilter}/>
-		})
-		var addButton;
-		if(this.state.showAddButton) {
-			addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter} className={styles.styleAdd}><ContentAdd/></FloatingActionButton>
-		}
-		return (
-			<div>
-				<div id="filters-div" className={styles.inline}>
-					{filters}
-				</div>
-				<div className={styles.inline}>
-					{addButton}
-				</div>
-			</div>
-		);
-	}
+    render() {
+        const filterIds = this.props.filters.map(f => f.id);
+        const filters = this.state.selectedValues.map((selected) => {
+            let idx = filterIds.indexOf(selected);
+            let f = this.props.filters[idx];
+            return <FilterList key={idx} onChangeSelection={this.handleChange} selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)} attribute={f.id} onClickRemove={this.handleClickRemoveFilter}/>
+        });
+        let addButton;
+        if(this.state.showAddButton) {
+            addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter} className={styles.add}><ContentAdd/></FloatingActionButton>
+        }
+        return (
+            <div>
+                <div id="filters-div">
+                    {filters}
+                    {addButton}
+                </div>
+            </div>
+        );
+    }
 }
 
 export default FilterSelection
