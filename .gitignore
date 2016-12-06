@@ -1,5 +1,6 @@
 build/
 node_modules/
-public/bundle.js
 .idea/
 .DS_Store
+*-compiled.js
+*-compiled.js.map

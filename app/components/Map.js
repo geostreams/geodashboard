@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 var ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css'
+import DeviceGpsFixed from 'material-ui/svg-icons/device/gps-fixed';
 
 
 class Map extends Component {
@@ -9,6 +10,9 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.updateLayers = this.updateLayers.bind(this)
+    this.state = {
+      center: [-84.44799549, 38.9203417],
+    }
   }
 
   render() {
@@ -23,6 +27,8 @@ class Map extends Component {
                 <div id="popup-content"></div>
               </div>
               <div id="ol-zoomslider" className="ol-zoomslider"></div>
+              <div id="ol-centercontrol" className={styles.olCenterButton}></div>
+              <button id="centerButton"><DeviceGpsFixed/></button>
             </div>
             </div>);
   }
@@ -62,6 +68,7 @@ class Map extends Component {
     });
     this.vectorSource.clear();
     this.vectorSource.addFeatures(features);
+    this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
   }
 
   componentDidUpdate() {
@@ -98,9 +105,17 @@ class Map extends Component {
     });
     this.vectorLayer = vectorLayer;
 
+    var attribution = new ol.Attribution({
+      html: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' +
+      'rest/services/NatGeo_World_Map/MapServer">ArcGIS</a> &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC'
+    });
+
     var layers = [
       new ol.layer.Tile({
-        source: new ol.source.OSM()
+        source: new ol.source.XYZ({
+          attributions: [attribution],
+          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
+        })
       }),
       vectorLayer
     ];
@@ -122,19 +137,57 @@ class Map extends Component {
       closer.blur();
       return false;
     };
+
+
+    var view =  new ol.View({
+      projection: 'EPSG:4326',
+      center: this.state.center,
+      zoom: 5.5,
+      minZoom: 5.5,
+      maxZoom: 12
+    });
     var theMap;
+    var initialCenter = this.state.initialCenter;
+    window.app = {};
+    var app = window.app;
+    app.centerControl = function(opt_options) {
+      var options= opt_options || {};
+      var centerButton = document.getElementById('centerButton');
+      
+      var handleCenterButton = function() {
+        view.fit(vectorSource.getExtent(), theMap.getSize());
+      };
+
+      centerButton.addEventListener('click', handleCenterButton, false);
+      centerButton.addEventListener('touchstart', handleCenterButton, false);
+
+      var element = document.getElementById('ol-centercontrol');
+      element.className += ' ol-unselectable ol-control';
+      element.appendChild(centerButton);
+
+      ol.control.Control.call(this, {
+        element: element,
+        target: options.target
+      });
+
+    };
+    ol.inherits(app.centerControl, ol.control.Control);
+
+
     theMap = new ol.Map({
       target: 'map',
       layers: layers,
-      view: new ol.View({
-        projection: 'EPSG:4326',
-        center: [-84.44799549, 38.9203417],
-        zoom: 4
-      }),
+      view: view,
       overlays: [overlay],
-      controls: ol.control.defaults().extend([
-          new ol.control.ZoomSlider()
-        ]),
+      controls: ol.control.defaults({
+        attributionOptions: ({
+          collapsible: false
+        })
+      }).extend([
+        new ol.control.ZoomSlider(),
+        new app.centerControl()
+
+      ])
     });
     this.map = theMap;
     this.map.on('singleclick', function(e){
