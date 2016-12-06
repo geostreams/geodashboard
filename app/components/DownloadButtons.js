@@ -9,7 +9,6 @@ class DownloadButtons extends Component {
 		};
 	}
 
-
 	handleOpen = () => {
 		var link= this.buildLink("json");
 		this.setState({open: true, link: link});
@@ -38,7 +37,6 @@ class DownloadButtons extends Component {
 	buildLink = function(type)  {
 
 		var downloadApi= this.props.api + "/api/geostreams/datapoints?";
-		var isFirst = true;
 		var params={};
 		params["format"] = type;
 		params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
