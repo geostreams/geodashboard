@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
 import {RaisedButton, Dialog, FlatButton} from 'material-ui';
 
-var Config = require('Config');
-
 class DownloadButtons extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
 			open: false,
-			link: Config.clowderUrl,
 		};
 	}
 
@@ -27,17 +24,22 @@ class DownloadButtons extends Component {
 		var str = [];
 		for(var p in obj)
 			if (obj.hasOwnProperty(p)) {
-				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				if(Array.isArray(obj[p]) ){
+					for(var a in obj[p]){
+						str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][a]));
+					}
+				} else {
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				}
 			}
 		return str.join("&");
 	};
 
 	buildLink = function(type)  {
 
-		var downloadApi= Config.clowderUrl +"api/geostreams/datapoints?";
+		var downloadApi= this.props.api + "/api/geostreams/datapoints?";
 		var isFirst = true;
 		var params={};
-		params["key"] = Config.commKey;
 		params["format"] = type;
 		params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
 		params["until"] = this.props.selectedEndDate.toISOString().slice(0, 10);

@@ -7,6 +7,7 @@ const mapStateToProps = (state, ownProps) => {
         selectedDataSources: state.selectedDataSources.data_sources,
         selectedStartDate: state.selectedDate.selectedStartDate,
         selectedEndDate: state.selectedDate.selectedEndDate,
+        api: state.backends.selected,
     }
 };
 
