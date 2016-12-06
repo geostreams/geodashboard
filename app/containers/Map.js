@@ -6,6 +6,8 @@ const mapStateToProps = (state, ownProps) => {
         sensors: state.sensors.data,
         selectedParameters: state.selectedParameters.parameters,
         selectedDataSources: state.selectedDataSources.data_sources,
+        selectedStartDate: state.selectedDate.selectedStartDate,
+        selectedEndDate: state.selectedDate.selectedEndDate
     }
 };
 

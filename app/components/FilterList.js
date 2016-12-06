@@ -27,7 +27,7 @@ class FilterList extends Component {
 	selectAll(event) {
 		var name = event.target.getAttribute("data-name");
 		if(name == "data_source") {
-			var selectedDataSources;
+			let selectedDataSources;
 			if(event.target.checked) {
 				selectedDataSources = Object.assign([], this.props.sources.map(s=> s.id));	
 			} else {
@@ -35,7 +35,7 @@ class FilterList extends Component {
 			}
 			this.props.onSelectAllDataSources(event, selectedDataSources)
 		} else if(name == "parameters") {
-			var selectedParameters;
+			let selectedParameters;
 			if(event.target.checked) {
 				selectedParameters = Object.assign([], this.props.parameters.map(s=> s.id));
 			} else {
