@@ -19,16 +19,6 @@ class TimeFilter extends Component {
 
 
     changeDate = (isStart, event, date) => {
-        // set the min Date for endDate and max Date for startDate when the other is selected
-        if(isStart) {
-            this.setState({
-                minDate: date,
-            });
-        } else {
-            this.setState({
-                maxDate: date,
-            });
-        }
         this.props.onDateChange(event, date, isStart);
     }
 
@@ -36,10 +26,10 @@ class TimeFilter extends Component {
         return (
                 <div>
                     <h5> Start Date</h5>
-                    <DatePicker id="startDate" hintText="Start Date" container="inline" maxDate={this.state.maxDate} onChange={this.changeDate.bind(this, true)}/>
+                    <DatePicker id="startDate" hintText="Start Date" container="inline" minDate={this.state.minDate} maxDate={this.props.selectedEndDate} onChange={this.changeDate.bind(this, true)}/>
 
                     <h5> End Date</h5>
-                    <DatePicker id="endDate" hintText="End Date" container="inline" minDate={this.state.minDate} onChange={this.changeDate.bind(this, false)}/>
+                    <DatePicker id="endDate" hintText="End Date" container="inline" minDate={this.props.selectedStartDate} maxDate={this.state.maxDate} onChange={this.changeDate.bind(this, false)}/>
                 </div>
 
         );
