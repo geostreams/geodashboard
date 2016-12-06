@@ -4,7 +4,7 @@ import Sensors from '../containers/Sensors'
 import Map from '../containers/Map'
 import Menu from './Menu'
 import { connect } from 'react-redux'
-import DownloadButtons from './DownloadButtons'
+import DownloadButtons from '../containers/DownloadButtons'
 import FilterSelection from '../containers/FilterSelection'
 
 class Search extends Component {
