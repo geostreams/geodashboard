@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
+import FilterOption from './FilterOption';
+import TimeFilter from '../containers/TimeFilter';
 import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json'
 import injectTapEventPlugin from 'react-tap-event-plugin'
@@ -22,27 +24,26 @@ class FilterList extends Component {
         this.selectAll = this.selectAll.bind(this)
     }
 
-    selectAll(event) {
-        let name = event.target.getAttribute("data-name");
-        if(name == "data_source") {
-            let selectedDataSources;
-            if(event.target.checked) {
-                selectedDataSources = Object.assign([], this.props.sources.map(s=> s.id));
-            } else {
-                selectedDataSources = Object.assign([]);
-            }
-            this.props.onSelectAllDataSources(event, selectedDataSources)
-        } else if(name == "parameters") {
-            let selectedParameters;
-            if(event.target.checked) {
-                selectedParameters = Object.assign([], this.props.parameters.map(s=> s.id));
-            } else {
-                selectedParameters = Object.assign([]);
-            }
-            this.props.onSelectAllParameters(event, selectedParameters)
-        }
-
-    }
+	selectAll(event) {
+		var name = event.target.getAttribute("data-name");
+		if(name == "data_source") {
+			let selectedDataSources;
+			if(event.target.checked) {
+				selectedDataSources = Object.assign([], this.props.sources.map(s=> s.id));	
+			} else {
+				selectedDataSources = Object.assign([]);
+			}
+			this.props.onSelectAllDataSources(event, selectedDataSources)
+		} else if(name == "parameters") {
+			let selectedParameters;
+			if(event.target.checked) {
+				selectedParameters = Object.assign([], this.props.parameters.map(s=> s.id));
+			} else {
+				selectedParameters = Object.assign([]);
+			}
+			this.props.onSelectAllParameters(event, selectedParameters)
+		}
+	}
 
     render() {
         let divContents;
@@ -61,33 +62,36 @@ class FilterList extends Component {
 
             showButtons = hideShowContents;
 
-        } else if(this.state.selectValue == "parameters") {
-            divContents = this.props.parameters.map(p =>
-                <UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
-            );
-            showButtons = hideShowContents;
-        } else if(this.state.selectValue == "time") {
-            divContents = "Start time / End time"
-        } else if(this.state.selectValue == "locations") {
-            divContents = "Locations"
-        }
-        const {selectedValues, idx} = this.props;
-        const options = dimensions.map(d => {
-            if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
-                return <MenuItem value={d.id} key={d.id} primaryText={d.name} data-idx={idx}/>
-            }
-        });
+		} else if(this.state.selectValue == "parameters") {
+			divContents = this.props.parameters.map(p =>
+				<UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
+			);
+			showButtons = hideShowContents;
+		} else if(this.state.selectValue == "time") {
+			//the UI of date picker
+			divContents =
+				<TimeFilter />
 
-        return (
-            <div className={styles.root} id={this.state.divId}>
-                <div className={styles.right}>
-                    <IconButton onClick={this.props.onClickRemove} data-idx={idx}>
-                        <ContentClear color={red500}/>
-                    </IconButton>
-                </div>
-                <SelectField value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
-                    {options}
-                </SelectField>
+		} else if(this.state.selectValue == "locations") {
+			divContents = "Locations"
+		}
+		const {selectedValues, idx} = this.props;
+		const options = dimensions.map(d => {
+			if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
+		  		return <MenuItem value={d.id} key={d.id} primaryText={d.name} data-idx={idx}/>
+		  	}
+		});
+				  	
+		return (
+			<div className={styles.root} id={this.state.divId}>
+				<div className={styles.right}>
+					<IconButton onClick={this.props.onClickRemove} data-idx={idx}>
+						<ContentClear color={red500}/>
+					</IconButton>
+				</div>
+				<SelectField value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
+					{options}
+				</SelectField>
 
                 {showButtons}
                 <div>

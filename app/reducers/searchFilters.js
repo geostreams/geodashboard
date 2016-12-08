@@ -1,5 +1,4 @@
 import update from 'react/lib/update'
-
 import { ADD_SEARCH_FILTER } from '../actions'
 
 const defaultState = {filters:[{'id':'locations'}, {'id':'data_source'}, {'id':'parameters'}, {'id':'time'}]}

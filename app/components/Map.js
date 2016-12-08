@@ -41,7 +41,6 @@ class Map extends Component {
         }
       }
     }
-    
     return false;
   }
 
@@ -50,7 +49,8 @@ class Map extends Component {
     this.props.sensors.map((sensor) => {
       var showSensor = false;
       if((this.props.selectedParameters.length == 0 || this.inArray(sensor.parameters, this.props.selectedParameters))
-       && (this.props.selectedDataSources.length == 0  || this.props.selectedDataSources.indexOf(sensor.properties.type.id) > -1)) {
+       && (this.props.selectedDataSources.length == 0  || this.props.selectedDataSources.indexOf(sensor.properties.type.id) > -1)
+       && this.props.selectedStartDate < new Date(sensor.max_end_time) && this.props.selectedEndDate > new Date(sensor.min_start_time)) {
 
         var feature = new ol.Feature({
           geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
