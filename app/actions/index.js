@@ -64,6 +64,14 @@ export function addEndDate(date){
   }
 }
 
+export const ADD_SEARCH_LOCATION = 'ADD_SEARCH_LOCATION'
+export function addSearchLocation(location){
+  return {
+    type: ADD_SEARCH_LOCATION,
+    location
+  }
+}
+
 export function fetchSensors(api) {
   return dispatch => {
     dispatch(requestSensors(api))
