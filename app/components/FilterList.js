@@ -21,7 +21,6 @@ class FilterList extends Component {
             selectValue: props.attribute,
             divId: props.idx
         };
-        this.selectAll = this.selectAll.bind(this)
     }
 
 	selectAll(event) {
@@ -54,7 +53,7 @@ class FilterList extends Component {
         } else if(this.state.selectValue == "parameters") {
             isAllSelected = this.props.selectedParameters.length == this.props.parameters.length
         }
-        let hideShowContents = <div><input type="checkbox" data-name={this.state.selectValue} onChange={this.selectAll} checked={isAllSelected}></input>Select All</div>;
+        let hideShowContents = <div><input type="checkbox" data-name={this.state.selectValue} onChange={this.selectAll.bind(this)} checked={isAllSelected}></input>Select All</div>;
         if(this.state.selectValue == "data_source") {
             divContents = this.props.sources.map(p =>
                 <UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>

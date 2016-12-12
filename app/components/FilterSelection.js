@@ -11,9 +11,6 @@ class FilterSelection extends Component {
             selectedValues: ['locations'],
             showAddButton: true
         };
-        this.handleClickAddFilter = this.handleClickAddFilter.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleClickRemoveFilter = this.handleClickRemoveFilter.bind(this);
     }
 
     handleClickAddFilter(event) {
@@ -79,13 +76,13 @@ class FilterSelection extends Component {
         const filters = this.state.selectedValues.map((selected) => {
             let idx = filterIds.indexOf(selected);
             let f = this.props.filters[idx];
-            return <FilterList key={idx} onChangeSelection={this.handleChange}
+            return <FilterList key={idx} onChangeSelection={this.handleChange.bind(this)}
                                selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)}
-                               attribute={f.id} onClickRemove={this.handleClickRemoveFilter}/>
+                               attribute={f.id} onClickRemove={this.handleClickRemoveFilter.bind(this)}/>
         });
         let addButton;
         if (this.state.showAddButton) {
-            addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter} className={styles.add}><ContentAdd/></FloatingActionButton>
+            addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter.bind(this)} className={styles.add}><ContentAdd/></FloatingActionButton>
         }
         return (
             <div>

@@ -9,7 +9,6 @@ class Map extends Component {
 
   constructor(props) {
     super(props);
-    this.updateLayers = this.updateLayers.bind(this)
     this.state = {
       center: [-84.44799549, 38.9203417],
     }
