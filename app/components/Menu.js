@@ -1,24 +1,30 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import styles from '../styles/menu.css'
+import AppBar from 'material-ui/AppBar';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
 
-class Menu extends Component {
+class MenuPage extends Component {
 
-	render() {
-		return (
-			<header>
-				<div className={styles.nav}>
-			        <ul>
-			          	<li><Link to="/" className={this.props.selected === 'home'? styles.selected : null}>Home</Link></li>
-			          	<li><Link to="/explore" className={this.props.selected === 'explore'? styles.selected : null}>Explore</Link></li>
-			            <li><Link to="/search" className={this.props.selected === 'search'? styles.selected : null}>Search</Link></li>
-			            <li><Link to="/about" className={this.props.selected === 'about'? styles.selected : null}>About</Link></li>
-			        </ul>
-		      	</div>
-	      	</header>
-		);
-	}
+    render() {
+        return (
+            <header>
+                <div>
+                    <AppBar
+                        showMenuIconButton={false}
+                        title="Geodashboard 3.0">
+                        <Menu listStyle={{ display: 'flex'}}>
+                            <MenuItem primaryText="Home" containerElement={<Link to="/" />}/>
+                            <MenuItem primaryText="Explore" containerElement={<Link to="/explore" />}/>
+                            <MenuItem primaryText="Search" containerElement={<Link to="/search" />}/>
+                            <MenuItem primaryText="About" containerElement={<Link to="/about" />}/>
+                        </Menu>
+                    </AppBar>
+                </div>
+            </header>
+        );
+    }
 
 }
 
-export default Menu;
+export default MenuPage;
