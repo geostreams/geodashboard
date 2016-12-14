@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
-import FilterOption from './FilterOption';
 import TimeFilter from '../containers/TimeFilter';
 import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json'
@@ -10,6 +9,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 import {red500} from 'material-ui/styles/colors';
+import Paper from 'material-ui/Paper';
 
 injectTapEventPlugin();
 
@@ -81,9 +81,19 @@ class FilterList extends Component {
 		  		return <MenuItem value={d.id} key={d.id} primaryText={d.name} data-idx={idx}/>
 		  	}
 		});
-				  	
+
+        const paper_style = {
+            height: 500,
+            width: 300,
+            margin: 50,
+            padding: 10,
+            textAlign: 'left',
+            display: 'inline-block',
+            overflow: 'auto'
+        };
+
 		return (
-			<div className={styles.root} id={this.state.divId}>
+			<Paper style={paper_style} zDepth={2} id={this.state.divId}>
 				<div className={styles.right}>
 					<IconButton onClick={this.props.onClickRemove} data-idx={idx}>
 						<ContentClear color={red500}/>
@@ -97,7 +107,7 @@ class FilterList extends Component {
                 <div>
                     {divContents}
                 </div>
-            </div>
+            </Paper>
         );
     }
 
