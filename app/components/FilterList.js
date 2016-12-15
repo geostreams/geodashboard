@@ -94,17 +94,19 @@ class FilterList extends Component {
 
 		return (
 			<Paper style={paper_style} zDepth={2} id={this.state.divId}>
-				<div className={styles.right}>
-					<IconButton onClick={this.props.onClickRemove} data-idx={idx}>
-						<ContentClear color={red500}/>
-					</IconButton>
-				</div>
-				<SelectField value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
-					{options}
-				</SelectField>
-
-                {showButtons}
-                <div>
+				<div className={styles.left}>
+					<SelectField fullWidth={true} value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
+                        {options}
+					</SelectField>
+                </div>
+                <div className={styles.right}>
+                    <IconButton className={styles.right} onClick={this.props.onClickRemove} data-idx={idx}>
+                        <ContentClear color={red500}/>
+                    </IconButton>
+                </div>
+                <br/>
+                <div className={styles.listspacing}>
+                    {showButtons}
                     {divContents}
                 </div>
             </Paper>
