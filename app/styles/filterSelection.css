@@ -18,8 +18,9 @@ input[type=button] {
 }
 
 .add {
-    vertical-align: 16em;
+    vertical-align: 18em;
     margin-left: 1em;
+    margin-top: 1em;
 }
 
 .inline {
