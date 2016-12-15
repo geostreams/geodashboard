@@ -37,6 +37,7 @@ class DownloadButtons extends Component {
     buildLink = function (type) {
 
         var downloadApi = this.props.api + "/api/geostreams/datapoints?";
+        // refer to https://opensource.ncsa.illinois.edu/bitbucket/projects/CATS/repos/clowder/browse/app/api/Geostreams.scala#665
         var params = {};
         params["format"] = type;
         params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
@@ -49,9 +50,12 @@ class DownloadButtons extends Component {
             params["attributes"] = this.props.selectedParameters;
         }
 
-        //TODO: Needs Update when setting up the lakes
-        //Add lake
+        if (this.props.selectedLocation !== null) {
 
+            //TODO: Needs Update when setting up the lakes
+            //params["geocode"] = this.props.location;
+            // a config file like: https://opensource.ncsa.illinois.edu/bitbucket/projects/GEOD/repos/seagrant/browse/config/areas.js
+        }
 
         var link = this.serialize(params);
         console.log(link);

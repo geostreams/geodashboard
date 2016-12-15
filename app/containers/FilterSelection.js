@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import FilterSelectionComponent from '../components/FilterSelection'
-import { addSearchParameter, addSearchDataSource, addStartDate, addEndDate } from '../actions'
+import { addSearchParameter, addSearchDataSource, addStartDate, addEndDate, addSearchLocation } from '../actions'
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -27,6 +27,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             minDate.setHours(0, 0, 0, 0);
             dispatch(addStartDate(minDate));
             dispatch(addEndDate(new Date()));
+        },
+        onClearLocation:() =>{
+            dispatch(addSearchLocation(null));
         }
     }
 };

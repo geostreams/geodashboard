@@ -10,6 +10,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 import {red500} from 'material-ui/styles/colors';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
 injectTapEventPlugin();
 
@@ -44,6 +45,10 @@ class FilterList extends Component {
 		}
 	}
 
+	selectLocation(event) {
+		this.props.onSelectLocation(event);
+	}
+
     render() {
         let divContents;
         let showButtons;
@@ -53,7 +58,9 @@ class FilterList extends Component {
         } else if(this.state.selectValue == "parameters") {
             isAllSelected = this.props.selectedParameters.length == this.props.parameters.length
         }
-        let hideShowContents = <div><input type="checkbox" data-name={this.state.selectValue} onChange={this.selectAll.bind(this)} checked={isAllSelected}></input>Select All</div>;
+        let hideShowContents = <div><input type="checkbox" data-name={this.state.selectValue} onChange={this.selectAll} checked={isAllSelected}></input>Select All</div>;
+		let locationList = this.props.locations.map(p => <RadioButton id={p.id} value={p.id} label={p.label} key={p.id}/>);
+
         if(this.state.selectValue == "data_source") {
             divContents = this.props.sources.map(p =>
                 <UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
@@ -72,7 +79,13 @@ class FilterList extends Component {
 				<TimeFilter />
 
 		} else if(this.state.selectValue == "locations") {
-			divContents = "Locations"
+			divContents =
+				(<div>
+						<RadioButtonGroup name="location" onChange={this.selectLocation.bind(this)}>
+							{locationList}
+						</RadioButtonGroup>
+					</div>
+				);
 		}
 		const {selectedValues, idx} = this.props;
 		const options = dimensions.map(d => {
@@ -92,7 +105,7 @@ class FilterList extends Component {
 					{options}
 				</SelectField>
 
-                {showButtons}
+				{showButtons}
                 <div>
                     {divContents}
                 </div>

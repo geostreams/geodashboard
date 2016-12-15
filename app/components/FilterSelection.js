@@ -62,6 +62,9 @@ class FilterSelection extends Component {
         if (value == "time" || this.state.selectedValues[idx] == "time") {
             this.props.onClearTime();
         }
+        if (value == "locations" || this.state.selectedValues[idx] == "locations") {
+            this.props.onClearLocation();
+        }
         var newSelected = Object.assign([], this.state.selectedValues);
         newSelected.splice(idx, 1);
         var showAdd = newSelected.length < this.props.filters.length;

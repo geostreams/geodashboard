@@ -7,7 +7,8 @@ const mapStateToProps = (state, ownProps) => {
         selectedParameters: state.selectedParameters.parameters,
         selectedDataSources: state.selectedDataSources.data_sources,
         selectedStartDate: state.selectedDate.selectedStartDate,
-        selectedEndDate: state.selectedDate.selectedEndDate
+        selectedEndDate: state.selectedDate.selectedEndDate,
+        selectedLocation: state.selectedLocation.location,
     }
 };
 
