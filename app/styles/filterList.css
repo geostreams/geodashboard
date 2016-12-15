@@ -34,6 +34,15 @@
    width: 268px;
 }
 
+.listspacing {
+    float: left;
+}
+
 .right {
     float: right;
+}
+
+.left {
+    float: left;
+    width: 200px;
 }
