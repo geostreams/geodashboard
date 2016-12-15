@@ -10,7 +10,8 @@ const sensors = (state = defaultState, action) => {
 		        receivedAt: action.receivedAt,
 		        api: action.api,
 		        parameters: collectParameters(action.sensors),
-		        sources: collectSources(action.sensors)
+		        sources: collectSources(action.sensors),
+                locations: collectLocations(action.sensors),
     	})
 		default:
 			return state
@@ -25,7 +26,7 @@ function collectParameters(sensorsData) {
         var found = params.some(function (e) {
           return e.id === p;
         })
-        if (p == null) 
+        if (p === null)
         	console.log(`Found sensor ${s.id} with null parameters`)
         else if (!found) 
         	params.push({'id': p, 'label': p || ''});
@@ -43,7 +44,7 @@ function collectSources(sensorsData) {
       var found = sources.some(function (e) {
         return e.id === source.id;
       })
-       if (source == null) 
+       if (source === null)
         console.log(`Found sensor ${s.id} with null data sources`)
       else if (!found) 
       	sources.push({'id':source.id, 'label': source.title || ''});
@@ -51,6 +52,23 @@ function collectSources(sensorsData) {
     // sort
     return sortByLabel(sources);
   }
+
+function collectLocations(sensorsData) {
+    var locations = [];
+    sensorsData.map(s => {
+        var location = s.properties.region;
+        // check if source exists already
+        var found = locations.some(function (e) {
+            return e.id === location;
+        })
+        if (location === null)
+            console.log(`Found sensor ${s.id} without location`)
+        else if (!found)
+            locations.push({'id':location, 'label': location || ''});
+    });
+    // sort
+    return sortByLabel(locations);
+}
 
 function sortByLabel(list) {
     list.sort(function(a, b) {

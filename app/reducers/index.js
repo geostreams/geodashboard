@@ -5,7 +5,7 @@ import searchFilters from './searchFilters'
 import selectedParameters from './selectedParameters'
 import selectedDataSources from './selectedDataSources'
 import selectedDate from './selectedDate'
-
+import selectedLocation from './selectedLocation'
 
 const geodashboardApp = combineReducers({
   backends,
@@ -13,7 +13,8 @@ const geodashboardApp = combineReducers({
   searchFilters,
   selectedParameters,
   selectedDataSources,
-  selectedDate
+  selectedDate,
+  selectedLocation,
 })
 
 export default geodashboardApp
