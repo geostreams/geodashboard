@@ -8,7 +8,6 @@ class FilterOption extends Component {
 	    this.state = {
 	      dimension: ""
 	    };
-	    this.handleChange = this.handleChange.bind(this)
 	}
 
 	handleChange(event) {
@@ -23,7 +22,7 @@ class FilterOption extends Component {
 		return (
 			<div className={styles.row}>
 				<div className={styles.col1}>
-					<input type="checkbox" name={this.props.name} value={this.props.id} onChange={this.handleChange} checked={checkedVar}></input>
+					<input type="checkbox" name={this.props.name} value={this.props.id} onChange={this.handleChange.bind(this)} checked={checkedVar}></input>
 				</div>
 				<div className={styles.col2}>{this.props.label}</div>
 			</div>
