@@ -39,10 +39,21 @@
 }
 
 .right {
-    float: right;
+    float: left;
+    width: 1em;
 }
 
 .left {
     float: left;
-    width: 200px;
+    width: 13.5em;
+}
+
+.paperstyle {
+    height: 30em;
+    width: 19em;
+    margin: 3em;
+    padding: 1em 1.5em;
+    text-align: left;
+    display: inline-block;
+    overflow-y: auto;
 }
