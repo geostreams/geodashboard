@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
-import FilterOption from './FilterOption';
 import TimeFilter from '../containers/TimeFilter';
 import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json'
@@ -23,7 +22,6 @@ class FilterList extends Component {
             selectValue: props.attribute,
             divId: props.idx
         };
-        this.selectAll = this.selectAll.bind(this)
     }
 
 	selectAll(event) {
@@ -96,18 +94,8 @@ class FilterList extends Component {
 		  	}
 		});
 
-        const paper_style = {
-            height: 500,
-            width: 300,
-            margin: 50,
-            padding: 10,
-            textAlign: 'left',
-            display: 'inline-block',
-            overflow: 'auto'
-        };
-
 		return (
-			<Paper style={paper_style} zDepth={2} id={this.state.divId}>
+			<Paper className={styles.paperstyle} zDepth={2} id={this.state.divId}>
 				<div className={styles.left}>
 					<SelectField fullWidth={true} value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
                         {options}
