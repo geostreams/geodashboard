@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Menu from '../components/Menu'
+import Menu from '../components/MenuPage'
 import styles from './home.css'
 import SwitchBackend from '../containers/SwitchBackend'
 

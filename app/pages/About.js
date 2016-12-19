@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Menu from '../components/Menu'
+import Menu from '../components/MenuPage'
 import styles from './about.css'
 
 class About extends Component {

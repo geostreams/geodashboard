@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import styles from '../styles/search.css';
 import Sensors from '../containers/Sensors'
 import Map from '../containers/Map'
-import Menu from './Menu'
+import Menu from './MenuPage'
 import { connect } from 'react-redux'
 import DownloadButtons from '../containers/DownloadButtons'
 import FilterSelection from '../containers/FilterSelection'

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Menu from '../components/Menu'
+import Menu from '../components/MenuPage'
 import Sensors from '../containers/Sensors'
 import styles from './explore.css'
 import { connect } from 'react-redux'
