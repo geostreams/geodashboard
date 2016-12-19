@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
 import AppBar from 'material-ui/AppBar';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
+import FlatButton from 'material-ui/FlatButton';
+import styles from '../styles/menuPage.css';
 
 class MenuPage extends Component {
 
@@ -13,12 +13,12 @@ class MenuPage extends Component {
                     <AppBar
                         showMenuIconButton={false}
                         title="Geodashboard 3.0">
-                        <Menu listStyle={{ display: 'flex'}}>
-                            <MenuItem primaryText="Home" containerElement={<Link to="/" />}/>
-                            <MenuItem primaryText="Explore" containerElement={<Link to="/explore" />}/>
-                            <MenuItem primaryText="Search" containerElement={<Link to="/search" />}/>
-                            <MenuItem primaryText="About" containerElement={<Link to="/about" />}/>
-                        </Menu>
+                        <div className={styles.button_format}>
+                            <FlatButton label="Home" containerElement={<Link to="/" />}/>
+                            <FlatButton label="Explore" containerElement={<Link to="/explore" />}/>
+                            <FlatButton label="Search" containerElement={<Link to="/search" />}/>
+                            <FlatButton label="About" containerElement={<Link to="/about" />}/>
+                        </div>
                     </AppBar>
                 </div>
             </header>
