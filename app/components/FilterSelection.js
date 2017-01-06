@@ -39,6 +39,12 @@ class FilterSelection extends Component {
         if (value == "data_source" || this.state.selectedValues[idx] == "data_source") {
             this.props.onClearFilter(false, true);
         }
+        if (value == "time" || this.state.selectedValues[idx] == "time") {
+            this.props.onClearTime();
+        }
+        if (value == "locations" || this.state.selectedValues[idx] == "locations") {
+            this.props.onClearLocation();
+        }
         var newSelected = Object.assign([], this.state.selectedValues);
         newSelected = newSelected.splice(0, idx);
         newSelected.push(value);
