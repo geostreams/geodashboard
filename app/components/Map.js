@@ -69,7 +69,10 @@ class Map extends Component {
     });
     this.vectorSource.clear();
     this.vectorSource.addFeatures(features);
-    this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
+
+    if(this.vectorSource.getFeatures().length > 0 ) {
+      this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
+    }
   }
 
   componentDidUpdate() {
