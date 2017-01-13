@@ -11,6 +11,7 @@ import ContentClear from 'material-ui/svg-icons/content/clear';
 import {red500} from 'material-ui/styles/colors';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Paper from 'material-ui/Paper';
+import Checkbox from 'material-ui/Checkbox';
 
 injectTapEventPlugin();
 
@@ -58,7 +59,11 @@ class FilterList extends Component {
         } else if(this.state.selectValue == "parameters") {
             isAllSelected = this.props.selectedParameters.length == this.props.parameters.length
         }
-		let hideShowContents = <div><input type="checkbox" data-name={this.state.selectValue} onChange={this.selectAll.bind(this)} checked={isAllSelected}></input>Select All</div>;
+		let hideShowContents =
+			<div className={styles.select_all_style}>
+				<Checkbox label="Select All" data-name={this.state.selectValue}
+						  onCheck={this.selectAll.bind(this)} checked={isAllSelected} />
+			</div>;
 		let locationList = this.props.locations.map(p => <RadioButton id={p.id} value={p.id} label={p.label} key={p.id}/>);
 
         if(this.state.selectValue == "data_source") {

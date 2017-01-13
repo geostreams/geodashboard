@@ -45,15 +45,21 @@
 
 .left {
     float: left;
-    width: 13.5em;
+    width: 15em;
 }
 
 .paperstyle {
     height: 30em;
-    width: 19em;
-    margin: 3em;
+    width: 20em;
+    margin: 3em 2em;
     padding: 1em 1.5em;
     text-align: left;
     display: inline-block;
     overflow-y: auto;
+    overflow-x: auto;
+}
+
+.select_all_style {
+    margin-top: 0.6em;
+    width: 80%;
 }
