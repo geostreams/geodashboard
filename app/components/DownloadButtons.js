@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
 import {RaisedButton, Dialog, FlatButton} from 'material-ui';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 class DownloadButtons extends Component {
     constructor(props) {
         super(props);
         this.state = {
             open: false,
+            value: 1,
         };
     }
+
+    handleSelect = (event, index, value) => this.setState({value});
+
     // handle Permalink panel
     handleOpen = () => {
         var link = this.buildLink("json");
@@ -76,14 +82,13 @@ class DownloadButtons extends Component {
                 onTouchTap={this.handleClose}
             />
         ];
-
+        const style = {
+            textAlign: "center",
+        };
         // don't use a-href download for Download as CSV/JSON, otherwise buildLink will be executed as the page loading,
         // instead of onClick
         return (
-            <div>
-                <RaisedButton label="Download as CSV" onClick={this.onDownload.bind(this, "csv")}/>
-                <RaisedButton label="Download as JSON" onClick={this.onDownload.bind(this, "json")}/>
-                <RaisedButton label="Permalink" onTouchTap={this.handleOpen}/>
+            <div style={style}>
                 <Dialog
                     title="Permalink"
                     actions={actions}
@@ -93,6 +98,11 @@ class DownloadButtons extends Component {
                 >
                     <a href={this.state.link}/> {this.state.link}
                 </Dialog>
+                <DropDownMenu value={this.state.value} onChange={this.handleSelect}>
+                    <MenuItem value={1} primaryText="Download as CSV" onClick={this.onDownload.bind(this, "csv")}/>
+                    <MenuItem value={2} primaryText="Download as JSON" onClick={this.onDownload.bind(this, "json")}/>
+                    <MenuItem value={3} primaryText="Permalink" onTouchTap={this.handleOpen}/>
+                </DropDownMenu>
 
             </div>
         );
