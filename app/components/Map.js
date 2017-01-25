@@ -43,6 +43,14 @@ class Map extends Component {
     return false;
   }
 
+  //TODO: get this info from settings.
+  getColor(source){
+  var sourcecolor = {"epa" :  "#0D71BA", "glfmsp" : "#F7941E", "gsfmp" : "#CC2128", "heidelberg" : "#CC2128", "iadn" : "#8A2BE2",
+    "lec" : "#4D6363", "noaa" : "#043C82", "usgs" : "#39B54A","wqp" : "#F28E1E",
+    };
+  return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
+}
+
   updateLayers() {
     var features = Array();
     this.props.sensors.map((sensor) => {
@@ -58,7 +66,7 @@ class Map extends Component {
         feature.setStyle(new ol.style.Style({
           image: new ol.style.Circle({
               radius: 4,
-              fill: new ol.style.Fill({color: '#17495B'}),
+              fill: new ol.style.Fill({color: this.getColor(sensor.properties.type.id)}),
               stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
             })
         }));
@@ -91,7 +99,7 @@ class Map extends Component {
       feature.setStyle(new ol.style.Style({
         image: new ol.style.Circle({
             radius: 5,
-            fill: new ol.style.Fill({color: '#17495B'}),
+            fill: new ol.style.Fill({color: this.getColor(sensor.properties.type.id)}),
             stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
           })
       }));
