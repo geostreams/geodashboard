@@ -49,9 +49,9 @@
 }
 
 .paperstyle {
-    height: 30em;
-    width: 20em;
-    margin: 3em 2em;
+    max-height: 30em;
+    width: 20.5em;
+    margin: 1em 0em 1em 1em;
     padding: 1em 1.5em;
     text-align: left;
     display: inline-block;
