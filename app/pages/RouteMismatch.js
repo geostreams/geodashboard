@@ -1,13 +1,15 @@
 import React, {Component} from 'react'
 import Menu from '../components/MenuPage'
+import styles from '../styles/main.css'
 
 class RouteMismatch extends Component {
 	render() {
-		var title = 'Sensors';
 		return (
 			<div>
 				<Menu/>
-				<div>Wrong url, friend.</div>
+				<div className={styles.contentcenter}>
+					<h3>404 Not Found.</h3>
+				</div>
 			</div>
 		);
 	}

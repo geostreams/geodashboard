@@ -6,6 +6,7 @@ const mapStateToProps = (state, ownProps) => {
         sensorsData: state.sensors.data,
         parameters: state.sensors.parameters,
         sources: state.sensors.sources,
+        locations: state.sensors.locations
     }
 };
 

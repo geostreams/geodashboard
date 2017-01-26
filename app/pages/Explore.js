@@ -1,12 +1,11 @@
 import React, {Component} from 'react'
 import Menu from '../components/MenuPage'
 import Sensors from '../containers/Sensors'
-import styles from './explore.css'
+import styles from '../styles/main.css'
 import { connect } from 'react-redux'
 
 class Explore extends Component {
 	render() {
-		var title = 'Sensors';
 		return (
 			<div>
 				<Menu selected='explore'/>
