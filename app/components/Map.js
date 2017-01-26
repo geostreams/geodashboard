@@ -67,7 +67,7 @@ class Map extends Component {
           image: new ol.style.Circle({
               radius: 4,
               fill: new ol.style.Fill({color: this.getColor(sensor.properties.type.id)}),
-              stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
+              stroke: new ol.style.Stroke({color: '#000000', width: 1})
             })
         }));
         feature.setId(sensor.name);
