@@ -6,25 +6,31 @@ import Menu from './MenuPage'
 import { connect } from 'react-redux'
 import DownloadButtons from '../containers/DownloadButtons'
 import FilterSelection from '../containers/FilterSelection'
-import Drawer from 'material-ui/Drawer';
-import AppBar from 'material-ui/AppBar';
+import Card from 'material-ui/Card';
+import List from 'material-ui/List';
+
 
 class Search extends Component {
 
     render() {
         var title = 'Sensors';
         return (
-			<div>
-				<Menu selected="search"/>
-				<div>
-					<Drawer width="380">
-						<AppBar title="Geodashboard 3.0" showMenuIconButton={false}/>
-						<FilterSelection/>
-						<DownloadButtons/>
-					</Drawer>
+        	<div>
+				<div className={styles.menustyle}>
+					<Menu selected="search"/>
 				</div>
-				<div className={styles.root}>
-					<Map sensors={this.props.sensorsData}/>
+				<div className={styles.nonmenustyle}>
+					<div>
+						<List className={styles.cardsize}>
+							<FilterSelection/>
+							<DownloadButtons/>
+						</List>
+					</div>
+					<div className={styles.root}>
+						<Card>
+							<Map sensors={this.props.sensorsData}/>
+						</Card>
+					</div>
 				</div>
 			</div>
         );
