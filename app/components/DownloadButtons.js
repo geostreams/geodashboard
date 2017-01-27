@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
 import {RaisedButton, Dialog, FlatButton} from 'material-ui';
-import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
+import FileFileDownload from 'material-ui/svg-icons/file/file-download';
 
 class DownloadButtons extends Component {
     constructor(props) {
         super(props);
         this.state = {
             open: false,
-            value: 1,
         };
     }
-
-    handleSelect = (event, index, value) => this.setState({value});
 
     // handle Permalink panel
     handleOpen = () => {
@@ -74,6 +73,12 @@ class DownloadButtons extends Component {
         window.open(link);
     };
 
+    handleSelect = (value) => {
+        this.setState({
+            openMenu: value,
+        });
+    };
+
     render() {
         const actions = [
             <FlatButton
@@ -98,11 +103,15 @@ class DownloadButtons extends Component {
                 >
                     <a href={this.state.link}/> {this.state.link}
                 </Dialog>
-                <DropDownMenu value={this.state.value} onChange={this.handleSelect}>
-                    <MenuItem value={1} primaryText="Download as CSV" onClick={this.onDownload.bind(this, "csv")}/>
-                    <MenuItem value={2} primaryText="Download as JSON" onClick={this.onDownload.bind(this, "json")}/>
-                    <MenuItem value={3} primaryText="Permalink" onTouchTap={this.handleOpen}/>
-                </DropDownMenu>
+                <RaisedButton label="Download as CSV" onClick={this.onDownload.bind(this, "csv")}/>
+                <IconMenu
+                    iconButtonElement={<IconButton><FileFileDownload /></IconButton>}
+                    open={this.state.openMenu}
+                    onRequestChange={this.handleSelect}
+                >
+                    <MenuItem value="1" primaryText="Download as JSON" onClick={this.onDownload.bind(this, "json")} />
+                    <MenuItem value="2" primaryText="Permalink" onTouchTap={this.handleOpen} />
+                </IconMenu>
 
             </div>
         );
