@@ -5,9 +5,11 @@
 }
 
 .cardsize {
-  width: 23em;
+  width: 23.5em;
   margin: 3.6em 1em 1em 1em;
   float: left;
+  max-height: 42em;
+  overflow-y: auto;
 
 }
 
