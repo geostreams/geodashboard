@@ -1,6 +1,23 @@
 .root {
-  background-color: #eee;
-  margin: 1em 1em 1em 25em;
-  padding: 0;
+  margin: 5em 1em 1em 25em;
+  position: fixed;
+  width: calc(70% - 5em);
+}
 
+.cardsize {
+  width: 23em;
+  margin: 3.6em 1em 1em 1em;
+  float: left;
+
+}
+
+.nonmenustyle {
+  display: flex;
+}
+
+.menustyle {
+  position: fixed;
+  width: 100%;
+  margin-bottom: 5em;
+  z-index: 1;
 }
