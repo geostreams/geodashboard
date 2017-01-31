@@ -106,21 +106,18 @@ class DownloadButtons extends Component {
                               label="Download as CSV"
                               onClick={this.onDownload.bind(this, "csv")}
                 />
-
-                <RaisedButton className={styles.iconbuttonstyle}>
-                    <IconMenu
+                <IconMenu className={styles.iconstyle}
                         iconButtonElement={<IconButton><FileFileDownload /></IconButton>}
                         open={this.state.openMenu}
                         onRequestChange={this.handleDownloadOption}
-                    >
-                        <MenuItem value="1" primaryText="Download as JSON"
-                                  onClick={this.onDownload.bind(this, "json")}
-                        />
-                        <MenuItem value="2" primaryText="Permalink"
-                                  onTouchTap={this.handleOpenPermalink}
-                        />
-                    </IconMenu>
-                </RaisedButton>
+                >
+                    <MenuItem value="1" primaryText="Download as JSON"
+                              onClick={this.onDownload.bind(this, "json")}
+                    />
+                    <MenuItem value="2" primaryText="Permalink"
+                              onTouchTap={this.handleOpenPermalink}
+                    />
+                </IconMenu>
             </div>
         );
     }
