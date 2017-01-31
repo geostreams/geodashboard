@@ -18,3 +18,14 @@ h1, h2, h3, h4, h5, h6, p, ul {
   margin: 0;
   padding: 0;
 }
+
+.content {
+    margin-top: 50px;
+    padding: 10px;
+}
+
+.contentcenter {
+    margin-top: 50px;
+    padding: 10px;
+    text-align: center;
+}

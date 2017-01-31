@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Router, Route, browserHistory } from 'react-router'
+import { Router, Route, browserHistory, hashHistory } from 'react-router'
 import Search from '../containers/Search'
 import Home from '../pages/Home'
 import Explore from '../pages/Explore'
@@ -18,7 +18,7 @@ class App extends Component {
 	render() {
 		return (
 		    <MuiThemeProvider>
-                <Router history={browserHistory}>
+                <Router history={hashHistory}>
                     <Route path="/" component={Home}/>
                     <Route path="/explore" component={Explore}/>
                     <Route path="/search" component={Search}/>

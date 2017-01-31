@@ -1,15 +1,14 @@
 import React, {Component} from 'react'
 import Menu from '../components/MenuPage'
-import styles from './home.css'
+import styles from '../styles/main.css'
 import SwitchBackend from '../containers/SwitchBackend'
 
 class Home extends Component {
 	render() {
-		var title = 'Sensors';
 		return (
 			<div>
 				<Menu selected='home'/>
-				<div className={styles.content}>
+				<div className={styles.contentcenter}>
 					<div><h3>Welcome to the Geodashboard!</h3></div>
 					<SwitchBackend/>
 				</div>
