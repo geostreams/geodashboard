@@ -1,4 +1,5 @@
 import { SWITCH_BACKEND, REQUEST_SENSORS, RECEIVE_SENSORS} from '../actions'
+import getLocationName from './locationNames'
 
 const defaultState = {data:[], parameters: [], sources: []}
 
@@ -52,19 +53,6 @@ function collectSources(sensorsData) {
     // sort
     return sortByLabel(sources);
   }
-
-function getLocationName(source) {
-    const named_locations =
-        {
-            "OH": "Ohio",
-            "HU": "Lake Huron",
-            "ON": "Lake Ontario",
-            "MI": "Lake Michigan",
-            "ER": "Lake Erie",
-            "SU": "Lake Superior",
-        };
-    return named_locations[source] !== undefined ? named_locations[source] : source;
-}
 
 function collectLocations(sensorsData) {
     let locations = [];
