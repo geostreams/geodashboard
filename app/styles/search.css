@@ -4,7 +4,7 @@
   width: calc(70% - 5em);
 }
 
-.cardsize {
+.liststyle {
   width: 23.5em;
   margin: 3.6em 1em 1em 1em;
   float: left;
@@ -13,7 +13,7 @@
 
 }
 
-.nonmenustyle {
+.bodystyle {
   display: flex;
 }
 
