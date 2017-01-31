@@ -19,9 +19,9 @@ class Search extends Component {
 				<div className={styles.menustyle}>
 					<Menu selected="search"/>
 				</div>
-				<div className={styles.nonmenustyle}>
+				<div className={styles.bodystyle}>
 					<div>
-						<List className={styles.cardsize}>
+						<List className={styles.liststyle}>
 							<FilterSelection/>
 							<DownloadButtons/>
 						</List>
