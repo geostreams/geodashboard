@@ -53,18 +53,31 @@ function collectSources(sensorsData) {
     return sortByLabel(sources);
   }
 
+function getLocationName(source) {
+    const named_locations =
+        {
+            "OH": "Ohio",
+            "HU": "Lake Huron",
+            "ON": "Lake Ontario",
+            "MI": "Lake Michigan",
+            "ER": "Lake Erie",
+            "SU": "Lake Superior",
+        };
+    return named_locations[source] !== undefined ? named_locations[source] : source;
+}
+
 function collectLocations(sensorsData) {
-    var locations = [];
+    let locations = [];
     sensorsData.map(s => {
-        var location = s.properties.region;
+        let location = s.properties.region;
         // check if source exists already
-        var found = locations.some(function (e) {
+        let found = locations.some(function (e) {
             return e.id === location;
-        })
+        });
         if (location === null)
-            console.log(`Found sensor ${s.id} without location`)
+            console.log(`Found sensor ${s.id} without location`);
         else if (!found)
-            locations.push({'id':location, 'label': location || ''});
+            locations.push({'id': location, 'label': getLocationName(location) || ''});
     });
     // sort
     return sortByLabel(locations);
