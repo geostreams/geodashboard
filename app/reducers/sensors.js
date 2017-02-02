@@ -55,11 +55,11 @@ function collectSources(sensorsData) {
   }
 
 function collectLocations(sensorsData) {
-    let locations = [];
+    const locations = [];
     sensorsData.map(s => {
-        let location = s.properties.region;
+        const location = s.properties.region;
         // check if source exists already
-        let found = locations.some(function (e) {
+        const found = locations.some(function (e) {
             return e.id === location;
         });
         if (location === null)
