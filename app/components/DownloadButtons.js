@@ -103,7 +103,7 @@ class DownloadButtons extends Component {
                     <a href={this.state.link}/> {this.state.link}
                 </Dialog>
                 <RaisedButton className={styles.raisedbuttonstyle}
-                              label="Download as CSV"
+                              label="Download Data"
                               onClick={this.onDownload.bind(this, "csv")}
                 />
                 <IconMenu className={styles.iconstyle}
