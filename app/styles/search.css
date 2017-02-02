@@ -8,9 +8,8 @@
   width: 23.5em;
   margin: 3.6em 1em 1em 1em;
   float: left;
-  max-height: 42em;
+  height: 38em;
   overflow-y: auto;
-
 }
 
 .bodystyle {
@@ -22,4 +21,9 @@
   width: 100%;
   margin-bottom: 5em;
   z-index: 1;
+}
+
+.downloadstyle {
+  margin: auto;
+  width: 70%;
 }
