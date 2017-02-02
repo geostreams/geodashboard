@@ -1,4 +1,5 @@
 import { SWITCH_BACKEND, REQUEST_SENSORS, RECEIVE_SENSORS} from '../actions'
+import getLocationName from './locationNames'
 
 const defaultState = {data:[], parameters: [], sources: []}
 
@@ -54,17 +55,17 @@ function collectSources(sensorsData) {
   }
 
 function collectLocations(sensorsData) {
-    var locations = [];
+    const locations = [];
     sensorsData.map(s => {
-        var location = s.properties.region;
+        const location = s.properties.region;
         // check if source exists already
-        var found = locations.some(function (e) {
+        const found = locations.some(function (e) {
             return e.id === location;
-        })
+        });
         if (location === null)
-            console.log(`Found sensor ${s.id} without location`)
+            console.log(`Found sensor ${s.id} without location`);
         else if (!found)
-            locations.push({'id':location, 'label': location || ''});
+            locations.push({'id': location, 'label': getLocationName(location) || ''});
     });
     // sort
     return sortByLabel(locations);
