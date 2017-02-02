@@ -9,7 +9,6 @@ import FilterSelection from '../containers/FilterSelection'
 import Card from 'material-ui/Card';
 import List from 'material-ui/List';
 
-
 class Search extends Component {
 
     render() {
@@ -23,8 +22,10 @@ class Search extends Component {
 					<div>
 						<List className={styles.liststyle}>
 							<FilterSelection/>
-							<DownloadButtons/>
 						</List>
+						<div className={styles.downloadstyle}>
+							<DownloadButtons/>
+						</div>
 					</div>
 					<div className={styles.root}>
 						<Card>
