@@ -6,9 +6,8 @@
 
 .liststyle {
   width: 23.5em;
-  margin: 3.6em 1em 1em 1em;
+  margin: 3.6em 1em 3em 1em;
   float: left;
-  height: 38em;
   overflow-y: auto;
 }
 
@@ -27,7 +26,7 @@
   margin-left: auto;
   padding-left: 5em;
   width: 25em;
-  position: absolute;
+  position: fixed;
   bottom:0;
   z-index: 100;
   background-color: #eee;
