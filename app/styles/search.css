@@ -8,6 +8,7 @@
   width: 23.5em;
   margin: 3.6em 1em 3em 1em;
   float: left;
+  height: calc(100vh - 150px);
   overflow-y: auto;
 }
 
