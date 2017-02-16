@@ -1,14 +1,13 @@
 .root {
-  margin: 5em 1em 1em 25em;
-  position: fixed;
-  width: calc(70% - 5em);
+  margin: 4em 0em 0em 0em;
+  float: right;
 }
 
 .liststyle {
-  width: 23.5em;
-  margin: 3.6em 1em 3em 1em;
+  width: 24em;
+  margin: 3.6em 0em 3em 1em;
   float: left;
-  height: calc(100vh - 150px);
+  height: calc(100vh - 8em);
   overflow-y: auto;
 }
 
@@ -25,7 +24,7 @@
 
 .downloadstyle {
   margin-left: auto;
-  padding-left: 5em;
+  padding: 0.5em 0em 0.5em 5em;
   width: 25em;
   position: fixed;
   bottom:0;
