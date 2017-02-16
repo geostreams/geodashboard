@@ -4,3 +4,5 @@ node_modules/
 .DS_Store
 *-compiled.js
 *-compiled.js.map
+yarn-error.log
+npm-debug.log
