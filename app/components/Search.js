@@ -23,9 +23,9 @@ class Search extends Component {
 						<List className={styles.liststyle}>
 							<FilterSelection/>
 						</List>
-						<div className={styles.downloadstyle}>
+						<Card className={styles.downloadstyle}>
 							<DownloadButtons/>
-						</div>
+						</Card>
 					</div>
 					<div className={styles.root}>
 						<Card>
