@@ -1,5 +1,6 @@
 .root {
-	height: 40em;
+    height: calc(100vh - 4em);
+    width: calc(100vw - 25em);
 }
 
 .marker {
