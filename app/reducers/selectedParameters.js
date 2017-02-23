@@ -6,9 +6,9 @@ const defaultState = {parameters: []}
 
 const parameters = (state = defaultState, action) => {
 	switch(action.type) {
-		case 'ADD_SEARCH_PARAMETER':
+		case ADD_SEARCH_PARAMETER:
 			return Object.assign({}, state, {
-		        parameters: action.parameter}
+		        parameters: action.payload.parameter}
     		)
 		default:
 			return state

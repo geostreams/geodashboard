@@ -24,10 +24,12 @@ class FilterSelection extends Component {
             let selectedVal = this.state.selectedValues.slice();
             selectedVal.push(notUsedFilters[0]);
             this.setState({selectedValues: selectedVal, showAddButton: true});
+            this.props.onAddFilter(selectedVal);
         }
         if (notUsedFilters.length <= 1) {
             this.setState({showAddButton: false});
         }
+
     }
 
     handleChange(event, valueIdx, value) {
@@ -51,6 +53,7 @@ class FilterSelection extends Component {
         var showAdd = newSelected.length < this.props.filters.length;
 
         this.setState({selectedValues: newSelected, showAddButton: showAdd});
+        this.props.onChangeFilter(newSelected, idx);
 
     }
 
@@ -76,6 +79,7 @@ class FilterSelection extends Component {
         var showAdd = newSelected.length < this.props.filters.length;
 
         this.setState({selectedValues: newSelected, showAddButton: showAdd});
+        this.props.onDeleteFilter(idx);
 
     }
 

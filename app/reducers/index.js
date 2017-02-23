@@ -6,15 +6,18 @@ import selectedParameters from './selectedParameters'
 import selectedDataSources from './selectedDataSources'
 import selectedDate from './selectedDate'
 import selectedLocation from './selectedLocation'
+import selectedFilters from './selectedFilters'
 
 const geodashboardApp = combineReducers({
   backends,
-  sensors,
+
   searchFilters,
   selectedParameters,
   selectedDataSources,
   selectedDate,
   selectedLocation,
+    sensors,
+    selectedFilters
 })
 
 export default geodashboardApp

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import FilterSelectionComponent from '../components/FilterSelection'
-import { addSearchParameter, addSearchDataSource, addStartDate, addEndDate, addSearchLocation } from '../actions'
+import { addSearchParameter, addSearchDataSource, addStartDate, addEndDate,
+    addSearchLocation, addFilter, deleteFilter, changeFilter } from '../actions'
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -30,7 +31,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         onClearLocation:() =>{
             dispatch(addSearchLocation(null));
+        },
+        onAddFilter: (selectedFilter) => {
+            dispatch(addFilter(selectedFilter));
+        },
+        onDeleteFilter: (idx) => {
+            dispatch(deleteFilter(idx));
+        },
+        onChangeFilter: (selectedFilter, idx) => {
+            dispatch(changeFilter(selectedFilter, idx));
         }
+
     }
 };
 

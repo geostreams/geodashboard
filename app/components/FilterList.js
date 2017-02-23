@@ -54,6 +54,9 @@ class FilterList extends Component {
         let divContents;
         let showButtons;
         let isAllSelected = false;
+        const {selectedValues, idx} = this.props;
+
+
         if(this.state.selectValue == "data_source") {
             isAllSelected = this.props.selectedDataSources.length == this.props.sources.length
         } else if(this.state.selectValue == "parameters") {
@@ -68,6 +71,7 @@ class FilterList extends Component {
 
         if(this.state.selectValue == "data_source") {
             divContents = this.props.sources.map(p =>
+
                 <UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
             );
 
@@ -92,7 +96,7 @@ class FilterList extends Component {
 					</div>
 				);
 		}
-		const {selectedValues, idx} = this.props;
+
 		const options = dimensions.map(d => {
 			if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
 		  		return <MenuItem value={d.id} key={d.id} primaryText={d.name} data-idx={idx}/>

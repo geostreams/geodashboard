@@ -5,11 +5,11 @@ const defaultState = {selectedStartDate: new Date("1983-01-01"), selectedEndDate
 
 const date = (state = defaultState, action) => {
     switch(action.type) {
-        case 'ADD_START_DATE':
+        case ADD_START_DATE:
             return Object.assign({}, state, {
                 selectedStartDate: action.date}
             )
-        case 'ADD_END_DATE':
+        case ADD_END_DATE:
             return Object.assign({}, state, {
                 selectedEndDate: action.date}
             )

@@ -20,6 +20,7 @@ function receiveSensors(api, json) {
     type: RECEIVE_SENSORS,
     api,
     sensors: json,
+    available_sensors: json,
     receivedAt: Date.now()
   }
 }
@@ -34,17 +35,35 @@ function addSearchFilter(filter) {
 
 export const ADD_SEARCH_PARAMETER = 'ADD_SEARCH_PARAMETER'
 export function addSearchParameter(parameter){
-  return {
-    type: ADD_SEARCH_PARAMETER,
-    parameter
+  return(dispatch, getState) => {
+    const state = getState();
+    const selectedParameters = state.selectedParameters;
+    dispatch({
+      type: ADD_SEARCH_PARAMETER,
+        payload: {
+          selectedParameters,
+          parameter
+        }
+    })
   }
+
 }
 
 export const ADD_SEARCH_DATASOURCE = 'ADD_SEARCH_DATASOURCE'
 export function addSearchDataSource(data_source){
-  return {
-    type: ADD_SEARCH_DATASOURCE,
-    data_source
+  return (dispatch, getState) => {
+    const state = getState();
+    const selectedDataSources = state.selectedDataSources;
+    const sensors = state.sensors;
+    dispatch ({
+        type: ADD_SEARCH_DATASOURCE,
+        payload: {
+          selectedDataSources,
+          sensors,
+          data_source
+        }
+    })
+
   }
 }
 
@@ -69,6 +88,31 @@ export function addSearchLocation(location){
   return {
     type: ADD_SEARCH_LOCATION,
     location
+  }
+}
+
+export const ADD_FILTER = 'ADD_FILTER'
+export function addFilter(selectedFilter){
+  return {
+    type: ADD_FILTER,
+      selectedFilter
+  }
+}
+
+export const CHANGE_FILTER = 'CHANGE_FILTER'
+export function changeFilter(selectedFilter, idx) {
+  return {
+    type: CHANGE_FILTER,
+      selectedFilter,
+      idx
+  }
+}
+
+export const DELETE_FILTER = 'DELETE_FILTER'
+export function deleteFilter(idx) {
+  return  {
+    type: DELETE_FILTER,
+      idx
   }
 }
 
