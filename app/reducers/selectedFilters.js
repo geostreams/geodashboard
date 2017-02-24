@@ -1,6 +1,6 @@
 import {ADD_FILTER, CHANGE_FILTER, DELETE_FILTER} from '../actions'
 
-const defaultState = {selected_filters: []};
+const defaultState = {selected_filters: ['locations']};
 
 const selected_filters = (state = defaultState, action) => {
     switch(action.type) {

@@ -32,18 +32,23 @@ function addSearchFilter(filter) {
     filter
   }
 }
-
+export const UPDATE_AVAILABLE_SENSORS = 'UPDATE_AVAILABLE_SENSORS'
 export const ADD_SEARCH_PARAMETER = 'ADD_SEARCH_PARAMETER'
 export function addSearchParameter(parameter){
   return(dispatch, getState) => {
-    const state = getState();
-    const selectedParameters = state.selectedParameters;
     dispatch({
       type: ADD_SEARCH_PARAMETER,
         payload: {
-          selectedParameters,
           parameter
         }
+    })
+    const state = getState();
+    const selected_filters = state.selectedFilters.selected_filters;
+    const selected_search = state.selectedSearch;
+    dispatch({
+      type: 'UPDATE_AVAILABLE_SENSORS',
+        selected_filters,
+        selected_search
     })
   }
 
@@ -52,16 +57,19 @@ export function addSearchParameter(parameter){
 export const ADD_SEARCH_DATASOURCE = 'ADD_SEARCH_DATASOURCE'
 export function addSearchDataSource(data_source){
   return (dispatch, getState) => {
-    const state = getState();
-    const selectedDataSources = state.selectedDataSources;
-    const sensors = state.sensors;
     dispatch ({
         type: ADD_SEARCH_DATASOURCE,
         payload: {
-          selectedDataSources,
-          sensors,
           data_source
         }
+    })
+    const state = getState();
+    const selected_filters = state.selectedFilters.selected_filters;
+    const selected_search = state.selectedSearch;
+    dispatch({
+        type: 'UPDATE_AVAILABLE_SENSORS',
+        selected_filters,
+        selected_search
     })
 
   }
@@ -85,9 +93,21 @@ export function addEndDate(date){
 
 export const ADD_SEARCH_LOCATION = 'ADD_SEARCH_LOCATION'
 export function addSearchLocation(location){
-  return {
-    type: ADD_SEARCH_LOCATION,
-    location
+  return (dispatch, getState) => {
+    dispatch({
+      type: ADD_SEARCH_LOCATION,
+        payload: {
+          location
+        }
+    })
+      const state = getState();
+      const selected_filters = state.selectedFilters.selected_filters;
+      const selected_search = state.selectedSearch;
+      dispatch({
+          type: 'UPDATE_AVAILABLE_SENSORS',
+          selected_filters,
+          selected_search
+      })
   }
 }
 

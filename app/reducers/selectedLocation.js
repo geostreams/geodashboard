@@ -6,7 +6,7 @@ const location = (state = defaultState, action) => {
 	switch(action.type) {
 		case 'ADD_SEARCH_LOCATION':
 			return Object.assign({}, state, {
-		        location: action.location}
+		        location: action.payload.location}
     		)
 		default:
 			return state
