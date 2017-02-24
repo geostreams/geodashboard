@@ -2,7 +2,7 @@ const defaultState = {
 	endpoints:[
     {url: "https://greatlakesmonitoring.org/clowder", label: "GLM PROD"},
     {url: "https://seagrant-dev.ncsa.illinois.edu/clowder", label: "GLM DEV"},
-    {url: "https://greatlakesmonitoring.org//clowder", label: "GLTG PROD"},
+    {url: "https://greatlakesmonitoring.org/clowder", label: "GLTG PROD"},
     {url: "http://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV"},
     {url: "http://data.imlczo.org/clowder", label: "IMLCZO PROD"},
     {url: "https://imlczo-dev.ncsa.illinois.edu/clowder", label: "IMLCZO DEV"},
