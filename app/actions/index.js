@@ -107,7 +107,6 @@ export function addSearchLocation(location) {
     }
 }
 
-export const UPDATE_AVAILABLE_FILTERS = 'UPDATE_AVAILABLE_FILTERS'
 export const ADD_FILTER = 'ADD_FILTER'
 export function addFilter(selectedFilter) {
     return (dispatch, getState) => {
@@ -115,18 +114,7 @@ export function addFilter(selectedFilter) {
             type: ADD_FILTER,
             selectedFilter
         });
-        const state = getState();
-        const selected_filters = state.searchFilters.selected;
-        const selected_search = state.selectedSearch;
-        const sensors = state.sensors.available_sensors;
-        const allFilters = state.searchFilters.filters;
-        dispatch({
-            type: UPDATE_AVAILABLE_FILTERS,
-            selected_filters,
-            selected_search,
-            allFilters,
-            sensors
-        })
+        dispatch(updateAvailableFilters())
     }
 }
 
@@ -137,8 +125,23 @@ export function changeFilter(selectedFilter, idx) {
            type: CHANGE_FILTER,
            selectedFilter,
            idx
-       })
+       });
         dispatch(updateAvailableSensors(idx));
+        dispatch(updateAvailableFilters());
+    }
+}
+
+export const DELETE_FILTER = 'DELETE_FILTER'
+export function deleteFilter(idx) {
+    return {
+        type: DELETE_FILTER,
+        idx
+    }
+}
+
+export const UPDATE_AVAILABLE_FILTERS = 'UPDATE_AVAILABLE_FILTERS'
+export function updateAvailableFilters() {
+    return (dispatch, getState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
         const selected_search = state.selectedSearch;
@@ -151,17 +154,9 @@ export function changeFilter(selectedFilter, idx) {
             allFilters,
             sensors
         })
-
     }
 }
 
-export const DELETE_FILTER = 'DELETE_FILTER'
-export function deleteFilter(idx) {
-    return {
-        type: DELETE_FILTER,
-        idx
-    }
-}
 export const UPDATE_AVAILABLE_SENSORS = 'UPDATE_AVAILABLE_SENSORS'
 export const DELETE_FILTERS_AFTER = 'DELETE_FILTERS_AFTER'
 export function updateAvailableSensors(idx) {
