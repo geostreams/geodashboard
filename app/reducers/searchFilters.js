@@ -1,4 +1,4 @@
-import { ADD_SEARCH_FILTER, ADD_FILTER, CHANGE_FILTER, DELETE_FILTER } from '../actions'
+import { ADD_SEARCH_FILTER, ADD_FILTER, CHANGE_FILTER, DELETE_FILTER, DELETE_FILTERS_AFTER } from '../actions'
 
 const defaultState = {filters:[{'id':'locations'}, {'id':'data_source'}, {'id':'parameters'}, {'id':'time'}], selected: []};
 
@@ -20,6 +20,11 @@ const filters = (state = defaultState, action) => {
             let newFiltersDelete = state.selected.slice(0, action.idx);
             newFiltersDelete = newFiltersDelete.concat(state.selected.slice(parseInt(action.idx)+1));
             return Object.assign({}, state, {selected: newFiltersDelete});
+
+		case DELETE_FILTERS_AFTER:
+			let newFiltersDeleteAfter = state.selected.slice(0, action.idx+1);
+			return Object.assign({}, state, {selected: newFiltersDeleteAfter});
+
 		default:
 			return state
 	}

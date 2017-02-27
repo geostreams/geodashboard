@@ -9,27 +9,29 @@ const defaultState = {  data_sources: {selected: [], available: []},
 const selectedSearch = (state = defaultState, action) => {
     switch(action.type) {
         case ADD_SEARCH_DATASOURCE:
-            let available_ds = state.data_sources.available;
-            if(action.payload.data_source.length < 1 && available_ds < 1){
-                available_ds = action.all_data_sources;
-            }
-            return Object.assign({}, state, {data_sources: {selected: action.payload.data_source, available: available_ds}});
+            const tempState = Object.assign({}, state, {data_sources: {selected: action.data_source, available: state.data_sources.available}});
+            const newState = updateSelected(action.selected_filters, tempState, 'data_source');
+            return Object.assign({}, state, newState);
 
         case ADD_SEARCH_PARAMETER:
-            let available_p = state.parameters.available;
-            if(action.payload.parameter.length < 1 && available_p.length < 1 ) {
-                available_p = action.all_parameters;
-            }
-            return Object.assign({}, state, {parameters: {selected: action.payload.parameter, available: available_p}});
+            const tempStateP = Object.assign({}, state, {parameters: {selected: action.parameter, available: state.parameters.available}});
+            const newStateP = updateSelected(action.selected_filters, tempStateP, 'parameters');
+            return Object.assign({}, state, newStateP);
 
         case ADD_SEARCH_LOCATION:
-            return Object.assign({}, state, {locations: {selected: action.payload.location, available: state.locations.available}});
+            const tempStateL = Object.assign({}, state, {locations: {selected: action.location, available: state.locations.available}});
+            const newStateL = updateSelected(action.selected_filters, tempStateL, 'location');
+            return Object.assign({}, state, newStateL);
 
         case ADD_START_DATE:
-            return Object.assign({}, state, {date: {selected: {start: action.date}}});
+            const tempStateSD = Object.assign({}, state, {date: {selected: {start: action.date}}});
+            const newStateSD = updateSelected(action.selected_filters, tempStateSD, 'date');
+            return Object.assign({}, state, newStateSD);
 
         case ADD_END_DATE:
-            return Object.assign({}, state, {date: {selected: {end: action.date}}});
+            const tempStateED = Object.assign({}, state, {date: {selected: {end: action.date}}});
+            const newStateED = updateSelected(action.selected_filters, tempStateED, 'date');
+            return Object.assign({}, state, newStateED);
 
         case UPDATE_AVAILABLE_FILTERS:
             const newFilters = updateAvailable(action.sensors, action.selected_filters, action.allFilters, state);
@@ -48,6 +50,28 @@ function intersectArrays(array1, array2) {
     return array1.filter(function(e) {
         return array2.indexOf(e) > -1
     });
+}
+
+function updateSelected(selected_filters, state, type) {
+    let newState = Object.assign({}, state);
+    const idx = selected_filters.indexOf(type);
+    const filtersToUpdate = selected_filters.slice(idx + 1);
+    filtersToUpdate.map((filter) => {
+        switch(filter) {
+            case 'data_source':
+                newState = Object.assign({}, newState, {data_sources: {selected: []}});
+                return;
+            case 'parameters':
+                newState = Object.assign({}, newState, {parameters: {selected: []}});
+                return;
+            case 'date':
+                return;
+            case 'location':
+                newState = Object.assign({}, newState, {locations: {selected: null}});
+        }
+    })
+    return newState
+
 }
 
 function updateAvailable(sensors, selected_filters, allFilters, state){
