@@ -6,6 +6,7 @@ import { addSearchParameter, addSearchDataSource, addStartDate, addEndDate,
 const mapStateToProps = (state, ownProps) => {
     return {
         filters: state.searchFilters.filters,
+        selectedFilters: state.searchFilters.selected
     }
 };
 

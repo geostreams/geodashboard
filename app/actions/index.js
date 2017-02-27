@@ -33,7 +33,6 @@ function addSearchFilter(filter) {
   }
 }
 export const UPDATE_AVAILABLE_SENSORS = 'UPDATE_AVAILABLE_SENSORS'
-export const UPDATE_AVAILABLE_FILTERS = 'UPDATE_AVAILABLE_FILTERS'
 export const ADD_SEARCH_PARAMETER = 'ADD_SEARCH_PARAMETER'
 export function addSearchParameter(parameter) {
     return (dispatch, getState) => {
@@ -47,24 +46,13 @@ export function addSearchParameter(parameter) {
             }
         })
         const state = getState();
-        const selected_filters = state.selectedFilters.selected_filters;
+        const selected_filters = state.searchFilters.selected;
         const selected_search = state.selectedSearch;
         dispatch({
             type: 'UPDATE_AVAILABLE_SENSORS',
             selected_filters,
             selected_search
         })
-        const newState = getState();
-        const sensors = newState.sensors.available_sensors;
-        const allFilters = newState.searchFilters.filters;
-        dispatch({
-            type: 'UPDATE_AVAILABLE_FILTERS',
-            selected_filters,
-            selected_search,
-            allFilters,
-            sensors
-        })
-
     }
 }
 
@@ -81,24 +69,13 @@ export function addSearchDataSource(data_source){
         }
     })
     const state = getState();
-    const selected_filters = state.selectedFilters.selected_filters;
+    const selected_filters = state.searchFilters.selected;
     const selected_search = state.selectedSearch;
     dispatch({
         type: 'UPDATE_AVAILABLE_SENSORS',
         selected_filters,
         selected_search
     })
-    const newState = getState();
-    const sensors = newState.sensors.available_sensors;
-      const allFilters = newState.searchFilters.filters;
-    dispatch({
-        type: 'UPDATE_AVAILABLE_FILTERS',
-        selected_filters,
-        selected_search,
-        allFilters,
-        sensors
-    })
-
   }
 }
 
@@ -128,26 +105,17 @@ export function addSearchLocation(location){
         }
     })
       const state = getState();
-      const selected_filters = state.selectedFilters.selected_filters;
+      const selected_filters = state.searchFilters.selected;
       const selected_search = state.selectedSearch;
       dispatch({
           type: 'UPDATE_AVAILABLE_SENSORS',
           selected_filters,
           selected_search
       })
-      const newState = getState();
-      const sensors = newState.sensors.available_sensors;
-      const allFilters = newState.searchFilters.filters;
-      dispatch({
-          type: 'UPDATE_AVAILABLE_FILTERS',
-          selected_filters,
-          selected_search,
-          allFilters,
-          sensors
-      })
   }
 }
 
+export const UPDATE_AVAILABLE_FILTERS = 'UPDATE_AVAILABLE_FILTERS'
 export const ADD_FILTER = 'ADD_FILTER'
 export function addFilter(selectedFilter) {
     return (dispatch, getState) => {
@@ -155,9 +123,8 @@ export function addFilter(selectedFilter) {
             type: ADD_FILTER,
             selectedFilter
         });
-
         const state = getState();
-        const selected_filters = state.selectedFilters.selected_filters;
+        const selected_filters = state.searchFilters.selected;
         const selected_search = state.selectedSearch;
         const sensors = state.sensors.available_sensors;
         const allFilters = state.searchFilters.filters;

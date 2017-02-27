@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { switchBackend, fetchSensors } from '../actions'
-import SwitchAPI from '../components/SwitchAPI'
+import SwitchAPIComponent from '../components/SwitchAPI'
 
 const mapStateToProps = (state, ownProps) => {
 	return {
@@ -18,9 +18,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 	}
 };
 
-const SwitchBackend = connect(
+const SwitchAPI = connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(SwitchAPI);
+)(SwitchAPIComponent);
 
-export default SwitchBackend
+export default SwitchAPI

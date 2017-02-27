@@ -1,9 +1,9 @@
-import {ADD_SEARCH_DATASOURCE, ADD_SEARCH_PARAMETER, ADD_SEARCH_LOCATION, UPDATE_AVAILABLE_FILTERS  } from '../actions'
+import {ADD_SEARCH_DATASOURCE, ADD_SEARCH_PARAMETER, ADD_SEARCH_LOCATION, UPDATE_AVAILABLE_FILTERS, ADD_START_DATE, ADD_END_DATE } from '../actions'
 import {collectSources, collectLocations, collectParameters} from './sensors'
 const defaultState = {  data_sources: {selected: [], available: []},
                         parameters: {selected: [], available: []},
                         locations: {selected: null, available: []},
-                        dates: {selected: {start: [], end: []}, available: {start: [], end: []}}
+                        dates: {selected: {start: [new Date("1983-01-01")], end: [new Date()]}, available: {start: [], end: []}}
                     };
 
 const selectedSearch = (state = defaultState, action) => {
@@ -23,8 +23,13 @@ const selectedSearch = (state = defaultState, action) => {
             return Object.assign({}, state, {parameters: {selected: action.payload.parameter, available: available_p}});
 
         case ADD_SEARCH_LOCATION:
-
             return Object.assign({}, state, {locations: {selected: action.payload.location, available: state.locations.available}});
+
+        case ADD_START_DATE:
+            return Object.assign({}, state, {date: {selected: {start: action.date}}});
+
+        case ADD_END_DATE:
+            return Object.assign({}, state, {date: {selected: {end: action.date}}});
 
         case UPDATE_AVAILABLE_FILTERS:
             const newFilters = updateAvailable(action.sensors, action.selected_filters, action.allFilters, state);

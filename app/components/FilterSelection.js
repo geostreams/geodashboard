@@ -8,7 +8,6 @@ class FilterSelection extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedValues: ['locations'],
             showAddButton: true
         };
     }
@@ -16,15 +15,16 @@ class FilterSelection extends Component {
     handleClickAddFilter(event) {
         let notUsedFilters = [];
         this.props.filters.map((f, key) => {
-            if (!this.state.selectedValues.includes(f.id)) {
+            if (!this.props.selectedFilters.includes(f.id)) {
                 notUsedFilters.push(f.id)
             }
         });
         if (notUsedFilters.length > 0) {
-            let selectedVal = this.state.selectedValues.slice();
-            selectedVal.push(notUsedFilters[0]);
-            this.setState({selectedValues: selectedVal, showAddButton: true});
-            this.props.onAddFilter(selectedVal);
+            // let selectedVal = this.state.selectedValues.slice();
+            // selectedVal.push(notUsedFilters[0]);
+            // this.setState({selectedValues: selectedVal, showAddButton: true});
+            this.setState({showAddButton: true});
+            this.props.onAddFilter(notUsedFilters[0]);
         }
         if (notUsedFilters.length <= 1) {
             this.setState({showAddButton: false});
@@ -35,62 +35,66 @@ class FilterSelection extends Component {
     handleChange(event, valueIdx, value) {
         var idx = event.target.parentElement.parentElement.parentElement.dataset.idx; //Idx of the selected filter
         console.log(value, " was selected");
-        if (value == "parameters" || this.state.selectedValues[idx] == "parameters") {
+        if (value == "parameters" || this.props.selectedFilters[idx] == "parameters") {
             this.props.onClearFilter(true, false);
         }
-        if (value == "data_source" || this.state.selectedValues[idx] == "data_source") {
+        if (value == "data_source" || this.props.selectedFilters[idx] == "data_source") {
             this.props.onClearFilter(false, true);
         }
-        if (value == "time" || this.state.selectedValues[idx] == "time") {
+        if (value == "time" || this.props.selectedFilters[idx] == "time") {
             this.props.onClearTime();
         }
-        if (value == "locations" || this.state.selectedValues[idx] == "locations") {
+        if (value == "locations" || this.props.selectedFilters[idx] == "locations") {
             this.props.onClearLocation();
         }
-        var newSelected = Object.assign([], this.state.selectedValues);
+        var newSelected = Object.assign([], this.props.selectedFilters);
         newSelected = newSelected.splice(0, idx);
         newSelected.push(value);
         var showAdd = newSelected.length < this.props.filters.length;
 
-        this.setState({selectedValues: newSelected, showAddButton: showAdd});
+        this.setState({showAddButton: showAdd});
         this.props.onChangeFilter(newSelected, idx);
 
     }
 
     handleClickRemoveFilter(event) {
         var idx = event.target.parentElement.dataset.idx;
-        var value = this.state.selectedValues[idx];
+        var value = this.props.selectedFilters[idx];
 
         console.log(value, " was removed");
-        if (value == "parameters" || this.state.selectedValues[idx] == "parameters") {
+        if (value == "parameters" || this.props.selectedFilters[idx] == "parameters") {
             this.props.onClearFilter(true, false);
         }
-        if (value == "data_source" || this.state.selectedValues[idx] == "data_source") {
+        if (value == "data_source" || this.props.selectedFilters[idx] == "data_source") {
             this.props.onClearFilter(false, true);
         }
-        if (value == "time" || this.state.selectedValues[idx] == "time") {
+        if (value == "time" || this.props.selectedFilters[idx] == "time") {
             this.props.onClearTime();
         }
-        if (value == "locations" || this.state.selectedValues[idx] == "locations") {
+        if (value == "locations" || this.props.selectedFilters[idx] == "locations") {
             this.props.onClearLocation();
         }
-        var newSelected = Object.assign([], this.state.selectedValues);
+        var newSelected = Object.assign([], this.props.selectedFilters);
         newSelected.splice(idx, 1);
         var showAdd = newSelected.length < this.props.filters.length;
 
-        this.setState({selectedValues: newSelected, showAddButton: showAdd});
+        this.setState({showAddButton: showAdd});
         this.props.onDeleteFilter(idx);
 
     }
 
 
+    componentWillMount() {
+        this.props.onAddFilter("locations");
+    }
+
     render() {
         const filterIds = this.props.filters.map(f => f.id);
-        const filters = this.state.selectedValues.map((selected) => {
+        const filters = this.props.selectedFilters.map((selected) => {
             let idx = filterIds.indexOf(selected);
             let f = this.props.filters[idx];
             return <FilterList key={idx} onChangeSelection={this.handleChange.bind(this)}
-                               selectedValues={this.state.selectedValues} idx={this.state.selectedValues.indexOf(f.id)}
+                               selectedValues={this.props.selectedFilters} idx={this.props.selectedFilters.indexOf(f.id)}
                                attribute={f.id} onClickRemove={this.handleClickRemoveFilter.bind(this)}/>
         });
         let addButton;

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import Menu from '../components/MenuPage'
 import styles from '../styles/main.css'
-import SwitchBackend from '../containers/SwitchBackend'
+import SwitchBackend from '../containers/SwitchAPI'
 
 class Home extends Component {
 	render() {
