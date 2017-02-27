@@ -55,21 +55,23 @@ function intersectArrays(array1, array2) {
 function updateSelected(selected_filters, state, type) {
     let newState = Object.assign({}, state);
     const idx = selected_filters.indexOf(type);
-    const filtersToUpdate = selected_filters.slice(idx + 1);
-    filtersToUpdate.map((filter) => {
-        switch(filter) {
-            case 'data_source':
-                newState = Object.assign({}, newState, {data_sources: {selected: []}});
-                return;
-            case 'parameters':
-                newState = Object.assign({}, newState, {parameters: {selected: []}});
-                return;
-            case 'date':
-                return;
-            case 'location':
-                newState = Object.assign({}, newState, {locations: {selected: null}});
-        }
-    })
+    if(idx > 0) {
+        const filtersToUpdate = selected_filters.slice(idx + 1);
+        filtersToUpdate.map((filter) => {
+            switch(filter) {
+                case 'data_source':
+                    newState = Object.assign({}, newState, {data_sources: {selected: []}});
+                    return;
+                case 'parameters':
+                    newState = Object.assign({}, newState, {parameters: {selected: []}});
+                    return;
+                case 'date':
+                    return;
+                case 'location':
+                    newState = Object.assign({}, newState, {locations: {selected: null}});
+            }
+        })
+    }
     return newState
 
 }
