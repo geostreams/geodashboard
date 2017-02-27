@@ -56,7 +56,6 @@ class FilterList extends Component {
         let isAllSelected = false;
         const {selectedValues, idx} = this.props;
 
-
         if(this.state.selectValue == "data_source") {
             isAllSelected = this.props.selectedDataSources.length == this.props.sources.length
         } else if(this.state.selectValue == "parameters") {

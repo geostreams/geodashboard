@@ -20,9 +20,6 @@ class FilterSelection extends Component {
             }
         });
         if (notUsedFilters.length > 0) {
-            // let selectedVal = this.state.selectedValues.slice();
-            // selectedVal.push(notUsedFilters[0]);
-            // this.setState({selectedValues: selectedVal, showAddButton: true});
             this.setState({showAddButton: true});
             this.props.onAddFilter(notUsedFilters[0]);
         }

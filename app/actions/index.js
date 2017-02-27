@@ -33,8 +33,8 @@ function addSearchFilter(filter) {
   }
 }
 export const UPDATE_AVAILABLE_SENSORS = 'UPDATE_AVAILABLE_SENSORS'
-export const ADD_SEARCH_PARAMETER = 'ADD_SEARCH_PARAMETER'
 export const DELETE_FILTERS_AFTER = 'DELETE_FILTERS_AFTER'
+export const ADD_SEARCH_PARAMETER = 'ADD_SEARCH_PARAMETER'
 export function addSearchParameter(parameter) {
     return (dispatch, getState) => {
         const state = getState();
