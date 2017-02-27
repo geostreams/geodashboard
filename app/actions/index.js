@@ -33,34 +33,51 @@ function addSearchFilter(filter) {
   }
 }
 export const UPDATE_AVAILABLE_SENSORS = 'UPDATE_AVAILABLE_SENSORS'
+export const UPDATE_AVAILABLE_FILTERS = 'UPDATE_AVAILABLE_FILTERS'
 export const ADD_SEARCH_PARAMETER = 'ADD_SEARCH_PARAMETER'
-export function addSearchParameter(parameter){
-  return(dispatch, getState) => {
-    dispatch({
-      type: ADD_SEARCH_PARAMETER,
-        payload: {
-          parameter
-        }
-    })
-    const state = getState();
-    const selected_filters = state.selectedFilters.selected_filters;
-    const selected_search = state.selectedSearch;
-    dispatch({
-      type: 'UPDATE_AVAILABLE_SENSORS',
-        selected_filters,
-        selected_search
-    })
-  }
+export function addSearchParameter(parameter) {
+    return (dispatch, getState) => {
+        const state1 = getState();
+        const all_parameters = state1.sensors.parameters;
+        dispatch({
+            type: ADD_SEARCH_PARAMETER,
+            payload: {
+                parameter,
+                all_parameters
+            }
+        })
+        const state = getState();
+        const selected_filters = state.selectedFilters.selected_filters;
+        const selected_search = state.selectedSearch;
+        dispatch({
+            type: 'UPDATE_AVAILABLE_SENSORS',
+            selected_filters,
+            selected_search
+        })
+        const newState = getState();
+        const sensors = newState.sensors.available_sensors;
+        const allFilters = newState.searchFilters.filters;
+        dispatch({
+            type: 'UPDATE_AVAILABLE_FILTERS',
+            selected_filters,
+            selected_search,
+            allFilters,
+            sensors
+        })
 
+    }
 }
 
 export const ADD_SEARCH_DATASOURCE = 'ADD_SEARCH_DATASOURCE'
 export function addSearchDataSource(data_source){
   return (dispatch, getState) => {
+      const state1 = getState();
+      const all_data_sources = state1.sensors.sources;
     dispatch ({
         type: ADD_SEARCH_DATASOURCE,
         payload: {
-          data_source
+          data_source,
+            all_data_sources
         }
     })
     const state = getState();
@@ -70,6 +87,16 @@ export function addSearchDataSource(data_source){
         type: 'UPDATE_AVAILABLE_SENSORS',
         selected_filters,
         selected_search
+    })
+    const newState = getState();
+    const sensors = newState.sensors.available_sensors;
+      const allFilters = newState.searchFilters.filters;
+    dispatch({
+        type: 'UPDATE_AVAILABLE_FILTERS',
+        selected_filters,
+        selected_search,
+        allFilters,
+        sensors
     })
 
   }
@@ -108,15 +135,40 @@ export function addSearchLocation(location){
           selected_filters,
           selected_search
       })
+      const newState = getState();
+      const sensors = newState.sensors.available_sensors;
+      const allFilters = newState.searchFilters.filters;
+      dispatch({
+          type: 'UPDATE_AVAILABLE_FILTERS',
+          selected_filters,
+          selected_search,
+          allFilters,
+          sensors
+      })
   }
 }
 
 export const ADD_FILTER = 'ADD_FILTER'
-export function addFilter(selectedFilter){
-  return {
-    type: ADD_FILTER,
-      selectedFilter
-  }
+export function addFilter(selectedFilter) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_FILTER,
+            selectedFilter
+        });
+
+        const state = getState();
+        const selected_filters = state.selectedFilters.selected_filters;
+        const selected_search = state.selectedSearch;
+        const sensors = state.sensors.available_sensors;
+        const allFilters = state.searchFilters.filters;
+        dispatch({
+            type: 'UPDATE_AVAILABLE_FILTERS',
+            selected_filters,
+            selected_search,
+            allFilters,
+            sensors
+        })
+    }
 }
 
 export const CHANGE_FILTER = 'CHANGE_FILTER'

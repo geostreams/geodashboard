@@ -4,8 +4,8 @@ import filterOption from '../components/FilterOption'
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		selectedParameters: state.selectedParameters.parameters,
-  		selectedDataSources: state.selectedDataSources.data_sources,
+		selectedParameters: state.selectedSearch.parameters.selected,
+  		selectedDataSources: state.selectedSearch.data_sources.selected,
 	}
 };
 

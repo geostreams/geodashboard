@@ -4,12 +4,12 @@ import { addSearchParameter, addSearchDataSource, addSearchLocation } from '../a
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        locations: state.sensors.locations,
-        sources: state.sensors.sources,
-        parameters: state.sensors.parameters,
-        selectedParameters: state.selectedParameters.parameters,
-        selectedDataSources: state.selectedDataSources.data_sources,
-        selectedLocation: state.selectedLocation,
+        locations: state.selectedSearch.locations.available,
+        sources: state.selectedSearch.data_sources.available,
+        parameters: state.selectedSearch.parameters.available,
+        selectedParameters: state.selectedSearch.parameters.selected,
+        selectedDataSources: state.selectedSearch.data_sources.selected,
+        selectedLocation: state.selectedSearch.locations.selected,
     }
 };
 

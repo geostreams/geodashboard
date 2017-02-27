@@ -124,7 +124,7 @@ const sensors = (state = defaultState, action) => {
 	}
 }
 
-function collectParameters(sensorsData) {
+export function collectParameters(sensorsData) {
     var params = [];
     sensorsData.map(s => {
       s.parameters.map(p => {
@@ -142,7 +142,7 @@ function collectParameters(sensorsData) {
     return sortByLabel(params);
   }
 
-function collectSources(sensorsData) {
+export function collectSources(sensorsData) {
     var sources = [];
     sensorsData.map(s => {
       var source = s.properties.type;
@@ -159,7 +159,7 @@ function collectSources(sensorsData) {
     return sortByLabel(sources);
   }
 
-function collectLocations(sensorsData) {
+export function collectLocations(sensorsData) {
     const locations = [];
     sensorsData.map(s => {
         const location = s.properties.region;
