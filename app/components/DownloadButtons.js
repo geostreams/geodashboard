@@ -1,5 +1,10 @@
 import React, {Component} from 'react';
 import {RaisedButton, Dialog, FlatButton} from 'material-ui';
+import MenuItem from 'material-ui/MenuItem';
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
+import FileFileDownload from 'material-ui/svg-icons/file/file-download';
+import styles from '../styles/downloadButton.css';
 
 class DownloadButtons extends Component {
     constructor(props) {
@@ -8,13 +13,14 @@ class DownloadButtons extends Component {
             open: false,
         };
     }
+
     // handle Permalink panel
-    handleOpen = () => {
+    handleOpenPermalink = () => {
         var link = this.buildLink("json");
         this.setState({open: true, link: link});
     };
 
-    handleClose = () => {
+    handleClosePermalink = () => {
         this.setState({open: false});
     };
 
@@ -68,32 +74,50 @@ class DownloadButtons extends Component {
         window.open(link);
     };
 
+    handleDownloadOption = (value) => {
+        this.setState({
+            openMenu: value,
+        });
+    };
+
     render() {
         const actions = [
             <FlatButton
                 label="Close"
                 primary={true}
-                onTouchTap={this.handleClose}
+                onTouchTap={this.handleClosePermalink}
             />
         ];
 
-        // don't use a-href download for Download as CSV/JSON, otherwise buildLink will be executed as the page loading,
-        // instead of onClick
+        // don't use a-href download for Download as CSV/JSON, otherwise buildLink
+        // will be executed as the page loading, instead of onClick
         return (
-            <div>
-                <RaisedButton label="Download as CSV" onClick={this.onDownload.bind(this, "csv")}/>
-                <RaisedButton label="Download as JSON" onClick={this.onDownload.bind(this, "json")}/>
-                <RaisedButton label="Permalink" onTouchTap={this.handleOpen}/>
+            <div className={styles.buttonstyle}>
                 <Dialog
                     title="Permalink"
                     actions={actions}
                     modal={false}
                     open={this.state.open}
-                    onRequestClose={this.handleClose}
+                    onRequestClose={this.handleClosePermalink}
                 >
                     <a href={this.state.link}/> {this.state.link}
                 </Dialog>
-
+                <RaisedButton className={styles.raisedbuttonstyle}
+                              label="Download Data"
+                              onClick={this.onDownload.bind(this, "csv")}
+                />
+                <IconMenu className={styles.iconstyle}
+                        iconButtonElement={<IconButton><FileFileDownload /></IconButton>}
+                        open={this.state.openMenu}
+                        onRequestChange={this.handleDownloadOption}
+                >
+                    <MenuItem value="1" primaryText="Download as JSON"
+                              onClick={this.onDownload.bind(this, "json")}
+                    />
+                    <MenuItem value="2" primaryText="Permalink"
+                              onTouchTap={this.handleOpenPermalink}
+                    />
+                </IconMenu>
             </div>
         );
     }

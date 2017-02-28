@@ -1,17 +1,14 @@
 {
-  "name": "geodashboard-search-react",
-  "version": "1.0.0",
-  "description": "Prototype of a search page to interact with the geostreaming API available in Clowder.",
-  "main": "index.js",
+  "name": "geodashboard-v3",
+  "version": "0.0.0",
+  "description": "Prototype of new Geodashboard using React.js to visualize data from Geostreaming API available in Clowder.",
+  "main": "app/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --progress --colors",
     "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js --progress --colors"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://lmarini@opensource.ncsa.illinois.edu/bitbucket/scm/~lmarini/geodashboard-search-react.git"
-  },
+  "repository": "https://opensource.ncsa.illinois.edu/bitbucket/scm/geod/geodashboard-v3.git",
   "author": "Luigi Marini",
   "license": "NCSA",
   "devDependencies": {

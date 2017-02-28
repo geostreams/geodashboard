@@ -1,6 +1,33 @@
 .root {
-  background-color: #eee;
-  margin: 0;
-  padding: 0;
+  margin: 4em 0em 0em 0em;
+  float: right;
+}
 
+.liststyle {
+  width: 24em;
+  margin: 3.6em 0em 3em 1em;
+  float: left;
+  height: calc(100vh - 8em);
+  overflow-y: auto;
+}
+
+.bodystyle {
+  display: flex;
+}
+
+.menustyle {
+  position: fixed;
+  width: 100%;
+  margin-bottom: 5em;
+  z-index: 1;
+}
+
+.downloadstyle {
+  margin-left: auto;
+  padding: 0.5em 0em 0.5em 5em;
+  width: 25em;
+  position: fixed;
+  bottom:0;
+  z-index: 100;
+  background-color: #fff;
 }

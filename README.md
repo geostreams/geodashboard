@@ -1,10 +1,14 @@
-Geodashboard Search Prototype using React.js
-============================================
+Geodashboard v3 - 
+==================================
+
+**Work in Progress** - See [V2](https://opensource.ncsa.illinois.edu/bitbucket/projects/GEOD/repos/geodashboard) for a feature complete version.
 
 Uses react.js, redux, webpack, babel, react-router, openlayers 3.
 
-Install dependencies: `npm install`
+Requirements: [Node.js](https://nodejs.org) and [Yarn](https://yarnpkg.com).
 
-Develop: `npm start`
+Install dependencies: `yarn install` or `npm install`
 
-Build: `npm run build`
+Develop: `yarn start` or `npm start`
+
+Build: `yarn run build` or `npm run build`
