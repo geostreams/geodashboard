@@ -83,6 +83,9 @@ class FilterSelection extends Component {
 
     componentWillMount() {
         this.props.onAddFilter("locations");
+        if(this.props.selectedFilters.length < this.props.filters.length) {
+            this.setState({showAddButton: true});
+        }
     }
 
     render() {

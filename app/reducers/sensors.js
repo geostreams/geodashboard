@@ -1,18 +1,8 @@
 import { SWITCH_BACKEND, REQUEST_SENSORS, RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS} from '../actions'
 import getLocationName from './locationNames'
+import {inArray} from '../utils/arrayUtils'
 
 const defaultState = {data:[], parameters: [], sources: [], locations: [], available_sensors: []}
-
-function inArray(array1, array2) {
-    if(array1.length > 0 && array2.length > 0) {
-        for(var i = 0; i < array1.length; i++) {
-            if(array2.indexOf(array1[i]) > -1) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
 
 const sensors = (state = defaultState, action) => {
 	switch(action.type) {

@@ -4,8 +4,8 @@ import TimeFilterComponent from '../components/TimeFilter'
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        selectedStartDate: state.selectedSearch.date.selected.start,
-        selectedEndDate: state.selectedSearch.date.selected.end
+        selectedStartDate: state.selectedSearch.dates.selected.start,
+        selectedEndDate: state.selectedSearch.dates.selected.end
     }
 };
 

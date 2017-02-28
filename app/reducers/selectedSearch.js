@@ -1,5 +1,8 @@
 import {ADD_SEARCH_DATASOURCE, ADD_SEARCH_PARAMETER, ADD_SEARCH_LOCATION, UPDATE_AVAILABLE_FILTERS, ADD_START_DATE, ADD_END_DATE } from '../actions'
 import {collectSources, collectLocations, collectParameters} from './sensors'
+
+import {intersectArrays} from '../utils/arrayUtils'
+
 const defaultState = {  data_sources: {selected: [], available: []},
                         parameters: {selected: [], available: []},
                         locations: {selected: null, available: []},
@@ -24,12 +27,12 @@ const selectedSearch = (state = defaultState, action) => {
             return Object.assign({}, state, newStateL);
 
         case ADD_START_DATE:
-            const tempStateSD = Object.assign({}, state, {date: {selected: {start: action.date}}});
+            const tempStateSD = Object.assign({}, state, {dates: {selected: {start: action.date, end: state.dates.selected.end}}});
             const newStateSD = updateSelected(action.selected_filters, tempStateSD, 'date');
             return Object.assign({}, state, newStateSD);
 
         case ADD_END_DATE:
-            const tempStateED = Object.assign({}, state, {date: {selected: {end: action.date}}});
+            const tempStateED = Object.assign({}, state, {dates: {selected: {start: state.dates.selected.start, end: action.date}}});
             const newStateED = updateSelected(action.selected_filters, tempStateED, 'date');
             return Object.assign({}, state, newStateED);
 
@@ -40,16 +43,6 @@ const selectedSearch = (state = defaultState, action) => {
         default:
             return state
     }
-}
-
-function intersectArrays(array1, array2) {
-    let t;
-    if(array2.length > array1.length) {
-        t=array2, array2=array1, array1 = t; //Swap array's so 1 is shorter than2
-    }
-    return array1.filter(function(e) {
-        return array2.indexOf(e) > -1
-    });
 }
 
 function updateSelected(selected_filters, state, type) {
