@@ -109,7 +109,7 @@ export function addSearchLocation(location) {
 
 export const ADD_FILTER = 'ADD_FILTER'
 export function addFilter(selectedFilter) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch({
             type: ADD_FILTER,
             selectedFilter
@@ -120,7 +120,7 @@ export function addFilter(selectedFilter) {
 
 export const CHANGE_FILTER = 'CHANGE_FILTER'
 export function changeFilter(selectedFilter, idx) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
        dispatch({
            type: CHANGE_FILTER,
            selectedFilter,
@@ -133,9 +133,8 @@ export function changeFilter(selectedFilter, idx) {
 
 export const DELETE_FILTER = 'DELETE_FILTER'
 export function deleteFilter(idx) {
-    return {
-        type: DELETE_FILTER,
-        idx
+    return (dispatch) => {
+        dispatch(updateAvailableSensors(idx -1));
     }
 }
 
