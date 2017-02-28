@@ -50,6 +50,8 @@ class FilterList extends Component {
 		this.props.onSelectLocation(event);
 	}
 
+
+
     render() {
         let divContents;
         let showButtons;
@@ -64,7 +66,6 @@ class FilterList extends Component {
 				<Checkbox label="Select All" data-name={this.state.selectValue}
 						  onCheck={this.selectAll.bind(this)} checked={isAllSelected} />
 			</div>;
-		let locationList = this.props.locations.map(p => <RadioButton id={p.id} value={p.id} label={p.label} key={p.id}/>);
 
         if(this.state.selectValue == "data_source") {
             divContents = this.props.sources.map(p =>
@@ -84,6 +85,13 @@ class FilterList extends Component {
 				<TimeFilter />
 
 		} else if(this.state.selectValue == "locations") {
+			let locationList
+			if(this.props.locations) {
+				locationList = this.props.locations.map(p => <RadioButton id={p.id} value={p.id} label={p.label} key={p.id}/>);
+			} else {
+				locationList = <div></div>
+			}
+
 			divContents =
 				(<div>
 						<RadioButtonGroup name="location" onChange={this.selectLocation.bind(this)}>
@@ -92,6 +100,7 @@ class FilterList extends Component {
 					</div>
 				);
 		}
+
 		const {selectedValues, idx} = this.props;
 		const options = dimensions.map(d => {
 			if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
