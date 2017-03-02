@@ -6,7 +6,7 @@ import {intersectArrays} from '../utils/arrayUtils'
 const defaultState = {  data_sources: {selected: [], available: []},
                         parameters: {selected: [], available: []},
                         locations: {selected: null, available: []},
-                        dates: {selected: {start: [new Date("1983-01-01")], end: [new Date()]}, available: {start: [], end: []}}
+                        dates: {selected: {start: new Date("1983-01-01"), end: new Date()}, available: {start: new Date("1983-01-01"), end: new Date()}}
                     };
 
 const selectedSearch = (state = defaultState, action) => {
