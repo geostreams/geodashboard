@@ -17,6 +17,7 @@ class MenuPage extends Component {
                             <FlatButton label="Home" containerElement={<Link to="/" />}/>
                             <FlatButton label="Explore" containerElement={<Link to="/explore" />}/>
                             <FlatButton label="Search" containerElement={<Link to="/search" />}/>
+                            <FlatButton label="Exploratory Analysis" containerElement={<Link to="/analysis" />}/>
                             <FlatButton label="About" containerElement={<Link to="/about" />}/>
                         </div>
                     </AppBar>

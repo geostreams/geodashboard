@@ -22,7 +22,8 @@
   border: 1px solid #cccccc;
   bottom: 12px;
   left: -50px;
-  min-width: 280px;
+  min-width: 24em;
+  font-size: 80%;
 }
 .olPopup:after, .olPopup:before {
   top: 100%;
