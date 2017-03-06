@@ -70,8 +70,18 @@ class Map extends Component {
               stroke: new ol.style.Stroke({color: '#000000', width: 1})
             })
         }));
-        feature.setId(sensor.name);
+
+        feature.attributes = {
+            "dataSource": sensor.properties.type.id,
+            "maxEndTime": sensor.max_end_time,
+            "minStartTime": sensor.min_start_time,
+            "latitude": sensor.geometry.coordinates[1],
+            "longitude": sensor.geometry.coordinates[0],
+        };
+
+        feature.setId(sensor.properties.popupContent);
         features.push(feature);
+
       }
 
     });
@@ -91,8 +101,8 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    var features = Array();
-    this.props.sensors.map((sensor) => {
+      var features = Array();
+      this.props.sensors.map((sensor) => {
       var feature = new ol.Feature({
         geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
       });
@@ -103,8 +113,17 @@ class Map extends Component {
             stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
           })
       }));
-      feature.setId(sensor.name);
-      features.push(feature);
+
+          feature.attributes = {
+              "dataSource": sensor.properties.type.id,
+              "maxEndTime": sensor.max_end_time,
+              "minStartTime": sensor.min_start_time,
+              "latitude": sensor.geometry.coordinates[1],
+              "longitude": sensor.geometry.coordinates[0],
+          };
+
+          feature.setId(sensor.properties.popupContent);
+          features.push(feature);
     });
 
     var vectorSource = new ol.source.Vector({
@@ -202,14 +221,51 @@ class Map extends Component {
       ])
     });
     this.map = theMap;
+
     this.map.on('singleclick', function(e){
       theMap.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-        var id = feature.getId();
+
+        var id = feature.getId().toUpperCase();
         var coordinate = e.coordinate;
 
-        content.innerHTML = id;
-        overlay.setPosition(coordinate);
+        var sensorInfo = feature.attributes;
 
+        var dataSourceValue = sensorInfo.dataSource.toUpperCase();
+        var dataSource = '<tr><td><strong>Data Source: </strong></td>'.concat('<td>', dataSourceValue, ' Monitoring Site</td></tr>');
+
+        var startTime = new Date(sensorInfo.minStartTime).toLocaleDateString();
+        var endTime = new Date(sensorInfo.maxEndTime).toLocaleDateString();
+        var timePeriod = '<tr><td><strong>Time Period: </strong></td>'.concat('<td>', startTime, ' - ' , endTime, '</td></tr>');
+
+        var latitude = Number(sensorInfo.latitude).toPrecision(5).toString();
+        if(latitude.includes("-")){
+            latitude = latitude.substring(1);
+            latitude = latitude.concat('&degS');
+        } else {
+            latitude = latitude.concat('&degN');
+        }
+        var longitude = Number(sensorInfo.longitude).toPrecision(5).toString();
+        if(longitude.includes("-")){
+            longitude = longitude.substring(1);
+            longitude = longitude.concat('&degW');
+        } else {
+            longitude = longitude.concat('&degE');
+        }
+        var latlong = '<tr><td><strong>Lat, Long: </strong></td>'.concat('<td>', latitude, ', ', longitude, '</td></tr>');
+
+        var headerText = '<h2 style="text-align: center">' + id + '</h2>';
+
+        var bodyText =
+            '<table align="center" style="border-top: solid;">' +
+                dataSource +
+                timePeriod +
+                latlong +
+            '</table>' ;
+
+        var popupText = headerText + bodyText;
+
+        content.innerHTML = popupText;
+        overlay.setPosition(coordinate);
 
       });
 
