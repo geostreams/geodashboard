@@ -7,9 +7,6 @@ import styles from '../styles/filterSelection.css'
 class FilterSelection extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            showAddButton: true
-        };
     }
 
     handleClickAddFilter(event) {
@@ -20,11 +17,7 @@ class FilterSelection extends Component {
             }
         });
         if (notUsedFilters.length > 0) {
-            this.setState({showAddButton: true});
             this.props.onAddFilter(notUsedFilters[0]);
-        }
-        if (notUsedFilters.length <= 1) {
-            this.setState({showAddButton: false});
         }
 
     }
@@ -47,9 +40,6 @@ class FilterSelection extends Component {
         var newSelected = Object.assign([], this.props.selectedFilters);
         newSelected = newSelected.splice(0, idx);
         newSelected.push(value);
-        var showAdd = newSelected.length < this.props.filters.length;
-
-        this.setState({showAddButton: showAdd});
         this.props.onChangeFilter(newSelected, idx);
 
     }
@@ -73,9 +63,6 @@ class FilterSelection extends Component {
         }
         var newSelected = Object.assign([], this.props.selectedFilters);
         newSelected.splice(idx, 1);
-        var showAdd = newSelected.length < this.props.filters.length;
-
-        this.setState({showAddButton: showAdd});
         this.props.onDeleteFilter(idx);
 
     }
@@ -83,9 +70,6 @@ class FilterSelection extends Component {
 
     componentWillMount() {
         this.props.onAddFilter("locations");
-        if(this.props.selectedFilters.length < this.props.filters.length) {
-            this.setState({showAddButton: true});
-        }
     }
 
     render() {
@@ -98,7 +82,7 @@ class FilterSelection extends Component {
                                attribute={f.id} onClickRemove={this.handleClickRemoveFilter.bind(this)}/>
         });
         let addButton;
-        if (this.state.showAddButton) {
+        if (this.props.selectedFilters.length < this.props.filters.length) {
             addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter.bind(this)} className={styles.add}><ContentAdd/></FloatingActionButton>
         }
         return (
