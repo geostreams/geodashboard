@@ -60,6 +60,23 @@ export function collectSources(sensorsData) {
     return sortByLabel(sources);
   }
 
+export function collectDates(sensorsData) {
+    let minDate = new Date();
+    let maxDate = new Date("1983-01-01");
+
+    sensorsData.map(s => {
+      const sensorStartTime = new Date(s.min_start_time);
+      const sensorEndTime = new Date(s.max_end_time);
+      if(sensorStartTime.getTime() < minDate.getTime()) {
+          minDate = sensorStartTime;
+      }
+      if(sensorEndTime.getTime() > maxDate) {
+          maxDate = sensorEndTime;
+      }
+    });
+
+    return {'start': minDate, 'end': maxDate};
+}
 export function collectLocations(sensorsData) {
     const locations = [];
     sensorsData.map(s => {
@@ -123,12 +140,14 @@ function filterAvailableSensors(state, selectedFilters, selectedSearch) {
 
                 return;
 
-            case 'date':
-                av_sensors = av_sensors.map((sensor) => {
-                    if(selectedSearch.date.selected.start < new Date(sensor.max_end_time) && selectedSearch.date.selected.end > new Date(sensor.min_start_time)) {
-                        return sensor;
+            case 'time':
+                new_sensors=[];
+                av_sensors.map((sensor) => {
+                    if(selectedSearch.dates.selected.start < new Date(sensor.max_end_time) && selectedSearch.dates.selected.end > new Date(sensor.min_start_time)) {
+                        new_sensors.push(sensor);
                     }
                 });
+                av_sensors = new_sensors;
                 return;
 
             case 'locations':

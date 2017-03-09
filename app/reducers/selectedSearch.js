@@ -1,12 +1,12 @@
 import {ADD_SEARCH_DATASOURCE, ADD_SEARCH_PARAMETER, ADD_SEARCH_LOCATION, UPDATE_AVAILABLE_FILTERS, ADD_START_DATE, ADD_END_DATE } from '../actions'
-import {collectSources, collectLocations, collectParameters} from './sensors'
+import {collectSources, collectLocations, collectParameters, collectDates} from './sensors'
 
 import {intersectArrays} from '../utils/arrayUtils'
 
 const defaultState = {  data_sources: {selected: [], available: []},
                         parameters: {selected: [], available: []},
                         locations: {selected: null, available: []},
-                        dates: {selected: {start: new Date("1983-01-01"), end: new Date()}, available: {start: new Date("1983-01-01"), end: new Date()}}
+                        dates: {selected: {start: new Date("1970-01-01"), end: new Date()}, available: {start: new Date("1970-01-01"), end: new Date()}}
                     };
 
 const selectedSearch = (state = defaultState, action) => {
@@ -27,13 +27,21 @@ const selectedSearch = (state = defaultState, action) => {
             return Object.assign({}, state, newStateL);
 
         case ADD_START_DATE:
-            const tempStateSD = Object.assign({}, state, {dates: {selected: {start: action.date, end: state.dates.selected.end}}});
-            const newStateSD = updateSelected(action.selected_filters, tempStateSD, 'date');
+            const availableDatesS = collectDates(action.availableSensors);
+            let newStart = action.date;
+            if(newStart.getTime() < availableDatesS.start.getTime()) {
+                newStart = availableDatesS.start;
+            }
+            const newStateSD = Object.assign({}, state, {dates: {selected: {start: newStart, end: state.dates.selected.end}, available: {start: availableDatesS.start, end: availableDatesS.end}}});
             return Object.assign({}, state, newStateSD);
 
         case ADD_END_DATE:
-            const tempStateED = Object.assign({}, state, {dates: {selected: {start: state.dates.selected.start, end: action.date}}});
-            const newStateED = updateSelected(action.selected_filters, tempStateED, 'date');
+            const availableDatesE = collectDates(action.availableSensors);
+            let newEnd = action.date;
+            if(newEnd.getTime() > availableDatesE.end.getTime()) {
+                newEnd = availableDatesE.end;
+            }
+            const newStateED = Object.assign({}, state, {dates: {selected: {start: state.dates.selected.start, end: newEnd}, available: {start: availableDatesE.start, end: availableDatesE.end}}});
             return Object.assign({}, state, newStateED);
 
         case UPDATE_AVAILABLE_FILTERS:
@@ -58,8 +66,6 @@ function updateSelected(selected_filters, state, type) {
                 case 'parameters':
                     newState = Object.assign({}, newState, {parameters: {selected: []}});
                     return;
-                case 'date':
-                    return;
                 case 'location':
                     newState = Object.assign({}, newState, {locations: {selected: null}});
             }
@@ -83,8 +89,6 @@ function updateAvailable(sensors, selected_filters, allFilters, state){
                     const newAvailableParameters = collectParameters(sensors);
                     const newSelectedParameters = intersectArrays(newAvailableParameters, state.parameters.selected);
                     newState = Object.assign({}, newState, {parameters: {selected: newSelectedParameters, available: newAvailableParameters}});
-                    return;
-                case 'date':
                     return;
                 case 'locations':
                     const newAvailableLocations = collectLocations(sensors);

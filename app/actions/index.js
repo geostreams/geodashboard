@@ -71,11 +71,15 @@ export function addStartDate(date) {
     return (dispatch, getState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
+        const availableSensors = state.sensors.available_sensors;
         dispatch({
             type: ADD_START_DATE,
             date,
-            selected_filters
+            selected_filters,
+            availableSensors
         })
+        const idx = selected_filters.indexOf('time');
+        dispatch(updateAvailableSensors(idx));
     }
 }
 
@@ -84,10 +88,13 @@ export function addEndDate(date) {
     return (dispatch, getState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
+        const availableSensors = state.sensors.available_sensors;
         dispatch({
             type: ADD_END_DATE,
-            date, selected_filters
+            date, selected_filters, availableSensors
         })
+        const idx = selected_filters.indexOf('time');
+        dispatch(updateAvailableSensors(idx));
     }
 }
 
