@@ -16,12 +16,15 @@ function requestSensors(api) {
 
 export const RECEIVE_SENSORS = 'RECEIVE_SENSORS'
 function receiveSensors(api, json) {
-    return {
-        type: RECEIVE_SENSORS,
-        api,
-        sensors: json,
-        available_sensors: json,
-        receivedAt: Date.now()
+    return( dispatch) =>{
+       dispatch({
+           type: RECEIVE_SENSORS,
+           api,
+           sensors: json,
+           available_sensors: json,
+           receivedAt: Date.now()
+       });
+       dispatch(updateAvailableFilters());
     }
 }
 
@@ -174,8 +177,9 @@ export function updateAvailableSensors(idx) {
                 idx
             })
         }
-        const selected_filters = state.searchFilters.selected;
-        const selected_search = state.selectedSearch;
+        const state2 = getState();
+        const selected_filters = state2.searchFilters.selected;
+        const selected_search = state2.selectedSearch;
         dispatch({
             type: UPDATE_AVAILABLE_SENSORS,
             selected_filters,
