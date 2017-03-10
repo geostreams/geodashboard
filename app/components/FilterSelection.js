@@ -69,8 +69,11 @@ class FilterSelection extends Component {
 
 
     componentWillMount() {
-        this.props.onAddFilter("locations");
+        if(this.props.selectedFilters.length < 1) {
+            this.props.onAddFilter("locations");
+        }
     }
+
 
     render() {
         const filterIds = this.props.filters.map(f => f.id);

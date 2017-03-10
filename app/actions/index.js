@@ -24,7 +24,8 @@ function receiveSensors(api, json) {
            available_sensors: json,
            receivedAt: Date.now()
        });
-       dispatch(updateAvailableFilters());
+        dispatch(updateAvailableFilters());
+
     }
 }
 
@@ -199,5 +200,6 @@ export function fetchSensors(api) {
             .then(json => {
                 dispatch(receiveSensors(api, json))
             })
+            .then( dispatch(updateAvailableSensors(-1)))
     }
 }
