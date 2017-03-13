@@ -143,7 +143,7 @@ function filterAvailableSensors(state, selectedFilters, selectedSearch) {
             case 'time':
                 new_sensors=[];
                 av_sensors.map((sensor) => {
-                    if(selectedSearch.dates.selected.start < new Date(sensor.max_end_time) && selectedSearch.dates.selected.end > new Date(sensor.min_start_time)) {
+                    if(selectedSearch.dates.selected.start <= new Date(sensor.max_end_time) && selectedSearch.dates.selected.end >= new Date(sensor.min_start_time)) {
                         new_sensors.push(sensor);
                     }
                 });

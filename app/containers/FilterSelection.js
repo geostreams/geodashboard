@@ -24,10 +24,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         onClearTime: () => {
             //TODO: user the state of TimeFilter component
-            const minDate = new Date();
-            minDate.setFullYear(1970);
-            minDate.setHours(0, 0, 0, 0);
-            dispatch(addStartDate(minDate));
+            dispatch(addStartDate( new Date("1951-04-10")));
             dispatch(addEndDate(new Date()));
         },
         onClearLocation:() =>{
