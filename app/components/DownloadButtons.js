@@ -1,31 +1,45 @@
-import React, {Component} from 'react';
+/*
+ * @flow
+ */
+import React, {Component, PropTypes} from 'react';
 import {RaisedButton, Dialog, FlatButton} from 'material-ui';
 import MenuItem from 'material-ui/MenuItem';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import FileFileDownload from 'material-ui/svg-icons/file/file-download';
 import styles from '../styles/downloadButton.css';
+import type { MapOfStrings } from '../utils/flowtype'
+
+type DownloadStateType = {
+    isOpen: boolean,
+    link: string,
+    openMenu: ? boolean
+};
 
 class DownloadButtons extends Component {
-    constructor(props) {
+    state:DownloadStateType;
+
+    constructor(props:Object) {
         super(props);
         this.state = {
-            open: false,
+            isOpen: false,
+            link: "",
+            openMenu: false
         };
     }
 
     // handle Permalink panel
     handleOpenPermalink = () => {
-        var link = this.buildLink("json");
-        this.setState({open: true, link: link});
+        var link:string = this.buildLink("json");
+        this.setState({isOpen: true, link: link});
     };
 
     handleClosePermalink = () => {
-        this.setState({open: false});
+        this.setState({isOpen: false});
     };
 
     //convert a map object to url parameters
-    serialize = function (obj) {
+    serialize = function (obj:Object):string {
         var str = [];
         for (var p in obj)
             if (obj.hasOwnProperty(p)) {
@@ -40,7 +54,7 @@ class DownloadButtons extends Component {
         return str.join("&");
     };
 
-    buildLink = function (type) {
+    buildLink = function (type:string):string {
 
         var downloadApi = this.props.api + "/api/geostreams/datapoints?";
         // refer to https://opensource.ncsa.illinois.edu/bitbucket/projects/CATS/repos/clowder/browse/app/api/Geostreams.scala#665
@@ -69,12 +83,12 @@ class DownloadButtons extends Component {
         return downloadApi + link;
     };
 
-    onDownload = (type) => {
+    onDownload = (type:string) => {
         var link = this.buildLink(type);
         window.open(link);
     };
 
-    handleDownloadOption = (value) => {
+    handleDownloadOption = (value:boolean) => {
         this.setState({
             openMenu: value,
         });
@@ -97,7 +111,7 @@ class DownloadButtons extends Component {
                     title="Permalink"
                     actions={actions}
                     modal={false}
-                    open={this.state.open}
+                    open={this.state.isOpen}
                     onRequestClose={this.handleClosePermalink}
                 >
                     <a href={this.state.link}/> {this.state.link}
@@ -107,9 +121,9 @@ class DownloadButtons extends Component {
                               onClick={this.onDownload.bind(this, "csv")}
                 />
                 <IconMenu className={styles.iconstyle}
-                        iconButtonElement={<IconButton><FileFileDownload /></IconButton>}
-                        open={this.state.openMenu}
-                        onRequestChange={this.handleDownloadOption}
+                          iconButtonElement={<IconButton><FileFileDownload /></IconButton>}
+                          open={this.state.openMenu}
+                          onRequestChange={this.handleDownloadOption}
                 >
                     <MenuItem value="1" primaryText="Download as JSON"
                               onClick={this.onDownload.bind(this, "json")}

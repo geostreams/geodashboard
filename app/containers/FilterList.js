@@ -1,8 +1,13 @@
+/*
+ * @flow
+ */
+
 import { connect } from 'react-redux'
 import FilterListComponent from '../components/FilterList'
 import { addSearchParameter, addSearchDataSource, addSearchLocation } from '../actions'
+import type { Dispatch } from '../utils/flowtype'
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         locations: state.selectedSearch.locations.available,
         sources: state.selectedSearch.data_sources.available,
@@ -13,7 +18,7 @@ const mapStateToProps = (state, ownProps) => {
     }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         onSelectAllParameters: (event, selectedParameters) => {
             dispatch(addSearchParameter(selectedParameters));

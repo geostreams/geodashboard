@@ -12,3 +12,5 @@ Install dependencies: `yarn install` or `npm install`
 Develop: `yarn start` or `npm start`
 
 Build: `yarn run build` or `npm run build`
+
+Test for flow: 'npm run-script flow'

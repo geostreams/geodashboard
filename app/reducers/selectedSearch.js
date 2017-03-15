@@ -1,7 +1,14 @@
+/*
+ * @flow
+ */
 import {ADD_SEARCH_DATASOURCE, ADD_SEARCH_PARAMETER, ADD_SEARCH_LOCATION, UPDATE_AVAILABLE_FILTERS, ADD_START_DATE, ADD_END_DATE } from '../actions'
 import {collectSources, collectLocations, collectParameters, collectDates} from './sensors'
-
+import type { selectedSearchState, Sensors, DatasourceParameter, Location } from '../utils/flowtype'
 import {intersectArrays} from '../utils/arrayUtils'
+
+type SelectedSearchAction = {| type:string, sensors:Sensors, data_sources: DatasourceParameter, parameters:DatasourceParameter,
+    locations:Location, data_source:Array<string>,  parameter:Array<string>,  location:?string, date:Date,
+    availableSensors:Sensors, selected_filters:Array<string>, allFilters:Array<Object> |};
 
 const defaultState = {  data_sources: {selected: [], available: []},
                         parameters: {selected: [], available: []},
@@ -9,7 +16,7 @@ const defaultState = {  data_sources: {selected: [], available: []},
                         dates: {selected: {start: new Date("1951-04-10"), end: new Date()}, available: {start: new Date("1951-04-10"), end: new Date()}}
                     };
 
-const selectedSearch = (state = defaultState, action) => {
+const selectedSearch = (state:selectedSearchState = defaultState, action:SelectedSearchAction) => {
     switch(action.type) {
         case ADD_SEARCH_DATASOURCE:
             const tempState = Object.assign({}, state, {data_sources: {selected: action.data_source, available: state.data_sources.available}});
@@ -92,10 +99,12 @@ function updateAvailable(sensors, selected_filters, allFilters, state){
                     return;
                 case 'locations':
                     const newAvailableLocations = collectLocations(sensors);
-                    let location = state.locations.selected;
-                    if(newAvailableLocations.indexOf(location) < 0) {
+                    let location= state.locations.selected;
+
+                    //comment this out since newAvailableLocations is not an array of string so cannot use newAvailableLocations.indexOf(location)
+                    // if( location!== null && newAvailableLocations.indexOf(location) < 0) {
                         location = null;
-                    }
+                    //}
                     newState = Object.assign({}, newState, {locations: {selected: location, available: newAvailableLocations}});
                     return
             }

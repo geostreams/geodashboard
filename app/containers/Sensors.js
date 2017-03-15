@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import SensorsComponent from '../components/Sensors'
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         sensorsData: state.sensors.data
     }

@@ -1,16 +1,21 @@
+/*
+ * @flow
+ */
+
 import { connect } from 'react-redux'
 import FilterSelectionComponent from '../components/FilterSelection'
 import { addSearchParameter, addSearchDataSource, addStartDate, addEndDate,
     addSearchLocation, addFilter, deleteFilter, changeFilter } from '../actions'
+import type { Dispatch } from '../utils/flowtype'
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         filters: state.searchFilters.filters,
         selectedFilters: state.searchFilters.selected
     }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch:Dispatch) => {
     return {
         onClearFilter: (clearSelectedParameters, clearSelectedDataSources) => {
             if(clearSelectedParameters) {
@@ -39,7 +44,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         onChangeFilter: (selectedFilter, idx) => {
             dispatch(changeFilter(selectedFilter, idx));
         }
-
     }
 };
 

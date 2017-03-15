@@ -12,7 +12,6 @@ import List from 'material-ui/List';
 class Search extends Component {
 
     render() {
-        var title = 'Sensors';
         return (
         	<div>
 				<div className={styles.menustyle}>

@@ -1,7 +1,11 @@
+/*
+ * @flow
+ */
+
 import { connect } from 'react-redux'
 import DownloadButtonsComponent from '../components/DownloadButtons'
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         selectedParameters: state.selectedSearch.parameters.selected,
         selectedDataSources: state.selectedSearch.data_sources.selected,

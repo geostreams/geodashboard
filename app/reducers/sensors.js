@@ -1,10 +1,16 @@
+/*
+ * @flow
+ */
 import { SWITCH_BACKEND, REQUEST_SENSORS, RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS} from '../actions'
-import getLocationName from './locationNames'
-import {inArray} from '../utils/arrayUtils'
+import type { Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype'
+import {inArray, sortByLabel} from '../utils/arrayUtils'
 
-const defaultState = {data:[], parameters: [], sources: [], locations: [], available_sensors: []}
+type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS', sensors:Sensors, api:string, receivedAt:Date,
+    selected_search:Object, selected_filters:Array<string>|};
 
-const sensors = (state = defaultState, action) => {
+const defaultState = {data:[], parameters: [], sources: [], locations:[], available_sensors:[]}
+
+const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
 	switch(action.type) {
 		case RECEIVE_SENSORS:
 			return Object.assign({}, state, {
@@ -25,12 +31,12 @@ const sensors = (state = defaultState, action) => {
 	}
 }
 
-export function collectParameters(sensorsData) {
-    var params = [];
+export function collectParameters(sensorsData:Sensors):MapWithLabels {
+    var params:MapWithLabels = [];
     sensorsData.map(s => {
       s.parameters.map(p => {
         // check if parameters exists already
-        var found = params.some(function (e) {
+        const found = params.some(function (e:MapWithLabel) {
           return e.id === p;
         })
         if (p === null)
@@ -43,14 +49,14 @@ export function collectParameters(sensorsData) {
     return sortByLabel(params);
   }
 
-export function collectSources(sensorsData) {
-    var sources = [];
+export function collectSources(sensorsData:Sensors):MapWithLabels {
+    var sources:MapWithLabels = [];
     sensorsData.map(s => {
       var source = s.properties.type;
       // check if source exists already
-      var found = sources.some(function (e) {
-        return e.id === source.id;
-      })
+        const found = sources.some(function (e:MapWithLabel) {
+            return e.id === source.id;
+        })
        if (source === null)
         console.log(`Found sensor ${s.id} with null data sources`)
       else if (!found) 
@@ -60,29 +66,32 @@ export function collectSources(sensorsData) {
     return sortByLabel(sources);
   }
 
-export function collectDates(sensorsData) {
+type CollectDate = {'start': Date, 'end': Date};
+export function collectDates(sensorsData:Sensors):CollectDate {
     let minDate = new Date();
     let maxDate = new Date("1983-01-01");
 
     sensorsData.map(s => {
-      const sensorStartTime = new Date(s.min_start_time);
-      const sensorEndTime = new Date(s.max_end_time);
-      if(sensorStartTime.getTime() < minDate.getTime()) {
-          minDate = sensorStartTime;
-      }
-      if(sensorEndTime.getTime() > maxDate) {
-          maxDate = sensorEndTime;
-      }
+        const sensorStartTime = new Date(s.min_start_time);
+        const sensorEndTime = new Date(s.max_end_time);
+        if(sensorStartTime.getTime() < minDate.getTime()) {
+            minDate = sensorStartTime;
+        }
+        if(sensorEndTime.getTime() > maxDate) {
+            maxDate = sensorEndTime;
+        }
     });
 
     return {'start': minDate, 'end': maxDate};
 }
-export function collectLocations(sensorsData) {
-    const locations = [];
+
+
+export function collectLocations(sensorsData:Sensors):MapWithLabels {
+    const locations:MapWithLabels = [];
     sensorsData.map(s => {
         const location = s.properties.region;
-        // check if source exists already
-        const found = locations.some(function (e) {
+        // check if location exists already
+        const found = locations.some(function (e:MapWithLabel) {
             return e.id === location;
         });
         if (location === null)
@@ -94,24 +103,23 @@ export function collectLocations(sensorsData) {
     return sortByLabel(locations);
 }
 
-function sortByLabel(list) {
-    list.sort(function(a, b) {
-      var labelA = a.label.toUpperCase();
-      var labelB = b.label.toUpperCase();
-      if (labelA < labelB) {
-        return -1;
-      }
-      if (labelA > labelB) {
-        return 1;
-      }
-      return 0;
-    });
-    return list;
-  }
 
-function filterAvailableSensors(state, selectedFilters, selectedSearch) {
-    let av_sensors = state.data;
-    let new_sensors = [];
+export function getLocationName(source:string):string {
+    const named_locations =
+    {
+        "OH": "Ohio",
+        "HU": "Lake Huron",
+        "ON": "Lake Ontario",
+        "MI": "Lake Michigan",
+        "ER": "Lake Erie",
+        "SU": "Lake Superior",
+    };
+    return named_locations[source] !== undefined ? named_locations[source] : source;
+}
+
+function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string>, selectedSearch:Object) {
+    let av_sensors: Sensors = state.data;
+    let new_sensors: Sensors = [];
     selectedFilters.map ((filter) => {
         switch(filter) {
             case 'data_source':
@@ -167,4 +175,5 @@ function filterAvailableSensors(state, selectedFilters, selectedSearch) {
     });
     return av_sensors;
 }
+
 export default sensors

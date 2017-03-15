@@ -5,10 +5,6 @@ import Checkbox from 'material-ui/Checkbox';
 class FilterOption extends Component {
 	constructor(props) {
 	    super(props);
-
-	    this.state = {
-	      dimension: ""
-	    };
 	}
 
 	handleChange(event) {

@@ -1,3 +1,10 @@
+/*
+ * @flow
+ */
+import type { backendsState } from '../utils/flowtype'
+
+type BackendAction = {| type:'SWITCH_BACKEND', selected:string |};
+
 const defaultState = {
 	endpoints:[
     {url: "https://greatlakesmonitoring.org/clowder", label: "GLM PROD"},
@@ -10,7 +17,8 @@ const defaultState = {
   ], 
   selected: "https://greatlakesmonitoring.org/clowder"};
 
-const backends = (state = defaultState, action) => {
+
+const backends = (state:backendsState = defaultState, action:BackendAction) => {
 	switch(action.type) {
     case 'SWITCH_BACKEND':
       return Object.assign({}, state, {selected: action.selected});

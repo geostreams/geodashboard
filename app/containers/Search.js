@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import SearchComponent from '../components/Search'
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         sensorsData: state.sensors.data,
         parameters: state.sensors.parameters,

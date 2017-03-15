@@ -9,7 +9,7 @@ class FilterSelection extends Component {
         super(props);
     }
 
-    handleClickAddFilter(event) {
+    handleClickAddFilter() {
         let notUsedFilters = [];
         this.props.filters.map((f, key) => {
             if (!this.props.selectedFilters.includes(f.id)) {
@@ -69,7 +69,7 @@ class FilterSelection extends Component {
 
 
     componentWillMount() {
-        if(this.props.selectedFilters.length < 1) {
+        if (this.props.selectedFilters.length < 1) {
             this.props.onAddFilter("locations");
         }
     }
@@ -81,12 +81,14 @@ class FilterSelection extends Component {
             let idx = filterIds.indexOf(selected);
             let f = this.props.filters[idx];
             return <FilterList key={idx} onChangeSelection={this.handleChange.bind(this)}
-                               selectedValues={this.props.selectedFilters} idx={this.props.selectedFilters.indexOf(f.id)}
+                               selectedValues={this.props.selectedFilters}
+                               idx={this.props.selectedFilters.indexOf(f.id)}
                                attribute={f.id} onClickRemove={this.handleClickRemoveFilter.bind(this)}/>
         });
         let addButton;
         if (this.props.selectedFilters.length < this.props.filters.length) {
-            addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter.bind(this)} className={styles.add}><ContentAdd/></FloatingActionButton>
+            addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter.bind(this)}
+                                              className={styles.add}><ContentAdd/></FloatingActionButton>
         }
         return (
             <div>

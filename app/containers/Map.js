@@ -1,7 +1,10 @@
+/*
+ * @flow
+ */
 import { connect } from 'react-redux'
 import MapComponent from '../components/Map'
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         sensors: state.sensors.data,
         availableSensors: state.sensors.available_sensors

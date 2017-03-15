@@ -18,3 +18,18 @@ export function intersectArrays(array1, array2) {
         return array2.indexOf(e) > -1
     });
 }
+
+export function sortByLabel(list) {
+    list.sort(function(a, b) {
+        var labelA = a.label.toUpperCase();
+        var labelB = b.label.toUpperCase();
+        if (labelA < labelB) {
+            return -1;
+        }
+        if (labelA > labelB) {
+            return 1;
+        }
+        return 0;
+    });
+    return list;
+}

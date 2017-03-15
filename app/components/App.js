@@ -1,3 +1,4 @@
+// @flow
 import React, {Component} from 'react'
 import { Router, Route, browserHistory, hashHistory } from 'react-router'
 import Search from '../containers/Search'

@@ -1,8 +1,12 @@
+/*
+ * @flow
+ */
 import { connect } from 'react-redux'
 import { addStartDate, addEndDate } from '../actions'
 import TimeFilterComponent from '../components/TimeFilter'
+import type { Dispatch } from '../utils/flowtype'
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         selectedStartDate: state.selectedSearch.dates.selected.start,
         selectedEndDate: state.selectedSearch.dates.selected.end,
@@ -11,7 +15,7 @@ const mapStateToProps = (state, ownProps) => {
     }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch:Dispatch) => {
     return {
         onDateChange: (event, date, isStart) => {
             if (isStart) {

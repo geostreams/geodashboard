@@ -1,3 +1,6 @@
+/*
+ * @flow
+ */
 import React, {Component} from 'react'
 import styles from '../styles/filterList.css';
 import TimeFilter from '../containers/TimeFilter';
@@ -12,108 +15,110 @@ import {red500} from 'material-ui/styles/colors';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Paper from 'material-ui/Paper';
 import Checkbox from 'material-ui/Checkbox';
+import type { InputEvent } from '../utils/flowtype'
 
 injectTapEventPlugin();
 
 class FilterList extends Component {
 
-    constructor(props) {
+    constructor(props:Object) {
         super(props);
-        this.state = {
-            selectValue: props.attribute,
-            divId: props.idx
-        };
     }
 
-	selectAll(event) {
-		var name = event.target.getAttribute("data-name");
-		if(name == "data_source") {
-			let selectedDataSources;
-			if(event.target.checked) {
-				selectedDataSources = Object.assign([], this.props.sources.map(s=> s.id));	
-			} else {
-				selectedDataSources = Object.assign([]);
-			}
-			this.props.onSelectAllDataSources(event, selectedDataSources)
-		} else if(name == "parameters") {
-			let selectedParameters;
-			if(event.target.checked) {
-				selectedParameters = Object.assign([], this.props.parameters.map(s=> s.id));
-			} else {
-				selectedParameters = Object.assign([]);
-			}
-			this.props.onSelectAllParameters(event, selectedParameters)
-		}
-	}
+    selectAll = (event:InputEvent) => {
+        var name = event.target.getAttribute("data-name");
+        if (name == "data_source") {
+            let selectedDataSources;
+            if (event.target.checked) {
+                selectedDataSources = Object.assign([], this.props.sources.map(s=> s.id));
+            } else {
+                selectedDataSources = Object.assign([]);
+            }
+            this.props.onSelectAllDataSources(event, selectedDataSources)
+        } else if (name == "parameters") {
+            let selectedParameters;
+            if (event.target.checked) {
+                selectedParameters = Object.assign([], this.props.parameters.map(s=> s.id));
+            } else {
+                selectedParameters = Object.assign([]);
+            }
+            this.props.onSelectAllParameters(event, selectedParameters)
+        }
+    }
 
-	selectLocation(event) {
-		this.props.onSelectLocation(event);
-	}
-
+    selectLocation(event:InputEvent) {
+        this.props.onSelectLocation(event);
+    }
 
 
     render() {
         let divContents;
         let showButtons;
-        let isAllSelected = false;
-        if(this.state.selectValue == "data_source") {
+        let isAllSelected:boolean = false;
+        if (this.props.attribute == "data_source") {
             isAllSelected = this.props.selectedDataSources.length == this.props.sources.length
-        } else if(this.state.selectValue == "parameters") {
+        } else if (this.props.attribute == "parameters") {
             isAllSelected = this.props.selectedParameters.length == this.props.parameters.length
         }
-		let hideShowContents =
-			<div className={styles.select_all_style}>
-				<Checkbox label="Select All" data-name={this.state.selectValue}
-						  onCheck={this.selectAll.bind(this)} checked={isAllSelected} />
-			</div>;
+        let hideShowContents =
+            <div className={styles.select_all_style}>
+                <Checkbox label="Select All" data-name={this.props.attribute}
+                          onCheck={this.selectAll} checked={isAllSelected}/>
+            </div>;
 
-        if(this.state.selectValue == "data_source") {
-            divContents = this.props.sources.map(p =>
-                <UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
-            );
+        switch (this.props.attribute) {
+            case 'data_source':
+                divContents = this.props.sources.map(p =>
+                    <UpdateFilters id={p.id} name={this.props.attribute} label={p.label} key={p.id}/>
+                );
 
-            showButtons = hideShowContents;
+                showButtons = hideShowContents;
+                break;
+            case "parameters":
+                divContents = this.props.parameters.map(p =>
+                    <UpdateFilters id={p.id} name={this.props.attribute} label={p.label} key={p.id}/>
+                );
+                showButtons = hideShowContents;
+                break;
+            case "time":
+                //the UI of date picker
+                divContents =
+                    <TimeFilter />
+                break;
+            case "locations":
+                let locationList
+                if (this.props.locations) {
+                    locationList = this.props.locations.map(p => <RadioButton id={p.id} value={p.id} label={p.label}
+                                                                              key={p.id}/>);
+                } else {
+                    locationList = <div></div>
+                }
+                divContents =
+                    (<div>
+                            <RadioButtonGroup name="location" onChange={this.selectLocation.bind(this)}>
+                                {locationList}
+                            </RadioButtonGroup>
+                        </div>
+                    );
+                break;
+            default:
 
-		} else if(this.state.selectValue == "parameters") {
-			divContents = this.props.parameters.map(p =>
-				<UpdateFilters id={p.id} name={this.state.selectValue} label={p.label} key={p.id}/>
-			);
-			showButtons = hideShowContents;
-		} else if(this.state.selectValue == "time") {
-			//the UI of date picker
-			divContents =
-				<TimeFilter />
+        }
 
-		} else if(this.state.selectValue == "locations") {
-			let locationList
-			if(this.props.locations) {
-				locationList = this.props.locations.map(p => <RadioButton id={p.id} value={p.id} label={p.label} key={p.id}/>);
-			} else {
-				locationList = <div></div>
-			}
+        const {selectedValues, idx} = this.props;
+        const options = dimensions.map(d => {
+            if (selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx) {
+                return <MenuItem value={d.id} key={d.id} primaryText={d.name} data-idx={idx}/>
+            }
+        });
 
-			divContents =
-				(<div>
-						<RadioButtonGroup name="location" onChange={this.selectLocation.bind(this)}>
-							{locationList}
-						</RadioButtonGroup>
-					</div>
-				);
-		}
-
-		const {selectedValues, idx} = this.props;
-		const options = dimensions.map(d => {
-			if(selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx){
-		  		return <MenuItem value={d.id} key={d.id} primaryText={d.name} data-idx={idx}/>
-		  	}
-		});
-
-		return (
-			<Paper className={styles.paperstyle} zDepth={2} id={this.state.divId}>
-				<div className={styles.left}>
-					<SelectField fullWidth={true} value={this.state.selectValue} onChange={this.props.onChangeSelection} data-idx={idx}>
+        return (
+            <Paper className={styles.paperstyle} zDepth={2} id={this.props.idx}>
+                <div className={styles.left}>
+                    <SelectField fullWidth={true} value={this.props.attribute} onChange={this.props.onChangeSelection}
+                                 data-idx={idx}>
                         {options}
-					</SelectField>
+                    </SelectField>
                 </div>
                 <div className={styles.right}>
                     <IconButton className={styles.right} onClick={this.props.onClickRemove} data-idx={idx}>

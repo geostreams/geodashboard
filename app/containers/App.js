@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import AppContainer from '../components/App'
 import { fetchSensors } from '../actions'
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         sensors: state.sensors,
         api: state.backends.selected,
@@ -10,7 +10,7 @@ const mapStateToProps = (state, ownProps) => {
     }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         loadSensors: (selected) => {
             dispatch(fetchSensors(selected))
