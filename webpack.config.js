@@ -1,13 +1,16 @@
 var webpack = require("webpack");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var HtmlWebpackPlugin = require("html-webpack-plugin");
 var path = require("path");
 
 module.exports = {
   devtool: 'eval-source-map',
-  entry: "./app/main.js",
+  entry: "./app/main.jsx",
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js"
+  },
+  resolve: {
+    extensions: ["", ".js", ".jsx"]
   },
   module: {
     loaders: [
@@ -16,7 +19,7 @@ module.exports = {
         loader: "json"
       },
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel'
       },

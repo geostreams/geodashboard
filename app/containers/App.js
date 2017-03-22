@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import AppContainer from '../components/App'
-import { fetchSensors } from '../actions'
+import { fetchSensors } from '../actions/index'
 
 const mapStateToProps = (state) => {
     return {

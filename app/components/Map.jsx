@@ -243,10 +243,9 @@ class Map extends Component {
             ])
         });
 
-        this.setState({map: theMap});
 
         //this.state.map = theMap;
-        this.state.map.on('singleclick', function (e) {
+        theMap.on('singleclick', function (e) {
             theMap.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
                 var id = feature.getId().toUpperCase();
                 var coordinate = e.coordinate;
@@ -294,6 +293,7 @@ class Map extends Component {
             });
 
         });
+        this.setState({map: theMap});
     }
 }
 
