@@ -8,7 +8,6 @@
     "start": "webpack-dev-server --progress --colors",
     "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js --progress --colors",
     "flow": "flow; test $? -eq 1 -o $? -eq 2 && echo \"\\033[41mError running Flow. Fix these issues before committing\\033[0m\n\" || echo \"\\033[92mNo Flow errors! Have a beer! 🍺\\033[0m\n\""
-
   },
   "repository": "https://opensource.ncsa.illinois.edu/bitbucket/scm/geod/geodashboard-v3.git",
   "author": "Luigi Marini",
@@ -36,6 +35,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "flow-bin": "^0.42.0",
     "openlayers": "^3.15.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",

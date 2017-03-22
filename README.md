@@ -13,4 +13,4 @@ Develop: `yarn start` or `npm start`
 
 Build: `yarn run build` or `npm run build`
 
-Test for flow: 'npm run-script flow'
+Test for flow: `yarn run flow` or `npm run-script flow`

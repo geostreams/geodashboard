@@ -2,7 +2,6 @@ build/
 node_modules/
 .idea/
 .DS_Store
-.flowconfig
 *-compiled.js
 *-compiled.js.map
 yarn-error.log
