@@ -1,12 +1,18 @@
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var webpack = require("webpack");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
 var path = require("path");
 
 module.exports = {
-  entry: "./app/main.jsx",
+  entry: "./main.jsx",
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js"
+  },
+  externals: {
+    './config': "config"
+  },
+  resolve: {
+    extensions: ["", ".js", ".jsx"]
   },
   module: {
     loaders: [
@@ -15,9 +21,10 @@ module.exports = {
         loader: "json"
       },
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel'
+
       },
       {
         test: /\.css$/,

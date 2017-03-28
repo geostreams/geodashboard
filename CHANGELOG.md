@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-789](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-789)
 - Use [Flow](https://flowtype.org) for tracking the types of variables as they flow through your program.
   [GEOD-802](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-802)
+- Use outside code base configuration
+  [GEOD-813](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-813)
 
 
 

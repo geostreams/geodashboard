@@ -4,7 +4,7 @@ var path = require("path");
 
 module.exports = {
   devtool: 'eval-source-map',
-  entry: "./app/main.jsx",
+  entry: "./main.jsx",
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js"
