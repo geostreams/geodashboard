@@ -1,6 +1,7 @@
 .root {
     height: calc(100vh - 4em);
     width: calc(100vw - 25em);
+    cursor: pointer;
 }
 
 .marker {
@@ -17,16 +18,14 @@
   background-color: white;
   -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
   filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-  padding: 15px;
   border-radius: 10px;
-  border: 1px solid #cccccc;
   bottom: 12px;
   left: -50px;
-  min-width: 24em;
+  min-width: 22em;
   font-size: 80%;
+  cursor: default;
 }
 .olPopup:after, .olPopup:before {
-  top: 100%;
   border: solid transparent;
   content: " ";
   height: 0;
@@ -41,7 +40,6 @@
   margin-left: -10px;
 }
 .olPopup:before {
-  border-top-color: #cccccc;
   border-width: 11px;
   left: 48px;
   margin-left: -11px;
@@ -54,9 +52,44 @@
 }
 .olPopupCloser:after {
   content: "✖";
+  color: #ffffff;
 }
 .olCenterButton {
   bottom: 5px;
   left: .5em;
   border-radius: 2px 2px 0 0;
+}
+
+.tablestyle {
+  margin: auto;
+  border-collapse: separate;
+  border-spacing: 0.4em;
+  width: 100%;
+  padding-left: 0.5em;
+}
+
+.header2style {
+  text-align: center;
+  color: #ffffff;
+  padding: 0.5em;
+  border-radius: 0.5em 0.5em 0em 0em;
+  font-weight: lighter;
+}
+
+.header3style {
+  padding: 0.2em 0.2em 0.2em 1em;
+  background-color: #dcdcdc;
+}
+
+.greyborder {
+  border-bottom: 0.2em solid #808080;
+  min-height: 0;
+}
+
+.paramsborder {
+  padding-left: 2.5em;
+  margin-bottom: 0.5em;
+  max-height: 6em;
+  overflow-y: auto;
+  line-height: 1.5em;
 }

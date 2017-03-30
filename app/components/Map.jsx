@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react'
-var ol = require('openlayers');
+let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css'
 import DeviceGpsFixed from 'material-ui/svg-icons/device/gps-fixed';
@@ -21,9 +21,9 @@ type MapState = {
 };
 
 class Map extends Component {
-    state:MapState;
+    state: MapState;
 
-    constructor(props:MapProps) {
+    constructor(props: MapProps) {
         super(props);
         this.state = {
             center: [-84.44799549, 38.9203417],
@@ -72,14 +72,15 @@ class Map extends Component {
         var features = Array();
         this.props.availableSensors.map((sensor) => {
 
-            var feature = new ol.Feature({
+            let feature = new ol.Feature({
                 geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
             });
+
             feature.setStyle(new ol.style.Style({
                 image: new ol.style.Circle({
-                    radius: 4,
+                    radius: 5,
                     fill: new ol.style.Fill({color: this.getColor(sensor.properties.type.id)}),
-                    stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                    stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
                 })
             }));
 
@@ -89,6 +90,8 @@ class Map extends Component {
                 "minStartTime": sensor.min_start_time,
                 "latitude": sensor.geometry.coordinates[1],
                 "longitude": sensor.geometry.coordinates[0],
+                "parameters": sensor.parameters,
+                "color": this.getColor(sensor.properties.type.id),
             };
 
             feature.setId(sensor.properties.popupContent);
@@ -133,29 +136,30 @@ class Map extends Component {
                 "minStartTime": sensor.min_start_time,
                 "latitude": sensor.geometry.coordinates[1],
                 "longitude": sensor.geometry.coordinates[0],
+                "parameters": sensor.parameters,
+                "color": this.getColor(sensor.properties.type.id),
             };
 
             feature.setId(sensor.properties.popupContent);
             features.push(feature);
         });
 
-        var vectorSource = new ol.source.Vector({
+        let vectorSource = new ol.source.Vector({
             features: features
         });
         this.setState({vectorSource: vectorSource});
 
-        var vectorLayer = new ol.layer.Vector({
+        let vectorLayer = new ol.layer.Vector({
             source: vectorSource
         });
-        //this is not used now
-        //this.state.vectorLayer = vectorLayer;
 
-        var attribution = new ol.Attribution({
+        let attribution = new ol.Attribution({
             html: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' +
-            'rest/services/NatGeo_World_Map/MapServer">ArcGIS</a> &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC'
+            'rest/services/NatGeo_World_Map/MapServer">ArcGIS</a> &mdash; National Geographic, Esri, DeLorme, NAVTEQ, ' +
+            'UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC'
         });
 
-        var layers = [
+        let layers = [
             new ol.layer.Tile({
                 source: new ol.source.XYZ({
                     attributions: [attribution],
@@ -165,11 +169,11 @@ class Map extends Component {
             vectorLayer
         ];
 
-        var container = document.getElementById('popup');
+        const container = document.getElementById('popup');
         const content = document.getElementById('popup-content');
         const closer = document.getElementById('popup-closer');
 
-        var overlay = new ol.Overlay({
+        let overlay = new ol.Overlay({
             element: container,
             autoPan: true,
             autoPanAnimation: {
@@ -185,22 +189,22 @@ class Map extends Component {
             };
         }
 
-
-        var view = new ol.View({
+        let view = new ol.View({
             projection: 'EPSG:4326',
             center: this.state.center,
             zoom: 5.5,
             minZoom: 5.5,
             maxZoom: 12
         });
-        var theMap;
+        let theMap;
+
         window.app = {};
-        var app = window.app;
+        let app = window.app;
         app.centerControl = function (opt_options) {
-            var options = opt_options || {};
+            let options = opt_options || {};
             const centerButton = document.getElementById('centerButton');
 
-            var handleCenterButton = function () {
+            let handleCenterButton = function () {
                 view.fit(vectorSource.getExtent(), theMap.getSize());
             };
             if (centerButton) {
@@ -222,7 +226,6 @@ class Map extends Component {
         };
         ol.inherits(app.centerControl, ol.control.Control);
 
-
         theMap = new ol.Map({
             target: 'map',
             layers: layers,
@@ -239,58 +242,94 @@ class Map extends Component {
             ])
         });
 
+        theMap.getView().on("change:resolution", function () {
+            if (closer) {
+                overlay.setPosition(undefined);
+                closer.blur();
+            }
+        });
 
-        //this.state.map = theMap;
         theMap.on('singleclick', function (e) {
-            theMap.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
-                var id = feature.getId().toUpperCase();
-                var coordinate = e.coordinate;
 
-                var sensorInfo = feature.attributes;
+            let feature = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange, layer) {
+                return featureChange;
+            });
 
-                var dataSourceValue = sensorInfo.dataSource.toUpperCase();
-                var dataSource = '<tr><td><strong>Data Source: </strong></td>'.concat('<td>', dataSourceValue, ' Monitoring Site</td></tr>');
+            if (feature) {
+                let id = feature.getId().toUpperCase();
+                let coordinate = e.coordinate;
 
-                var startTime = new Date(sensorInfo.minStartTime).toLocaleDateString();
-                var endTime = new Date(sensorInfo.maxEndTime).toLocaleDateString();
-                var timePeriod = '<tr><td><strong>Time Period: </strong></td>'.concat('<td>', startTime, ' - ', endTime, '</td></tr>');
+                let sensorInfo = feature.attributes;
 
-                var latitude = Number(sensorInfo.latitude).toPrecision(5).toString();
+                let dataSourceValue = sensorInfo.dataSource.toUpperCase();
+                let dataSource = '<tr><td><strong>Data Source: </strong></td>'.concat('<td>', dataSourceValue,
+                    ' Monitoring Site</td></tr>');
+
+                let startTime = new Date(sensorInfo.minStartTime).toLocaleDateString();
+                let endTime = new Date(sensorInfo.maxEndTime).toLocaleDateString();
+                let timePeriod = '<tr><td><strong>Time Period: </strong></td>'.concat('<td>', startTime, ' - ',
+                    endTime, '</td></tr>');
+
+                let latitude = Number(sensorInfo.latitude).toPrecision(5).toString();
                 if (latitude.includes("-")) {
                     latitude = latitude.substring(1);
                     latitude = latitude.concat('&degS');
                 } else {
                     latitude = latitude.concat('&degN');
                 }
-                var longitude = Number(sensorInfo.longitude).toPrecision(5).toString();
+                let longitude = Number(sensorInfo.longitude).toPrecision(5).toString();
                 if (longitude.includes("-")) {
                     longitude = longitude.substring(1);
                     longitude = longitude.concat('&degW');
                 } else {
                     longitude = longitude.concat('&degE');
                 }
-                var latlong = '<tr><td><strong>Lat, Long: </strong></td>'.concat('<td>', latitude, ', ', longitude, '</td></tr>');
+                let latlong = '<tr><td><strong>Lat, Long: </strong></td>'.concat('<td>', latitude, ', ',
+                    longitude, '</td></tr>');
 
-                var headerText = '<h2 style="text-align: center">' + id + '</h2>';
+                let paramsLength = (sensorInfo.parameters).length;
+                let paramsOrig = (sensorInfo.parameters);
+                let paramsAlt = '';
+                for (let i = 0; i < paramsLength; i++) {
+                    paramsAlt = paramsAlt + '<li>' + paramsOrig[i] + '</li>';
+                }
+                let params = '<ul>'.concat(paramsAlt, '</ul>');
 
-                var bodyText =
-                    '<table align="center" style="border-top: solid;">' +
-                    dataSource +
-                    timePeriod +
-                    latlong +
-                    '</table>';
+                let sourceColor = sensorInfo.color;
 
-                var popupText = headerText + bodyText;
+                let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
+                    sourceColor + ';">' + id + '</h2>';
+
+                let bodyText =
+                    '<table class=' + styles.tablestyle + '>' +
+                        dataSource +
+                        timePeriod +
+                        latlong +
+                    '</table>' +
+                    '<div class=' + styles.greyborder + '></div>' +
+                    '<h3 class=' + styles.header3style + '>' + 'Parameters (' + paramsLength + '): </h3>' +
+                    '<div class=' + styles.paramsborder + '>' + params + '</div>';
+
+                let popupText = headerText + bodyText;
 
                 if (content) {
                     content.innerHTML = popupText;
                 }
                 overlay.setPosition(coordinate);
-            });
+
+            } else {
+                if (closer) {
+                    overlay.setPosition(undefined);
+                    closer.blur();
+                }
+            }
 
         });
+
         this.setState({map: theMap});
-    }
+
+    };
+
 }
 
 export default Map
