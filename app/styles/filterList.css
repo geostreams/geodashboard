@@ -36,6 +36,8 @@
 
 .listspacing {
     float: left;
+    font-size: smaller;
+    width: 100%;
 }
 
 .right {
@@ -45,14 +47,14 @@
 
 .left {
     float: left;
-    width: 15em;
+    width: 15.5em;
 }
 
 .paperstyle {
     max-height: 30em;
     width: 20.5em;
-    margin: 1em 0em 1em 1em;
-    padding: 1em 1.5em;
+    margin: 1em 0em 0em 1em;
+    padding: 0.5em 1em 1em 1em;
     text-align: left;
     display: inline-block;
     overflow-y: auto;
@@ -61,5 +63,6 @@
 
 .select_all_style {
     margin-top: 0.6em;
+    margin-bottom: -0.5em;
     width: 80%;
 }

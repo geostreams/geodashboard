@@ -14,11 +14,15 @@ class FilterOption extends Component {
   	}
 
 	render() {
-		let checkedVar = (this.props.name == "data_source" && this.props.selectedDataSources.indexOf(this.props.id) > -1) ||
-						(this.props.name == "parameters" && this.props.selectedParameters.indexOf(this.props.id) > -1);
+		let checkedVar = (this.props.name == "data_source" &&
+							this.props.selectedDataSources.indexOf(this.props.id) > -1) ||
+						(this.props.name == "parameters" &&
+							this.props.selectedParameters.indexOf(this.props.id) > -1);
+
 		return (
 			<div className={styles.col_style}>
-				<Checkbox label={this.props.label} name={this.props.name} value={this.props.id}
+				<Checkbox iconStyle = {{height: '1.5em', marginRight: '0.5em'}}
+						  label={this.props.label} name={this.props.name} value={this.props.id}
 						  onCheck={this.handleChange.bind(this)} checked={checkedVar} />
 			</div>
 		);

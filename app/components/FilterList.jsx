@@ -26,7 +26,7 @@ class FilterList extends Component {
     }
 
     selectAll = (event:InputEvent) => {
-        var name = event.target.getAttribute("data-name");
+        let name = event.target.getAttribute("data-name");
         if (name == "data_source") {
             let selectedDataSources;
             if (event.target.checked) {
@@ -44,12 +44,11 @@ class FilterList extends Component {
             }
             this.props.onSelectAllParameters(event, selectedParameters)
         }
-    }
+    };
 
     selectLocation(event:InputEvent) {
         this.props.onSelectLocation(event);
     }
-
 
     render() {
         let divContents;
@@ -60,10 +59,11 @@ class FilterList extends Component {
         } else if (this.props.attribute == "parameters") {
             isAllSelected = this.props.selectedParameters.length == this.props.parameters.length
         }
+
         let hideShowContents =
             <div className={styles.select_all_style}>
-                <Checkbox label="Select All" data-name={this.props.attribute}
-                          onCheck={this.selectAll} checked={isAllSelected}/>
+                <Checkbox iconStyle = {{height: '1.5em', marginRight: '0.5em'}} label="Select All"
+                          data-name={this.props.attribute} onCheck={this.selectAll} checked={isAllSelected}/>
             </div>;
 
         switch (this.props.attribute) {
@@ -82,27 +82,26 @@ class FilterList extends Component {
                 break;
             case "time":
                 //the UI of date picker
-                divContents =
-                    <TimeFilter />
+                divContents = <TimeFilter />;
                 break;
             case "locations":
-                let locationList
+                let locationList;
                 if (this.props.locations) {
-                    locationList = this.props.locations.map(p => <RadioButton id={p.id} value={p.id} label={p.label}
-                                                                              key={p.id}/>);
+                    locationList = this.props.locations.map(
+                        p => <RadioButton iconStyle = {{height: '1.5em', marginRight: '0.5em'}}
+                                          id={p.id} value={p.id} label={p.label} key={p.id}/>);
                 } else {
                     locationList = <div></div>
                 }
                 divContents =
                     (<div>
-                            <RadioButtonGroup name="location" onChange={this.selectLocation.bind(this)}>
-                                {locationList}
-                            </RadioButtonGroup>
-                        </div>
+                        <RadioButtonGroup name="location" onChange={this.selectLocation.bind(this)}>
+                            {locationList}
+                        </RadioButtonGroup>
+                    </div>
                     );
                 break;
             default:
-
         }
 
         const {selectedValues, idx} = this.props;
