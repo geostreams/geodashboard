@@ -7,6 +7,9 @@ import styles from '../styles/filterSelection.css'
 class FilterSelection extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectedValue: 0
+        };
     }
 
     handleClickAddFilter() {
@@ -18,6 +21,8 @@ class FilterSelection extends Component {
         });
         if (notUsedFilters.length > 0) {
             this.props.onAddFilter(notUsedFilters[0]);
+
+            this.setState({selectedValue: this.props.selectedFilters.length });
         }
 
     }
@@ -41,7 +46,6 @@ class FilterSelection extends Component {
         newSelected = newSelected.splice(0, idx);
         newSelected.push(value);
         this.props.onChangeFilter(newSelected, idx);
-
     }
 
     handleClickRemoveFilter(event) {
@@ -65,8 +69,9 @@ class FilterSelection extends Component {
         newSelected.splice(idx, 1);
         this.props.onDeleteFilter(idx);
 
-    }
+        this.setState({ selectedValue: (idx > 0 ? idx - 1 : 0)});
 
+    }
 
     componentWillMount() {
         if (this.props.selectedFilters.length < 1) {
@@ -74,16 +79,36 @@ class FilterSelection extends Component {
         }
     }
 
+    componentDidUpdate() {
+        // when the filter list is changing, the filters after will be removed, then update selectedValue.
+        if(this.state.selectedValue >= this.props.selectedFilters.length) {
+            this.setState({selectedValue: this.props.selectedFilters.length - 1});
+        }
+    }
+
+    handleExpand(event){
+        // leave this line for debugging
+        //console.log(event.target.parentElement.parentElement);
+
+        if(!isNaN(parseInt(event.target.parentElement.parentElement.id))) {
+            this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.id)});
+        } else if(!isNaN(parseInt(event.target.parentElement.parentElement.parentElement.id))) {
+            this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.parentElement.id)});
+        } else {
+            this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.parentElement.parentElement.id)});
+        }
+    };
 
     render() {
         const filterIds = this.props.filters.map(f => f.id);
         const filters = this.props.selectedFilters.map((selected) => {
             let idx = filterIds.indexOf(selected);
             let f = this.props.filters[idx];
-            return <FilterList key={idx} onChangeSelection={this.handleChange.bind(this)}
-                               selectedValues={this.props.selectedFilters}
-                               idx={this.props.selectedFilters.indexOf(f.id)}
-                               attribute={f.id} onClickRemove={this.handleClickRemoveFilter.bind(this)}/>
+
+            return <FilterList key={idx} selectedId={this.state.selectedValue} onChangeSelection={this.handleChange.bind(this)}
+                               selectedValues={this.props.selectedFilters} idx={this.props.selectedFilters.indexOf(f.id)}
+                               attribute={f.id} onClickRemove={this.handleClickRemoveFilter.bind(this)}
+                               onExpand={this.handleExpand.bind(this)} />
         });
         let addButton;
         if (this.props.selectedFilters.length < this.props.filters.length) {

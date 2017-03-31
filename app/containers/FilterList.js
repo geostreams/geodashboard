@@ -12,6 +12,8 @@ const mapStateToProps = (state) => {
         locations: state.selectedSearch.locations.available,
         sources: state.selectedSearch.data_sources.available,
         parameters: state.selectedSearch.parameters.available,
+        selectDate: state.selectedSearch.dates.selected.start.toISOString().slice(0,10)
+        + " - "+ state.selectedSearch.dates.selected.end.toISOString().slice(0,10),
         selectedParameters: state.selectedSearch.parameters.selected,
         selectedDataSources: state.selectedSearch.data_sources.selected,
         selectedLocation: state.selectedSearch.locations.selected,
