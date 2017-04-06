@@ -14,8 +14,8 @@ import ContentClear from 'material-ui/svg-icons/content/clear';
 import {red500} from 'material-ui/styles/colors';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Checkbox from 'material-ui/Checkbox';
-import {Card, CardMedia, CardHeader} from 'material-ui/Card';
-import {getLocationName} from '../reducers/sensors'
+import {Card, CardMedia, CardTitle} from 'material-ui/Card';
+import {getLocationName} from '../utils/getConfig'
 import type { InputEvent } from '../utils/flowtype'
 
 injectTapEventPlugin();
@@ -136,13 +136,13 @@ class FilterList extends Component {
                 </div>
             );
         } else {
-            cardsubtitle = cardsubtitle !== null && cardsubtitle.length > 0? cardsubtitle : "No selection"
+            cardsubtitle = cardsubtitle !== null && (Array.isArray(cardsubtitle) && cardsubtitle.length > 0) ? cardsubtitle : "No selection";
             cardhead = (
                 <div>
-                <CardHeader title={this.props.attribute}
+                <CardTitle title={this.props.attribute.replace("data_source", "data source")}
                             subtitle={cardsubtitle}
                             onClick={this.props.onExpand}
-                            titleStyle={{'fontSize':'15px', 'fontWeight':'bold', 'text-transform':'capitalize',}}
+                            titleStyle={{'fontSize':'15px', 'fontWeight':'bold', 'text-transform':'capitalize'}}
                     //TODO: this is not working, need to fix or remove
                     //iconRightElement={<HardwareVideogameAsset />}
                 />

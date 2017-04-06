@@ -7,6 +7,7 @@ export type Geometry = {
     coordinates:string[]
 };
 
+// this is data source
 export type PropertiesType = {
     id:string;
     title:string

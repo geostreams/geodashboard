@@ -7,7 +7,9 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css'
 import DeviceGpsFixed from 'material-ui/svg-icons/device/gps-fixed';
+import {getSourceName} from '../utils/getConfig'
 import type { Sensors } from '../utils/flowtype'
+
 
 type MapProps = {
     sensors:Sensors,
@@ -85,7 +87,7 @@ class Map extends Component {
             }));
 
             feature.attributes = {
-                "dataSource": sensor.properties.type.id,
+                "dataSource": getSourceName(sensor.properties.type),
                 "maxEndTime": sensor.max_end_time,
                 "minStartTime": sensor.min_start_time,
                 "latitude": sensor.geometry.coordinates[1],
@@ -131,7 +133,7 @@ class Map extends Component {
             }));
 
             feature.attributes = {
-                "dataSource": sensor.properties.type.id,
+                "dataSource": getSourceName(sensor.properties.type),
                 "maxEndTime": sensor.max_end_time,
                 "minStartTime": sensor.min_start_time,
                 "latitude": sensor.geometry.coordinates[1],
@@ -261,8 +263,8 @@ class Map extends Component {
 
                 let sensorInfo = feature.attributes;
 
-                let dataSourceValue = sensorInfo.dataSource.toUpperCase();
-                let dataSource = '<tr><td><strong>Data Source: </strong></td>'.concat('<td>', dataSourceValue,
+                let dataSourceValue = (sensorInfo.dataSource);
+                let dataSource = '<tr><td width="35%"><strong>Data Source: </strong></td>'.concat('<td width="65%">', dataSourceValue,
                     ' Monitoring Site</td></tr>');
 
                 let startTime = new Date(sensorInfo.minStartTime).toLocaleDateString();

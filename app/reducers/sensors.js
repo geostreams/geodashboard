@@ -4,6 +4,7 @@
 import { SWITCH_BACKEND, REQUEST_SENSORS, RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS} from '../actions'
 import type { Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype'
 import {inArray, sortByLabel} from '../utils/arrayUtils'
+import {getLocationName, getSourceName} from '../utils/getConfig'
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS', sensors:Sensors, api:string, receivedAt:Date,
     selected_search:Object, selected_filters:Array<string>|};
@@ -60,7 +61,7 @@ export function collectSources(sensorsData:Sensors):MapWithLabels {
        if (source === null)
         console.log(`Found sensor ${s.id} with null data sources`)
       else if (!found) 
-      	sources.push({'id':source.id, 'label': source.title || ''});
+      	sources.push({'id':source.id, 'label': getSourceName(source) || ''});
     });
     // sort
     return sortByLabel(sources);
@@ -101,20 +102,6 @@ export function collectLocations(sensorsData:Sensors):MapWithLabels {
     });
     // sort
     return sortByLabel(locations);
-}
-
-
-export function getLocationName(source:string):string {
-    const named_locations =
-    {
-        "OH": "Ohio",
-        "HU": "Lake Huron",
-        "ON": "Lake Ontario",
-        "MI": "Lake Michigan",
-        "ER": "Lake Erie",
-        "SU": "Lake Superior",
-    };
-    return named_locations[source] !== undefined ? named_locations[source] : source;
 }
 
 function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string>, selectedSearch:Object) {
