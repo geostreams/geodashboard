@@ -7,7 +7,7 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css'
 import DeviceGpsFixed from 'material-ui/svg-icons/device/gps-fixed';
-import {getSourceName} from '../utils/getConfig'
+import {getSourceName, getParameterName} from '../utils/getConfig'
 import type { Sensors } from '../utils/flowtype'
 
 
@@ -92,7 +92,8 @@ class Map extends Component {
                 "minStartTime": sensor.min_start_time,
                 "latitude": sensor.geometry.coordinates[1],
                 "longitude": sensor.geometry.coordinates[0],
-                "parameters": sensor.parameters,
+                //parameters has null in the array
+                "parameters": sensor.parameters.filter(x => x !== null).map(x => getParameterName(x)),
                 "color": this.getColor(sensor.properties.type.id),
             };
 
@@ -138,7 +139,7 @@ class Map extends Component {
                 "minStartTime": sensor.min_start_time,
                 "latitude": sensor.geometry.coordinates[1],
                 "longitude": sensor.geometry.coordinates[0],
-                "parameters": sensor.parameters,
+                "parameters": sensor.parameters.filter(x => x !== null).map(x => getParameterName(x)),
                 "color": this.getColor(sensor.properties.type.id),
             };
 

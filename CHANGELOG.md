@@ -18,4 +18,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-802](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-802)
 - Use outside code base configuration
   [GEOD-813](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-813)
+  [GEOD-849](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-849)
+  [GEOD-867](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-867)
+
+
+
 

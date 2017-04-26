@@ -4,7 +4,7 @@
 import { SWITCH_BACKEND, REQUEST_SENSORS, RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS} from '../actions'
 import type { Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype'
 import {inArray, sortByLabel} from '../utils/arrayUtils'
-import {getLocationName, getSourceName} from '../utils/getConfig'
+import {getLocationName, getSourceName, getParameterName} from '../utils/getConfig'
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS', sensors:Sensors, api:string, receivedAt:Date,
     selected_search:Object, selected_filters:Array<string>|};
@@ -43,7 +43,7 @@ export function collectParameters(sensorsData:Sensors):MapWithLabels {
         if (p === null)
         	console.log(`Found sensor ${s.id} with null parameters`)
         else if (!found) 
-        	params.push({'id': p, 'label': p || ''});
+        	params.push({'id': p, 'label': getParameterName(p) || ''});
       });
     });
     // sort
@@ -85,7 +85,6 @@ export function collectDates(sensorsData:Sensors):CollectDate {
 
     return {'start': minDate, 'end': maxDate};
 }
-
 
 export function collectLocations(sensorsData:Sensors):MapWithLabels {
     const locations:MapWithLabels = [];
