@@ -70,9 +70,9 @@ class Map extends Component {
         return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
     }
 
-    updateLayers() {
+    updateLayers(sensors) {
         var features = Array();
-        this.props.availableSensors.map((sensor) => {
+        sensors.map((sensor) => {
 
             let feature = new ol.Feature({
                 geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
@@ -101,8 +101,19 @@ class Map extends Component {
             features.push(feature);
 
         });
+        return features;
+    }
 
-
+    componentDidUpdate() {
+        // FIXME: this does not get called all the time
+        // Try switching API and quickly switching to the search page
+        var features;
+        if(this.props.updateSensors){
+            console.log("Map component got new props");
+            features = this.updateLayers(this.props.updateSensors);
+        } else {
+            features = this.updateLayers(this.props.sensors);
+        }
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
 
@@ -112,40 +123,9 @@ class Map extends Component {
 
     }
 
-    componentDidUpdate() {
-        // FIXME: this does not get called all the time
-        // Try switching API and quickly switching to the search page
-        console.log("Map component got new props");
-        this.updateLayers()
-    }
-
     componentDidMount() {
-        let features = Array();
-        this.props.sensors.map((sensor) => {
-            let feature = new ol.Feature({
-                geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
-            });
-            feature.setStyle(new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 5,
-                    fill: new ol.style.Fill({color: this.getColor(sensor.properties.type.id)}),
-                    stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
-                })
-            }));
 
-            feature.attributes = {
-                "dataSource": getSourceName(sensor.properties.type),
-                "maxEndTime": sensor.max_end_time,
-                "minStartTime": sensor.min_start_time,
-                "latitude": sensor.geometry.coordinates[1],
-                "longitude": sensor.geometry.coordinates[0],
-                "parameters": sensor.parameters.filter(x => x !== null).map(x => getParameterName(x)),
-                "color": this.getColor(sensor.properties.type.id),
-            };
-
-            feature.setId(sensor.properties.popupContent);
-            features.push(feature);
-        });
+        var features = this.updateLayers(this.props.sensors);
 
         let vectorSource = new ol.source.Vector({
             features: features

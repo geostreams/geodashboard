@@ -8,7 +8,6 @@ import Card from 'material-ui/Card';
 import List from 'material-ui/List';
 
 class Search extends Component {
-
     render() {
         return (
         	<div>
@@ -26,7 +25,7 @@ class Search extends Component {
 					</div>
 					<div className={styles.root}>
 						<Card>
-							<Map sensors={this.props.sensorsData}/>
+							<Map updateSensors={this.props.availableSensors} />
 						</Card>
 					</div>
 				</div>

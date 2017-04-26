@@ -29,3 +29,21 @@ h1, h2, h3, h5, h6, p, ul {
     padding: 10px;
     text-align: center;
 }
+
+.rightmap {
+    margin: 0em 0em 0em 0em;
+    float: right;
+}
+
+.bodystyle {
+    display: flex;
+}
+
+/*TODO: change this. */
+.leftcolumn {
+    width: 24em;
+    margin: 3.6em 0em 3em 1em;
+    float: left;
+    /*height: calc(100vh - 8em);*/
+    overflow-y: auto;
+}
