@@ -106,7 +106,7 @@ class DownloadButtons extends Component {
         // don't use a-href download for Download as CSV/JSON, otherwise buildLink
         // will be executed as the page loading, instead of onClick
         return (
-            <div className={styles.buttonstyle}>
+            <div className={styles.button}>
                 <Dialog
                     title="Permalink"
                     actions={actions}
@@ -116,11 +116,11 @@ class DownloadButtons extends Component {
                 >
                     <a href={this.state.link}/> {this.state.link}
                 </Dialog>
-                <RaisedButton className={styles.raisedbuttonstyle}
+                <RaisedButton className={styles.raisedbutton}
                               label="Download Data"
                               onClick={this.onDownload.bind(this, "csv")}
                 />
-                <IconMenu className={styles.iconstyle}
+                <IconMenu className={styles.icon}
                           iconButtonElement={<IconButton><FileFileDownload /></IconButton>}
                           open={this.state.openMenu}
                           onRequestChange={this.handleDownloadOption}

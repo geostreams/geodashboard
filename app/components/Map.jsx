@@ -70,7 +70,7 @@ class Map extends Component {
         return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
     }
 
-    updateLayers(sensors) {
+    updateLayers(sensors:Sensors) {
         var features = Array();
         sensors.map((sensor) => {
 
@@ -104,6 +104,71 @@ class Map extends Component {
         return features;
     }
 
+    popupHandler(feature:ol.Feature, coordinate:number[]) {
+        const content = document.getElementById('popup-content');
+        if (feature) {
+            let id = feature.getId().toUpperCase();
+            let sensorInfo = feature.attributes;
+
+            let dataSourceValue = (sensorInfo.dataSource);
+            let dataSource = '<tr><td width="35%"><strong>Data Source: </strong></td>'.concat('<td width="65%">', dataSourceValue,
+                ' Monitoring Site</td></tr>');
+
+            let startTime = new Date(sensorInfo.minStartTime).toLocaleDateString();
+            let endTime = new Date(sensorInfo.maxEndTime).toLocaleDateString();
+            let timePeriod = '<tr><td><strong>Time Period: </strong></td>'.concat('<td>', startTime, ' - ',
+                endTime, '</td></tr>');
+
+            let latitude = Number(sensorInfo.latitude).toPrecision(5).toString();
+            if (latitude.includes("-")) {
+                latitude = latitude.substring(1);
+                latitude = latitude.concat('&degS');
+            } else {
+                latitude = latitude.concat('&degN');
+            }
+            let longitude = Number(sensorInfo.longitude).toPrecision(5).toString();
+            if (longitude.includes("-")) {
+                longitude = longitude.substring(1);
+                longitude = longitude.concat('&degW');
+            } else {
+                longitude = longitude.concat('&degE');
+            }
+            let latlong = '<tr><td><strong>Lat, Long: </strong></td>'.concat('<td>', latitude, ', ',
+                longitude, '</td></tr>');
+
+            let paramsLength = (sensorInfo.parameters).length;
+            let paramsOrig = (sensorInfo.parameters);
+            let paramsAlt = '';
+            for (let i = 0; i < paramsLength; i++) {
+                paramsAlt = paramsAlt + '<li>' + paramsOrig[i] + '</li>';
+            }
+            let params = '<ul>'.concat(paramsAlt, '</ul>');
+
+            let sourceColor = sensorInfo.color;
+
+            let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
+                sourceColor + ';">' + id + '</h2>';
+
+            let bodyText =
+                '<table class=' + styles.popup_table + '>' +
+                dataSource +
+                timePeriod +
+                latlong +
+                '</table>' +
+                '<div class=' + styles.greyborder + '></div>' +
+                '<h3 class=' + styles.header3style + '>' + 'Parameters (' + paramsLength + '): </h3>' +
+                '<div class=' + styles.paramsborder + '>' + params + '</div>';
+
+            let popupText = headerText + bodyText;
+
+            if (content) {
+                content.innerHTML = popupText;
+            }
+            let overlay = this.state.map.getOverlayById("marker");
+            overlay.setPosition(coordinate);
+        }
+    }
+
     componentDidUpdate() {
         // FIXME: this does not get called all the time
         // Try switching API and quickly switching to the search page
@@ -120,7 +185,14 @@ class Map extends Component {
         if (this.state.vectorSource.getFeatures().length > 0) {
             this.state.map.getView().fit(this.state.vectorSource.getExtent(), this.state.map.getSize());
         }
+        if(this.props.coordinates) {
+            var feature = this.state.map.forEachFeatureAtPixel(this.state.map.getPixelFromCoordinate(this.props.coordinates)
+                , function (featureChange) {
+                    return featureChange;
+                });
 
+            this.popupHandler(feature, this.props.coordinates);
+        }
     }
 
     componentDidMount() {
@@ -157,6 +229,7 @@ class Map extends Component {
         const closer = document.getElementById('popup-closer');
 
         let overlay = new ol.Overlay({
+            id:"marker",
             element: container,
             autoPan: true,
             autoPanAnimation: {
@@ -231,75 +304,15 @@ class Map extends Component {
                 closer.blur();
             }
         });
+        let that = this;
 
         theMap.on('singleclick', function (e) {
 
-            let feature = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange, layer) {
+            let feature = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
                 return featureChange;
             });
-
-            if (feature) {
-                let id = feature.getId().toUpperCase();
-                let coordinate = e.coordinate;
-
-                let sensorInfo = feature.attributes;
-
-                let dataSourceValue = (sensorInfo.dataSource);
-                let dataSource = '<tr><td width="35%"><strong>Data Source: </strong></td>'.concat('<td width="65%">', dataSourceValue,
-                    ' Monitoring Site</td></tr>');
-
-                let startTime = new Date(sensorInfo.minStartTime).toLocaleDateString();
-                let endTime = new Date(sensorInfo.maxEndTime).toLocaleDateString();
-                let timePeriod = '<tr><td><strong>Time Period: </strong></td>'.concat('<td>', startTime, ' - ',
-                    endTime, '</td></tr>');
-
-                let latitude = Number(sensorInfo.latitude).toPrecision(5).toString();
-                if (latitude.includes("-")) {
-                    latitude = latitude.substring(1);
-                    latitude = latitude.concat('&degS');
-                } else {
-                    latitude = latitude.concat('&degN');
-                }
-                let longitude = Number(sensorInfo.longitude).toPrecision(5).toString();
-                if (longitude.includes("-")) {
-                    longitude = longitude.substring(1);
-                    longitude = longitude.concat('&degW');
-                } else {
-                    longitude = longitude.concat('&degE');
-                }
-                let latlong = '<tr><td><strong>Lat, Long: </strong></td>'.concat('<td>', latitude, ', ',
-                    longitude, '</td></tr>');
-
-                let paramsLength = (sensorInfo.parameters).length;
-                let paramsOrig = (sensorInfo.parameters);
-                let paramsAlt = '';
-                for (let i = 0; i < paramsLength; i++) {
-                    paramsAlt = paramsAlt + '<li>' + paramsOrig[i] + '</li>';
-                }
-                let params = '<ul>'.concat(paramsAlt, '</ul>');
-
-                let sourceColor = sensorInfo.color;
-
-                let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
-                    sourceColor + ';">' + id + '</h2>';
-
-                let bodyText =
-                    '<table class=' + styles.tablestyle + '>' +
-                        dataSource +
-                        timePeriod +
-                        latlong +
-                    '</table>' +
-                    '<div class=' + styles.greyborder + '></div>' +
-                    '<h3 class=' + styles.header3style + '>' + 'Parameters (' + paramsLength + '): </h3>' +
-                    '<div class=' + styles.paramsborder + '>' + params + '</div>';
-
-                let popupText = headerText + bodyText;
-
-                if (content) {
-                    content.innerHTML = popupText;
-                }
-                overlay.setPosition(coordinate);
-
+            if(feature){
+                that.popupHandler(feature, e.coordinate);
             } else {
                 if (closer) {
                     overlay.setPosition(undefined);

@@ -191,6 +191,16 @@ export function updateAvailableSensors(idx:number) {
     }
 }
 
+export const SELECT_SENSOR = 'SELECT_SENSOR'
+export function selectAction(id:string, coordinates:Array<number>) {
+    return {
+        type: SELECT_SENSOR,
+        id,
+        coordinates
+    };
+}
+
+
 export function fetchSensors(api:string) {
     //TODO: dispatch type is not defined.
     return (dispatch:any) => {
@@ -205,3 +215,4 @@ export function fetchSensors(api:string) {
             .then(dispatch(updateAvailableSensors(-1)))
     }
 }
+

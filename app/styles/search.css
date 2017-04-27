@@ -1,9 +1,4 @@
-.root {
-  margin: 4em 0em 0em 0em;
-  float: right;
-}
-
-.liststyle {
+.list {
   width: 24em;
   margin: 3.6em 0em 3em 1em;
   float: left;
@@ -11,18 +6,7 @@
   overflow-y: auto;
 }
 
-.bodystyle {
-  display: flex;
-}
-
-.menustyle {
-  position: fixed;
-  width: 100%;
-  margin-bottom: 5em;
-  z-index: 1;
-}
-
-.downloadstyle {
+.download {
   margin-left: auto;
   padding: 0.5em 0em 0.5em 5em;
   width: 25em;

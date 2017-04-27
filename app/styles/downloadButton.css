@@ -1,15 +1,15 @@
-.raisedbuttonstyle {
+.raisedbutton {
     float: left;
     padding: 0.33em;
     margin: 0.2em;
 }
 
-.iconstyle {
+.icon {
     float: left;
     padding: 0.2em;
 }
 
-.buttonstyle {
+.button {
     margin: auto;
     width: 80%;
 }

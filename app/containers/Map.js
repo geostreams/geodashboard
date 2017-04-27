@@ -7,6 +7,7 @@ import MapComponent from '../components/Map'
 const mapStateToProps = (state) => {
     return {
         sensors: state.sensors.data,
+        coordinates: state.sensorDetail.coordinates
     }
 };
 

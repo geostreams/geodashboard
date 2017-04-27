@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import styles from '../styles/switchAPI.css'
+import styles from '../styles/main.css'
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
@@ -11,7 +11,7 @@ class SwitchAPI extends Component {
 
 	render() {
 		return (
-			<div className={styles.root}>
+			<div className={styles.contentcenter}>
 				<h4>Pick an instance</h4>
 				<SelectField  value={this.props.selected} onChange={this.handleChange}>
 					{this.props.endpoints.map( (b, index) =>

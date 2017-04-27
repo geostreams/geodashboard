@@ -1,23 +1,9 @@
-.col1 {
-	display: inline-block;
-	padding: 0px 5px;
-	width: 10%;
-	vertical-align: top;
-}
-
-.col2 {
-	display: inline-block;
-	padding: 0px 5px;
-	width: 90%;
-}
-
-
 .row {
 	padding: 10px 0px;
 	border-top: 1px solid gray;
 }
 
-.col_style {
+.col {
 	margin-left: 1em;
 	margin-top: 0.6em;
 	margin-bottom: -0.5em;

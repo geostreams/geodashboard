@@ -20,7 +20,7 @@ class FilterOption extends Component {
 							this.props.selectedParameters.indexOf(this.props.id) > -1);
 
 		return (
-			<div className={styles.col_style}>
+			<div className={styles.col}>
 				<Checkbox iconStyle = {{height: '1.5em', marginRight: '0.5em'}}
 						  label={this.props.label} name={this.props.name} value={this.props.id}
 						  onCheck={this.handleChange.bind(this)} checked={checkedVar} />

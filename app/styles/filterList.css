@@ -49,7 +49,7 @@
     width: 15.5em;
 }
 
-.paperstyle {
+.filter_card {
     max-height: 30em;
     width: 20.5em;
     margin: 1em 0em 0em 1em;
@@ -60,7 +60,7 @@
     overflow-x: auto;
 }
 
-.select_all_style {
+.select_all {
     margin-top: 0.6em;
     margin-bottom: -0.5em;
     width: 80%;

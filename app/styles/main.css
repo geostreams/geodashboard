@@ -31,12 +31,19 @@ h1, h2, h3, h5, h6, p, ul {
 }
 
 .rightmap {
-    margin: 0em 0em 0em 0em;
+    margin: 4em 0em 0em 0em;
     float: right;
 }
 
-.bodystyle {
+.body {
     display: flex;
+}
+
+.menu {
+    position: fixed;
+    width: 100%;
+    margin-bottom: 5em;
+    z-index: 1;
 }
 
 /*TODO: change this. */
@@ -44,6 +51,6 @@ h1, h2, h3, h5, h6, p, ul {
     width: 24em;
     margin: 3.6em 0em 3em 1em;
     float: left;
-    /*height: calc(100vh - 8em);*/
+    height: calc(100vh - 6.6em);
     overflow-y: auto;
 }

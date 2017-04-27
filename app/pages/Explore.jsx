@@ -1,29 +1,36 @@
 import React, {Component} from 'react'
 import Map from '../containers/Map'
 import Menu from '../components/MenuPage'
-import {Card, CardTitle} from 'material-ui/Card'
+import ExploreSourcesTab from '../containers/ExploreSourcesTab'
+import {Card, CardTitle, CardMedia, CardText} from 'material-ui/Card'
 import Sensors from '../containers/Sensors'
 import styles from '../styles/main.css'
 import { connect } from 'react-redux'
 
 class Explore extends Component {
 	render() {
+
+		let sourceLists = this.props.sources.map(s=>
+			<Card >
+				<CardTitle
+					title={s.label}
+					titleStyle={{'fontSize':'12px', 'text-transform':'capitalize'}}
+					actAsExpander={true}
+				/>
+				<CardText expandable={true}>
+					<ExploreSourcesTab source={s} />
+				</CardText>
+			</Card>
+		)
 		return (
 			<div>
-				<Menu selected='explore'/>
+				<div className={styles.menu}>
+					<Menu selected='explore'/>
+				</div>
 				<div>
-					<div className={styles.bodystyle}>
+					<div className={styles.body}>
 						<div className={styles.leftcolumn}>
-							<Card >
-								<CardTitle
-									title="Explore Trends"
-									titleStyle={{'fontSize':'17px', 'fontWeight':'bold', 'text-transform':'capitalize',}}
-								/>
-								<CardTitle
-									title="Explore Sources"
-									titleStyle={{'fontSize':'17px', 'fontWeight':'bold', 'text-transform':'capitalize',}}
-								/>
-							</Card>
+							{sourceLists}
 						</div>
 						<div className={styles.rightmap}>
 							<Card>
@@ -37,9 +44,9 @@ class Explore extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
 	return {
-		sensorsData: state.sensors.data
+		sources: state.sensors.sources
 	}
 };
 

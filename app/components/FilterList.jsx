@@ -62,7 +62,7 @@ class FilterList extends Component {
         }
 
         let hideShowContents =
-            <div className={styles.select_all_style}>
+            <div className={styles.select_all}>
                 <Checkbox iconStyle = {{height: '1.5em', marginRight: '0.5em'}} label="Select All"
                           data-name={this.props.attribute} onCheck={this.selectAll} checked={isAllSelected}/>
             </div>;
@@ -151,7 +151,7 @@ class FilterList extends Component {
             )
         }
         return (
-            <Card expanded={this.props.idx === this.props.selectedId} className={styles.paperstyle} zDepth={2} id={this.props.idx} >
+            <Card expanded={this.props.idx === this.props.selectedId} className={styles.filter_card} zDepth={2} id={this.props.idx} >
                 {cardhead}
                 <CardMedia expandable={true}>
                     <div className={styles.listspacing}>
