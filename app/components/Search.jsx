@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import styles from '../styles/search.css';
+import styles from '../styles/main.css';
 import stylesearch from '../styles/search.css';
 import Map from '../containers/Map'
 import Menu from './MenuPage'
