@@ -1,5 +1,80 @@
 .centeredcontent {
-    margin-top: 2em;
     padding: 2em;
     text-align: center;
+}
+
+.mapstyle {
+    height: calc(100vh - 4em);
+    width: calc(100vw - 25em);
+}
+
+.root {
+    margin: 4em 0em 0em 0em;
+    float: right;
+}
+
+.liststyle {
+    width: 24em;
+    margin: 3.6em 0em 3em 1em;
+    float: left;
+    height: calc(100vh - 8em);
+    overflow-y: auto;
+}
+
+.bodystyle {
+    display: flex;
+}
+
+.menustyle {
+    position: fixed;
+    width: 100%;
+    margin-bottom: 5em;
+    z-index: 100;
+}
+
+.buttonstyle {
+    margin-left: auto;
+    text-align: center;
+    padding: 1em;
+    width: 25em;
+    position: fixed;
+    bottom:0;
+    z-index: 100;
+    background-color: #ffffff;
+}
+
+.paperstyle {
+    max-height: 30em;
+    width: 22.2em;
+    margin: 1em 0.2em;
+    padding: 1em 1em;
+    text-align: left;
+    display: inline-block;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.paperstyle2 {
+    height: 10em;
+    width: 22.2em;
+    margin: 1em 0.2em;
+    padding: 1em 1em;
+    text-align: left;
+    display: inline-block;
+}
+
+.thresholdStyle {
+    float: left;
+}
+
+.sliderStyle {
+    padding-top: 1em;
+    padding-left: 1em;
+    float: left;
+    width: 15em;
+}
+
+.showScroll {
+    overflow-y: auto;
+    height: 9em;
 }

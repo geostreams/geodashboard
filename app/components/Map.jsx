@@ -70,6 +70,11 @@ class Map extends Component {
         return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
     }
 
+    getTrendColor(source:string):string {
+        let trend_colors = window.configruntime.trend_colors;
+        return trend_colors[source] !== undefined ? trend_colors[source] : '#7F7F7F';
+    }
+
     updateLayers(sensors:Sensors) {
         var features = Array();
         sensors.map((sensor) => {
@@ -78,13 +83,82 @@ class Map extends Component {
                 geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
             });
 
-            feature.setStyle(new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 5,
-                    fill: new ol.style.Fill({color: this.getColor(sensor.properties.type.id)}),
-                    stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
-                })
-            }));
+            let trend_type = "";
+            let trend_values = "";
+
+            if (this.props.display_trends) {
+
+                if (trend_type == "trendUp") {
+                    feature.setStyle(new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 6,
+                            fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type == "trendDown") {
+                    feature.setStyle(new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 6,
+                            rotation: 3.141592654,
+                            fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type == "overThresholdUp") {
+                    feature.setStyle(new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 6,
+                            fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type == "overThresholdDown") {
+                    feature.setStyle(new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 6,
+                            rotation: 3.141592654,
+                            fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type == "noTrend" || trend_type == "") {
+                    feature.setStyle(new ol.style.Style({
+                        image: new ol.style.Circle({
+                            radius: 5,
+                            fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                }
+
+                feature.attributes = {
+                    "dataSource": getSourceName(sensor.properties.type),
+                    "maxEndTime": sensor.max_end_time,
+                    "minStartTime": sensor.min_start_time,
+                    "latitude": sensor.geometry.coordinates[1],
+                    "longitude": sensor.geometry.coordinates[0],
+                    //parameters has null in the array
+                    "parameters": sensor.parameters.filter(x => x !== null).map(x => getParameterName(x)),
+                    "color": this.getColor(sensor.properties.type.id),
+                    "trend_color": this.getTrendColor(trend_type),
+                    "trend_type": trend_type,
+                    "trend_values": trend_values,
+                    "display_trends": this.props.display_trends,
+                };
+
+            } else {
+                feature.setStyle(new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 5,
+                        fill: new ol.style.Fill({color: this.getColor(sensor.properties.type.id)}),
+                        stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
+                    })
+                }));
 
             feature.attributes = {
                 "dataSource": getSourceName(sensor.properties.type),
@@ -96,6 +170,8 @@ class Map extends Component {
                 "parameters": sensor.parameters.filter(x => x !== null).map(x => getParameterName(x)),
                 "color": this.getColor(sensor.properties.type.id),
             };
+
+            }
 
             feature.setId(sensor.properties.popupContent);
             features.push(feature);
@@ -136,14 +212,6 @@ class Map extends Component {
             let latlong = '<tr><td><strong>Lat, Long: </strong></td>'.concat('<td>', latitude, ', ',
                 longitude, '</td></tr>');
 
-            let paramsLength = (sensorInfo.parameters).length;
-            let paramsOrig = (sensorInfo.parameters);
-            let paramsAlt = '';
-            for (let i = 0; i < paramsLength; i++) {
-                paramsAlt = paramsAlt + '<li>' + paramsOrig[i] + '</li>';
-            }
-            let params = '<ul>'.concat(paramsAlt, '</ul>');
-
             let sourceColor = sensorInfo.color;
 
             let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
@@ -151,13 +219,61 @@ class Map extends Component {
 
             let bodyText =
                 '<table class=' + styles.popup_table + '>' +
-                dataSource +
-                timePeriod +
-                latlong +
+                    dataSource +
+                    timePeriod +
+                    latlong +
                 '</table>' +
-                '<div class=' + styles.greyborder + '></div>' +
-                '<h3 class=' + styles.header3style + '>' + 'Parameters (' + paramsLength + '): </h3>' +
-                '<div class=' + styles.paramsborder + '>' + params + '</div>';
+                '<div class=' + styles.greyborder + '></div>';
+
+            if (sensorInfo.display_trends) {
+
+                let sensorTrends = sensorInfo.trend_type;
+                let trendColor = sensorInfo.trend_color;
+                let trendValues = sensorInfo.trend_values;
+
+                let trendsLeft = '';
+
+                if (sensorTrends == 'trendUp' || sensorTrends == 'overThresholdUp') {
+                    trendsLeft = '<tr><td rowspan="5"><p class=' + styles.upArrow + ' style="background: ' +
+                        trendColor + '; border-color: ' + trendColor + '; ">' + trendValues[4] + '</p></td></tr>';
+                } else if (sensorTrends == 'trendDown' || sensorTrends == 'overThresholdDown') {
+                    trendsLeft = '<tr><td rowspan="5"><p class=' + styles.downArrow + ' style="background: ' +
+                        trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+                } else if (sensorTrends == 'noTrend') {
+                    trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                        trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+                } else {
+                    trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                        trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+                }
+
+                let trendsRight = '' +
+                    '<tr><td><strong>Calculated Avg: </strong>' + trendValues[0] + '</td></tr>' +
+                    '<tr><td><strong>Long Term Avg: </strong>' + trendValues[1] + '</td></tr>' +
+                    '<tr><td><strong>Latest Value: </strong>' + trendValues[2] + '</td></tr>' +
+                    '<tr><td><strong>Latest Time: </strong>' + trendValues[3] + '</td></tr>';
+
+                let trends = trendsLeft + trendsRight;
+
+                bodyText = bodyText +
+                    '<table class=' + styles.tablestyle + '>' +
+                    trends +
+                    '</table>';
+
+            } else {
+
+                let paramsLength = (sensorInfo.parameters).length;
+                let paramsOrig = (sensorInfo.parameters);
+                let paramsAlt = '';
+                for (let i = 0; i < paramsLength; i++) {
+                    paramsAlt = paramsAlt + '<li>' + paramsOrig[i] + '</li>';
+                }
+                let params = '<ul>'.concat(paramsAlt, '</ul>');
+
+                bodyText = bodyText +
+                    '<h3 class=' + styles.header3style + '>' + 'Parameters (' + paramsLength + '): </h3>' +
+                    '<div class=' + styles.paramsborder + '>' + params + '</div>';
+            }
 
             let popupText = headerText + bodyText;
 
@@ -167,6 +283,7 @@ class Map extends Component {
             let overlay = this.state.map.getOverlayById("marker");
             overlay.setPosition(coordinate);
         }
+
     }
 
     componentDidUpdate() {
@@ -311,6 +428,7 @@ class Map extends Component {
             let feature = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
                 return featureChange;
             });
+
             if(feature){
                 that.popupHandler(feature, e.coordinate);
             } else {

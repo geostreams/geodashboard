@@ -25,9 +25,7 @@ export const sourcecolor = {
       "ss" : "#4d6363",
       "usgs" : "#39B54A",
       "wqp" : "#F28E1E"
- };
-
-
+};
 
 export const parameter_maps = {
       "biomass": "Zooplankton Biomass (ug/m^3)",
@@ -51,7 +49,6 @@ export const parameter_maps = {
       "phosphorus-concentration": "Total Phosphorus (ug/L)",
       "nitrogen-concentration": "Nitrogen (mg/L)",
       "depth": "Depth (m)",
-
       "load-Mg": "Nitrate Load (Mg)",
       "cumulative-load-Mg": "Nitrate Cumulative Load (Mg)",
       "ammonia-ammonium-mgl": "Ammonia / Ammonium (mg/L)",
@@ -75,6 +72,7 @@ export const parameter_maps = {
       "water-temperature-c" : "Water Temperature (°C)",
       "wind-speed-mps": "Wind Speed (m/s)"
 };
+
 export const sourcename = {
       "glfmsp": "Great Lakes Fish Monitoring and Surveillance Program",
       "epa": "Water Quality Data",
@@ -82,4 +80,12 @@ export const sourcename = {
       "lec": "Lake Erie Committee Forage Task Group",
       "usgs": "United States Geological Survey",
       "iadn": "Integrated Atmospheric Deposition Network"
-}
+};
+
+export const trend_colors = {
+    "trendUp" : "#FAE70B",
+    "trendDown" : "#29ABE2",
+    "noTrend" : "#7F7F7F",
+    "overThresholdUp" : "#ED2026",
+    "overThresholdDown" : "#ED2026"
+};

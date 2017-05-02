@@ -93,3 +93,61 @@
   overflow-y: auto;
   line-height: 1.5em;
 }
+
+.upArrow {
+  text-align: center;
+  padding-top: 1em;
+  font-size: larger;
+  font-weight: bold;
+  margin-top: 2.5em;
+  position: relative;
+  width: 4.9em;
+  height: 3.5em;
+  border-radius: 0% 0% 10% 10%;
+}
+.upArrow:before {
+  content: '';
+  border-width: 0em 2.5em 2.2em 2.5em;
+  border-color: transparent;
+  border-bottom-color: inherit;
+  border-style: solid;
+  position: absolute;
+  width: 0em;
+  height: 0em;
+  left: 0em;
+  top: -2.2em;
+}
+
+.downArrow {
+  text-align: center;
+  padding-top: 1.5em;
+  font-size: larger;
+  font-weight: bold;
+  margin-bottom: 2.5em;
+  position: relative;
+  width: 4.9em;
+  height: 3.5em;
+  border-radius: 10% 10% 0% 0%;
+}
+.downArrow:before {
+  content: '';
+  border-width: 2.2em 2.5em 0em 2.5em;
+  border-color: transparent;
+  border-top-color: inherit;
+  border-style: solid;
+  position: absolute;
+  width: 0em;
+  height: 0em;
+  left: 0em;
+  bottom: -2.15em;
+}
+
+.noValue {
+  text-align: center;
+  padding-top: 1.8em;
+  font-size: larger;
+  font-weight: bold;
+  width: 5em;
+  height: 5em;
+  border-radius: 50%;
+}

@@ -4,7 +4,7 @@ import { Router, Route, browserHistory, hashHistory } from 'react-router'
 import Search from '../containers/Search'
 import Home from '../pages/Home'
 import Explore from '../pages/Explore'
-import Analysis from './Analysis';
+import Analysis from '../containers/Analysis';
 import About from '../pages/About';
 import RouteMismatch from '../pages/RouteMismatch'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
