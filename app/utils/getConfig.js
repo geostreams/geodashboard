@@ -17,10 +17,10 @@ function capitalize(a:string):string {
     return a.charAt(0).toUpperCase() + a.slice(1);
 }
 
-export function getParameterName(parameter:string):string {
+export function getParameterName(parameter:string):?string {
     var parameter_maps = window.configruntime.parameter_maps;
     return parameter_maps[parameter] !== undefined ? parameter_maps[parameter] :
-        capitalize(parameter.replace(/-/g, " ")).replace(" mgl", " (mg/l)");
+        null;
 }
 
 export function getTrendSettings() {

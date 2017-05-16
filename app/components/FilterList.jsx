@@ -136,7 +136,7 @@ class FilterList extends Component {
                 </div>
             );
         } else {
-            cardsubtitle = cardsubtitle !== null && (Array.isArray(cardsubtitle) && cardsubtitle.length > 0) ? cardsubtitle : "No selection";
+            cardsubtitle = cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 0 ? cardsubtitle : "No selection";
             cardhead = (
                 <div>
                 <CardTitle title={this.props.attribute.replace("data_source", "data source")}

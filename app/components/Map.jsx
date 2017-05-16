@@ -10,7 +10,6 @@ import DeviceGpsFixed from 'material-ui/svg-icons/device/gps-fixed';
 import {getSourceName, getParameterName} from '../utils/getConfig'
 import type { Sensors } from '../utils/flowtype'
 
-
 type MapProps = {
     sensors:Sensors,
     availableSensors:Sensors
@@ -190,6 +189,8 @@ class Map extends Component {
                     "minStartTime": sensor.min_start_time,
                     "latitude": sensor.geometry.coordinates[1],
                     "longitude": sensor.geometry.coordinates[0],
+                    //parameters has null in the array
+                    "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
                     "color": this.getColor(sensor.properties.type.id),
                     "trend_color": this.getTrendColor(trend_type),
                     "trend_type": trend_type,
@@ -213,7 +214,7 @@ class Map extends Component {
                 "latitude": sensor.geometry.coordinates[1],
                 "longitude": sensor.geometry.coordinates[0],
                 //parameters has null in the array
-                "parameters": sensor.parameters.filter(x => x !== null).map(x => getParameterName(x)),
+                "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
                 "color": this.getColor(sensor.properties.type.id),
             };
 

@@ -42,7 +42,7 @@ export function collectParameters(sensorsData:Sensors):MapWithLabels {
         })
         if (p === null)
         	console.log(`Found sensor ${s.id} with null parameters`)
-        else if (!found) 
+        else if (!found && getParameterName(p) != null)
         	params.push({'id': p, 'label': getParameterName(p) || ''});
       });
     });
