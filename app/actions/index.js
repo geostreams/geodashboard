@@ -33,6 +33,7 @@ function receiveSensors(api:string, json:Sensors) {
 }
 
 export const ADD_SEARCH_FILTER = 'ADD_SEARCH_FILTER'
+// this is not used for now, it push a new field in state.searchFilters.filters, not state.searchFilters.selected
 function addSearchFilter(filter:string) {
     return {
         type: ADD_SEARCH_FILTER,
@@ -53,6 +54,110 @@ export function addSearchParameter(parameter:Array<string>) {
         const idx = selected_filters.indexOf('parameters');
         dispatch(updateAvailableSensors(idx));
     }
+}
+
+export const ADD_TRENDS = 'ADD_TRENDS';
+export function fetchTrends(parameter, totalyear, interval) {
+    return (dispatch:Dispatch, getState:GetState) => {
+        // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
+        // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
+        // Each sensor wil have a dispatch with type = ADD_TRENDS.
+        const state = getState();
+        const api = state.backends.selected;
+        //TODO: add season for GLM
+        const season = undefined;
+        //TODO: change to year/semi for GLM, may need a config
+        const trendsendpoint = api + '/api/geostreams/datapoints/trends?binning=year&semi=all';
+        state.sensors.data.filter(s => s.parameters.indexOf(parameter) >= 0)
+            .map(sensor => {
+                let start_time = new Date(sensor.min_start_time);
+                let end_time = new Date(sensor.max_end_time);
+                let result;
+                let timeframeDays = Math.floor((end_time - start_time) / (1000*60*60*24));
+                if (isNaN(end_time.getTime()) || timeframeDays <= (totalyear * 365)) {
+                    dispatch({
+                        type: ADD_TRENDS,
+                        sensor: Object.assign(sensor, {
+                            "trends": "not enough data",
+                            "trend_start_time": start_time,
+                            "trend_end_time": end_time,
+                        })
+                    });
+                    return undefined;
+                } else {
+                    const end_year = end_time.getFullYear();
+                    const window_start = new Date(end_time);
+                    window_start.setYear(end_year - interval);
+
+                    let start = new Date(end_time);
+                    if (totalyear == 0) {
+                        start = start_time;
+                    } else {
+                        start.setYear(end_year - totalyear);
+                    }
+
+                    let trendsendpointargs = trendsendpoint +
+                        "&window_start=" + window_start.toISOString() +
+                        "&window_end=" + end_time.toISOString() +
+                        "&since=" + start.toISOString() +
+                        "&until=" + end_time.toISOString() +
+                        "&sensor_id=" + sensor.id +
+                        "&attributes=" + parameter;
+                    if (season)
+                        trendsendpointargs = trendsendpointargs + "&semi=" + season;
+                    console.log(trendsendpointargs);
+                    result = fetch(trendsendpointargs);
+                    result
+                        .then(response => {
+                            if (response) {
+                                return response.json();
+                            } else {
+                                return undefined
+                            }
+                        })
+                        .then(json => {
+                            if (json) {
+                                // trends api return do result, not sure why.
+                                if (json.length < 1) {
+                                    dispatch({
+                                        type: ADD_TRENDS,
+                                        sensor: Object.assign(sensor, {
+                                            "trends": "trends return no data",
+                                            "trend_start_time": start_time,
+                                            "trend_end_time": end_time,
+                                        })
+                                    });
+                                } else {
+                                    let trendStart = new Date(json[0].start_time);
+                                    let trendEnd = new Date(json[0].end_time);
+                                    let timeframeTrendsDays = Math.floor((trendEnd - trendStart) / (1000*60*60*24));
+
+                                    if (timeframeTrendsDays >= (totalyear * 365)-180) {
+                                        dispatch({
+                                            type: ADD_TRENDS,
+                                            sensor: Object.assign(sensor, {
+                                                "trends": json[0].properties,
+                                                "trend_start_time": start_time,
+                                                "trend_end_time": end_time,
+                                            })
+                                        });
+                                    } else {
+                                        dispatch({
+                                            type: ADD_TRENDS,
+                                            sensor: Object.assign(sensor, {
+                                                "trends": "trends return no data",
+                                                "trend_start_time": start_time,
+                                                "trend_end_time": end_time,
+                                            })
+                                        });
+                                    }
+                                }
+                            }
+                        })
+                }
+            });
+    }
+
 }
 
 export const ADD_SEARCH_DATASOURCE = 'ADD_SEARCH_DATASOURCE'
@@ -213,6 +318,20 @@ export function fetchSensors(api:string) {
                 dispatch(receiveSensors(api, json))
             })
             .then(dispatch(updateAvailableSensors(-1)))
+    }
+}
+
+
+export const ADD_TRENDS_ARGS = 'ADD_TRENDS_ARGS';
+export function fetchTrendsArgs(chosenParameter, baselinePeriod, rollingPeriod, thresholdChooseValue){
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: ADD_TRENDS_ARGS,
+            chosenParameter,
+            baselinePeriod,
+            rollingPeriod,
+            thresholdChooseValue,
+        })
     }
 }
 

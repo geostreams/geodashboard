@@ -89,3 +89,75 @@ export const trend_colors = {
     "overThresholdUp" : "#ED2026",
     "overThresholdDown" : "#ED2026"
 };
+
+export const trend_settings = [
+    {
+        "parameter": {
+            "id": "nitrate-as-n-mgl",
+            "title": "Nitrate as N"
+        },
+        "thresholds":[
+            {
+                "title": "Standard01",
+                "region": "Region01",
+                "value": 3.1
+            },
+            {
+                "title": "Standard02",
+                "region": "Region02",
+                "value": 1.1
+            },
+            {
+                "title": "Standard03",
+                "region": "Region03",
+                "value": 2.5
+            }
+        ]
+    },
+    {
+        "parameter": {
+            "id":"pH",
+            "title": "Water Acidity"
+        },
+        "thresholds":[
+            {
+                "title": "Standard04",
+                "region": "Region04",
+                "value": 6.3
+            },
+            {
+                "title": "Standard05",
+                "region": "Region05",
+                "value": 7
+            },
+            {
+                "title": "Standard06",
+                "region": "Region06",
+                "value": 7.2
+            }
+        ]
+    },
+    {
+        "parameter": {
+            "id": "load-Mg",
+            "title": "Nitrate Load"
+        },
+        "thresholds":[
+            {
+                "title": "Standard07",
+                "region": "Region07",
+                "value": 0.6
+            },
+            {
+                "title": "Standard08",
+                "region": "Region08",
+                "value": 1.5
+            },
+            {
+                "title": "Standard09",
+                "region": "Region09",
+                "value": 2.0
+            }
+        ]
+    }
+];

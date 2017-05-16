@@ -49,7 +49,9 @@ class Map extends Component {
     render() {
         // this.updateLayers()
         return (<div>
-            <div id='map' className={styles.root}></div>
+            <div id='map' className={styles.root}>
+                <div id="trends_legend" className={styles.trends_legend}></div>
+            </div>
             <div style={{display: "none"}}>
                 <a className="overlay" id="vienna" target="_blank" href="http://en.wikipedia.org/wiki/Vienna">Vienna</a>
                 <div id="marker" title="Marker" className="marker"></div>
@@ -88,11 +90,57 @@ class Map extends Component {
 
             if (this.props.display_trends) {
 
+                // TODO: The arrow color should be partially decided by the latest returned value in sensor.trends
+
+                if(sensor.hasOwnProperty("trends")) {
+                    if (sensor.trends === "not enough data" || sensor.trends === "trends return no data") {
+                        trend_type = "noTrend";
+                    } else {
+
+                        const threshold = this.props.threshold_value;
+
+                        if (sensor.trends[this.props.trendsparameter + "_percentage_change"] > 0 &&
+                            sensor.trends[this.props.trendsparameter + "_last_average"] >= threshold) {
+
+                            trend_type = "overThresholdUp";
+
+                        } else if (sensor.trends[this.props.trendsparameter + "_percentage_change"] > 0 &&
+                            sensor.trends[this.props.trendsparameter + "_last_average"] < threshold) {
+
+                            trend_type = "trendUp";
+
+                        } else if (sensor.trends[this.props.trendsparameter + "_percentage_change"] < 0 &&
+                            sensor.trends[this.props.trendsparameter + "_last_average"] < threshold) {
+
+                            trend_type = "trendDown";
+
+                        } else if (sensor.trends[this.props.trendsparameter + "_percentage_change"] < 0 &&
+                            sensor.trends[this.props.trendsparameter + "_last_average"] > threshold) {
+
+                            trend_type = "overThresholdDown";
+
+                        } else {
+
+                            trend_type = "noTrend";
+
+                        }
+                    }
+
+                    trend_values = [
+                        (Number(sensor.trends[this.props.trendsparameter + "_total_average"]).toFixed(2) + " mg/L"),
+                        (Number(sensor.trends[this.props.trendsparameter + "_interval_average"]).toFixed(2) + " mg/L"),
+                        (Number(sensor.trends[this.props.trendsparameter + "_last_average"]).toFixed(2) + " mg/L"),
+                        (new Date(sensor["trend_end_time"]).toLocaleDateString()),
+                        (Number(sensor.trends[this.props.trendsparameter + "_percentage_change"]).toFixed(2) + " %")
+                    ]
+
+                }
+
                 if (trend_type == "trendUp") {
                     feature.setStyle(new ol.style.Style({
                         image: new ol.style.RegularShape({
                             points: 3,
-                            radius: 6,
+                            radius: 10,
                             fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
@@ -101,7 +149,7 @@ class Map extends Component {
                     feature.setStyle(new ol.style.Style({
                         image: new ol.style.RegularShape({
                             points: 3,
-                            radius: 6,
+                            radius: 10,
                             rotation: 3.141592654,
                             fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
@@ -111,7 +159,7 @@ class Map extends Component {
                     feature.setStyle(new ol.style.Style({
                         image: new ol.style.RegularShape({
                             points: 3,
-                            radius: 6,
+                            radius: 10,
                             fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
@@ -120,7 +168,7 @@ class Map extends Component {
                     feature.setStyle(new ol.style.Style({
                         image: new ol.style.RegularShape({
                             points: 3,
-                            radius: 6,
+                            radius: 10,
                             rotation: 3.141592654,
                             fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
@@ -129,7 +177,7 @@ class Map extends Component {
                 } else if (trend_type == "noTrend" || trend_type == "") {
                     feature.setStyle(new ol.style.Style({
                         image: new ol.style.Circle({
-                            radius: 5,
+                            radius: 4,
                             fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
@@ -142,8 +190,6 @@ class Map extends Component {
                     "minStartTime": sensor.min_start_time,
                     "latitude": sensor.geometry.coordinates[1],
                     "longitude": sensor.geometry.coordinates[0],
-                    //parameters has null in the array
-                    "parameters": sensor.parameters.filter(x => x !== null).map(x => getParameterName(x)),
                     "color": this.getColor(sensor.properties.type.id),
                     "trend_color": this.getTrendColor(trend_type),
                     "trend_type": trend_type,
@@ -232,32 +278,46 @@ class Map extends Component {
                 let trendValues = sensorInfo.trend_values;
 
                 let trendsLeft = '';
+                let trendsRight = '';
 
-                if (sensorTrends == 'trendUp' || sensorTrends == 'overThresholdUp') {
-                    trendsLeft = '<tr><td rowspan="5"><p class=' + styles.upArrow + ' style="background: ' +
-                        trendColor + '; border-color: ' + trendColor + '; ">' + trendValues[4] + '</p></td></tr>';
-                } else if (sensorTrends == 'trendDown' || sensorTrends == 'overThresholdDown') {
-                    trendsLeft = '<tr><td rowspan="5"><p class=' + styles.downArrow + ' style="background: ' +
-                        trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
-                } else if (sensorTrends == 'noTrend') {
+                if (sensorTrends == "noTrend" || sensorTrends == "") {
+
+                    let leftText = " ";
                     trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
-                        trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+                        trendColor + '; border-color: ' + trendColor + ';">' + leftText + '</p></td></tr>';
+
+                    let rightText = "Not enough data to display";
+                    trendsRight = '' +
+                        '<tr><td><strong>' + rightText + '</strong></td></tr>';
+
                 } else {
-                    trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
-                        trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
-                }
 
-                let trendsRight = '' +
-                    '<tr><td><strong>Calculated Avg: </strong>' + trendValues[0] + '</td></tr>' +
-                    '<tr><td><strong>Long Term Avg: </strong>' + trendValues[1] + '</td></tr>' +
-                    '<tr><td><strong>Latest Value: </strong>' + trendValues[2] + '</td></tr>' +
-                    '<tr><td><strong>Latest Time: </strong>' + trendValues[3] + '</td></tr>';
+                    if (sensorTrends == 'trendUp' || sensorTrends == 'overThresholdUp') {
+                        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.upArrow + ' style="background: ' +
+                            trendColor + '; border-color: ' + trendColor + '; ">' + trendValues[4] + '</p></td></tr>';
+                    } else if (sensorTrends == 'trendDown' || sensorTrends == 'overThresholdDown') {
+                        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.downArrow + ' style="background: ' +
+                            trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+                    } else if (sensorTrends == 'noTrend') {
+                        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                            trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+                    } else {
+                        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                            trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+                    }
+
+                    trendsRight = '' +
+                        '<tr><td><strong>Baseline Avg: </strong>' + trendValues[0] + '</td></tr>' +
+                        '<tr><td><strong>Rolling Avg: </strong>' + trendValues[1] + '</td></tr>' +
+                        '<tr><td><strong>Latest Value: </strong>' + trendValues[2] + '</td></tr>' +
+                        '<tr><td><strong>Latest Time: </strong>' + trendValues[3] + '</td></tr>';
+                }
 
                 let trends = trendsLeft + trendsRight;
 
                 bodyText = bodyText +
                     '<table class=' + styles.tablestyle + '>' +
-                    trends +
+                        trends +
                     '</table>';
 
             } else {
@@ -289,18 +349,31 @@ class Map extends Component {
     componentDidUpdate() {
         // FIXME: this does not get called all the time
         // Try switching API and quickly switching to the search page
-        var features;
-        if(this.props.updateSensors){
-            console.log("Map component got new props");
-            features = this.updateLayers(this.props.updateSensors);
+        let features;
+
+        if( this.props.display_trends ){
+            if(Array.isArray(this.props.trendSensors) && this.props.trendSensors.length > 0){
+                features = this.updateLayers(this.props.trendSensors);
+            } else {
+                features = this.updateLayers(this.props.sensors);
+            }
         } else {
-            features = this.updateLayers(this.props.sensors);
+            if(this.props.updateSensors){
+                console.log("Map component got new props");
+                features = this.updateLayers(this.props.updateSensors);
+            } else {
+                features = this.updateLayers(this.props.sensors);
+            }
         }
+
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
 
         if (this.state.vectorSource.getFeatures().length > 0) {
-            this.state.map.getView().fit(this.state.vectorSource.getExtent(), this.state.map.getSize());
+            // Turn off auto zoom for Trends
+            if(!this.props.display_trend){
+                this.state.map.getView().fit(this.state.vectorSource.getExtent(), this.state.map.getSize());
+            }
         }
         if(this.props.coordinates) {
             var feature = this.state.map.forEachFeatureAtPixel(this.state.map.getPixelFromCoordinate(this.props.coordinates)
@@ -372,6 +445,7 @@ class Map extends Component {
         let theMap;
 
         window.app = {};
+
         let app = window.app;
         app.centerControl = function (opt_options) {
             let options = opt_options || {};
@@ -439,6 +513,39 @@ class Map extends Component {
             }
 
         });
+
+        if (this.props.display_trends) {
+
+            const trends_legend_var = document.getElementById('trends_legend');
+
+            const noTrendArrow = '<p class=' + styles.noValueLegend + ' style="background: ' +
+                this.getTrendColor("noTrend") + '; border-color: ' +
+                this.getTrendColor("noTrend") + '; margin-left: 1em;"></p>';
+
+            const trendUpArrow = '<p class=' + styles.upArrowLegend + ' style="border-color: ' +
+                this.getTrendColor("trendUp") + '; margin-left: 1em; "></p>';
+
+            const trendDownArrow = '<p class=' + styles.downArrowLegend + ' style="border-color: ' +
+                this.getTrendColor("trendDown") + '; margin-left: 1em;"></p>';
+
+            const overThresholdUpArrow = '<p class=' + styles.upArrowLegend + ' style="border-color: ' +
+                this.getTrendColor("overThresholdUp") + ';"></p>';
+
+            const overThresholdDownArrow = '<p class=' + styles.downArrowLegend + ' style="border-color: ' +
+                this.getTrendColor("overThresholdDown") + ';"></p>';
+
+            if (trends_legend_var) {
+                trends_legend_var.innerHTML =
+                    (
+                        '<div class=' + styles.trends_legend_text + '>' +
+                        trendUpArrow + ' - Trending Up <br/>' +
+                        trendDownArrow + ' - Trending Down <br/>' +
+                        noTrendArrow + ' - No Data Available <br/>' +
+                        overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/> </div>'
+                    );
+            }
+
+        }
 
         this.setState({map: theMap});
 

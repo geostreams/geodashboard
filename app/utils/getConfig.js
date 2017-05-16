@@ -22,3 +22,8 @@ export function getParameterName(parameter:string):string {
     return parameter_maps[parameter] !== undefined ? parameter_maps[parameter] :
         capitalize(parameter.replace(/-/g, " ")).replace(" mgl", " (mg/l)");
 }
+
+export function getTrendSettings() {
+    var trend_settings = window.configruntime.trend_settings;
+    return trend_settings;
+}

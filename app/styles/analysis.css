@@ -32,35 +32,15 @@
     z-index: 100;
 }
 
-.buttonstyle {
-    margin-left: auto;
-    text-align: center;
-    padding: 1em;
-    width: 25em;
-    position: fixed;
-    bottom:0;
-    z-index: 100;
-    background-color: #ffffff;
-}
-
 .paperstyle {
     max-height: 30em;
     width: 22.2em;
-    margin: 1em 0.2em;
+    margin: 1em 0.5em 0em 0.2em;
     padding: 1em 1em;
     text-align: left;
     display: inline-block;
     overflow-y: auto;
     overflow-x: auto;
-}
-
-.paperstyle2 {
-    height: 10em;
-    width: 22.2em;
-    margin: 1em 0.2em;
-    padding: 1em 1em;
-    text-align: left;
-    display: inline-block;
 }
 
 .thresholdStyle {
@@ -77,4 +57,31 @@
 .showScroll {
     overflow-y: auto;
     height: 9em;
+}
+
+.actionStyle {
+    margin-left: auto;
+    text-align: center;
+    padding: 0.5em 0.5em 0.5em 5em;
+    width: 25em;
+    position: fixed;
+    bottom:0;
+    z-index: 100;
+    background-color: #ffffff;
+}
+
+.buttonStyle {
+    float: left;
+    margin: 0.5em 0.2em 0.5em 0.2em;
+}
+
+.counterText {
+    float: left;
+    margin-top: 1em;
+    padding: 0.2em;
+}
+
+.comboStyling {
+    margin: auto;
+    width: 90%;
 }
