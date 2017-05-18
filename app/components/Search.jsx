@@ -17,7 +17,7 @@ class Search extends Component {
 				<div className={styles.menu}>
 					<Menu selected="search"/>
 				</div>
-				<div className={styles.body}>
+				<div className={styles.bodymap}>
 					<div>
 						<List className={styles.list}>
 							<FilterSelection/>

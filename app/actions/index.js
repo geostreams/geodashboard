@@ -20,7 +20,7 @@ function requestSensors(api:string) {
 
 export const RECEIVE_SENSORS = 'RECEIVE_SENSORS'
 function receiveSensors(api:string, json:Sensors) {
-    return (dispatch) => {
+    return (dispatch:Dispatch) => {
         dispatch({
             type: RECEIVE_SENSORS,
             api,
@@ -29,6 +29,28 @@ function receiveSensors(api:string, json:Sensors) {
             receivedAt: Date.now()
         });
         dispatch(updateAvailableFilters());
+    }
+}
+
+export const RECEIVE_SENSOR = 'RECEIVE_SENSOR'
+function receiveSensor(json:Sensors) {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: RECEIVE_SENSOR,
+            sensor_data: json,
+        });
+    }
+}
+
+export const UPDATE_DETAIL = 'UPDATE_DETAIL'
+export function updateDetail(id:string, name:string, coordinates:number[]){
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: UPDATE_DETAIL,
+            id,
+            name,
+            coordinates
+        });
     }
 }
 
@@ -57,7 +79,7 @@ export function addSearchParameter(parameter:Array<string>) {
 }
 
 export const ADD_TRENDS = 'ADD_TRENDS';
-export function fetchTrends(parameter, totalyear, interval) {
+export function fetchTrends(parameter:string, totalyear:number, interval:number) {
     return (dispatch:Dispatch, getState:GetState) => {
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
         // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
@@ -85,15 +107,15 @@ export function fetchTrends(parameter, totalyear, interval) {
                     });
                     return undefined;
                 } else {
-                    const end_year = end_time.getFullYear();
-                    const window_start = new Date(end_time);
-                    window_start.setYear(end_year - interval);
+                    const end_year:number = end_time.getFullYear();
+                    const window_start:Date = new Date(end_time);
+                    window_start.setFullYear(end_year - interval);
 
-                    let start = new Date(end_time);
+                    let start:Date = new Date(end_time);
                     if (totalyear == 0) {
                         start = start_time;
                     } else {
-                        start.setYear(end_year - totalyear);
+                        start.setFullYear(end_year - totalyear);
                     }
 
                     let trendsendpointargs = trendsendpoint +
@@ -297,10 +319,11 @@ export function updateAvailableSensors(idx:number) {
 }
 
 export const SELECT_SENSOR = 'SELECT_SENSOR'
-export function selectAction(id:string, coordinates:Array<number>) {
+export function selectSensorDetail(id:string, name:string, coordinates:Array<number>) {
     return {
         type: SELECT_SENSOR,
         id,
+        name,
         coordinates
     };
 }
@@ -321,9 +344,49 @@ export function fetchSensors(api:string) {
     }
 }
 
+function fetchSensorhelp(api:string, id:number){
+    return (dispatch:any) => {
+        const endpoint = api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + id;
+        return fetch(endpoint)
+            .then(response => response.json())
+            .then(json => {
+                dispatch(receiveSensor(json))
+            })
+    }
+}
+
+export function fetchSensor(name:string) {
+    return (dispatch:any, getState:GetState) => {
+        const state = getState();
+        const api = state.backends.selected;
+
+            //get sensor id from the name
+            if (state.sensors.length > 0) {
+                const sensor = state.sensors.data.find(x => x.name === name).id;
+                dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
+                dispatch(fetchSensorhelp(api, sensor.id));
+
+            } else {
+                const endpointsensors = api + '/api/geostreams/sensors';
+                var result = fetch(endpointsensors)
+                    .then(response => response.json())
+                    .then(json => {
+                        const sensor = json.find(x => x.name === name);
+                        console.log(sensor.id)
+                        dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
+                        return fetch(api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + sensor.id)
+                    });
+                result
+                    .then(response => response.json())
+                    .then(json => {
+                    dispatch(receiveSensor(json))
+                })
+            }
+    }
+}
 
 export const ADD_TRENDS_ARGS = 'ADD_TRENDS_ARGS';
-export function fetchTrendsArgs(chosenParameter, baselinePeriod, rollingPeriod, thresholdChooseValue){
+export function fetchTrendsArgs(chosenParameter:string, baselinePeriod:number, rollingPeriod:number, thresholdChooseValue:number){
     return (dispatch:Dispatch) => {
         dispatch({
             type: ADD_TRENDS_ARGS,
@@ -334,4 +397,3 @@ export function fetchTrendsArgs(chosenParameter, baselinePeriod, rollingPeriod, 
         })
     }
 }
-

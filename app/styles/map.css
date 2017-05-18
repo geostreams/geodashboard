@@ -189,3 +189,13 @@
   border-radius: 50%;
   display: inline-block;
 }
+
+.viewdetail {
+  color: white;
+  text-align:center;
+  display:block;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-radius: 0em 0em  0.5em 0.5em;
+  font-weight: lighter;
+}

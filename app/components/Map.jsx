@@ -76,7 +76,7 @@ class Map extends Component {
         return trend_colors[source] !== undefined ? trend_colors[source] : '#7F7F7F';
     }
 
-    updateLayers(sensors:Sensors) {
+    updateLayers(sensors:Sensors):Array<ol.Feature> {
         var features = Array();
         sensors.map((sensor) => {
 
@@ -208,6 +208,7 @@ class Map extends Component {
                 }));
 
             feature.attributes = {
+                "name": sensor.name,
                 "dataSource": getSourceName(sensor.properties.type),
                 "maxEndTime": sensor.max_end_time,
                 "minStartTime": sensor.min_start_time,
@@ -271,7 +272,6 @@ class Map extends Component {
                     latlong +
                 '</table>' +
                 '<div class=' + styles.greyborder + '></div>';
-
             if (sensorInfo.display_trends) {
 
                 let sensorTrends = sensorInfo.trend_type;
@@ -331,9 +331,14 @@ class Map extends Component {
                 }
                 let params = '<ul>'.concat(paramsAlt, '</ul>');
 
-                bodyText = bodyText +
+                bodyText +=
                     '<h3 class=' + styles.header3style + '>' + 'Parameters (' + paramsLength + '): </h3>' +
-                    '<div class=' + styles.paramsborder + '>' + params + '</div>';
+                    '<div class=' + styles.paramsborder + '>' + params + '</div>' ;
+
+                if(paramsLength > 0) {
+                    bodyText += '<a href="#/detail/location/'+ sensorInfo.name + '" class=' + styles.viewdetail + ' style="background-color: ' +
+                        sourceColor + ';">View detail</a>';
+                }
             }
 
             let popupText = headerText + bodyText;
@@ -344,7 +349,6 @@ class Map extends Component {
             let overlay = this.state.map.getOverlayById("marker");
             overlay.setPosition(coordinate);
         }
-
     }
 
     componentDidUpdate() {
@@ -420,7 +424,7 @@ class Map extends Component {
         const closer = document.getElementById('popup-closer');
 
         let overlay = new ol.Overlay({
-            id:"marker",
+            id: "marker",
             element: container,
             autoPan: true,
             autoPanAnimation: {
@@ -496,14 +500,14 @@ class Map extends Component {
                 closer.blur();
             }
         });
-        let that = this;
+
+        const that = this;
 
         theMap.on('singleclick', function (e) {
 
             let feature = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
                 return featureChange;
             });
-
             if(feature){
                 that.popupHandler(feature, e.coordinate);
             } else {
@@ -549,8 +553,7 @@ class Map extends Component {
         }
 
         this.setState({map: theMap});
-
-    };
+    }
 
 }
 

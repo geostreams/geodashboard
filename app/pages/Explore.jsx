@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import Map from '../containers/Map'
 import Menu from '../components/MenuPage'
+import Map from '../containers/Map'
 import ExploreSourcesTab from '../containers/ExploreSourcesTab'
 import {Card, CardTitle, CardMedia, CardText} from 'material-ui/Card'
 import Sensors from '../containers/Sensors'
@@ -11,7 +11,7 @@ class Explore extends Component {
 	render() {
 
 		let sourceLists = this.props.sources.map(s=>
-			<Card >
+			<Card key={s.label}>
 				<CardTitle
 					title={s.label}
 					titleStyle={{'fontSize':'12px', 'text-transform':'capitalize'}}
@@ -28,7 +28,7 @@ class Explore extends Component {
 					<Menu selected='explore'/>
 				</div>
 				<div>
-					<div className={styles.body}>
+					<div className={styles.bodymap}>
 						<div className={styles.leftcolumn}>
 							{sourceLists}
 						</div>

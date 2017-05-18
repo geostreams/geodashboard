@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import AppContainer from '../components/App'
+import AppComponent from '../components/App'
 import { fetchSensors } from '../actions/index'
 
 const mapStateToProps = (state) => {
@@ -18,6 +18,6 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-const App = connect(mapStateToProps, mapDispatchToProps)(AppContainer);
+const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent);
 
 export default App

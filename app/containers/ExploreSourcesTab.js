@@ -2,10 +2,9 @@
  * @flow
  */
 
-
 import { connect } from 'react-redux'
 import ExploreSourcesTabComponent from '../components/ExploreSourcesTab'
-import { selectAction } from '../actions'
+import { selectSensorDetail } from '../actions'
 import type { Dispatch } from '../utils/flowtype'
 
 const mapStateToProps = (state) => {
@@ -17,8 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSelectClick: (id, coordinates) => {
-            dispatch(selectAction(id, coordinates));
+        onSelectClick: (id, name, coordinates) => {
+            dispatch(selectSensorDetail(id, name, coordinates));
         }
     }
 };
