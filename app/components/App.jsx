@@ -1,4 +1,3 @@
-// @flow
 import React, {Component} from 'react'
 import { Router, Route, browserHistory, hashHistory } from 'react-router'
 import Search from '../containers/Search'
@@ -14,8 +13,9 @@ class App extends Component {
 
     componentWillMount() {
         console.log('App did mount');
-        const { loadSensors, sensors_url } = this.props;
-        loadSensors(sensors_url)
+        const { loadSensors } = this.props;
+        // dispatch is synchronous by default,
+        loadSensors(window.configruntime.clowder_endpoints[0].url);
     }
 
 	render() {
@@ -33,7 +33,6 @@ class App extends Component {
             </MuiThemeProvider>
 		)
 	}
-
 }
 
 export default App

@@ -10,6 +10,13 @@ export const switchBackend = (selected:string) => {
     }
 }
 
+export const ADD_ENDPOINTS = 'ADD_ENDPOINTS'
+export const addEndpoints = () =>{
+    return {
+        type: ADD_ENDPOINTS
+    }
+}
+
 export const REQUEST_SENSORS = 'REQUEST_SENSORS'
 function requestSensors(api:string) {
     return {
