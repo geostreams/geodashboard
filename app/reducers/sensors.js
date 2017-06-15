@@ -2,8 +2,8 @@
  * @flow
  */
 import { SWITCH_BACKEND, REQUEST_SENSORS, RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS} from '../actions'
-import type { Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype'
-import {inArray, sortByLabel} from '../utils/arrayUtils'
+import type { Sensor, Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype'
+import {inArray, sortByLabel, pnpoly} from '../utils/arrayUtils'
 import {getLocationName, getSourceName, getParameterName} from '../utils/getConfig'
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS', sensors:Sensors, api:string, receivedAt:Date,
@@ -88,6 +88,8 @@ export function collectDates(sensorsData:Sensors):CollectDate {
 
 export function collectLocations(sensorsData:Sensors):MapWithLabels {
     const locations:MapWithLabels = [];
+    const additional_location = window.configruntime.additional_locations;
+
     sensorsData.map(s => {
         const location = s.properties.region;
         // check if location exists already
@@ -98,7 +100,18 @@ export function collectLocations(sensorsData:Sensors):MapWithLabels {
             console.log(`Found sensor ${s.id} without location`);
         else if (!found)
             locations.push({'id': location, 'label': getLocationName(location) || ''});
+        // for custom location, insert into locations if it is in sensor && not insert before
+        additional_location.map(customLocation => {
+                if (pnpoly(s.geometry.coordinates[1], s.geometry.coordinates[0], customLocation.geometry.coordinates)
+                    && !locations.find(function (e) {
+                        e.id === customLocation.properties.id
+                    })) {
+                    locations.push({'id': customLocation.properties.id, 'label': customLocation.properties.title})
+                }
+            }
+        )
     });
+
     // sort
     return sortByLabel(locations);
 }
@@ -148,7 +161,7 @@ function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string
                 if(selectedSearch.locations.selected != null ) {
                     new_sensors = [];
                     av_sensors.map((sensor => {
-                        if(selectedSearch.locations.selected == sensor.properties.region) {
+                        if(matchLocation(selectedSearch.locations.selected, sensor)) {
                             new_sensors.push(sensor);
                         }
                     }));
@@ -160,6 +173,19 @@ function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string
 
     });
     return av_sensors;
+}
+
+function matchLocation(selectedLocation:string, sensor:Sensor) {
+    if (selectedLocation === sensor.properties.region)
+        return true;
+    function findLocation(location) {
+        return location.properties.id === selectedLocation;
+    }
+
+    const customLocation = window.configruntime.additional_locations.find(findLocation);
+    if (!customLocation)
+        return false;
+    return pnpoly(sensor.geometry.coordinates[1], sensor.geometry.coordinates[0], customLocation.geometry.coordinates)
 }
 
 export default sensors

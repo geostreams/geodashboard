@@ -4,13 +4,23 @@
 import type { PropertiesType } from './flowtype'
 
 export function getSourceName(source:PropertiesType):string {
-    var sourcename = window.configruntime.sourcename;
+    const sourcename = window.configruntime.sourcename;
     return sourcename[source.id] !== undefined ? sourcename[source.id] : source.title;
 }
 
-export function getLocationName(source:string):string {
-    var named_locations = window.configruntime.named_locations;
-    return named_locations[source] !== undefined ? named_locations[source] : source;
+export function getLocationName(location:string):string {
+    const named_locations = window.configruntime.named_locations;
+    const additional_location = window.configruntime.additional_locations;
+
+    if( named_locations[location] !== undefined)
+        return named_locations[location]
+    const custom_location = additional_location.find(
+        function(custom_location) {
+        return custom_location.properties.id === location;
+    });
+    if( custom_location)
+        return custom_location.properties.title;
+    return location;
 }
 
 function capitalize(a:string):string {
@@ -18,12 +28,11 @@ function capitalize(a:string):string {
 }
 
 export function getParameterName(parameter:string):?string {
-    var parameter_maps = window.configruntime.parameter_maps;
+    const parameter_maps = window.configruntime.parameter_maps;
     return parameter_maps[parameter] !== undefined ? parameter_maps[parameter] :
         null;
 }
 
 export function getTrendSettings() {
-    var trend_settings = window.configruntime.trend_settings;
-    return trend_settings;
+    return window.configruntime.trend_settings;
 }

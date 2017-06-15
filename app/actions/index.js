@@ -247,7 +247,6 @@ export function addSearchLocation(location:? string) {
             type: ADD_SEARCH_LOCATION,
             location,
             selected_filters
-
         })
         const idx = selected_filters.indexOf('locations');
         dispatch(updateAvailableSensors(idx));

@@ -229,7 +229,7 @@ class Map extends Component {
 
     popupHandler(feature: ol.Feature, coordinate: number[]) {
         const content = document.getElementById('popup-content');
-        if (feature) {
+        if (feature && feature.getId()) {
             let id = feature.getId().toUpperCase();
             let sensorInfo = feature.attributes;
 
