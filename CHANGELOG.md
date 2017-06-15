@@ -33,5 +33,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-882](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-882)
 - Add Content for the Exploratory Analysis Page
   [GLGVO-274](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-274)
+- Changing from Material-UI to [React Material Web Components](https://github.com/kradio3/react-mdc-web)
+  [GEOD-852](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-852)
+
 
 

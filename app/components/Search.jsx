@@ -2,37 +2,39 @@ import React, {Component} from 'react'
 import styles from '../styles/main.css';
 import stylesearch from '../styles/search.css';
 import Map from '../containers/Map'
-import Menu from './MenuPage'
+import MenuPage from './MenuPage'
 import DownloadButtons from '../containers/DownloadButtons'
 import FilterSelection from '../containers/FilterSelection'
-import Card from 'material-ui/Card';
-import List from 'material-ui/List';
+import {Card, CardText, CardMedia, List, Content, Grid, Cell} from 'react-mdc-web';
 
 Object.assign(styles, stylesearch);
 
 class Search extends Component {
     render() {
         return (
-        	<div>
-				<div className={styles.menu}>
-					<Menu selected="search"/>
-				</div>
-				<div className={styles.bodymap}>
-					<div>
-						<List className={styles.list}>
-							<FilterSelection/>
-						</List>
-						<Card className={styles.download}>
-							<DownloadButtons/>
-						</Card>
-					</div>
-					<div className={styles.rightmap}>
-						<Card>
-							<Map updateSensors={this.props.availableSensors} />
-						</Card>
-					</div>
-				</div>
-			</div>
+            <div>
+                <MenuPage selected="search"/>
+                <Content>
+                    <div className={styles.bodymap}>
+                        <Grid className={styles.noPadding}>
+                            <Cell col={2}>
+                                <List className={styles.list}>
+                                    <FilterSelection/>
+                                </List>
+                                <div className={styles.leftActions}>
+                                <DownloadButtons/>
+                                </div>
+                            </Cell>
+                            <Cell col={10}>
+
+                                <div className={styles.rightmap} >
+                                    <Map updateSensors={this.props.availableSensors}/>
+                                </div>
+                            </Cell>
+                        </Grid>
+                    </div>
+                </Content>
+            </div>
         );
     }
 }

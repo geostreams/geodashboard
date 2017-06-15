@@ -1,17 +1,27 @@
 import React, {Component} from 'react'
-import Menu from './MenuPage'
-import styles from '../styles/analysis.css';
-import { connect } from 'react-redux'
-import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
-import List from 'material-ui/List';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
+import MenuPage from './MenuPage'
+import styles from '../styles/main.css';
+import analysisStyles from '../styles/analysis.css';
+import {connect} from 'react-redux'
+import {
+    Card,
+    CardHeader,
+    Content,
+    CardActions,
+    CardTitle,
+    CardSubtitle,
+    CardText,
+    List,
+    Textfield,
+    Button,
+    Cell,
+    Grid,
+    RadioGroup,
+    Radio
+} from 'react-mdc-web';
 import Map from '../containers/Map';
 import {getTrendSettings} from '../utils/getConfig'
-
+import Select from './material/Select'
 
 class Analysis extends Component {
 
@@ -20,11 +30,10 @@ class Analysis extends Component {
 
         this.state = {
             regions: {
-                "1" : "All Regions",
+                "1": "All Regions",
             },
 
             thresholdValue: 0,
-            thresholdChooseValue: 0,
             thresholdMin: 0,
             thresholdMax: 100,
             thresholdLength: 3,
@@ -40,28 +49,28 @@ class Analysis extends Component {
             rollingMin: 0,
             rollingMax: 10,
 
-            chosenParameter:"None",
+            chosenParameter: "None",
 
             showResults: false,
         };
     }
 
-    handleParameterChange = (event, value) => {
-        this.setState({chosenParameter:value});
+    handleParameterChange = (event) => {
+        this.setState({chosenParameter: event.target.value});
         this.state.thresholdDisabled02 = false;
         this.state.showResults = false;
     };
 
-    handleThresholdChange = (event, value, thresholdValue) => {
-        if (value > (this.state.thresholdLength - 1)) {
+    handleThresholdChange = (event) => {
+        const thresholdValue = event.target.value;
+        if (thresholdValue > (this.state.thresholdLength - 1)) {
             this.state.thresholdDisabled02 = false;
         }
-        this.setState({thresholdValue: thresholdValue});
-        this.setState({thresholdChooseValue: thresholdValue});
-
+        this.setState({thresholdValue: thresholdValue, thresholdChooseValue: thresholdValue});
     };
 
-    handleThresholdChooseValue = (event, value) => {
+    handleThresholdChooseValue = (event) => {
+        let value = event.target.value;
         if (value < this.state.thresholdMin) {
             value = this.state.thresholdMin
         }
@@ -72,7 +81,8 @@ class Analysis extends Component {
         this.setState({thresholdChooseValue: value});
     };
 
-    handleBaselineChange = (event, value) => {
+    handleBaselineChange = (event) => {
+        let value = event.target.value;
         if (value < this.state.baselineMin) {
             value = this.state.baselineMin
         }
@@ -83,7 +93,8 @@ class Analysis extends Component {
         this.setState({baselinePeriod: value});
     };
 
-    handleRollingChange = (event, value) => {
+    handleRollingChange = (event) => {
+        let value = event.target.value;
         if (value < this.state.rollingMin) {
             value = this.state.rollingMin
         }
@@ -94,7 +105,7 @@ class Analysis extends Component {
         this.setState({rollingPeriod: value});
     };
 
-    handleClickAnalysis = (event) =>{
+    handleClickAnalysis = (event) => {
 
         this.state.showResults = true;
 
@@ -114,35 +125,35 @@ class Analysis extends Component {
 
         let paramsList = [];
         let paramsListMap = [];
-        if(trendSettings) {
+        if (trendSettings) {
             paramsListMap = trendSettings
-                .map(p => <RadioButton id={p.parameter.id} value={p.parameter.id}
-                                       label={p.parameter.title} key={p.parameter.id}/>);
+                .map(p => <Radio id={p.parameter.id} value={p.parameter.id}
+                                 key={p.parameter.id}> {p.parameter.title}</Radio>);
         }
         paramsList = paramsList.concat(paramsListMap);
-        if(paramsListMap.length == 0) {
+        if (paramsListMap.length == 0) {
             //TODO: need fix
-            paramsList = [ <RadioButton id="9999" value="9999" key="9999"
-                                        label="None Available" disabled={true}/> ];
+            paramsList = [<Radio id="9999" value="9999" key="9999"
+                                 disabled={true}> None Available </Radio>];
         }
 
         let thresholdListMap = [];
         let thresholdList = [];
-        if(this.state.chosenParameter != 'None'){
+        if (this.state.chosenParameter != 'None') {
             this.state.thresholdDisabled01 = false;
-            for(let i = 0; i < trendSettings.length; i++) {
-                if(trendSettings[i].parameter.id == this.state.chosenParameter) {
+            for (let i = 0; i < trendSettings.length; i++) {
+                if (trendSettings[i].parameter.id == this.state.chosenParameter) {
                     let thresholdTrendSettings = trendSettings[i].thresholds;
                     this.state.thresholdLength = thresholdTrendSettings.length;
                     thresholdListMap = thresholdTrendSettings
-                        .map(p => <MenuItem value={p.value} key={p.value} primaryText={p.title} />);
+                        .map(p => <option value={p.value} key={p.value}> {p.title} </option>);
                     thresholdList = thresholdList.concat(thresholdListMap);
-                    thresholdList = thresholdList.concat(<MenuItem value={0} key={0} primaryText="Enter a Value" />);
+                    thresholdList = thresholdList.concat(<option value={0} key={0}> Enter a Value</option>);
                 }
             }
         } else {
             this.state.thresholdDisabled01 = true;
-            thresholdList = [ <MenuItem value={1} key={1} primaryText="None Available" /> ];
+            thresholdList = [<option value={1} key={1}> None Available</option>];
         }
 
         let counterText;
@@ -156,112 +167,136 @@ class Analysis extends Component {
 
         return (
             <div>
-                <div className={styles.menustyle}>
-                    <Menu selected="analysis"/>
-                </div>
-                <div className={styles.bodystyle}>
-                    <div>
-                        <List className={styles.liststyle}>
 
-                            <Card zDepth={2} className={styles.paperstyle} key="Parameter">
-                                <CardTitle
-                                    title="Select Parameter"
-                                    subtitle="Parameter to Explore"
-                                />
-                                <CardActions>
-                                    <RadioButtonGroup name="params"
-                                                      value={this.state.chosenParameter}
-                                                      onChange={this.handleParameterChange}>
-                                        {paramsList}
-                                    </RadioButtonGroup>
-                                </CardActions>
-                            </Card>
+                <MenuPage selected="analysis"/>
+                <Content>
+                    <div className={styles.body}>
+                        <Grid className={styles.noPadding}>
+                            <Cell col={2}>
+                                <List className={styles.list}>
+                                    <Card className={analysisStyles.cardMargin} key="Parameter">
+                                        <CardHeader>
+                                            <CardTitle>
+                                                Select Parameter
+                                            </CardTitle>
+                                            <CardSubtitle>
+                                                Parameter to Explore
+                                            </CardSubtitle>
+                                        </CardHeader>
+                                        <CardActions>
+                                            <RadioGroup name="params"
+                                                        value={this.state.chosenParameter}
+                                                        onChange={this.handleParameterChange}>
+                                                {paramsList}
+                                            </RadioGroup>
+                                        </CardActions>
+                                    </Card>
 
-                            <Card zDepth={2} className={styles.paperstyle} key="calculate">
-                                <CardTitle
-                                    title="Change Calculation Setting"
-                                    subtitle="Setting how to calculate change"
-                                />
-                                <CardActions>
-                                    <TextField
-                                        floatingLabelText="Baseline Avg Period (yr)" floatingLabelFixed={true}
-                                        floatingLabelStyle={{width: 200}}
-                                        type='number'
-                                        min={this.state.baselineMin} max={this.state.baselineMax}
-                                        style = {{width: 50, marginRight: 120}}
-                                        value={this.state.baselinePeriod}
-                                        onChange={this.handleBaselineChange}
-                                    />
-                                    <TextField
-                                        floatingLabelText="Rolling Avg Period (yr)" floatingLabelFixed={true}
-                                        floatingLabelStyle={{width: 200}}
-                                        type='number'
-                                        min={this.state.rollingMin} max={this.state.rollingMax}
-                                        style = {{width: 50}}
-                                        value={this.state.rollingPeriod}
-                                        onChange={this.handleRollingChange}
-                                    />
-                                </CardActions>
-                            </Card>
+                                    <Card className={analysisStyles.cardMargin} key="calculate">
+                                        <CardHeader>
+                                            <CardTitle>Change Calculation Setting</CardTitle>
+                                            <CardSubtitle>Settings how to calculate change</CardSubtitle>
+                                        </CardHeader>
+                                        <CardText>
+                                            <Grid>
+                                                <Cell col={6}>
+                                                    <Textfield
+                                                        floatingLabel="Baseline Avg Period (yr)"
+                                                        type="number"
+                                                        className={analysisStyles.textField}
+                                                        min={this.state.baselineMin} max={this.state.baselineMax}
+                                                        value={this.state.baselinePeriod}
+                                                        onChange={this.handleBaselineChange}
+                                                    />
+                                                </Cell>
+                                                <Cell col={6}>
+                                                    <Textfield
+                                                        floatingLabel="Rolling Avg Period (yr)"
+                                                        type="number"
+                                                        className={analysisStyles.textField}
+                                                        min={this.state.rollingMin} max={this.state.rollingMax}
+                                                        value={this.state.rollingPeriod}
+                                                        onChange={this.handleRollingChange}
+                                                    />
+                                                </Cell>
+                                            </Grid>
+                                        </CardText>
+                                    </Card>
 
-                            <Card zDepth={2} className={styles.paperstyle} key="Threshold">
-                                <CardTitle
-                                    title="Select Threshold Value"
-                                    subtitle="Change the threshold value for analysis"
-                                />
-                                <CardActions>
-                                    <SelectField disabled={this.state.thresholdDisabled01}
-                                                 value={this.state.thresholdValue}
-                                                 onChange={this.handleThresholdChange}
-                                                 defaultValue="0">
-                                        {thresholdList}
-                                    </SelectField>
+                                    <Card className={analysisStyles.cardMargin} key="Threshold">
+                                        <CardHeader>
+                                            <CardTitle>Select Threshold Value</CardTitle>
+                                            <CardSubtitle>Change the threshold value for analysis</CardSubtitle>
+                                        </CardHeader>
+                                        <CardText>
+                                            <Grid>
+                                                <Cell col={6}>
+                                                    <Select className={analysisStyles.select}
+                                                            disabled={this.state.thresholdDisabled01}
+                                                            value={this.state.thresholdValue}
+                                                            onChange={this.handleThresholdChange.bind(this)}
+                                                            defaultValue="0">
+                                                        {thresholdList}
+                                                    </Select>
+                                                </Cell>
+                                                <Cell col={6}>
 
-                                    <TextField
-                                        disabled={this.state.thresholdDisabled02}
-                                        floatingLabelText="Threshold" floatingLabelFixed={true}
-                                        type='number'
-                                        min={this.state.thresholdMin} max={this.state.thresholdMax}
-                                        className={styles.thresholdStyle}
-                                        value={this.state.thresholdChooseValue}
-                                        onChange={this.handleThresholdChooseValue}
-                                    />
-                                </CardActions>
-                            </Card>
+                                                    <Textfield
+                                                        floatingLabel="Threshold"
+                                                        type="number"
+                                                        disabled={this.state.thresholdDisabled02}
+                                                        min={this.state.thresholdMin} max={this.state.thresholdMax}
+                                                        className={analysisStyles.textField}
+                                                        value={this.state.thresholdChooseValue}
+                                                        onChange={this.handleThresholdChooseValue}
+                                                    />
 
-                            <Card zDepth={2} className={styles.paperstyle} key="Region">
-                                <CardTitle
-                                    title="Select Region"
-                                    subtitle="Select region to apply the setting"
-                                />
-                                <CardActions>
-                                    <RadioButtonGroup name="region" defaultSelected="01">
-                                        <RadioButton value="01" label={this.state.regions[1]} />
-                                    </RadioButtonGroup>
-                                </CardActions>
-                            </Card>
+                                                </Cell>
+                                            </Grid>
+                                        </CardText>
+                                    </Card>
 
-                        </List>
-                        <Card className={styles.actionStyle} key="Button">
-                            <div className={styles.comboStyling}>
-                                <RaisedButton className={styles.buttonStyle} label="Apply Setting"
-                                              primary={true} onClick={this.handleClickAnalysis}/>
-                                <span className={styles.counterText}>
-                                    {counterText}
-                                </span>
-                            </div>
-                        </Card>
+                                    <Card className={analysisStyles.cardMargin} key="Region">
+                                        <CardHeader>
+                                            <CardTitle> Select Region </CardTitle>
+                                            <CardSubtitle> Select region to apply the settings</CardSubtitle>
+                                        </CardHeader>
+                                        <CardActions>
+                                            <RadioGroup name="region" value="01">
+                                                <Radio value="01">  {this.state.regions[1]} </Radio>
+                                            </RadioGroup>
+                                        </CardActions>
+                                    </Card>
+
+                                </List>
+
+                                <div className={styles.leftActions}>
+
+                                    <div className={analysisStyles.comboStyling}>
+                                        <Button raised className={analysisStyles.buttonStyle}
+                                                primary onClick={this.handleClickAnalysis}> Apply Settings </Button>
+                                        <span className={analysisStyles.counterText}>
+                                            {counterText}
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </Cell>
+
+                            <Cell col={10}>
+                                <div className={styles.rightmap}>
+                                    <Card>
+                                        <Map display_trends='True'/>
+                                    </Card>
+                                </div>
+
+                            </Cell>
+                        </Grid>
                     </div>
-
-                    <div className={styles.root}>
-                        <Card>
-                            <Map display_trends='True'/>
-                        </Card>
-                    </div>
-
-                </div>
+                </Content>
             </div>
-        );
+        )
+            ;
     }
 
 }

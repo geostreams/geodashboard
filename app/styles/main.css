@@ -31,7 +31,6 @@ h1, h2, h3, h5, h6, p, ul {
 }
 
 .rightmap {
-    margin: 4em 0em 0em 0em;
     float: right;
 }
 
@@ -48,9 +47,24 @@ h1, h2, h3, h5, h6, p, ul {
 
 /*TODO: change this. */
 .leftcolumn {
-    width: 24em;
-    margin: 3.6em 0em 3em 1em;
+    margin: 3.6em 0em 3em 0em;
     float: left;
     height: calc(100vh - 6.6em);
     overflow-y: auto;
+}
+
+.leftActions {
+    margin-left: auto;
+    padding: 0.5em 0em 0.5em 2em;
+    width: 25em;
+    bottom:0;
+    background-color: #fff;
+}
+
+.card {
+    width: 18em;
+}
+
+.noPadding {
+    padding: 0 !important;
 }

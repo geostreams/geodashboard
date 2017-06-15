@@ -6,19 +6,19 @@ import React, {Component} from 'react'
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css'
-import DeviceGpsFixed from 'material-ui/svg-icons/device/gps-fixed';
+import {Icon} from 'react-mdc-web'
 import {getSourceName, getParameterName} from '../utils/getConfig'
-import type { Sensors } from '../utils/flowtype'
+import type {Sensors} from '../utils/flowtype'
 
 type MapProps = {
-    sensors:Sensors,
-    availableSensors:Sensors
+    sensors: Sensors,
+    availableSensors: Sensors
 };
 
 type MapState = {
-    center:Array < number >,
-    vectorSource:ol.source.Vector,
-    map:ol.Map,
+    center: Array<number>,
+    vectorSource: ol.source.Vector,
+    map: ol.Map,
 };
 
 class Map extends Component {
@@ -58,25 +58,24 @@ class Map extends Component {
                     <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
                     <div id="popup-content"></div>
                 </div>
-                <div id="ol-zoomslider" className="ol-zoomslider"></div>
                 <div id="ol-centercontrol" className={styles.olCenterButton}></div>
-                <button id="centerButton"><DeviceGpsFixed/></button>
+                <button id="centerButton"><Icon name="gps_fixed"/></button>
             </div>
         </div>);
     }
 
 
-    getColor(source:string):string {
+    getColor(source: string): string {
         var sourcecolor = window.configruntime.sourcecolor;
         return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
     }
 
-    getTrendColor(source:string):string {
+    getTrendColor(source: string): string {
         let trend_colors = window.configruntime.trend_colors;
         return trend_colors[source] !== undefined ? trend_colors[source] : '#7F7F7F';
     }
 
-    updateLayers(sensors:Sensors):Array<ol.Feature> {
+    updateLayers(sensors: Sensors):Array<ol.Feature> {
         var features = Array();
         sensors.map((sensor) => {
 
@@ -91,7 +90,7 @@ class Map extends Component {
 
                 // TODO: The arrow color should be partially decided by the latest returned value in sensor.trends
 
-                if(sensor.hasOwnProperty("trends")) {
+                if (sensor.hasOwnProperty("trends")) {
                     if (sensor.trends === "not enough data" || sensor.trends === "trends return no data") {
                         trend_type = "noTrend";
                     } else {
@@ -207,17 +206,17 @@ class Map extends Component {
                     })
                 }));
 
-            feature.attributes = {
-                "name": sensor.name,
+                feature.attributes = {
+                    "name": sensor.name,
                 "dataSource": getSourceName(sensor.properties.type),
-                "maxEndTime": sensor.max_end_time,
-                "minStartTime": sensor.min_start_time,
-                "latitude": sensor.geometry.coordinates[1],
-                "longitude": sensor.geometry.coordinates[0],
-                //parameters has null in the array
-                "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
-                "color": this.getColor(sensor.properties.type.id),
-            };
+                    "maxEndTime": sensor.max_end_time,
+                    "minStartTime": sensor.min_start_time,
+                    "latitude": sensor.geometry.coordinates[1],
+                    "longitude": sensor.geometry.coordinates[0],
+                    //parameters has null in the array
+                    "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
+                    "color": this.getColor(sensor.properties.type.id),
+                };
 
             }
 
@@ -228,7 +227,7 @@ class Map extends Component {
         return features;
     }
 
-    popupHandler(feature:ol.Feature, coordinate:number[]) {
+    popupHandler(feature: ol.Feature, coordinate: number[]) {
         const content = document.getElementById('popup-content');
         if (feature) {
             let id = feature.getId().toUpperCase();
@@ -267,9 +266,9 @@ class Map extends Component {
 
             let bodyText =
                 '<table class=' + styles.popup_table + '>' +
-                    dataSource +
-                    timePeriod +
-                    latlong +
+                dataSource +
+                timePeriod +
+                latlong +
                 '</table>' +
                 '<div class=' + styles.greyborder + '></div>';
             if (sensorInfo.display_trends) {
@@ -318,7 +317,7 @@ class Map extends Component {
 
                 bodyText = bodyText +
                     '<table class=' + styles.tablestyle + '>' +
-                        trends +
+                    trends +
                     '</table>';
 
             } else {
@@ -356,14 +355,14 @@ class Map extends Component {
         // Try switching API and quickly switching to the search page
         let features;
 
-        if( this.props.display_trends ){
-            if(Array.isArray(this.props.trendSensors) && this.props.trendSensors.length > 0){
+        if (this.props.display_trends) {
+            if (Array.isArray(this.props.trendSensors) && this.props.trendSensors.length > 0) {
                 features = this.updateLayers(this.props.trendSensors);
             } else {
                 features = this.updateLayers(this.props.sensors);
             }
         } else {
-            if(this.props.updateSensors){
+            if (this.props.updateSensors) {
                 console.log("Map component got new props");
                 features = this.updateLayers(this.props.updateSensors);
             } else {
@@ -376,11 +375,11 @@ class Map extends Component {
 
         if (this.state.vectorSource.getFeatures().length > 0) {
             // Turn off auto zoom for Trends
-            if(!this.props.display_trend){
+            if (!this.props.display_trend) {
                 this.state.map.getView().fit(this.state.vectorSource.getExtent(), this.state.map.getSize());
             }
         }
-        if(this.props.coordinates) {
+        if (this.props.coordinates) {
             var feature = this.state.map.forEachFeatureAtPixel(this.state.map.getPixelFromCoordinate(this.props.coordinates)
                 , function (featureChange) {
                     return featureChange;
@@ -488,7 +487,6 @@ class Map extends Component {
                     collapsible: false
                 })
             }).extend([
-                new ol.control.ZoomSlider(),
                 new app.centerControl()
 
             ])
@@ -508,7 +506,7 @@ class Map extends Component {
             let feature = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
                 return featureChange;
             });
-            if(feature){
+            if (feature) {
                 that.popupHandler(feature, e.coordinate);
             } else {
                 if (closer) {

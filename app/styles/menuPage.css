@@ -42,6 +42,12 @@
   }
 
 }
-.button_format {
-  padding-top: 0.8em;
+.menu_items a:link{
+  text-decoration: none;
+  color: white;
+}
+
+.menu_items a:visited{
+  text-decoration: none;
+  color: white;
 }
