@@ -1,5 +1,5 @@
 .root {
-    height: calc(100vh - 4em);
+    height: calc(100vh - 132px);
     width: calc(100vw - 25em);
     cursor: pointer;
 }

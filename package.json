@@ -32,6 +32,7 @@
     "react-tap-event-plugin": "*",
     "react-transform-hmr": "^1.0.4",
     "style-loader": "^0.13.1",
+    "url-loader": "^0.5.8",
     "webpack": "^1.12.15",
     "webpack-dev-server": "^1.14.1"
   },

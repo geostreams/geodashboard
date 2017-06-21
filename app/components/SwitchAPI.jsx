@@ -6,7 +6,9 @@ import MenuItem from 'material-ui/MenuItem';
 class SwitchAPI extends Component {
 
 	handleChange = (e, index, value) => {
-		this.props.onBackendChange(value);
+
+		this.props.onBackendChange(this.props.endpoints[index].url, this.props.endpoints[index].title,
+			this.props.endpoints[index].subtitle);
 	}
 
 	render() {

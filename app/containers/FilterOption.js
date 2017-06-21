@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux'
 import { addSearchParameter, addSearchDataSource } from '../actions'
-import filterOption from '../components/FilterOption'
+import FilterOptionComponent from '../components/FilterOption'
 import type { Dispatch } from '../utils/flowtype'
 
 const mapStateToProps = (state) => {
@@ -49,6 +49,6 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
     }
 };
 
-const FilterOption = connect(mapStateToProps, mapDispatchToProps)(filterOption);
+const FilterOption = connect(mapStateToProps, mapDispatchToProps)(FilterOptionComponent);
 
 export default FilterOption

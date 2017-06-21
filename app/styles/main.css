@@ -30,27 +30,21 @@ h1, h2, h3, h5, h6, p, ul {
     text-align: center;
 }
 
-.rightmap {
-    margin: 4em 0em 0em 0em;
-    float: right;
-}
-
 .bodymap {
     display: flex;
+    overflow: hidden;
 }
 
-.menu {
-    position: fixed;
-    width: 100%;
-    margin-bottom: 5em;
-    z-index: 1;
+.rightmap {
+    margin: 0em 0em 0em 0em;
+    float: right;
 }
 
 /*TODO: change this. */
 .leftcolumn {
     width: 24em;
-    margin: 3.6em 0em 3em 1em;
+    margin: 0em 0em 3em 1em;
     float: left;
-    height: calc(100vh - 6.6em);
+    height: calc(100vh - 20.6em);
     overflow-y: auto;
 }

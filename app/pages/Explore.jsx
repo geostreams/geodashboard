@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Menu from '../components/MenuPage'
+import Menu from '../containers/MenuBar'
 import Map from '../containers/Map'
 import ExploreSourcesTab from '../containers/ExploreSourcesTab'
 import {Card, CardTitle, CardMedia, CardText} from 'material-ui/Card'

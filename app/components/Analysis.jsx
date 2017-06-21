@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Menu from './MenuPage'
+import Menu from './MenuBar'
 import styles from '../styles/analysis.css';
 import { connect } from 'react-redux'
 import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';

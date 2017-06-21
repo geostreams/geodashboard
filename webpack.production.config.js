@@ -29,6 +29,9 @@ module.exports = {
       {
         test: /\.css$/,
         loader: 'style!css?modules!postcss'
+      },
+      { test: /\.(png|jpg)$/,
+        loader: 'url-loader?limit=8192'
       }
     ]
   },

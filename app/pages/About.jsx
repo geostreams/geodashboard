@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Menu from '../components/MenuPage'
+import Menu from '../containers/MenuBar'
 import styles from '../styles/main.css'
 
 class About extends Component {

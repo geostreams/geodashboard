@@ -16,8 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch:Dispatch) => {
     return {
-        onBackendChange: (selected:string) => {
-            dispatch(switchBackend(selected));
+        onBackendChange: (selected:string, title:string, subtitle:string) => {
+            dispatch(switchBackend(selected, title, subtitle));
             dispatch(fetchSensors(selected))
         }
     }
