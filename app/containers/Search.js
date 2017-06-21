@@ -3,7 +3,8 @@ import SearchComponent from '../components/Search'
 
 const mapStateToProps = (state) => {
     return {
-        availableSensors: state.sensors.available_sensors
+        availableSensors: state.sensors.available_sensors,
+        selectedSearchLocation: state.selectedSearch.locations.selected
     }
 };
 

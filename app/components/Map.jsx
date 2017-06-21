@@ -10,6 +10,7 @@ import {Icon} from 'react-mdc-web'
 import {getSourceName, getParameterName} from '../utils/getConfig'
 import type {Sensors} from '../utils/flowtype'
 
+
 type MapProps = {
     sensors: Sensors,
     availableSensors: Sensors
@@ -46,7 +47,7 @@ class Map extends Component {
     }
 
     render() {
-        // this.updateLayers()
+
         return (<div>
             <div id='map' className={styles.root}>
                 <div id="trends_legend" className={styles.trends_legend}></div>
@@ -60,13 +61,44 @@ class Map extends Component {
                 </div>
                 <div id="ol-centercontrol" className={styles.olCenterButton}></div>
                 <button id="centerButton"><Icon name="gps_fixed"/></button>
+
+                <div id="ol-drawcirclecontrol"
+                    className={styles.olDrawCircleButton + ' ' +
+                    styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                <button id="drawCircleButton" title="Click to Draw a Circle">
+                    <Icon name="panorama_fish_eye"/></button>
+
+                <div id="ol-drawsquarecontrol"
+                    className={styles.olDrawSquareButton + ' ' +
+                    styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                <button id="drawSquareButton" title="Click to Draw a Square">
+                    <Icon name="panorama_wide_angle"/></button>
+
+                <div id="ol-drawcustomcontrol"
+                    className={styles.olDrawCustomButton + ' ' +
+                    styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                <button id="drawCustomButton" title="Click to Draw a Custom Shape">
+                    <Icon name="change_history"/></button>
+
+                <div id="ol-drawclearcontrol"
+                     className={styles.olDrawClearButton + ' ' +
+                     styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                <button id="drawClearButton" title="Click to Reset Drawing Selection">
+                    <Icon name="clear"/></button>
+
+                <div id="ol-drawstopcontrol"
+                     className={styles.olDrawStopButton + ' ' +
+                     styles.olSharedDrawStyles}></div>
+                <button id="drawStopButton" title="Click to Remove a Drawn Shape">
+                    <Icon name="stop"/></button>
+
             </div>
         </div>);
+
     }
 
-
     getColor(source: string): string {
-        var sourcecolor = window.configruntime.sourcecolor;
+        let sourcecolor = window.configruntime.sourcecolor;
         return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
     }
 
@@ -75,8 +107,17 @@ class Map extends Component {
         return trend_colors[source] !== undefined ? trend_colors[source] : '#7F7F7F';
     }
 
+    selectShapeLocation(event:Array<string>) {
+
+        if( this.props.display_trends ){
+            this.props.onSelectShapeLocationTrend(event);
+        } else {
+            this.props.onSelectShapeLocation(event);
+        }
+    }
+
     updateLayers(sensors: Sensors):Array<ol.Feature> {
-        var features = Array();
+        let features = Array();
         sensors.map((sensor) => {
 
             let feature = new ol.Feature({
@@ -188,6 +229,8 @@ class Map extends Component {
                     "minStartTime": sensor.min_start_time,
                     "latitude": sensor.geometry.coordinates[1],
                     "longitude": sensor.geometry.coordinates[0],
+                    "location": sensor.properties.region,
+                    "name": sensor.name,
                     //parameters has null in the array
                     "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
                     "color": this.getColor(sensor.properties.type.id),
@@ -208,11 +251,12 @@ class Map extends Component {
 
                 feature.attributes = {
                     "name": sensor.name,
-                "dataSource": getSourceName(sensor.properties.type),
+                    "dataSource": getSourceName(sensor.properties.type),
                     "maxEndTime": sensor.max_end_time,
                     "minStartTime": sensor.min_start_time,
                     "latitude": sensor.geometry.coordinates[1],
                     "longitude": sensor.geometry.coordinates[0],
+                    "location": sensor.properties.region,
                     //parameters has null in the array
                     "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
                     "color": this.getColor(sensor.properties.type.id),
@@ -266,11 +310,12 @@ class Map extends Component {
 
             let bodyText =
                 '<table class=' + styles.popup_table + '>' +
-                dataSource +
-                timePeriod +
-                latlong +
+                    dataSource +
+                    timePeriod +
+                    latlong +
                 '</table>' +
                 '<div class=' + styles.greyborder + '></div>';
+
             if (sensorInfo.display_trends) {
 
                 let sensorTrends = sensorInfo.trend_type;
@@ -317,7 +362,7 @@ class Map extends Component {
 
                 bodyText = bodyText +
                     '<table class=' + styles.tablestyle + '>' +
-                    trends +
+                        trends +
                     '</table>';
 
             } else {
@@ -348,6 +393,7 @@ class Map extends Component {
             let overlay = this.state.map.getOverlayById("marker");
             overlay.setPosition(coordinate);
         }
+
     }
 
     componentDidUpdate() {
@@ -355,19 +401,129 @@ class Map extends Component {
         // Try switching API and quickly switching to the search page
         let features;
 
-        if (this.props.display_trends) {
+        let add_button = document.getElementById('addButton');
+        if (add_button) {
+            add_button.addEventListener('click', clickedAddButton);
+        }
+
+        let draw_buttons_group = document.getElementsByClassName('drawing_buttons');
+
+        let draw_radio = document.getElementById('draw');
+        if (draw_radio) {
+            draw_radio.addEventListener('click', clickedDrawRadio);
+        }
+
+        let all_regions_radio = document.getElementById("all");
+        if (all_regions_radio) {
+            all_regions_radio.addEventListener('click', clickedNotDrawRadioTrends);
+        }
+
+        let copyOfMap = this.state.map;
+
+        let that = this;
+
+        function clickedDrawRadio() {
+            if (draw_buttons_group){
+                for (let i = 0; i < draw_buttons_group.length; i++) {
+                    draw_buttons_group[i].style.visibility = "visible";
+                }
+            }
+        }
+
+        function clickedNotDrawRadio() {
+            if (draw_buttons_group){
+                for (let i = 0; i < draw_buttons_group.length; i++) {
+                    draw_buttons_group[i].style.visibility = "hidden";
+                }
+            }
+
+            copyOfMap.getInteractions().forEach(function (e) {
+                if(e instanceof ol.interaction.Draw) {
+                    copyOfMap.removeInteraction(e);
+                }
+            });
+
+        }
+
+        function clickedAddButton() {
+            clickedNotDrawRadio();
+        }
+
+        function resetDrawPoints() {
+            // Set this for resetting the points
+            let selectPointsLocations = [];
+            selectPointsLocations[0] = 'reset_points';
+
+            that.selectShapeLocation(selectPointsLocations);
+
+            let clear_drawn_shape = document.getElementById('drawStopButton');
+            if (clear_drawn_shape) {
+                clear_drawn_shape.click();
+            }
+        }
+
+        function clickedNotDrawRadioTrends() {
+            resetDrawPoints();
+            clickedNotDrawRadio();
+        }
+
+        function clickedDrawRadioTrends() {
+            clickedDrawRadio();
+        }
+
+        if (this.props.display_trends){
+
+            if (draw_radio && all_regions_radio) {
+                if (all_regions_radio.checked == false && draw_radio.checked == false) {
+                    clickedNotDrawRadioTrends();
+                }
+
+                if (all_regions_radio.checked == true) {
+                    clickedNotDrawRadioTrends();
+                }
+
+                if (draw_radio.checked == true) {
+                    clickedDrawRadioTrends();
+                }
+            }
+
             if (Array.isArray(this.props.trendSensors) && this.props.trendSensors.length > 0) {
                 features = this.updateLayers(this.props.trendSensors);
             } else {
                 features = this.updateLayers(this.props.sensors);
             }
+
         } else {
-            if (this.props.updateSensors) {
+            if (draw_radio) {
+                if (draw_radio.checked == false) {
+                    copyOfMap.getInteractions().forEach(function (e) {
+                        if (e instanceof ol.interaction.Draw) {
+                            copyOfMap.removeInteraction(e);
+                        }
+                    });
+                    clickedNotDrawRadio();
+                }
+
+                if (draw_radio.checked == true) {
+                    clickedDrawRadio();
+                }
+            }
+
+            let the_filters_div = document.getElementById('filters-div');
+            if (the_filters_div) {
+                if (the_filters_div.children.length <=1) {
+                    clickedNotDrawRadio();
+                    resetDrawPoints();
+                }
+            }
+
+            if (this.props.updateSensors){
                 console.log("Map component got new props");
                 features = this.updateLayers(this.props.updateSensors);
             } else {
                 features = this.updateLayers(this.props.sensors);
             }
+
         }
 
         this.state.vectorSource.clear();
@@ -380,7 +536,7 @@ class Map extends Component {
             }
         }
         if (this.props.coordinates) {
-            var feature = this.state.map.forEachFeatureAtPixel(this.state.map.getPixelFromCoordinate(this.props.coordinates)
+            let feature = this.state.map.forEachFeatureAtPixel(this.state.map.getPixelFromCoordinate(this.props.coordinates)
                 , function (featureChange) {
                     return featureChange;
                 });
@@ -391,7 +547,7 @@ class Map extends Component {
 
     componentDidMount() {
 
-        var features = this.updateLayers(this.props.sensors);
+        let features = this.updateLayers(this.props.sensors);
 
         let vectorSource = new ol.source.Vector({
             features: features
@@ -402,10 +558,17 @@ class Map extends Component {
             source: vectorSource
         });
 
+        vectorLayer.setZIndex(20);
+
         let attribution = new ol.Attribution({
             html: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' +
             'rest/services/NatGeo_World_Map/MapServer">ArcGIS</a> &mdash; National Geographic, Esri, DeLorme, NAVTEQ, ' +
             'UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC'
+        });
+
+        let customLocationFilterVector = new ol.source.Vector();
+        let customLocationFilterLayer = new ol.layer.Vector({
+            source: customLocationFilterVector
         });
 
         let layers = [
@@ -415,7 +578,8 @@ class Map extends Component {
                     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
                 })
             }),
-            vectorLayer
+            vectorLayer,
+            customLocationFilterLayer
         ];
 
         const container = document.getElementById('popup');
@@ -450,6 +614,7 @@ class Map extends Component {
 
         window.app = {};
 
+        // Add Center Map Button
         let app = window.app;
         app.centerControl = function (opt_options) {
             let options = opt_options || {};
@@ -477,20 +642,380 @@ class Map extends Component {
         };
         ol.inherits(app.centerControl, ol.control.Control);
 
-        theMap = new ol.Map({
-            target: 'map',
-            layers: layers,
-            view: view,
-            overlays: [overlay],
-            controls: ol.control.defaults({
-                attributionOptions: ({
-                    collapsible: false
-                })
-            }).extend([
-                new app.centerControl()
+        let selectPoints = [];
 
-            ])
-        });
+        const that = this;
+
+        // Add Draw Clear/Reset Button
+        let appDrawClear = window.app;
+        appDrawClear.drawClearControl = function (opt_options) {
+            let options = opt_options || {};
+            const drawClearButton = document.getElementById('drawClearButton');
+
+            let handleDrawClearButton = function () {
+                theMap.getInteractions().forEach(function (e) {
+                    if(e instanceof ol.interaction.Draw) {
+                        theMap.removeInteraction(e);
+                    }
+                });
+
+                customLocationFilterLayer.getSource().clear();
+
+                selectPoints = [];
+
+                // Create empty array for points
+                let selectPointsLocations = [];
+
+                // Set this for resetting the points
+                selectPointsLocations[0] = 'reset_points';
+
+                // This is the button that will reset the points
+                that.selectShapeLocation(selectPointsLocations);
+
+                let keep_draw_active = document.getElementById('draw');
+                if (keep_draw_active) {
+                    keep_draw_active.click();
+                }
+
+            };
+
+            if (drawClearButton) {
+                drawClearButton.addEventListener('click', handleDrawClearButton, false);
+                drawClearButton.addEventListener('touchstart', handleDrawClearButton, false);
+            }
+
+            const drawElement = document.getElementById('ol-drawclearcontrol');
+            if (drawElement && drawClearButton) {
+                drawElement.className += ' ol-unselectable ol-control';
+                drawElement.appendChild(drawClearButton);
+
+                ol.control.Control.call(this, {
+                    element: drawElement,
+                    target: options.target
+                });
+            }
+
+        };
+
+        // Add Draw Stop Button
+        let appDrawStop = window.app;
+        appDrawStop.drawStopControl = function (opt_options) {
+            let options = opt_options || {};
+            const drawStopButton = document.getElementById('drawStopButton');
+
+            let handleDrawStopButton = function () {
+                theMap.getInteractions().forEach(function (e) {
+                    if(e instanceof ol.interaction.Draw) {
+                        theMap.removeInteraction(e);
+                    }
+                });
+
+                customLocationFilterLayer.getSource().clear();
+
+            };
+
+            if (drawStopButton) {
+                drawStopButton.addEventListener('click', handleDrawStopButton, false);
+                drawStopButton.addEventListener('touchstart', handleDrawStopButton, false);
+            }
+
+            const element = document.getElementById('ol-drawstopcontrol');
+            if (element && drawStopButton) {
+                element.className += ' ol-unselectable ol-control';
+                element.appendChild(drawStopButton);
+
+                ol.control.Control.call(this, {
+                    element: element,
+                    target: options.target
+                });
+            }
+
+        };
+
+        // Add Draw Square Button
+        let appDrawSquare = window.app;
+        appDrawSquare.drawSquareControl = function (opt_options) {
+            let options = opt_options || {};
+            const drawSquareButton = document.getElementById('drawSquareButton');
+
+            let handleDrawSquareButton = function () {
+
+                let drawSquare = new ol.interaction.Draw({
+                    type: 'Circle',
+                    source: customLocationFilterVector,
+                    geometryFunction: ol.interaction.Draw.createRegularPolygon(4),
+                });
+
+                theMap.addInteraction(drawSquare);
+
+                drawSquare.on ('drawstart',function() {
+                    selectItems.setActive(false);
+                    selectPoints = [];
+                });
+
+                drawSquare.on('drawend', function (e) {
+                    customLocationFilterLayer.getSource().clear();
+                    selectItems.setActive(true);
+
+                    theMap.getInteractions().forEach(function (e) {
+                        if(e instanceof ol.interaction.Draw) {
+                            theMap.removeInteraction(e);
+                        }
+                    });
+
+                    // Get the shape geometry
+                    let drawExtent = e.feature.getGeometry();
+
+                    // Get all the features in the layer
+                    let featuresInLayer = vectorLayer.getSource().getFeatures();
+
+                    // Check each feature
+                    let loopFeatureExtent;
+                    for (let j = 0; j < featuresInLayer.length; j++) {
+                        loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
+                        // Only select the features within the shape
+                        if (drawExtent.intersectsExtent(loopFeatureExtent)) {
+                            selectPoints.push(featuresInLayer[j]);
+                        }
+                    }
+
+                    let selectPointsLocations = [];
+
+                    if (selectPoints.length > 0) {
+                        for (let i = 0; i < selectPoints.length; i++) {
+                            if (!selectPointsLocations.includes((selectPoints[i].attributes.name).toString())) {
+                                selectPointsLocations.push((selectPoints[i].attributes.name));
+                            }
+                        }
+                    }
+
+                    that.selectShapeLocation(selectPointsLocations);
+
+                });
+
+            };
+
+            if (drawSquareButton) {
+                drawSquareButton.addEventListener('click', handleDrawSquareButton, false);
+                drawSquareButton.addEventListener('touchstart', handleDrawSquareButton, false);
+            }
+
+            const drawElement = document.getElementById('ol-drawsquarecontrol');
+            if (drawElement && drawSquareButton) {
+                drawElement.className += ' ol-unselectable ol-control';
+                drawElement.appendChild(drawSquareButton);
+
+                ol.control.Control.call(this, {
+                    element: drawElement,
+                    target: options.target
+                });
+            }
+
+        };
+
+        // Add Draw Circle Button
+        let appDrawCircle = window.app;
+        appDrawCircle.drawCircleControl = function (opt_options) {
+            let options = opt_options || {};
+            const drawCircleButton = document.getElementById('drawCircleButton');
+
+            let handleDrawCircleButton = function () {
+
+                let drawCircle = new ol.interaction.Draw({
+                    type: 'Circle',
+                    source: customLocationFilterVector,
+                });
+
+                theMap.addInteraction(drawCircle);
+
+                drawCircle.on ('drawstart',function() {
+                    selectItems.setActive(false);
+                    selectPoints = [];
+                });
+
+                drawCircle.on('drawend', function (e) {
+                    customLocationFilterLayer.getSource().clear();
+                    selectItems.setActive(true);
+
+                    theMap.getInteractions().forEach(function (e) {
+                        if(e instanceof ol.interaction.Draw) {
+                            theMap.removeInteraction(e);
+                        }
+                    });
+
+                    // Get the shape geometry
+                    let drawExtent = e.feature.getGeometry();
+
+                    // Get all the features in the layer
+                    let featuresInLayer = vectorLayer.getSource().getFeatures();
+
+                    // Check each feature
+                    let loopFeatureExtent;
+                    for (let j = 0; j < featuresInLayer.length; j++) {
+                        loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
+                        // Only select the features within the shape
+                        if (drawExtent.intersectsExtent(loopFeatureExtent)) {
+                            selectPoints.push(featuresInLayer[j]);
+                        }
+                    }
+
+                    let selectPointsLocations = [];
+
+                    if (selectPoints.length > 0) {
+                        for (let i = 0; i < selectPoints.length; i++) {
+                            if (!selectPointsLocations.includes((selectPoints[i].attributes.name).toString())) {
+                                selectPointsLocations.push((selectPoints[i].attributes.name));
+                            }
+                        }
+                    }
+
+                    that.selectShapeLocation(selectPointsLocations);
+
+                });
+
+            };
+
+            if (drawCircleButton) {
+                drawCircleButton.addEventListener('click', handleDrawCircleButton, false);
+                drawCircleButton.addEventListener('touchstart', handleDrawCircleButton, false);
+            }
+
+            const drawElement = document.getElementById('ol-drawcirclecontrol');
+            if (drawElement && drawCircleButton) {
+                drawElement.className += ' ol-unselectable ol-control';
+                drawElement.appendChild(drawCircleButton);
+
+                ol.control.Control.call(this, {
+                    element: drawElement,
+                    target: options.target
+                });
+            }
+
+        };
+
+        // Add Draw Custom Button
+        let appDrawCustom = window.app;
+        appDrawCustom.drawCustomControl = function (opt_options) {
+            let options = opt_options || {};
+            const drawCustomButton = document.getElementById('drawCustomButton');
+
+            let handleDrawCustomButton = function () {
+
+                let drawCustom = new ol.interaction.Draw({
+                    type: 'Polygon',
+                    source: customLocationFilterVector,
+                });
+
+                theMap.addInteraction(drawCustom);
+
+                drawCustom.on ('drawstart',function() {
+                    selectItems.setActive(false);
+                    selectPoints = [];
+                });
+
+                drawCustom.on('drawend', function (e) {
+                    customLocationFilterLayer.getSource().clear();
+                    selectItems.setActive(true);
+
+                    theMap.getInteractions().forEach(function (e) {
+                        if(e instanceof ol.interaction.Draw) {
+                            theMap.removeInteraction(e);
+                        }
+                    });
+
+                    // Get the shape geometry
+                    let drawExtent = e.feature.getGeometry();
+
+                    // Get all the features in the layer
+                    let featuresInLayer = vectorLayer.getSource().getFeatures();
+
+                    // Check each feature
+                    let loopFeatureExtent;
+                    for (let j = 0; j < featuresInLayer.length; j++) {
+                        loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
+                        // Only select the features within the shape
+                        if (drawExtent.intersectsExtent(loopFeatureExtent)) {
+                            selectPoints.push(featuresInLayer[j]);
+                        }
+                    }
+
+                    let selectPointsLocations = [];
+
+                    if (selectPoints.length > 0) {
+                        for (let i = 0; i < selectPoints.length; i++) {
+                            if (!selectPointsLocations.includes((selectPoints[i].attributes.name).toString())) {
+                                selectPointsLocations.push((selectPoints[i].attributes.name));
+                            }
+                        }
+                    }
+
+                    that.selectShapeLocation(selectPointsLocations);
+
+                });
+
+            };
+
+            if (drawCustomButton) {
+                drawCustomButton.addEventListener('click', handleDrawCustomButton, false);
+                drawCustomButton.addEventListener('touchstart', handleDrawCustomButton, false);
+            }
+
+            const drawElement = document.getElementById('ol-drawcustomcontrol');
+            if (drawElement && drawCustomButton) {
+                drawElement.className += ' ol-unselectable ol-control';
+                drawElement.appendChild(drawCustomButton);
+
+                ol.control.Control.call(this, {
+                    element: drawElement,
+                    target: options.target
+                });
+            }
+
+        };
+
+        if( this.props.display_draw == 'True' ) {
+            ol.inherits(appDrawClear.drawClearControl, ol.control.Control);
+            ol.inherits(appDrawStop.drawStopControl, ol.control.Control);
+            ol.inherits(appDrawSquare.drawSquareControl, ol.control.Control);
+            ol.inherits(appDrawCircle.drawCircleControl, ol.control.Control);
+            ol.inherits(appDrawCustom.drawCustomControl, ol.control.Control);
+
+            theMap = new ol.Map({
+                target: 'map',
+                layers: layers,
+                view: view,
+                overlays: [overlay],
+                controls: ol.control.defaults({
+                    attributionOptions: ({
+                        collapsible: false
+                    })
+                }).extend([
+                    new app.centerControl(),
+                    new appDrawCircle.drawCircleControl(),
+                    new appDrawSquare.drawSquareControl(),
+                    new appDrawCustom.drawCustomControl(),
+                    new appDrawStop.drawStopControl,
+                    new appDrawClear.drawClearControl(),
+                ])
+            });
+        } else {
+            theMap = new ol.Map({
+                target: 'map',
+                layers: layers,
+                view: view,
+                overlays: [overlay],
+                controls: ol.control.defaults({
+                    attributionOptions: ({
+                        collapsible: false
+                    })
+                }).extend([
+                    new app.centerControl(),
+                ])
+            });
+        }
+
+        let selectItems = new ol.interaction.Select();
+        theMap.addInteraction(selectItems);
 
         theMap.getView().on("change:resolution", function () {
             if (closer) {
@@ -499,13 +1024,12 @@ class Map extends Component {
             }
         });
 
-        const that = this;
-
         theMap.on('singleclick', function (e) {
 
             let feature = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
                 return featureChange;
             });
+
             if (feature) {
                 that.popupHandler(feature, e.coordinate);
             } else {

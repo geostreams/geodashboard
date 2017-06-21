@@ -3,6 +3,8 @@
  */
 import { connect } from 'react-redux'
 import MapComponent from '../components/Map'
+import { addCustomLocationFilter, addCustomTrendLocationFilter } from '../actions'
+import type { Dispatch } from '../utils/flowtype'
 
 const mapStateToProps = (state) => {
     return {
@@ -14,6 +16,17 @@ const mapStateToProps = (state) => {
     }
 };
 
-const Map = connect(mapStateToProps)(MapComponent);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        onSelectShapeLocation: (selectPointsLocations) => {
+            dispatch(addCustomLocationFilter(selectPointsLocations));
+        },
+        onSelectShapeLocationTrend: (selectPointsLocations) => {
+            dispatch(addCustomTrendLocationFilter(selectPointsLocations));
+        }
+    }
+};
+
+const Map = connect(mapStateToProps, mapDispatchToProps)(MapComponent);
 
 export default Map;

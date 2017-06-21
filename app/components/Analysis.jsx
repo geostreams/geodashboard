@@ -29,11 +29,23 @@ class Analysis extends Component {
         super(props);
 
         this.state = {
-            regions: {
-                "1": "All Regions",
-            },
+            regions: [
+                {
+                    "region": {
+                        "id": "all",
+                        "title": "All Regions"
+                    }
+                },
+                {
+                    "region": {
+                        "id": "draw",
+                        "title": "Draw Custom Region"
+                    }
+                },
+            ],
 
             thresholdValue: 0,
+            thresholdChooseValue: 0,
             thresholdMin: 0,
             thresholdMax: 100,
             thresholdLength: 3,
@@ -105,7 +117,7 @@ class Analysis extends Component {
         this.setState({rollingPeriod: value});
     };
 
-    handleClickAnalysis = (event) => {
+    handleClickAnalysis = () =>{
 
         this.state.showResults = true;
 
@@ -135,6 +147,16 @@ class Analysis extends Component {
             //TODO: need fix
             paramsList = [<Radio id="9999" value="9999" key="9999"
                                  disabled={true}> None Available </Radio>];
+        }
+
+        let regionsList = [];
+        let regionsListMap = [];
+        let setRegions = this.state.regions;
+        regionsListMap = setRegions
+            .map(r => <Radio id={r.region.id} value={r.region.id} key={r.region.id}>{r.region.title}</Radio>);
+        regionsList = regionsList.concat(regionsListMap);
+        if(regionsListMap.length == 0) {
+            regionsList = [ <Radio id="9999" value="9999" key="9999" disabled={true}>None Available</Radio> ];
         }
 
         let thresholdListMap = [];
@@ -263,7 +285,7 @@ class Analysis extends Component {
                                         </CardHeader>
                                         <CardActions>
                                             <RadioGroup name="region" value="01">
-                                                <Radio value="01">  {this.state.regions[1]} </Radio>
+                                                {regionsList}
                                             </RadioGroup>
                                         </CardActions>
                                     </Card>
@@ -286,7 +308,8 @@ class Analysis extends Component {
                             <Cell col={10}>
                                 <div className={styles.rightmap}>
                                     <Card>
-                                        <Map display_trends='True'/>
+                                        <Map display_trends='True'
+                                             display_draw='True'/>
                                     </Card>
                                 </div>
 

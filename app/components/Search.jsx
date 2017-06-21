@@ -26,9 +26,10 @@ class Search extends Component {
                                 </div>
                             </Cell>
                             <Cell col={10}>
-
                                 <div className={styles.rightmap} >
-                                    <Map updateSensors={this.props.availableSensors}/>
+                                    <Map updateSensors={this.props.availableSensors}
+                                         locationSelected={this.props.selectedSearchLocation}
+                                         display_draw='True'/>
                                 </div>
                             </Cell>
                         </Grid>

@@ -1,6 +1,7 @@
 /*
  * @flow
  */
+
 import type { backendsState } from '../utils/flowtype'
 
 type BackendAction = {| type:'SWITCH_BACKEND', selected:string |};
@@ -10,7 +11,6 @@ const defaultState = {
     selected: ""
 };
 
-
 const backends = (state:backendsState = defaultState, action:BackendAction) => {
 	switch(action.type) {
         case 'ADD_ENDPOINTS':
@@ -19,7 +19,7 @@ const backends = (state:backendsState = defaultState, action:BackendAction) => {
                 selected: window.configruntime.clowder_endpoints[0].url
             });
         case 'SWITCH_BACKEND':
-          return Object.assign({}, state, {selected: action.selected});
+            return Object.assign({}, state, {selected: action.selected});
 		default:
 			return state
 	}

@@ -71,6 +71,13 @@
     width: 80%;
 }
 
+.draw_location_style {
+    border-bottom-style: solid;
+    border-bottom-width: 0.1em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+}
+
 .title_card{
     fontSize: 15px;
     fontWeight: bold;

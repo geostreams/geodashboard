@@ -72,7 +72,8 @@ class FilterList extends Component {
                     <UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute} label={p.label}
                                    key={p.id}/>
                 );
-                cardsubtitle = this.props.sources.filter(x => this.props.selectedDataSources.indexOf(x.id) >= 0).map(x => x.label).join(", ");
+                cardsubtitle = this.props.sources.filter(
+                    x => this.props.selectedDataSources.indexOf(x.id) >= 0).map(x => x.label).join(", ");
 
                 showButtons = hideShowContents;
                 break;
@@ -103,6 +104,8 @@ class FilterList extends Component {
                     (<div>
                             <RadioGroup name="location" onChange={this.selectLocation.bind(this)}
                                         value={this.props.selectedLocation}>
+                                <Radio className={styles.radio}
+                                       id="draw" value="draw" key="draw">Draw Custom Location</Radio>
                                 {locationList}
                             </RadioGroup>
                         </div>

@@ -26,30 +26,26 @@ class Explore extends Component {
                 </CardText>
             </Card>
         )
+
         return (
             <div>
-
-                    <MenuPage selected='explore'/>
-                    <Content>
-                        <div className={styles.body}>
-                            <Grid className={styles.noPadding}>
-                                <Cell col={2}>
-                                    <List className={styles.leftcolumn}>
-                                        {sourceLists}
-                                    </List>
-                                </Cell>
-                                <Cell col={10}>
-                                    <div className={styles.rightmap}>
-
-                                            <Map />
-
-                                    </div>
-                                </Cell>
-                            </Grid>
-                        </div>
-                    </Content>
-
-
+                <MenuPage selected='explore'/>
+                <Content>
+                    <div className={styles.body}>
+                        <Grid className={styles.noPadding}>
+                            <Cell col={2}>
+                                <List className={styles.leftcolumn}>
+                                    {sourceLists}
+                                </List>
+                            </Cell>
+                            <Cell col={10}>
+                                <div className={styles.rightmap}>
+                                    <Map display_draw='False'/>
+                                </div>
+                            </Cell>
+                        </Grid>
+                    </div>
+                </Content>
             </div>
         )
     }

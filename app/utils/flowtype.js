@@ -31,6 +31,9 @@ export type Sensor = {
     properties:Properties;
     type:string;
     min_start_time:Date;
+    trend_end_time:Date;
+    trend_start_time:Date;
+    trends:[];
 };
 
 export type Sensors = Sensor[];
@@ -79,8 +82,17 @@ export type sensorsState= {
         locations:MapWithLabels,
         sources:MapWithLabels,
         parameters:MapWithLabels,
-        data:Sensors
+        data:Sensors,
+        draw_available_sensors:Sensors,
     };
+export type trendsSensorsState = {
+    chosen_parameter: string,
+    baseline_period: string,
+    rolling_period: string,
+    threshold_value: string,
+    data: Sensors,
+    available_sensors: Sensors,
+}
 
 // export type Action = BackendAction | SearchFilterAction | SensorAction | SelectedSearchAction;
 export type Dispatch = (action:any) => null;

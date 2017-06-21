@@ -54,10 +54,36 @@
   content: "✖";
   color: #ffffff;
 }
+
 .olCenterButton {
-  bottom: 5px;
+  bottom: 1.2em;
   left: .5em;
-  border-radius: 2px 2px 0 0;
+  border-radius: 0.15em;
+}
+
+.olDrawStopButton {
+  top: 4.5em;
+}
+
+.olDrawCircleButton {
+  top: 6.3em;
+}
+
+.olDrawSquareButton {
+  top: 8.15em;
+}
+
+.olDrawCustomButton  {
+  top: 9.95em;
+}
+
+.olDrawClearButton {
+  top: 11.75em;
+}
+
+.olSharedDrawStyles {
+  left: .5em;
+  border-radius: 0.15em;
 }
 
 .popup_table {
@@ -155,8 +181,8 @@
 .trends_legend {
   z-index: 100;
   position: absolute;
-  top: 5em;
-  right: 1em;
+  top: 4.5em;
+  right: 0.5em;
 }
 
 .trends_legend_text {
