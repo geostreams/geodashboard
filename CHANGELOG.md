@@ -39,3 +39,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-853](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-853)
   [GLGVO-322](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-322)
 
+### Fixed
+- Bug in filtering for custom locations
+  [GEOD-925](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-925)

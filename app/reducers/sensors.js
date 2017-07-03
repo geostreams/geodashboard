@@ -145,7 +145,7 @@ export function collectLocations(sensorsData:Sensors):MapWithLabels {
         additional_location.map(customLocation => {
                 if (pnpoly(s.geometry.coordinates[1], s.geometry.coordinates[0], customLocation.geometry.coordinates)
                     && !locations.find(function (e) {
-                        e.id === customLocation.properties.id
+                        return e.id === customLocation.properties.id
                     })) {
                     locations.push({'id': customLocation.properties.id, 'label': customLocation.properties.title})
                 }
