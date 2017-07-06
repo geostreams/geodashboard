@@ -13,7 +13,7 @@ class Search extends Component {
     render() {
         return (
             <div>
-                <MenuPage selected="search"/>
+                <Menu selected="search"/>
                 <Content>
                     <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>

@@ -2,13 +2,22 @@ import React, {Component} from 'react'
 import Menu from './MenuBar'
 import styles from '../styles/analysis.css';
 import { connect } from 'react-redux'
-import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
-import List from 'material-ui/List';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
+import {
+    Card,
+    CardHeader,
+    Content,
+    CardActions,
+    CardTitle,
+    CardSubtitle,
+    CardText,
+    List,
+    Textfield,
+    Button,
+    Cell,
+    Grid,
+    RadioGroup,
+    Radio
+} from 'react-mdc-web';
 import Map from '../containers/Map';
 import {getTrendSettings} from '../utils/getConfig';
 import Select from './material/Select';

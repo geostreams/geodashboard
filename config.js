@@ -271,7 +271,7 @@ export const clowder_endpoints = [
         subtitle: "ILLINOIS-INDIANA SEA GRANT" },
     {url: "https://seagrant-dev.ncsa.illinois.edu/clowder", label: "GLM DEV", title: "Great Lakes Monitoring",
         subtitle: "ILLINOIS-INDIANA SEA GRANT" },
-    {url: "http://greatlakestogulf.org/clowder", label: "GLTG PROD", title: "Great Lakes to Gulf",
+    {url: "https://greatlakestogulf.org/clowder", label: "GLTG PROD", title: "Great Lakes to Gulf",
         subtitle: "VIRTUAL OBSERVATORY"},
     {url: "http://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV", title: "Great Lakes to Gulf",
         subtitle: "VIRTUAL OBSERVATORY"},

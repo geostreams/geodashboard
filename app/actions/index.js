@@ -2,7 +2,7 @@
 
 import type { Sensors, Dispatch, GetState } from "../utils/flowtype";
 
-export const SWITCH_BACKEND = 'SWITCH_BACKEND'
+export const SWITCH_BACKEND = 'SWITCH_BACKEND';
 export const switchBackend = (selected:string, title:string, subtitle:string) => {
     return {
         type: SWITCH_BACKEND,

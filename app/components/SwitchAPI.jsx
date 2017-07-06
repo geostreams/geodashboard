@@ -4,8 +4,8 @@ import Select from './material/Select'
 
 class SwitchAPI extends Component {
 
-	handleChange = (e, index, value) => {
-
+	handleChange = (e) => {
+        const index = e.target.selectedIndex;
 		this.props.onBackendChange(this.props.endpoints[index].url, this.props.endpoints[index].title,
 			this.props.endpoints[index].subtitle);
 	}
