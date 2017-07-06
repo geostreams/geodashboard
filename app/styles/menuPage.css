@@ -42,6 +42,11 @@
   }
 
 }
+
+.menu_items {
+  white-space: nowrap;
+}
+
 .menu_items a:link{
   text-decoration: none;
   color: white;

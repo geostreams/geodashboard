@@ -59,6 +59,7 @@ h1, h2, h3, h5, h6, p, ul {
     width: 25em;
     bottom:0;
     background-color: #fff;
+    text-align: center;
 }
 
 .card {
