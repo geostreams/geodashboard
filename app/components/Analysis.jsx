@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import MenuPage from './MenuPage'
 import styles from '../styles/main.css';
 import analysisStyles from '../styles/analysis.css';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import {
     Card,
     CardHeader,
@@ -20,8 +20,8 @@ import {
     Radio
 } from 'react-mdc-web';
 import Map from '../containers/Map';
-import {getTrendSettings} from '../utils/getConfig'
-import Select from './material/Select'
+import {getTrendSettings} from '../utils/getConfig';
+import Select from './material/Select';
 
 class Analysis extends Component {
 
@@ -43,9 +43,9 @@ class Analysis extends Component {
                     }
                 },
             ],
+            chosenRegion: 'all',
 
             thresholdValue: 0,
-            thresholdChooseValue: 0,
             thresholdMin: 0,
             thresholdMax: 100,
             thresholdLength: 3,
@@ -115,6 +115,11 @@ class Analysis extends Component {
         }
         value = parseFloat(value);
         this.setState({rollingPeriod: value});
+    };
+
+    handleRegionChange = (event) => {
+        let chosenRegion = event.target.value;
+        this.setState({chosenRegion: chosenRegion});
     };
 
     handleClickAnalysis = () =>{
@@ -284,7 +289,9 @@ class Analysis extends Component {
                                             <CardSubtitle> Select region to apply the settings</CardSubtitle>
                                         </CardHeader>
                                         <CardActions>
-                                            <RadioGroup name="region" value="01">
+                                            <RadioGroup name="region"
+                                                        value={this.state.chosenRegion}
+                                                        onChange={this.handleRegionChange}>
                                                 {regionsList}
                                             </RadioGroup>
                                         </CardActions>

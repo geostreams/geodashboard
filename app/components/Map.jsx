@@ -2,13 +2,13 @@
  * @flow
  */
 
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
-import styles from '../styles/map.css'
-import {Icon} from 'react-mdc-web'
-import {getSourceName, getParameterName} from '../utils/getConfig'
-import type {Sensors} from '../utils/flowtype'
+import styles from '../styles/map.css';
+import {Icon} from 'react-mdc-web';
+import {getSourceName, getParameterName} from '../utils/getConfig';
+import type {Sensors} from '../utils/flowtype';
 
 
 type MapProps = {
