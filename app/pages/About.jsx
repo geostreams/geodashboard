@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import MenuPage from '../components/MenuPage'
 import Menu from '../containers/MenuBar'
 import styles from '../styles/main.css'
 
@@ -7,7 +8,7 @@ class About extends Component {
     render() {
         return (
             <div>
-                <Menu selected='about'/>
+                <MenuPage selected='about'/>
                 <div className={styles.contentcenter}>
                     <p>This is a prototype of Geodashboard 3.0 using React,
                         Redux, and Material-UI.

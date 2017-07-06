@@ -1,37 +1,33 @@
 /*
  * @flow
  */
-import React, {Component} from 'react'
+
+import React, {Component} from 'react';
 import styles from '../styles/filterList.css';
 import TimeFilter from '../containers/TimeFilter';
 import UpdateFilters from '../containers/FilterOption';
-import dimensions from '../../data/dimensions.json'
-import injectTapEventPlugin from 'react-tap-event-plugin'
-import IconButton from 'material-ui/IconButton';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import ContentClear from 'material-ui/svg-icons/content/clear';
-import {red500} from 'material-ui/styles/colors';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import Checkbox from 'material-ui/Checkbox';
-import {Card, CardMedia, CardTitle} from 'material-ui/Card';
-import {getLocationName} from '../utils/getConfig'
-import type { InputEvent } from '../utils/flowtype'
-
-injectTapEventPlugin();
+import dimensions from '../../data/dimensions.json';
+import {getLocationName} from '../utils/getConfig';
+import {
+    Button, Icon, Checkbox, FormField, label, RadioGroup, Radio, Elevation, Card, CardHeader, CardTitle, CardSubtitle,
+    CardText, CardMedia
+} from 'react-mdc-web';
+import type {InputEvent} from '../utils/flowtype';
+import Select from './material/Select';
 
 class FilterList extends Component {
 
-    constructor(props:Object) {
+    constructor(props: Object) {
         super(props);
+
     }
 
-    selectAll = (event:InputEvent) => {
+    selectAll = (event: InputEvent) => {
         let name = event.target.getAttribute("data-name");
         if (name == "data_source") {
             let selectedDataSources;
             if (event.target.checked) {
-                selectedDataSources = Object.assign([], this.props.sources.map(s=> s.id));
+                selectedDataSources = Object.assign([], this.props.sources.map(s => s.id));
             } else {
                 selectedDataSources = Object.assign([]);
             }
@@ -39,7 +35,7 @@ class FilterList extends Component {
         } else if (name == "parameters") {
             let selectedParameters;
             if (event.target.checked) {
-                selectedParameters = Object.assign([], this.props.parameters.map(s=> s.id));
+                selectedParameters = Object.assign([], this.props.parameters.map(s => s.id));
             } else {
                 selectedParameters = Object.assign([]);
             }
@@ -47,14 +43,14 @@ class FilterList extends Component {
         }
     };
 
-    selectLocation(event:InputEvent) {
+    selectLocation(event: InputEvent) {
         this.props.onSelectLocation(event);
     }
 
     render() {
         let divContents;
         let showButtons;
-        let isAllSelected:boolean = false;
+        let isAllSelected: boolean = false;
         if (this.props.attribute == "data_source") {
             isAllSelected = this.props.selectedDataSources.length == this.props.sources.length
         } else if (this.props.attribute == "parameters") {
@@ -63,22 +59,29 @@ class FilterList extends Component {
 
         let hideShowContents =
             <div className={styles.select_all}>
-                <Checkbox iconStyle = {{height: '1.5em', marginRight: '0.5em'}} label="Select All"
-                          data-name={this.props.attribute} onCheck={this.selectAll} checked={isAllSelected}/>
+                <FormField id={this.props.attribute}>
+                    <Checkbox data-filterId={this.props.idx} data-name={this.props.attribute}
+                              onChange={this.selectAll} checked={isAllSelected}/>
+                    <label>Select All</label>
+                </FormField>
             </div>;
+
         let cardsubtitle;
         switch (this.props.attribute) {
             case 'data_source':
                 divContents = this.props.sources.map(p =>
-                    <UpdateFilters id={p.id} name={this.props.attribute} label={p.label} key={p.id}/>
+                    <UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute} label={p.label}
+                                   key={p.id}/>
                 );
-                cardsubtitle = this.props.sources.filter(x => this.props.selectedDataSources.indexOf(x.id) >=0 ).map(x => x.label).join(", ");
+                cardsubtitle = this.props.sources.filter(
+                    x => this.props.selectedDataSources.indexOf(x.id) >= 0).map(x => x.label).join(", ");
 
                 showButtons = hideShowContents;
                 break;
             case "parameters":
                 divContents = this.props.parameters.map(p =>
-                    <UpdateFilters id={p.id} name={this.props.attribute} label={p.label} key={p.id}/>
+                    <UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute} label={p.label}
+                                   key={p.id}/>
                 );
                 //TODO: replace with label
                 cardsubtitle = this.props.selectedParameters.join(", ");
@@ -86,24 +89,52 @@ class FilterList extends Component {
                 break;
             case "time":
                 //the UI of date picker
-                divContents = <TimeFilter />;
+                divContents = <TimeFilter filterId={this.props.idx}/>;
                 cardsubtitle = this.props.selectDate;
                 break;
             case "locations":
                 let locationList;
+                let drawRadio;
+                let dividerLine;
+
                 if (this.props.locations) {
-                    locationList = this.props.locations.map(
-                        p => <RadioButton iconStyle = {{height: '1.5em', marginRight: '0.5em'}}
-                                          id={p.id} value={p.id} label={p.label} key={p.id}/>);
+
+                    // Add Draw Radio option
+                    // Setting the radio button's value alters the selected value in the list
+                    drawRadio = [
+                        <Radio className={styles.radio} id="draw" data-filterId={this.props.idx}
+                               value="Custom Location" key="draw">Click to Draw Custom Location</Radio>
+                    ];
+
+                    // Add Divider Line to separate sections
+                    dividerLine = <hr className={styles.divider_style}/>;
+
+                    // Add Locations Radio options
+                    locationList = this.props.locations.map(p =>
+                        <Radio className={styles.radio} data-filterId={this.props.idx}
+                               value={p.id} key={p.id}> {p.label}</Radio>);
+
                 } else {
+                    drawRadio = <div></div>;
+                    dividerLine = <div></div>;
                     locationList = <div></div>;
                 }
+
                 divContents =
-                    (<div>
-                        <RadioButtonGroup name="location" onChange={this.selectLocation.bind(this)} defaultSelected={this.props.selectedLocation} >
-                            {locationList}
-                        </RadioButtonGroup>
-                    </div>
+                    (
+                        <div>
+                            <RadioGroup name="draw_location" onChange={this.selectLocation.bind(this)}
+                                        value={this.props.selectedLocation}>
+                                {drawRadio}
+                            </RadioGroup>
+
+                            {dividerLine}
+
+                            <RadioGroup name="location" onChange={this.selectLocation.bind(this)}
+                                        value={this.props.selectedLocation}>
+                                {locationList}
+                            </RadioGroup>
+                        </div>
                     );
                 cardsubtitle = getLocationName(this.props.selectedLocation);
                 break;
@@ -113,53 +144,56 @@ class FilterList extends Component {
         const {selectedValues, idx} = this.props;
         const options = dimensions.map(d => {
             if (selectedValues.indexOf(d.id) < 0 || selectedValues.indexOf(d.id) >= idx) {
-                return <MenuItem value={d.id} key={d.id} primaryText={d.name} data-idx={idx}/>
+                return <option data-filterId={this.props.idx} value={d.id} key={d.id} data-idx={idx}> {d.name} </option>
             }
         });
         let cardhead;
         // if this filter is open
-        if(this.props.idx === this.props.selectedId) {
-            cardhead =  (
-                <div>
+        if (this.props.idx === this.props.selectedId) {
+            cardhead = (
+                <CardHeader>
                     <div className={styles.left}>
-                        <SelectField fullWidth={true} value={this.props.attribute} onChange={this.props.onChangeSelection}
-                                     data-idx={idx}>
+                        <Select value={this.props.attribute} onChange={this.props.onChangeSelection}
+                                dataIdx={idx}>
                             {options}
-                        </SelectField>
+                        </Select>
                     </div>
                     <div className={styles.right}>
-                        <IconButton className={styles.right} onClick={this.props.onClickRemove} data-idx={idx}>
-                            <ContentClear color={red500}/>
-                        </IconButton>
+                        <a onClick={this.props.onClickRemove} data-idx={idx}>
+                            <Icon className={styles.closeIcon} name='close'/>
+                        </a>
                     </div>
                     <br/>
-                </div>
+                </CardHeader>
             );
         } else {
             cardsubtitle = cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 0 ? cardsubtitle : "No selection";
             cardhead = (
-                <div>
-                <CardTitle title={this.props.attribute.replace("data_source", "data source")}
-                            subtitle={cardsubtitle}
-                            onClick={this.props.onExpand}
-                            titleStyle={{'fontSize':'15px', 'fontWeight':'bold', 'text-transform':'capitalize'}}
-                    //TODO: this is not working, need to fix or remove
-                    //iconRightElement={<HardwareVideogameAsset />}
-                />
-
-                    </div>
+                <CardHeader>
+                    <CardTitle
+                        className={styles.title_card}>{this.props.attribute.replace("data_source", "data source")}</CardTitle>
+                    <CardSubtitle> {cardsubtitle} </CardSubtitle>
+                </CardHeader>
             )
         }
+
+        let cardMedia;
+        if (this.props.idx === this.props.selectedId) {
+            cardMedia = <CardText className={styles.listspacing}>
+
+                {showButtons}
+                {divContents}
+
+            </CardText>;
+        }
+
         return (
-            <Card expanded={this.props.idx === this.props.selectedId} className={styles.filter_card} zDepth={2} id={this.props.idx} >
+
+            <Card className={styles.filter_card} id={this.props.idx} onClick={this.props.onExpand}>
                 {cardhead}
-                <CardMedia expandable={true}>
-                    <div className={styles.listspacing}>
-                        {showButtons}
-                        {divContents}
-                    </div>
-                </CardMedia>
+                {cardMedia}
             </Card>
+
         );
     }
 

@@ -10,16 +10,16 @@ export const switchBackend = (selected:string, title:string, subtitle:string) =>
         title,
         subtitle
     }
-}
+};
 
-export const ADD_ENDPOINTS = 'ADD_ENDPOINTS'
+export const ADD_ENDPOINTS = 'ADD_ENDPOINTS';
 export const addEndpoints = () =>{
     return {
         type: ADD_ENDPOINTS
     }
-}
+};
 
-export const REQUEST_SENSORS = 'REQUEST_SENSORS'
+export const REQUEST_SENSORS = 'REQUEST_SENSORS';
 function requestSensors(api:string) {
     return {
         type: REQUEST_SENSORS,
@@ -27,7 +27,7 @@ function requestSensors(api:string) {
     }
 }
 
-export const RECEIVE_SENSORS = 'RECEIVE_SENSORS'
+export const RECEIVE_SENSORS = 'RECEIVE_SENSORS';
 function receiveSensors(api:string, json:Sensors) {
     return (dispatch:Dispatch) => {
         dispatch({
@@ -41,7 +41,7 @@ function receiveSensors(api:string, json:Sensors) {
     }
 }
 
-export const RECEIVE_SENSOR = 'RECEIVE_SENSOR'
+export const RECEIVE_SENSOR = 'RECEIVE_SENSOR';
 function receiveSensor(json:Sensors) {
     return (dispatch:Dispatch) => {
         dispatch({
@@ -51,7 +51,7 @@ function receiveSensor(json:Sensors) {
     }
 }
 
-export const UPDATE_DETAIL = 'UPDATE_DETAIL'
+export const UPDATE_DETAIL = 'UPDATE_DETAIL';
 export function updateDetail(id:string, name:string, coordinates:number[]){
     return (dispatch:Dispatch) => {
         dispatch({
@@ -63,7 +63,7 @@ export function updateDetail(id:string, name:string, coordinates:number[]){
     }
 }
 
-export const ADD_SEARCH_FILTER = 'ADD_SEARCH_FILTER'
+export const ADD_SEARCH_FILTER = 'ADD_SEARCH_FILTER';
 // this is not used for now, it push a new field in state.searchFilters.filters, not state.searchFilters.selected
 function addSearchFilter(filter:string) {
     return {
@@ -72,7 +72,7 @@ function addSearchFilter(filter:string) {
     }
 }
 
-export const ADD_SEARCH_PARAMETER = 'ADD_SEARCH_PARAMETER'
+export const ADD_SEARCH_PARAMETER = 'ADD_SEARCH_PARAMETER';
 export function addSearchParameter(parameter:Array<string>) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
@@ -81,7 +81,7 @@ export function addSearchParameter(parameter:Array<string>) {
             type: ADD_SEARCH_PARAMETER,
             parameter,
             selected_filters
-        })
+        });
         const idx = selected_filters.indexOf('parameters');
         dispatch(updateAvailableSensors(idx));
     }
@@ -99,7 +99,15 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number)
         const season = undefined;
         //TODO: change to year/semi for GLM, may need a config
         const trendsendpoint = api + '/api/geostreams/datapoints/trends?binning=year&semi=all';
-        state.sensors.data.filter(s => s.parameters.indexOf(parameter) >= 0)
+
+        let sensorsToFilter;
+        if ((state.sensorTrends.available_sensors).length > 0 ) {
+            sensorsToFilter = state.sensorTrends.available_sensors;
+        } else {
+            sensorsToFilter = state.sensors.data;
+        }
+
+        sensorsToFilter.filter(s => s.parameters.indexOf(parameter) >= 0)
             .map(sensor => {
                 let start_time = new Date(sensor.min_start_time);
                 let end_time = new Date(sensor.max_end_time);
@@ -191,7 +199,7 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number)
 
 }
 
-export const ADD_SEARCH_DATASOURCE = 'ADD_SEARCH_DATASOURCE'
+export const ADD_SEARCH_DATASOURCE = 'ADD_SEARCH_DATASOURCE';
 export function addSearchDataSource(data_source:Array<string>) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
@@ -200,13 +208,13 @@ export function addSearchDataSource(data_source:Array<string>) {
             type: ADD_SEARCH_DATASOURCE,
             data_source,
             selected_filters
-        })
+        });
         const idx = selected_filters.indexOf('data_source');
         dispatch(updateAvailableSensors(idx));
     }
 }
 
-export const ADD_START_DATE = 'ADD_START_DATE'
+export const ADD_START_DATE = 'ADD_START_DATE';
 export function addStartDate(date:Date) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
@@ -217,13 +225,13 @@ export function addStartDate(date:Date) {
             date,
             selected_filters,
             availableSensors
-        })
+        });
         const idx = selected_filters.indexOf('time');
         dispatch(updateAvailableSensors(idx));
     }
 }
 
-export const ADD_END_DATE = 'ADD_END_DATE'
+export const ADD_END_DATE = 'ADD_END_DATE';
 export function addEndDate(date:Date) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
@@ -234,13 +242,13 @@ export function addEndDate(date:Date) {
             date,
             selected_filters,
             availableSensors
-        })
+        });
         const idx = selected_filters.indexOf('time');
         dispatch(updateAvailableSensors(idx));
     }
 }
 
-export const ADD_SEARCH_LOCATION = 'ADD_SEARCH_LOCATION'
+export const ADD_SEARCH_LOCATION = 'ADD_SEARCH_LOCATION';
 export function addSearchLocation(location:? string) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
@@ -249,14 +257,40 @@ export function addSearchLocation(location:? string) {
             type: ADD_SEARCH_LOCATION,
             location,
             selected_filters
-
-        })
+        });
         const idx = selected_filters.indexOf('locations');
         dispatch(updateAvailableSensors(idx));
     }
 }
 
-export const ADD_FILTER = 'ADD_FILTER'
+export const ADD_CUSTOM_LOCATION_FILTER = 'ADD_CUSTOM_LOCATION_FILTER';
+export function addCustomLocationFilter(selectedPointsLocations:Array<string>) {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: ADD_CUSTOM_LOCATION_FILTER,
+            selectedPointsLocations,
+        })
+
+    }
+}
+
+export const ADD_CUSTOM_TREND_LOCATION_FILTER = 'ADD_CUSTOM_TREND_LOCATION_FILTER';
+export function addCustomTrendLocationFilter(selectedPointsLocations:Array<string>) {
+    return (dispatch:Dispatch, getState:GetState) => {
+
+        const state = getState();
+        let origSensors = state.sensors.data;
+
+        dispatch({
+            type: ADD_CUSTOM_TREND_LOCATION_FILTER,
+            selectedPointsLocations,
+            origSensors,
+        })
+
+    }
+}
+
+export const ADD_FILTER = 'ADD_FILTER';
 export function addFilter(selectedFilter:string) {
     return (dispatch:Dispatch) => {
         dispatch({
@@ -267,7 +301,7 @@ export function addFilter(selectedFilter:string) {
     }
 }
 
-export const CHANGE_FILTER = 'CHANGE_FILTER'
+export const CHANGE_FILTER = 'CHANGE_FILTER';
 export function changeFilter(selectedFilter:string, idx:number) {
     return (dispatch:Dispatch) => {
         dispatch({
@@ -280,14 +314,14 @@ export function changeFilter(selectedFilter:string, idx:number) {
     }
 }
 
-export const DELETE_FILTER = 'DELETE_FILTER'
+export const DELETE_FILTER = 'DELETE_FILTER';
 export function deleteFilter(idx:number) {
     return (dispatch:Dispatch) => {
         dispatch(updateAvailableSensors(idx - 1));
     }
 }
 
-export const UPDATE_AVAILABLE_FILTERS = 'UPDATE_AVAILABLE_FILTERS'
+export const UPDATE_AVAILABLE_FILTERS = 'UPDATE_AVAILABLE_FILTERS';
 export function updateAvailableFilters() {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
@@ -305,8 +339,8 @@ export function updateAvailableFilters() {
     }
 }
 
-export const UPDATE_AVAILABLE_SENSORS = 'UPDATE_AVAILABLE_SENSORS'
-export const DELETE_FILTERS_AFTER = 'DELETE_FILTERS_AFTER'
+export const UPDATE_AVAILABLE_SENSORS = 'UPDATE_AVAILABLE_SENSORS';
+export const DELETE_FILTERS_AFTER = 'DELETE_FILTERS_AFTER';
 export function updateAvailableSensors(idx:number) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
@@ -327,7 +361,7 @@ export function updateAvailableSensors(idx:number) {
     }
 }
 
-export const SELECT_SENSOR = 'SELECT_SENSOR'
+export const SELECT_SENSOR = 'SELECT_SENSOR';
 export function selectSensorDetail(id:string, name:string, coordinates:Array<number>) {
     return {
         type: SELECT_SENSOR,
@@ -377,11 +411,11 @@ export function fetchSensor(name:string) {
 
             } else {
                 const endpointsensors = api + '/api/geostreams/sensors';
-                var result = fetch(endpointsensors)
+                let result = fetch(endpointsensors)
                     .then(response => response.json())
                     .then(json => {
                         const sensor = json.find(x => x.name === name);
-                        console.log(sensor.id)
+                        console.log(sensor.id);
                         dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
                         return fetch(api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + sensor.id)
                     });

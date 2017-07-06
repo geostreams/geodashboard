@@ -2,13 +2,21 @@
  * @flow
  */
 import React, {Component, PropTypes} from 'react';
-import {RaisedButton, Dialog, FlatButton} from 'material-ui';
-import MenuItem from 'material-ui/MenuItem';
-import IconMenu from 'material-ui/IconMenu';
-import IconButton from 'material-ui/IconButton';
-import FileFileDownload from 'material-ui/svg-icons/file/file-download';
+import {
+    Button,
+    Dialog,
+    DialogHeader,
+    DialogTitle,
+    DialogBody,
+    DialogFooter,
+    Icon,
+    Menu,
+    MenuItem,
+    MenuAnchor
+} from 'react-mdc-web';
+import {getCustomLocation} from '../utils/getConfig'
 import styles from '../styles/downloadButton.css';
-import type { MapOfStrings } from '../utils/flowtype'
+import type {MapOfStrings} from '../utils/flowtype'
 
 type DownloadStateType = {
     isOpen: boolean,
@@ -17,9 +25,9 @@ type DownloadStateType = {
 };
 
 class DownloadButtons extends Component {
-    state:DownloadStateType;
+    state: DownloadStateType;
 
-    constructor(props:Object) {
+    constructor(props: Object) {
         super(props);
         this.state = {
             isOpen: false,
@@ -30,7 +38,7 @@ class DownloadButtons extends Component {
 
     // handle Permalink panel
     handleOpenPermalink = () => {
-        var link:string = this.buildLink("json");
+        var link: string = this.buildLink("json");
         this.setState({isOpen: true, link: link});
     };
 
@@ -39,7 +47,7 @@ class DownloadButtons extends Component {
     };
 
     //convert a map object to url parameters
-    serialize = function (obj:Object):string {
+    serialize = function (obj: Object): string {
         var str = [];
         for (var p in obj)
             if (obj.hasOwnProperty(p)) {
@@ -54,7 +62,7 @@ class DownloadButtons extends Component {
         return str.join("&");
     };
 
-    buildLink = function (type:string):string {
+    buildLink = function (type: string): string {
 
         var downloadApi = this.props.api + "/api/geostreams/datapoints?";
         // refer to https://opensource.ncsa.illinois.edu/bitbucket/projects/CATS/repos/clowder/browse/app/api/Geostreams.scala#665
@@ -72,9 +80,14 @@ class DownloadButtons extends Component {
 
         if (this.props.selectedLocation !== null) {
 
-            //TODO: Needs Update when setting up the lakes
-            //params["geocode"] = this.props.location;
-            // a config file like: https://opensource.ncsa.illinois.edu/bitbucket/projects/GEOD/repos/seagrant/browse/config/areas.js
+            const area = getCustomLocation(this.props.selectedLocation);
+
+            if(area && area.geometry){
+                params["geocode"] = area.geometry.coordinates[0].map(function(coordinate){
+                    // swap coordinate
+                    return [coordinate[1], coordinate[0]]
+                }).join(",");
+            }
         }
 
         var link = this.serialize(params);
@@ -83,55 +96,64 @@ class DownloadButtons extends Component {
         return downloadApi + link;
     };
 
-    onDownload = (type:string) => {
+    onDownload = (type: string) => {
         var link = this.buildLink(type);
         window.open(link);
     };
 
-    handleDownloadOption = (value:boolean) => {
+    handleDownloadOption = (value: boolean) => {
         this.setState({
             openMenu: value,
         });
     };
 
     render() {
-        const actions = [
-            <FlatButton
-                label="Close"
-                primary={true}
-                onTouchTap={this.handleClosePermalink}
-            />
-        ];
 
         // don't use a-href download for Download as CSV/JSON, otherwise buildLink
         // will be executed as the page loading, instead of onClick
         return (
-            <div className={styles.button}>
+            <div>
                 <Dialog
-                    title="Permalink"
-                    actions={actions}
-                    modal={false}
                     open={this.state.isOpen}
-                    onRequestClose={this.handleClosePermalink}
+                    onClose={this.handleClosePermalink}
                 >
-                    <a href={this.state.link}/> {this.state.link}
+                    <DialogHeader>
+                        <DialogTitle>Permalink</DialogTitle>
+                    </DialogHeader>
+                    <DialogBody>
+                        <a href={this.state.link}/> {this.state.link}
+                    </DialogBody>
+                    <DialogFooter>
+                        <Button
+                            primary
+                            onClick={this.handleClosePermalink}
+                        > Close </Button>
+                    </DialogFooter>
                 </Dialog>
-                <RaisedButton className={styles.raisedbutton}
-                              label="Download Data"
-                              onClick={this.onDownload.bind(this, "csv")}
-                />
-                <IconMenu className={styles.icon}
-                          iconButtonElement={<IconButton><FileFileDownload /></IconButton>}
-                          open={this.state.openMenu}
-                          onRequestChange={this.handleDownloadOption}
-                >
-                    <MenuItem value="1" primaryText="Download as JSON"
-                              onClick={this.onDownload.bind(this, "json")}
-                    />
-                    <MenuItem value="2" primaryText="Permalink"
-                              onTouchTap={this.handleOpenPermalink}
-                    />
-                </IconMenu>
+
+
+                <Button raised
+                        onClick={this.onDownload.bind(this, "csv")}
+                > Download Data </Button>
+
+                <Button onClick={() => {
+                    this.setState({openMenu: true})
+                }}>
+                    <Icon name="get_app"/>
+                </Button>
+                <MenuAnchor>
+                    <Menu bottom open={this.state.openMenu} onClose={() => {
+                        this.setState({openMenu: false})
+                    }}>
+                        <MenuItem value="1" onClick={this.onDownload.bind(this, "json")}>
+                            Download as JSON
+                        </MenuItem>
+                        <MenuItem value="2" onClick={this.handleOpenPermalink}>
+                            Permalink
+                        </MenuItem>
+                    </Menu>
+                </MenuAnchor>
+
             </div>
         );
     }

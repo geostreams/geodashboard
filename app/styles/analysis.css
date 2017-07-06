@@ -14,8 +14,8 @@
 }
 
 .liststyle {
-    width: 24em;
-    margin: 3.6em 0em 3em 1em;
+    width: 22em;
+    margin: 3.6em 0em 3em 0em;
     float: left;
     height: calc(100vh - 8em);
     overflow-y: auto;
@@ -72,7 +72,6 @@
 
 .buttonStyle {
     float: left;
-    margin: 0.5em 0.2em 0.5em 0.2em;
 }
 
 .counterText {
@@ -84,4 +83,17 @@
 .comboStyling {
     margin: auto;
     width: 90%;
+}
+
+.cardMargin {
+    margin: 1em 0em 0em 0em;
+    width: 20em;
+}
+
+.select {
+    margin-top: 2em;
+}
+
+.textField {
+    width: 9em;
 }

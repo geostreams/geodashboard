@@ -33,3 +33,25 @@ export function sortByLabel(list) {
     });
     return list;
 }
+
+// Point in Polygon. same function from geodashboard
+// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html#Listing the Vertices
+
+export function pnpoly (x,y,coords) {
+    var vert = [ [0,0] ]
+
+    for (var i = 0; i < coords.length; i++) {
+        for (var j = 0; j < coords[i].length; j++) {
+            vert.push(coords[i][j])
+        }
+        vert.push(coords[i][0])
+        vert.push([0,0])
+    }
+
+    var inside = false
+    for (var i = 0, j = vert.length - 1; i < vert.length; j = i++) {
+        if (((vert[i][0] > y) != (vert[j][0] > y)) && (x < (vert[j][1] - vert[i][1]) * (y - vert[i][0]) / (vert[j][0] - vert[i][0]) + vert[i][1])) inside = !inside
+    }
+
+    return inside
+}

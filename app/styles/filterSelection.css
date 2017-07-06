@@ -18,13 +18,10 @@ input[type=button] {
 }
 
 .add {
-    margin: 1em 1em 1em 10em;
+    margin: 1em 1em 1em 13em;
 }
 
 .inline {
   display: inline-block;
 }
 
-.styleAdd {
-  margin-right: 20;
-}

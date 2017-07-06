@@ -37,22 +37,27 @@
     float: left;
     font-size: smaller;
     width: 100%;
+    overflow-y: auto;
 }
 
 .right {
-    float: left;
+    float: right;
     width: 1em;
+    cursor: pointer;
 }
 
 .left {
     float: left;
-    width: 15.5em;
+    width: 15em;
+}
+.closeIcon {
+   color: red;
 }
 
 .filter_card {
     max-height: 30em;
-    width: 20.5em;
-    margin: 1em 0em 0em 1em;
+    width: 20em;
+    margin: 1em 0em 0em 0em;
     padding: 0.5em 1em 1em 1em;
     text-align: left;
     display: inline-block;
@@ -64,4 +69,31 @@
     margin-top: 0.6em;
     margin-bottom: -0.5em;
     width: 80%;
+}
+
+.draw_location_style {
+    border-bottom-style: solid;
+    border-bottom-width: 0.1em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+}
+
+.title_card{
+    fontSize: 15px;
+    fontWeight: bold;
+    text-transform: capitalize;
+}
+
+.radio{
+    line-height: 1em;
+    padding: 0em 1em 0em 1em;
+}
+
+hr.divider_style {
+    border-top: 0.5em double #808080;
+    width: 16em;
+}
+
+.formfield {
+
 }

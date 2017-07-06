@@ -9,3 +9,11 @@
 	margin-bottom: -0.5em;
 	width: 90%;
 }
+
+.checkboxWidth {
+	width: 1em;
+}
+
+.checkboxLabel {
+	margin-left: 1.1em;
+}

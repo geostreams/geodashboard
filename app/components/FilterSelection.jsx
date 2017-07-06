@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import FilterList from '../containers/FilterList'
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import {Fab, Icon, Button} from 'react-mdc-web';
 import styles from '../styles/filterSelection.css'
 
 class FilterSelection extends Component {
@@ -22,13 +21,14 @@ class FilterSelection extends Component {
         if (notUsedFilters.length > 0) {
             this.props.onAddFilter(notUsedFilters[0]);
 
-            this.setState({selectedValue: this.props.selectedFilters.length });
+            this.setState({selectedValue: this.props.selectedFilters.length});
         }
 
     }
 
-    handleChange(event, valueIdx, value) {
-        var idx = event.target.parentElement.parentElement.parentElement.dataset.idx; //Idx of the selected filter
+    handleChange(event) {
+        const idx = event.target.dataset.idx; //Idx of the selected filter
+        const value = event.target.options[event.target.selectedIndex].value;
         console.log(value, " was selected");
         if (value == "parameters" || this.props.selectedFilters[idx] == "parameters") {
             this.props.onClearFilter(true, false);
@@ -42,7 +42,7 @@ class FilterSelection extends Component {
         if (value == "locations" || this.props.selectedFilters[idx] == "locations") {
             this.props.onClearLocation();
         }
-        var newSelected = Object.assign([], this.props.selectedFilters);
+        let newSelected = Object.assign([], this.props.selectedFilters);
         newSelected = newSelected.splice(0, idx);
         newSelected.push(value);
         this.props.onChangeFilter(newSelected, idx);
@@ -69,7 +69,7 @@ class FilterSelection extends Component {
         newSelected.splice(idx, 1);
         this.props.onDeleteFilter(idx);
 
-        this.setState({ selectedValue: (idx > 0 ? idx - 1 : 0)});
+        this.setState({selectedValue: (idx > 0 ? idx - 1 : 0)});
 
     }
 
@@ -81,18 +81,19 @@ class FilterSelection extends Component {
 
     componentDidUpdate() {
         // when the filter list is changing, the filters after will be removed, then update selectedValue.
-        if(this.state.selectedValue >= this.props.selectedFilters.length) {
+        if (this.state.selectedValue >= this.props.selectedFilters.length) {
             this.setState({selectedValue: this.props.selectedFilters.length - 1});
         }
     }
 
-    handleExpand(event){
+    handleExpand(event) {
         // leave this line for debugging
         //console.log(event.target.parentElement.parentElement);
-
-        if(!isNaN(parseInt(event.target.parentElement.parentElement.id))) {
+        if (!isNaN(parseInt(event.target.dataset.filterid))) {
+            this.setState({selectedValue: parseInt(event.target.dataset.filterid)});
+        } else if (!isNaN(parseInt(event.target.parentElement.parentElement.id))) {
             this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.id)});
-        } else if(!isNaN(parseInt(event.target.parentElement.parentElement.parentElement.id))) {
+        } else if (!isNaN(parseInt(event.target.parentElement.parentElement.parentElement.id))) {
             this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.parentElement.id)});
         } else {
             this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.parentElement.parentElement.id)});
@@ -105,15 +106,17 @@ class FilterSelection extends Component {
             let idx = filterIds.indexOf(selected);
             let f = this.props.filters[idx];
 
-            return <FilterList key={idx} selectedId={this.state.selectedValue} onChangeSelection={this.handleChange.bind(this)}
-                               selectedValues={this.props.selectedFilters} idx={this.props.selectedFilters.indexOf(f.id)}
+            return <FilterList key={idx} selectedId={this.state.selectedValue}
+                               onChangeSelection={this.handleChange.bind(this)}
+                               selectedValues={this.props.selectedFilters}
+                               idx={this.props.selectedFilters.indexOf(f.id)}
                                attribute={f.id} onClickRemove={this.handleClickRemoveFilter.bind(this)}
-                               onExpand={this.handleExpand.bind(this)} />
+                               onExpand={this.handleExpand.bind(this)}/>
         });
         let addButton;
         if (this.props.selectedFilters.length < this.props.filters.length) {
-            addButton = <FloatingActionButton id="addButton" onClick={this.handleClickAddFilter.bind(this)}
-                                              className={styles.add}><ContentAdd/></FloatingActionButton>
+            addButton = <Fab id="addButton" className={styles.add} onClick={this.handleClickAddFilter.bind(this)}
+            ><Icon name="add"/></Fab>
         }
         return (
             <div>
