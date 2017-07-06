@@ -209,10 +209,11 @@ function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string
                 return;
 
             case 'locations':
+                // This uses the radio button's value
                 if(selectedSearch.locations.selected != null ) {
                     new_sensors = [];
 
-                    if (selectedSearch.locations.selected == 'draw') {
+                    if (selectedSearch.locations.selected == 'Custom Location') {
                         if (draw_sensors_names.length <= 0) {
                             new_sensors = av_sensors;
                         } else {

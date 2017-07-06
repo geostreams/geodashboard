@@ -1,19 +1,20 @@
 /*
  * @flow
  */
-import React, {Component} from 'react'
+
+import React, {Component} from 'react';
 import styles from '../styles/filterList.css';
 import TimeFilter from '../containers/TimeFilter';
 import UpdateFilters from '../containers/FilterOption';
-import dimensions from '../../data/dimensions.json'
-import {getLocationName} from '../utils/getConfig'
+import dimensions from '../../data/dimensions.json';
+import {getLocationName} from '../utils/getConfig';
 import {
     Button, Icon, Checkbox, FormField, label, RadioGroup, Radio, Elevation, Card, CardHeader, CardTitle, CardSubtitle,
     CardText, CardMedia
 } from 'react-mdc-web';
-import DatePicker from 'material-ui/DatePicker';
-import type {InputEvent} from '../utils/flowtype'
-import Select from './material/Select'
+import type {InputEvent} from '../utils/flowtype';
+import Select from './material/Select';
+
 class FilterList extends Component {
 
     constructor(props: Object) {
@@ -93,19 +94,44 @@ class FilterList extends Component {
                 break;
             case "locations":
                 let locationList;
+                let drawRadio;
+                let dividerLine;
+
                 if (this.props.locations) {
+
+                    // Add Draw Radio option
+                    // Setting the radio button's value alters the selected value in the list
+                    drawRadio = [
+                        <Radio className={styles.radio} id="draw" data-filterId={this.props.idx}
+                               value="Custom Location" key="draw">Click to Draw Custom Location</Radio>
+                    ];
+
+                    // Add Divider Line to separate sections
+                    dividerLine = <hr className={styles.divider_style}/>;
+
+                    // Add Locations Radio options
                     locationList = this.props.locations.map(p =>
-                        <Radio className={styles.radio} data-filterId={this.props.idx} value={p.id} key={p.id}> {p.label}</Radio>)
+                        <Radio className={styles.radio} data-filterId={this.props.idx}
+                               value={p.id} key={p.id}> {p.label}</Radio>);
 
                 } else {
+                    drawRadio = <div></div>;
+                    dividerLine = <div></div>;
                     locationList = <div></div>;
                 }
+
                 divContents =
-                    (<div>
+                    (
+                        <div>
+                            <RadioGroup name="draw_location" onChange={this.selectLocation.bind(this)}
+                                        value={this.props.selectedLocation}>
+                                {drawRadio}
+                            </RadioGroup>
+
+                            {dividerLine}
+
                             <RadioGroup name="location" onChange={this.selectLocation.bind(this)}
                                         value={this.props.selectedLocation}>
-                                <Radio className={styles.radio}
-                                       id="draw" value="draw" key="draw">Draw Custom Location</Radio>
                                 {locationList}
                             </RadioGroup>
                         </div>
@@ -160,14 +186,13 @@ class FilterList extends Component {
 
             </CardText>;
         }
-        return (
 
+        return (
 
             <Card className={styles.filter_card} id={this.props.idx} onClick={this.props.onExpand}>
                 {cardhead}
                 {cardMedia}
             </Card>
-
 
         );
     }

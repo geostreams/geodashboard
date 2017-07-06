@@ -17,14 +17,14 @@ type MapProps = {
 };
 
 type MapState = {
-    center:Array <number>,
-    vectorSource:ol.source.Vector,
-    clusterSource:ol.souce.Cluster,
+    center: Array <number>,
+    vectorSource: ol.source.Vector,
+    clusterSource: ol.souce.Cluster,
     multiLineLayer: ol.layer.Vector,
     multiLineString: ol.geom.MultiLineString,
     expandedClusterLayer: ol.layer.Vector,
     expandedCluster: boolean,
-    map:ol.Map,
+    map: ol.Map,
     currentZoom: number,
     maxZoom: number
 };
@@ -85,25 +85,19 @@ class Map extends Component {
                     className={styles.olDrawSquareButton + ' ' +
                     styles.olSharedDrawStyles + ' drawing_buttons'}></div>
                 <button id="drawSquareButton" title="Click to Draw a Square">
-                    <Icon name="panorama_wide_angle"/></button>
+                    <Icon name="crop_square"/></button>
 
                 <div id="ol-drawcustomcontrol"
                     className={styles.olDrawCustomButton + ' ' +
                     styles.olSharedDrawStyles + ' drawing_buttons'}></div>
                 <button id="drawCustomButton" title="Click to Draw a Custom Shape">
-                    <Icon name="change_history"/></button>
+                    <Icon name="star_border"/></button>
 
                 <div id="ol-drawclearcontrol"
                      className={styles.olDrawClearButton + ' ' +
                      styles.olSharedDrawStyles + ' drawing_buttons'}></div>
                 <button id="drawClearButton" title="Click to Reset Drawing Selection">
                     <Icon name="clear"/></button>
-
-                <div id="ol-drawstopcontrol"
-                     className={styles.olDrawStopButton + ' ' +
-                     styles.olSharedDrawStyles}></div>
-                <button id="drawStopButton" title="Click to Remove a Drawn Shape">
-                    <Icon name="stop"/></button>
 
             </div>
         </div>);
@@ -306,11 +300,11 @@ class Map extends Component {
         const coordinates = geometry.getCoordinates();
         const px = theMap.getPixelFromCoordinate(coordinates);
         const size = featuresAtPixel.get('features').length;
-        var points = this.generatePointsCircle(size, px);
+        let points = this.generatePointsCircle(size, px);
 
         // Create lines to where each marker is going to be placed
-        var multiLineString = new ol.geom.MultiLineString([]);
-        var multiLineLayer = new ol.layer.Vector({
+        let multiLineString = new ol.geom.MultiLineString([]);
+        let multiLineLayer = new ol.layer.Vector({
             source: new ol.source.Vector({
                 features: [
                     new ol.Feature({ geometry: multiLineString })
@@ -331,9 +325,9 @@ class Map extends Component {
         multiLineLayer.setZIndex(2);
 
         // Create new features to place in the ends of the line with the right styling
-        var newFeatures = Array();
+        let newFeatures = Array();
         featuresAtPixel.get('features').forEach(function(feature, index) {
-            var cd_end = theMap.getCoordinateFromPixel(points[index]);
+            let cd_end = theMap.getCoordinateFromPixel(points[index]);
 
             multiLineString.appendLineString(
                 new ol.geom.LineString([coordinates, cd_end])
@@ -346,15 +340,15 @@ class Map extends Component {
 
         });
 
-        var newFeaturesSource = new ol.source.Vector({
+        let newFeaturesSource = new ol.source.Vector({
             features: newFeatures
         });
 
-        var newFeaturesLayer = new ol.layer.Vector({
+        let newFeaturesLayer = new ol.layer.Vector({
             source: newFeaturesSource,
             style: function(feature) {
-                var sensorColor = feature.attributes.color;
-                var iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
+                let sensorColor = feature.attributes.color;
+                let iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
                     + '<g class="marker-g">'
                     + '<path d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke="black" stroke-width="1" fill="white"/>'
                     + '	<ellipse cx="7.5" cy="8.5" rx="4.5" ry="5.5" class="map-pin-color" style="fill:' +
@@ -377,7 +371,8 @@ class Map extends Component {
         theMap.addLayer(multiLineLayer);
         const currentZoom = theMap.getView().getZoom();
 
-        this.setState({currentZoom: currentZoom, multiLineString: multiLineString, expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true})
+        this.setState({currentZoom: currentZoom, multiLineString: multiLineString,
+            expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true})
     }
 
     removeSpiderfiedClusterLayers(theMap) {
@@ -516,6 +511,12 @@ class Map extends Component {
         // Try switching API and quickly switching to the search page
         let features;
 
+        let copyOfMap = this.state.map;
+
+        let that = this;
+
+        let reset_drawn_shape = document.getElementById('drawClearButton');
+
         let add_button = document.getElementById('addButton');
         if (add_button) {
             add_button.addEventListener('click', clickedAddButton);
@@ -533,11 +534,50 @@ class Map extends Component {
             all_regions_radio.addEventListener('click', clickedNotDrawRadioTrends);
         }
 
-        let copyOfMap = this.state.map;
+        let all_auto_locations_radio = document.getElementsByName("location");
+        if (all_auto_locations_radio) {
+            for (let i=0; i < all_auto_locations_radio.length; i++){
+                if (all_auto_locations_radio[i].checked == true) {
+                    clearDrawnShape();
+                }
+            }
+        }
 
-        let that = this;
+        function clearDrawnShape() {
+
+            copyOfMap.getInteractions().forEach(function (e) {
+                if(e instanceof ol.interaction.Draw) {
+                    copyOfMap.removeInteraction(e);
+                }
+            });
+
+            copyOfMap.getLayers().forEach(function(e) {
+                if (e.get('name') == 'drawing_layer') {
+                    e.getSource().clear();
+                }
+            });
+
+        }
+
+        function resetDrawPoints() {
+            // Set this for resetting the points
+            let selectPointsLocations = [];
+            selectPointsLocations[0] = 'reset_points';
+
+            that.selectShapeLocation(selectPointsLocations);
+
+            clearDrawnShape();
+        }
 
         function clickedDrawRadio() {
+
+            if (!that.props.drawn_sensors.length > 0) {
+                if (reset_drawn_shape) {
+                    reset_drawn_shape.click();
+                }
+                resetDrawPoints();
+            }
+
             if (draw_buttons_group){
                 for (let i = 0; i < draw_buttons_group.length; i++) {
                     draw_buttons_group[i].style.visibility = "visible";
@@ -562,19 +602,6 @@ class Map extends Component {
 
         function clickedAddButton() {
             clickedNotDrawRadio();
-        }
-
-        function resetDrawPoints() {
-            // Set this for resetting the points
-            let selectPointsLocations = [];
-            selectPointsLocations[0] = 'reset_points';
-
-            that.selectShapeLocation(selectPointsLocations);
-
-            let clear_drawn_shape = document.getElementById('drawStopButton');
-            if (clear_drawn_shape) {
-                clear_drawn_shape.click();
-            }
         }
 
         function clickedNotDrawRadioTrends() {
@@ -610,17 +637,16 @@ class Map extends Component {
 
         } else {
             if (draw_radio) {
-                if (draw_radio.checked == false) {
+                if (draw_radio.checked) {
+
+                    clickedDrawRadio();
+                } else {
                     copyOfMap.getInteractions().forEach(function (e) {
                         if (e instanceof ol.interaction.Draw) {
                             copyOfMap.removeInteraction(e);
                         }
                     });
                     clickedNotDrawRadio();
-                }
-
-                if (draw_radio.checked == true) {
-                    clickedDrawRadio();
                 }
             }
 
@@ -632,6 +658,7 @@ class Map extends Component {
                 }
             }
 
+            // This is available_sensors
             if (this.props.updateSensors){
                 console.log("Map component got new props");
                 features = this.updateLayers(this.props.updateSensors);
@@ -647,7 +674,7 @@ class Map extends Component {
 
         if (this.state.vectorSource.getFeatures().length > 0) {
             // Turn off auto zoom for Trends
-            if (!this.props.display_trend && !this.state.expandedCluster) {
+            if (!this.props.display_trend && !this.state.expandedCluster){
                 this.state.map.getView().fit(this.state.vectorSource.getExtent(), this.state.map.getSize());
             }
         }
@@ -661,7 +688,8 @@ class Map extends Component {
                 this.popupHandler(featuresAtPixel.get('features')[0], this.props.coordinates);
             } else {
                 //TODO: Need to update the global state. This is causing an infinite loop.
-                // After calling the overlapping markers we need to clear out the this.props.coordinates through the global state
+                // After calling the overlapping markers we need to clear out the
+                //     this.props.coordinates through the global state
                 // if(that.state.expandedCluster) {
                 //     that.removeSpiderfiedClusterLayers(that.state.map);
                 // }
@@ -686,10 +714,10 @@ class Map extends Component {
         });
         this.setState({clusterSource: vectorSource});
 
-        var clusters = new ol.layer.Vector({
+        let clusters = new ol.layer.Vector({
             source: clusterSource,
             style: function (feature) {
-                var size = feature.get('features').length;
+                let size = feature.get('features').length;
                 let style;
                 if (size > 1) {
                     style = new ol.style.Style({
@@ -711,8 +739,8 @@ class Map extends Component {
                     });
                 } else {
 
-                    var featureColor = feature.getProperties().features[0].attributes.color;
-                    var iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
+                    let featureColor = feature.getProperties().features[0].attributes.color;
+                    let iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
                         + '<g class="marker-g">'
                         + '<path d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke="black" stroke-width="1" fill="white" />'
                         + '	<ellipse cx="7.5" cy="8.5" rx="4.5" ry="5.5" class="map-pin-color" style="fill:' +
@@ -794,7 +822,8 @@ class Map extends Component {
 
         let customLocationFilterVector = new ol.source.Vector();
         let customLocationFilterLayer = new ol.layer.Vector({
-            source: customLocationFilterVector
+            source: customLocationFilterVector,
+            name: 'drawing_layer'
         });
 
         let layers = [
@@ -924,41 +953,6 @@ class Map extends Component {
 
         };
 
-        // Add Draw Stop Button
-        let appDrawStop = window.app;
-        appDrawStop.drawStopControl = function (opt_options) {
-            let options = opt_options || {};
-            const drawStopButton = document.getElementById('drawStopButton');
-
-            let handleDrawStopButton = function () {
-                theMap.getInteractions().forEach(function (e) {
-                    if(e instanceof ol.interaction.Draw) {
-                        theMap.removeInteraction(e);
-                    }
-                });
-
-                customLocationFilterLayer.getSource().clear();
-
-            };
-
-            if (drawStopButton) {
-                drawStopButton.addEventListener('click', handleDrawStopButton, false);
-                drawStopButton.addEventListener('touchstart', handleDrawStopButton, false);
-            }
-
-            const element = document.getElementById('ol-drawstopcontrol');
-            if (element && drawStopButton) {
-                element.className += ' ol-unselectable ol-control';
-                element.appendChild(drawStopButton);
-
-                ol.control.Control.call(this, {
-                    element: element,
-                    target: options.target
-                });
-            }
-
-        };
-
         // Add Draw Square Button
         let appDrawSquare = window.app;
         appDrawSquare.drawSquareControl = function (opt_options) {
@@ -992,6 +986,9 @@ class Map extends Component {
 
                     // Get the shape geometry
                     let drawExtent = e.feature.getGeometry();
+
+                    // Zoom to shape
+                    view.fit(drawExtent.getExtent(), theMap.getSize());
 
                     // Get all the features in the layer
                     let featuresInLayer = clusters.getSource().getFeatures();
@@ -1077,6 +1074,9 @@ class Map extends Component {
                     // Get the shape geometry
                     let drawExtent = e.feature.getGeometry();
 
+                    // Zoom to shape
+                    view.fit(drawExtent.getExtent(), theMap.getSize());
+
                     // Get all the features in the layer
                     let featuresInLayer = clusters.getSource().getFeatures();
 
@@ -1161,6 +1161,9 @@ class Map extends Component {
                     // Get the shape geometry
                     let drawExtent = e.feature.getGeometry();
 
+                    // Zoom to shape
+                    view.fit(drawExtent.getExtent(), theMap.getSize());
+
                     // Get all the features in the layer
                     let featuresInLayer = clusters.getSource().getFeatures();
 
@@ -1214,7 +1217,6 @@ class Map extends Component {
 
         if( this.props.display_draw == 'True' ) {
             ol.inherits(appDrawClear.drawClearControl, ol.control.Control);
-            ol.inherits(appDrawStop.drawStopControl, ol.control.Control);
             ol.inherits(appDrawSquare.drawSquareControl, ol.control.Control);
             ol.inherits(appDrawCircle.drawCircleControl, ol.control.Control);
             ol.inherits(appDrawCustom.drawCustomControl, ol.control.Control);
@@ -1233,7 +1235,6 @@ class Map extends Component {
                     new appDrawCircle.drawCircleControl(),
                     new appDrawSquare.drawSquareControl(),
                     new appDrawCustom.drawCustomControl(),
-                    new appDrawStop.drawStopControl,
                     new appDrawClear.drawClearControl(),
                 ])
             });
@@ -1266,7 +1267,7 @@ class Map extends Component {
             }
         });
 
-        var fill = new ol.style.Fill({color:[255,255,255,1]}),
+        let fill = new ol.style.Fill({color:[255,255,255,1]}),
             stroke = new ol.style.Stroke({color:[0,0,0,1]});
 
 
@@ -1294,11 +1295,11 @@ class Map extends Component {
                 //     theMap.getView().setZoom(theMap.getView().getZoom() + 1);
                 //     theMap.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
                 // } else {
-                    if(that.state.expandedCluster) {
-                        that.removeSpiderfiedClusterLayers(theMap);
-                    }
-                    that.displayOverlappingMarkers(featuresAtPixel, theMap, that);
-                    closeClusters = false;
+                if(that.state.expandedCluster) {
+                    that.removeSpiderfiedClusterLayers(theMap);
+                }
+                that.displayOverlappingMarkers(featuresAtPixel, theMap, that);
+                closeClusters = false;
 
                 // }
 
