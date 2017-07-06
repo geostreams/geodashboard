@@ -132,21 +132,23 @@ export function collectLocations(sensorsData:Sensors):MapWithLabels {
     const additional_location = window.configruntime.additional_locations;
 
     sensorsData.map(s => {
-        const location = s.properties.region;
-        // check if location exists already
-        const found = locations.some(function (e:MapWithLabel) {
-            return e.id === location;
-        });
-        if (location === null)
-            console.log(`Found sensor ${s.id} without location`);
-        else if (!found)
-            locations.push({'id': location, 'label': getLocationName(location) || ''});
+        // old code, keep this for other geodashboard
+        //const location = s.properties.region;
+        //// check if location exists already
+        //const found = locations.some(function (e:MapWithLabel) {
+        //    return e.id === location;
+        //});
+        //if (location === null)
+        //    console.log(`Found sensor ${s.id} without location`);
+        //else if (!found)
+        //    locations.push({'id': location, 'label': getLocationName(location) || ''});
+
         // for custom location, insert into locations if it is in sensor && not insert before
         additional_location.map(customLocation => {
-                if (pnpoly(s.geometry.coordinates[1], s.geometry.coordinates[0], customLocation.geometry.coordinates)
-                    && !locations.find(function (e) {
+                if (!locations.find(function (e) {
                         return e.id === customLocation.properties.id
-                    })) {
+                    }) && pnpoly(s.geometry.coordinates[1], s.geometry.coordinates[0],
+                        customLocation.geometry.coordinates)) {
                     locations.push({'id': customLocation.properties.id, 'label': customLocation.properties.title})
                 }
             }

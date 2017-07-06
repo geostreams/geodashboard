@@ -14,6 +14,7 @@ import {
     MenuItem,
     MenuAnchor
 } from 'react-mdc-web';
+import {getCustomLocation} from '../utils/getConfig'
 import styles from '../styles/downloadButton.css';
 import type {MapOfStrings} from '../utils/flowtype'
 
@@ -79,9 +80,14 @@ class DownloadButtons extends Component {
 
         if (this.props.selectedLocation !== null) {
 
-            //TODO: Needs Update when setting up the lakes
-            //params["geocode"] = this.props.location;
-            // a config file like: https://opensource.ncsa.illinois.edu/bitbucket/projects/GEOD/repos/seagrant/browse/config/areas.js
+            const area = getCustomLocation(this.props.selectedLocation);
+
+            if(area && area.geometry){
+                params["geocode"] = area.geometry.coordinates[0].map(function(coordinate){
+                    // swap coordinate
+                    return [coordinate[1], coordinate[0]]
+                }).join(",");
+            }
         }
 
         var link = this.serialize(params);

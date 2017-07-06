@@ -5,10 +5,11 @@
 import React, {Component} from 'react';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
-import styles from '../styles/map.css';
-import {Icon} from 'react-mdc-web';
-import {getSourceName, getParameterName} from '../utils/getConfig';
-import type {Sensors} from '../utils/flowtype';
+import styles from '../styles/map.css'
+import {Icon} from 'react-mdc-web'
+import {getSourceName, getParameterName, getCustomLocation, getTrendColor, getColor} from '../utils/getConfig'
+import {popupHelper} from '../utils/mapUtils'
+import type {Sensors} from '../utils/flowtype'
 
 
 type MapProps = {
@@ -23,6 +24,7 @@ type MapState = {
     multiLineLayer: ol.layer.Vector,
     multiLineString: ol.geom.MultiLineString,
     expandedClusterLayer: ol.layer.Vector,
+    areaPolygonSource: ol.source.Vector,
     expandedCluster: boolean,
     map: ol.Map,
     currentZoom: number,
@@ -41,6 +43,7 @@ class Map extends Component {
             multiLineLayer: new ol.layer.Vector,
             multiLineString: new ol.geom.MultiLineString,
             expandedClusterLayer: new ol.layer.Vector,
+            areaPolygonSource: new ol.source.Vector,
             expandedCluster: false,
             currentZoom: 5.5,
             maxZoom: 12,
@@ -102,16 +105,6 @@ class Map extends Component {
             </div>
         </div>);
 
-    }
-
-    getColor(source: string): string {
-        let sourcecolor = window.configruntime.sourcecolor;
-        return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
-    }
-
-    getTrendColor(source: string): string {
-        let trend_colors = window.configruntime.trend_colors;
-        return trend_colors[source] !== undefined ? trend_colors[source] : '#7F7F7F';
     }
 
     selectShapeLocation(event:Array<string>) {
@@ -187,7 +180,7 @@ class Map extends Component {
                         image: new ol.style.RegularShape({
                             points: 3,
                             radius: 10,
-                            fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
                     }));
@@ -197,7 +190,7 @@ class Map extends Component {
                             points: 3,
                             radius: 10,
                             rotation: 3.141592654,
-                            fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
                     }));
@@ -206,7 +199,7 @@ class Map extends Component {
                         image: new ol.style.RegularShape({
                             points: 3,
                             radius: 10,
-                            fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
                     }));
@@ -216,7 +209,7 @@ class Map extends Component {
                             points: 3,
                             radius: 10,
                             rotation: 3.141592654,
-                            fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
                     }));
@@ -224,7 +217,7 @@ class Map extends Component {
                     feature.setStyle(new ol.style.Style({
                         image: new ol.style.Circle({
                             radius: 4,
-                            fill: new ol.style.Fill({color: this.getTrendColor(trend_type)}),
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
                     }));
@@ -240,8 +233,8 @@ class Map extends Component {
                     "name": sensor.name,
                     //parameters has null in the array
                     "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
-                    "color": this.getColor(sensor.properties.type.id),
-                    "trend_color": this.getTrendColor(trend_type),
+                    "color": getColor(sensor.properties.type.id),
+                    "trend_color": getTrendColor(trend_type),
                     "trend_type": trend_type,
                     "trend_values": trend_values,
                     "display_trends": this.props.display_trends,
@@ -259,7 +252,7 @@ class Map extends Component {
                     "location": sensor.properties.region,
                     //parameters has null in the array
                     "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
-                    "color": this.getColor(sensor.properties.type.id),
+                    "color": getColor(sensor.properties.type.id),
                     "type": "single"
 
                 };
@@ -384,118 +377,8 @@ class Map extends Component {
     popupHandler(feature: ol.Feature, coordinate: number[]) {
         const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
-            let id = feature.getId().toUpperCase();
-            let sensorInfo = feature.attributes;
 
-            let dataSourceValue = (sensorInfo.dataSource);
-            let dataSource = '<tr><td width="35%"><strong>Data Source: </strong></td>'.concat('<td width="65%">', dataSourceValue,
-                ' Monitoring Site</td></tr>');
-
-            let startTime = new Date(sensorInfo.minStartTime).toLocaleDateString();
-            let endTime = new Date(sensorInfo.maxEndTime).toLocaleDateString();
-            let timePeriod = '<tr><td><strong>Time Period: </strong></td>'.concat('<td>', startTime, ' - ',
-                endTime, '</td></tr>');
-
-            let latitude = Number(sensorInfo.latitude).toPrecision(5).toString();
-            if (latitude.includes("-")) {
-                latitude = latitude.substring(1);
-                latitude = latitude.concat('&degS');
-            } else {
-                latitude = latitude.concat('&degN');
-            }
-            let longitude = Number(sensorInfo.longitude).toPrecision(5).toString();
-            if (longitude.includes("-")) {
-                longitude = longitude.substring(1);
-                longitude = longitude.concat('&degW');
-            } else {
-                longitude = longitude.concat('&degE');
-            }
-            let latlong = '<tr><td><strong>Lat, Long: </strong></td>'.concat('<td>', latitude, ', ',
-                longitude, '</td></tr>');
-
-            let sourceColor = sensorInfo.color;
-
-            let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
-                sourceColor + ';">' + id + '</h2>';
-
-            let bodyText =
-                '<table class=' + styles.popup_table + '>' +
-                dataSource +
-                timePeriod +
-                latlong +
-                '</table>' +
-                '<div class=' + styles.greyborder + '></div>';
-
-            if (sensorInfo.display_trends) {
-
-                let sensorTrends = sensorInfo.trend_type;
-                let trendColor = sensorInfo.trend_color;
-                let trendValues = sensorInfo.trend_values;
-
-                let trendsLeft = '';
-                let trendsRight = '';
-
-                if (sensorTrends == "noTrend" || sensorTrends == "") {
-
-                    let leftText = " ";
-                    trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
-                        trendColor + '; border-color: ' + trendColor + ';">' + leftText + '</p></td></tr>';
-
-                    let rightText = "Not enough data to display";
-                    trendsRight = '' +
-                        '<tr><td><strong>' + rightText + '</strong></td></tr>';
-
-                } else {
-
-                    if (sensorTrends == 'trendUp' || sensorTrends == 'overThresholdUp') {
-                        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.upArrow + ' style="background: ' +
-                            trendColor + '; border-color: ' + trendColor + '; ">' + trendValues[4] + '</p></td></tr>';
-                    } else if (sensorTrends == 'trendDown' || sensorTrends == 'overThresholdDown') {
-                        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.downArrow + ' style="background: ' +
-                            trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
-                    } else if (sensorTrends == 'noTrend') {
-                        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
-                            trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
-                    } else {
-                        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
-                            trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
-                    }
-
-                    trendsRight = '' +
-                        '<tr><td><strong>Baseline Avg: </strong>' + trendValues[0] + '</td></tr>' +
-                        '<tr><td><strong>Rolling Avg: </strong>' + trendValues[1] + '</td></tr>' +
-                        '<tr><td><strong>Latest Value: </strong>' + trendValues[2] + '</td></tr>' +
-                        '<tr><td><strong>Latest Time: </strong>' + trendValues[3] + '</td></tr>';
-                }
-
-                let trends = trendsLeft + trendsRight;
-
-                bodyText = bodyText +
-                    '<table class=' + styles.tablestyle + '>' +
-                    trends +
-                    '</table>';
-
-            } else {
-
-                let paramsLength = (sensorInfo.parameters).length;
-                let paramsOrig = (sensorInfo.parameters);
-                let paramsAlt = '';
-                for (let i = 0; i < paramsLength; i++) {
-                    paramsAlt = paramsAlt + '<li>' + paramsOrig[i] + '</li>';
-                }
-                let params = '<ul>'.concat(paramsAlt, '</ul>');
-
-                bodyText +=
-                    '<h3 class=' + styles.header3style + '>' + 'Parameters (' + paramsLength + '): </h3>' +
-                    '<div class=' + styles.paramsborder + '>' + params + '</div>' ;
-
-                if(paramsLength > 0) {
-                    bodyText += '<a href="#/detail/location/'+ sensorInfo.name + '" class=' + styles.viewdetail + ' style="background-color: ' +
-                        sourceColor + ';">View detail</a>';
-                }
-            }
-
-            let popupText = headerText + bodyText;
+            let popupText = popupHelper(feature, styles);
 
             if (content) {
                 content.innerHTML = popupText;
@@ -662,15 +545,29 @@ class Map extends Component {
             if (this.props.updateSensors){
                 console.log("Map component got new props");
                 features = this.updateLayers(this.props.updateSensors);
+                // add polygon according to  selected location
+
             } else {
                 features = this.updateLayers(this.props.sensors);
             }
 
         }
+
+
         this.state.clusterSource.clear();
         this.state.clusterSource.addFeatures(features);
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
+
+        const area = getCustomLocation(that.props.selectedLocation);
+        var feature = new ol.Feature();
+        if (area && area.geometry) {
+            feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
+        }
+
+        this.state.areaPolygonSource.clear();
+        this.state.areaPolygonSource.addFeatures([feature]);
+
 
         if (this.state.vectorSource.getFeatures().length > 0) {
             // Turn off auto zoom for Trends
@@ -678,24 +575,20 @@ class Map extends Component {
                 this.state.map.getView().fit(this.state.vectorSource.getExtent(), this.state.map.getSize());
             }
         }
+        // For Explore page, trigger the popup on the map when user click the tab on the left
+        const vectorSource = this.state.vectorSource;
+        if (this.props.popupSensorname) {
+            let featuresAtPixel = vectorSource.getFeatures().find(function (feature) {
+                return feature.attributes.name === that.props.popupSensorname;
+            })
+            this.popupHandler(featuresAtPixel, this.props.popupCoordinates);
 
-        if (this.props.coordinates) {
-            const pixel = this.state.map.getPixelFromCoordinate(this.props.coordinates);
-            let featuresAtPixel = this.state.map.forEachFeatureAtPixel(pixel, function (featureChange) {
-                return featureChange;
-            });
-            if(featuresAtPixel.get('features').length == 1) {
-                this.popupHandler(featuresAtPixel.get('features')[0], this.props.coordinates);
-            } else {
                 //TODO: Need to update the global state. This is causing an infinite loop.
-                // After calling the overlapping markers we need to clear out the
-                //     this.props.coordinates through the global state
+                // After calling the overlapping markers we need to clear out the this.props.coordinates through the global state
                 // if(that.state.expandedCluster) {
                 //     that.removeSpiderfiedClusterLayers(that.state.map);
                 // }
                 // that.displayOverlappingMarkers(featuresAtPixel, that.state.map, that);
-
-            }
 
         }
     }
@@ -712,13 +605,14 @@ class Map extends Component {
             distance: 1,
             source: this.state.vectorSource
         });
-        this.setState({clusterSource: vectorSource});
+        this.setState({clusterSource: clusterSource});
 
         let clusters = new ol.layer.Vector({
             source: clusterSource,
             style: function (feature) {
                 let size = feature.get('features').length;
                 let style;
+
                 if (size > 1) {
                     style = new ol.style.Style({
                         image: new ol.style.Circle({
@@ -757,14 +651,14 @@ class Map extends Component {
 
                     }));
                 }
-                if(that.props.display_trends) {
+                if (that.props.display_trends) {
                     const trend_type = feature.getProperties().features[0].attributes.trend_type;
-                    if(trend_type == "trendUp") {
+                    if (trend_type == "trendUp") {
                         style = (new ol.style.Style({
                             image: new ol.style.RegularShape({
                                 points: 3,
                                 radius: 10,
-                                fill: new ol.style.Fill({color: that.getTrendColor(trend_type)}),
+                                fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                                 stroke: new ol.style.Stroke({color: '#000000', width: 1})
                             })
                         }));
@@ -774,7 +668,7 @@ class Map extends Component {
                                 points: 3,
                                 radius: 10,
                                 rotation: 3.141592654,
-                                fill: new ol.style.Fill({color: that.getTrendColor(trend_type)}),
+                                fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                                 stroke: new ol.style.Stroke({color: '#000000', width: 1})
                             })
                         }));
@@ -783,7 +677,7 @@ class Map extends Component {
                             image: new ol.style.RegularShape({
                                 points: 3,
                                 radius: 10,
-                                fill: new ol.style.Fill({color: that.getTrendColor(trend_type)}),
+                                fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                                 stroke: new ol.style.Stroke({color: '#000000', width: 1})
                             })
                         }));
@@ -793,7 +687,7 @@ class Map extends Component {
                                 points: 3,
                                 radius: 10,
                                 rotation: 3.141592654,
-                                fill: new ol.style.Fill({color: that.getTrendColor(trend_type)}),
+                                fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                                 stroke: new ol.style.Stroke({color: '#000000', width: 1})
                             })
                         }));
@@ -801,7 +695,7 @@ class Map extends Component {
                         style = (new ol.style.Style({
                             image: new ol.style.Circle({
                                 radius: 4,
-                                fill: new ol.style.Fill({color: that.getTrendColor(trend_type)}),
+                                fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                                 stroke: new ol.style.Stroke({color: '#000000', width: 1})
                             })
                         }));
@@ -857,7 +751,6 @@ class Map extends Component {
                 return false;
             };
         }
-
 
         let view = new ol.View({
             projection: 'EPSG:4326',
@@ -1322,20 +1215,20 @@ class Map extends Component {
             const trends_legend_var = document.getElementById('trends_legend');
 
             const noTrendArrow = '<p class=' + styles.noValueLegend + ' style="background: ' +
-                this.getTrendColor("noTrend") + '; border-color: ' +
-                this.getTrendColor("noTrend") + '; margin-left: 1em;"></p>';
+                getTrendColor("noTrend") + '; border-color: ' +
+                getTrendColor("noTrend") + '; margin-left: 1em;"></p>';
 
             const trendUpArrow = '<p class=' + styles.upArrowLegend + ' style="border-color: ' +
-                this.getTrendColor("trendUp") + '; margin-left: 1em; "></p>';
+                getTrendColor("trendUp") + '; margin-left: 1em; "></p>';
 
             const trendDownArrow = '<p class=' + styles.downArrowLegend + ' style="border-color: ' +
-                this.getTrendColor("trendDown") + '; margin-left: 1em;"></p>';
+                getTrendColor("trendDown") + '; margin-left: 1em;"></p>';
 
             const overThresholdUpArrow = '<p class=' + styles.upArrowLegend + ' style="border-color: ' +
-                this.getTrendColor("overThresholdUp") + ';"></p>';
+                getTrendColor("overThresholdUp") + ';"></p>';
 
             const overThresholdDownArrow = '<p class=' + styles.downArrowLegend + ' style="border-color: ' +
-                this.getTrendColor("overThresholdDown") + ';"></p>';
+                getTrendColor("overThresholdDown") + ';"></p>';
 
             if (trends_legend_var) {
                 trends_legend_var.innerHTML =
@@ -1349,7 +1242,33 @@ class Map extends Component {
             }
 
         }
+        if (this.props.updateSensors) {
 
+            var areaPolygonSource = new ol.source.Vector({
+                features: [
+                    new ol.Feature({ })
+                ]
+            });
+
+            this.setState({areaPolygonSource: areaPolygonSource});
+
+            var areaPolygonLayer = new ol.layer.Vector({
+                id: "areaPolygon",
+                source: areaPolygonSource,
+                style: [
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: 'rgba(0, 152, 254, 1)',
+                            width: 2
+                        }),
+                        fill: new ol.style.Fill({
+                            color: 'rgba(254, 254, 254, 0.3)'
+                        })
+                    })
+                ]
+            });
+            theMap.addLayer(areaPolygonLayer);
+        }
         this.setState({map: theMap});
     }
 

@@ -35,9 +35,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-274](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-274)
 - Changing from Material-UI to [React Material Web Components](https://github.com/kradio3/react-mdc-web)
   [GEOD-852](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-852)
-- Add Sensor Selection with Shapes on the Search and Exploratory Analysis Pages
-  [GEOD-853](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-853)
-  [GLGVO-322](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-322)
+- Add geolocation/polygons for each lake in the configuration
+  Use them for creating the download links.
+  Draw a polygon on the map to show the location you select.
+  Fix popup on Explore page
+  [GEOD-910](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-910)
+  [GEOD-909](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-909)
+
+
+
+
 
 ### Fixed
 - Bug in filtering for custom locations

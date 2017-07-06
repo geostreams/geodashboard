@@ -9,8 +9,9 @@ import type { Dispatch } from '../utils/flowtype'
 const mapStateToProps = (state) => {
     return {
         sensors: state.sensors.data,
-        drawn_sensors: state.sensors.draw_available_sensors,
-        coordinates: state.sensorDetail.coordinates,
+        popupSensorname: state.sensorDetail.name,
+        popupCoordinates: state.sensorDetail.coordinates,
+        selectedLocation: state.selectedSearch.locations.selected,
         threshold_value: state.sensorTrends.threshold_value,
         trendsparameter: state.sensorTrends.chosen_parameter,
         trendSensors: state.sensorTrends.data
