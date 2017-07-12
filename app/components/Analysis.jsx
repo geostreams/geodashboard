@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import Menu from './MenuBar'
-import styles from '../styles/analysis.css';
+import Menu from '../containers/MenuBar'
+import styles from '../styles/main.css';
+import analysisStyles from '../styles/analysis.css';
 import { connect } from 'react-redux'
 import {
     Card,
@@ -194,7 +195,7 @@ class Analysis extends Component {
         return (
             <div>
 
-                <MenuPage selected="analysis"/>
+                <Menu selected="analysis"/>
                 <Content>
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>

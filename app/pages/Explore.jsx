@@ -29,7 +29,7 @@ class Explore extends Component {
 
         return (
             <div>
-                <MenuPage selected='explore'/>
+                <Menu selected='explore'/>
                 <Content>
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>
