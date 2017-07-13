@@ -95,9 +95,20 @@ class FilterList extends Component {
             case "locations":
                 let locationList;
                 let drawRadio;
+                let allLocations;
                 let dividerLine;
 
                 if (this.props.locations) {
+
+                    // Add Divider Line to separate sections
+                    dividerLine = <hr className={styles.divider_style}/>;
+
+                    // Add All Locations option
+                    // Setting the radio button's value alters the selected value in the list
+                    allLocations = [
+                        <Radio className={styles.radio} id="allLocations" data-filterId={this.props.idx}
+                               value="All Locations" key="allLocations">Select All Available Locations</Radio>
+                    ];
 
                     // Add Draw Radio option
                     // Setting the radio button's value alters the selected value in the list
@@ -106,23 +117,29 @@ class FilterList extends Component {
                                value="Custom Location" key="draw">Click to Draw Custom Location</Radio>
                     ];
 
-                    // Add Divider Line to separate sections
-                    dividerLine = <hr className={styles.divider_style}/>;
-
                     // Add Locations Radio options
                     locationList = this.props.locations.map(p =>
                         <Radio className={styles.radio} data-filterId={this.props.idx}
                                value={p.id} key={p.id}> {p.label}</Radio>);
 
                 } else {
-                    drawRadio = <div></div>;
                     dividerLine = <div></div>;
+                    allLocations = <div></div>;
+                    drawRadio = <div></div>;
                     locationList = <div></div>;
                 }
 
                 divContents =
                     (
                         <div>
+
+                            <RadioGroup name="all_locations" onChange={this.selectLocation.bind(this)}
+                                        value={this.props.selectedLocation}>
+                                {allLocations}
+                            </RadioGroup>
+
+                            {dividerLine}
+
                             <RadioGroup name="draw_location" onChange={this.selectLocation.bind(this)}
                                         value={this.props.selectedLocation}>
                                 {drawRadio}

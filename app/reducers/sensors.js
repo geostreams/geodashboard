@@ -215,22 +215,36 @@ function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string
                 if(selectedSearch.locations.selected != null ) {
                     new_sensors = [];
 
-                    if (selectedSearch.locations.selected == 'Custom Location') {
-                        if (draw_sensors_names.length <= 0) {
-                            new_sensors = av_sensors;
-                        } else {
-                            new_sensors = av_sensors.filter(function(e){return this.indexOf(e)>=0;},draw_sensors_names);
-                        }
-                    }
-                    else {
-                        av_sensors.map((sensor => {
-                            if(matchLocation(selectedSearch.locations.selected, sensor)) {
-                                new_sensors.push(sensor);
+                    switch(selectedSearch.locations.selected) {
+
+                        case 'All Locations':
+
+                            return;
+
+                        case 'Custom Location':
+                            if (draw_sensors_names.length <= 0) {
+                                new_sensors = av_sensors;
+                            } else {
+                                new_sensors = av_sensors.filter(function (e) {
+                                    return this.indexOf(e) >= 0;
+                                }, draw_sensors_names);
                             }
-                        }));
+                            av_sensors = new_sensors;
+
+                            return;
+
+                        default:
+                            av_sensors.map((sensor => {
+                                if (matchLocation(selectedSearch.locations.selected, sensor)) {
+                                    new_sensors.push(sensor);
+                                }
+                            }));
+                            av_sensors = new_sensors;
+
+                            return;
+
                     }
 
-                    av_sensors = new_sensors;
                 }
 
                 return;

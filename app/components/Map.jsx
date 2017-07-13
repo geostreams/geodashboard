@@ -426,6 +426,13 @@ class Map extends Component {
             }
         }
 
+        let select_all_locations_radio = document.getElementById("allLocations");
+        if (select_all_locations_radio) {
+            if (select_all_locations_radio.checked == true) {
+                clearDrawnShape();
+            }
+        }
+
         function clearDrawnShape() {
 
             copyOfMap.getInteractions().forEach(function (e) {
