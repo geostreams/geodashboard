@@ -94,6 +94,26 @@ export type trendsSensorsState = {
     available_sensors: Sensors,
 }
 
+export type MapProps = {
+    sensors: Sensors,
+    availableSensors: Sensors
+};
+
+export type MapState = {
+    center: Array <number>,
+    vectorSource: ol.source.Vector,
+    clusterSource: ol.souce.Cluster,
+    multiLineLayer: ol.layer.Vector,
+    multiLineString: ol.geom.MultiLineString,
+    expandedClusterLayer: ol.layer.Vector,
+    areaPolygonSource: ol.source.Vector,
+    expandedCluster: boolean,
+    map: ol.Map,
+    currentZoom: number,
+    maxZoom: number
+};
+
+
 // export type Action = BackendAction | SearchFilterAction | SensorAction | SelectedSearchAction;
 export type Dispatch = (action:any) => null;
 export type ThunkAction = (dispatch:Dispatch, getState:GetState) => any;

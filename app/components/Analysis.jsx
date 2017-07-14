@@ -19,7 +19,7 @@ import {
     RadioGroup,
     Radio
 } from 'react-mdc-web';
-import Map from '../containers/Map';
+import Map from '../containers/AnalysisMap';
 import {getTrendSettings} from '../utils/getConfig';
 import Select from './material/Select';
 

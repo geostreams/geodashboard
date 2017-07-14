@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import styles from '../styles/main.css';
 import stylesearch from '../styles/search.css';
-import Map from '../containers/Map'
+import SearchMap from '../containers/SearchMap'
 import MenuPage from './MenuPage'
 import DownloadButtons from '../containers/DownloadButtons'
 import FilterSelection from '../containers/FilterSelection'
@@ -27,7 +27,7 @@ class Search extends Component {
                             </Cell>
                             <Cell col={10}>
                                 <div className={styles.rightmap} >
-                                    <Map updateSensors={this.props.availableSensors}
+                                    <SearchMap updateSensors={this.props.availableSensors}
                                          locationSelected={this.props.selectedSearchLocation}
                                          display_draw='True'/>
                                 </div>
