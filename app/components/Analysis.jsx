@@ -260,7 +260,7 @@ class Analysis extends Component {
                                                 <Cell col={6}>
                                                     <Select className={analysisStyles.select}
                                                             disabled={this.state.thresholdDisabled01}
-                                                            value={this.state.thresholdValue}
+                                                            value={this.state.thresholdValue.toString()}
                                                             onChange={this.handleThresholdChange.bind(this)}
                                                             defaultValue="0">
                                                         {thresholdList}

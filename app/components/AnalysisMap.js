@@ -118,14 +118,11 @@ class AnalysisMap extends Component {
         features = sensorsToFeaturesTrend(this.props.trendSensors);
 
         if (Array.isArray(this.props.trendSensors) && this.props.trendSensors.length > 0) {
-            features = sensorsToFeaturesTrend(this.props.trendSensors);
+            features = sensorsToFeaturesTrend(that.props.trendSensors);
         } else {
-            features = sensorsToFeaturesTrend(this.props.sensors);
+            features = sensorsToFeaturesTrend(that.props.sensors);
         }
 
-
-        this.state.clusterSource.clear();
-        this.state.clusterSource.addFeatures(features);
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
 
@@ -615,11 +612,11 @@ class AnalysisMap extends Component {
         theMap.on('singleclick', function (e) {
             selectItems.setActive(false);
 
-            let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
-                return featureChange;
+            let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (feature) {
+                that.popupHandler(feature.get('features')[0], e.coordinate);
             });
 
-                that.popupHandler(featuresAtPixel, e.coordinate);
+
         });
 
 
