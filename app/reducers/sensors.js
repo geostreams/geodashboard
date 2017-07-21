@@ -1,14 +1,18 @@
 /*
  * @flow
  */
-import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER} from '../actions'
-import type { Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype'
-import {inArray, sortByLabel, pnpoly} from '../utils/arrayUtils'
-import {getLocationName, getSourceName, getParameterName} from '../utils/getConfig'
+import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER} from '../actions';
+import type { Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype';
+import {inArray, sortByLabel, pnpoly} from '../utils/arrayUtils';
+import {getLocationName, getSourceName, getParameterName} from '../utils/getConfig';
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS',
-    sensors:Sensors, api:string, receivedAt:Date,
-    selected_search:Object, selected_filters:Array<string>|};
+    sensors:Sensors,
+    api:string,
+    receivedAt:Date,
+    selected_search:Object,
+    selected_filters:Array<string>,
+    shape_coordinates: Array<number> |};
 
 const defaultState = {
     data:[],
@@ -16,10 +20,14 @@ const defaultState = {
     sources: [],
     locations:[],
     available_sensors:[],
-    draw_available_sensors:[]
+    draw_available_sensors:[],
+    shape_coordinates: []
 };
 
 const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
+
+    let shapeCoordinates = [];
+
 	switch(action.type) {
 		case RECEIVE_SENSORS:
 			return Object.assign({}, state, {
@@ -29,18 +37,28 @@ const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
 		        parameters: collectParameters(action.sensors),
 		        sources: collectSources(action.sensors),
                 locations: collectLocations(action.sensors),
-                available_sensors: action.sensors
+                available_sensors: action.sensors,
+                shape_coordinates: []
     	});
 
         case UPDATE_AVAILABLE_SENSORS:
             let newSensors = filterAvailableSensors(state, action.selected_filters, action.selected_search);
-            return Object.assign({}, state, {available_sensors: newSensors});
+            if (action.selected_search.locations.selected == 'Custom Location') {
+                shapeCoordinates = state.shape_coordinates;
+            } else {
+                shapeCoordinates = [];
+            }
+
+            return Object.assign({}, state, {available_sensors: newSensors, shape_coordinates: shapeCoordinates});
 
         case ADD_CUSTOM_LOCATION_FILTER:
             let customLocationSensors = filterCustomLocation(state, action.selectedPointsLocations);
+            shapeCoordinates = action.shapeCoordinates;
+
             return Object.assign({}, state, {
                 available_sensors: customLocationSensors,
-                draw_available_sensors: customLocationSensors
+                draw_available_sensors: customLocationSensors,
+                shape_coordinates: shapeCoordinates
             });
 
         default:

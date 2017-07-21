@@ -92,8 +92,8 @@ class SearchMap extends Component {
 
     }
 
-    selectShapeLocation(event:Array<string>) {
-            this.props.onSelectShapeLocation(event);
+    selectShapeLocation(event:Array<string>, drawExtent: Array<number>) {
+            this.props.onSelectShapeLocation(event, drawExtent);
     }
 
     displayOverlappingMarkers(featuresAtPixel: ol.features, theMap) {
@@ -312,8 +312,11 @@ class SearchMap extends Component {
                 // Set this for resetting the points
                 selectPointsLocations[0] = 'reset_points';
 
+                // Get the shape coordinates
+                let drawCoordinates = [];
+
                 // This is the button that will reset the points
-                that.selectShapeLocation(selectPointsLocations);
+                that.selectShapeLocation(selectPointsLocations, drawCoordinates);
 
                 let keep_draw_active = document.getElementById('draw');
                 if (keep_draw_active) {
@@ -404,7 +407,10 @@ class SearchMap extends Component {
                         }
                     }
 
-                    that.selectShapeLocation(selectPointsLocations);
+                    // Get the shape coordinates
+                    let drawCoordinates = drawExtent.getCoordinates();
+
+                    that.selectShapeLocation(selectPointsLocations, drawCoordinates);
 
                 });
 
@@ -439,6 +445,7 @@ class SearchMap extends Component {
                 let drawCircle = new ol.interaction.Draw({
                     type: 'Circle',
                     source: customLocationFilterVector,
+                    geometryFunction: ol.interaction.Draw.createRegularPolygon(40),
                 });
 
                 theMap.addInteraction(drawCircle);
@@ -491,7 +498,10 @@ class SearchMap extends Component {
                         }
                     }
 
-                    that.selectShapeLocation(selectPointsLocations);
+                    // Get the shape coordinates
+                    let drawCoordinates = drawExtent.getCoordinates();
+
+                    that.selectShapeLocation(selectPointsLocations, drawCoordinates);
 
                 });
 
@@ -578,7 +588,10 @@ class SearchMap extends Component {
                         }
                     }
 
-                    that.selectShapeLocation(selectPointsLocations);
+                    // Get the shape coordinates
+                    let drawCoordinates = drawExtent.getCoordinates();
+
+                    that.selectShapeLocation(selectPointsLocations, drawCoordinates);
 
                 });
 

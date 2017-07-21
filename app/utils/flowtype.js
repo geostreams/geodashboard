@@ -84,6 +84,7 @@ export type sensorsState= {
         parameters:MapWithLabels,
         data:Sensors,
         draw_available_sensors:Sensors,
+        shape_coordinates:Array<number>,
     };
 export type trendsSensorsState = {
     chosen_parameter: string,

@@ -262,11 +262,12 @@ export function addSearchLocation(location:? string) {
 }
 
 export const ADD_CUSTOM_LOCATION_FILTER = 'ADD_CUSTOM_LOCATION_FILTER';
-export function addCustomLocationFilter(selectedPointsLocations:Array<string>) {
+export function addCustomLocationFilter(selectedPointsLocations:Array<string>, shapeCoordinates: Array<number>) {
     return (dispatch:Dispatch) => {
         dispatch({
             type: ADD_CUSTOM_LOCATION_FILTER,
             selectedPointsLocations,
+            shapeCoordinates,
         })
 
     }

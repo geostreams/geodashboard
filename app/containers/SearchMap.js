@@ -20,8 +20,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSelectShapeLocation: (selectPointsLocations) => {
-            dispatch(addCustomLocationFilter(selectPointsLocations));
+        onSelectShapeLocation: (selectPointsLocations, shapeCoordinates) => {
+            dispatch(addCustomLocationFilter(selectPointsLocations, shapeCoordinates));
         }
     }
 };
