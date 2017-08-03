@@ -1,27 +1,38 @@
 import React, {Component} from 'react'
-import DatePicker from 'material-ui/DatePicker';
 
 class TimeFilter extends Component {
     constructor(props) {
         super(props);
     }
 
-    changeDate = (isStart, event, date) => {
+    changeDate = (isStart, event) => {
+        const date = new Date(event.target.value);
         this.props.onDateChange(event, date, isStart);
     }
 
     render() {
+        Date.prototype.toDateInputValue = (function() {
+            const local = new Date(this);
+            local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+            return local.toJSON().slice(0, 10)
+        });
+
+        const selectedStartDate = this.props.selectedStartDate.toDateInputValue();
+        const availableStartDate = this.props.availableStartDate.toDateInputValue();
+        const selectedEndDate = this.props.selectedEndDate.toDateInputValue();
+        const availableEndDate = this.props.availableEndDate.toDateInputValue();
+
         return (
             <div>
                 <h5> Start Date</h5>
-                <DatePicker id="startDate" data-filterId={this.props.filterId} hintText="Start Date" container="inline"
-                            minDate={this.props.availableStartDate} maxDate={this.props.selectedEndDate}
-                            defaultDate={this.props.selectedStartDate} onChange={this.changeDate.bind(this, true)}/>
+                <input type="date" id="startDate" data-filterId={this.props.filterId}
+                       min={availableStartDate} max={selectedEndDate}
+                       value={selectedStartDate} onChange={this.changeDate.bind(this, true)}/>
 
                 <h5> End Date</h5>
-                <DatePicker id="endDate" data-filterId={this.props.filterId} hintText="End Date" container="inline"
-                            minDate={this.props.selectedStartDate} maxDate={this.props.availableEndDate}
-                            defaultDate={this.props.selectedEndDate} onChange={this.changeDate.bind(this, false)}/>
+                <input type="date"  id="endDate" data-filterId={this.props.filterId}
+                       min={selectedStartDate} max={availableEndDate}
+                       value={selectedEndDate} onChange={this.changeDate.bind(this, false)}/>
 
             </div>
 

@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-274](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-274)
 - Changing from Material-UI to [React Material Web Components](https://github.com/kradio3/react-mdc-web)
   [GEOD-852](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-852)
+  [GEOD-950](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-950)
 - Add geolocation/polygons for each lake in the configuration
   Use them for creating the download links.
   Draw a polygon on the map to show the location you select.

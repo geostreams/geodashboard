@@ -8,11 +8,8 @@ import Analysis from '../containers/Analysis';
 import Detail from '../pages/Detail';
 import TrendsDetail from '../pages/TrendsDetail';
 import About from '../pages/About';
-import RouteMismatch from '../pages/RouteMismatch';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RouteMismatch from '../pages/RouteMismatch'
 import 'material-components-web/dist/material-components-web.min.css';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
 
 class App extends Component {
 
@@ -25,19 +22,18 @@ class App extends Component {
 
     render() {
         return (
-            <MuiThemeProvider>
-                <Router history={hashHistory}>
-                    <Route path="/" component={Home}/>
-                    <Route path="/explore" component={Explore}/>
-                    <Route path="/detail/location/:name" component={Detail}/>
-                    <Route path="/search" component={Search}/>
-                    <Route path="/trends" component={Trends}/>
-                    <Route path="/trendsdetail/region/:region" component={TrendsDetail}/>
-                    <Route path="/analysis" component={Analysis}/>
-                    <Route path="/about" component={About}/>
-                    <Route path="*" component={RouteMismatch}/>
-                </Router>
-            </MuiThemeProvider>
+
+            <Router history={hashHistory}>
+                <Route path="/" component={Home}/>
+                <Route path="/explore" component={Explore}/>
+                <Route path="/detail/location/:name" component={Detail}/>
+                <Route path="/search" component={Search}/>
+                <Route path="/trends" component={Trends}/>
+                <Route path="/trendsdetail/region/:region" component={TrendsDetail}/>
+                <Route path="/analysis" component={Analysis}/>
+                <Route path="/about" component={About}/>
+                <Route path="*" component={RouteMismatch}/>
+            </Router>
         )
     }
 }

@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import Chart from '../containers/Chart'
 import MiniMap from '../components/MiniMap'
-import Checkbox from 'material-ui/Checkbox';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import styles from "../styles/detail.css"
 import {getParameterName} from '../utils/getConfig'
+import { Checkbox, FormField, label} from 'react-mdc-web';
 
 class DataGraph extends Component {
     constructor(props) {
@@ -20,9 +20,9 @@ class DataGraph extends Component {
     }
 
     handleSelectParam = () => {
-        var paralistselect = [];
-        var checkboxes = document.querySelectorAll('input[name=param]:checked');
-        for (var i = 0; i < checkboxes.length; i++) {
+        const paralistselect = [];
+        const checkboxes = document.querySelectorAll('input[name=param]:checked');
+        for (let i = 0; i < checkboxes.length; i++) {
             paralistselect.push(checkboxes[i].value);
         }
 
@@ -31,7 +31,7 @@ class DataGraph extends Component {
 
     render() {
         let sensor = this.props.property.find(x => x.name == this.props.sensorName);
-        var center = [0,1];
+        let center = [0,1];
         if(sensor && sensor.geometry && sensor.geometry.coordinates){
             center =  sensor.geometry.coordinates.slice(0,2);
         }
@@ -40,10 +40,21 @@ class DataGraph extends Component {
         let charts = [];
 
         if (sensor) {
+            // If there are not selected parameters, we mark all as selected. This was added to mark them all selected
+            // on page load, since all the graphs are displayed initially.
+            if(this.state.paralistselect.length < 1) {
+                this.setState({paralistselect: sensor.parameters })
+            }
+
             sensor.parameters.map(p => {
                 if (getParameterName(p) != null) {
-                    paralist.push(<Checkbox name="param" key={p} label={getParameterName(p)} value={p}
-                                                    defaultChecked={true} onCheck={this.handleSelectParam}/>)
+                    paralist.push(
+                        <FormField id={p} >
+                            <Checkbox onChange={this.handleSelectParam} value={p} key={p} name="param"
+                            checked={this.state.paralistselect.includes(p)}/>
+                            <label>{getParameterName(p)}</label>
+                        </FormField>
+                )
 
                     if (this.state.paralistselect.length == 0 || this.state.paralistselect.indexOf(p) > -1) {
                         charts.push(<Row key={p}>
