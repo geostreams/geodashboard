@@ -10,7 +10,7 @@ class About extends Component {
                 <MenuPage selected='about'/>
                 <div className={styles.contentcenter}>
                     <p>This is a prototype of Geodashboard 3.0 using React,
-                        Redux, and Material-UI.
+                        Redux, and react-mdc-web.
                     </p>
                     <br/>
                     <p>For the current version, please see
