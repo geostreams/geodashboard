@@ -114,6 +114,65 @@ export type MapState = {
     maxZoom: number
 };
 
+export type TrendsMapState = {
+    center: Array <number>,
+    vectorSource: Object,
+    clusterSource: Object,
+    areaPolygonSource: Object,
+    map: Object,
+    currentZoom: number,
+    maxZoom: number
+};
+
+export type RegionGeometry = {
+    type: string;
+    coordinates: []
+};
+
+export type TrendsRegionSetup = {
+    id: number;
+    created: string;
+    geometry: RegionGeometry;
+    max_end_time: string;
+    min_end_time: string;
+    min_start_time: string;
+    name: string;
+    parameters: [];
+    properties: Properties;
+    type: string;
+    trend_end_time: string;
+    trend_start_time: string;
+    trends: [];
+};
+
+export type TrendsRegions = TrendsRegionSetup[];
+
+export type TrendsParameter = string;
+export type TrendsSeason = string;
+export type TrendsRegion = string;
+export type TrendsThreshold = number;
+export type TrendsThresholdChoice = boolean;
+export type TrendsPageSensorsState = Sensors;
+export type TrendsPageRegionsState = TrendsRegions;
+export type TrendsViewType = string;
+export type TrendsBaselineTotalYear = number;
+export type TrendsRollingInterval = number;
+
+export type ChosenTrendsState = {
+    region: TrendsRegion,
+    all_regions: Array<string>,
+    parameter: TrendsParameter,
+    season: TrendsSeason,
+    threshold_choice: TrendsThresholdChoice,
+    threshold: TrendsThreshold,
+    sensors: Sensors,
+    trends_sensors: TrendsPageSensorsState,
+    trends_regions: TrendsPageRegionsState,
+    baseline_totalyear: TrendsBaselineTotalYear,
+    rolling_interval: TrendsRollingInterval,
+    view_type: TrendsViewType,
+};
+
 
 // export type Action = BackendAction | SearchFilterAction | SensorAction | SelectedSearchAction;
 export type Dispatch = (action:any) => null;
@@ -130,4 +189,3 @@ export type InputEvent = ElementEventTemplate<HTMLInputElement>;
 
 
 //type Dispatch = (action: Action | Promise<Action>) => Promise;
-

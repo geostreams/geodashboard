@@ -20,7 +20,7 @@ type MapProps = {
 type MapState = {
     center: Array <number>,
     vectorSource: ol.source.Vector,
-    clusterSource: ol.souce.Cluster,
+    clusterSource: ol.source.Cluster,
     multiLineLayer: ol.layer.Vector,
     multiLineString: ol.geom.MultiLineString,
     expandedClusterLayer: ol.layer.Vector,

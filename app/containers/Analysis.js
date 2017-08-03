@@ -13,11 +13,13 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onClickAnalysis:(chosenParameter, baselinePeriod, rollingPeriod, thresholdChooseValue) => {
+            let type = 'ADD_TRENDS';
+            let season = 'all';
             //TODO: check if all arguments are set. otherwise alert
             dispatch(fetchTrendsArgs(
                 chosenParameter, baselinePeriod, rollingPeriod, thresholdChooseValue
             ));
-             dispatch(fetchTrends(chosenParameter, baselinePeriod, rollingPeriod));
+             dispatch(fetchTrends(chosenParameter, baselinePeriod, rollingPeriod, type, season));
         }
     }
 };

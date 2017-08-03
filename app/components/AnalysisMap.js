@@ -5,21 +5,24 @@
 import React, {Component} from 'react';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
-import styles from '../styles/map.css'
-import {Icon} from 'react-mdc-web'
-import {getSourceName, getParameterName, getCustomLocation, getTrendColor, getColor} from '../utils/getConfig'
-import {popupHelper, sensorsToFeatures, sensorsToFeaturesTrend, getAttribution} from '../utils/mapUtils'
-import {drawHelper, centerHelper} from '../utils/mapAction'
-import type {Sensors, MapProps, MapState} from '../utils/flowtype'
+import styles from '../styles/map.css';
+import {Icon} from 'react-mdc-web';
+import {getSourceName, getParameterName, getCustomLocation, getTrendColor, getColor} from '../utils/getConfig';
+import {popupHelper, sensorsToFeatures, sensorsToFeaturesTrend, getAttribution} from '../utils/mapUtils';
+import {drawHelper, centerHelper} from '../utils/mapAction';
+import type {Sensors, MapProps, TrendsMapState} from '../utils/flowtype';
+
 
 class AnalysisMap extends Component {
-    state: MapState;
+    state: TrendsMapState;
 
     constructor(props: MapProps) {
         super(props);
         this.state = {
             center: [-84.44799549, 38.9203417],
             vectorSource: new ol.source.Vector,
+            clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector}),
+            areaPolygonSource: new ol.source.Vector,
             currentZoom: 5.5,
             maxZoom: 12,
             // create a fake map to avoid checking map.isdefined every time for flow.
@@ -40,46 +43,49 @@ class AnalysisMap extends Component {
 
     render() {
 
-        return (<div>
-            <div id='map' className={styles.root}>
-                <div id="trends_legend" className={styles.trends_legend}></div>
-            </div>
-            <div id="search" style={{position: 'absolute', bottom: '10px', left: '25em', padding: '5px'}}>
-                <button id="centerButton"><Icon name="gps_fixed"/></button>
-            </div>
-            <div style={{display: "none"}}>
-                <div id="marker" title="Marker" className="marker"></div>
-                <div id="popup" className={styles.olPopup}>
-                    <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
-                    <div id="popup-content"></div>
+        return (
+            <div>
+                <div id='map' className={styles.root}>
+                    <div id="trends_legend" className={styles.trends_legend}></div>
                 </div>
+                <div id="search" style={{position: 'absolute', bottom: '10px', left: '25em', padding: '5px'}}>
+                    <button id="centerButton"><Icon name="gps_fixed"/></button>
+                </div>
+                <div style={{display: "none"}}>
 
-                <div id="ol-drawcirclecontrol"
-                     className={styles.olDrawCircleButton + ' ' +
-                    styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                <button id="drawCircleButton" title="Click to Draw a Circle">
-                    <Icon name="panorama_fish_eye"/></button>
+                    <div id="marker" title="Marker" className="marker"></div>
+                    <div id="popup" className={styles.olPopup}>
+                        <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
+                        <div id="popup-content"></div>
+                    </div>
 
-                <div id="ol-drawsquarecontrol"
-                     className={styles.olDrawSquareButton + ' ' +
-                    styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                <button id="drawSquareButton" title="Click to Draw a Square">
-                    <Icon name="crop_square"/></button>
+                    <div id="ol-drawcirclecontrol"
+                         className={styles.olDrawCircleButton + ' ' +
+                        styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                    <button id="drawCircleButton" title="Click to Draw a Circle">
+                        <Icon name="panorama_fish_eye"/></button>
 
-                <div id="ol-drawcustomcontrol"
-                     className={styles.olDrawCustomButton + ' ' +
-                    styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                <button id="drawCustomButton" title="Click to Draw a Custom Shape">
-                    <Icon name="star_border"/></button>
+                    <div id="ol-drawsquarecontrol"
+                         className={styles.olDrawSquareButton + ' ' +
+                        styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                    <button id="drawSquareButton" title="Click to Draw a Square">
+                        <Icon name="crop_square"/></button>
 
-                <div id="ol-drawclearcontrol"
-                     className={styles.olDrawClearButton + ' ' +
-                     styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                <button id="drawClearButton" title="Click to Reset Drawing Selection">
-                    <Icon name="clear"/></button>
+                    <div id="ol-drawcustomcontrol"
+                         className={styles.olDrawCustomButton + ' ' +
+                        styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                    <button id="drawCustomButton" title="Click to Draw a Custom Shape">
+                        <Icon name="star_border"/></button>
 
+                    <div id="ol-drawclearcontrol"
+                         className={styles.olDrawClearButton + ' ' +
+                         styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                    <button id="drawClearButton" title="Click to Reset Drawing Selection">
+                        <Icon name="clear"/></button>
+
+                </div>
             </div>
-        </div>);
+        );
 
     }
 
@@ -573,6 +579,7 @@ class AnalysisMap extends Component {
 
         };
 
+        if( this.props.display_draw == 'True' ) {
             ol.inherits(appDrawClear.drawClearControl, ol.control.Control);
             ol.inherits(appDrawSquare.drawSquareControl, ol.control.Control);
             ol.inherits(appDrawCircle.drawCircleControl, ol.control.Control);
@@ -594,6 +601,19 @@ class AnalysisMap extends Component {
                     new appDrawClear.drawClearControl(),
                 ])
             });
+        } else {
+            theMap = new ol.Map({
+                target: 'map',
+                layers: layers,
+                view: view,
+                overlays: [overlay],
+                controls: ol.control.defaults({
+                    attributionOptions: ({
+                        collapsible: false
+                    })
+                })
+            });
+        }
 
         let selectItems = new ol.interaction.Select();
         theMap.addInteraction(selectItems);
@@ -602,9 +622,6 @@ class AnalysisMap extends Component {
             if (closer) {
                 overlay.setPosition(undefined);
                 closer.blur();
-            }
-            if(that.state.expandedCluster) {
-                that.removeSpiderfiedClusterLayers(theMap);
             }
         });
 
@@ -619,36 +636,35 @@ class AnalysisMap extends Component {
 
         });
 
+        const trends_legend_var = document.getElementById('trends_legend');
 
+        const noTrendArrow = '<p class=' + styles.noValueLegend + ' style="background: ' +
+            getTrendColor("noTrend") + '; border-color: ' +
+            getTrendColor("noTrend") + '; margin-left: 1em;"></p>';
 
-            const trends_legend_var = document.getElementById('trends_legend');
+        const trendUpArrow = '<p class=' + styles.upArrowLegend + ' style="border-color: ' +
+            getTrendColor("trendUp") + '; margin-left: 1em; "></p>';
 
-            const noTrendArrow = '<p class=' + styles.noValueLegend + ' style="background: ' +
-                getTrendColor("noTrend") + '; border-color: ' +
-                getTrendColor("noTrend") + '; margin-left: 1em;"></p>';
+        const trendDownArrow = '<p class=' + styles.downArrowLegend + ' style="border-color: ' +
+            getTrendColor("trendDown") + '; margin-left: 1em;"></p>';
 
-            const trendUpArrow = '<p class=' + styles.upArrowLegend + ' style="border-color: ' +
-                getTrendColor("trendUp") + '; margin-left: 1em; "></p>';
+        const overThresholdUpArrow = '<p class=' + styles.upArrowLegend + ' style="border-color: ' +
+            getTrendColor("overThresholdUp") + ';"></p>';
 
-            const trendDownArrow = '<p class=' + styles.downArrowLegend + ' style="border-color: ' +
-                getTrendColor("trendDown") + '; margin-left: 1em;"></p>';
+        const overThresholdDownArrow = '<p class=' + styles.downArrowLegend + ' style="border-color: ' +
+            getTrendColor("overThresholdDown") + ';"></p>';
 
-            const overThresholdUpArrow = '<p class=' + styles.upArrowLegend + ' style="border-color: ' +
-                getTrendColor("overThresholdUp") + ';"></p>';
+        if (trends_legend_var) {
+            trends_legend_var.innerHTML =
+                (
+                    '<div class=' + styles.trends_legend_text + '>' +
+                    trendUpArrow + ' - Trending Up <br/>' +
+                    trendDownArrow + ' - Trending Down <br/>' +
+                    noTrendArrow + ' - No Data Available <br/>' +
+                    overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/> </div>'
+                );
+        }
 
-            const overThresholdDownArrow = '<p class=' + styles.downArrowLegend + ' style="border-color: ' +
-                getTrendColor("overThresholdDown") + ';"></p>';
-
-            if (trends_legend_var) {
-                trends_legend_var.innerHTML =
-                    (
-                        '<div class=' + styles.trends_legend_text + '>' +
-                        trendUpArrow + ' - Trending Up <br/>' +
-                        trendDownArrow + ' - Trending Down <br/>' +
-                        noTrendArrow + ' - No Data Available <br/>' +
-                        overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/> </div>'
-                    );
-            }
         centerHelper(view, vectorSource, theMap);
 
         this.setState({map: theMap});
