@@ -36,6 +36,7 @@ function receiveSensors(api:string, json:Sensors) {
             receivedAt: Date.now()
         });
         dispatch(updateAvailableFilters());
+        dispatch(trendsSensors());
     }
 }
 
@@ -86,21 +87,23 @@ export function addSearchParameter(parameter:Array<string>) {
 }
 
 export const ADD_TRENDS = 'ADD_TRENDS';
-export function fetchTrends(parameter:string, totalyear:number, interval:number) {
+export const ADD_CHOOSE_TRENDS = 'ADD_CHOOSE_TRENDS';
+export function fetchTrends(parameter:string, totalyear:number, interval:number, type:string, season_input:string) {
     return (dispatch:Dispatch, getState:GetState) => {
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
         // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
-        // Each sensor wil have a dispatch with type = ADD_TRENDS.
+        // Each sensor wil have a dispatch with type = ADD_TRENDS or ADD_CHOOSE_TRENDS.
         const state = getState();
         const api = state.backends.selected;
-        //TODO: add season for GLM
-        const season = undefined;
-        //TODO: change to year/semi for GLM, may need a config
-        const trendsendpoint = api + '/api/geostreams/datapoints/trends?binning=year&semi=all';
+
+        const season = season_input;
+        const trendsendpoint = api + '/api/geostreams/datapoints/trends?binning=year';
 
         let sensorsToFilter;
-        if ((state.sensorTrends.available_sensors).length > 0 ) {
+        if ((state.sensorTrends.available_sensors).length > 0  && type == 'ADD_TRENDS') {
             sensorsToFilter = state.sensorTrends.available_sensors;
+        } else if ((state.chosenTrends.trends_sensors).length > 0  && type == 'ADD_CHOOSE_TRENDS') {
+            sensorsToFilter = state.chosenTrends.trends_sensors;
         } else {
             sensorsToFilter = state.sensors.data;
         }
@@ -113,7 +116,7 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number)
                 let timeframeDays = Math.floor((end_time - start_time) / (1000*60*60*24));
                 if (isNaN(end_time.getTime()) || timeframeDays <= (totalyear * 365)) {
                     dispatch({
-                        type: ADD_TRENDS,
+                        type: type,
                         sensor: Object.assign(sensor, {
                             "trends": "not enough data",
                             "trend_start_time": start_time,
@@ -133,16 +136,23 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number)
                         start.setFullYear(end_year - totalyear);
                     }
 
-                    let trendsendpointargs = trendsendpoint +
-                        "&window_start=" + window_start.toISOString() +
-                        "&window_end=" + end_time.toISOString() +
-                        "&since=" + start.toISOString() +
-                        "&until=" + end_time.toISOString() +
-                        "&sensor_id=" + sensor.id +
-                        "&attributes=" + parameter;
+                    let trendsendpointargs;
+                    if (type == 'ADD_TRENDS') {
+                        trendsendpointargs = trendsendpoint +
+                            "&window_start=" + window_start.toISOString() +
+                            "&window_end=" + end_time.toISOString() +
+                            "&since=" + start.toISOString() +
+                            "&until=" + end_time.toISOString() +
+                            "&sensor_id=" + sensor.id +
+                            "&attributes=" + parameter;
+                    } else {
+                        trendsendpointargs = trendsendpoint +
+                            "&sensor_id=" + sensor.id +
+                            "&attributes=" + parameter;
+                    }
+
                     if (season)
                         trendsendpointargs = trendsendpointargs + "&semi=" + season;
-                    console.log(trendsendpointargs);
                     result = fetch(trendsendpointargs);
                     result
                         .then(response => {
@@ -157,7 +167,7 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number)
                                 // trends api return do result, not sure why.
                                 if (json.length < 1) {
                                     dispatch({
-                                        type: ADD_TRENDS,
+                                        type: type,
                                         sensor: Object.assign(sensor, {
                                             "trends": "trends return no data",
                                             "trend_start_time": start_time,
@@ -171,16 +181,20 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number)
 
                                     if (timeframeTrendsDays >= (totalyear * 365)-180) {
                                         dispatch({
-                                            type: ADD_TRENDS,
+                                            type: type,
                                             sensor: Object.assign(sensor, {
                                                 "trends": json[0].properties,
                                                 "trend_start_time": start_time,
                                                 "trend_end_time": end_time,
                                             })
                                         });
+                                        if (type == 'ADD_CHOOSE_TRENDS') {
+                                            // Create the Region Points from the individual Sensors
+                                            dispatch(updateTrendsRegionsPoints());
+                                        }
                                     } else {
                                         dispatch({
-                                            type: ADD_TRENDS,
+                                            type: type,
                                             sensor: Object.assign(sensor, {
                                                 "trends": "trends return no data",
                                                 "trend_start_time": start_time,
@@ -438,4 +452,108 @@ export function fetchTrendsArgs(chosenParameter:string, baselinePeriod:number, r
             thresholdChooseValue,
         })
     }
+}
+
+export const SELECT_TRENDS_PARAMETER = 'SELECT_TRENDS_PARAMETER';
+export function selectTrendsParameter(parameter:string, threshold_choice:boolean) {
+    return (dispatch:Dispatch, getState:GetState) => {
+
+        const state = getState();
+        let totalyear = state.chosenTrends.baseline_totalyear;
+        let interval = state.chosenTrends.rolling_interval;
+        let season = state.chosenTrends.season;
+        let type = 'ADD_CHOOSE_TRENDS';
+
+        dispatch({
+            type: SELECT_TRENDS_PARAMETER,
+            parameter,
+            threshold_choice
+        });
+        dispatch(fetchTrends(parameter, totalyear, interval, type, season));
+        dispatch(updateTrendsSensors());
+    };
+}
+
+export const SELECT_TRENDS_SEASON = 'SELECT_TRENDS_SEASON';
+export function selectTrendsSeason(season:string) {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: SELECT_TRENDS_SEASON,
+            season,
+        });
+        dispatch(updateTrendsSensors());
+    };
+}
+
+export const SELECT_TRENDS_REGION = 'SELECT_TRENDS_REGION';
+export function selectTrendsRegion(region:string) {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: SELECT_TRENDS_REGION,
+            region
+        });
+        dispatch(updateTrendsSensors());
+    };
+}
+
+export const TRENDS_SENSORS = 'TRENDS_SENSORS';
+export function trendsSensors() {
+    return (dispatch:Dispatch, getState:GetState) => {
+
+        const state = getState();
+        let sensors = state.sensors.data;
+
+        dispatch({
+            type: TRENDS_SENSORS,
+            sensors
+        });
+    }
+}
+
+export const SET_TRENDS_TIMEFRAMES = 'SET_TRENDS_TIMEFRAMES';
+export function setTrendsTimeframes() {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: SET_TRENDS_TIMEFRAMES
+        });
+    }
+}
+
+export const UPDATE_TRENDS_SENSORS = 'UPDATE_TRENDS_SENSORS';
+export function updateTrendsSensors() {
+    return (dispatch:Dispatch) => {
+        dispatch(setTrendsTimeframes());
+        dispatch({
+            type: UPDATE_TRENDS_SENSORS
+        })
+    }
+}
+
+export const SELECT_TRENDS_THRESHOLD = 'SELECT_TRENDS_THRESHOLD';
+export function selectTrendsThreshold(threshold:number) {
+    return {
+        type: SELECT_TRENDS_THRESHOLD,
+        threshold
+    };
+}
+
+export const SELECT_TRENDS_VIEW_TYPE = 'SELECT_TRENDS_VIEW_TYPE';
+export function selectTrendsViewType(view_type:string) {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: SELECT_TRENDS_VIEW_TYPE,
+            view_type
+        });
+        let region = 'all';
+        dispatch(selectTrendsRegion(region));
+    };
+}
+
+export const UPDATE_TRENDS_REGIONS_POINTS = 'UPDATE_TRENDS_REGIONS_POINTS';
+export function updateTrendsRegionsPoints() {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: UPDATE_TRENDS_REGIONS_POINTS
+        });
+    };
 }

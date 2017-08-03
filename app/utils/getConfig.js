@@ -1,7 +1,7 @@
 /*
  * @flow
  */
-import type { PropertiesType } from './flowtype'
+import type { PropertiesType } from './flowtype';
 
 export function getSourceName(source:PropertiesType):string {
     const sourcename = window.configruntime.sourcename;
@@ -45,6 +45,51 @@ export function getTrendSettings() {
     return window.configruntime.trend_settings;
 }
 
+export function getTrendsPageViewTypes() {
+    return window.configruntime.trends_page_view_types;
+}
+
+export function getTrendsPageSettings() {
+    return window.configruntime.trends_page_settings;
+}
+
+export function getTrendsRegionsSettings() {
+    return window.configruntime.trends_page_regions;
+}
+
+export function getTrendsPageSeasons() {
+    return window.configruntime.trends_page_seasons;
+}
+
+export function getTrendsPageTimeframes() {
+    return window.configruntime.trends_page_timeframes;
+}
+
+export function getCustomTrendsRegion(region:string):string {
+
+    let custom_trends_region = '';
+    let custom_trends_region_map;
+    let trendsPageRegions = getTrendsRegionsSettings();
+
+    if (trendsPageRegions) {
+        custom_trends_region_map = trendsPageRegions.map(r => {
+            if (r.properties.region == region) {
+                custom_trends_region = r.properties.title;
+                return custom_trends_region;
+            }
+        })
+    }
+
+    return custom_trends_region;
+}
+
+export function getTrendsDefaultValues() {
+    return window.configruntime.trends_page_defaults;
+}
+
+export function getTrendsThresholdsSettings() {
+    return window.configruntime.trends_page_thresholds;
+}
 
 export function getColor(source: string): string {
     let sourcecolor = window.configruntime.sourcecolor;

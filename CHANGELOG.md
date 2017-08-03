@@ -41,10 +41,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   Fix popup on Explore page
   [GEOD-910](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-910)
   [GEOD-909](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-909)
-
-
-
-
+- Add a new Trends Page and Region Pages
+  [GEOD-944](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-944)
+  [GEOD-954](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-954)
 
 ### Fixed
 - Bug in filtering for custom locations

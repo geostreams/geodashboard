@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
-import {Link} from 'react-router'
+import React, {Component} from 'react';
+import {Link} from 'react-router';
 import styles from '../styles/menuPage.css';
 import {Button, Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle} from 'react-mdc-web';
+
 
 class MenuPage extends Component {
 
@@ -17,6 +18,7 @@ class MenuPage extends Component {
                             <Button><Link onlyActiveOnIndex to="/">HOME</Link></Button>
                             <Button><Link onlyActiveOnIndex to="/explore">EXPLORE</Link></Button>
                             <Button><Link onlyActiveOnIndex to="/search">SEARCH</Link></Button>
+                            <Button><Link onlyActiveOnIndex to="/trends">TRENDS</Link></Button>
                             <Button><Link onlyActiveOnIndex to="/analysis">EXPLORATORY ANALYSIS</Link></Button>
                             <Button><Link onlyActiveOnIndex to="/about">ABOUT</Link></Button>
                         </ToolbarTitle>
