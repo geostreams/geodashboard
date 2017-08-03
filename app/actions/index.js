@@ -100,13 +100,20 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number,
         const trendsendpoint = api + '/api/geostreams/datapoints/trends?binning=year';
 
         let sensorsToFilter;
-        if ((state.sensorTrends.available_sensors).length > 0  && type == 'ADD_TRENDS') {
+        if (state.sensorTrends.available_sensors.length > 0  && type == 'ADD_TRENDS') {
             sensorsToFilter = state.sensorTrends.available_sensors;
-        } else if ((state.chosenTrends.trends_sensors).length > 0  && type == 'ADD_CHOOSE_TRENDS') {
+        } else if (state.chosenTrends.trends_sensors.length > 0  && type == 'ADD_CHOOSE_TRENDS') {
             sensorsToFilter = state.chosenTrends.trends_sensors;
         } else {
             sensorsToFilter = state.sensors.data;
         }
+
+        let number_to_filter = (sensorsToFilter.length);
+
+        dispatch({
+            type: ADD_TRENDS_COUNT,
+            number_to_filter,
+        });
 
         sensorsToFilter.filter(s => s.parameters.indexOf(parameter) >= 0)
             .map(sensor => {
@@ -153,6 +160,7 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number,
 
                     if (season)
                         trendsendpointargs = trendsendpointargs + "&semi=" + season;
+
                     result = fetch(trendsendpointargs);
                     result
                         .then(response => {
@@ -442,7 +450,9 @@ export function fetchSensor(name:string) {
 }
 
 export const ADD_TRENDS_ARGS = 'ADD_TRENDS_ARGS';
-export function fetchTrendsArgs(chosenParameter:string, baselinePeriod:number, rollingPeriod:number, thresholdChooseValue:number){
+export function fetchTrendsArgs(chosenParameter:string, baselinePeriod:number,
+                                rollingPeriod:number, thresholdChooseValue:number,
+                                chosenRegion:string){
     return (dispatch:Dispatch) => {
         dispatch({
             type: ADD_TRENDS_ARGS,
@@ -450,6 +460,33 @@ export function fetchTrendsArgs(chosenParameter:string, baselinePeriod:number, r
             baselinePeriod,
             rollingPeriod,
             thresholdChooseValue,
+            chosenRegion,
+        })
+    }
+}
+
+export const ADD_TRENDS_COUNT = 'ADD_TRENDS_COUNT';
+export function addTrendsCount(number_to_filter:number){
+    return (dispatch:Dispatch) => {
+
+        dispatch({
+            type: ADD_TRENDS_COUNT,
+            number_to_filter,
+        })
+    }
+}
+
+export const FETCH_TRENDS_REGION = 'FETCH_TRENDS_REGION';
+export function fetchTrendsRegion(chosenRegion:string){
+    return (dispatch:Dispatch, getState:GetState) => {
+
+        const state = getState();
+        let origSensors = state.sensors.data;
+
+        dispatch({
+            type: FETCH_TRENDS_REGION,
+            chosenRegion,
+            origSensors,
         })
     }
 }
@@ -499,7 +536,6 @@ export function selectTrendsRegion(region:string) {
 export const TRENDS_SENSORS = 'TRENDS_SENSORS';
 export function trendsSensors() {
     return (dispatch:Dispatch, getState:GetState) => {
-
         const state = getState();
         let sensors = state.sensors.data;
 

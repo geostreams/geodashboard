@@ -5,11 +5,14 @@
 import React, {Component} from 'react';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
-import styles from '../styles/map.css'
-import {Icon} from 'react-mdc-web'
-import {getSourceName, getParameterName, getCustomLocation, getTrendColor, getColor} from '../utils/getConfig'
-import {popupHelper} from '../utils/mapUtils'
-import type {Sensors} from '../utils/flowtype'
+import styles from '../styles/map.css';
+import {Icon} from 'react-mdc-web';
+import {
+    getSourceName, getParameterName, getCustomTrendRegion,
+    getCustomLocation, getTrendColor, getColor
+} from '../utils/getConfig';
+import {popupHelper} from '../utils/mapUtils';
+import type {Sensors} from '../utils/flowtype';
 
 
 type MapProps = {
@@ -28,7 +31,8 @@ type MapState = {
     expandedCluster: boolean,
     map: ol.Map,
     currentZoom: number,
-    maxZoom: number
+    maxZoom: number,
+    customLocationFilterVector: ol.source.Vector,
 };
 
 class Map extends Component {
@@ -47,6 +51,7 @@ class Map extends Component {
             expandedCluster: false,
             currentZoom: 5.5,
             maxZoom: 12,
+            customLocationFilterVector: ol.source.Vector,
             // create a fake map to avoid checking map.isdefined every time for flow.
             map: new ol.Map({
                 view: new ol.View({
@@ -232,7 +237,9 @@ class Map extends Component {
                     "location": sensor.properties.region,
                     "name": sensor.name,
                     //parameters has null in the array
-                    "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
+                    "parameters": sensor.parameters.filter(x =>
+                        x !== null && getParameterName(x) != null).map(x => getParameterName(x)
+                    ),
                     "color": getColor(sensor.properties.type.id),
                     "trend_color": getTrendColor(trend_type),
                     "trend_type": trend_type,
@@ -251,10 +258,11 @@ class Map extends Component {
                     "longitude": sensor.geometry.coordinates[0],
                     "location": sensor.properties.region,
                     //parameters has null in the array
-                    "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
+                    "parameters": sensor.parameters.filter(x =>
+                        x !== null && getParameterName(x) != null).map(x => getParameterName(x)
+                    ),
                     "color": getColor(sensor.properties.type.id),
                     "type": "single"
-
                 };
 
             }
@@ -267,6 +275,7 @@ class Map extends Component {
     }
 
     generatePointsCircle(count: number, centerPixel) {
+
         // Generate points within a circle where the markers will be displayed.
         const separation = 20;
         const twoPi = Math.PI * 2;
@@ -315,6 +324,7 @@ class Map extends Component {
             ],
             updateWhileAnimating: true
         });
+
         multiLineLayer.setZIndex(2);
 
         // Create new features to place in the ends of the line with the right styling
@@ -461,7 +471,7 @@ class Map extends Component {
 
         function clickedDrawRadio() {
 
-            if (!that.props.drawn_sensors.length > 0) {
+            if (that.props.drawn_sensors.length == 0 && !that.props.display_trends) {
                 if (reset_drawn_shape) {
                     reset_drawn_shape.click();
                 }
@@ -500,35 +510,122 @@ class Map extends Component {
         }
 
         function clickedDrawRadioTrends() {
-            clickedDrawRadio();
+            if (that.props.sensors.length == that.props.trendSensors.length) {
+                if (reset_drawn_shape) {
+                    reset_drawn_shape.click();
+                }
+                resetDrawPoints();
+            }
+
+            if (draw_buttons_group){
+                for (let i = 0; i < draw_buttons_group.length; i++) {
+                    draw_buttons_group[i].style.visibility = "visible";
+                }
+            }
+        }
+
+        function clickedCustomRadioTrends() {
+            resetDrawPoints();
+
+            if (draw_buttons_group){
+                for (let i = 0; i < draw_buttons_group.length; i++) {
+                    draw_buttons_group[i].style.visibility = "hidden";
+                }
+            }
+
+            copyOfMap.getInteractions().forEach(function (e) {
+                if(e instanceof ol.interaction.Draw) {
+                    copyOfMap.removeInteraction(e);
+                }
+            });
+
+            let region_choice = that.props.chosen_region;
+
+            let trendRegions = getCustomTrendRegion(region_choice);
+
+            let feature = new ol.Feature();
+            if (trendRegions && trendRegions.region.geometry) {
+                feature = new ol.Feature(
+                    {geometry: new ol.geom.Polygon(trendRegions.region.geometry.coordinates)}
+                );
+            }
+
+            that.state.customLocationFilterVector.clear();
+            that.state.customLocationFilterVector.addFeatures([feature]);
+
+            // Get the shape geometry
+            let drawExtent = feature.getGeometry();
+            let selectPoints = [];
+
+            // Get all the features in the layer
+            let featuresInLayer = features;
+
+            // Check each feature
+            let loopFeatureExtent;
+            for (let i = 0; i < featuresInLayer.length; i++) {
+                loopFeatureExtent = featuresInLayer[i].getGeometry().getExtent();
+                if (drawExtent.intersectsExtent(loopFeatureExtent)) {
+                    selectPoints.push(featuresInLayer[i]);
+                }
+            }
+
+            let selectPointsLocationsNames = [];
+
+            if (selectPoints.length > 0) {
+                for (let i = 0; i < selectPoints.length; i++) {
+                    let featureName = selectPoints[i].attributes.name;
+                    if(!selectPointsLocationsNames.includes(featureName.toString())) {
+                        selectPointsLocationsNames.push(featureName)
+                    }
+                }
+            }
+
+            let original_sensors = that.props.sensors;
+            let filteredSensors = [];
+
+            original_sensors.map((sensor) => {
+                if (selectPointsLocationsNames.includes(sensor.name)) {
+                    filteredSensors.push(sensor);
+                }
+            });
+
+            // Update the sensors
+            if (Array.isArray(filteredSensors) && filteredSensors.length > 0) {
+                features = that.updateLayers(filteredSensors);
+            }
+
         }
 
         if (this.props.display_trends){
 
-            if (draw_radio && all_regions_radio) {
-                if (all_regions_radio.checked == false && draw_radio.checked == false) {
-                    clickedNotDrawRadioTrends();
-                }
+            // Default is 'all'
+            let region_choice = this.props.chosen_region;
 
-                if (all_regions_radio.checked == true) {
-                    clickedNotDrawRadioTrends();
-                }
-
-                if (draw_radio.checked == true) {
-                    clickedDrawRadioTrends();
-                }
+             // All regions chosen
+            if (region_choice == 'all') {
+                clickedNotDrawRadioTrends();
             }
 
+            // Custom draw region chosen
+            if (region_choice == 'draw') {
+                clickedDrawRadioTrends();
+            }
+
+            // Update the sensors
             if (Array.isArray(this.props.trendSensors) && this.props.trendSensors.length > 0) {
                 features = this.updateLayers(this.props.trendSensors);
             } else {
                 features = this.updateLayers(this.props.sensors);
             }
 
+            // Preset drawn region chosen
+            if (region_choice != 'draw' && region_choice != 'all') {
+                clickedCustomRadioTrends();
+            }
+
         } else {
             if (draw_radio) {
                 if (draw_radio.checked) {
-
                     clickedDrawRadio();
                 } else {
                     copyOfMap.getInteractions().forEach(function (e) {
@@ -552,7 +649,7 @@ class Map extends Component {
             if (this.props.updateSensors){
                 console.log("Map component got new props");
                 features = this.updateLayers(this.props.updateSensors);
-                // add polygon according to  selected location
+                // add polygon according to selected location
 
             } else {
                 features = this.updateLayers(this.props.sensors);
@@ -560,14 +657,14 @@ class Map extends Component {
 
         }
 
-
         this.state.clusterSource.clear();
         this.state.clusterSource.addFeatures(features);
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
 
         const area = getCustomLocation(that.props.selectedLocation);
-        var feature = new ol.Feature();
+        let feature = new ol.Feature();
+
         if (area && area.geometry) {
             feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
         }
@@ -575,23 +672,33 @@ class Map extends Component {
         this.state.areaPolygonSource.clear();
         this.state.areaPolygonSource.addFeatures([feature]);
 
-
-        if (this.state.vectorSource.getFeatures().length > 0) {
+        if (this.state.vectorSource.getFeatures().length > 0 ||
+            this.state.customLocationFilterVector.getFeatures().length > 0) {
             // Turn off auto zoom for Trends
             if (!this.props.display_trend && !this.state.expandedCluster){
-                this.state.map.getView().fit(this.state.vectorSource.getExtent(), this.state.map.getSize());
+                if (this.state.customLocationFilterVector.getFeatures().length > 0) {
+                    this.state.map.getView().fit(
+                        this.state.customLocationFilterVector.getExtent(),
+                        this.state.map.getSize());
+                } else {
+                    this.state.map.getView().fit(
+                        this.state.vectorSource.getExtent(),
+                        this.state.map.getSize());
+                }
             }
         }
+
         // For Explore page, trigger the popup on the map when user click the tab on the left
         const vectorSource = this.state.vectorSource;
         if (this.props.popupSensorname) {
             let featuresAtPixel = vectorSource.getFeatures().find(function (feature) {
                 return feature.attributes.name === that.props.popupSensorname;
-            })
+            });
             this.popupHandler(featuresAtPixel, this.props.popupCoordinates);
 
                 //TODO: Need to update the global state. This is causing an infinite loop.
-                // After calling the overlapping markers we need to clear out the this.props.coordinates through the global state
+                // After calling the overlapping markers we need to clear out the
+                //     this.props.coordinates through the global state
                 // if(that.state.expandedCluster) {
                 //     that.removeSpiderfiedClusterLayers(that.state.map);
                 // }
@@ -615,6 +722,7 @@ class Map extends Component {
         this.setState({clusterSource: clusterSource});
 
         let clusters = new ol.layer.Vector({
+            name: 'clusters_layer',
             source: clusterSource,
             style: function (feature) {
                 let size = feature.get('features').length;
@@ -1170,8 +1278,6 @@ class Map extends Component {
         let fill = new ol.style.Fill({color:[255,255,255,1]}),
             stroke = new ol.style.Stroke({color:[0,0,0,1]});
 
-
-
         theMap.on('singleclick', function (e) {
             selectItems.setActive(false);
 
@@ -1179,18 +1285,22 @@ class Map extends Component {
                 return featureChange;
             });
 
-            // If a cluster is expanded we want to close it, unless there was a click in one of the features that is expanded
+            // If a cluster is expanded we want to close it, unless there
+            // was a click in one of the features that is expanded
             let closeClusters = true;
             if(featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type == "single"))) {
                 // Case when a feature is expanded
                 that.popupHandler(featuresAtPixel, e.coordinate);
                 closeClusters = false;
-            } else if(featuresAtPixel &&  featuresAtPixel.get('features') != undefined && featuresAtPixel.get('features').length == 1  ){
+            } else if(featuresAtPixel &&  featuresAtPixel.get('features')
+                != undefined && featuresAtPixel.get('features').length == 1  ){
                 // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
                 const feature = featuresAtPixel.get('features')[0];
                 that.popupHandler(feature, e.coordinate);
-            } else if (featuresAtPixel &&  featuresAtPixel.get('features') != undefined && featuresAtPixel.get('features').length > 1) {
-                // Case when a clustered was click. If it has more than 4 features and is in a zoom level lower than maxZoom, zoom in
+            } else if (featuresAtPixel &&  featuresAtPixel.get('features')
+                    != undefined && featuresAtPixel.get('features').length > 1) {
+                // Case when a clustered was click. If it has more than 4 features
+                // and is in a zoom level lower than maxZoom, zoom in
                 // if(featuresAtPixel.get('features').length > 4 && theMap.getView().getZoom() < that.state.maxZoom) {
                 //     theMap.getView().setZoom(theMap.getView().getZoom() + 1);
                 //     theMap.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
@@ -1251,7 +1361,7 @@ class Map extends Component {
         }
         if (this.props.updateSensors) {
 
-            var areaPolygonSource = new ol.source.Vector({
+            let areaPolygonSource = new ol.source.Vector({
                 features: [
                     new ol.Feature({ })
                 ]
@@ -1259,7 +1369,7 @@ class Map extends Component {
 
             this.setState({areaPolygonSource: areaPolygonSource});
 
-            var areaPolygonLayer = new ol.layer.Vector({
+            let areaPolygonLayer = new ol.layer.Vector({
                 id: "areaPolygon",
                 source: areaPolygonSource,
                 style: [
@@ -1276,6 +1386,8 @@ class Map extends Component {
             });
             theMap.addLayer(areaPolygonLayer);
         }
+        this.setState({customLocationFilterVector: customLocationFilterVector});
+
         this.setState({map: theMap});
     }
 

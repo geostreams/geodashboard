@@ -44,6 +44,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add a new Trends Page and Region Pages
   [GEOD-944](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-944)
   [GEOD-954](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-954)
+- Add Sensor Selection with Shapes on the Search and Exploratory Analysis Pages
+  [GEOD-853](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-853)
+  [GLGVO-322](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-322)
 
 ### Fixed
 - Bug in filtering for custom locations

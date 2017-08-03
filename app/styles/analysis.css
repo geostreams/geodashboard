@@ -71,18 +71,17 @@
 }
 
 .buttonStyle {
+    margin-top: 1em;
+    margin-left: 1em;
     float: left;
+    width: 45%;
 }
 
 .counterText {
     float: left;
     margin-top: 1em;
-    padding: 0.2em;
-}
-
-.comboStyling {
-    margin: auto;
-    width: 90%;
+    margin-left: 1em;
+    text-align: left;
 }
 
 .cardMargin {

@@ -10,6 +10,7 @@ const mapStateToProps = (state) => {
     return {
         sensors: state.sensors.data,
         drawn_sensors: state.sensors.draw_available_sensors,
+        coordinates: state.sensorDetail.coordinates,
         popupSensorname: state.sensorDetail.name,
         popupCoordinates: state.sensorDetail.coordinates,
         selectedLocation: state.selectedSearch.locations.selected,

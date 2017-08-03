@@ -19,8 +19,9 @@ import {
     RadioGroup,
     Radio
 } from 'react-mdc-web';
-import Map from '../containers/AnalysisMap';
-import {getTrendSettings} from '../utils/getConfig';
+// import Map from '../containers/AnalysisMap';
+import Map from '../containers/Map';
+import {getTrendSettings, getTrendRegions} from '../utils/getConfig';
 import Select from './material/Select';
 
 class Analysis extends Component {
@@ -29,20 +30,6 @@ class Analysis extends Component {
         super(props);
 
         this.state = {
-            regions: [
-                {
-                    "region": {
-                        "id": "all",
-                        "title": "All Regions"
-                    }
-                },
-                {
-                    "region": {
-                        "id": "draw",
-                        "title": "Draw Custom Region"
-                    }
-                },
-            ],
             chosenRegion: 'all',
 
             thresholdValue: 0,
@@ -131,6 +118,7 @@ class Analysis extends Component {
             this.state.baselinePeriod,
             this.state.rollingPeriod,
             this.state.thresholdChooseValue,
+            this.state.chosenRegion,
         )
     };
 
@@ -154,14 +142,19 @@ class Analysis extends Component {
                                  disabled={true}> None Available </Radio>];
         }
 
+        const trendRegions = getTrendRegions();
+
         let regionsList = [];
         let regionsListMap = [];
-        let setRegions = this.state.regions;
-        regionsListMap = setRegions
-            .map(r => <Radio id={r.region.id} value={r.region.id} key={r.region.id}>{r.region.title}</Radio>);
+        if (trendRegions) {
+            regionsListMap = trendRegions
+                .map(r => <Radio id={r.region.id} value={r.region.id}
+                                 key={r.region.id}>{r.region.title}</Radio>);
+        }
         regionsList = regionsList.concat(regionsListMap);
         if(regionsListMap.length == 0) {
-            regionsList = [ <Radio id="9999" value="9999" key="9999" disabled={true}>None Available</Radio> ];
+            regionsList = [ <Radio id="9999" value="9999" key="9999"
+                                   disabled={true}>None Available</Radio> ];
         }
 
         let thresholdListMap = [];
@@ -183,13 +176,14 @@ class Analysis extends Component {
             thresholdList = [<option value={1} key={1}> None Available</option>];
         }
 
-        let counterText;
+        let trendsCompleted;
+        let trendsTotal;
         if (this.state.showResults == true) {
-            let trendsCompleted = this.props.trendNumberCompleted;
-            let trendsTotal = (this.props.sensorsData.filter(s => s.parameters.indexOf(this.state.chosenParameter) >= 0)).length;
-            counterText = 'Results: ' + trendsCompleted + ' / ' + trendsTotal;
+            trendsCompleted = this.props.trendNumberCompleted;
+            trendsTotal = (this.props.sensorsData.filter(s => s.parameters.indexOf(this.state.chosenParameter) >= 0)).length;
         } else {
-            counterText = 'Results: 0 / 0';
+            trendsCompleted = 0;
+            trendsTotal = 0;
         }
 
         return (
@@ -301,12 +295,14 @@ class Analysis extends Component {
 
                                 <div className={styles.leftActions}>
 
-                                    <div className={analysisStyles.comboStyling}>
+                                    <div>
                                         <Button raised className={analysisStyles.buttonStyle}
                                                 primary onClick={this.handleClickAnalysis}> Apply Settings </Button>
-                                        <span className={analysisStyles.counterText}>
-                                            {counterText}
-                                        </span>
+                                        <div className={analysisStyles.counterText}>
+                                            Processed: {trendsCompleted}
+                                            <br/>
+                                            Available: {trendsTotal}
+                                        </div>
                                     </div>
 
                                 </div>
@@ -316,7 +312,9 @@ class Analysis extends Component {
                                 <div className={styles.rightmap}>
                                     <Card>
                                         <Map display_trends='True'
-                                             display_draw='True'/>
+                                             display_draw='True'
+                                             chosen_region={this.state.chosenRegion}
+                                        />
                                     </Card>
                                 </div>
 

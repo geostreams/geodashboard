@@ -45,6 +45,23 @@ export function getTrendSettings() {
     return window.configruntime.trend_settings;
 }
 
+export function getTrendRegions() {
+    return window.configruntime.trend_regions;
+}
+
+export function getCustomTrendRegion(location:string):Object {
+
+    let trend_preset_regions = getTrendRegions();
+
+    let trend_preset_region;
+
+    trend_preset_region = trend_preset_regions.find(
+        function (trend_preset_region) {
+            return trend_preset_region.region.id === location;
+        });
+
+    return trend_preset_region;
+}
 export function getTrendsPageViewTypes() {
     return window.configruntime.trends_page_view_types;
 }

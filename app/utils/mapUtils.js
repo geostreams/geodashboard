@@ -97,7 +97,7 @@ export function popupHelper(feature: ol.Feature, styles){
             trends +
             '</table>';
 
-        if((paramsLength > 0) && (sensorInfo.trends_detail)){
+        if(paramsLength > 0 && sensorInfo.trends_detail){
             bodyText += '<a href="#/detail/location/'+ sensorInfo.name + '" class=' + styles.viewsitedetail +
                 ' style="background-color: ' + sourceColor + ';">View Details for the ' +
                 sensorInfo.name + ' Site </a>';
@@ -161,7 +161,7 @@ export function sensorsToFeatures(sensors: Sensors):Array<ol.Feature> {
     return features;
 }
 
-export function sensorsToFeaturesTrend(sensors: Sensors):Array<ol.Feature> {
+export function sensorsToFeaturesTrend(sensors: Sensors, parameter: string, threshold: number):Array<ol.Feature> {
     let features = Array();
     sensors.map((sensor) => {
 
@@ -178,26 +178,24 @@ export function sensorsToFeaturesTrend(sensors: Sensors):Array<ol.Feature> {
                 if (sensor.trends === "not enough data" || sensor.trends === "trends return no data") {
                     trend_type = "noTrend";
                 } else {
-
-                    const threshold = this.props.threshold_value;
-
-                    if (sensor.trends[this.props.trendsparameter + "_percentage_change"] > 0 &&
-                        sensor.trends[this.props.trendsparameter + "_last_average"] >= threshold) {
+                    
+                    if (sensor.trends[parameter + "_percentage_change"] > 0 &&
+                        sensor.trends[parameter + "_last_average"] >= threshold) {
 
                         trend_type = "overThresholdUp";
 
-                    } else if (sensor.trends[this.props.trendsparameter + "_percentage_change"] > 0 &&
-                        sensor.trends[this.props.trendsparameter + "_last_average"] < threshold) {
+                    } else if (sensor.trends[parameter + "_percentage_change"] > 0 &&
+                        sensor.trends[parameter + "_last_average"] < threshold) {
 
                         trend_type = "trendUp";
 
-                    } else if (sensor.trends[this.props.trendsparameter + "_percentage_change"] < 0 &&
-                        sensor.trends[this.props.trendsparameter + "_last_average"] < threshold) {
+                    } else if (sensor.trends[parameter + "_percentage_change"] < 0 &&
+                        sensor.trends[parameter + "_last_average"] < threshold) {
 
                         trend_type = "trendDown";
 
-                    } else if (sensor.trends[this.props.trendsparameter + "_percentage_change"] < 0 &&
-                        sensor.trends[this.props.trendsparameter + "_last_average"] > threshold) {
+                    } else if (sensor.trends[parameter + "_percentage_change"] < 0 &&
+                        sensor.trends[parameter + "_last_average"] > threshold) {
 
                         trend_type = "overThresholdDown";
 
@@ -209,11 +207,11 @@ export function sensorsToFeaturesTrend(sensors: Sensors):Array<ol.Feature> {
                 }
 
                 trend_values = [
-                    (Number(sensor.trends[this.props.trendsparameter + "_total_average"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.trends[this.props.trendsparameter + "_interval_average"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.trends[this.props.trendsparameter + "_last_average"]).toFixed(2) + " mg/L"),
+                    (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + " mg/L"),
+                    (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + " mg/L"),
+                    (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + " mg/L"),
                     (new Date(sensor["trend_end_time"]).toLocaleDateString()),
-                    (Number(sensor.trends[this.props.trendsparameter + "_percentage_change"]).toFixed(2) + " %")
+                    (Number(sensor.trends[parameter + "_percentage_change"]).toFixed(2) + " %")
                 ]
 
             }

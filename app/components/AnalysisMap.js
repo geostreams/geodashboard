@@ -7,11 +7,10 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
-import {getSourceName, getParameterName, getCustomLocation, getTrendColor, getColor} from '../utils/getConfig';
+import {getSourceName, getParameterName, getCustomTrendRegion,getCustomLocation, getTrendColor, getColor} from '../utils/getConfig';
 import {popupHelper, sensorsToFeatures, sensorsToFeaturesTrend, getAttribution} from '../utils/mapUtils';
 import {drawHelper, centerHelper} from '../utils/mapAction';
 import type {Sensors, MapProps, TrendsMapState} from '../utils/flowtype';
-
 
 class AnalysisMap extends Component {
     state: TrendsMapState;
@@ -121,12 +120,15 @@ class AnalysisMap extends Component {
 
         drawHelper(copyOfMap, true, that);
 
-        features = sensorsToFeaturesTrend(this.props.trendSensors);
+        features = sensorsToFeaturesTrend(
+            this.props.trendSensors, this.props.selectedParameter, this.props.threshold_value);
 
         if (Array.isArray(this.props.trendSensors) && this.props.trendSensors.length > 0) {
-            features = sensorsToFeaturesTrend(that.props.trendSensors);
+            features = sensorsToFeaturesTrend(
+                that.props.trendSensors, this.props.selectedParameter, this.props.threshold_value);
         } else {
-            features = sensorsToFeaturesTrend(that.props.sensors);
+            features = sensorsToFeaturesTrend(
+                that.props.sensors, this.props.selectedParameter, this.props.threshold_value);
         }
 
         this.state.vectorSource.clear();
@@ -136,7 +138,8 @@ class AnalysisMap extends Component {
 
     componentDidMount() {
 
-        let features = sensorsToFeaturesTrend(this.props.sensors);
+        let features = sensorsToFeaturesTrend(
+            this.props.sensors, this.props.selectedParameter, this.props.threshold_value);
 
         let vectorSource = new ol.source.Vector({
             features: features
@@ -209,8 +212,6 @@ class AnalysisMap extends Component {
 
             }
         });
-
-
 
         let customLocationFilterVector = new ol.source.Vector();
         let customLocationFilterLayer = new ol.layer.Vector({

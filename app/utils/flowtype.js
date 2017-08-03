@@ -91,8 +91,10 @@ export type trendsSensorsState = {
     baseline_period: string,
     rolling_period: string,
     threshold_value: string,
+    chosen_region: string,
     data: Sensors,
     available_sensors: Sensors,
+    number_to_filter: number,
 }
 
 export type MapProps = {
