@@ -123,7 +123,8 @@ export type TrendsMapState = {
     areaPolygonSource: Object,
     map: Object,
     currentZoom: number,
-    maxZoom: number
+    maxZoom: number,
+    openMenu: boolean,
 };
 
 export type RegionGeometry = {
