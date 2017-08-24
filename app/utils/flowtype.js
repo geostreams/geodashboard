@@ -106,6 +106,7 @@ export type MapState = {
     center: Array <number>,
     vectorSource: ol.source.Vector,
     clusterSource: ol.souce.Cluster,
+    customLocationFilterVectorExtent: Array <number>,
     multiLineLayer: ol.layer.Vector,
     multiLineString: ol.geom.MultiLineString,
     expandedClusterLayer: ol.layer.Vector,

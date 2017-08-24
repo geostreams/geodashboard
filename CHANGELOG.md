@@ -51,6 +51,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-322](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-322)
 - Extending bottom Download bar on search page and show stats on it
   [GEOD-850](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-850)
+- When Drawing, zoom to shape and not the points
+  [GEOD-934](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-934)
 
 ### Fixed
 - Bug in filtering for custom locations

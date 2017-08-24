@@ -5,13 +5,12 @@
 import React, {Component} from 'react';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
-import styles from '../styles/map.css'
-import {Icon} from 'react-mdc-web'
-import {getSourceName, getParameterName, getCustomLocation, getTrendColor, getColor} from '../utils/getConfig'
-import {popupHelper, sensorsToFeatures, getMultiLineLayer, getAttribution} from '../utils/mapUtils'
-import {drawHelper, centerHelper} from '../utils/mapAction'
-
-import type {Sensors, MapState, MapProps} from '../utils/flowtype'
+import styles from '../styles/map.css';
+import {Icon} from 'react-mdc-web';
+import {getCustomLocation} from '../utils/getConfig';
+import {popupHelper, sensorsToFeatures, getMultiLineLayer, getAttribution} from '../utils/mapUtils';
+import {drawHelper, centerHelper} from '../utils/mapAction';
+import type {MapState, MapProps} from '../utils/flowtype';
 
 
 class SearchMap extends Component {
@@ -27,6 +26,7 @@ class SearchMap extends Component {
             multiLineString: new ol.geom.MultiLineString,
             expandedClusterLayer: new ol.layer.Vector,
             areaPolygonSource: new ol.source.Vector,
+            customLocationFilterVectorExtent: [],
             expandedCluster: false,
             currentZoom: 5.5,
             maxZoom: 12,
@@ -143,15 +143,13 @@ class SearchMap extends Component {
         features = sensorsToFeatures(this.props.updateSensors);
         // add polygon according to  selected location
 
-
-
         this.state.clusterSource.clear();
         this.state.clusterSource.addFeatures(features);
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
 
         const area = getCustomLocation(that.props.selectedLocation);
-        var feature = new ol.Feature();
+        let feature = new ol.Feature();
         if (area && area.geometry) {
             feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
         }
@@ -159,9 +157,14 @@ class SearchMap extends Component {
         this.state.areaPolygonSource.clear();
         this.state.areaPolygonSource.addFeatures([feature]);
 
-
-        if (this.state.vectorSource.getFeatures().length > 0) {
-            // Turn off auto zoom for Trends
+        // If the User drew a custom location, zoom to the shape
+        if (this.state.customLocationFilterVectorExtent.length > 0 &&
+            this.props.selectedLocation == 'Custom Location') {
+            if (!this.state.expandedCluster) {
+                this.state.map.getView().fit(this.state.customLocationFilterVectorExtent, this.state.map.getSize());
+            }
+        // If the User selected a predefined location, zoom to the features
+        } else if (this.state.vectorSource.getFeatures().length > 0) {
             if (!this.state.expandedCluster){
                 this.state.map.getView().fit(this.state.vectorSource.getExtent(), this.state.map.getSize());
             }
@@ -176,8 +179,6 @@ class SearchMap extends Component {
         let vectorSource = new ol.source.Vector({
             features: features
         });
-        //this.setState({vectorSource: vectorSource});
-
 
         const clusterSource = new ol.source.Cluster({
             distance: 1,
@@ -376,9 +377,7 @@ class SearchMap extends Component {
 
                     // Get the shape geometry
                     let drawExtent = e.feature.getGeometry();
-
-                    // Zoom to shape
-                    view.fit(drawExtent.getExtent(), theMap.getSize());
+                    that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
 
                     // Get all the features in the layer
                     let featuresInLayer = clusters.getSource().getFeatures();
@@ -467,9 +466,7 @@ class SearchMap extends Component {
 
                     // Get the shape geometry
                     let drawExtent = e.feature.getGeometry();
-
-                    // Zoom to shape
-                    view.fit(drawExtent.getExtent(), theMap.getSize());
+                    that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
 
                     // Get all the features in the layer
                     let featuresInLayer = clusters.getSource().getFeatures();
@@ -557,9 +554,7 @@ class SearchMap extends Component {
 
                     // Get the shape geometry
                     let drawExtent = e.feature.getGeometry();
-
-                    // Zoom to shape
-                    view.fit(drawExtent.getExtent(), theMap.getSize());
+                    that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
 
                     // Get all the features in the layer
                     let featuresInLayer = clusters.getSource().getFeatures();
@@ -637,7 +632,6 @@ class SearchMap extends Component {
             ])
         });
 
-
         let selectItems = new ol.interaction.Select();
         theMap.addInteraction(selectItems);
 
@@ -700,8 +694,7 @@ class SearchMap extends Component {
 
         });
 
-
-        var areaPolygonSource = new ol.source.Vector({
+        let areaPolygonSource = new ol.source.Vector({
             features: [
                 new ol.Feature({})
             ]
@@ -709,7 +702,7 @@ class SearchMap extends Component {
 
         this.setState({areaPolygonSource: areaPolygonSource});
 
-        var areaPolygonLayer = new ol.layer.Vector({
+        let areaPolygonLayer = new ol.layer.Vector({
             id: "areaPolygon",
             source: areaPolygonSource,
             style: [
