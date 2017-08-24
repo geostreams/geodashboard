@@ -1,8 +1,16 @@
 .list {
-  width: 24em;
-  margin: 4em 0em 3em 1em;
-  float: left;
-  height: calc(100vh - 8em);
-  overflow-y: auto;
+    width: 24em;
+    margin: 4em 0em 3em 1em;
+    float: left;
+    height: calc(100vh - 8em);
+    overflow-y: auto;
 }
 
+.bottomSection {
+    margin-left: auto;
+    padding: 0.5em 0em 0.5em 2em;
+    width: 25em;
+    bottom: 0;
+    position: absolute;
+    background-color: #fff;
+}

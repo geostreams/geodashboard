@@ -13,3 +13,7 @@
     margin: auto;
     width: 80%;
 }
+
+.iconButtonStyle {
+    padding-top: 0.5em !important;
+}

@@ -1,6 +1,7 @@
 /*
  * @flow
  */
+
 import React, {Component, PropTypes} from 'react';
 import {
     Button,
@@ -16,7 +17,6 @@ import {
 } from 'react-mdc-web';
 import {getCustomLocation} from '../utils/getConfig';
 import styles from '../styles/downloadButton.css';
-import type {MapOfStrings} from '../utils/flowtype';
 
 type DownloadStateType = {
     isOpen: boolean,
@@ -120,10 +120,12 @@ class DownloadButtons extends Component {
 
     render() {
 
+        let numSensors = this.props.availableSensors.length;
+
         // don't use a-href download for Download as CSV/JSON, otherwise buildLink
         // will be executed as the page loading, instead of onClick
         return (
-            <div>
+            <div className={styles.bottomSection}>
                 <Dialog
                     open={this.state.isOpen}
                     onClose={this.handleClosePermalink}
@@ -142,16 +144,22 @@ class DownloadButtons extends Component {
                     </DialogFooter>
                 </Dialog>
 
-
-                <Button raised
+                <Button raised primary
                         onClick={this.onDownload.bind(this, "csv")}
-                > Download Data </Button>
+                >
+                    Download Data
+                </Button>
 
-                <Button onClick={() => {
-                    this.setState({openMenu: true})
-                }}>
+                <Button className={styles.iconButtonStyle}
+                        onClick={() => {this.setState({openMenu: true})}}
+                >
                     <Icon name="get_app"/>
                 </Button>
+
+                <span className={styles.counterText}>
+                    Sites: {numSensors}
+                </span>
+
                 <MenuAnchor>
                     <Menu bottom open={this.state.openMenu} onClose={() => {
                         this.setState({openMenu: false})

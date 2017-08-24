@@ -49,6 +49,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add Sensor Selection with Shapes on the Search and Exploratory Analysis Pages
   [GEOD-853](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-853)
   [GLGVO-322](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-322)
+- Extending bottom Download bar on search page and show stats on it
+  [GEOD-850](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-850)
 
 ### Fixed
 - Bug in filtering for custom locations

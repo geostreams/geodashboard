@@ -14,6 +14,7 @@ const mapStateToProps = (state) => {
         selectedLocation: state.selectedSearch.locations.selected,
         api: state.backends.selected,
         drawShapeCoordinates: state.sensors.shape_coordinates,
+        availableSensors: state.sensors.available_sensors,
     }
 };
 

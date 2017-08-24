@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react'
 import styles from '../styles/main.css';
 import stylesearch from '../styles/search.css';
@@ -21,8 +25,8 @@ class Search extends Component {
                                 <List className={styles.list}>
                                     <FilterSelection/>
                                 </List>
-                                <div className={styles.leftActions}>
-                                <DownloadButtons/>
+                                <div className={styles.bottomSection}>
+                                    <DownloadButtons/>
                                 </div>
                             </Cell>
                             <Cell col={10}>
