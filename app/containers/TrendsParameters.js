@@ -16,8 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSelectTrendsParameter:(parameter, threshold_choice) => {
-            dispatch(selectTrendsParameter(parameter, threshold_choice));
+        onSelectTrendsParameter:(parameter, threshold_choice, page, viewtype) => {
+            dispatch(selectTrendsParameter(parameter, threshold_choice, page, viewtype));
         },
     }
 };

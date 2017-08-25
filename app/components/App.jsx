@@ -3,12 +3,13 @@ import {Router, Route, browserHistory, hashHistory} from 'react-router';
 import Search from '../containers/Search';
 import Home from '../pages/Home';
 import Explore from '../pages/Explore';
-import Trends from '../pages/Trends';
+import TrendsStation from '../pages/TrendsSensor';
+import TrendsRegion from '../pages/TrendsRegion';
 import Analysis from '../containers/Analysis';
 import Detail from '../pages/Detail';
 import TrendsDetail from '../pages/TrendsDetail';
 import About from '../pages/About';
-import RouteMismatch from '../pages/RouteMismatch'
+import RouteMismatch from '../pages/RouteMismatch';
 import 'material-components-web/dist/material-components-web.min.css';
 
 class App extends Component {
@@ -28,7 +29,8 @@ class App extends Component {
                 <Route path="/explore" component={Explore}/>
                 <Route path="/detail/location/:name" component={Detail}/>
                 <Route path="/search" component={Search}/>
-                <Route path="/trends" component={Trends}/>
+                <Route path="/trendsstations" component={TrendsStation}/>
+                <Route path="/trendsregions" component={TrendsRegion}/>
                 <Route path="/trendsdetail/region/:region" component={TrendsDetail}/>
                 <Route path="/analysis" component={Analysis}/>
                 <Route path="/about" component={About}/>

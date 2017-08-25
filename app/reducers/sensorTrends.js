@@ -6,6 +6,7 @@ import { ADD_TRENDS, ADD_TRENDS_ARGS, ADD_CUSTOM_TREND_LOCATION_FILTER,
     FETCH_TRENDS_REGION, ADD_TRENDS_COUNT } from '../actions';
 import type { trendsSensorsState, Sensor, Sensors } from '../utils/flowtype';
 import {pnpoly} from '../utils/arrayUtils';
+import {getTrendRegions} from '../utils/getConfig';
 
 type TrendsSensorAction = {| type:'ADD_TRENDS' | 'ADD_TRENDS_ARGS',
     sensor:Sensors,
@@ -120,8 +121,7 @@ function presetRegionCheck(selectedRegion:string, sensor: Sensor) {
         return location.region.id === selectedRegion;
     }
 
-    let customLocation = window.configruntime.trend_regions.find(findRegion);
-
+    let customLocation = getTrendRegions().find(findRegion);
     if (!customLocation) {
         return false;
     }

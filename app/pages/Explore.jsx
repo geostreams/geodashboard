@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
-import MenuPage from '../components/MenuPage'
-import Map from '../containers/Map'
-import ExploreSourcesTab from '../containers/ExploreSourcesTab'
-import {Card, CardTitle, CardHeader, CardText, Grid, Cell, Content, List} from 'react-mdc-web'
-import styles from '../styles/main.css'
-import {connect} from 'react-redux'
+import React, {Component} from 'react';
+import MenuPage from '../components/MenuPage';
+import Map from '../containers/Map';
+import ExploreSourcesTab from '../containers/ExploreSourcesTab';
+import {Card, CardTitle, CardHeader, CardText, Grid, Cell, Content, List} from 'react-mdc-web';
+import styles from '../styles/main.css';
+import {connect} from 'react-redux';
 
 class Explore extends Component {
     constructor(props) {
@@ -25,7 +25,7 @@ class Explore extends Component {
                     <ExploreSourcesTab source={s}/>
                 </CardText>
             </Card>
-        )
+        );
 
         return (
             <div>

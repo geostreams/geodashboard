@@ -2,6 +2,7 @@ let ol = require('openlayers');
 import {getSourceName, getParameterName, getCustomTrendsRegion, getTrendColor, getColor} from './getConfig';
 import type { Sensors } from '../utils/flowtype';
 
+
 export function popupHelper(feature: ol.Feature, styles){
     let id = feature.getId().toUpperCase();
     let sensorInfo = feature.attributes;
@@ -178,7 +179,7 @@ export function sensorsToFeaturesTrend(sensors: Sensors, parameter: string, thre
                 if (sensor.trends === "not enough data" || sensor.trends === "trends return no data") {
                     trend_type = "noTrend";
                 } else {
-                    
+
                     if (sensor.trends[parameter + "_percentage_change"] > 0 &&
                         sensor.trends[parameter + "_last_average"] >= threshold) {
 
@@ -562,6 +563,7 @@ export function sensorsToFeaturesTrendDetailPage(
 
 }
 
+// TODO: Is this a duplicate from components/Map.jsx?
 function generatePointsCircle(count: number, centerPixel) {
     // Generate points within a circle where the markers will be displayed.
     const separation = 20;

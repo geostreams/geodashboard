@@ -56,3 +56,20 @@
   text-decoration: none;
   color: white;
 }
+
+.trends_button_style {
+  color: white !important;
+}
+
+.menu_style {
+  background-color: #3f51b5 !important;
+}
+
+.menu_anchor_style{
+  position: absolute !important;
+  right: 10em !important;
+}
+
+.button_style {
+  width: 12em;
+}

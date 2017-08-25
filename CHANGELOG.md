@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-944](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-944)
   [GEOD-945](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-945)
   [GEOD-954](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-954)
+  [GEOD-956](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-956)
 - Add Sensor Selection with Shapes on the Search and Exploratory Analysis Pages
   [GEOD-853](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-853)
   [GLGVO-322](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-322)
@@ -53,6 +54,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-850](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-850)
 - When Drawing, zoom to shape and not the points
   [GEOD-934](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-934)
+- Refactor the Exploratory Analysis Page
+  [GLGVO-339](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-339)
+  [GLGVO-345](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-345)
+  [GLGVO-346](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-346)
+  [GLGVO-347](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-347)
+  [GLGVO-348](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-348)
+  [GLGVO-349](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-349)
+  [GLGVO-356](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-356)
+
 
 ### Fixed
 - Bug in filtering for custom locations

@@ -16,8 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSelectTrendsSeason:(season) => {
-            dispatch(selectTrendsSeason(season));
+        onSelectTrendsSeason:(season, view_type) => {
+            dispatch(selectTrendsSeason(season, view_type));
         }
     }
 };

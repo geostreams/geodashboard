@@ -12,44 +12,41 @@ import {
 
 class TrendsRegions extends Component {
 
-    state: {
-        chosenRegion: Object,
-    };
-
     constructor(props: Object) {
         super(props);
-        this.state = {
-            chosenRegion: this.props.trends_defaults[3].value,
-        };
     }
 
     handleRegionChange = (event: Object) => {
-        this.setState({chosenRegion: event.target.value});
-        this.props.onSelectTrendsRegion(event.target.value);
+        this.props.onSelectTrendsRegion(event.target.value, this.props.trends_page, this.props.trends_view_type);
     };
+
 
     render() {
 
-        let trendsViewType = this.props.trends_view_type;
-
+        let trendsPageSettings = this.props.trends_regions;
+        let trendsPageRegions = [];
+        let trendsPageRegionsMap = [];
         let return_item;
 
-        if (trendsViewType == 'by-sensors') {
+        return_item = (
+            <Card className={trendsStyles.cardMargin}>
+            </Card>
+        );
 
-            let trendsPageSettings = this.props.trends_regions;
 
-            let trendsPageRegions = [];
-            let trendsPageRegionsMap = [];
-            if (trendsPageSettings) {
-                trendsPageRegionsMap = trendsPageSettings
-                    .map(r => <Radio id={r.properties.title} value={r.properties.id}
-                                     key={r.properties.id}> {r.properties.title}</Radio>);
-            }
-            trendsPageRegions = trendsPageRegions.concat(trendsPageRegionsMap);
-            if (trendsPageRegionsMap.length == 0) {
-                trendsPageRegions = [<Radio id="9999" value="9999" key="9999"
-                                            disabled={true}> None Available </Radio>];
-            }
+        if (trendsPageSettings) {
+            trendsPageRegionsMap = trendsPageSettings
+                .map(r => <Radio id={r.properties.id} value={r.properties.id}
+                                 key={r.properties.id}> {r.properties.title}</Radio>);
+        }
+        trendsPageRegions = trendsPageRegions.concat(trendsPageRegionsMap);
+        if (trendsPageRegionsMap.length == 0) {
+            trendsPageRegions = [<Radio id="9999" value="9999" key="9999"
+                                        disabled={true}> None Available </Radio>];
+        }
+
+
+        if (trendsPageRegions.length != 0) {
 
             return_item = (
                 <Card className={trendsStyles.cardMargin}>
@@ -68,21 +65,6 @@ class TrendsRegions extends Component {
                             {trendsPageRegions}
                         </RadioGroup>
                     </CardActions>
-                </Card>
-            );
-
-        } else {
-
-            return_item = (
-                <Card className={trendsStyles.cardMargin}>
-                    <CardHeader>
-                        <CardTitle>
-                            Select Region
-                        </CardTitle>
-                        <CardSubtitle>
-                            Click a Map Region to Explore
-                        </CardSubtitle>
-                    </CardHeader>
                 </Card>
             );
 

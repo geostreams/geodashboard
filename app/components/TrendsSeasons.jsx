@@ -26,7 +26,7 @@ class TrendsSeasons extends Component {
 
     handleSeasonChange = (event: Object) => {
         this.setState({chosenSeason: event.target.value});
-        this.props.onSelectTrendsSeason(event.target.value);
+        this.props.onSelectTrendsSeason(event.target.value, this.props.trends_view_type);
     };
 
 

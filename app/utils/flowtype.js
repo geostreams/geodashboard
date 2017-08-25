@@ -154,13 +154,13 @@ export type TrendsRegions = TrendsRegionSetup[];
 export type TrendsParameter = string;
 export type TrendsSeason = string;
 export type TrendsRegion = string;
-export type TrendsThreshold = number;
+export type TrendsThreshold = string;
 export type TrendsThresholdChoice = boolean;
 export type TrendsPageSensorsState = Sensors;
 export type TrendsPageRegionsState = TrendsRegions;
 export type TrendsViewType = string;
-export type TrendsBaselineTotalYear = number;
-export type TrendsRollingInterval = number;
+export type TrendsBaselineTotalYear = string;
+export type TrendsRollingInterval = string;
 
 export type ChosenTrendsState = {
     region: TrendsRegion,
@@ -175,6 +175,8 @@ export type ChosenTrendsState = {
     baseline_totalyear: TrendsBaselineTotalYear,
     rolling_interval: TrendsRollingInterval,
     view_type: TrendsViewType,
+    number_to_filter: number,
+    draw_available_sensors: TrendsPageSensorsState,
 };
 
 

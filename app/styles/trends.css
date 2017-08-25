@@ -2,6 +2,7 @@
 .liststyle {
     width: 25em;
     margin: 3.6em 0.1em 3em 0.1em;
+    padding-top: 16.5em !important;
     float: left;
     height: calc(100vh - 4em);
     overflow-y: auto;
@@ -18,11 +19,6 @@
     overflow-x: auto;
 }
 
-.cardMargin {
-    margin: 1em 0.1em 0.5em 0.1em;
-    width: 22em;
-}
-
 .buttonstyle {
     width: 20em;
     padding: 1em;
@@ -31,10 +27,14 @@
     margin-bottom: 2em;
 }
 
+.select {
+    margin-top: 2em;
+    max-width: calc(100%) !important;
+}
 .detailListStyle {
     width: 25em;
     margin: 3.6em 0.1em 3em 0.1em;
-    padding-top: 20em;
+    padding-top: 19.5em !important;
     float: left;
     height: calc(100vh - 4em);
     overflow-y: auto;
@@ -51,11 +51,68 @@
     width: 100%;
     position: absolute;
     top: 10;
-    z-index: 100;
     background-color: #ffffff;
 }
 
 .list_style {
     padding-left: 2em;
     list-style: none;
+}
+
+.textField {
+    width: 8em;
+    margin-bottom: -1em;
+}
+
+.counterText {
+    float: left;
+    margin-top: 1em;
+    margin-left: 1em;
+    text-align: left;
+}
+
+.submitButtonStyle {
+    margin-top: 1em;
+    margin-left: 1em;
+    float: left;
+    width: 45%;
+}
+
+.parametersCardStyle {
+    max-height: 16.5em;
+    width: 22em;
+    overflow-y: auto;
+    overflow-x: auto;
+    margin: 1em 0.1em 0.5em 1.1em;
+    padding: 0.2em 0.2em 0.2em 0em !important;
+    position: fixed;
+    top: 3em;
+    z-index: 100;
+    background-color: #ffffff;
+}
+
+.parametersCardStyleDetail {
+    max-height: 16.5em;
+    width: 22em;
+    overflow-y: auto;
+    overflow-x: auto;
+    margin: 1em 0.1em 0.5em 1.1em;
+    padding: 0.2em 0.2em 0.2em 0em !important;
+    position: fixed;
+    top: 6em;
+    z-index: 100;
+    background-color: #ffffff;
+}
+
+.cardMargin {
+    margin: 1em 0.1em 0.5em 0.1em;
+    width: 22em;
+}
+
+.selectedParameter {
+    background-color: #3f51b5;
+    padding: 0.5em;
+    border-radius: 5em;
+    font-weight: bold;
+    color: white;
 }

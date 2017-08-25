@@ -4,7 +4,7 @@
 
 
 import { connect } from 'react-redux';
-import TrendsMapComponent from '../components/TrendsMap';
+import TrendsRegionMapComponent from '../components/TrendsRegionMap';
 
 const mapStateToProps = (state) => {
     return {
@@ -19,7 +19,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-const TrendsMap = connect(mapStateToProps)(TrendsMapComponent);
+const TrendsRegionMap = connect(mapStateToProps)(TrendsRegionMapComponent);
 
-export default TrendsMap;
+export default TrendsRegionMap;
 

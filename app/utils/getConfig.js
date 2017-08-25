@@ -45,23 +45,6 @@ export function getTrendSettings() {
     return window.configruntime.trend_settings;
 }
 
-export function getTrendRegions() {
-    return window.configruntime.trend_regions;
-}
-
-export function getCustomTrendRegion(location:string):Object {
-
-    let trend_preset_regions = getTrendRegions();
-
-    let trend_preset_region;
-
-    trend_preset_region = trend_preset_regions.find(
-        function (trend_preset_region) {
-            return trend_preset_region.region.id === location;
-        });
-
-    return trend_preset_region;
-}
 export function getTrendsPageViewTypes() {
     return window.configruntime.trends_page_view_types;
 }
@@ -104,8 +87,27 @@ export function getTrendsDefaultValues() {
     return window.configruntime.trends_page_defaults;
 }
 
+export function getTrendsAnalysisDefaultValues() {
+    return window.configruntime.trends_analysis_defaults;
+}
+
 export function getTrendsThresholdsSettings() {
     return window.configruntime.trends_page_thresholds;
+}
+export function getTrendRegions() {
+    return window.configruntime.trend_analysis_regions;
+}
+
+export function getCustomTrendRegion(region:string):Object {
+
+    const trendsPageRegions = getTrendRegions();
+
+    const custom_trends_region = trendsPageRegions.find(
+        function (custom_trends_region) {
+            return custom_trends_region.properties.id === region;
+        });
+
+    return custom_trends_region;
 }
 
 export function getColor(source: string): string {

@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
-import Menu from '../components/MenuPage'
-import DataGraph from '../containers/DataGraph'
-import styles from '../styles/main.css'
+import React, {Component} from 'react';
+import Menu from '../components/MenuPage';
+import DataGraph from '../containers/DataGraph';
+import styles from '../styles/main.css';
 
 class Detail extends Component {
     render() {

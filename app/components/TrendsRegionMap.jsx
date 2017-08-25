@@ -91,14 +91,18 @@ class TrendsMap extends Component {
         let feature = new ol.Feature();
         let region_features = [];
 
-        map_items = this.props.trendSensors;
+        map_items = this.props.trendRegions;
 
-        // This is for the Region Outlines for one Region at a time
-        if (that.props.selectedRegion != 'all' && that.props.selectedRegion != 'draw') {
-            area = getCustomLocation(that.props.selectedRegion);
-            if (area && area.geometry) {
-                feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
-                region_features.push(feature);
+        // This is for the Region Outlines for all Regions at once
+        let trendsPageRegions = this.props.trendAllRegions;
+
+        for (let i = 0; i < trendsPageRegions.length; i++) {
+            if (trendsPageRegions[i] != 'ALL') {
+                area = getCustomLocation(trendsPageRegions[i].toLowerCase());
+                if (area && area.geometry) {
+                    feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
+                    region_features.push(feature);
+                }
             }
         }
 
@@ -125,7 +129,7 @@ class TrendsMap extends Component {
 
         let threshold = this.props.threshold_value;
 
-        let map_items = this.props.sensors;
+        let map_items = this.props.trendRegions;
 
         let features = sensorsToFeaturesTrendPage(
             map_items, this.props.selectedParameter, threshold);

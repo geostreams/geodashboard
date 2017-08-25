@@ -11,6 +11,8 @@ import {Radio, RadioGroup,
 
 class TrendsViewType extends Component {
 
+    // This component allows for the User to change view type if desired.
+
     state: {
         chosenViewType: Object,
     };
@@ -53,7 +55,7 @@ class TrendsViewType extends Component {
                         Select View Type
                     </CardTitle>
                     <CardSubtitle>
-                        Select to view by Sensor or Region
+                        Select to view by Stations or Region
                     </CardSubtitle>
                 </CardHeader>
                 <CardActions>

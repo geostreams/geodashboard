@@ -4,11 +4,9 @@
 
 import React, {Component, PropTypes} from 'react';
 import MenuPage from '../components/MenuPage';
-import Map from '../containers/TrendsMap';
-import TrendsViewType from '../containers/TrendsViewType';
+import Map from '../containers/TrendsRegionMap';
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsSeasons from '../containers/TrendsSeasons';
-import TrendsRegions from '../containers/TrendsRegions';
 import {Grid, Cell, Content, List} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
@@ -16,9 +14,7 @@ import {connect} from 'react-redux';
 import {
     getTrendsPageSettings,
     getTrendsPageSeasons,
-    getTrendsRegionsSettings,
-    getTrendsDefaultValues,
-    getTrendsPageViewTypes
+    getTrendsDefaultValues
 } from '../utils/getConfig';
 
 
@@ -29,9 +25,9 @@ class Trends extends Component {
         let trendsPageSettings = getTrendsPageSettings();
         let trendsPageDefaults = getTrendsDefaultValues();
         let trendsPageSeasons = getTrendsPageSeasons();
-        let trendsPageRegions = getTrendsRegionsSettings();
-        let trendsPageViewTypes = getTrendsPageViewTypes();
+        let trendsPageViewType = "by-regions";
         let trendsThresholdChoice = false;
+        let trendsPageType = 'Trends';
 
         return (
 
@@ -41,26 +37,19 @@ class Trends extends Component {
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>
                             <Cell col={2}>
+                                <TrendsParameters
+                                    className={trendsStyles.parametersCardStyle}
+                                    trends_settings={trendsPageSettings}
+                                    trends_threshold_choice={trendsThresholdChoice}
+                                    trends_defaults={trendsPageDefaults}
+                                    trends_view_type={trendsPageViewType}
+                                    trends_page={trendsPageType}
+                                />
                                 <List className={trendsStyles.liststyle}>
-                                    <TrendsViewType
-                                        trends_view_types={trendsPageViewTypes}
-                                        trends_defaults={trendsPageDefaults}
-                                    />
-                                    <TrendsParameters
-                                        trends_settings={trendsPageSettings}
-                                        trends_threshold_choice={trendsThresholdChoice}
-                                        trends_defaults={trendsPageDefaults}
-                                        trends_view_type={this.props.view_type}
-                                    />
                                     <TrendsSeasons
                                         trends_seasons={trendsPageSeasons}
                                         trends_defaults={trendsPageDefaults}
-                                        trends_view_type={this.props.view_type}
-                                    />
-                                    <TrendsRegions
-                                        trends_regions={trendsPageRegions}
-                                        trends_defaults={trendsPageDefaults}
-                                        trends_view_type={this.props.view_type}
+                                        trends_view_type={trendsPageViewType}
                                     />
                                 </List>
                             </Cell>
@@ -86,4 +75,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(Trends);
-

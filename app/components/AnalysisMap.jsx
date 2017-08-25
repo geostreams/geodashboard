@@ -7,10 +7,10 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
-import {getSourceName, getParameterName, getCustomTrendRegion,getCustomLocation, getTrendColor, getColor} from '../utils/getConfig';
-import {popupHelper, sensorsToFeatures, sensorsToFeaturesTrend, getAttribution} from '../utils/mapUtils';
+import {getCustomTrendRegion, getTrendColor} from '../utils/getConfig';
+import {popupHelper, sensorsToFeaturesTrendPage, getAttribution} from '../utils/mapUtils';
 import {drawHelper, centerHelper} from '../utils/mapAction';
-import type {Sensors, MapProps, TrendsMapState} from '../utils/flowtype';
+import type {MapProps, TrendsMapState} from '../utils/flowtype';
 
 class AnalysisMap extends Component {
     state: TrendsMapState;
@@ -24,6 +24,7 @@ class AnalysisMap extends Component {
             areaPolygonSource: new ol.source.Vector,
             currentZoom: 5.5,
             maxZoom: 12,
+            openMenu: false,
             // create a fake map to avoid checking map.isdefined every time for flow.
             map: new ol.Map({
                 view: new ol.View({
@@ -44,9 +45,8 @@ class AnalysisMap extends Component {
 
         return (
             <div>
-                <div id='map' className={styles.root}>
-                    <div id="trends_legend" className={styles.trends_legend}></div>
-                </div>
+                <div id='map' className={styles.root}></div>
+                <div id="trends_legend" className={styles.trends_legend}></div>
                 <div id="search" style={{position: 'absolute', bottom: '10px', left: '25em', padding: '5px'}}>
                     <button id="centerButton"><Icon name="gps_fixed"/></button>
                 </div>
@@ -110,8 +110,6 @@ class AnalysisMap extends Component {
     }
 
     componentDidUpdate() {
-        // FIXME: this does not get called all the time
-        // Try switching API and quickly switching to the search page
         let features;
 
         let copyOfMap = this.state.map;
@@ -120,26 +118,52 @@ class AnalysisMap extends Component {
 
         drawHelper(copyOfMap, true, that);
 
-        features = sensorsToFeaturesTrend(
-            this.props.trendSensors, this.props.selectedParameter, this.props.threshold_value);
+        let map_items;
+        let area;
+        let threshold = this.props.threshold_value;
+        let feature = new ol.Feature();
+        let region_features = [];
 
-        if (Array.isArray(this.props.trendSensors) && this.props.trendSensors.length > 0) {
-            features = sensorsToFeaturesTrend(
-                that.props.trendSensors, this.props.selectedParameter, this.props.threshold_value);
-        } else {
-            features = sensorsToFeaturesTrend(
-                that.props.sensors, this.props.selectedParameter, this.props.threshold_value);
+        map_items = this.props.trendSensors;
+
+        // This is for the Region Outlines for one Region at a time
+        if (that.props.selectedRegion != 'all' && that.props.selectedRegion != 'draw') {
+            area = getCustomTrendRegion(that.props.selectedRegion);
+            if (area && area.geometry) {
+                feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
+                region_features.push(feature);
+            }
         }
+
+        this.state.areaPolygonSource.clear();
+        this.state.areaPolygonSource.addFeatures(region_features);
+
+        features = sensorsToFeaturesTrendPage(
+            map_items, this.props.selectedParameter, threshold);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
+
+        if (area) {
+            this.state.map.getView().fit(
+                this.state.areaPolygonSource.getExtent(), this.state.map.getSize());
+        } else {
+            this.state.map.getView().fit(
+                this.state.vectorSource.getExtent(), this.state.map.getSize());
+        }
 
     }
 
     componentDidMount() {
 
-        let features = sensorsToFeaturesTrend(
-            this.props.sensors, this.props.selectedParameter, this.props.threshold_value);
+        let map_items;
+        let threshold = this.props.threshold_value;
+        let view_type = this.props.trendViewType;
+
+        map_items = this.props.sensors;
+
+        let features = sensorsToFeaturesTrendPage(
+            map_items, this.props.selectedParameter, threshold);
 
         let vectorSource = new ol.source.Vector({
             features: features
@@ -149,7 +173,6 @@ class AnalysisMap extends Component {
             distance: 1,
             source: this.state.vectorSource
         });
-        this.setState({clusterSource: clusterSource});
 
         let clusters = new ol.layer.Vector({
             source: clusterSource,
@@ -157,56 +180,54 @@ class AnalysisMap extends Component {
                 let size = feature.get('features').length;
                 let style;
 
-
-                    const trend_type = feature.getProperties().features[0].attributes.trend_type;
-                    if (trend_type == "trendUp") {
-                        style = (new ol.style.Style({
-                            image: new ol.style.RegularShape({
-                                points: 3,
-                                radius: 10,
-                                fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                                stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                            })
-                        }));
-                    } else if (trend_type == "trendDown") {
-                        style = (new ol.style.Style({
-                            image: new ol.style.RegularShape({
-                                points: 3,
-                                radius: 10,
-                                rotation: 3.141592654,
-                                fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                                stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                            })
-                        }));
-                    } else if (trend_type == "overThresholdUp") {
-                        style = (new ol.style.Style({
-                            image: new ol.style.RegularShape({
-                                points: 3,
-                                radius: 10,
-                                fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                                stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                            })
-                        }));
-                    } else if (trend_type == "overThresholdDown") {
-                        style = (new ol.style.Style({
-                            image: new ol.style.RegularShape({
-                                points: 3,
-                                radius: 10,
-                                rotation: 3.141592654,
-                                fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                                stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                            })
-                        }));
-                    } else if (trend_type == "noTrend" || trend_type == "") {
-                        style = (new ol.style.Style({
-                            image: new ol.style.Circle({
-                                radius: 4,
-                                fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                                stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                            })
-                        }));
-                    }
-
+                const trend_type = feature.getProperties().features[0].attributes.trend_type;
+                if (trend_type == "trendUp") {
+                    style = (new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 10,
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type == "trendDown") {
+                    style = (new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 10,
+                            rotation: 3.141592654,
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type == "overThresholdUp") {
+                    style = (new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 10,
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type == "overThresholdDown") {
+                    style = (new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 10,
+                            rotation: 3.141592654,
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type == "noTrend" || trend_type == "") {
+                    style = (new ol.style.Style({
+                        image: new ol.style.Circle({
+                            radius: 4,
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                }
 
                 return style;
 
@@ -218,6 +239,8 @@ class AnalysisMap extends Component {
             source: customLocationFilterVector,
             name: 'drawing_layer'
         });
+
+        clusters.setZIndex(1);
 
         let layers = [
             new ol.layer.Tile({
@@ -261,7 +284,6 @@ class AnalysisMap extends Component {
         let theMap;
 
         window.app = {};
-
 
         let selectPoints = [];
 
@@ -580,41 +602,27 @@ class AnalysisMap extends Component {
 
         };
 
-        if( this.props.display_draw == 'True' ) {
-            ol.inherits(appDrawClear.drawClearControl, ol.control.Control);
-            ol.inherits(appDrawSquare.drawSquareControl, ol.control.Control);
-            ol.inherits(appDrawCircle.drawCircleControl, ol.control.Control);
-            ol.inherits(appDrawCustom.drawCustomControl, ol.control.Control);
+        ol.inherits(appDrawClear.drawClearControl, ol.control.Control);
+        ol.inherits(appDrawSquare.drawSquareControl, ol.control.Control);
+        ol.inherits(appDrawCircle.drawCircleControl, ol.control.Control);
+        ol.inherits(appDrawCustom.drawCustomControl, ol.control.Control);
 
-            theMap = new ol.Map({
-                target: 'map',
-                layers: layers,
-                view: view,
-                overlays: [overlay],
-                controls: ol.control.defaults({
-                    attributionOptions: ({
-                        collapsible: false
-                    })
-                }).extend([
-                    new appDrawCircle.drawCircleControl(),
-                    new appDrawSquare.drawSquareControl(),
-                    new appDrawCustom.drawCustomControl(),
-                    new appDrawClear.drawClearControl(),
-                ])
-            });
-        } else {
-            theMap = new ol.Map({
-                target: 'map',
-                layers: layers,
-                view: view,
-                overlays: [overlay],
-                controls: ol.control.defaults({
-                    attributionOptions: ({
-                        collapsible: false
-                    })
+        theMap = new ol.Map({
+            target: 'map',
+            layers: layers,
+            view: view,
+            overlays: [overlay],
+            controls: ol.control.defaults({
+                attributionOptions: ({
+                    collapsible: false
                 })
-            });
-        }
+            }).extend([
+                new appDrawCircle.drawCircleControl(),
+                new appDrawSquare.drawSquareControl(),
+                new appDrawCustom.drawCustomControl(),
+                new appDrawClear.drawClearControl(),
+            ])
+        });
 
         let selectItems = new ol.interaction.Select();
         theMap.addInteraction(selectItems);
@@ -629,12 +637,20 @@ class AnalysisMap extends Component {
 
         theMap.on('singleclick', function (e) {
             selectItems.setActive(false);
-
-            let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (feature) {
-                that.popupHandler(feature.get('features')[0], e.coordinate);
+            let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
+                return featureChange;
             });
-
-
+            if (featuresAtPixel && featuresAtPixel.get('features')
+                != undefined && featuresAtPixel.get('features').length == 1) {
+                const feature = featuresAtPixel.get('features')[0];
+                that.popupHandler(feature, e.coordinate);
+            } else {
+                // Case when the click is anywhere else in the map
+                if (closer) {
+                    overlay.setPosition(undefined);
+                    closer.blur();
+                }
+            }
         });
 
         const trends_legend_var = document.getElementById('trends_legend');
@@ -666,11 +682,42 @@ class AnalysisMap extends Component {
                 );
         }
 
+        let areaPolygonSource = new ol.source.Vector({
+            features: [
+                new ol.Feature({})
+            ]
+        });
+
+        // This is for the Region Outlines
+        let areaPolygonLayer = new ol.layer.Vector({
+            id: "areaPolygon",
+            source: areaPolygonSource,
+            style: [
+                new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(0, 152, 254, 1)',
+                        width: 2
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(254, 254, 254, 0.3)'
+                    })
+                })
+            ]
+        });
+        theMap.addLayer(areaPolygonLayer);
+
         centerHelper(view, vectorSource, theMap);
 
-        this.setState({map: theMap});
+        this.setState(
+            {
+                clusterSource: clusterSource,
+                areaPolygonSource: areaPolygonSource,
+                map: theMap
+            }
+        );
     }
 
 }
 
 export default AnalysisMap
+

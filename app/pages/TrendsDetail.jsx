@@ -42,13 +42,13 @@ class TrendsDetail extends Component {
                                         {trendsRegionTitle} Trends Detail
                                     </CardTitle>
                                 </Card>
+                                <TrendsParameters
+                                    className={trendsStyles.parametersCardStyleDetail}
+                                    trends_settings={trendsPageSettings}
+                                    trends_threshold_choice={trendsThresholdChoice}
+                                    trends_defaults={trendsPageDefaults}
+                                />
                                 <List className={trendsStyles.detailListStyle}>
-                                    <br/>
-                                    <TrendsParameters
-                                        trends_settings={trendsPageSettings}
-                                        trends_threshold_choice={trendsThresholdChoice}
-                                        trends_defaults={trendsPageDefaults}
-                                    />
                                     <TrendsRegionDetails
                                         trends_region_name={trendsRegionName}
                                     />

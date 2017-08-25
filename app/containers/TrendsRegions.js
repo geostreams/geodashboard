@@ -16,8 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSelectTrendsRegion:(region) => {
-            dispatch(selectTrendsRegion(region));
+        onSelectTrendsRegion:(region, page, view_type) => {
+            dispatch(selectTrendsRegion(region, page, view_type));
         }
     }
 };
