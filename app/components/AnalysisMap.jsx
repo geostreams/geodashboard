@@ -8,8 +8,9 @@ require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import {getCustomTrendRegion, getTrendColor} from '../utils/getConfig';
-import {popupHelper, sensorsToFeaturesTrendPage, getAttribution} from '../utils/mapUtils';
-import {drawHelper, centerHelper} from '../utils/mapAction';
+import {sensorsToFeaturesTrendPage, getAttribution} from '../utils/mapUtils';
+import {popupHeader, popupTrends} from '../utils/mapPopup';
+import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
 
 class AnalysisMap extends Component {
@@ -98,7 +99,7 @@ class AnalysisMap extends Component {
         const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
 
-            let popupText = popupHelper(feature, styles);
+            let popupText = popupHeader(feature, styles) + popupTrends(feature, styles);
 
             if (content) {
                 content.innerHTML = popupText;
@@ -116,7 +117,7 @@ class AnalysisMap extends Component {
 
         let that = this;
 
-        drawHelper(copyOfMap, true, that);
+        drawHelper(copyOfMap, true, that.selectShapeLocation.bind(this), that.props.drawn_sensors);
 
         let map_items;
         let area;

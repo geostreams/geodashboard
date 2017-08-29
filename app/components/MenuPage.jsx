@@ -11,6 +11,9 @@ import {Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
 
 
 class MenuPage extends Component {
+    state: {
+        openMenu: boolean
+    }
 
     constructor(props: Object) {
         super(props);

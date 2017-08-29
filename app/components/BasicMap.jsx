@@ -1,5 +1,14 @@
 /*
  * @flow
+ *
+ * Basic Map is the underline Component for all maps.
+ * To create a button:
+ *     a normal button: create it in your own map.
+ *     a overlayer.control: create it in BasicMap and hide it unless all map will use it.
+ * To create a new layer:
+ *     a layer that will be add and remove from the map: refer to multiLineLayer in SearchMap
+ *     a layer that exist all the time and its sources are updated according to redux store:
+ *     refer to areaPolygonSource in SearchMap.
  */
 
 import React, {Component} from 'react';
@@ -7,14 +16,11 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
-import {getCustomLocation} from '../utils/getConfig';
-import {popupHelper, sensorsToFeatures, getMultiLineLayer, getAttribution} from '../utils/mapUtils';
-import {drawHelper, centerHelper} from '../utils/mapAction';
-import type {MapState, MapProps} from '../utils/flowtype';
+import {getAttribution} from '../utils/mapUtils';
+import type {Sensors, MapProps, BasicMapState} from '../utils/flowtype';
 
-
-class SearchMap extends Component {
-    state: MapState;
+class BasicMap extends Component {
+    state: BasicMapState;
 
     constructor(props: MapProps) {
         super(props);
@@ -22,12 +28,7 @@ class SearchMap extends Component {
             center: [-84.44799549, 38.9203417],
             vectorSource: new ol.source.Vector,
             clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector}),
-            multiLineLayer: new ol.layer.Vector,
-            multiLineString: new ol.geom.MultiLineString,
-            expandedClusterLayer: new ol.layer.Vector,
-            areaPolygonSource: new ol.source.Vector,
             customLocationFilterVectorExtent: [],
-            expandedCluster: false,
             currentZoom: 5.5,
             maxZoom: 12,
             // create a fake map to avoid checking map.isdefined every time for flow.
@@ -49,132 +50,60 @@ class SearchMap extends Component {
     render() {
 
         return (
-            <div>
-                <div id='map' className={styles.root}>
+         <div>
+            <div id='map' className={styles.root}>
+            </div>
+
+            <div style={{display: 'none'}}>
+                <div id="marker" title="Marker" className="marker"></div>
+                <div id="popup" className={styles.olPopup}>
+                    <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
+                    <div id="popup-content"></div>
                 </div>
-                <div id="search" style={{position: 'absolute', bottom: '10px', left: '25em', padding: '5px'}}>
-                    <button id="centerButton"><Icon name="gps_fixed"/></button>
-                </div>
+                <div id="ol-centercontrol" className={styles.olCenterButton}></div>
+                <button id="centerButton"><Icon name="gps_fixed"/></button>
 
-                <div style={{display: "none"}}>
-                    <div id="marker" title="Marker" className="marker"></div>
-                    <div id="popup" className={styles.olPopup}>
-                        <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
-                        <div id="popup-content"></div>
-                    </div>
+                <div id="ol-drawcirclecontrol"
+                     className={styles.olDrawCircleButton + ' ' +
+                    styles.olSharedDrawStyles + ' drawing_buttons'} ></div>
+                <button id="drawCircleButton" title="Click to Draw a Circle">
+                    <Icon name="panorama_fish_eye"/></button>
 
-                    <div id="ol-drawcirclecontrol"
-                         className={styles.olDrawCircleButton + ' ' +
-                        styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                    <button id="drawCircleButton" title="Click to Draw a Circle">
-                        <Icon name="panorama_fish_eye"/></button>
+                <div id="ol-drawsquarecontrol"
+                     className={styles.olDrawSquareButton + ' ' +
+                    styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                <button id="drawSquareButton" title="Click to Draw a Square">
+                    <Icon name="crop_square"/></button>
 
-                    <div id="ol-drawsquarecontrol"
-                         className={styles.olDrawSquareButton + ' ' +
-                        styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                    <button id="drawSquareButton" title="Click to Draw a Square">
-                        <Icon name="crop_square"/></button>
+                <div id="ol-drawcustomcontrol"
+                     className={styles.olDrawCustomButton + ' ' +
+                    styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                <button id="drawCustomButton" title="Click to Draw a Custom Shape">
+                    <Icon name="star_border"/></button>
 
-                    <div id="ol-drawcustomcontrol"
-                         className={styles.olDrawCustomButton + ' ' +
-                        styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                    <button id="drawCustomButton" title="Click to Draw a Custom Shape">
-                        <Icon name="star_border"/></button>
-
-                    <div id="ol-drawclearcontrol"
-                         className={styles.olDrawClearButton + ' ' +
-                         styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                    <button id="drawClearButton" title="Click to Reset Drawing Selection">
-                        <Icon name="clear"/></button>
-                </div>
-             </div>
-        );
+                <div id="ol-drawclearcontrol"
+                     className={styles.olDrawClearButton + ' ' +
+                     styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                <button id="drawClearButton" title="Click to Reset Drawing Selection">
+                    <Icon name="clear"/></button>
+            </div>
+        </div>);
 
     }
 
-    selectShapeLocation(event:Array<string>, drawExtent: Array<number>) {
-            this.props.onSelectShapeLocation(event, drawExtent);
-    }
 
-    displayOverlappingMarkers(featuresAtPixel: ol.features, theMap) {
-        const multiLineLayers = getMultiLineLayer(featuresAtPixel, theMap);
-        const multiLineLayer = multiLineLayers[0];
-        const newFeaturesLayer = multiLineLayers[1];
-        theMap.addLayer(newFeaturesLayer);
-        theMap.addLayer(multiLineLayer);
-        const currentZoom = theMap.getView().getZoom();
-
-        this.setState({currentZoom: currentZoom, multiLineString: multiLineString,
-            expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true})
-    }
-
-    removeSpiderfiedClusterLayers(theMap) {
-        theMap.removeLayer(this.state.expandedClusterLayer);
-        theMap.removeLayer(this.state.multiLineLayer);
-    }
-
-    popupHandler(feature: ol.Feature, coordinate: number[]) {
-        const content = document.getElementById('popup-content');
-        if (feature && feature.getId()) {
-
-            let popupText = popupHelper(feature, styles);
-
-            if (content) {
-                content.innerHTML = popupText;
-            }
-            let overlay = this.state.map.getOverlayById("marker");
-            overlay.setPosition(coordinate);
-        }
-
-    }
 
     componentDidUpdate() {
-        // FIXME: this does not get called all the time
-        // Try switching API and quickly switching to the search page
-        let features;
-
-        let copyOfMap = this.state.map;
-
-        let that = this;
-
-        drawHelper(copyOfMap, false, that);
-
-        console.log("Map component got new props");
-        features = sensorsToFeatures(this.props.updateSensors);
-        // add polygon according to  selected location
-
+        this.props.mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
         this.state.clusterSource.clear();
-        this.state.clusterSource.addFeatures(features);
+        this.state.clusterSource.addFeatures(this.props.features);
         this.state.vectorSource.clear();
-        this.state.vectorSource.addFeatures(features);
-
-        const area = getCustomLocation(that.props.selectedLocation);
-        let feature = new ol.Feature();
-        if (area && area.geometry) {
-            feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
-        }
-
-        this.state.areaPolygonSource.clear();
-        this.state.areaPolygonSource.addFeatures([feature]);
-
-        // If the User drew a custom location, zoom to the shape
-        if (this.state.customLocationFilterVectorExtent.length > 0 &&
-            this.props.selectedLocation == 'Custom Location') {
-            if (!this.state.expandedCluster) {
-                this.state.map.getView().fit(this.state.customLocationFilterVectorExtent, this.state.map.getSize());
-            }
-        // If the User selected a predefined location, zoom to the features
-        } else if (this.state.vectorSource.getFeatures().length > 0) {
-            if (!this.state.expandedCluster){
-                this.state.map.getView().fit(this.state.vectorSource.getExtent(), this.state.map.getSize());
-            }
-        }
-
+        this.state.vectorSource.addFeatures(this.props.features);
     }
 
     componentDidMount() {
 
-        let features = sensorsToFeatures(this.props.sensors);
+        let features = this.props.features;
 
         let vectorSource = new ol.source.Vector({
             features: features
@@ -186,55 +115,7 @@ class SearchMap extends Component {
         });
         this.setState({clusterSource: clusterSource});
 
-        let clusters = new ol.layer.Vector({
-            source: clusterSource,
-            style: function (feature) {
-                let size = feature.get('features').length;
-                let style;
-
-                if (size > 1) {
-                    style = new ol.style.Style({
-                        image: new ol.style.Circle({
-                            radius: 10,
-                            stroke: new ol.style.Stroke({
-                                color: '#fff'
-                            }),
-                            fill: new ol.style.Fill({
-                                color: '#3399CC'
-                            })
-                        }),
-                        text: new ol.style.Text({
-                            text: size.toString(),
-                            fill: new ol.style.Fill({
-                                color: '#fff'
-                            })
-                        })
-                    });
-                } else {
-
-                    let featureColor = feature.getProperties().features[0].attributes.color;
-                    let iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
-                        + '<g class="marker-g">'
-                        + '<path d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke="black" stroke-width="1" fill="white" />'
-                        + '	<ellipse cx="7.5" cy="8.5" rx="4.5" ry="5.5" class="map-pin-color" style="fill:' +
-                        featureColor + '"/>'
-                        + '<path class="mouseCapture" d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke-width="1" opacity="0"/>'
-                        + '</g>'
-                        + '</svg>';
-
-                    style = (new ol.style.Style({
-                        image: new ol.style.Icon({
-                            anchor: [0.5, 1],
-                            src: 'data:image/svg+xml;utf8,' + iconSvg,
-                        })
-
-                    }));
-                }
-
-                return style;
-
-            }
-        });
+        let clusters = this.props.getCluster(clusterSource);
         clusters.setZIndex(1);
 
         let customLocationFilterVector = new ol.source.Vector();
@@ -247,7 +128,7 @@ class SearchMap extends Component {
             new ol.layer.Tile({
                 source: new ol.source.XYZ({
                     attributions: [getAttribution()],
-                    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
+                    url: window.configruntime.mapTileURL
                 })
             }),
             clusters,
@@ -284,11 +165,37 @@ class SearchMap extends Component {
         });
         let theMap;
 
+        window.app = {};
+        let app = window.app;
+        app.centerControl = function (opt_options) {
+            let options = opt_options || {};
+            const centerButton = document.getElementById('centerButton');
+
+            let handleCenterButton = function () {
+                view.fit(vectorSource.getExtent(), theMap.getSize());
+            };
+            if (centerButton) {
+                centerButton.addEventListener('click', handleCenterButton, false);
+                centerButton.addEventListener('touchstart', handleCenterButton, false);
+            }
+
+            const element = document.getElementById('ol-centercontrol');
+            if (element && centerButton) {
+                element.className += ' ol-unselectable ol-control';
+                element.appendChild(centerButton);
+
+                ol.control.Control.call(this, {
+                    element: element,
+                    target: options.target
+                });
+            }
+
+        };
+        ol.inherits(app.centerControl, ol.control.Control);
+
         let selectPoints = [];
 
         const that = this;
-        window.app = {};
-
 
         // Add Draw Clear/Reset Button
         let appDrawClear = window.app;
@@ -298,7 +205,7 @@ class SearchMap extends Component {
 
             let handleDrawClearButton = function () {
                 theMap.getInteractions().forEach(function (e) {
-                    if (e instanceof ol.interaction.Draw) {
+                    if(e instanceof ol.interaction.Draw) {
                         theMap.removeInteraction(e);
                     }
                 });
@@ -317,7 +224,7 @@ class SearchMap extends Component {
                 let drawCoordinates = [];
 
                 // This is the button that will reset the points
-                that.selectShapeLocation(selectPointsLocations, drawCoordinates);
+                that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
 
                 let keep_draw_active = document.getElementById('draw');
                 if (keep_draw_active) {
@@ -360,7 +267,7 @@ class SearchMap extends Component {
 
                 theMap.addInteraction(drawSquare);
 
-                drawSquare.on('drawstart', function () {
+                drawSquare.on ('drawstart',function() {
                     selectItems.setActive(false);
                     selectPoints = [];
                 });
@@ -370,7 +277,7 @@ class SearchMap extends Component {
                     selectItems.setActive(true);
 
                     theMap.getInteractions().forEach(function (e) {
-                        if (e instanceof ol.interaction.Draw) {
+                        if(e instanceof ol.interaction.Draw) {
                             theMap.removeInteraction(e);
                         }
                     });
@@ -397,9 +304,9 @@ class SearchMap extends Component {
                     if (selectPoints.length > 0) {
                         for (let i = 0; i < selectPoints.length; i++) {
                             let selectPointFeatures = selectPoints[i].get('features');
-                            for (let j = 0; j < selectPointFeatures.length; j++) {
+                            for(let j = 0; j < selectPointFeatures.length; j++) {
                                 let featureName = selectPointFeatures[j].attributes.name;
-                                if (!selectPointsLocations.includes(featureName.toString())) {
+                                if(!selectPointsLocations.includes(featureName.toString())) {
                                     selectPointsLocations.push(featureName);
                                 }
                             }
@@ -408,11 +315,8 @@ class SearchMap extends Component {
 
                     // Get the shape coordinates
                     let drawCoordinates = drawExtent.getCoordinates();
-
-                    that.selectShapeLocation(selectPointsLocations, drawCoordinates);
-
+                    that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
                 });
-
             };
 
             if (drawSquareButton) {
@@ -449,7 +353,7 @@ class SearchMap extends Component {
 
                 theMap.addInteraction(drawCircle);
 
-                drawCircle.on('drawstart', function () {
+                drawCircle.on ('drawstart',function() {
                     selectItems.setActive(false);
                     selectPoints = [];
                 });
@@ -459,7 +363,7 @@ class SearchMap extends Component {
                     selectItems.setActive(true);
 
                     theMap.getInteractions().forEach(function (e) {
-                        if (e instanceof ol.interaction.Draw) {
+                        if(e instanceof ol.interaction.Draw) {
                             theMap.removeInteraction(e);
                         }
                     });
@@ -486,19 +390,18 @@ class SearchMap extends Component {
                     if (selectPoints.length > 0) {
                         for (let i = 0; i < selectPoints.length; i++) {
                             let selectPointFeatures = selectPoints[i].get('features');
-                            for (let j = 0; j < selectPointFeatures.length; j++) {
+                            for(let j = 0; j < selectPointFeatures.length; j++) {
                                 let featureName = selectPointFeatures[j].attributes.name;
-                                if (!selectPointsLocations.includes(featureName.toString())) {
+                                if(!selectPointsLocations.includes(featureName.toString())) {
                                     selectPointsLocations.push(featureName);
                                 }
                             }
                         }
                     }
-
                     // Get the shape coordinates
                     let drawCoordinates = drawExtent.getCoordinates();
 
-                    that.selectShapeLocation(selectPointsLocations, drawCoordinates);
+                    that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
 
                 });
 
@@ -537,7 +440,7 @@ class SearchMap extends Component {
 
                 theMap.addInteraction(drawCustom);
 
-                drawCustom.on('drawstart', function () {
+                drawCustom.on ('drawstart',function() {
                     selectItems.setActive(false);
                     selectPoints = [];
                 });
@@ -547,7 +450,7 @@ class SearchMap extends Component {
                     selectItems.setActive(true);
 
                     theMap.getInteractions().forEach(function (e) {
-                        if (e instanceof ol.interaction.Draw) {
+                        if(e instanceof ol.interaction.Draw) {
                             theMap.removeInteraction(e);
                         }
                     });
@@ -574,20 +477,18 @@ class SearchMap extends Component {
                     if (selectPoints.length > 0) {
                         for (let i = 0; i < selectPoints.length; i++) {
                             let selectPointFeatures = selectPoints[i].get('features');
-                            for (let j = 0; j < selectPointFeatures.length; j++) {
+                            for(let j = 0; j < selectPointFeatures.length; j++) {
                                 let featureName = selectPointFeatures[j].attributes.name;
-                                if (!selectPointsLocations.includes(featureName.toString())) {
+                                if(!selectPointsLocations.includes(featureName.toString())) {
                                     selectPointsLocations.push(featureName);
                                 }
                             }
                         }
                     }
-
                     // Get the shape coordinates
                     let drawCoordinates = drawExtent.getCoordinates();
 
-                    that.selectShapeLocation(selectPointsLocations, drawCoordinates);
-
+                    that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
                 });
 
             };
@@ -609,6 +510,7 @@ class SearchMap extends Component {
             }
 
         };
+
         ol.inherits(appDrawClear.drawClearControl, ol.control.Control);
         ol.inherits(appDrawSquare.drawSquareControl, ol.control.Control);
         ol.inherits(appDrawCircle.drawCircleControl, ol.control.Control);
@@ -624,105 +526,35 @@ class SearchMap extends Component {
                     collapsible: false
                 })
             }).extend([
-                //new app.centerControl(),
+                new app.centerControl(),
                 new appDrawCircle.drawCircleControl(),
                 new appDrawSquare.drawSquareControl(),
                 new appDrawCustom.drawCustomControl(),
-                new appDrawClear.drawClearControl(),
+                new appDrawClear.drawClearControl()
             ])
         });
 
         let selectItems = new ol.interaction.Select();
         theMap.addInteraction(selectItems);
 
-        theMap.getView().on("change:resolution", function () {
-            if (closer) {
-                overlay.setPosition(undefined);
-                closer.blur();
-            }
-            if (that.state.expandedCluster) {
-                that.removeSpiderfiedClusterLayers(theMap);
-            }
+        theMap.getView().on("change:resolution", function (e) {
+            that.props.onMapChangeResolution(theMap, e);
         });
-
-        let fill = new ol.style.Fill({color: [255, 255, 255, 1]}),
-            stroke = new ol.style.Stroke({color: [0, 0, 0, 1]});
 
 
         theMap.on('singleclick', function (e) {
             selectItems.setActive(false);
-
-            let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
-                return featureChange;
-            });
-
-            // If a cluster is expanded we want to close it, unless there was a click in one of the features that is expanded
-            let closeClusters = true;
-            if (featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type == "single"))) {
-                // Case when a feature is expanded
-                that.popupHandler(featuresAtPixel, e.coordinate);
-                closeClusters = false;
-            } else if (featuresAtPixel && featuresAtPixel.get('features') != undefined && featuresAtPixel.get('features').length == 1) {
-                // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
-                const feature = featuresAtPixel.get('features')[0];
-                that.popupHandler(feature, e.coordinate);
-            } else if (featuresAtPixel && featuresAtPixel.get('features') != undefined && featuresAtPixel.get('features').length > 1) {
-                // Case when a clustered was click. If it has more than 4 features and is in a zoom level lower than maxZoom, zoom in
-                // if(featuresAtPixel.get('features').length > 4 && theMap.getView().getZoom() < that.state.maxZoom) {
-                //     theMap.getView().setZoom(theMap.getView().getZoom() + 1);
-                //     theMap.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
-                // } else {
-                if (that.state.expandedCluster) {
-                    that.removeSpiderfiedClusterLayers(theMap);
-                }
-                that.displayOverlappingMarkers(featuresAtPixel, theMap, that);
-                closeClusters = false;
-
-                // }
-
-            } else {
-                // Case when the click is anywhere else in the map
-                if (closer) {
-                    overlay.setPosition(undefined);
-                    closer.blur();
-                }
-
-            }
-            if (closeClusters && that.state.expandedCluster) {
-                that.removeSpiderfiedClusterLayers(theMap);
-            }
-
+            that.props.onMapSingleClick(theMap, e);
         });
 
-        let areaPolygonSource = new ol.source.Vector({
-            features: [
-                new ol.Feature({})
-            ]
-        });
 
-        this.setState({areaPolygonSource: areaPolygonSource});
+        if(this.props.customLayers){
+            this.props.customLayers.map(l=> theMap.addLayer(l));
+        }
 
-        let areaPolygonLayer = new ol.layer.Vector({
-            id: "areaPolygon",
-            source: areaPolygonSource,
-            style: [
-                new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: 'rgba(0, 152, 254, 1)',
-                        width: 2
-                    }),
-                    fill: new ol.style.Fill({
-                        color: 'rgba(254, 254, 254, 0.3)'
-                    })
-                })
-            ]
-        });
-        theMap.addLayer(areaPolygonLayer);
-
-        centerHelper(view, vectorSource, theMap);
         this.setState({map: theMap});
     }
 
 }
 
-export default SearchMap
+export default BasicMap;

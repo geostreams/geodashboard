@@ -8,8 +8,9 @@ require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import {getTrendColor, getCustomLocation} from '../utils/getConfig';
-import {popupHelper, sensorsToFeaturesTrendPage, getAttribution} from '../utils/mapUtils';
-import {drawHelper, centerHelper} from '../utils/mapAction';
+import {popupHeader, popupTrends} from '../utils/mapPopup';
+import {sensorsToFeaturesTrendPage, getAttribution} from '../utils/mapUtils';
+import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
 
 
@@ -66,7 +67,7 @@ class TrendsMap extends Component {
         const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
 
-            let popupText = popupHelper(feature, styles);
+            let popupText = popupHeader(feature, styles) + popupTrends(feature, styles);
 
             if (content) {
                 content.innerHTML = popupText;

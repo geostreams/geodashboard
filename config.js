@@ -1108,3 +1108,6 @@ export const trends_analysis_defaults = [
 export const trends_page_regions = additional_locations;
 
 export const trends_page_thresholds = trends_page_settings;
+
+export const mapTileURL = 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}';
+

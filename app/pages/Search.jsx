@@ -6,7 +6,7 @@ import React, {Component} from 'react'
 import styles from '../styles/main.css';
 import stylesearch from '../styles/search.css';
 import SearchMap from '../containers/SearchMap';
-import MenuPage from './MenuPage';
+import MenuPage from '../components/MenuPage';
 import DownloadButtons from '../containers/DownloadButtons';
 import FilterSelection from '../containers/FilterSelection';
 import {Card, CardText, CardMedia, List, Content, Grid, Cell} from 'react-mdc-web';
@@ -31,9 +31,7 @@ class Search extends Component {
                             </Cell>
                             <Cell col={10}>
                                 <div className={styles.rightmap} >
-                                    <SearchMap updateSensors={this.props.availableSensors}
-                                         locationSelected={this.props.selectedSearchLocation}
-                                         display_draw='True'/>
+                                    <SearchMap />
                                 </div>
                             </Cell>
                         </Grid>

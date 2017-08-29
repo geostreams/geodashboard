@@ -9,12 +9,9 @@ import type { Dispatch } from '../utils/flowtype'
 const mapStateToProps = (state) => {
     return {
         sensors: state.sensors.data,
+        updateSensors: state.sensors.available_sensors,
         drawn_sensors: state.sensors.draw_available_sensors,
-        popupSensorname: state.sensorDetail.name,
-        popupCoordinates: state.sensorDetail.coordinates,
-        selectedLocation: state.selectedSearch.locations.selected,
-        threshold_value: state.sensorTrends.threshold_value,
-
+        selectedLocation: state.selectedSearch.locations.selected
     }
 };
 

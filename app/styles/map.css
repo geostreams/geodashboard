@@ -80,6 +80,7 @@
 .olSharedDrawStyles {
   left: .5em;
   border-radius: 0.15em;
+  visibility:hidden;
 }
 
 .popup_table {

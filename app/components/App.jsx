@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Router, Route, browserHistory, hashHistory} from 'react-router';
-import Search from '../containers/Search';
+import {Router, Route, hashHistory} from 'react-router';
+import Search from '../pages/Search';
 import Home from '../pages/Home';
 import Explore from '../pages/Explore';
 import TrendsStation from '../pages/TrendsSensor';
@@ -23,19 +23,18 @@ class App extends Component {
 
     render() {
         return (
-
-            <Router history={hashHistory}>
-                <Route path="/" component={Home}/>
-                <Route path="/explore" component={Explore}/>
-                <Route path="/detail/location/:name" component={Detail}/>
-                <Route path="/search" component={Search}/>
-                <Route path="/trendsstations" component={TrendsStation}/>
-                <Route path="/trendsregions" component={TrendsRegion}/>
-                <Route path="/trendsdetail/region/:region" component={TrendsDetail}/>
-                <Route path="/analysis" component={Analysis}/>
-                <Route path="/about" component={About}/>
-                <Route path="*" component={RouteMismatch}/>
-            </Router>
+                <Router history={hashHistory}>
+                    <Route path="/" component={Home}/>
+                    <Route path="/explore" component={Explore}/>
+                    <Route path="/detail/location/:name" component={Detail}/>
+                    <Route path="/search" component={Search}/>
+                    <Route path="/trendsstations" component={TrendsStation}/>
+                    <Route path="/trendsregions" component={TrendsRegion}/>
+                    <Route path="/trendsdetail/region/:region" component={TrendsDetail}/>
+                    <Route path="/analysis" component={Analysis}/>
+                    <Route path="/about" component={About}/>
+                    <Route path="*" component={RouteMismatch}/>
+                </Router>
         )
     }
 }

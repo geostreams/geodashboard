@@ -13,12 +13,12 @@ import {Card, CardHeader, CardTitle, CardMedia,
 import styles from '../styles/regionMiniMap.css';
 import {getTrendColor, getCustomLocation} from '../utils/getConfig';
 import {popupHelperTrendDetailPage, sensorsToFeaturesTrendDetailPage, getAttribution} from '../utils/mapUtils';
-import {drawHelper} from '../utils/mapAction';
+import {drawHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
 
 class RegionMiniMap extends Component {
 
-    state: TrendsMapState;
+    state: TrendsMapState & {openMenu: boolean, areaPolygonSource: ol.source.Vector,};
 
     constructor(props: MapProps) {
         super(props);

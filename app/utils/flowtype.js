@@ -1,7 +1,7 @@
 /*
  * @flow
  */
-
+let ol = require('openlayers');
 export type Geometry = {
     type:string;
     coordinates:string[]
@@ -102,30 +102,25 @@ export type MapProps = {
     availableSensors: Sensors
 };
 
-export type MapState = {
+export type BasicMapState = {
     center: Array <number>,
     vectorSource: ol.source.Vector,
-    clusterSource: ol.souce.Cluster,
+    clusterSource: ol.source.Cluster,
     customLocationFilterVectorExtent: Array <number>,
-    multiLineLayer: ol.layer.Vector,
-    multiLineString: ol.geom.MultiLineString,
-    expandedClusterLayer: ol.layer.Vector,
-    areaPolygonSource: ol.source.Vector,
-    expandedCluster: boolean,
     map: ol.Map,
     currentZoom: number,
     maxZoom: number
 };
 
+//TODO: remove this when using BasicMap in Trends Map
 export type TrendsMapState = {
     center: Array <number>,
-    vectorSource: Object,
-    clusterSource: Object,
-    areaPolygonSource: Object,
-    map: Object,
+    vectorSource: ol.source.Vector,
+    clusterSource: ol.source.Cluster,
+    areaPolygonSource: ol.source.Vector,
+    map: ol.Map,
     currentZoom: number,
     maxZoom: number,
-    openMenu: boolean,
 };
 
 export type RegionGeometry = {
@@ -192,6 +187,11 @@ type ElementEventTemplate<E> = {
     } & Event;
 
 export type InputEvent = ElementEventTemplate<HTMLInputElement>;
+type eventOnMap = {
+    pixel: Array<number>,
+    coordinate: Array<number>
+}
+export type InputEventMap = InputEventMap & eventOnMap;
 
 
 //type Dispatch = (action: Action | Promise<Action>) => Promise;
