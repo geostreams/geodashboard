@@ -1,23 +1,23 @@
-export const sourcecolor = {
-    "ads": "#bf5fff",
-    "ats": "#0d71ba",
-    "epa" :  "#0D71BA",
-    "glfmsp" : "#F7941E",
-    "gsfmp" : "#CC2128",
-    "heidelberg" : "#CC2128",
-    "iadn" : "#8A2BE2",
-    "ifis": "#a17c6c",
-    "imlczo": "#C4B9A2",
-    "isws": "#f7941e",
-    "lec" : "#4D6363",
-    "noaa" : "#043C82",
-    "ps" : "#cc2128",
-    "ss" : "#4d6363",
-    "usgs" : "#39B54A",
-    "wqp" : "#F28E1E"
-};
-
-export const parameter_maps = {
+export const gd3 = {
+    sourcecolor : {
+        "ads": "#bf5fff",
+        "ats": "#0d71ba",
+        "epa" :  "#0D71BA",
+        "glfmsp" : "#F7941E",
+        "gsfmp" : "#CC2128",
+        "heidelberg" : "#CC2128",
+        "iadn" : "#8A2BE2",
+        "ifis": "#a17c6c",
+        "imlczo": "#C4B9A2",
+        "isws": "#f7941e",
+        "lec" : "#4D6363",
+        "noaa" : "#043C82",
+        "ps" : "#cc2128",
+        "ss" : "#4d6363",
+        "usgs" : "#39B54A",
+        "wqp" : "#F28E1E"
+    },
+    parameter_maps : {
     "biomass": "Zooplankton Biomass (ug/m^3)",
     "density": "Zooplankton Density (#/m^3)",
     "alkalinity": "Alkalinity (mg/L)",
@@ -172,26 +172,24 @@ export const parameter_maps = {
     "vapor_total_endos": "Vapor Total Endos (pg/m^3)",
     "vapor_total_pahs": "Vapor Total PAHs (pg/m^3)",
     "vapor_total_pests": "Vapor Total PESTs (pg/m^3)"
-};
-
-export const sourcename = {
+},
+sourcename : {
     "glfmsp": "Great Lakes Fish Monitoring and Surveillance Program",
     "epa": "Water Quality Data",
     "heidelberg": "Heidelberg University",
     "lec": "Lake Erie Committee Forage Task Group",
     "usgs": "United States Geological Survey",
     "iadn": "Integrated Atmospheric Deposition Network"
-};
-
-export const trend_colors = {
+},
+trend_colors : {
     "trendUp" : "#FAE70B",
     "trendDown" : "#29ABE2",
     "noTrend" : "#7F7F7F",
     "overThresholdUp" : "#ED2026",
     "overThresholdDown" : "#ED2026"
-};
+},
 
-export const trend_settings = [
+trend_settings : [
     {
         "parameter": {
             "id": "nitrate-as-n-mgl",
@@ -261,9 +259,9 @@ export const trend_settings = [
             }
         ]
     }
-];
+],
 
-export const trend_analysis_regions = [
+trend_analysis_regions : [
     {
         "type": "Feature",
         "properties": {
@@ -358,9 +356,9 @@ export const trend_analysis_regions = [
             "region_coordinate": []
         }
     }
-];
+],
 
-export const clowder_endpoints = [
+clowder_endpoints : [
     {url: "https://greatlakesmonitoring.org/clowder", label: "GLM PROD"},
     {url: "https://seagrant-dev.ncsa.illinois.edu/clowder", label: "GLM DEV"},
     {url: "https://greatlakestogulf.org/clowder", label: "GLTG PROD"},
@@ -368,9 +366,9 @@ export const clowder_endpoints = [
     {url: "http://data.imlczo.org/clowder", label: "IMLCZO PROD"},
     {url: "https://imlczo-dev.ncsa.illinois.edu/clowder", label: "IMLCZO DEV"},
     {url: "http://141.142.211.37/clowder", label: "IMLCZO NEBULA"}
-];
+],
 
-export const additional_locations = [
+additional_locations : [
     {
         "type": "Feature",
         "properties": {
@@ -910,9 +908,9 @@ export const additional_locations = [
             "region_coordinate": [-77.8, 43.6, 0]
         }
     }
-];
+],
 
-export const trends_page_settings = [
+trends_page_settings : [
     {
         "parameter": {
             "id": "total-phosphorus",
@@ -1027,9 +1025,9 @@ export const trends_page_settings = [
             }
         ]
     }
-];
+],
 
-export const trends_page_seasons = [
+trends_page_seasons : [
     {
         "id": "spring",
         "title": "Spring"
@@ -1037,9 +1035,9 @@ export const trends_page_seasons = [
         "id": "summer" ,
         "title": "Summer",
     }
-];
+],
 
-export const trends_page_view_types = [
+trends_page_view_types : [
     {
         "id": "by-sensors",
         "title": "Stations"
@@ -1047,9 +1045,9 @@ export const trends_page_view_types = [
         "id": "by-regions" ,
         "title": "Regions",
     }
-];
+],
 
-export const trends_page_timeframes = [
+trends_page_timeframes : [
     {
         "id": "baseline_totalyear",
         "value": 10
@@ -1057,9 +1055,9 @@ export const trends_page_timeframes = [
         "id": "rolling_interval" ,
         "value": 2,
     }
-];
+],
 
-export const trends_page_defaults = [
+trends_page_defaults : [
     {
         "id": "parameter",
         "value": "None"
@@ -1076,9 +1074,9 @@ export const trends_page_defaults = [
         "id": "region" ,
         "value": "all",
     }
-];
+],
 
-export const trends_analysis_defaults = [
+trends_analysis_defaults : [
     {
         "id": "parameter",
         "value": "None"
@@ -1103,11 +1101,7 @@ export const trends_analysis_defaults = [
         "id": "rollingPeriod" ,
         "value": 2,
     }
-];
-
-export const trends_page_regions = additional_locations;
-
-export const trends_page_thresholds = trends_page_settings;
-
-export const mapTileURL = 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}';
-
+],
+    mapTileURL : 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
+    // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
+}

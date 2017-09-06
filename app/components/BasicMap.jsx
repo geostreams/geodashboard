@@ -128,7 +128,7 @@ class BasicMap extends Component {
             new ol.layer.Tile({
                 source: new ol.source.XYZ({
                     attributions: [getAttribution()],
-                    url: window.configruntime.mapTileURL
+                    url: window.configruntime.gd3.mapTileURL
                 })
             }),
             clusters,

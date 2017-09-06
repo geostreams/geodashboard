@@ -15,8 +15,8 @@ const backends = (state:backendsState = defaultState, action:BackendAction) => {
 	switch(action.type) {
         case 'ADD_ENDPOINTS':
             return Object.assign({}, state, {
-                endpoints: window.configruntime.clowder_endpoints,
-                selected: window.configruntime.clowder_endpoints[0].url
+                endpoints: window.configruntime.gd3.clowder_endpoints,
+                selected: window.configruntime.gd3.clowder_endpoints[0].url
             });
         case 'SWITCH_BACKEND':
             return Object.assign({}, state, {selected: action.selected});

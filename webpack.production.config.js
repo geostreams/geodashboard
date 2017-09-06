@@ -1,5 +1,6 @@
 var webpack = require("webpack");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var path = require("path");
 
 module.exports = {
@@ -48,6 +49,13 @@ module.exports = {
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin(),
-    new HtmlWebpackPlugin({title: 'Geodashboard', hash: true, template: 'public/index.html'})
+    new HtmlWebpackPlugin({title: 'Geodashboard', hash: true, template: 'public/index.html'}),
+    new CopyWebpackPlugin([{
+        from: 'config.js',
+        transform: function(content, absoluteFrom) {
+            // return content.replace("export const ", "window.config.");
+            return content.toString().replace("export const gd3 = ", "window.config = {\n    gd3:") + "}"
+        }
+    }])
   ],
 };

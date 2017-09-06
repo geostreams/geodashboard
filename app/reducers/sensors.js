@@ -147,7 +147,7 @@ export function collectDates(sensorsData:Sensors):CollectDate {
 
 export function collectLocations(sensorsData:Sensors):MapWithLabels {
     const locations:MapWithLabels = [];
-    const additional_location = window.configruntime.additional_locations;
+    const additional_location = window.configruntime.gd3.additional_locations;
 
     sensorsData.map(s => {
         // old code, keep this for other geodashboard
@@ -279,7 +279,7 @@ function matchLocation(selectedLocation:string, sensor:Sensor) {
         return location.properties.id === selectedLocation;
     }
 
-    const customLocation = window.configruntime.additional_locations.find(findLocation);
+    const customLocation = window.configruntime.gd3.additional_locations.find(findLocation);
     if (!customLocation)
         return false;
     return pnpoly(sensor.geometry.coordinates[1], sensor.geometry.coordinates[0], customLocation.geometry.coordinates)

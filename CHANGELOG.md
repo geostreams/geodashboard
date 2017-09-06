@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-348](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-348)
   [GLGVO-349](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-349)
   [GLGVO-356](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-356)
-
+- Copy config.js into build directory. [GEOD-970](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-970)
 
 ### Fixed
 - Bug in filtering for custom locations

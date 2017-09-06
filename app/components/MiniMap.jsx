@@ -22,7 +22,7 @@ class MiniMap extends Component {
     }
 
     getColor(source:string):string {
-        var sourcecolor = window.configruntime.sourcecolor;
+        var sourcecolor = window.configruntime.gd3.sourcecolor;
         return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
     }
 
