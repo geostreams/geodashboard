@@ -40,6 +40,20 @@
     overflow-y: auto;
 }
 
+.close_button_collapsed_card {
+    float: right;
+    width: 1em;
+    cursor: pointer;
+    padding-left: 0.33em;
+}
+
+.close_button_open_card {
+    float: right;
+    width: 1em;
+    cursor: pointer;
+    padding-top: 0.5em;
+}
+
 .right {
     float: right;
     width: 1em;

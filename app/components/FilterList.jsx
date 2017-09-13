@@ -175,7 +175,7 @@ class FilterList extends Component {
                             {options}
                         </Select>
                     </div>
-                    <div className={styles.right}>
+                    <div className={styles.close_button_open_card}>
                         <a onClick={this.props.onClickRemove} data-idx={idx}>
                             <Icon className={styles.closeIcon} name='close'/>
                         </a>
@@ -183,12 +183,17 @@ class FilterList extends Component {
                     <br/>
                 </CardHeader>
             );
+        // if this filter is closed
         } else {
             cardsubtitle = cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 0 ? cardsubtitle : "No selection";
             cardhead = (
                 <CardHeader>
                     <CardTitle
-                        className={styles.title_card}>{this.props.attribute.replace("data_source", "data source")}</CardTitle>
+                        className={styles.title_card}>{this.props.attribute.replace("data_source", "data source")}
+                        <a className={styles.close_button_collapsed_card} onClick={this.props.onClickRemove} data-idx={idx}>
+                            <Icon className={styles.closeIcon} name='close'/>
+                        </a>
+                    </CardTitle>
                     <CardSubtitle> {cardsubtitle} </CardSubtitle>
                 </CardHeader>
             )
