@@ -64,6 +64,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-356](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-356)
 - Add an 'x' to the collapsed filters
   [GEOD-912](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-912)
+- Added an edit button on collapsed cards
+  [GEOD-911](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-911)
 
 ### Fixed
 - Bug in filtering for custom locations
