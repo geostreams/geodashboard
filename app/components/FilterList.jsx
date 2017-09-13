@@ -9,8 +9,8 @@ import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json';
 import {getLocationName} from '../utils/getConfig';
 import {
-    Button, Icon, Checkbox, FormField, label, RadioGroup, Radio, Elevation, Card, CardHeader, CardTitle, CardSubtitle,
-    CardText, CardMedia
+    Button, Icon, Checkbox, FormField, label, RadioGroup, Radio,
+    Card, CardHeader, CardTitle, CardSubtitle, CardText, CardMedia
 } from 'react-mdc-web';
 import type {InputEvent} from '../utils/flowtype';
 import Select from './material/Select';
@@ -207,11 +207,17 @@ class FilterList extends Component {
                 {divContents}
 
             </CardText>;
+        } else {
+            // if the filter is closed, display an open icon
+            cardMedia =
+                <a className={styles.edit_filter_button} onClick={this.props.onExpand} >
+                    <Icon name='keyboard_arrow_down'/>
+                </a>
         }
 
         return (
 
-            <Card className={styles.filter_card} id={this.props.idx} onClick={this.props.onExpand}>
+            <Card className={styles.filter_card} id={this.props.idx}>
                 {cardhead}
                 {cardMedia}
             </Card>

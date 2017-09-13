@@ -108,6 +108,8 @@ hr.divider_style {
     width: 16em;
 }
 
-.formfield {
-
+.edit_filter_button {
+    cursor: pointer;
+    margin: auto;
 }
+
