@@ -53,7 +53,7 @@ class TrendsSeasons extends Component {
                         Select Season
                     </CardTitle>
                     <CardSubtitle>
-                        Season to Explore
+                        {window.configruntime.gd3.season_subtitle}
                     </CardSubtitle>
                 </CardHeader>
                 <CardActions>

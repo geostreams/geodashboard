@@ -47,7 +47,7 @@ class TrendsRegions extends Component {
                             Select Region
                         </CardTitle>
                         <CardSubtitle>
-                            Region to Explore
+                            {window.configruntime.gd3.region_subtitle}
                         </CardSubtitle>
                     </CardHeader>
                     <CardActions>

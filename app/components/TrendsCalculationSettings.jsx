@@ -69,7 +69,7 @@ class TrendsCalculationSettings extends Component {
             <Card className={trendsStyles.cardMargin} key="calculate">
                 <CardHeader>
                     <CardTitle>Change Calculation Setting</CardTitle>
-                    <CardSubtitle>Set Average Baseline and Rolling Periods</CardSubtitle>
+                    <CardSubtitle>{window.configruntime.gd3.calculation_subtitle}</CardSubtitle>
                 </CardHeader>
                 <CardText>
                     <Grid>

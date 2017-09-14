@@ -78,6 +78,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-838](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-838)
 - Refactor code associated with Trends
   [GEOD-963](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-963)
+- Make the subtitle in cards for optional on the Trends and Analysis Pages
+  [GEOD-961](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-961)
 
 ### Fixed
 - Bug in filtering for custom locations

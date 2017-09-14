@@ -107,7 +107,7 @@ class TrendsThresholds extends Component {
                             Select Threshold Value
                         </CardTitle>
                         <CardSubtitle>
-                            Change the threshold value for analysis
+                            {window.configruntime.gd3.threshold_subtitle}
                         </CardSubtitle>
                     </CardHeader>
                     <CardText>
@@ -147,7 +147,7 @@ class TrendsThresholds extends Component {
                             Select Threshold
                         </CardTitle>
                         <CardSubtitle>
-                            Threshold to Explore
+                            {window.configruntime.gd3.threshold_none_subtitle}
                         </CardSubtitle>
                     </CardHeader>
                     <CardText>

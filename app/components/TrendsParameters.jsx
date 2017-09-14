@@ -61,7 +61,7 @@ class TrendsParameters extends Component {
                         Select Parameter
                     </CardTitle>
                     <CardSubtitle>
-                        Click a Parameter to Explore
+                        {window.configruntime.gd3.parameter_subtitle}
                     </CardSubtitle>
                 </CardHeader>
                 <CardActions>
