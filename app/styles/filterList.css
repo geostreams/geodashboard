@@ -69,7 +69,6 @@
 }
 
 .filter_card {
-    max-height: 30em;
     width: 20em;
     margin: 1em 0em 0em 0em;
     padding: 0.5em 1em 1em 1em;
@@ -112,4 +111,3 @@ hr.divider_style {
     cursor: pointer;
     margin: auto;
 }
-
