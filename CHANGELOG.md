@@ -78,3 +78,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Bug in filtering for custom locations
   [GEOD-925](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-925)
+- Removed the card max-height on the V3 Search Page
+  [GEOD-982](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-982)
