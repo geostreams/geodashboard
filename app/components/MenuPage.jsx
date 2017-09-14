@@ -8,7 +8,7 @@ import styles from '../styles/menuPage.css';
 import {Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
         Button, MenuItem, Menu, MenuAnchor
 } from 'react-mdc-web';
-
+import {getApplicationOptions} from '../utils/getConfig';
 
 class MenuPage extends Component {
     state: {
@@ -26,42 +26,60 @@ class MenuPage extends Component {
         this.setState({openMenu: openMenuValue});
     };
 
-
     render() {
 
-        return (
-            <Toolbar>
-                <ToolbarRow>
-                    <ToolbarSection align="start">
-                        <ToolbarTitle> Geodashboard 3.0</ToolbarTitle>
-                    </ToolbarSection>
-                    <ToolbarSection align="end">
-                        <ToolbarTitle className={styles.menu_items}>
-                            <Button><Link onlyActiveOnIndex to="/">HOME</Link></Button>
-                            <Button><Link onlyActiveOnIndex to="/explore">EXPLORE</Link></Button>
-                            <Button><Link onlyActiveOnIndex to="/search">SEARCH</Link></Button>
-                            <Button><Link onlyActiveOnIndex to="/analysis">EXPLORATORY ANALYSIS</Link></Button>
+        let application_title;
+        let applicationOptions = getApplicationOptions();
+        let menuOptions = [];
+        let menuOptionsMap = [];
+
+        if (applicationOptions) {
+            for (let i = 0; i < applicationOptions.length; i++) {
+                application_title = applicationOptions[i].title;
+                applicationOptions[i].pages.map(m => {
+                    if (m.name == 'TRENDS') {
+                        menuOptionsMap.push(
                             <Button className={styles.trends_button_style}
-                                    onClick={this.onClickTrendButton.bind(this, true)}>
+                                onClick={this.onClickTrendButton.bind(this, true)}>
                                 TRENDS
-                            </Button>
-                            <Button><Link onlyActiveOnIndex to="/about">ABOUT</Link></Button>
+                            </Button>);
+                        menuOptionsMap.push(
                             <MenuAnchor className={styles.menu_anchor_style}>
                                 <Menu className={styles.menu_style}
                                       open={this.state.openMenu}
                                       onClose={this.onClickTrendButton.bind(this, false)}>
                                     <MenuItem>
                                         <Button className={styles.button_style}>
-                                            <Link onlyActiveOnIndex to="/trendsstations">TRENDS STATIONS</Link>
+                                            <Link href={"#trendsstations"}>TRENDS STATIONS</Link>
                                         </Button>
                                     </MenuItem>
                                     <MenuItem>
                                         <Button className={styles.button_style}>
-                                            <Link onlyActiveOnIndex to="/trendsregions">TRENDS REGIONS</Link>
+                                            <Link href={"#trendsregions"}>TRENDS REGIONS</Link>
                                         </Button>
                                     </MenuItem>
                                 </Menu>
                             </MenuAnchor>
+                        )
+                    } else {
+                        menuOptionsMap.push(
+                            <Button><Link href={m.url}>{m.name}</Link></Button>
+                        )
+                    }
+                });
+                menuOptions = menuOptions.concat(menuOptionsMap);
+            }
+        }
+
+        return (
+            <Toolbar>
+                <ToolbarRow>
+                    <ToolbarSection align="start">
+                        <ToolbarTitle>{application_title}</ToolbarTitle>
+                    </ToolbarSection>
+                    <ToolbarSection align="end">
+                        <ToolbarTitle className={styles.menu_items}>
+                            {menuOptions}
                         </ToolbarTitle>
                     </ToolbarSection>
                 </ToolbarRow>

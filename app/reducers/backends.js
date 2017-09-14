@@ -2,7 +2,7 @@
  * @flow
  */
 
-import type { backendsState } from '../utils/flowtype'
+import type { backendsState } from '../utils/flowtype';
 
 type BackendAction = {| type:'SWITCH_BACKEND', selected:string |};
 

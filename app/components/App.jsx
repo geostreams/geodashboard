@@ -11,6 +11,7 @@ import TrendsDetail from '../pages/TrendsDetail';
 import About from '../pages/About';
 import RouteMismatch from '../pages/RouteMismatch';
 import 'material-components-web/dist/material-components-web.min.css';
+import {getApplicationBackends} from '../utils/getConfig';
 
 class App extends Component {
 
@@ -19,22 +20,23 @@ class App extends Component {
         const { loadSensors } = this.props;
         // dispatch is synchronous by default,
         loadSensors(window.configruntime.gd3.clowder_endpoints[0].url);
+
     }
 
     render() {
         return (
-                <Router history={hashHistory}>
-                    <Route path="/" component={Home}/>
-                    <Route path="/explore" component={Explore}/>
-                    <Route path="/detail/location/:name" component={Detail}/>
-                    <Route path="/search" component={Search}/>
-                    <Route path="/trendsstations" component={TrendsStation}/>
-                    <Route path="/trendsregions" component={TrendsRegion}/>
-                    <Route path="/trendsdetail/region/:region" component={TrendsDetail}/>
-                    <Route path="/analysis" component={Analysis}/>
-                    <Route path="/about" component={About}/>
-                    <Route path="*" component={RouteMismatch}/>
-                </Router>
+            <Router history={hashHistory}>
+                <Route path="/" component={Home}/>
+                <Route path="/explore" component={Explore}/>
+                <Route path="/detail/location/:name" component={Detail}/>
+                <Route path="/search" component={Search}/>
+                <Route path="/trendsstations" component={TrendsStation}/>
+                <Route path="/trendsregions" component={TrendsRegion}/>
+                <Route path="/trendsdetail/region/:region" component={TrendsDetail}/>
+                <Route path="/analysis" component={Analysis}/>
+                <Route path="/about" component={About}/>
+                <Route path="*" component={RouteMismatch}/>
+            </Router>
         )
     }
 }

@@ -68,6 +68,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-911](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-911)
 - Copy config.js into build directory.
   [GEOD-970](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-970)
+- Add ability to have V2 application links
+  [GEOD-904](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-904)
+  [GLGVO-342](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-342)
+  [IMLCZO-180](https://opensource.ncsa.illinois.edu/jira/browse/IMLCZO-180)
 
 ### Fixed
 - Bug in filtering for custom locations

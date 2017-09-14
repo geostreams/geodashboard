@@ -1102,6 +1102,38 @@ trends_analysis_defaults : [
         "value": 2,
     }
 ],
-    mapTileURL : 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
+    mapTileURL : 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
+
+    application_options : [
+    {
+        "title": "Geodashboard 3.0",
+        "pages": [
+            {
+                "name": "HOME",
+                "url": "/#",
+            },
+            {
+                "name": "EXPLORE",
+                "url": "/#explore",
+            },
+            {
+                "name": "SEARCH",
+                "url": "/#search",
+            },
+            {
+                "name": "EXPLORATORY ANALYSIS",
+                "url": "/#analysis",
+            },
+            {
+                "name": "TRENDS",
+                "url": "",
+            },
+            {
+                "name": "ABOUT",
+                "url": "/#about",
+            },
+        ]
+    }
+],
     // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
 }

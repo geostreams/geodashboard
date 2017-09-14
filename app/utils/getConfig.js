@@ -119,3 +119,11 @@ export function getTrendColor(source: string): string {
     let trend_colors = window.configruntime.gd3.trend_colors;
     return trend_colors[source] !== undefined ? trend_colors[source] : '#7F7F7F';
 }
+
+export function getApplicationOptions() {
+    return window.configruntime.gd3.application_options;
+}
+
+export function getApplicationBackends() {
+    return window.configruntime.gd3.clowder_endpoints;
+}
