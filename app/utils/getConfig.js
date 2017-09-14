@@ -53,6 +53,10 @@ export function getTrendsPageSettings() {
     return window.configruntime.gd3.trends_page_settings;
 }
 
+export function getTrendsPageLakeRegions() {
+    return window.configruntime.gd3.trends_page_lake_regions;
+}
+
 export function getTrendsRegionsSettings() {
     return window.configruntime.gd3.additional_locations;
 }

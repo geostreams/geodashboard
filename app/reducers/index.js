@@ -4,7 +4,6 @@ import sensors from './sensors';
 import searchFilters from './searchFilters';
 import selectedSearch from './selectedSearch';
 import sensorDetail from './sensorDetail';
-import sensorTrends from './sensorTrends';
 import chosenTrends from './chosenTrends';
 
 
@@ -14,7 +13,6 @@ const geodashboardApp = combineReducers({
     sensors,
     selectedSearch,
     sensorDetail,
-    sensorTrends,
     chosenTrends
 });
 

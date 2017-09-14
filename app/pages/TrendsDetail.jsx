@@ -12,11 +12,7 @@ import RegionChart from '../containers/RegionChart';
 import {Grid, Cell, Content, List, Card, CardTitle} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
-import {
-    getCustomTrendsRegion,
-    getTrendsPageSettings,
-    getTrendsDefaultValues
-} from '../utils/getConfig';
+import { getCustomTrendsRegion, getTrendsPageSettings, getTrendsDefaultValues } from '../utils/getConfig';
 
 
 class TrendsDetail extends Component {
@@ -42,13 +38,13 @@ class TrendsDetail extends Component {
                                         {trendsRegionTitle} Trends Detail
                                     </CardTitle>
                                 </Card>
-                                <TrendsParameters
-                                    className={trendsStyles.parametersCardStyleDetail}
-                                    trends_settings={trendsPageSettings}
-                                    trends_threshold_choice={trendsThresholdChoice}
-                                    trends_defaults={trendsPageDefaults}
-                                />
                                 <List className={trendsStyles.detailListStyle}>
+                                    <TrendsParameters
+                                        className={trendsStyles.parametersCardStyleDetail}
+                                        trends_settings={trendsPageSettings}
+                                        trends_threshold_choice={trendsThresholdChoice}
+                                        trends_defaults={trendsPageDefaults}
+                                    />
                                     <TrendsRegionDetails
                                         trends_region_name={trendsRegionName}
                                     />

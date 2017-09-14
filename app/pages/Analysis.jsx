@@ -8,15 +8,11 @@ import styles from '../styles/main.css';
 import analysisStyles from '../styles/analysis.css';
 import {
     Card, CardHeader, CardActions, CardTitle, CardSubtitle, CardText,
-    Content, List, Cell, Grid,
-    Textfield,
-    Button,
+    Content, List, Cell, Grid, Textfield, Button
 } from 'react-mdc-web';
 import Map from '../containers/AnalysisMap';
 import {
-    getTrendSettings,
-    getTrendRegions,
-    getTrendsAnalysisDefaultValues,
+    getTrendSettings, getTrendRegions, getTrendsAnalysisDefaultValues
 } from '../utils/getConfig';
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsThresholds from '../containers/TrendsThresholds';
@@ -28,13 +24,13 @@ import TrendsSubmitButton from '../containers/TrendsSubmitButton';
 class Analysis extends Component {
 
     render() {
-        let title = 'Analysis';
+
         let trendsPageSettings = getTrendSettings();
         let trendsPageDefaults = getTrendsAnalysisDefaultValues();
         let trendsPageRegions = getTrendRegions();
         let trendsPageThresholds = getTrendSettings();
+
         let trendsThresholdChoice = true;
-        let trendsPageType = 'Analysis';
         let trendsPageViewType = 'by-analysis';
         let trendsType = 'ADD_TRENDS';
         let trendsSeason = 'all';
@@ -51,7 +47,7 @@ class Analysis extends Component {
                                     trends_settings={trendsPageSettings}
                                     trends_threshold_choice={trendsThresholdChoice}
                                     trends_defaults={trendsPageDefaults}
-                                    trends_page={trendsPageType}
+                                    trends_view_type={trendsPageViewType}
                                 />
                                 <List className={analysisStyles.liststyle}>
                                     <TrendsCalculationSettings
@@ -60,12 +56,12 @@ class Analysis extends Component {
                                     <TrendsThresholds
                                         trends_thresholds={trendsPageThresholds}
                                         trends_threshold_choice={trendsThresholdChoice}
+                                        trends_defaults={trendsPageDefaults}
                                     />
                                     <TrendsRegions
                                         trends_regions={trendsPageRegions}
                                         trends_defaults={trendsPageDefaults}
                                         trends_view_type={trendsPageViewType}
-                                        trends_page={trendsPageType}
                                     />
                                 </List>
                                 <div className={analysisStyles.actionStyle}>

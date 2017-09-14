@@ -11,14 +11,14 @@ import type { Dispatch } from '../utils/flowtype';
 const mapStateToProps = (state) => {
     return {
         chosenCalculationSetting: state.chosenTrends.threshold,
-        chosenParameter: state.chosenTrends.parameter,
+        chosenParameter: state.chosenTrends.parameter
     }
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSelectTrendsCalcBaselineSetting:(baseline_totalyear) => {
-            dispatch(selectTrendsCalcBaselineSetting(baseline_totalyear));
+        onSelectTrendsCalcBaselineSetting:(baseline_total_year) => {
+            dispatch(selectTrendsCalcBaselineSetting(baseline_total_year));
         },
         onSelectTrendsCalcRollingSetting:(rolling_interval) => {
             dispatch(selectTrendsCalcRollingSetting(rolling_interval));

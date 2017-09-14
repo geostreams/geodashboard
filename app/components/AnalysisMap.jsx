@@ -8,10 +8,11 @@ require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import {getCustomTrendRegion, getTrendColor} from '../utils/getConfig';
-import {sensorsToFeaturesTrendPage, getAttribution} from '../utils/mapUtils';
+import {sensorsToFeaturesAnalysisPage, getAttribution} from '../utils/mapUtils';
 import {popupHeader, popupTrends} from '../utils/mapPopup';
 import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
+
 
 class AnalysisMap extends Component {
     state: TrendsMapState;
@@ -139,7 +140,7 @@ class AnalysisMap extends Component {
         this.state.areaPolygonSource.clear();
         this.state.areaPolygonSource.addFeatures(region_features);
 
-        features = sensorsToFeaturesTrendPage(
+        features = sensorsToFeaturesAnalysisPage(
             map_items, this.props.selectedParameter, threshold);
 
         this.state.vectorSource.clear();
@@ -163,7 +164,7 @@ class AnalysisMap extends Component {
 
         map_items = this.props.sensors;
 
-        let features = sensorsToFeaturesTrendPage(
+        let features = sensorsToFeaturesAnalysisPage(
             map_items, this.props.selectedParameter, threshold);
 
         let vectorSource = new ol.source.Vector({
@@ -621,7 +622,7 @@ class AnalysisMap extends Component {
                 new appDrawCircle.drawCircleControl(),
                 new appDrawSquare.drawSquareControl(),
                 new appDrawCustom.drawCustomControl(),
-                new appDrawClear.drawClearControl(),
+                new appDrawClear.drawClearControl()
             ])
         });
 
@@ -676,10 +677,11 @@ class AnalysisMap extends Component {
             trends_legend_var.innerHTML =
                 (
                     '<div class=' + styles.trends_legend_text + '>' +
-                    trendUpArrow + ' - Trending Up <br/>' +
-                    trendDownArrow + ' - Trending Down <br/>' +
-                    noTrendArrow + ' - No Data Available <br/>' +
-                    overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/> </div>'
+                        trendUpArrow + ' - Trending Up <br/>' +
+                        trendDownArrow + ' - Trending Down <br/>' +
+                        noTrendArrow + ' - No Data Available <br/>' +
+                        overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/>' +
+                    '</div>'
                 );
         }
 
@@ -721,4 +723,3 @@ class AnalysisMap extends Component {
 }
 
 export default AnalysisMap
-

@@ -6,6 +6,7 @@
 import { connect } from 'react-redux';
 import TrendsMapComponent from '../components/TrendsMap';
 
+
 const mapStateToProps = (state) => {
     return {
         sensors: state.chosenTrends.sensors,
@@ -15,11 +16,10 @@ const mapStateToProps = (state) => {
         selectedParameter: state.chosenTrends.parameter,
         selectedRegion: state.chosenTrends.region,
         trendViewType: state.chosenTrends.view_type,
-        trendAllRegions: state.chosenTrends.all_regions,
+        trendAllRegions: state.chosenTrends.all_regions
     }
 };
 
 const TrendsMap = connect(mapStateToProps)(TrendsMapComponent);
 
 export default TrendsMap;
-

@@ -14,7 +14,7 @@ import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
 
 
-class TrendsMap extends Component {
+class TrendsRegionMap extends Component {
     state: TrendsMapState;
 
     constructor(props: MapProps) {
@@ -132,8 +132,16 @@ class TrendsMap extends Component {
 
         let map_items = this.props.trendRegions;
 
+        let trends_parameter_lake_regions = [];
+        let trends_settings = this.props.trends_settings;
+        trends_settings.map(p => {
+            if (p.parameter.lake_regions == true) {
+                trends_parameter_lake_regions.push(p.parameter.id);
+            }
+        });
+
         let features = sensorsToFeaturesTrendPage(
-            map_items, this.props.selectedParameter, threshold);
+            map_items, this.props.selectedParameter, trends_parameter_lake_regions);
 
         let vectorSource = new ol.source.Vector({
             features: features
@@ -214,7 +222,7 @@ class TrendsMap extends Component {
                     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
                 })
             }),
-            clusters,
+            clusters
         ];
 
         const container = document.getElementById('popup');
@@ -313,10 +321,11 @@ class TrendsMap extends Component {
             trends_legend_var.innerHTML =
                 (
                     '<div class=' + styles.trends_legend_text + '>' +
-                    trendUpArrow + ' - Trending Up <br/>' +
-                    trendDownArrow + ' - Trending Down <br/>' +
-                    noTrendArrow + ' - No Data Available <br/>' +
-                    overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/> </div>'
+                        trendUpArrow + ' - Trending Up <br/>' +
+                        trendDownArrow + ' - Trending Down <br/>' +
+                        noTrendArrow + ' - No Data Available <br/>' +
+                        overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/>' +
+                    '</div>'
                 );
         }
 
@@ -353,4 +362,4 @@ class TrendsMap extends Component {
 
 }
 
-export default TrendsMap;
+export default TrendsRegionMap;

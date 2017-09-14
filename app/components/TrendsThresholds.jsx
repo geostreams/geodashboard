@@ -6,7 +6,7 @@ import React, {Component, PropTypes} from 'react';
 import trendsStyles from '../styles/trends.css';
 import {
     Textfield, Cell, Grid,
-    Card, CardHeader, CardTitle, CardSubtitle, CardActions, CardText,
+    Card, CardHeader, CardTitle, CardSubtitle, CardActions, CardText
 } from 'react-mdc-web';
 import Select from './material/Select';
 
@@ -16,19 +16,20 @@ class TrendsThresholds extends Component {
     state: {
         chosenThreshold: number,
         thresholdMin: number,
-        thresholdMax: number,
+        thresholdMax: number
     };
 
     constructor(props: Object) {
         super(props);
         this.state = {
             chosenThreshold: Number(''),
-            thresholdMin: 0,
-            thresholdMax: 100,
+            thresholdMin: this.props.trends_defaults[10].value,
+            thresholdMax: this.props.trends_defaults[11].value
         };
+        (this:any).handleThresholdChooseValue = this.handleThresholdChooseValue.bind(this);
     }
 
-    handleThresholdChooseValue = (event: Object) => {
+    handleThresholdChooseValue(event: Object) {
         let value = event.target.value;
         if (value < this.state.thresholdMin) {
             value = this.state.thresholdMin
@@ -40,8 +41,7 @@ class TrendsThresholds extends Component {
         this.setState({chosenThreshold: value});
 
         this.props.onSelectTrendsThreshold(value);
-    };
-
+    }
 
     render() {
 
@@ -50,15 +50,9 @@ class TrendsThresholds extends Component {
         let trendsPageSettings = this.props.trends_thresholds;
         let trendsPageParameter = this.props.chosenParameter;
         let trendsCheckParameter;
-        let trendsPageThreshold = [];
         let trendsPageThresholds = [];
         let trendsPageThresholdsMap = [];
-
-        trendsPageThreshold =
-            (
-                <Card className={trendsStyles.cardMargin}>
-                </Card>
-            );
+        let trendsPageThreshold;
 
         // Choice is Not Allowed
         if (trendsPageThresholdChoice == false) {
@@ -75,7 +69,7 @@ class TrendsThresholds extends Component {
                 }
             }
 
-            trendsPageThreshold =
+            trendsPageThreshold = (
                 <Card className={trendsStyles.cardMargin}>
                     <CardHeader>
                         <CardTitle>
@@ -85,7 +79,8 @@ class TrendsThresholds extends Component {
                     <CardText>
                         {trendsPageThresholds}
                     </CardText>
-                </Card>;
+                </Card>
+            );
 
         }
 
@@ -101,12 +96,11 @@ class TrendsThresholds extends Component {
                         trendsPageThresholds = trendsPageThresholds.concat(
                             <option value={'none'} key={0}> Enter a Value</option>);
                         trendsPageThresholds = trendsPageThresholds.concat(trendsPageThresholdsMap);
-
                     }
                 }
             }
 
-            trendsPageThreshold =
+            trendsPageThreshold = (
                 <Card className={trendsStyles.cardMargin} key="Threshold">
                     <CardHeader>
                         <CardTitle>
@@ -121,8 +115,8 @@ class TrendsThresholds extends Component {
                             <Cell col={6}>
                                 <Select className={trendsStyles.select}
                                         value={this.state.chosenThreshold.toString()}
-                                        onChange={this.handleThresholdChooseValue.bind(this)}
-                                        >
+                                        onChange={this.handleThresholdChooseValue}
+                                >
                                     {trendsPageThresholds}
                                 </Select>
                             </Cell>
@@ -139,10 +133,12 @@ class TrendsThresholds extends Component {
                             </Cell>
                         </Grid>
                     </CardText>
-                </Card>;
+                </Card>
+            );
 
         }
 
+        // Condition possible for both situations
         if (trendsPageThresholdsMap.length == 0) {
             trendsPageThreshold =
                 <Card className={trendsStyles.cardMargin}>

@@ -11,14 +11,10 @@ import {Grid, Cell, Content, List} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
 import {connect} from 'react-redux';
-import {
-    getTrendsPageSettings,
-    getTrendsPageSeasons,
-    getTrendsDefaultValues
-} from '../utils/getConfig';
+import { getTrendsPageSettings, getTrendsPageSeasons, getTrendsDefaultValues } from '../utils/getConfig';
 
 
-class Trends extends Component {
+class TrendsRegion extends Component {
 
     render() {
 
@@ -27,7 +23,6 @@ class Trends extends Component {
         let trendsPageSeasons = getTrendsPageSeasons();
         let trendsPageViewType = "by-regions";
         let trendsThresholdChoice = false;
-        let trendsPageType = 'Trends';
 
         return (
 
@@ -43,7 +38,6 @@ class Trends extends Component {
                                     trends_threshold_choice={trendsThresholdChoice}
                                     trends_defaults={trendsPageDefaults}
                                     trends_view_type={trendsPageViewType}
-                                    trends_page={trendsPageType}
                                 />
                                 <List className={trendsStyles.liststyle}>
                                     <TrendsSeasons
@@ -55,7 +49,10 @@ class Trends extends Component {
                             </Cell>
                             <Cell col={10}>
                                 <div className={styles.rightmap}>
-                                    <Map display_draw='False'/>
+                                    <Map
+                                        display_draw='False'
+                                        trends_settings={trendsPageSettings}
+                                    />
                                 </div>
                             </Cell>
                         </Grid>
@@ -74,4 +71,5 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps)(Trends);
+export default connect(mapStateToProps)(TrendsRegion);
+

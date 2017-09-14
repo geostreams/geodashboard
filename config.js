@@ -377,7 +377,7 @@ additional_locations : [
             "id": "all",
             "sortOrder": 0,
             "threshold": {
-                "Total Phosphorus": 5
+                "total-phosphorus": 5
             }
 
         },
@@ -395,7 +395,7 @@ additional_locations : [
             "id": "su",
             "sortOrder": 1,
             "threshold": {
-                "Total Phosphorus": 5
+                "total-phosphorus": 5
             }
         },
         "geometry": {
@@ -435,7 +435,7 @@ additional_locations : [
             "id": "mi",
             "sortOrder": 2,
             "threshold": {
-                "Total Phosphorus": 7
+                "total-phosphorus": 7
             }
         },
         "geometry": {
@@ -478,7 +478,7 @@ additional_locations : [
             "id": "hu",
             "sortOrder": 3,
             "threshold": {
-                "Total Phosphorus": 5
+                "total-phosphorus": 5
             }
         },
         "geometry": {
@@ -539,7 +539,7 @@ additional_locations : [
             "id": "cl",
             "sortOrder": 4,
             "threshold": {
-                "Total Phosphorus": 5
+                "total-phosphorus": 5
             }
         },
         "geometry": {
@@ -579,7 +579,7 @@ additional_locations : [
             "id": "er",
             "sortOrder": 5,
             "threshold": {
-                "Total Phosphorus": 10
+                "total-phosphorus": 10
             }
         },
         "geometry": {
@@ -743,7 +743,7 @@ additional_locations : [
             "id": "er-east",
             "sortOrder": 6,
             "threshold": {
-                "Total Phosphorus": 10
+                "total-phosphorus": 10
             }
         },
         "geometry": {
@@ -786,7 +786,7 @@ additional_locations : [
             "id": "er-center",
             "sortOrder": 7,
             "threshold": {
-                "Total Phosphorus": 10
+                "total-phosphorus": 10
             }
         },
         "geometry": {
@@ -832,7 +832,7 @@ additional_locations : [
             "id": "er-west",
             "sortOrder": 8,
             "threshold": {
-                "Total Phosphorus": 15
+                "total-phosphorus": 15
             }
         },
         "geometry": {
@@ -869,7 +869,7 @@ additional_locations : [
             "id": "on",
             "sortOrder": 9,
             "threshold": {
-                "Total Phosphorus": 10
+                "total-phosphorus": 10
             }
         },
         "geometry": {
@@ -914,116 +914,52 @@ trends_page_settings : [
     {
         "parameter": {
             "id": "total-phosphorus",
-            "title": "Total Phosphorus (ug/L)"
-        },
-        "thresholds":[
-            {
-                "title": "Total Phosphorus All",
-                "region": "all",
-                "value": 5
-            },
-            {
-                "title": "Total Phosphorus SU",
-                "region": "su",
-                "value": 5
-            },
-            {
-                "title": "Total Phosphorus MI",
-                "region": "mi",
-                "value": 7
-            },
-            {
-                "title": "Total Phosphorus HU",
-                "region": "hu",
-                "value": 5
-            },
-            {
-                "title": "Total Phosphorus ER",
-                "region": "er",
-                "value": 10
-            },
-            {
-                "title": "Total Phosphorus ON",
-                "region": "on",
-                "value": 10
-            }
-        ]
+            "title": "Total Phosphorus (ug/L)",
+            "lake_regions": true
+        }
     },
     {
         "parameter": {
             "id": "nitrogen",
-            "title": "Nitrogen (mg/L)"
-        },
-        "thresholds":[
-            {
-                "title": "Nitrogen All Regions",
-                "region": "all",
-                "value": 6
-            },
-            {
-                "title": "Nitrogen SU",
-                "region": "su",
-                "value": 6
-            },
-            {
-                "title": "Nitrogen MI",
-                "region": "mi",
-                "value": 6
-            },
-            {
-                "title": "Nitrogen HU",
-                "region": "hu",
-                "value": 6
-            },
-            {
-                "title": "Nitrogen ER",
-                "region": "er",
-                "value": 6
-            },
-            {
-                "title": "Nitrogen ON",
-                "region": "on",
-                "value": 6
-            }
-        ]
+            "title": "Nitrogen (mg/L)",
+            "lake_regions": false
+        }
     },
     {
         "parameter": {
             "id": "alkalinity",
-            "title": "Alkalinity (mg/L)"
-        },
-        "thresholds":[
-            {
-                "title": "Alkalinity All Regions",
-                "region": "all",
-                "value": 100
-            },
-            {
-                "title": "Alkalinity SU",
-                "region": "su",
-                "value": 100
-            },
-            {
-                "title": "Alkalinity MI",
-                "region": "mi",
-                "value": 100
-            },
-            {
-                "title": "Alkalinity HU",
-                "region": "hu",
-                "value": 100
-            },
-            {
-                "title": "Alkalinity ER",
-                "region": "er",
-                "value": 100
-            },
-            {
-                "title": "Alkalinity ON",
-                "region": "on",
-                "value": 100
-            }
-        ]
+            "title": "Alkalinity (mg/L)",
+            "lake_regions": false
+        }
+    },
+    {
+        "parameter": {
+            "id": "chlorophyll-a",
+            "title": "Chlorophyll a (ug/L)",
+            "lake_regions": false
+        }
+    },
+    {
+        "parameter": {
+            "id": "silica",
+            "title": "Silica (mg/L)",
+            "lake_regions": false
+        }
+    },
+    {
+        "parameter": {
+            "id": "turbidity",
+            "title": "Turbidity (NTU)",
+            "lake_regions": false
+        }
+    }
+],
+
+trends_page_lake_regions :
+[
+    {
+        "lake": "ER",
+        "regions": "er-west,er-east,er-center"
     }
 ],
 
@@ -1049,7 +985,7 @@ trends_page_view_types : [
 
 trends_page_timeframes : [
     {
-        "id": "baseline_totalyear",
+        "id": "baseline_total_year",
         "value": 10
     }, {
         "id": "rolling_interval" ,
@@ -1082,24 +1018,48 @@ trends_analysis_defaults : [
         "value": "None"
     },
     {
-        "id": "season" ,
+        "id": "season",
         "value": "all",
     },
     {
-        "id": "by-analysis" ,
+        "id": "by-analysis",
         "value": "Analysis",
     },
     {
-        "id": "region" ,
+        "id": "region",
         "value": "all",
     },
     {
-        "id": "baselinePeriod" ,
+        "id": "baselinePeriod",
         "value": 10,
     },
     {
-        "id": "rollingPeriod" ,
+        "id": "baselineMin",
+        "value": 0,
+    },
+    {
+        "id": "baselineMax",
+        "value": 30,
+    },
+    {
+        "id": "rollingPeriod",
         "value": 2,
+    },
+    {
+        "id": "rollingMin",
+        "value": 0,
+    },
+    {
+        "id": "rollingMax",
+        "value": 10,
+    },
+    {
+        "id": "thresholdMin",
+        "value": 0,
+    },
+    {
+        "id": "thresholdMax",
+        "value": 100,
     }
 ],
 

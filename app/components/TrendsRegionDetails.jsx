@@ -6,15 +6,25 @@ import React, {Component, PropTypes} from 'react';
 import trendsStyles from '../styles/trends.css';
 import {Card, CardHeader, CardTitle, CardText} from 'react-mdc-web';
 import {sensorsToFeaturesTrendPage} from '../utils/mapUtils';
+import { getTrendsPageSettings } from '../utils/getConfig';
 
 
 class TrendsRegionDetails extends Component {
 
     render() {
 
-        let return_item;
         let regionName = this.props.trends_region_name;
-        let trendsPageSettings = sensorsToFeaturesTrendPage(this.props.regionsStations);
+
+        let trends_parameter_lake_regions = [];
+        let trends_settings = getTrendsPageSettings();
+        trends_settings.map(p => {
+            if (p.parameter.lake_regions == true) {
+                trends_parameter_lake_regions.push(p.parameter.id);
+            }
+        });
+        let trendsPageSettings = sensorsToFeaturesTrendPage(
+            this.props.regionsStations, this.props.selectedParameter, trends_parameter_lake_regions);
+
         let trendsCheckRegion;
         let trendsDetailListItems = '';
 
@@ -33,7 +43,7 @@ class TrendsRegionDetails extends Component {
             }
         }
 
-        return_item=(
+        return (
             <Card className={trendsStyles.cardMargin}>
                 <CardHeader>
                     <CardTitle>
@@ -45,8 +55,6 @@ class TrendsRegionDetails extends Component {
                 </CardText>
             </Card>
         );
-
-        return return_item;
 
     }
 

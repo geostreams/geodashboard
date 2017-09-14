@@ -10,21 +10,20 @@ import {Button} from 'react-mdc-web';
 class TrendsSubmitButton extends Component {
 
     state: {
-        showResults: boolean,
+        showResults: boolean
     };
 
     constructor(props: Object) {
         super(props);
-
         this.state = {
-            showResults: false,
+            showResults: false
         };
+        (this:any).handleClickAnalysis = this.handleClickAnalysis.bind(this);
     }
 
-    handleClickAnalysis = () =>{
+    handleClickAnalysis() {
 
         this.state.showResults = true;
-
         let chosenParameter = this.props.chosenParameter;
         let chosenRegion = this.props.chosenRegion;
         let baselinePeriod = this.props.baselinePeriod;
@@ -42,33 +41,22 @@ class TrendsSubmitButton extends Component {
         }
 
         this.props.onClickAnalysis(
-            chosenParameter,
-            chosenRegion,
-            baselinePeriod,
-            rollingPeriod,
-            thresholdChooseValue,
-            trendsSeason,
-            trendsType,
-            trendsViewType
+            chosenParameter, chosenRegion, baselinePeriod, rollingPeriod,
+            thresholdChooseValue, trendsSeason, trendsType, trendsViewType
         )
-    };
-
+    }
 
     render() {
 
-        let trendsCompleted;
-        let trendsTotal;
+        let trendsCompleted = 0;
+        let trendsTotal = 0;
         if (this.state.showResults == true) {
             trendsCompleted = this.props.trendNumberCompleted;
             trendsTotal = (this.props.originalSensors.filter(s =>
                 s.parameters.indexOf(this.props.chosenParameter) >= 0)).length;
-        } else {
-            trendsCompleted = 0;
-            trendsTotal = 0;
         }
 
         let submit_button;
-
         if (this.props.chosenParameter == '' ||
             this.props.thresholdChooseValue == 'none' ||
             this.props.thresholdChooseValue === undefined ||

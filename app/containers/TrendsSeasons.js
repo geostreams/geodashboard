@@ -8,12 +8,6 @@ import { selectTrendsSeason } from '../actions';
 import type { Dispatch } from '../utils/flowtype';
 
 
-const mapStateToProps = (state) => {
-    return {
-        chosenSeason: state.chosenTrends.Season,
-    }
-};
-
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         onSelectTrendsSeason:(season, view_type) => {
@@ -22,6 +16,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     }
 };
 
-const TrendsSeasons = connect(mapStateToProps, mapDispatchToProps)(TrendsSeasonsComponent);
+const TrendsSeasons = connect(null, mapDispatchToProps)(TrendsSeasonsComponent);
 
 export default TrendsSeasons;

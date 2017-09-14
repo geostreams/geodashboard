@@ -247,7 +247,6 @@ class SearchMap extends Component {
                           onMapSingleClick={this.popupHandler}
                           onMapChangeResolution={this.onChangeZoom}
                           mapDidUpdate={this.mapDidUpdate}
-                          mapZoom={this.mapZoom}
                 />
             </div>
 

@@ -5,20 +5,21 @@
 import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 import styles from '../styles/menuPage.css';
-import {Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
-        Button, MenuItem, Menu, MenuAnchor
+import {
+    Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
+    Button, MenuItem, Menu, MenuAnchor
 } from 'react-mdc-web';
 import {getApplicationOptions} from '../utils/getConfig';
 
 class MenuPage extends Component {
     state: {
         openMenu: boolean
-    }
+    };
 
     constructor(props: Object) {
         super(props);
         this.state = {
-            openMenu: false,
+            openMenu: false
         };
     }
 
@@ -72,7 +73,7 @@ class MenuPage extends Component {
         }
 
         return (
-            <Toolbar>
+            <Toolbar className={styles.menu_style}>
                 <ToolbarRow>
                     <ToolbarSection align="start">
                         <ToolbarTitle>{application_title}</ToolbarTitle>

@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
     return {
         threshold_value: state.chosenTrends.threshold,
         trendSensors: state.chosenTrends.trends_sensors,
-        selectedParameter: state.chosenTrends.parameter,
+        selectedParameter: state.chosenTrends.parameter
     }
 };
 
