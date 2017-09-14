@@ -94,6 +94,7 @@ export function getTrendsAnalysisDefaultValues() {
 export function getTrendsThresholdsSettings() {
     return window.configruntime.gd3.trends_page_settings;
 }
+
 export function getTrendRegions() {
     return window.configruntime.gd3.trend_analysis_regions;
 }
@@ -127,3 +128,8 @@ export function getApplicationOptions() {
 export function getApplicationBackends() {
     return window.configruntime.gd3.clowder_endpoints;
 }
+
+export function getErrorText() {
+    return window.configruntime.gd3.error_text;
+}
+

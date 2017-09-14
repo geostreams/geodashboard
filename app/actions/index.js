@@ -10,6 +10,28 @@ export const switchBackend = (selected:string) => {
     }
 };
 
+export const SWITCH_BACKEND_ERROR = 'SWITCH_BACKEND_ERROR';
+export const switchBackendError = () => {
+    return (dispatch:Dispatch, getState:GetState) => {
+        const state = getState();
+        let fetched_api = state.sensors.api;
+        dispatch({
+            type: SWITCH_BACKEND_ERROR,
+            fetched_api
+        });
+        dispatch({
+            type: CLEAR_SENSORS
+        });
+        dispatch({
+            type: CLEAR_TRENDS_SENSORS
+        });
+    }
+};
+
+export const CLEAR_SENSORS = 'CLEAR_SENSORS';
+
+export const CLEAR_TRENDS_SENSORS = 'CLEAR_TRENDS_SENSORS';
+
 export const ADD_ENDPOINTS = 'ADD_ENDPOINTS';
 export const addEndpoints = () =>{
     return {
@@ -420,6 +442,10 @@ export function fetchSensors(api:string) {
                 dispatch(receiveSensors(api, json))
             })
             .then(dispatch(updateAvailableSensors(-1)))
+            .catch((error) => {
+                console.log('An ERROR occurred! ' + error);
+                dispatch(switchBackendError());
+            })
     }
 }
 

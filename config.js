@@ -1102,6 +1102,9 @@ trends_analysis_defaults : [
         "value": 2,
     }
 ],
+
+    error_text :"An Error Occurred - Please Select Again",
+
     mapTileURL : 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
 
     application_options : [
@@ -1135,5 +1138,6 @@ trends_analysis_defaults : [
         ]
     }
 ],
+
     // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
 }

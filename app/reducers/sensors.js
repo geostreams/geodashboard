@@ -1,7 +1,7 @@
 /*
  * @flow
  */
-import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER} from '../actions';
+import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS} from '../actions';
 import type { Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype';
 import {inArray, sortByLabel, pnpoly} from '../utils/arrayUtils';
 import {getLocationName, getSourceName, getParameterName} from '../utils/getConfig';
@@ -59,6 +59,18 @@ const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
                 available_sensors: customLocationSensors,
                 draw_available_sensors: customLocationSensors,
                 shape_coordinates: shapeCoordinates
+            });
+
+        case CLEAR_SENSORS:
+            return Object.assign({}, state, {
+                api: '',
+                data:[],
+                parameters: [],
+                sources: [],
+                locations:[],
+                available_sensors:[],
+                draw_available_sensors:[],
+                shape_coordinates: []
             });
 
         default:

@@ -8,7 +8,8 @@ type BackendAction = {| type:'SWITCH_BACKEND', selected:string |};
 
 const defaultState = {
     endpoints: [],
-    selected: ""
+    selected: "",
+    error: false
 };
 
 const backends = (state:backendsState = defaultState, action:BackendAction) => {
@@ -16,10 +17,18 @@ const backends = (state:backendsState = defaultState, action:BackendAction) => {
         case 'ADD_ENDPOINTS':
             return Object.assign({}, state, {
                 endpoints: window.configruntime.gd3.clowder_endpoints,
-                selected: window.configruntime.gd3.clowder_endpoints[0].url
+                selected: window.configruntime.gd3.clowder_endpoints[0].url,
+                error: false
             });
         case 'SWITCH_BACKEND':
-            return Object.assign({}, state, {selected: action.selected});
+            return Object.assign({}, state, {
+                selected: action.selected,
+                error: false
+            });
+        case 'SWITCH_BACKEND_ERROR':
+            return Object.assign({}, state, {
+                error: true
+            });
 		default:
 			return state
 	}

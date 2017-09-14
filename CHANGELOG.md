@@ -72,6 +72,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-904](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-904)
   [GLGVO-342](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-342)
   [IMLCZO-180](https://opensource.ncsa.illinois.edu/jira/browse/IMLCZO-180)
+- Show error message if API fetch fails
+  [GEOD-838](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-838)
 
 ### Fixed
 - Bug in filtering for custom locations
