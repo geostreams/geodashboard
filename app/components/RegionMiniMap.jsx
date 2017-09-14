@@ -42,13 +42,13 @@ class RegionMiniMap extends Component {
                 ],
                 target: 'map'
             }),
-            openMenu: false,
+            openMenu: false
         }
     }
 
     handleStationsIcon = (event: boolean) => {
         this.setState({
-            openMenu: event,
+            openMenu: event
         });
     };
 
@@ -264,7 +264,7 @@ class RegionMiniMap extends Component {
                     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
                 })
             }),
-            clusters,
+            clusters
         ];
 
         const that = this;

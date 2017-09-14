@@ -63,6 +63,7 @@
 
 .menu_style {
   background-color: #3f51b5 !important;
+  z-index: 10;
 }
 
 .menu_anchor_style{

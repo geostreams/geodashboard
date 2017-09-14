@@ -123,6 +123,15 @@ export type TrendsMapState = {
     maxZoom: number,
 };
 
+export type TrendsRegionMapState = {
+    center: Array <number>,
+    vectorSource: ol.source.Vector,
+    clusterSource: ol.source.Cluster,
+    areaPolygonSource: ol.source.Vector,
+    map: ol.Map,
+    currentZoom: number,
+}
+
 export type RegionGeometry = {
     type: string;
     coordinates: []
@@ -167,7 +176,7 @@ export type ChosenTrendsState = {
     sensors: Sensors,
     trends_sensors: TrendsPageSensorsState,
     trends_regions: TrendsPageRegionsState,
-    baseline_totalyear: TrendsBaselineTotalYear,
+    baseline_total_year: TrendsBaselineTotalYear,
     rolling_interval: TrendsRollingInterval,
     view_type: TrendsViewType,
     number_to_filter: number,

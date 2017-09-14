@@ -6,7 +6,7 @@ import React, {Component, PropTypes} from 'react';
 import trendsStyles from '../styles/trends.css';
 import {
     Textfield, Cell, Grid,
-    Card, CardHeader, CardTitle, CardSubtitle, CardActions, CardText,
+    Card, CardHeader, CardTitle, CardSubtitle, CardActions, CardText
 } from 'react-mdc-web';
 
 
@@ -19,23 +19,25 @@ class TrendsCalculationSettings extends Component {
 
         rollingPeriod: number,
         rollingMin: number,
-        rollingMax: number,
+        rollingMax: number
     };
 
     constructor(props: Object) {
         super(props);
         this.state = {
             baselinePeriod: this.props.trends_defaults[4].value,
-            baselineMin: 0,
-            baselineMax: 30,
+            baselineMin: this.props.trends_defaults[5].value,
+            baselineMax: this.props.trends_defaults[6].value,
 
-            rollingPeriod: this.props.trends_defaults[5].value,
-            rollingMin: 0,
-            rollingMax: 10,
+            rollingPeriod: this.props.trends_defaults[7].value,
+            rollingMin: this.props.trends_defaults[8].value,
+            rollingMax: this.props.trends_defaults[9].value
         };
+        (this:any).handleBaselineChange = this.handleBaselineChange.bind(this);
+        (this:any).handleRollingChange = this.handleRollingChange.bind(this);
     }
 
-    handleBaselineChange = (event: Object) => {
+    handleBaselineChange(event: Object) {
         let value = event.target.value;
         if (value < this.state.baselineMin) {
             value = this.state.baselineMin
@@ -46,9 +48,9 @@ class TrendsCalculationSettings extends Component {
         value = parseFloat(value);
         this.setState({baselinePeriod: value});
         this.props.onSelectTrendsCalcBaselineSetting(value);
-    };
+    }
 
-    handleRollingChange = (event: Object) => {
+    handleRollingChange(event: Object) {
         let value = event.target.value;
         if (value < this.state.rollingMin) {
             value = this.state.rollingMin
@@ -59,13 +61,11 @@ class TrendsCalculationSettings extends Component {
         value = parseFloat(value);
         this.setState({rollingPeriod: value});
         this.props.onSelectTrendsCalcRollingSetting(value);
-    };
+    }
 
     render() {
 
-        let trendsPageCalculationSetting = [];
-
-        trendsPageCalculationSetting = (
+        return (
             <Card className={trendsStyles.cardMargin} key="calculate">
                 <CardHeader>
                     <CardTitle>Change Calculation Setting</CardTitle>
@@ -84,6 +84,7 @@ class TrendsCalculationSettings extends Component {
                                 helptext="Must be a Number"
                             />
                         </Cell>
+
                         <Cell col={6}>
                             <Textfield
                                 floatingLabel="Rolling (yr)"
@@ -100,12 +101,9 @@ class TrendsCalculationSettings extends Component {
             </Card>
         );
 
-        return (
-            trendsPageCalculationSetting
-        );
-
     }
 
 }
 
 export default TrendsCalculationSettings;
+

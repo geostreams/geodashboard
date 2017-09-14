@@ -8,31 +8,24 @@ import {
     Radio, RadioGroup,
     Card, CardHeader, CardTitle, CardSubtitle, CardActions
 } from 'react-mdc-web';
-
+import type {InputEvent} from '../utils/flowtype';
 
 class TrendsRegions extends Component {
 
     constructor(props: Object) {
         super(props);
+        (this:any).handleRegionChange = this.handleRegionChange.bind(this);
     }
 
-    handleRegionChange = (event: Object) => {
-        this.props.onSelectTrendsRegion(event.target.value, this.props.trends_page, this.props.trends_view_type);
-    };
-
+    handleRegionChange(event: InputEvent) {
+        this.props.onSelectTrendsRegion(event.target.value, this.props.trends_view_type);
+    }
 
     render() {
 
         let trendsPageSettings = this.props.trends_regions;
         let trendsPageRegions = [];
         let trendsPageRegionsMap = [];
-        let return_item;
-
-        return_item = (
-            <Card className={trendsStyles.cardMargin}>
-            </Card>
-        );
-
 
         if (trendsPageSettings) {
             trendsPageRegionsMap = trendsPageSettings
@@ -45,10 +38,9 @@ class TrendsRegions extends Component {
                                         disabled={true}> None Available </Radio>];
         }
 
-
         if (trendsPageRegions.length != 0) {
 
-            return_item = (
+            return (
                 <Card className={trendsStyles.cardMargin}>
                     <CardHeader>
                         <CardTitle>
@@ -61,16 +53,18 @@ class TrendsRegions extends Component {
                     <CardActions>
                         <RadioGroup name="regions"
                                     value={this.props.chosenRegion.toString()}
-                                    onChange={this.handleRegionChange.bind(this)}>
+                                    onChange={this.handleRegionChange}>
                             {trendsPageRegions}
                         </RadioGroup>
                     </CardActions>
                 </Card>
             );
 
-        }
+        } else {
 
-        return return_item;
+            return (null);
+
+        }
 
     }
 

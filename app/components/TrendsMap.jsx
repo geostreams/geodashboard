@@ -42,6 +42,7 @@ class TrendsMap extends Component {
         }
     }
 
+
     render() {
 
         return (
@@ -88,7 +89,7 @@ class TrendsMap extends Component {
 
         let map_items;
         let area;
-        let threshold = this.props.threshold_value;
+        let trends_settings = this.props.trends_settings;
         let feature = new ol.Feature();
         let region_features = [];
 
@@ -106,8 +107,15 @@ class TrendsMap extends Component {
         this.state.areaPolygonSource.clear();
         this.state.areaPolygonSource.addFeatures(region_features);
 
-        features = sensorsToFeaturesTrendPage(
-            map_items, this.props.selectedParameter, threshold);
+        let trends_parameter_lake_regions = [];
+
+        trends_settings.map(p => {
+            if (p.parameter.lake_regions == true) {
+                trends_parameter_lake_regions.push(p.parameter.id);
+            }
+        });
+
+        features = sensorsToFeaturesTrendPage(map_items, this.props.selectedParameter, trends_parameter_lake_regions);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
@@ -124,12 +132,19 @@ class TrendsMap extends Component {
 
     componentDidMount() {
 
-        let threshold = this.props.threshold_value;
+        let trends_settings = this.props.trends_settings;
 
         let map_items = this.props.sensors;
 
-        let features = sensorsToFeaturesTrendPage(
-            map_items, this.props.selectedParameter, threshold);
+        let trends_lake_regions = [];
+
+        trends_settings.map(p => {
+            if (p.parameter.lake_regions == true) {
+                trends_lake_regions.push(p.parameter.id);
+            }
+        });
+
+        let features = sensorsToFeaturesTrendPage(map_items, this.props.selectedParameter, trends_lake_regions);
 
         let vectorSource = new ol.source.Vector({
             features: features
@@ -210,7 +225,7 @@ class TrendsMap extends Component {
                     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
                 })
             }),
-            clusters,
+            clusters
         ];
 
         const container = document.getElementById('popup');
@@ -309,10 +324,11 @@ class TrendsMap extends Component {
             trends_legend_var.innerHTML =
                 (
                     '<div class=' + styles.trends_legend_text + '>' +
-                    trendUpArrow + ' - Trending Up <br/>' +
-                    trendDownArrow + ' - Trending Down <br/>' +
-                    noTrendArrow + ' - No Data Available <br/>' +
-                    overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/> </div>'
+                        trendUpArrow + ' - Trending Up <br/>' +
+                        trendDownArrow + ' - Trending Down <br/>' +
+                        noTrendArrow + ' - No Data Available <br/>' +
+                        overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/>' +
+                    '</div>'
                 );
         }
 

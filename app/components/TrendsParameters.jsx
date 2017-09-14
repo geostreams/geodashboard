@@ -8,33 +8,23 @@ import {
     Radio, RadioGroup,
     Card, CardHeader, CardTitle, CardSubtitle, CardActions
 } from 'react-mdc-web';
-
+import type {InputEvent} from '../utils/flowtype';
 
 class TrendsParameters extends Component {
 
-    state: {
-        chosenParameter: string,
-    };
-
     constructor(props: Object) {
         super(props);
-        this.state = {
-            chosenParameter: this.props.trends_defaults[0].value,
-        };
+        (this:any).handleParameterChange = this.handleParameterChange.bind(this);
     }
 
-    handleParameterChange = (event: Object) => {
-        this.setState({chosenParameter: event.target.value});
+    handleParameterChange(event: InputEvent) {
         let trendsPageThresholdChoice = this.props.trends_threshold_choice;
-        let typeOfPage = this.props.trends_page;
         this.props.onSelectTrendsParameter(
-            event.target.value, trendsPageThresholdChoice, typeOfPage, this.props.trends_view_type
+            event.target.value, trendsPageThresholdChoice, this.props.trends_view_type
         );
-    };
+    }
 
     render() {
-
-        let return_item;
 
         let trendsPageSettings = this.props.trends_settings;
         let trendsPageParameters = [];
@@ -58,15 +48,13 @@ class TrendsParameters extends Component {
                 }
             )
         }
-
         trendsPageParameters = trendsPageParameters.concat(trendsPageParametersMap);
-
         if (trendsPageParametersMap.length == 0) {
             trendsPageParameters = [<Radio id="9999" value="9999" key="9999"
                                            disabled={true}> None Available </Radio>];
         }
 
-        return_item=(
+        return (
             <Card className={this.props.className}>
                 <CardHeader>
                     <CardTitle>
@@ -85,8 +73,6 @@ class TrendsParameters extends Component {
                 </CardActions>
             </Card>
         );
-
-        return return_item;
 
     }
 

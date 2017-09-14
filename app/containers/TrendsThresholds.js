@@ -10,7 +10,7 @@ import type { Dispatch } from '../utils/flowtype';
 const mapStateToProps = (state) => {
     return {
         chosenThreshold: state.chosenTrends.threshold,
-        chosenParameter: state.chosenTrends.parameter,
+        chosenParameter: state.chosenTrends.parameter
     }
 };
 

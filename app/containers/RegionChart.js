@@ -8,7 +8,7 @@ import RegionChartComponent from '../components/RegionChart';
 const mapStateToProps = (state) => {
     return {
         trendSensors: state.chosenTrends.trends_sensors,
-        selectedParameter: state.chosenTrends.parameter,    
+        selectedParameter: state.chosenTrends.parameter
     }
 };
 

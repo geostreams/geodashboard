@@ -5,7 +5,7 @@ import Home from '../pages/Home';
 import Explore from '../pages/Explore';
 import TrendsStation from '../pages/TrendsSensor';
 import TrendsRegion from '../pages/TrendsRegion';
-import Analysis from '../containers/Analysis';
+import Analysis from '../pages/Analysis';
 import Detail from '../pages/Detail';
 import TrendsDetail from '../pages/TrendsDetail';
 import About from '../pages/About';
