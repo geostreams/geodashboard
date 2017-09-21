@@ -134,7 +134,8 @@ export type TrendsRegionMapState = {
 
 export type RegionGeometry = {
     type: string;
-    coordinates: []
+    coordinates: [];
+    geocode: [];
 };
 
 export type TrendsRegionSetup = {
