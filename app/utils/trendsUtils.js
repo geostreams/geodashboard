@@ -20,7 +20,8 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
             created: "",
             geometry: {
                 type: "Point",
-                coordinates: trendsPageRegionsSettings[i].geometry.region_coordinate
+                coordinates: trendsPageRegionsSettings[i].geometry.region_coordinate,
+                geocode: trendsPageRegionsSettings[i].geometry.coordinates
             },
             max_end_time: "",
             min_start_time: "",
@@ -176,4 +177,3 @@ export function getRegionalThreshold(selectedRegion:string, sensor: Object, para
     return false;
 
 }
-
