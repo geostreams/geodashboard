@@ -115,12 +115,12 @@ export function fetchTrends(
     return (dispatch:Dispatch, getState:GetState) => {
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
         // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
-        // Each sensor wil have a dispatch with type = ADD_ANALYSIS or ADD_CHOOSE_TRENDS.
+        // Each sensor will have a dispatch with type = ADD_ANALYSIS or ADD_CHOOSE_TRENDS.
         const state = getState();
         const api = state.backends.selected;
 
         const season = season_input;
-        const trendsendpoint = api + '/api/geostreams/datapoints/trends?binning=year';
+        const trends_endpoint = api + '/api/geostreams/datapoints/trends?binning=year';
 
         let sensorsToFilter;
         if (state.chosenTrends.trends_sensors.length > 0) {
@@ -145,8 +145,8 @@ export function fetchTrends(
                 let start_time = new Date(sensor.min_start_time);
                 let end_time = new Date(sensor.max_end_time);
                 let result;
-                let timeframeDays = Math.floor((end_time - start_time) / (1000*60*60*24));
-                if (isNaN(end_time.getTime()) || timeframeDays <= (total_year * 365)) {
+                let time_frame_days = Math.floor((end_time - start_time) / (1000*60*60*24));
+                if (isNaN(end_time.getTime()) || time_frame_days <= (total_year * 365)) {
                     dispatch({
                         type: ADD_CHOOSE_TRENDS,
                         sensor: Object.assign(sensor, {
@@ -168,9 +168,9 @@ export function fetchTrends(
                         start.setFullYear(end_year - total_year);
                     }
 
-                    let trendsendpointargs;
+                    let trends_endpoint_args;
                     if (type == 'ADD_ANALYSIS') {
-                        trendsendpointargs = trendsendpoint +
+                        trends_endpoint_args = trends_endpoint +
                             "&window_start=" + window_start.toISOString() +
                             "&window_end=" + end_time.toISOString() +
                             "&since=" + start.toISOString() +
@@ -178,15 +178,15 @@ export function fetchTrends(
                             "&sensor_id=" + sensor.id +
                             "&attributes=" + parameter;
                     } else {
-                        trendsendpointargs = trendsendpoint +
+                        trends_endpoint_args = trends_endpoint +
                             "&sensor_id=" + sensor.id +
                             "&attributes=" + parameter;
                     }
 
                     if (season)
-                        trendsendpointargs = trendsendpointargs + "&semi=" + season;
+                        trends_endpoint_args = trends_endpoint_args + "&semi=" + season;
 
-                    result = fetch(trendsendpointargs);
+                    result = fetch(trends_endpoint_args);
                     result
                         .then(response => {
                             if (response) {
@@ -208,11 +208,11 @@ export function fetchTrends(
                                         })
                                     });
                                 } else {
-                                    let trendStart = new Date(json[0].start_time);
-                                    let trendEnd = new Date(json[0].end_time);
-                                    let timeframeTrendsDays = Math.floor((trendEnd - trendStart) / (1000*60*60*24));
+                                    let trend_start = new Date(json[0].start_time);
+                                    let trend_end = new Date(json[0].end_time);
+                                    let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000*60*60*24));
 
-                                    if (timeframeTrendsDays >= (total_year * 365)-180) {
+                                    if (time_frame_trends_days >= (total_year * 365)-180) {
                                         dispatch({
                                             type: ADD_CHOOSE_TRENDS,
                                             sensor: Object.assign(sensor, {
