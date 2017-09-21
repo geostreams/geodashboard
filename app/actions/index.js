@@ -124,11 +124,7 @@ export function fetchTrends(
 
         let sensorsToFilter;
         if (state.chosenTrends.trends_sensors.length > 0) {
-            if (view_type == 'by-regions'){
-                sensorsToFilter = state.sensors.data;
-            } else {
-                sensorsToFilter = state.chosenTrends.trends_sensors;
-            }
+            sensorsToFilter = state.chosenTrends.trends_sensors;
         } else {
             sensorsToFilter = state.sensors.data;
         }
