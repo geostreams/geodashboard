@@ -86,3 +86,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-925](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-925)
 - Removed the card max-height on the V3 Search Page
   [GEOD-982](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-982)
+- Use the API for Trends by Region and Detail
+  [GEOD-977](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-977)
