@@ -80,6 +80,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-963](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-963)
 - Make the subtitle in cards for optional on the Trends and Analysis Pages
   [GEOD-961](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-961)
+- Removed all instances of 'UPDATE_TRENDS_REGIONS_POINTS' and associated code
+  [GEOD-975](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-975)
 
 ### Fixed
 - Bug in filtering for custom locations
