@@ -24,14 +24,14 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         onClickAnalysis:(chosenParameter, chosenRegion, baselinePeriod, rollingPeriod,
-                         thresholdChooseValue, trendsSeason, trendsType, view_type) => {
+                         thresholdChooseValue, trendsSeason, trendsType) => {
 
             dispatch(fetchAnalysisRegion(
                 chosenRegion
             ));
 
             dispatch(fetchTrends(
-                chosenParameter, baselinePeriod, rollingPeriod, trendsType, trendsSeason, view_type
+                chosenParameter, baselinePeriod, rollingPeriod, trendsType, trendsSeason
             ));
 
         }
