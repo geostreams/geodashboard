@@ -110,7 +110,7 @@ export function addSearchParameter(parameter:Array<string>) {
 
 export const ADD_CHOOSE_TRENDS = 'ADD_CHOOSE_TRENDS';
 export function fetchTrends(
-    parameter:string, total_year:number, interval:number, type:string, season_input:string, view_type:string
+    parameter:string, total_year:number, interval:number, type:string, season_input:string
 ) {
     return (dispatch:Dispatch, getState:GetState) => {
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
@@ -519,7 +519,7 @@ export function selectTrendsParameter(
             type: SELECT_TRENDS_VIEW_TYPE,
             view_type
         });
-        dispatch(fetchTrends(parameter, total_year, interval, type, season, view_type));
+        dispatch(fetchTrends(parameter, total_year, interval, type, season));
         dispatch(updateTrendsSensors(view_type));
 
     };
@@ -555,7 +555,7 @@ export function selectTrendsRegion(region:string, view_type: string) {
         });
         dispatch(updateTrendsSensors(view_type));
         if (parameter != '') {
-            dispatch(fetchTrends(parameter, total_year, interval, type, season, view_type));
+            dispatch(fetchTrends(parameter, total_year, interval, type, season));
         }
 
     };
@@ -577,7 +577,7 @@ export function selectTrendsSeason(season:string, view_type: string) {
         });
         dispatch(updateTrendsSensors(view_type));
         if (parameter != '') {
-            dispatch(fetchTrends(parameter, total_year, interval, type, season, view_type));
+            dispatch(fetchTrends(parameter, total_year, interval, type, season));
         }
 
     };
