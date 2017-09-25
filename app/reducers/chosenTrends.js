@@ -90,14 +90,12 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
 
         case ADD_CHOOSE_TRENDS:
 
-            // push the new sensor into chosenTrends.trends_sensors and
-            // update chosenTrends.trends_regions with averages
-            let tmpsensor = [action.sensor];
-            let tmpdata = tmpsensor.concat(state["trends_sensors"]);
+            // push the new sensor into chosenTrends.trends_regions
+            let temp_sensor = [action.sensor];
+            let temp_data = temp_sensor.concat(state["trends_sensors"]);
 
             return Object.assign({}, state, {
-                trends_sensors : tmpdata,
-                trends_regions : state.trends_regions
+                trends_sensors : temp_data,
             });
 
         case SET_TRENDS_TIMEFRAMES:
