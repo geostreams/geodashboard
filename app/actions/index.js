@@ -236,6 +236,60 @@ export function fetchTrends(
 
 }
 
+export const ADD_REGION_TRENDS = 'ADD_REGION_TRENDS';
+export function fetchRegionTrends(parameter:string, season:string) {
+    return (dispatch:Dispatch, getState:GetState) => {
+        // For each region sensor, use the parameter, geocode, and season to get the Trends.
+
+        const state = getState();
+        const api = state.backends.selected;
+        const trends_region_endpoint = api + '/api/trends/region/';
+
+        let sensorsToFilter;
+        let result;
+        let trends_region_endpoint_args;
+
+        sensorsToFilter = state.chosenTrends.trends_regions;
+
+        sensorsToFilter.filter(s => s.parameters.indexOf(parameter) >= 0)
+            .map(sensor => {
+                trends_region_endpoint_args = trends_region_endpoint + parameter +
+                    "&geocode=" + sensor.geometry.geocode.toString() + "&season=" + season;
+
+                result = fetch(trends_region_endpoint_args);
+                result
+                    .then(response => {
+                        if (response) {
+                            return response.json();
+                        } else {
+                            return undefined
+                        }
+                    })
+                    .then(json => {
+                        if (json) {
+                            // trends api return do result, not sure why.
+                            if (json.length < 1) {
+                                dispatch({
+                                    type: ADD_CHOOSE_TRENDS,
+                                    sensor: Object.assign(sensor, {
+                                        "trends": "trends return no data"
+                                    })
+                                });
+                            } else {
+                                dispatch({
+                                    type: ADD_CHOOSE_TRENDS,
+                                    sensor: Object.assign(sensor, {
+                                        "trends": json[0].properties
+                                    })
+                                });
+                            }
+                        }
+                    });
+            });
+    }
+
+}
+
 export const ADD_SEARCH_DATASOURCE = 'ADD_SEARCH_DATASOURCE';
 export function addSearchDataSource(data_source:Array<string>) {
     return (dispatch:Dispatch, getState:GetState) => {
