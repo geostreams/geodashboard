@@ -32,7 +32,6 @@ class Analysis extends Component {
 
         let trendsThresholdChoice = true;
         let trendsPageViewType = 'by-analysis';
-        let trendsType = 'ADD_TRENDS';
         let trendsSeason = 'all';
 
         return (
@@ -67,7 +66,6 @@ class Analysis extends Component {
                                 <div className={analysisStyles.actionStyle}>
                                     <TrendsSubmitButton
                                         trends_season={trendsSeason}
-                                        trends_type={trendsType}
                                         trends_defaults={trendsPageDefaults}
                                         trends_view_type={trendsPageViewType}
                                     />
