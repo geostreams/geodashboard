@@ -573,7 +573,12 @@ export function selectTrendsParameter(
             type: SELECT_TRENDS_VIEW_TYPE,
             view_type
         });
-        dispatch(fetchTrends(parameter, total_year, interval, type, season));
+        if (view_type == 'by-sensors') {
+            dispatch(fetchTrends(parameter, total_year, interval, type, season));
+        }
+        if (view_type == 'by-regions') {
+            dispatch(fetchRegionTrends(parameter, season));
+        }
         dispatch(updateTrendsSensors(view_type));
 
     };
@@ -609,7 +614,12 @@ export function selectTrendsRegion(region:string, view_type: string) {
         });
         dispatch(updateTrendsSensors(view_type));
         if (parameter != '') {
-            dispatch(fetchTrends(parameter, total_year, interval, type, season));
+            if (view_type == 'by-sensors') {
+                dispatch(fetchTrends(parameter, total_year, interval, type, season));
+            }
+            if (view_type == 'by-regions') {
+                dispatch(fetchRegionTrends(parameter, season));
+            }
         }
 
     };
@@ -631,7 +641,12 @@ export function selectTrendsSeason(season:string, view_type: string) {
         });
         dispatch(updateTrendsSensors(view_type));
         if (parameter != '') {
-            dispatch(fetchTrends(parameter, total_year, interval, type, season));
+            if (view_type == 'by-sensors') {
+                dispatch(fetchTrends(parameter, total_year, interval, type, season));
+            }
+            if (view_type == 'by-regions') {
+                dispatch(fetchRegionTrends(parameter, season));
+            }
         }
 
     };
