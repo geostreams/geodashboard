@@ -110,12 +110,11 @@ export function addSearchParameter(parameter:Array<string>) {
 
 export const ADD_CHOOSE_TRENDS = 'ADD_CHOOSE_TRENDS';
 export function fetchTrends(
-    parameter:string, total_year:number, interval:number, type:string, season_input:string
+    parameter:string, total_year:number, interval:number, view_type:string, season_input:string
 ) {
     return (dispatch:Dispatch, getState:GetState) => {
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
         // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
-        // Each sensor will have a dispatch with type = ADD_ANALYSIS or ADD_CHOOSE_TRENDS.
         const state = getState();
         const api = state.backends.selected;
 
@@ -165,7 +164,7 @@ export function fetchTrends(
                     }
 
                     let trends_endpoint_args;
-                    if (type == 'ADD_ANALYSIS') {
+                    if (view_type == 'by-analysis') {
                         trends_endpoint_args = trends_endpoint +
                             "&window_start=" + window_start.toISOString() +
                             "&window_end=" + end_time.toISOString() +
@@ -562,7 +561,6 @@ export function selectTrendsParameter(
         let total_year = state.chosenTrends.baseline_total_year;
         let interval = state.chosenTrends.rolling_interval;
         let season = state.chosenTrends.season;
-        let type = 'ADD_CHOOSE_TRENDS';
 
         dispatch({
             type: SELECT_TRENDS_PARAMETER,
@@ -574,7 +572,7 @@ export function selectTrendsParameter(
             view_type
         });
         if (view_type == 'by-sensors') {
-            dispatch(fetchTrends(parameter, total_year, interval, type, season));
+            dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
         }
         if (view_type == 'by-regions') {
             dispatch(fetchRegionTrends(parameter, season));
@@ -606,7 +604,6 @@ export function selectTrendsRegion(region:string, view_type: string) {
         let interval = state.chosenTrends.rolling_interval;
         let season = state.chosenTrends.season;
         let parameter = state.chosenTrends.parameter;
-        let type = 'ADD_CHOOSE_TRENDS';
 
         dispatch({
             type: SELECT_TRENDS_REGION,
@@ -615,7 +612,7 @@ export function selectTrendsRegion(region:string, view_type: string) {
         dispatch(updateTrendsSensors(view_type));
         if (parameter != '') {
             if (view_type == 'by-sensors') {
-                dispatch(fetchTrends(parameter, total_year, interval, type, season));
+                dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
             }
             if (view_type == 'by-regions') {
                 dispatch(fetchRegionTrends(parameter, season));
@@ -633,7 +630,6 @@ export function selectTrendsSeason(season:string, view_type: string) {
         let total_year = state.chosenTrends.baseline_total_year;
         let interval = state.chosenTrends.rolling_interval;
         let parameter = state.chosenTrends.parameter;
-        let type = 'ADD_CHOOSE_TRENDS';
 
         dispatch({
             type: SELECT_TRENDS_SEASON,
@@ -642,7 +638,7 @@ export function selectTrendsSeason(season:string, view_type: string) {
         dispatch(updateTrendsSensors(view_type));
         if (parameter != '') {
             if (view_type == 'by-sensors') {
-                dispatch(fetchTrends(parameter, total_year, interval, type, season));
+                dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
             }
             if (view_type == 'by-regions') {
                 dispatch(fetchRegionTrends(parameter, season));
@@ -747,4 +743,3 @@ export function fetchAnalysisRegion(region:string){
         })
     }
 }
-
