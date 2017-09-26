@@ -17,6 +17,7 @@ export const gd3 = {
         "usgs": "#39B54A",
         "wqp": "#F28E1E"
     },
+
     parameter_maps: {
         "biomass": "Zooplankton Biomass (ug/m^3)",
         "density": "Zooplankton Density (#/m^3)",
@@ -173,6 +174,7 @@ export const gd3 = {
         "vapor_total_pahs": "Vapor Total PAHs (pg/m^3)",
         "vapor_total_pests": "Vapor Total PESTs (pg/m^3)"
     },
+
     sourcename: {
         "glfmsp": "Great Lakes Fish Monitoring and Surveillance Program",
         "epa": "Water Quality Data",
@@ -181,6 +183,7 @@ export const gd3 = {
         "usgs": "United States Geological Survey",
         "iadn": "Integrated Atmospheric Deposition Network"
     },
+
     trend_colors: {
         "trendUp": "#FAE70B",
         "trendDown": "#29ABE2",
@@ -910,58 +913,57 @@ export const gd3 = {
         }
     ],
 
-trends_page_settings : [
-    {
-        "parameter": {
-            "id": "total-phosphorus",
-            "title": "Total Phosphorus (ug/L)",
-            "lake_regions": true
+    trends_page_settings: [
+        {
+            "parameter": {
+                "id": "total-phosphorus",
+                "title": "Total Phosphorus (ug/L)",
+                "lake_regions": true
+            }
+        },
+        {
+            "parameter": {
+                "id": "nitrogen",
+                "title": "Nitrogen (mg/L)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "alkalinity",
+                "title": "Alkalinity (mg/L)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "chlorophyll-a",
+                "title": "Chlorophyll a (ug/L)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "silica",
+                "title": "Silica (mg/L)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "turbidity",
+                "title": "Turbidity (NTU)",
+                "lake_regions": false
+            }
         }
-    },
-    {
-        "parameter": {
-            "id": "nitrogen",
-            "title": "Nitrogen (mg/L)",
-            "lake_regions": false
-        }
-    },
-    {
-        "parameter": {
-            "id": "alkalinity",
-            "title": "Alkalinity (mg/L)",
-            "lake_regions": false
-        }
-    },
-    {
-        "parameter": {
-            "id": "chlorophyll-a",
-            "title": "Chlorophyll a (ug/L)",
-            "lake_regions": false
-        }
-    },
-    {
-        "parameter": {
-            "id": "silica",
-            "title": "Silica (mg/L)",
-            "lake_regions": false
-        }
-    },
-    {
-        "parameter": {
-            "id": "turbidity",
-            "title": "Turbidity (NTU)",
-            "lake_regions": false
-        }
-    }
-],
+    ],
 
-trends_page_lake_regions :
-[
-    {
-        "lake": "ER",
-        "regions": "er-west,er-east,er-center"
-    }
-],
+    trends_page_lake_regions: [
+            {
+                "lake": "ER",
+                "regions": "er-west,er-east,er-center"
+            }
+        ],
 
     trends_page_seasons: [
         {
@@ -983,15 +985,15 @@ trends_page_lake_regions :
         }
     ],
 
-trends_page_timeframes : [
-    {
-        "id": "baseline_total_year",
-        "value": 10
-    }, {
-        "id": "rolling_interval" ,
-        "value": 2,
-    }
-],
+    trends_page_timeframes: [
+        {
+            "id": "baseline_total_year",
+            "value": 10
+        }, {
+            "id": "rolling_interval" ,
+            "value": 2,
+        }
+    ],
 
     trends_page_defaults: [
         {
@@ -1012,60 +1014,60 @@ trends_page_timeframes : [
         }
     ],
 
-trends_analysis_defaults : [
-    {
-        "id": "parameter",
-        "value": "None"
-    },
-    {
-        "id": "season",
-        "value": "all",
-    },
-    {
-        "id": "by-analysis",
-        "value": "Analysis",
-    },
-    {
-        "id": "region",
-        "value": "all",
-    },
-    {
-        "id": "baselinePeriod",
-        "value": 10,
-    },
-    {
-        "id": "baselineMin",
-        "value": 0,
-    },
-    {
-        "id": "baselineMax",
-        "value": 30,
-    },
-    {
-        "id": "rollingPeriod",
-        "value": 2,
-    },
-    {
-        "id": "rollingMin",
-        "value": 0,
-    },
-    {
-        "id": "rollingMax",
-        "value": 10,
-    },
-    {
-        "id": "thresholdMin",
-        "value": 0,
-    },
-    {
-        "id": "thresholdMax",
-        "value": 100,
-    }
-],
+    trends_analysis_defaults: [
+        {
+            "id": "parameter",
+            "value": "None"
+        },
+        {
+            "id": "season",
+            "value": "all",
+        },
+        {
+            "id": "by-analysis",
+            "value": "Analysis",
+        },
+        {
+            "id": "region",
+            "value": "all",
+        },
+        {
+            "id": "baselinePeriod",
+            "value": 10,
+        },
+        {
+            "id": "baselineMin",
+            "value": 0,
+        },
+        {
+            "id": "baselineMax",
+            "value": 30,
+        },
+        {
+            "id": "rollingPeriod",
+            "value": 2,
+        },
+        {
+            "id": "rollingMin",
+            "value": 0,
+        },
+        {
+            "id": "rollingMax",
+            "value": 10,
+        },
+        {
+            "id": "thresholdMin",
+            "value": 0,
+        },
+        {
+            "id": "thresholdMax",
+            "value": 100,
+        }
+    ],
 
-    error_text :"An Error Occurred - Please Select Again",
+    error_text:"An Error Occurred - Please Select Again",
 
-    application_options : [
+    application_options: [
         {
             "title": "Geodashboard 3.0",
             "pages": [
@@ -1100,12 +1102,12 @@ trends_analysis_defaults : [
     mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
 
     // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages
-    parameter_subtitle : 'Click a Parameter to Explore',
-    season_subtitle : 'Season to Explore',
-    region_subtitle : 'Region to Explore',
-    calculation_subtitle : 'Set Average Baseline and Rolling Periods',
-    threshold_subtitle : 'Change the threshold value for analysis',
-    threshold_none_subtitle : 'Threshold to Explore',
+    parameter_subtitle: 'Click a Parameter to Explore',
+    season_subtitle: 'Season to Explore',
+    region_subtitle: 'Region to Explore',
+    calculation_subtitle: 'Set Average Baseline and Rolling Periods',
+    threshold_subtitle: 'Change the threshold value for analysis',
+    threshold_none_subtitle: 'Threshold to Explore',
     // **********
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
