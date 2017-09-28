@@ -250,7 +250,7 @@ export function fetchRegionTrends(parameter:string, season:string) {
 
         sensorsToFilter = state.chosenTrends.trends_regions;
 
-        sensorsToFilter.filter(s => s.parameters.indexOf(parameter) >= 0)
+        sensorsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
                 trends_region_endpoint_args = trends_region_endpoint + parameter +
                     "&geocode=" + sensor.geometry.geocode.toString() + "&season=" + season;
