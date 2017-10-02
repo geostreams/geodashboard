@@ -140,17 +140,10 @@ export type RegionGeometry = {
 
 export type TrendsRegionSetup = {
     id: number;
-    created: string;
     geometry: RegionGeometry;
-    max_end_time: string;
-    min_end_time: string;
-    min_start_time: string;
     name: string;
-    parameters: [];
     properties: Properties;
     type: string;
-    trend_end_time: string;
-    trend_start_time: string;
     trends: [];
 };
 
@@ -202,6 +195,5 @@ type eventOnMap = {
     coordinate: Array<number>
 }
 export type InputEventMap = InputEventMap & eventOnMap;
-
 
 //type Dispatch = (action: Action | Promise<Action>) => Promise;
