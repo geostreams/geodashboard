@@ -266,7 +266,7 @@ export function fetchRegionTrends(parameter:string, season:string) {
                     })
                     .then(json => {
                         if (json) {
-                            // trends api return do result, not sure why.
+                            // trends api return no result, not sure why.
                             if (json.length < 1) {
                                 dispatch({
                                     type: ADD_CHOOSE_TRENDS,
@@ -284,6 +284,62 @@ export function fetchRegionTrends(parameter:string, season:string) {
                             }
                         }
                     });
+            });
+    }
+
+}
+
+export const ADD_REGION_DETAIL_TRENDS = 'ADD_REGION_DETAIL_TRENDS';
+export function fetchRegionDetailTrends(parameter:string, season:string) {
+    return (dispatch:Dispatch, getState:GetState) => {
+        // For each region sensor for the Chart on the Trends Detail Page,
+        // use the parameter, geocode, and season to get the Trends.
+
+        const state = getState();
+        const api = state.backends.selected;
+        const trends_region_detail_endpoint = api + '/api/trends/region/detail/';
+
+        let sensorsToFilter;
+        let detail_result;
+        let trends_region_detail_endpoint_args;
+
+        sensorsToFilter = state.chosenTrends.trends_regions;
+
+        sensorsToFilter.filter(s => s.geometry.geocode.length > 0)
+            .map(sensor => {
+                trends_region_detail_endpoint_args = trends_region_detail_endpoint + parameter +
+                    "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
+
+                detail_result = fetch(trends_region_detail_endpoint);
+                detail_result
+                    .then(response => {
+                        if (response) {
+                            return response.json();
+                        } else {
+                            return undefined
+                        }
+                    })
+                    .then(json => {
+                        if (json) {
+                            // trends api return no result, not sure why.
+                            if (json.length < 1) {
+                                dispatch({
+                                    type: ADD_CHOOSE_TRENDS,
+                                    sensor: Object.assign(sensor, {
+                                        "trends_detail": "trends return no data"
+                                    })
+                                });
+                            } else {
+                                dispatch({
+                                    type: ADD_CHOOSE_TRENDS,
+                                    sensor: Object.assign(sensor, {
+                                        "trends_detail": json[0].average
+                                    })
+                                });
+                            }
+                        }
+                    });
+
             });
     }
 
