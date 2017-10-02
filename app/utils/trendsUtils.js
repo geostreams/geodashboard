@@ -7,7 +7,6 @@ import {pnpoly} from '../utils/arrayUtils';
 import type { Sensors, TrendsRegions } from '../utils/flowtype';
 
 export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegions: Array<string>) {
-
     // Update each Region item
 
     let trendsCheckRegionsAll = allRegions;
@@ -44,6 +43,7 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
                 },
                 type: "Feature",
                 trends: [],
+                trends_detail: [],
             };
 
         }
