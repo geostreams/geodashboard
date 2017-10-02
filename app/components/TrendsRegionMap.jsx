@@ -9,7 +9,7 @@ import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import {getTrendColor, getCustomLocation} from '../utils/getConfig';
 import {popupRegion} from '../utils/mapPopup';
-import {sensorsToFeaturesTrendPage, getAttribution} from '../utils/mapUtils';
+import {sensorsToFeaturesTrendRegionPage, getAttribution} from '../utils/mapUtils';
 import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
 
@@ -110,7 +110,7 @@ class TrendsRegionMap extends Component {
         this.state.areaPolygonSource.clear();
         this.state.areaPolygonSource.addFeatures(region_features);
 
-        features = sensorsToFeaturesTrendPage(
+        features = sensorsToFeaturesTrendRegionPage(
             map_items, this.props.selectedParameter, threshold);
 
         this.state.vectorSource.clear();
@@ -140,7 +140,7 @@ class TrendsRegionMap extends Component {
             }
         });
 
-        let features = sensorsToFeaturesTrendPage(
+        let features = sensorsToFeaturesTrendRegionPage(
             map_items, this.props.selectedParameter, trends_parameter_lake_regions);
 
         let vectorSource = new ol.source.Vector({
