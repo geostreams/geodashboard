@@ -285,6 +285,9 @@ export function fetchRegionTrends(parameter:string, season:string) {
                         }
                     });
             });
+
+        dispatch(fetchRegionDetailTrends(parameter, season));
+
     }
 
 }
@@ -799,3 +802,4 @@ export function fetchAnalysisRegion(region:string){
         })
     }
 }
+
