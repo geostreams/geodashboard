@@ -145,6 +145,7 @@ export type TrendsRegionSetup = {
     properties: Properties;
     type: string;
     trends: [];
+    trends_detail: [];
 };
 
 export type TrendsRegions = TrendsRegionSetup[];
@@ -197,3 +198,4 @@ type eventOnMap = {
 export type InputEventMap = InputEventMap & eventOnMap;
 
 //type Dispatch = (action: Action | Promise<Action>) => Promise;
+
