@@ -27,17 +27,12 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
 
             trendsRegionsSensors[i] = {
                 id: i,
-                created: "",
                 geometry: {
                     type: "Point",
                     coordinates: trendsPageRegionsSettings[i].geometry.region_coordinate,
                     geocode: geocodeArray
                 },
-                max_end_time: "",
-                min_start_time: "",
-                min_end_time: "",
                 name: trendsCheckRegionsAll[i].toString(),
-                parameters: [],
                 properties: {
                     region: trendsCheckRegionsAll[i].toString(),
                     type: {
@@ -48,8 +43,6 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
                     popupContent: trendsPageRegionsSettings[i].properties.title.toString(),
                 },
                 type: "Feature",
-                trend_end_time: "",
-                trend_start_time: "",
                 trends: [],
             };
 
@@ -57,6 +50,7 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
     }
 
     return trendsRegionsSensors;
+
 }
 
 export function filterPresetTrendLocation(region:string, origSensors: Sensors) {
