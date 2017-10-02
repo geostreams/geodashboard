@@ -15,33 +15,45 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
 
     // Create an item to represent each Region
     for (let i = 0; i < trendsCheckRegionsAll.length; i++) {
-        trendsRegionsSensors[i] = {
-            id:i,
-            created: "",
-            geometry: {
-                type: "Point",
-                coordinates: trendsPageRegionsSettings[i].geometry.region_coordinate,
-                geocode: trendsPageRegionsSettings[i].geometry.coordinates
-            },
-            max_end_time: "",
-            min_start_time: "",
-            min_end_time:"",
-            name:trendsCheckRegionsAll[i].toString(),
-            parameters:[],
-            properties:{
-                region: trendsCheckRegionsAll[i].toString(),
-                type: {
-                    id: i.toString(),
-                    title: "",
+
+        let geocodeArray = [];
+
+        if (trendsPageRegionsSettings[i].geometry.coordinates.length > 0) {
+
+            trendsPageRegionsSettings[i].geometry.coordinates[0].map(function (coordinate) {
+                // swap coordinate
+                geocodeArray.push([coordinate[1], coordinate[0]]);
+            }).join(",");
+
+            trendsRegionsSensors[i] = {
+                id: i,
+                created: "",
+                geometry: {
+                    type: "Point",
+                    coordinates: trendsPageRegionsSettings[i].geometry.region_coordinate,
+                    geocode: geocodeArray
                 },
+                max_end_time: "",
+                min_start_time: "",
+                min_end_time: "",
                 name: trendsCheckRegionsAll[i].toString(),
-                popupContent: trendsPageRegionsSettings[i].properties.title.toString(),
-            },
-            type:"Feature",
-            trend_end_time:"",
-            trend_start_time:"",
-            trends:[],
-        };
+                parameters: [],
+                properties: {
+                    region: trendsCheckRegionsAll[i].toString(),
+                    type: {
+                        id: i.toString(),
+                        title: "",
+                    },
+                    name: trendsCheckRegionsAll[i].toString(),
+                    popupContent: trendsPageRegionsSettings[i].properties.title.toString(),
+                },
+                type: "Feature",
+                trend_end_time: "",
+                trend_start_time: "",
+                trends: [],
+            };
+
+        }
     }
 
     return trendsRegionsSensors;
