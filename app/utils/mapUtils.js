@@ -234,9 +234,9 @@ export function sensorsToFeaturesTrendRegionPage(
             let trend_values = "";
             let threshold = 'n/a';
 
-            if (sensor.hasOwnProperty("trends")) {
+            if (sensor.hasOwnProperty("region_trends")) {
                 // Not enough information present
-                if (sensor.trends === "not enough data" || sensor.trends === "trends return no data") {
+                if (sensor.trends === "not enough data" || sensor.region_trends === "trends return no data") {
                     trend_type = "noTrend";
                 } else {
                     // For Trends Page, only check Threshold and assign red arrows for certain parameters.
@@ -254,11 +254,11 @@ export function sensorsToFeaturesTrendRegionPage(
                     }
                     // Only blue or yellow arrows
                     if (threshold == 'n/a') {
-                        if (sensor.trends["percentage_change"] > 0 ) {
+                        if (sensor.region_trends["percentage_change"] > 0 ) {
 
                             trend_type = "trendUp";
 
-                        } else if (sensor.trends["percentage_change"] < 0 ) {
+                        } else if (sensor.region_trends["percentage_change"] < 0 ) {
 
                             trend_type = "trendDown";
 
@@ -267,23 +267,23 @@ export function sensorsToFeaturesTrendRegionPage(
                         }
                     } else {
                         // May have red arrows with Threshold check
-                        if (sensor.trends["percentage_change"] > 0 &&
-                            sensor.trends["lastaverage"] >= threshold) {
+                        if (sensor.region_trends["percentage_change"] > 0 &&
+                            sensor.region_trends["lastaverage"] >= threshold) {
 
                             trend_type = "overThresholdUp";
 
-                        } else if (sensor.trends["percentage_change"] > 0 &&
-                            sensor.trends["lastaverage"] < threshold) {
+                        } else if (sensor.region_trends["percentage_change"] > 0 &&
+                            sensor.region_trends["lastaverage"] < threshold) {
 
                             trend_type = "trendUp";
 
-                        } else if (sensor.trends["percentage_change"] < 0 &&
-                            sensor.trends["lastaverage"] < threshold) {
+                        } else if (sensor.region_trends["percentage_change"] < 0 &&
+                            sensor.region_trends["lastaverage"] < threshold) {
 
                             trend_type = "trendDown";
 
-                        } else if (sensor.trends[parameter + "_percentage_change"] < 0 &&
-                            sensor.trends["lastaverage"] > threshold) {
+                        } else if (sensor.region_trends[parameter + "_percentage_change"] < 0 &&
+                            sensor.region_trends["lastaverage"] > threshold) {
 
                             trend_type = "overThresholdDown";
 
@@ -294,9 +294,9 @@ export function sensorsToFeaturesTrendRegionPage(
                 }
 
                 trend_values = [
-                    (Number(sensor.trends["totalaverage"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.trends["tenyearsaverage"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.trends["lastaverage"]).toFixed(2) + " mg/L")
+                    (Number(sensor.region_trends["totalaverage"]).toFixed(2) + " mg/L"),
+                    (Number(sensor.region_trends["tenyearsaverage"]).toFixed(2) + " mg/L"),
+                    (Number(sensor.region_trends["lastaverage"]).toFixed(2) + " mg/L")
                 ]
 
             }
