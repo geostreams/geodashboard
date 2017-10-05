@@ -250,13 +250,10 @@ export function fetchRegionTrends(parameter:string, season:string) {
 
         sensorsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
-                let result;
-                let trends_region_endpoint_args;
-
-                trends_region_endpoint_args = trends_region_endpoint + parameter +
+                const trends_region_endpoint_args = trends_region_endpoint + parameter +
                     "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
 
-                result = fetch(trends_region_endpoint_args);
+                const result = fetch(trends_region_endpoint_args);
                 result
                     .then(response => {
                         if (response) {
@@ -307,13 +304,10 @@ export function fetchRegionDetailTrends(parameter:string, season:string) {
 
         sensorsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
-                let detail_result;
-                let trends_region_detail_endpoint_args;
-
-                trends_region_detail_endpoint_args = trends_region_detail_endpoint + parameter +
+                const trends_region_detail_endpoint_args = trends_region_detail_endpoint + parameter +
                     "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
 
-                detail_result = fetch(trends_region_detail_endpoint_args);
+                const detail_result = fetch(trends_region_detail_endpoint_args);
                 detail_result
                     .then(response => {
                         if (response) {
