@@ -42,11 +42,13 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
                     popupContent: trendsPageRegionsSettings[i].properties.title.toString(),
                 },
                 type: "Feature",
-                trends: [],
+                region_trends: [],
                 trends_detail: [],
+                trends_deviation: []
             };
 
         }
+
     }
 
     return trendsRegionsSensors;
