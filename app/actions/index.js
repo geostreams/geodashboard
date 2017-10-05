@@ -271,14 +271,14 @@ export function fetchRegionTrends(parameter:string, season:string) {
                                 dispatch({
                                     type: ADD_CHOOSE_TRENDS,
                                     sensor: Object.assign(sensor, {
-                                        "trends": "trends return no data"
+                                        "region_trends": "trends return no data"
                                     })
                                 });
                             } else {
                                 dispatch({
                                     type: ADD_CHOOSE_TRENDS,
                                     sensor: Object.assign(sensor, {
-                                        "trends": json[0].trends
+                                        "region_trends": json[0].trends
                                     })
                                 });
                             }
@@ -327,14 +327,16 @@ export function fetchRegionDetailTrends(parameter:string, season:string) {
                                 dispatch({
                                     type: ADD_CHOOSE_TRENDS,
                                     sensor: Object.assign(sensor, {
-                                        "trends_detail": "trends return no data"
+                                        "trends_detail": "trends return no data",
+                                        "trends_deviation": "trends return no data"
                                     })
                                 });
                             } else {
                                 dispatch({
                                     type: ADD_CHOOSE_TRENDS,
                                     sensor: Object.assign(sensor, {
-                                        "trends_detail": json[0].average
+                                        "trends_detail": json[0].average,
+                                        "trends_deviation": json[0].deviation
                                     })
                                 });
                             }
