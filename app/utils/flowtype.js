@@ -51,8 +51,6 @@ type endpoint = {
     label:string
 };
 
-
-
 //ref: https://github.com/DavidBrear/ReactNativeFlowExample/tree/master/js
 export type GetState = () => Object;
 
@@ -144,8 +142,9 @@ export type TrendsRegionSetup = {
     name: string;
     properties: Properties;
     type: string;
-    trends: [];
+    region_trends: [];
     trends_detail: [];
+    trends_deviation: [];
 };
 
 export type TrendsRegions = TrendsRegionSetup[];
@@ -198,4 +197,3 @@ type eventOnMap = {
 export type InputEventMap = InputEventMap & eventOnMap;
 
 //type Dispatch = (action: Action | Promise<Action>) => Promise;
-
