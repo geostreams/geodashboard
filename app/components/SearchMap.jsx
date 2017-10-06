@@ -5,14 +5,14 @@
 import React, {Component} from 'react';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
-import styles from '../styles/map.css'
-import {Icon} from 'react-mdc-web'
-import {getSourceName, getParameterName, getCustomLocation, getTrendColor, getColor} from '../utils/getConfig'
-import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils'
-import {drawHelper} from '../utils/mapDraw'
-import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup'
-import BasicMap from './BasicMap'
-import type {InputEventMap} from '../utils/flowtype'
+import styles from '../styles/map.css';
+import {Icon} from 'react-mdc-web';
+import {getCustomLocation} from '../utils/getConfig';
+import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
+import {drawHelper} from '../utils/mapDraw';
+import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup';
+import BasicMap from './BasicMap';
+import type {InputEventMap} from '../utils/flowtype';
 
 class SearchMap extends Component {
     state: {
@@ -21,6 +21,7 @@ class SearchMap extends Component {
         expandedClusterLayer: ol.layer.Vector,
         expandedCluster: boolean,
         areaPolygonSource: ol.source.Vector,
+        customLocationFilterVectorExtent: Array <number>
     };
     constructor(props: Object) {
         super(props);
@@ -29,13 +30,14 @@ class SearchMap extends Component {
             multiLineString: new ol.geom.MultiLineString,
             expandedClusterLayer: new ol.layer.Vector,
             areaPolygonSource: new ol.source.Vector,
-            expandedCluster: false
+            expandedCluster: false,
+            customLocationFilterVectorExtent: []
         }
     }
 
     selectShapeLocation = (selectPointsLocations: Array<string>, drawExtent: Array<number>) => {
             this.props.onSelectShapeLocation(selectPointsLocations, drawExtent);
-    }
+    };
 
     displayOverlappingMarkers = (featuresAtPixel: ol.features, theMap: ol.Map) => {
         const multiLineLayers = getMultiLineLayer(featuresAtPixel, theMap);
@@ -46,12 +48,12 @@ class SearchMap extends Component {
 
         this.setState({
             expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true})
-    }
+    };
 
     removeSpiderfiedClusterLayers = (theMap: ol.Map) => {
         theMap.removeLayer(this.state.expandedClusterLayer);
         theMap.removeLayer(this.state.multiLineLayer);
-    }
+    };
 
     popupHandler = (theMap: ol.Map, e: InputEventMap) => {
         const that = this;
@@ -92,7 +94,7 @@ class SearchMap extends Component {
             if (closeClusters && that.state.expandedCluster) {
                 that.removeSpiderfiedClusterLayers(theMap);
             }
-    }
+    };
 
     popupHandleHelper = (feature: ol.Feature, coordinate: number[], overlay: ol.Overlay) => {
         const content = document.getElementById('popup-content');
@@ -105,7 +107,7 @@ class SearchMap extends Component {
             }
             overlay.setPosition(coordinate);
         }
-    }
+    };
 
     mapDidUpdate = (theMap: ol.Map, customLocationFilterVectorExtent: Array<number>) => {
 
@@ -125,7 +127,15 @@ class SearchMap extends Component {
         if (customLocationFilterVectorExtent.length > 0 &&
             this.props.selectedLocation == 'Custom Location') {
             if (!this.state.expandedCluster) {
-                theMap.getView().fit(customLocationFilterVectorExtent, theMap.getSize());
+                if (this.props.shapeCoordinates.length > 0) {
+                    theMap.getView().fit(customLocationFilterVectorExtent, theMap.getSize());
+                }
+                if (this.props.drawn_sensors.length == 0) {
+                    let tmpVectorSource = new ol.source.Vector({
+                        features: features
+                    });
+                    theMap.getView().fit(tmpVectorSource.getExtent(), theMap.getSize());
+                }
             }
             // If the User selected a predefined location, zoom to the features
         } else if (features.length > 0) {
@@ -136,7 +146,7 @@ class SearchMap extends Component {
                 theMap.getView().fit(tmpvectorSource.getExtent(), theMap.getSize());
             }
         }
-    }
+    };
 
     getFeature = () => {
         if(this.props.updateSensors){
@@ -145,7 +155,7 @@ class SearchMap extends Component {
             return sensorsToFeatures(this.props.sensors);
         }
 
-    }
+    };
 
     getCluster = (clusterSource: ol.source.Cluster) => {
       return new ol.layer.Vector({
@@ -197,7 +207,7 @@ class SearchMap extends Component {
 
             }
         });
-    }
+    };
 
     onChangeZoom = (theMap: ol.Map) => {
         const that = this;
@@ -205,7 +215,7 @@ class SearchMap extends Component {
         if (that.state.expandedCluster) {
             that.removeSpiderfiedClusterLayers(theMap);
         }
-    }
+    };
 
     getCustomLayers = () => {
         let areaPolygonLayer = new ol.layer.Vector({
@@ -224,7 +234,7 @@ class SearchMap extends Component {
             ]
         });
         return [areaPolygonLayer];
-    }
+    };
 
     componentWillMount() {
         let areaPolygonSource = new ol.source.Vector({
