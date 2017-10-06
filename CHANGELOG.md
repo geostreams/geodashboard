@@ -82,11 +82,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-961](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-961)
 - Removed all instances of 'UPDATE_TRENDS_REGIONS_POINTS' and associated code
   [GEOD-975](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-975)
+- Add the ability for Detail Links in V3 to go to V2
+  [GEOD-959](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-959)
+- Removed all instances of 'UPDATE_TRENDS_REGIONS_POINTS' and associated code
+  [GEOD-975](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-975)
 
 ### Fixed
 - Bug in filtering for custom locations
   [GEOD-925](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-925)
 - Removed the card max-height on the V3 Search Page
   [GEOD-982](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-982)
+- Fixed bug with Draw location filter not cleared up
+  [GEOD-968](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-968)
+
+## Changed
+- Changed how the Circle is created, and how the associated coordinates are assembled
+  [GEOD-965](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-965)
+- Fixed bug with drawing shapes not erasing when location card does not exist
+  [GEOD-981](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-981)
 - Use the API for Trends by Region and Detail
   [GEOD-977](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-977)

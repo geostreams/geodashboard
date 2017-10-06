@@ -1065,7 +1065,7 @@ export const gd3 = {
         }
     ],
 
-    error_text:"An Error Occurred - Please Select Again",
+    error_text: "An Error Occurred - Please Select Again",
 
     application_options: [
         {
@@ -1099,7 +1099,8 @@ export const gd3 = {
         }
     ],
 
-    mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
+    // This variable is used to determine the location for links to the Detail Page
+    application_website: "/",
 
     // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages
     parameter_subtitle: 'Click a Parameter to Explore',
@@ -1109,5 +1110,7 @@ export const gd3 = {
     threshold_subtitle: 'Change the threshold value for analysis',
     threshold_none_subtitle: 'Threshold to Explore',
     // **********
+
+    mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}

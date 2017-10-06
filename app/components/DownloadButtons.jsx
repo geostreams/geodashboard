@@ -80,14 +80,24 @@ class DownloadButtons extends Component {
 
         if (this.props.selectedLocation !== null) {
 
+            // Get the Drawn Shape Coordinates if they exist
             let draw_area = this.props.drawShapeCoordinates;
 
-            if (draw_area.length > 0) {
+            // For a Drawn Circle
+            if (draw_area.length == 1) {
+
+                params["geocode"] = draw_area.map(function (coordinate) {
+                    return [coordinate[1], coordinate[0], coordinate[2]]
+                }).join(",");
+
+            // For a Drawn Polygon
+            } else if (draw_area.length > 1) {
 
                 params["geocode"] = draw_area[0].map(function (coordinate) {
                     return [coordinate[1], coordinate[0]]
                 }).join(",");
 
+            // For a Predefined Location
             } else {
 
                 const area = getCustomLocation(this.props.selectedLocation);

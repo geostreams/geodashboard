@@ -127,12 +127,18 @@ export function drawHelper(copyOfMap, display_trends){
             }
         }
 
-        let the_filters_div = document.getElementById('filters-div');
-        if (the_filters_div) {
-            if (the_filters_div.children.length <=1) {
+        let filters_div = document.getElementById('filters-div');
+        if (filters_div) {
+            if (filters_div.children.length <=1) {
                 clickedNotDrawRadio();
                 resetDrawPoints();
             }
+        }
+
+        let locations_card = document.getElementById('locations');
+        if (!locations_card) {
+            clickedNotDrawRadio();
+            resetDrawPoints();
         }
 
     }
@@ -142,7 +148,7 @@ export function drawHelper(copyOfMap, display_trends){
 export function centerHelper(view, vectorSource, theMap){
     const centerButton = document.getElementById('centerButton');
     let handleCenterButton = function () {
-        console.log(vectorSource)
+        console.log(vectorSource);
         view.fit(vectorSource.getExtent(), theMap.getSize());
     };
     if (centerButton) {
