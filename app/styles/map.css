@@ -1,5 +1,5 @@
 .root {
-    height: calc(100vh - 132px);
+    height: calc(100vh - 9.2em);
     width: calc(100vw - 25em);
     cursor: pointer;
 }
@@ -80,6 +80,7 @@
 .olSharedDrawStyles {
   left: .5em;
   border-radius: 0.15em;
+  visibility:hidden;
 }
 
 .popup_table {
@@ -175,9 +176,8 @@
 }
 
 .trends_legend {
-  z-index: 100;
   position: absolute;
-  top: 4.5em;
+  top: 8.8em;
   right: 0.5em;
 }
 
@@ -219,5 +219,14 @@
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   border-radius: 0em 0em  0.5em 0.5em;
+  font-weight: lighter;
+}
+
+.viewsitedetail {
+  color: white;
+  text-align:center;
+  display:block;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
   font-weight: lighter;
 }

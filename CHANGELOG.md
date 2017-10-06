@@ -35,17 +35,60 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-274](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-274)
 - Changing from Material-UI to [React Material Web Components](https://github.com/kradio3/react-mdc-web)
   [GEOD-852](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-852)
+  [GEOD-950](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-950)
 - Add geolocation/polygons for each lake in the configuration
   Use them for creating the download links.
   Draw a polygon on the map to show the location you select.
   Fix popup on Explore page
   [GEOD-910](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-910)
   [GEOD-909](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-909)
-
-
-
-
+- Add a new Trends Page and Region Pages
+  [GEOD-944](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-944)
+  [GEOD-945](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-945)
+  [GEOD-954](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-954)
+  [GEOD-956](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-956)
+- Add Sensor Selection with Shapes on the Search and Exploratory Analysis Pages
+  [GEOD-853](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-853)
+  [GLGVO-322](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-322)
+- Extending bottom Download bar on search page and show stats on it
+  [GEOD-850](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-850)
+- When Drawing, zoom to shape and not the points
+  [GEOD-934](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-934)
+- Refactor the Exploratory Analysis Page
+  [GLGVO-339](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-339)
+  [GLGVO-345](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-345)
+  [GLGVO-346](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-346)
+  [GLGVO-347](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-347)
+  [GLGVO-348](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-348)
+  [GLGVO-349](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-349)
+  [GLGVO-356](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-356)
+- Add an 'x' to the collapsed filters
+  [GEOD-912](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-912)
+- Added an edit button on collapsed cards
+  [GEOD-911](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-911)
+- Copy config.js into build directory.
+  [GEOD-970](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-970)
+- Add ability to have V2 application links
+  [GEOD-904](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-904)
+  [GLGVO-342](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-342)
+  [IMLCZO-180](https://opensource.ncsa.illinois.edu/jira/browse/IMLCZO-180)
+- Refactor code associated with Trends
+  [GEOD-963](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-963)
+- Show error message if API fetch fails
+  [GEOD-838](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-838)
+- Refactor code associated with Trends
+  [GEOD-963](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-963)
+- Make the subtitle in cards for optional on the Trends and Analysis Pages
+  [GEOD-961](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-961)
+- Add the ability for Detail Links in V3 to go to V2
+  [GEOD-959](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-959)
 
 ### Fixed
 - Bug in filtering for custom locations
   [GEOD-925](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-925)
+- Removed the card max-height on the V3 Search Page
+  [GEOD-982](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-982)
+- Fixed bug with drawing shapes not erasing when location card does not exist
+  [GEOD-981](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-981)
+- Fixed bug with Draw location filter not cleared up
+  [GEOD-968](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-968)

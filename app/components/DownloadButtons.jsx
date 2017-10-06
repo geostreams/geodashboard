@@ -1,6 +1,7 @@
 /*
  * @flow
  */
+
 import React, {Component, PropTypes} from 'react';
 import {
     Button,
@@ -14,9 +15,8 @@ import {
     MenuItem,
     MenuAnchor
 } from 'react-mdc-web';
-import {getCustomLocation} from '../utils/getConfig'
+import {getCustomLocation} from '../utils/getConfig';
 import styles from '../styles/downloadButton.css';
-import type {MapOfStrings} from '../utils/flowtype'
 
 type DownloadStateType = {
     isOpen: boolean,
@@ -38,7 +38,7 @@ class DownloadButtons extends Component {
 
     // handle Permalink panel
     handleOpenPermalink = () => {
-        var link: string = this.buildLink("json");
+        let link: string = this.buildLink("json");
         this.setState({isOpen: true, link: link});
     };
 
@@ -48,11 +48,11 @@ class DownloadButtons extends Component {
 
     //convert a map object to url parameters
     serialize = function (obj: Object): string {
-        var str = [];
-        for (var p in obj)
+        let str = [];
+        for (let p in obj)
             if (obj.hasOwnProperty(p)) {
                 if (Array.isArray(obj[p])) {
-                    for (var a in obj[p]) {
+                    for (let a in obj[p]) {
                         str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][a]));
                     }
                 } else {
@@ -64,9 +64,9 @@ class DownloadButtons extends Component {
 
     buildLink = function (type: string): string {
 
-        var downloadApi = this.props.api + "/api/geostreams/datapoints?";
+        let downloadApi = this.props.api + "/api/geostreams/datapoints?";
         // refer to https://opensource.ncsa.illinois.edu/bitbucket/projects/CATS/repos/clowder/browse/app/api/Geostreams.scala#665
-        var params = {};
+        let params = {};
         params["format"] = type;
         params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
         params["until"] = this.props.selectedEndDate.toISOString().slice(0, 10);
@@ -80,24 +80,35 @@ class DownloadButtons extends Component {
 
         if (this.props.selectedLocation !== null) {
 
-            const area = getCustomLocation(this.props.selectedLocation);
+            let draw_area = this.props.drawShapeCoordinates;
 
-            if(area && area.geometry){
-                params["geocode"] = area.geometry.coordinates[0].map(function(coordinate){
-                    // swap coordinate
+            if (draw_area.length > 0) {
+
+                params["geocode"] = draw_area[0].map(function (coordinate) {
                     return [coordinate[1], coordinate[0]]
                 }).join(",");
+
+            } else {
+
+                const area = getCustomLocation(this.props.selectedLocation);
+
+                if (area && area.geometry) {
+                    params["geocode"] = area.geometry.coordinates[0].map(function (coordinate) {
+                        // swap coordinate
+                        return [coordinate[1], coordinate[0]]
+                    }).join(",");
+                }
             }
         }
 
-        var link = this.serialize(params);
+        let link = this.serialize(params);
         console.log(link);
 
         return downloadApi + link;
     };
 
     onDownload = (type: string) => {
-        var link = this.buildLink(type);
+        let link = this.buildLink(type);
         window.open(link);
     };
 
@@ -109,10 +120,12 @@ class DownloadButtons extends Component {
 
     render() {
 
+        let numSensors = this.props.availableSensors.length;
+
         // don't use a-href download for Download as CSV/JSON, otherwise buildLink
         // will be executed as the page loading, instead of onClick
         return (
-            <div>
+            <div className={styles.bottomSection}>
                 <Dialog
                     open={this.state.isOpen}
                     onClose={this.handleClosePermalink}
@@ -131,16 +144,22 @@ class DownloadButtons extends Component {
                     </DialogFooter>
                 </Dialog>
 
-
-                <Button raised
+                <Button raised primary
                         onClick={this.onDownload.bind(this, "csv")}
-                > Download Data </Button>
+                >
+                    Download Data
+                </Button>
 
-                <Button onClick={() => {
-                    this.setState({openMenu: true})
-                }}>
+                <Button className={styles.iconButtonStyle}
+                        onClick={() => {this.setState({openMenu: true})}}
+                >
                     <Icon name="get_app"/>
                 </Button>
+
+                <span className={styles.counterText}>
+                    Sites: {numSensors}
+                </span>
+
                 <MenuAnchor>
                     <Menu bottom open={this.state.openMenu} onClose={() => {
                         this.setState({openMenu: false})

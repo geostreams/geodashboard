@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
-import Menu from '../containers/MenuBar'
-import styles from '../styles/main.css'
+import React, {Component} from 'react';
+import Menu from '../containers/MenuBar';
+import styles from '../styles/main.css';
 
 class About extends Component {
 
@@ -10,7 +10,7 @@ class About extends Component {
                 <Menu selected='about'/>
                 <div className={styles.contentcenter}>
                     <p>This is a prototype of Geodashboard 3.0 using React,
-                        Redux, and Material-UI.
+                        Redux, and react-mdc-web.
                     </p>
                     <br/>
                     <p>For the current version, please see

@@ -33,11 +33,11 @@ class MenuBar extends Component {
                             <hr className={styles.header_hr} />
                         </div>
                             <ul className={styles.navbar} id="navigation">
-                                <li className={this.props.selected === "home"? styles.active: '' }><Link to="/" >HOME</Link></li>
-                                <li className={this.props.selected === "explore"? styles.active: '' }><Link to="/explore" >EXPLORE</Link></li>
-                                <li className={this.props.selected === "compare"? styles.active: '' }><Link to="/compare" >COMPARE</Link></li>
+                                <li className={this.props.selected === "home"? styles.active: '' }><a href="/" >HOME</a></li>
+                                <li className={this.props.selected === "explore"? styles.active: '' }><a href="/geodashboard/#explore">EXPLORE</a></li>
+                                <li className={this.props.selected === "compare"? styles.active: '' }><a href="/geodashboard/#compare">COMPARE</a></li>
                                 <li className={this.props.selected === "search"? styles.active: '' }><Link to="/search" >SEARCH</Link></li>
-                                <li className={this.props.selected === "about"? styles.active: '' }><Link to="/about" >ABOUT</Link></li>
+                                <li className={this.props.selected === "about"? styles.active: '' }><a href="/geodashboard/#about">ABOUT</a></li>
                             </ul>
                         </div>
                 </div>

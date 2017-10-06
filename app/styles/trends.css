@@ -1,0 +1,109 @@
+.liststyle {
+    width: 25em;
+    float: left;
+    height: calc(100vh - 27em);
+    overflow-y: auto;
+}
+
+.paperstyle {
+    max-height: 30em;
+    width: 22.2em;
+    margin: 1em 0.5em 0.5em 0.2em;
+    padding: 1em 1em;
+    text-align: left;
+    display: inline-block;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.buttonstyle {
+    width: 20em;
+    padding: 1em;
+    display: inline-block;
+    margin-left: 2em;
+    margin-bottom: 2em;
+}
+
+.select {
+    margin-top: 2em;
+    max-width: calc(100%) !important;
+}
+.detailListStyle {
+    width: 25em;
+    margin: 3.6em 0.1em 3em 0.1em;
+    padding-top: 3.5em !important;
+    float: left;
+    height: calc(100vh - 4em);
+    overflow-y: auto;
+}
+
+.detailChart {
+    margin-top: 4em;
+    margin-left: 1em;
+    float: left;
+}
+
+.detailTitle {
+    padding: 0.2em 0.2em 0.2em 1em !important;
+    width: 100%;
+    position: absolute;
+    background-color: #ffffff;
+    z-index: 1;
+}
+
+.list_style {
+    padding-left: 2em;
+    list-style: none;
+}
+
+.textField {
+    width: 8em;
+    margin-bottom: -1em;
+}
+
+.counterText {
+    float: left;
+    margin-top: 1em;
+    margin-left: 1em;
+    text-align: left;
+}
+
+.submitButtonStyle {
+    margin-top: 1em;
+    margin-left: 1em;
+    float: left;
+    width: 45%;
+}
+
+.parametersCardStyle {
+    max-height: 16em;
+    width: 24em;
+    overflow-y: auto;
+    overflow-x: auto;
+    margin: 1em 0.1em 0.5em 1em !important;
+    padding: 0.2em 0.2em 0.2em 0em !important;
+    position: relative;
+    z-index: 100;
+    background-color: #ffffff;
+}
+
+.parametersCardStyleDetail {
+    max-height: 16.5em;
+    width: 22em;
+    overflow-y: auto;
+    overflow-x: auto;
+    background-color: #ffffff;
+}
+
+.cardMargin {
+    margin: 0em 0.1em 1em 0.1em;
+    width: 22em;
+}
+
+.selectedParameter {
+    background-color: #3f51b5;
+    padding: 0.5em;
+    border-radius: 5em;
+    font-weight: bold;
+    color: white;
+}

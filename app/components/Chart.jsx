@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import rd3 from 'react-d3';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import {Card, CardHeader, CardMedia, CardText} from 'material-ui/Card';
+import {Card, CardHeader, CardTitle} from 'react-mdc-web';
 import {getParameterName} from '../utils/getConfig'
 
 var LineChart = rd3.LineChart;
@@ -32,31 +32,31 @@ class Chart extends Component {
         return (
             <Row>
                 <Col md={8}>
-                <LineChart
-                    data={lineData}
-                    width='100%'
-                    height={400}
-                    viewBoxObject={{
-                        x: 0,
-                        y: 0,
-                        width: 700,
-                        height: 400
-                      }}
-                    title={getParameterName(this.props.param)}
-                    yAxisLabel="Altitude"
-                    xAxisLabel="Elapsed Time (sec)"
-                    //domain={{x: [,10], y: [0,]}}
-                />
-             </Col>
+                    <LineChart
+                        data={lineData}
+                        width='100%'
+                        height={400}
+                        viewBoxObject={{
+                            x: 0,
+                            y: 0,
+                            width: 700,
+                            height: 400
+                          }}
+                        title={getParameterName(this.props.param)}
+                        yAxisLabel="Altitude"
+                        xAxisLabel="Elapsed Time (sec)"
+                        //domain={{x: [,10], y: [0,]}}
+                    />
+                </Col>
                 <Col md={3}
                      style={{"align-items":"center"}}
                 >
                     <Card >
-                        <CardHeader
-                            title="box and Whisker holder"
-                        />
+                        <CardHeader>
+                            <CardTitle> Box and Whisker holder</CardTitle>
+                        </CardHeader>
                     </Card>
-                    </Col>
+                </Col>
             </Row>
 
         )

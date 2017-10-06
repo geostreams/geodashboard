@@ -1,6 +1,5 @@
 import React, {PureComponent} from 'react';
-import classnames from 'classnames';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 class Select extends PureComponent {
 
@@ -13,7 +12,7 @@ class Select extends PureComponent {
         disabled: PropTypes.bool,
         dataIdx: PropTypes.number
 
-    }
+    };
     constructor(props: Object) {
         super(props);
     }
@@ -22,8 +21,12 @@ class Select extends PureComponent {
 
         const classNames = "mdc-select " + this.props.className;
         return(
-
-            <select value={this.props.value} className={classNames} onChange={this.props.onChange.bind(this)} data-idx={this.props.dataIdx} disabled={this.props.disabled} >
+            <select id={this.props.value}
+                    value={this.props.value}
+                    className={classNames}
+                    onChange={this.props.onChange.bind(this)}
+                    data-idx={this.props.dataIdx}
+                    disabled={this.props.disabled} >
                 {this.props.children}
             </select>
         )

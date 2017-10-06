@@ -1,16 +1,17 @@
-import React, {Component} from 'react'
-import {Router, Route, browserHistory, hashHistory} from 'react-router'
-import Search from '../containers/Search'
-import Home from '../pages/Home'
-import Explore from '../pages/Explore'
-import Analysis from '../containers/Analysis';
-import Detail from '../pages/Detail'
+import React, {Component} from 'react';
+import {Router, Route, hashHistory} from 'react-router';
+import Search from '../pages/Search';
+import Home from '../pages/Home';
+import Explore from '../pages/Explore';
+import TrendsStation from '../pages/TrendsSensor';
+import TrendsRegion from '../pages/TrendsRegion';
+import Analysis from '../pages/Analysis';
+import Detail from '../pages/Detail';
+import TrendsDetail from '../pages/TrendsDetail';
 import About from '../pages/About';
-import RouteMismatch from '../pages/RouteMismatch'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RouteMismatch from '../pages/RouteMismatch';
 import 'material-components-web/dist/material-components-web.min.css';
-import injectTapEventPlugin from 'react-tap-event-plugin'
-injectTapEventPlugin();
+import {getApplicationBackends} from '../utils/getConfig';
 
 class App extends Component {
 
@@ -18,22 +19,24 @@ class App extends Component {
         console.log('App did mount');
         const { loadSensors } = this.props;
         // dispatch is synchronous by default,
-        loadSensors(window.configruntime.clowder_endpoints[0].url);
+        loadSensors(window.configruntime.gd3.clowder_endpoints[0].url);
+
     }
 
     render() {
         return (
-            <MuiThemeProvider>
-                <Router history={hashHistory}>
-                    <Route path="/" component={Home}/>
-                    <Route path="/explore" component={Explore}/>
-                    <Route path="/detail/location/:name" component={Detail}/>
-                    <Route path="/search" component={Search}/>
-                    <Route path="/analysis" component={Analysis}/>
-                    <Route path="/about" component={About}/>
-                    <Route path="*" component={RouteMismatch}/>
-                </Router>
-            </MuiThemeProvider>
+            <Router history={hashHistory}>
+                <Route path="/" component={Home}/>
+                <Route path="/explore" component={Explore}/>
+                <Route path="/detail/location/:name" component={Detail}/>
+                <Route path="/search" component={Search}/>
+                <Route path="/trendsstations" component={TrendsStation}/>
+                <Route path="/trendsregions" component={TrendsRegion}/>
+                <Route path="/trendsdetail/region/:region" component={TrendsDetail}/>
+                <Route path="/analysis" component={Analysis}/>
+                <Route path="/about" component={About}/>
+                <Route path="*" component={RouteMismatch}/>
+            </Router>
         )
     }
 }

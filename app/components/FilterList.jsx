@@ -9,8 +9,8 @@ import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json';
 import {getLocationName} from '../utils/getConfig';
 import {
-    Button, Icon, Checkbox, FormField, label, RadioGroup, Radio, Elevation, Card, CardHeader, CardTitle, CardSubtitle,
-    CardText, CardMedia
+    Button, Icon, Checkbox, FormField, label, RadioGroup, Radio,
+    Card, CardHeader, CardTitle, CardSubtitle, CardText, CardMedia
 } from 'react-mdc-web';
 import type {InputEvent} from '../utils/flowtype';
 import Select from './material/Select';
@@ -95,9 +95,20 @@ class FilterList extends Component {
             case "locations":
                 let locationList;
                 let drawRadio;
+                let allLocations;
                 let dividerLine;
 
                 if (this.props.locations) {
+
+                    // Add Divider Line to separate sections
+                    dividerLine = <hr className={styles.divider_style}/>;
+
+                    // Add All Locations option
+                    // Setting the radio button's value alters the selected value in the list
+                    allLocations = [
+                        <Radio className={styles.radio} id="allLocations" data-filterId={this.props.idx}
+                               value="All Locations" key="allLocations">Select All Available Locations</Radio>
+                    ];
 
                     // Add Draw Radio option
                     // Setting the radio button's value alters the selected value in the list
@@ -106,23 +117,29 @@ class FilterList extends Component {
                                value="Custom Location" key="draw">Click to Draw Custom Location</Radio>
                     ];
 
-                    // Add Divider Line to separate sections
-                    dividerLine = <hr className={styles.divider_style}/>;
-
                     // Add Locations Radio options
                     locationList = this.props.locations.map(p =>
                         <Radio className={styles.radio} data-filterId={this.props.idx}
                                value={p.id} key={p.id}> {p.label}</Radio>);
 
                 } else {
-                    drawRadio = <div></div>;
                     dividerLine = <div></div>;
+                    allLocations = <div></div>;
+                    drawRadio = <div></div>;
                     locationList = <div></div>;
                 }
 
                 divContents =
                     (
                         <div>
+
+                            <RadioGroup name="all_locations" onChange={this.selectLocation.bind(this)}
+                                        value={this.props.selectedLocation}>
+                                {allLocations}
+                            </RadioGroup>
+
+                            {dividerLine}
+
                             <RadioGroup name="draw_location" onChange={this.selectLocation.bind(this)}
                                         value={this.props.selectedLocation}>
                                 {drawRadio}
@@ -158,7 +175,7 @@ class FilterList extends Component {
                             {options}
                         </Select>
                     </div>
-                    <div className={styles.right}>
+                    <div className={styles.close_button_open_card}>
                         <a onClick={this.props.onClickRemove} data-idx={idx}>
                             <Icon className={styles.closeIcon} name='close'/>
                         </a>
@@ -166,12 +183,17 @@ class FilterList extends Component {
                     <br/>
                 </CardHeader>
             );
+        // if this filter is closed
         } else {
             cardsubtitle = cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 0 ? cardsubtitle : "No selection";
             cardhead = (
                 <CardHeader>
                     <CardTitle
-                        className={styles.title_card}>{this.props.attribute.replace("data_source", "data source")}</CardTitle>
+                        className={styles.title_card}>{this.props.attribute.replace("data_source", "data source")}
+                        <a className={styles.close_button_collapsed_card} onClick={this.props.onClickRemove} data-idx={idx}>
+                            <Icon className={styles.closeIcon} name='close'/>
+                        </a>
+                    </CardTitle>
                     <CardSubtitle> {cardsubtitle} </CardSubtitle>
                 </CardHeader>
             )
@@ -185,11 +207,17 @@ class FilterList extends Component {
                 {divContents}
 
             </CardText>;
+        } else {
+            // if the filter is closed, display an open icon
+            cardMedia =
+                <a className={styles.edit_filter_button} onClick={this.props.onExpand} >
+                    <Icon name='keyboard_arrow_down'/>
+                </a>
         }
 
         return (
 
-            <Card className={styles.filter_card} id={this.props.idx} onClick={this.props.onExpand}>
+            <Card className={styles.filter_card} id={this.props.idx}>
                 {cardhead}
                 {cardMedia}
             </Card>

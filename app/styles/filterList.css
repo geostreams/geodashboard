@@ -40,6 +40,20 @@
     overflow-y: auto;
 }
 
+.close_button_collapsed_card {
+    float: right;
+    width: 1em;
+    cursor: pointer;
+    padding-left: 0.33em;
+}
+
+.close_button_open_card {
+    float: right;
+    width: 1em;
+    cursor: pointer;
+    padding-top: 0.5em;
+}
+
 .right {
     float: right;
     width: 1em;
@@ -55,7 +69,6 @@
 }
 
 .filter_card {
-    max-height: 30em;
     width: 20em;
     margin: 1em 0em 0em 0em;
     padding: 0.5em 1em 1em 1em;
@@ -94,6 +107,7 @@ hr.divider_style {
     width: 16em;
 }
 
-.formfield {
-
+.edit_filter_button {
+    cursor: pointer;
+    margin: auto;
 }

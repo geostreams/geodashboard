@@ -2,8 +2,8 @@
  * @flow
  */
 
-import { connect } from 'react-redux'
-import DownloadButtonsComponent from '../components/DownloadButtons'
+import { connect } from 'react-redux';
+import DownloadButtonsComponent from '../components/DownloadButtons';
 
 const mapStateToProps = (state) => {
     return {
@@ -13,6 +13,8 @@ const mapStateToProps = (state) => {
         selectedEndDate: state.selectedSearch.dates.selected.end,
         selectedLocation: state.selectedSearch.locations.selected,
         api: state.backends.selected,
+        drawShapeCoordinates: state.sensors.shape_coordinates,
+        availableSensors: state.sensors.available_sensors
     }
 };
 

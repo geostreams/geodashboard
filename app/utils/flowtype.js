@@ -1,7 +1,7 @@
 /*
  * @flow
  */
-
+let ol = require('openlayers');
 export type Geometry = {
     type:string;
     coordinates:string[]
@@ -84,15 +84,105 @@ export type sensorsState= {
         parameters:MapWithLabels,
         data:Sensors,
         draw_available_sensors:Sensors,
+        shape_coordinates:Array<number>,
     };
 export type trendsSensorsState = {
     chosen_parameter: string,
     baseline_period: string,
     rolling_period: string,
     threshold_value: string,
+    chosen_region: string,
     data: Sensors,
     available_sensors: Sensors,
+    number_to_filter: number,
 }
+
+export type MapProps = {
+    sensors: Sensors,
+    availableSensors: Sensors
+};
+
+export type BasicMapState = {
+    center: Array <number>,
+    vectorSource: ol.source.Vector,
+    clusterSource: ol.source.Cluster,
+    customLocationFilterVectorExtent: Array <number>,
+    map: ol.Map,
+    currentZoom: number,
+    maxZoom: number
+};
+
+//TODO: remove this when using BasicMap in Trends Map
+export type TrendsMapState = {
+    center: Array <number>,
+    vectorSource: ol.source.Vector,
+    clusterSource: ol.source.Cluster,
+    areaPolygonSource: ol.source.Vector,
+    map: ol.Map,
+    currentZoom: number,
+    maxZoom: number,
+};
+
+export type TrendsRegionMapState = {
+    center: Array <number>,
+    vectorSource: ol.source.Vector,
+    clusterSource: ol.source.Cluster,
+    areaPolygonSource: ol.source.Vector,
+    map: ol.Map,
+    currentZoom: number,
+}
+
+export type RegionGeometry = {
+    type: string;
+    coordinates: []
+};
+
+export type TrendsRegionSetup = {
+    id: number;
+    created: string;
+    geometry: RegionGeometry;
+    max_end_time: string;
+    min_end_time: string;
+    min_start_time: string;
+    name: string;
+    parameters: [];
+    properties: Properties;
+    type: string;
+    trend_end_time: string;
+    trend_start_time: string;
+    trends: [];
+};
+
+export type TrendsRegions = TrendsRegionSetup[];
+
+export type TrendsParameter = string;
+export type TrendsSeason = string;
+export type TrendsRegion = string;
+export type TrendsThreshold = string;
+export type TrendsThresholdChoice = boolean;
+export type TrendsPageSensorsState = Sensors;
+export type TrendsPageRegionsState = TrendsRegions;
+export type TrendsViewType = string;
+export type TrendsBaselineTotalYear = string;
+export type TrendsRollingInterval = string;
+
+export type ChosenTrendsState = {
+    region: TrendsRegion,
+    all_regions: Array<string>,
+    parameter: TrendsParameter,
+    season: TrendsSeason,
+    threshold_choice: TrendsThresholdChoice,
+    threshold: TrendsThreshold,
+    sensors: Sensors,
+    trends_sensors: TrendsPageSensorsState,
+    trends_regions: TrendsPageRegionsState,
+    baseline_total_year: TrendsBaselineTotalYear,
+    rolling_interval: TrendsRollingInterval,
+    view_type: TrendsViewType,
+    number_to_filter: number,
+    draw_available_sensors: TrendsPageSensorsState,
+};
+
 
 // export type Action = BackendAction | SearchFilterAction | SensorAction | SelectedSearchAction;
 export type Dispatch = (action:any) => null;
@@ -106,7 +196,11 @@ type ElementEventTemplate<E> = {
     } & Event;
 
 export type InputEvent = ElementEventTemplate<HTMLInputElement>;
+type eventOnMap = {
+    pixel: Array<number>,
+    coordinate: Array<number>
+}
+export type InputEventMap = InputEventMap & eventOnMap;
 
 
 //type Dispatch = (action: Action | Promise<Action>) => Promise;
-

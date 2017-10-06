@@ -1,12 +1,7 @@
-import React, {Component} from 'react'
-import Menu from '../containers/MenuBar'
-import DataGraph from '../containers/DataGraph'
-import styles from '../styles/main.css'
-import { connect } from 'react-redux'
-import {Card, CardHeader, CardTitle, CardMedia, CardText} from 'material-ui/Card';
-import List from 'material-ui/List';
-import Checkbox from 'material-ui/Checkbox';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import React, {Component} from 'react';
+import Menu from '../containers/MenuBar';
+import DataGraph from '../containers/DataGraph';
+import styles from '../styles/main.css';
 
 class Detail extends Component {
     render() {

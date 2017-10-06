@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
-import Menu from '../containers/MenuBar'
-import Map from '../containers/Map'
-import ExploreSourcesTab from '../containers/ExploreSourcesTab'
-import {Card, CardTitle, CardHeader, CardText, Grid, Cell, Content, List} from 'react-mdc-web'
-import styles from '../styles/main.css'
-import {connect} from 'react-redux'
+import React, {Component} from 'react';
+import Menu from '../containers/MenuBar';
+import Map from '../containers/ExploreMap';
+import ExploreSourcesTab from '../containers/ExploreSourcesTab';
+import {Card, CardTitle, CardHeader, CardText, Grid, Cell, Content, List} from 'react-mdc-web';
+import styles from '../styles/main.css';
+import {connect} from 'react-redux';
 
 class Explore extends Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class Explore extends Component {
     render() {
 
         let sourceLists = this.props.sources.map(s =>
-            <Card id={s} className={styles.card}>
+            <Card id={s.id} className={styles.card} key={s.id}>
                 <CardHeader>
                     <CardTitle>{s.label} </CardTitle>
                 </CardHeader>
@@ -25,13 +25,13 @@ class Explore extends Component {
                     <ExploreSourcesTab source={s}/>
                 </CardText>
             </Card>
-        )
+        );
 
         return (
             <div>
                 <Menu selected='explore'/>
                 <Content>
-                    <div className={styles.body}>
+                    <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>
                             <Cell col={2}>
                                 <List className={styles.leftcolumn}>
@@ -40,7 +40,7 @@ class Explore extends Component {
                             </Cell>
                             <Cell col={10}>
                                 <div className={styles.rightmap}>
-                                    <Map display_draw='False'/>
+                                    <Map />
                                 </div>
                             </Cell>
                         </Grid>

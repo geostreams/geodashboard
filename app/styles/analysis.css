@@ -14,8 +14,9 @@
 }
 
 .liststyle {
-    width: 22em;
-    margin: 3.6em 0em 3em 0em;
+    width: 25em;
+    margin: 3.6em 0.1em 3em 0.1em;
+    padding-top: 16.5em !important;
     float: left;
     height: calc(100vh - 8em);
     overflow-y: auto;
@@ -35,7 +36,7 @@
 .paperstyle {
     max-height: 30em;
     width: 22.2em;
-    margin: 1em 0.5em 0em 0.2em;
+    margin: 1em 0.5em 0.5em 0.2em;
     padding: 1em 1em;
     text-align: left;
     display: inline-block;
@@ -71,23 +72,22 @@
 }
 
 .buttonStyle {
+    margin-top: 1em;
+    margin-left: 1em;
     float: left;
+    width: 45%;
 }
 
 .counterText {
     float: left;
     margin-top: 1em;
-    padding: 0.2em;
-}
-
-.comboStyling {
-    margin: auto;
-    width: 90%;
+    margin-left: 1em;
+    text-align: left;
 }
 
 .cardMargin {
-    margin: 1em 0em 0em 0em;
-    width: 20em;
+    margin: 1em 0.1em 0.5em 1.1em;
+    width: 22em;
 }
 
 .select {
@@ -96,4 +96,17 @@
 
 .textField {
     width: 9em;
+}
+
+.parametersCardStyle {
+    max-height: 16.5em;
+    width: 22em;
+    overflow-y: auto;
+    overflow-x: auto;
+    margin: 1em 0.1em 0.5em 1.1em;
+    padding: 0.2em 0.2em 0.2em 0em !important;
+    position: fixed;
+    top: 3em;
+    z-index: 100;
+    background-color: #ffffff;
 }

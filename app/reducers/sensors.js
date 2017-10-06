@@ -1,14 +1,18 @@
 /*
  * @flow
  */
-import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER} from '../actions'
-import type { Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype'
-import {inArray, sortByLabel, pnpoly} from '../utils/arrayUtils'
-import {getLocationName, getSourceName, getParameterName} from '../utils/getConfig'
+import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS} from '../actions';
+import type { Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype';
+import {inArray, sortByLabel, pnpoly} from '../utils/arrayUtils';
+import {getSourceName, getParameterName} from '../utils/getConfig';
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS',
-    sensors:Sensors, api:string, receivedAt:Date,
-    selected_search:Object, selected_filters:Array<string>|};
+    sensors:Sensors,
+    api:string,
+    receivedAt:Date,
+    selected_search:Object,
+    selected_filters:Array<string>,
+    shape_coordinates: Array<number> |};
 
 const defaultState = {
     data:[],
@@ -16,10 +20,14 @@ const defaultState = {
     sources: [],
     locations:[],
     available_sensors:[],
-    draw_available_sensors:[]
+    draw_available_sensors:[],
+    shape_coordinates: []
 };
 
 const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
+
+    let shapeCoordinates = [];
+
 	switch(action.type) {
 		case RECEIVE_SENSORS:
 			return Object.assign({}, state, {
@@ -29,18 +37,47 @@ const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
 		        parameters: collectParameters(action.sensors),
 		        sources: collectSources(action.sensors),
                 locations: collectLocations(action.sensors),
-                available_sensors: action.sensors
+                available_sensors: action.sensors,
+                shape_coordinates: []
     	});
 
         case UPDATE_AVAILABLE_SENSORS:
             let newSensors = filterAvailableSensors(state, action.selected_filters, action.selected_search);
-            return Object.assign({}, state, {available_sensors: newSensors});
+            if (action.selected_search.locations.selected == 'Custom Location') {
+                shapeCoordinates = state.shape_coordinates;
+                return Object.assign({}, state, {
+                    available_sensors: newSensors,
+                    shape_coordinates: shapeCoordinates
+                });
+            } else {
+                shapeCoordinates = [];
+                return Object.assign({}, state, {
+                    available_sensors: newSensors,
+                    draw_available_sensors:[],
+                    shape_coordinates: shapeCoordinates
+                });
+            }
 
         case ADD_CUSTOM_LOCATION_FILTER:
             let customLocationSensors = filterCustomLocation(state, action.selectedPointsLocations);
+            shapeCoordinates = action.shapeCoordinates;
+
             return Object.assign({}, state, {
                 available_sensors: customLocationSensors,
-                draw_available_sensors: customLocationSensors
+                draw_available_sensors: customLocationSensors,
+                shape_coordinates: shapeCoordinates
+            });
+
+        case CLEAR_SENSORS:
+            return Object.assign({}, state, {
+                api: '',
+                data:[],
+                parameters: [],
+                sources: [],
+                locations:[],
+                available_sensors:[],
+                draw_available_sensors:[],
+                shape_coordinates: []
             });
 
         default:
@@ -129,7 +166,7 @@ export function collectDates(sensorsData:Sensors):CollectDate {
 
 export function collectLocations(sensorsData:Sensors):MapWithLabels {
     const locations:MapWithLabels = [];
-    const additional_location = window.configruntime.additional_locations;
+    const additional_location = window.configruntime.gd3.additional_locations;
 
     sensorsData.map(s => {
         // old code, keep this for other geodashboard
@@ -215,28 +252,43 @@ function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string
                 if(selectedSearch.locations.selected != null ) {
                     new_sensors = [];
 
-                    if (selectedSearch.locations.selected == 'Custom Location') {
-                        if (draw_sensors_names.length <= 0) {
-                            new_sensors = av_sensors;
-                        } else {
-                            new_sensors = av_sensors.filter(function(e){return this.indexOf(e)>=0;},draw_sensors_names);
-                        }
-                    }
-                    else {
-                        av_sensors.map((sensor => {
-                            if(matchLocation(selectedSearch.locations.selected, sensor)) {
-                                new_sensors.push(sensor);
+                    switch(selectedSearch.locations.selected) {
+
+                        case 'All Locations':
+
+                            return;
+
+                        case 'Custom Location':
+                            if (draw_sensors_names.length <= 0) {
+                                new_sensors = av_sensors;
+                            } else {
+                                new_sensors = av_sensors.filter(function (e) {
+                                    return this.indexOf(e) >= 0;
+                                }, draw_sensors_names);
                             }
-                        }));
+                            av_sensors = new_sensors;
+
+                            return;
+
+                        default:
+                            av_sensors.map((sensor => {
+                                if (matchLocation(selectedSearch.locations.selected, sensor)) {
+                                    new_sensors.push(sensor);
+                                }
+                            }));
+                            av_sensors = new_sensors;
+
+                            return;
+
                     }
 
-                    av_sensors = new_sensors;
                 }
 
                 return;
         }
 
     });
+
     return av_sensors;
 }
 
@@ -247,7 +299,7 @@ function matchLocation(selectedLocation:string, sensor:Sensor) {
         return location.properties.id === selectedLocation;
     }
 
-    const customLocation = window.configruntime.additional_locations.find(findLocation);
+    const customLocation = window.configruntime.gd3.additional_locations.find(findLocation);
     if (!customLocation)
         return false;
     return pnpoly(sensor.geometry.coordinates[1], sensor.geometry.coordinates[0], customLocation.geometry.coordinates)

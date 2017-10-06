@@ -12,6 +12,28 @@ export const switchBackend = (selected:string, title:string, subtitle:string) =>
     }
 };
 
+export const SWITCH_BACKEND_ERROR = 'SWITCH_BACKEND_ERROR';
+export const switchBackendError = () => {
+    return (dispatch:Dispatch, getState:GetState) => {
+        const state = getState();
+        let fetched_api = state.sensors.api;
+        dispatch({
+            type: SWITCH_BACKEND_ERROR,
+            fetched_api
+        });
+        dispatch({
+            type: CLEAR_SENSORS
+        });
+        dispatch({
+            type: CLEAR_TRENDS_SENSORS
+        });
+    }
+};
+
+export const CLEAR_SENSORS = 'CLEAR_SENSORS';
+
+export const CLEAR_TRENDS_SENSORS = 'CLEAR_TRENDS_SENSORS';
+
 export const ADD_ENDPOINTS = 'ADD_ENDPOINTS';
 export const addEndpoints = () =>{
     return {
@@ -38,6 +60,7 @@ function receiveSensors(api:string, json:Sensors) {
             receivedAt: Date.now()
         });
         dispatch(updateAvailableFilters());
+        dispatch(setTrendsSensors());
     }
 }
 
@@ -87,25 +110,37 @@ export function addSearchParameter(parameter:Array<string>) {
     }
 }
 
-export const ADD_TRENDS = 'ADD_TRENDS';
-export function fetchTrends(parameter:string, totalyear:number, interval:number) {
+export const ADD_CHOOSE_TRENDS = 'ADD_CHOOSE_TRENDS';
+export function fetchTrends(
+    parameter:string, total_year:number, interval:number, type:string, season_input:string, view_type:string
+) {
     return (dispatch:Dispatch, getState:GetState) => {
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
         // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
-        // Each sensor wil have a dispatch with type = ADD_TRENDS.
+        // Each sensor wil have a dispatch with type = ADD_ANALYSIS or ADD_CHOOSE_TRENDS.
         const state = getState();
         const api = state.backends.selected;
-        //TODO: add season for GLM
-        const season = undefined;
-        //TODO: change to year/semi for GLM, may need a config
-        const trendsendpoint = api + '/api/geostreams/datapoints/trends?binning=year&semi=all';
+
+        const season = season_input;
+        const trendsendpoint = api + '/api/geostreams/datapoints/trends?binning=year';
 
         let sensorsToFilter;
-        if ((state.sensorTrends.available_sensors).length > 0 ) {
-            sensorsToFilter = state.sensorTrends.available_sensors;
+        if (state.chosenTrends.trends_sensors.length > 0) {
+            if (view_type == 'by-regions'){
+                sensorsToFilter = state.sensors.data;
+            } else {
+                sensorsToFilter = state.chosenTrends.trends_sensors;
+            }
         } else {
             sensorsToFilter = state.sensors.data;
         }
+
+        let number_to_filter = (sensorsToFilter.length);
+
+        dispatch({
+            type: ADD_ANALYSIS_COUNT,
+            number_to_filter
+        });
 
         sensorsToFilter.filter(s => s.parameters.indexOf(parameter) >= 0)
             .map(sensor => {
@@ -113,13 +148,13 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number)
                 let end_time = new Date(sensor.max_end_time);
                 let result;
                 let timeframeDays = Math.floor((end_time - start_time) / (1000*60*60*24));
-                if (isNaN(end_time.getTime()) || timeframeDays <= (totalyear * 365)) {
+                if (isNaN(end_time.getTime()) || timeframeDays <= (total_year * 365)) {
                     dispatch({
-                        type: ADD_TRENDS,
+                        type: ADD_CHOOSE_TRENDS,
                         sensor: Object.assign(sensor, {
                             "trends": "not enough data",
                             "trend_start_time": start_time,
-                            "trend_end_time": end_time,
+                            "trend_end_time": end_time
                         })
                     });
                     return undefined;
@@ -129,22 +164,30 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number)
                     window_start.setFullYear(end_year - interval);
 
                     let start:Date = new Date(end_time);
-                    if (totalyear == 0) {
+                    if (total_year == 0) {
                         start = start_time;
                     } else {
-                        start.setFullYear(end_year - totalyear);
+                        start.setFullYear(end_year - total_year);
                     }
 
-                    let trendsendpointargs = trendsendpoint +
-                        "&window_start=" + window_start.toISOString() +
-                        "&window_end=" + end_time.toISOString() +
-                        "&since=" + start.toISOString() +
-                        "&until=" + end_time.toISOString() +
-                        "&sensor_id=" + sensor.id +
-                        "&attributes=" + parameter;
+                    let trendsendpointargs;
+                    if (type == 'ADD_ANALYSIS') {
+                        trendsendpointargs = trendsendpoint +
+                            "&window_start=" + window_start.toISOString() +
+                            "&window_end=" + end_time.toISOString() +
+                            "&since=" + start.toISOString() +
+                            "&until=" + end_time.toISOString() +
+                            "&sensor_id=" + sensor.id +
+                            "&attributes=" + parameter;
+                    } else {
+                        trendsendpointargs = trendsendpoint +
+                            "&sensor_id=" + sensor.id +
+                            "&attributes=" + parameter;
+                    }
+
                     if (season)
                         trendsendpointargs = trendsendpointargs + "&semi=" + season;
-                    console.log(trendsendpointargs);
+
                     result = fetch(trendsendpointargs);
                     result
                         .then(response => {
@@ -159,11 +202,11 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number)
                                 // trends api return do result, not sure why.
                                 if (json.length < 1) {
                                     dispatch({
-                                        type: ADD_TRENDS,
+                                        type: ADD_CHOOSE_TRENDS,
                                         sensor: Object.assign(sensor, {
                                             "trends": "trends return no data",
                                             "trend_start_time": start_time,
-                                            "trend_end_time": end_time,
+                                            "trend_end_time": end_time
                                         })
                                     });
                                 } else {
@@ -171,22 +214,26 @@ export function fetchTrends(parameter:string, totalyear:number, interval:number)
                                     let trendEnd = new Date(json[0].end_time);
                                     let timeframeTrendsDays = Math.floor((trendEnd - trendStart) / (1000*60*60*24));
 
-                                    if (timeframeTrendsDays >= (totalyear * 365)-180) {
+                                    if (timeframeTrendsDays >= (total_year * 365)-180) {
                                         dispatch({
-                                            type: ADD_TRENDS,
+                                            type: ADD_CHOOSE_TRENDS,
                                             sensor: Object.assign(sensor, {
                                                 "trends": json[0].properties,
                                                 "trend_start_time": start_time,
-                                                "trend_end_time": end_time,
+                                                "trend_end_time": end_time
                                             })
                                         });
+                                        if (type == 'ADD_CHOOSE_TRENDS') {
+                                            // Create the Region Points from the individual Sensors
+                                            dispatch(updateTrendsRegionsPoints());
+                                        }
                                     } else {
                                         dispatch({
-                                            type: ADD_TRENDS,
+                                            type: ADD_CHOOSE_TRENDS,
                                             sensor: Object.assign(sensor, {
                                                 "trends": "trends return no data",
                                                 "trend_start_time": start_time,
-                                                "trend_end_time": end_time,
+                                                "trend_end_time": end_time
                                             })
                                         });
                                     }
@@ -264,11 +311,12 @@ export function addSearchLocation(location:? string) {
 }
 
 export const ADD_CUSTOM_LOCATION_FILTER = 'ADD_CUSTOM_LOCATION_FILTER';
-export function addCustomLocationFilter(selectedPointsLocations:Array<string>) {
+export function addCustomLocationFilter(selectedPointsLocations:Array<string>, shapeCoordinates: Array<number>) {
     return (dispatch:Dispatch) => {
         dispatch({
             type: ADD_CUSTOM_LOCATION_FILTER,
             selectedPointsLocations,
+            shapeCoordinates
         })
 
     }
@@ -284,9 +332,19 @@ export function addCustomTrendLocationFilter(selectedPointsLocations:Array<strin
         dispatch({
             type: ADD_CUSTOM_TREND_LOCATION_FILTER,
             selectedPointsLocations,
-            origSensors,
+            origSensors
         })
 
+    }
+}
+
+export const ADD_CUSTOM_TREND_LOCATIONS_FILTER = 'ADD_CUSTOM_TREND_LOCATIONS_FILTER';
+export function addCustomTrendLocationsFilter(selectedPointsLocations:Array<string>) {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: ADD_CUSTOM_TREND_LOCATIONS_FILTER,
+            selectedPointsLocations
+        })
     }
 }
 
@@ -371,7 +429,6 @@ export function selectSensorDetail(id:string, name:string, coordinates:Array<num
     };
 }
 
-
 export function fetchSensors(api:string) {
     //TODO: dispatch type is not defined.
     return (dispatch:any) => {
@@ -384,6 +441,10 @@ export function fetchSensors(api:string) {
                 dispatch(receiveSensors(api, json))
             })
             .then(dispatch(updateAvailableSensors(-1)))
+            .catch((error) => {
+                console.log('An ERROR occurred! ' + error);
+                dispatch(switchBackendError());
+            })
     }
 }
 
@@ -428,15 +489,211 @@ export function fetchSensor(name:string) {
     }
 }
 
-export const ADD_TRENDS_ARGS = 'ADD_TRENDS_ARGS';
-export function fetchTrendsArgs(chosenParameter:string, baselinePeriod:number, rollingPeriod:number, thresholdChooseValue:number){
+export const SELECT_ANALYSIS_PARAMETER = 'SELECT_ANALYSIS_PARAMETER';
+export function selectAnalysisParameter(
+    parameter:string, threshold_choice:boolean, view_type: string
+) {
+    return (dispatch:Dispatch) => {
+
+        dispatch({
+            type: SELECT_ANALYSIS_PARAMETER,
+            parameter,
+            threshold_choice
+        });
+        dispatch({
+            type: SELECT_TRENDS_VIEW_TYPE,
+            view_type
+        });
+
+    };
+}
+
+export const SELECT_TRENDS_PARAMETER = 'SELECT_TRENDS_PARAMETER';
+export function selectTrendsParameter(
+    parameter:string, threshold_choice:boolean, view_type: string
+) {
+    return (dispatch:Dispatch, getState:GetState) => {
+
+        const state = getState();
+        let total_year = state.chosenTrends.baseline_total_year;
+        let interval = state.chosenTrends.rolling_interval;
+        let season = state.chosenTrends.season;
+        let type = 'ADD_CHOOSE_TRENDS';
+
+        dispatch({
+            type: SELECT_TRENDS_PARAMETER,
+            parameter,
+            threshold_choice
+        });
+        dispatch({
+            type: SELECT_TRENDS_VIEW_TYPE,
+            view_type
+        });
+        dispatch(fetchTrends(parameter, total_year, interval, type, season, view_type));
+        dispatch(updateTrendsSensors(view_type));
+
+    };
+}
+
+export const SELECT_ANALYSIS_REGION = 'SELECT_ANALYSIS_REGION';
+export function selectAnalysisRegion(region:string, view_type:string) {
+    return (dispatch:Dispatch) => {
+
+        dispatch({
+            type: SELECT_ANALYSIS_REGION,
+            region
+        });
+        dispatch(updateTrendsSensors(view_type));
+
+    };
+}
+
+export const SELECT_TRENDS_REGION = 'SELECT_TRENDS_REGION';
+export function selectTrendsRegion(region:string, view_type: string) {
+    return (dispatch:Dispatch, getState:GetState) => {
+
+        const state = getState();
+        let total_year = state.chosenTrends.baseline_total_year;
+        let interval = state.chosenTrends.rolling_interval;
+        let season = state.chosenTrends.season;
+        let parameter = state.chosenTrends.parameter;
+        let type = 'ADD_CHOOSE_TRENDS';
+
+        dispatch({
+            type: SELECT_TRENDS_REGION,
+            region
+        });
+        dispatch(updateTrendsSensors(view_type));
+        if (parameter != '') {
+            dispatch(fetchTrends(parameter, total_year, interval, type, season, view_type));
+        }
+
+    };
+}
+
+export const SELECT_TRENDS_SEASON = 'SELECT_TRENDS_SEASON';
+export function selectTrendsSeason(season:string, view_type: string) {
+    return (dispatch:Dispatch, getState:GetState) => {
+
+        const state = getState();
+        let total_year = state.chosenTrends.baseline_total_year;
+        let interval = state.chosenTrends.rolling_interval;
+        let parameter = state.chosenTrends.parameter;
+        let type = 'ADD_CHOOSE_TRENDS';
+
+        dispatch({
+            type: SELECT_TRENDS_SEASON,
+            season
+        });
+        dispatch(updateTrendsSensors(view_type));
+        if (parameter != '') {
+            dispatch(fetchTrends(parameter, total_year, interval, type, season, view_type));
+        }
+
+    };
+}
+
+export const SET_TRENDS_SENSORS = 'SET_TRENDS_SENSORS';
+export function setTrendsSensors() {
+    return (dispatch:Dispatch, getState:GetState) => {
+
+        const state = getState();
+        let sensors = state.sensors.data;
+
+        dispatch({
+            type: SET_TRENDS_SENSORS,
+            sensors
+        });
+    }
+}
+
+export const SET_TRENDS_TIMEFRAMES = 'SET_TRENDS_TIMEFRAMES';
+export function setTrendsTimeframes() {
     return (dispatch:Dispatch) => {
         dispatch({
-            type: ADD_TRENDS_ARGS,
-            chosenParameter,
-            baselinePeriod,
-            rollingPeriod,
-            thresholdChooseValue,
+            type: SET_TRENDS_TIMEFRAMES
+        });
+    }
+}
+
+export const UPDATE_TRENDS_SENSORS = 'UPDATE_TRENDS_SENSORS';
+export function updateTrendsSensors(view_type:string) {
+    return (dispatch:Dispatch) => {
+        dispatch(setTrendsTimeframes());
+        dispatch({
+            type: UPDATE_TRENDS_SENSORS,
+            view_type
+        })
+    }
+}
+
+export const SELECT_TRENDS_THRESHOLD = 'SELECT_TRENDS_THRESHOLD';
+export function selectTrendsThreshold(threshold:number) {
+    return {
+        type: SELECT_TRENDS_THRESHOLD,
+        threshold
+    };
+}
+
+export const SELECT_TRENDS_VIEW_TYPE = 'SELECT_TRENDS_VIEW_TYPE';
+export function selectTrendsViewType(view_type:string) {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: SELECT_TRENDS_VIEW_TYPE,
+            view_type
+        });
+        let region = 'all';
+        dispatch(selectTrendsRegion(region, view_type));
+    };
+}
+
+export const UPDATE_TRENDS_REGIONS_POINTS = 'UPDATE_TRENDS_REGIONS_POINTS';
+export function updateTrendsRegionsPoints() {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: UPDATE_TRENDS_REGIONS_POINTS
+        });
+    };
+}
+
+export const SELECT_TRENDS_CALC_BASELINE_SETTING= 'SELECT_TRENDS_CALC_BASELINE_SETTING';
+export function selectTrendsCalcBaselineSetting(baseline_total_year:number) {
+    return {
+        type: SELECT_TRENDS_CALC_BASELINE_SETTING,
+        baseline_total_year
+    };
+}
+
+export const SELECT_TRENDS_CALC_ROLLING_SETTING= 'SELECT_TRENDS_CALC_ROLLING_SETTING';
+export function selectTrendsCalcRollingSetting(rolling_interval:number) {
+    return {
+        type: SELECT_TRENDS_CALC_ROLLING_SETTING,
+        rolling_interval
+    };
+}
+
+export const ADD_ANALYSIS_COUNT = 'ADD_ANALYSIS_COUNT';
+export function addAnalysisCount(number_to_filter:number){
+    return (dispatch:Dispatch) => {
+
+        dispatch({
+            type: ADD_ANALYSIS_COUNT,
+            number_to_filter
+        })
+    }
+}
+
+export const FETCH_ANALYSIS_REGION = 'FETCH_ANALYSIS_REGION';
+export function fetchAnalysisRegion(region:string){
+    return (dispatch:Dispatch, getState:GetState) => {
+
+        const state = getState();
+        let sensors = state.chosenTrends.sensors;
+
+        dispatch({
+            type: FETCH_ANALYSIS_REGION,
+            region,
+            sensors
         })
     }
 }
