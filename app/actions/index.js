@@ -221,10 +221,6 @@ export function fetchTrends(
                                                 "trend_end_time": end_time
                                             })
                                         });
-                                        if (type == 'ADD_CHOOSE_TRENDS') {
-                                            // Create the Region Points from the individual Sensors
-                                            dispatch(updateTrendsRegionsPoints());
-                                        }
                                     } else {
                                         dispatch({
                                             type: ADD_CHOOSE_TRENDS,
@@ -645,15 +641,6 @@ export function selectTrendsViewType(view_type:string) {
     };
 }
 
-export const UPDATE_TRENDS_REGIONS_POINTS = 'UPDATE_TRENDS_REGIONS_POINTS';
-export function updateTrendsRegionsPoints() {
-    return (dispatch:Dispatch) => {
-        dispatch({
-            type: UPDATE_TRENDS_REGIONS_POINTS
-        });
-    };
-}
-
 export const SELECT_TRENDS_CALC_BASELINE_SETTING= 'SELECT_TRENDS_CALC_BASELINE_SETTING';
 export function selectTrendsCalcBaselineSetting(baseline_total_year:number) {
     return {
@@ -695,3 +682,4 @@ export function fetchAnalysisRegion(region:string){
         })
     }
 }
+
