@@ -14,7 +14,7 @@ class FilterOption extends Component {
     }
 
     render() {
-        let checkedVar = (this.props.name == "data_source" &&
+        let checkedVar = (this.props.name == "data_sources" &&
             this.props.selectedDataSources.indexOf(this.props.id) > -1) ||
             (this.props.name == "parameters" &&
             this.props.selectedParameters.indexOf(this.props.id) > -1);

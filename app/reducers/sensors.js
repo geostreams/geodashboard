@@ -210,7 +210,7 @@ function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string
 
     selectedFilters.map ((filter) => {
         switch(filter) {
-            case 'data_source':
+            case 'data_sources':
                 if(selectedSearch.data_sources.selected.length > 0) {
                     new_sensors = [];
                     av_sensors.map((sensor) => {
@@ -237,14 +237,17 @@ function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string
                 return;
 
             case 'time':
-                new_sensors=[];
-                av_sensors.map((sensor) => {
-                    if(selectedSearch.dates.selected.start <= new Date(sensor.max_end_time) &&
-                        selectedSearch.dates.selected.end >= new Date(sensor.min_start_time)) {
-                        new_sensors.push(sensor);
-                    }
-                });
-                av_sensors = new_sensors;
+                if(selectedSearch.dates.selected.start !== "" && selectedSearch.dates.selected.end !== ""
+                && selectedSearch.dates.selected.start !== null && selectedSearch.dates.selected.end !== null) {
+	                new_sensors=[];
+	                av_sensors.map((sensor) => {
+		                if(selectedSearch.dates.selected.start <= new Date(sensor.max_end_time) &&
+			                selectedSearch.dates.selected.end >= new Date(sensor.min_start_time)) {
+			                new_sensors.push(sensor);
+		                }
+	                });
+	                av_sensors = new_sensors;
+                }
                 return;
 
             case 'locations':

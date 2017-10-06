@@ -241,22 +241,22 @@ export function fetchTrends(
 }
 
 export const ADD_SEARCH_DATASOURCE = 'ADD_SEARCH_DATASOURCE';
-export function addSearchDataSource(data_source:Array<string>) {
+export function addSearchDataSource(data_sources:Array<string>) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
         dispatch({
             type: ADD_SEARCH_DATASOURCE,
-            data_source,
+            data_sources,
             selected_filters
         });
-        const idx = selected_filters.indexOf('data_source');
+        const idx = selected_filters.indexOf('data_sources');
         dispatch(updateAvailableSensors(idx));
     }
 }
 
 export const ADD_START_DATE = 'ADD_START_DATE';
-export function addStartDate(date:Date) {
+export function addStartDate(date:?Date) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
@@ -273,7 +273,7 @@ export function addStartDate(date:Date) {
 }
 
 export const ADD_END_DATE = 'ADD_END_DATE';
-export function addEndDate(date:Date) {
+export function addEndDate(date:?Date) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;

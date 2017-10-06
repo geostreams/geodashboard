@@ -98,3 +98,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-965](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-965)
 - Fixed bug with drawing shapes not erasing when location card does not exist
   [GEOD-981](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-981)
+- Bug in selected search not being updated when a filter was removed
+  [GEOD-953](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-953)
