@@ -133,6 +133,10 @@ export function getApplicationBackends() {
     return window.configruntime.gd3.clowder_endpoints;
 }
 
+export function getApplicationWebsite() {
+    return window.configruntime.gd3.application_website;
+}
+
 export function getErrorText() {
     return window.configruntime.gd3.error_text;
 }

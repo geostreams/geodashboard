@@ -1,3 +1,6 @@
+
+import {getApplicationWebsite} from './getConfig';
+
 export function popupHeader(feature: ol.Feature, styles){
     let id = feature.getId().toUpperCase();
     let sensorInfo = feature.attributes;
@@ -35,9 +38,9 @@ export function popupHeader(feature: ol.Feature, styles){
 
     let bodyText =
         '<table class=' + styles.popup_table + '>' +
-        dataSource +
-        timePeriod +
-        latlong +
+            dataSource +
+            timePeriod +
+            latlong +
         '</table>' +
         '<div class=' + styles.greyborder + '></div>';
 
@@ -45,6 +48,9 @@ export function popupHeader(feature: ol.Feature, styles){
 }
 
 export function popupParameters(feature: ol.Feature, styles){
+
+    let application_sensors_website = getApplicationWebsite();
+
     let sensorInfo = feature.attributes;
     let sourceColor = sensorInfo.color;
 
@@ -61,7 +67,8 @@ export function popupParameters(feature: ol.Feature, styles){
         '<div class=' + styles.paramsborder + '>' + params + '</div>' ;
 
     if(paramsLength > 0) {
-        bodyText += '<a href="#/detail/location/'+ sensorInfo.name + '" class=' + styles.viewdetail + ' style="background-color: ' +
+        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/'+ sensorInfo.name +
+            '/" class=' + styles.viewdetail + ' style="background-color: ' +
             sourceColor + ';">View detail</a>';
     }
 
@@ -69,12 +76,12 @@ export function popupParameters(feature: ol.Feature, styles){
 }
 
 export function popupTrends(feature: ol.Feature, styles){
-    let sensorInfo = feature.attributes;
 
+    let application_sensors_website = getApplicationWebsite();
+    let sensorInfo = feature.attributes;
     let sensorTrends = sensorInfo.trend_type;
     let trendColor = sensorInfo.trend_color;
     let trendValues = sensorInfo.trend_values;
-
     let trendsLeft = '';
     let trendsRight = '';
 
@@ -115,20 +122,20 @@ export function popupTrends(feature: ol.Feature, styles){
 
     let bodyText =
         '<table class=' + styles.tablestyle + '>' +
-        trends +
+            trends +
         '</table>';
     let paramsLength = (sensorInfo.parameters).length;
     let sourceColor = sensorInfo.color;
     if(paramsLength > 0 && sensorInfo.trends_detail){
-        bodyText += '<a href="#/detail/location/'+ sensorInfo.name + '" class=' + styles.viewsitedetail +
-            ' style="background-color: ' + sourceColor + ';">View Details for the ' +
-            sensorInfo.name + ' Site </a>';
+        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/'+
+            sensorInfo.name + '/" class=' + styles.viewsitedetail + ' style="background-color: ' +
+            sourceColor + ';">View Details for the ' + sensorInfo.name + ' Site </a>';
     }
 
     if(sensorInfo.trends_detail) {
-        bodyText += '<a href="#/trendsdetail/region/'+ sensorInfo.location + '" class=' + styles.viewdetail +
-            ' style="background-color: ' + sourceColor + ';">View Details for the ' +
-            sensorInfo.region + ' Region </a>';
+        bodyText += '<a href="/#trendsdetail/region/'+
+            sensorInfo.location + '/" class=' + styles.viewdetail + ' style="background-color: ' +
+            sourceColor + ';">View Details for the ' + sensorInfo.region + ' Region </a>';
     }
     return bodyText;
 }
