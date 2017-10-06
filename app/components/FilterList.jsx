@@ -175,11 +175,9 @@ class FilterList extends Component {
                             {options}
                         </Select>
                     </div>
-                    <div className={styles.close_button_open_card}>
-                        <a onClick={this.props.onClickRemove} data-idx={idx}>
-                            <Icon className={styles.closeIcon} name='close'/>
-                        </a>
-                    </div>
+                    <a className={styles.close_button_open_card} onClick={this.props.onClickRemove} data-idx={idx}>
+                        <Icon className={styles.closeIcon} name='close'/>
+                    </a>
                     <br/>
                 </CardHeader>
             );
@@ -210,7 +208,7 @@ class FilterList extends Component {
         } else {
             // if the filter is closed, display an open icon
             cardMedia =
-                <a className={styles.edit_filter_button} onClick={this.props.onExpand} >
+                <a id={this.props.attribute} className={styles.edit_filter_button} onClick={this.props.onExpand} >
                     <Icon name='keyboard_arrow_down'/>
                 </a>
         }

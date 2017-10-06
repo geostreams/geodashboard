@@ -96,3 +96,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Changed
 - Changed how the Circle is created, and how the associated coordinates are assembled
   [GEOD-965](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-965)
+- Fixed bug with drawing shapes not erasing when location card does not exist
+  [GEOD-981](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-981)
