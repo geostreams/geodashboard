@@ -1,5 +1,5 @@
 [
-{"id":"data_source", "name":"Data Sources"},
+{"id":"data_sources", "name":"Data Sources"},
 {"id":"parameters", "name":"Parameters"},
 {"id":"time", "name":"Time"},
 {"id":"locations", "name":"Locations"}

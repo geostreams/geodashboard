@@ -33,7 +33,7 @@ class FilterSelection extends Component {
         if (value == "parameters" || this.props.selectedFilters[idx] == "parameters") {
             this.props.onClearFilter(true, false);
         }
-        if (value == "data_source" || this.props.selectedFilters[idx] == "data_source") {
+        if (value == "data_sources" || this.props.selectedFilters[idx] == "data_sources") {
             this.props.onClearFilter(false, true);
         }
         if (value == "time" || this.props.selectedFilters[idx] == "time") {
@@ -56,7 +56,7 @@ class FilterSelection extends Component {
         if (value == "parameters" || this.props.selectedFilters[idx] == "parameters") {
             this.props.onClearFilter(true, false);
         }
-        if (value == "data_source" || this.props.selectedFilters[idx] == "data_source") {
+        if (value == "data_sources" || this.props.selectedFilters[idx] == "data_sources") {
             this.props.onClearFilter(false, true);
         }
         if (value == "time" || this.props.selectedFilters[idx] == "time") {

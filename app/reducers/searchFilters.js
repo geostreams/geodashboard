@@ -6,7 +6,7 @@ import type { searchFiltersState } from '../utils/flowtype'
 
 type SearchFilterAction = {| type:string, filter:Array<Object>, selectedFilter: Array<string>, allFilters: Object, idx: number |};
 
-const defaultState = {filters:[{'id':'locations'}, {'id':'data_source'}, {'id':'parameters'}, {'id':'time'}], selected: []};
+const defaultState = {filters:[{'id':'locations'}, {'id':'data_sources'}, {'id':'parameters'}, {'id':'time'}], selected: []};
 
 const filters = (state:searchFiltersState = defaultState, action:SearchFilterAction) => {
 	switch(action.type) {

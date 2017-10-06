@@ -29,8 +29,8 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
         },
         onClearTime: () => {
             //TODO: user the state of TimeFilter component
-            dispatch(addStartDate( new Date("1951-04-10")));
-            dispatch(addEndDate(new Date()));
+            dispatch(addStartDate(null));
+            dispatch(addEndDate(null));
         },
         onClearLocation:() =>{
             dispatch(addSearchLocation(null));

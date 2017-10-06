@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
                     selectedParameters.push(value);
                     dispatch(addSearchParameter(selectedParameters));
 
-                } else if (event.target.name == "data_source") {
+                } else if (event.target.name == "data_sources") {
                     selectedDataSources.push(value);
                     dispatch(addSearchDataSource(selectedDataSources));
                 }
@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
                         selectedParameters.splice(idx, 1);
                         dispatch(addSearchParameter(selectedParameters));
                     }
-                } else if (event.target.name == "data_source") {
+                } else if (event.target.name == "data_sources") {
                     var idx:number = selectedDataSources.indexOf(value);
                     if (idx > -1) {
                         selectedDataSources.splice(idx, 1);

@@ -72,7 +72,7 @@ export type selectedSearchState = {
         parameters:DatasourceParameter,
         dates: {
             available: {start:Date, end:Date},
-            selected: {start:Date, end:Date},
+            selected: {start:?Date, end:?Date},
         }
     };
 export type sensorsState= {
