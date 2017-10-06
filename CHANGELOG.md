@@ -92,3 +92,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-982](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-982)
 - Fixed bug with Draw location filter not cleared up
   [GEOD-968](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-968)
+
+## Changed
+- Changed how the Circle is created, and how the associated coordinates are assembled
+  [GEOD-965](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-965)

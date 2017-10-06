@@ -353,7 +353,6 @@ class BasicMap extends Component {
                 let drawCircle = new ol.interaction.Draw({
                     type: 'Circle',
                     source: customLocationFilterVector,
-                    geometryFunction: ol.interaction.Draw.createRegularPolygon(40),
                 });
 
                 theMap.addInteraction(drawCircle);
@@ -404,8 +403,15 @@ class BasicMap extends Component {
                         }
                     }
                     // Get the shape coordinates
-                    let drawCoordinates = drawExtent.getCoordinates();
-
+                    // (1) Get the Units for the Map Projection
+                    let units = theMap.getView().getProjection().getUnits();
+                    // (2) Get the Center Point of the Circle
+                    let drawCenter = drawExtent.getCenter();
+                    // (3) Get the Radius of the Circle in Meters
+                    let drawRadius = (drawExtent.getRadius() * ol.proj.METERS_PER_UNIT[units])/1000;
+                    // Assemble the Coordinates for the API call
+                    let drawCoordinates = [drawCenter.concat(drawRadius)];
+                    // Call the appropriate function
                     that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
 
                 });
