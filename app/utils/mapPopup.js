@@ -140,3 +140,41 @@ export function removePopup(theMap){
         closer.blur();
     }
 }
+
+export function popupRegion(feature: ol.Feature, styles){
+
+    let id = feature.getId().toUpperCase();
+    let sensorInfo = feature.attributes;
+
+    let trendColor = sensorInfo.trend_color;
+    let trendValues = sensorInfo.trend_values;
+    let sourceColor = sensorInfo.color;
+
+    let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
+        sourceColor + ';">' + id + '</h2>';
+
+    let bodyText = '<div class=' + styles.greyborder + '></div>';
+
+    let trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+        trendColor + '; border-color: ' + trendColor + ';"></p></td></tr>';
+
+    let trendsRight = '' +
+        '<tr><td><strong>Total Avg: </strong>' + trendValues[0] + '</td></tr>' +
+        '<tr><td><strong>Ten Year Avg: </strong>' + trendValues[1] + '</td></tr>' +
+        '<tr><td><strong>Latest Avg: </strong>' + trendValues[2] + '</td></tr>';
+
+    let trends = trendsLeft + trendsRight;
+
+    let regionText =
+        '<table class=' + styles.tablestyle + '>' +
+            trends +
+        '</table>' +
+        '<div class=' + styles.greyborder + '></div>';
+
+    if(sensorInfo.trends_detail) {
+        regionText += '<a href="#/trendsdetail/region/'+ sensorInfo.location + '" class=' + styles.viewdetail +
+            ' style="background-color: ' + sourceColor + ';">View Details for the ' +
+            sensorInfo.region + ' Region </a>';
+    }
+    return headerText + bodyText + regionText;
+}

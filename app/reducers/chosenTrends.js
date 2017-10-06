@@ -4,20 +4,19 @@
 
 
 import {
-    ADD_ANALYSIS_COUNT, ADD_CHOOSE_TRENDS, ADD_CUSTOM_TREND_LOCATIONS_FILTER,
-    CLEAR_TRENDS_SENSORS, FETCH_ANALYSIS_REGION, SELECT_TRENDS_CALC_BASELINE_SETTING, SELECT_ANALYSIS_REGION,
-    SELECT_TRENDS_REGION, SELECT_TRENDS_CALC_ROLLING_SETTING, SELECT_ANALYSIS_PARAMETER,
-    SELECT_TRENDS_PARAMETER, SELECT_TRENDS_SEASON, SELECT_TRENDS_THRESHOLD,
-    SELECT_TRENDS_VIEW_TYPE, SET_TRENDS_TIMEFRAMES, SET_TRENDS_SENSORS,
-    UPDATE_TRENDS_REGIONS_POINTS, UPDATE_TRENDS_SENSORS
+    ADD_ANALYSIS_COUNT, ADD_CHOOSE_TRENDS, ADD_REGION_DETAIL_TRENDS, ADD_REGION_TRENDS,
+    ADD_CUSTOM_TREND_LOCATIONS_FILTER, CLEAR_TRENDS_SENSORS, FETCH_ANALYSIS_REGION,
+    SELECT_TRENDS_CALC_BASELINE_SETTING, SELECT_ANALYSIS_REGION, SELECT_TRENDS_REGION,
+    SELECT_TRENDS_CALC_ROLLING_SETTING, SELECT_ANALYSIS_PARAMETER, SELECT_TRENDS_PARAMETER,
+    SELECT_TRENDS_SEASON, SELECT_TRENDS_THRESHOLD, SELECT_TRENDS_VIEW_TYPE, SET_TRENDS_TIMEFRAMES,
+    SET_TRENDS_SENSORS, UPDATE_TRENDS_SENSORS
 } from '../actions';
 import {
     getTrendsPageTimeframes, getTrendsRegionsSettings, getTrendSettings
 } from '../utils/getConfig';
 import {
     createRegionalTrends, filterCustomTrendLocation, filterPresetTrendLocation,
-    getAllRegions, getRegionalTrends, handleThresholdChangeNoChoice,
-    matchRegionAnalysis, matchRegionTrends
+    getAllRegions, handleThresholdChangeNoChoice, matchRegionAnalysis, matchRegionTrends
 } from '../utils/trendsUtils';
 import type {
     ChosenTrendsState, Sensors, TrendsBaselineTotalYear, TrendsPageSensorsState,
@@ -91,22 +90,22 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
 
         case ADD_CHOOSE_TRENDS:
 
-            // push the new sensor into chosenTrends.trends_sensors and
-            // update chosenTrends.trends_regions with averages
-            let tmpsensor = [action.sensor];
-            let tmpdata = tmpsensor.concat(state["trends_sensors"]);
+            // push the new sensor into chosenTrends.trends_regions
+            let temp_sensor = [action.sensor];
+            let temp_data = temp_sensor.concat(state["trends_sensors"]);
 
             return Object.assign({}, state, {
-                trends_sensors : tmpdata,
-                trends_regions : state.trends_regions
+                trends_sensors : temp_data,
             });
 
-        case UPDATE_TRENDS_REGIONS_POINTS:
+        case ADD_REGION_TRENDS:
 
-            let trendsRegionsSettings = getTrendsRegionsSettings();
-            let get_regional_trends = getRegionalTrends(state, trendsRegionsSettings);
+            // push the new sensor into chosenTrends.trends_regions
+            let temp_region_sensor = [action.sensor];
+            let temp_region_data = temp_region_sensor.concat(state["trends_regions"]);
+
             return Object.assign({}, state, {
-                trends_regions : get_regional_trends
+                trends_regions : temp_region_data
             });
 
         case SET_TRENDS_TIMEFRAMES:
@@ -323,3 +322,4 @@ function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
 }
 
 export default chosenTrends
+

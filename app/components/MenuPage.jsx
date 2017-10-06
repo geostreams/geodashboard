@@ -37,15 +37,15 @@ class MenuPage extends Component {
         if (applicationOptions) {
             for (let i = 0; i < applicationOptions.length; i++) {
                 application_title = applicationOptions[i].title;
-                applicationOptions[i].pages.map(m => {
+                applicationOptions[i].pages.map((m) => {
                     if (m.name == 'TRENDS') {
                         menuOptionsMap.push(
-                            <Button className={styles.trends_button_style}
+                            <Button key={m.name} className={styles.trends_button_style}
                                 onClick={this.onClickTrendButton.bind(this, true)}>
                                 TRENDS
                             </Button>);
                         menuOptionsMap.push(
-                            <MenuAnchor className={styles.menu_anchor_style}>
+                            <MenuAnchor key="trendsAnchor" className={styles.menu_anchor_style}>
                                 <Menu className={styles.menu_style}
                                       open={this.state.openMenu}
                                       onClose={this.onClickTrendButton.bind(this, false)}>
@@ -64,7 +64,7 @@ class MenuPage extends Component {
                         )
                     } else {
                         menuOptionsMap.push(
-                            <Button><Link href={m.url}>{m.name}</Link></Button>
+                            <Button key={m.name}><Link href={m.url}>{m.name}</Link></Button>
                         )
                     }
                 });
