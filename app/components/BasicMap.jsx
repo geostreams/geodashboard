@@ -17,7 +17,7 @@ require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import {getAttribution} from '../utils/mapUtils';
-import type {Sensors, MapProps, BasicMapState} from '../utils/flowtype';
+import type {MapProps, BasicMapState} from '../utils/flowtype';
 
 class BasicMap extends Component {
     state: BasicMapState;
@@ -51,6 +51,7 @@ class BasicMap extends Component {
 
         return (
          <div>
+
             <div id='map' className={styles.root}>
             </div>
 
@@ -87,6 +88,7 @@ class BasicMap extends Component {
                 <button id="drawClearButton" title="Click to Reset Drawing Selection">
                     <Icon name="clear"/></button>
             </div>
+
         </div>);
 
     }
@@ -225,6 +227,9 @@ class BasicMap extends Component {
 
                 // This is the button that will reset the points
                 that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
+
+                // Reset the State Variable
+                that.setState({customLocationFilterVectorExtent: []});
 
                 let keep_draw_active = document.getElementById('draw');
                 if (keep_draw_active) {

@@ -4,7 +4,7 @@
 import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS} from '../actions';
 import type { Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype';
 import {inArray, sortByLabel, pnpoly} from '../utils/arrayUtils';
-import {getLocationName, getSourceName, getParameterName} from '../utils/getConfig';
+import {getSourceName, getParameterName} from '../utils/getConfig';
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS',
     sensors:Sensors,
@@ -45,11 +45,18 @@ const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
             let newSensors = filterAvailableSensors(state, action.selected_filters, action.selected_search);
             if (action.selected_search.locations.selected == 'Custom Location') {
                 shapeCoordinates = state.shape_coordinates;
+                return Object.assign({}, state, {
+                    available_sensors: newSensors,
+                    shape_coordinates: shapeCoordinates
+                });
             } else {
                 shapeCoordinates = [];
+                return Object.assign({}, state, {
+                    available_sensors: newSensors,
+                    draw_available_sensors:[],
+                    shape_coordinates: shapeCoordinates
+                });
             }
-
-            return Object.assign({}, state, {available_sensors: newSensors, shape_coordinates: shapeCoordinates});
 
         case ADD_CUSTOM_LOCATION_FILTER:
             let customLocationSensors = filterCustomLocation(state, action.selectedPointsLocations);
@@ -281,6 +288,7 @@ function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string
         }
 
     });
+
     return av_sensors;
 }
 
