@@ -84,6 +84,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-975](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-975)
 - Add the ability for Detail Links in V3 to go to V2
   [GEOD-959](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-959)
+- Removed all instances of 'UPDATE_TRENDS_REGIONS_POINTS' and associated code
+  [GEOD-975](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-975)
 
 ### Fixed
 - Bug in filtering for custom locations
@@ -100,3 +102,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-981](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-981)
 - Bug in selected search not being updated when a filter was removed
   [GEOD-953](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-953)
+- Use the API for Trends by Region and Detail
+  [GEOD-977](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-977)

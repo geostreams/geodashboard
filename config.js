@@ -17,6 +17,7 @@ export const gd3 = {
         "usgs": "#39B54A",
         "wqp": "#F28E1E"
     },
+
     parameter_maps: {
         "biomass": "Zooplankton Biomass (ug/m^3)",
         "density": "Zooplankton Density (#/m^3)",
@@ -173,6 +174,7 @@ export const gd3 = {
         "vapor_total_pahs": "Vapor Total PAHs (pg/m^3)",
         "vapor_total_pests": "Vapor Total PESTs (pg/m^3)"
     },
+
     sourcename: {
         "glfmsp": "Great Lakes Fish Monitoring and Surveillance Program",
         "epa": "Water Quality Data",
@@ -181,6 +183,7 @@ export const gd3 = {
         "usgs": "United States Geological Survey",
         "iadn": "Integrated Atmospheric Deposition Network"
     },
+
     trend_colors: {
         "trendUp": "#FAE70B",
         "trendDown": "#29ABE2",
