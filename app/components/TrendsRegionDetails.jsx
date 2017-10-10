@@ -5,7 +5,7 @@
 import React, {Component, PropTypes} from 'react';
 import trendsStyles from '../styles/trends.css';
 import {Card, CardHeader, CardTitle, CardText} from 'react-mdc-web';
-import {sensorsToFeaturesTrendPage} from '../utils/mapUtils';
+import {sensorsToFeaturesTrendRegionPage} from '../utils/mapUtils';
 import { getTrendsPageSettings } from '../utils/getConfig';
 
 
@@ -22,7 +22,8 @@ class TrendsRegionDetails extends Component {
                 trends_parameter_lake_regions.push(p.parameter.id);
             }
         });
-        let trendsPageSettings = sensorsToFeaturesTrendPage(
+
+        let trendsPageSettings = sensorsToFeaturesTrendRegionPage(
             this.props.regionsStations, this.props.selectedParameter, trends_parameter_lake_regions);
 
         let trendsCheckRegion;
@@ -34,10 +35,9 @@ class TrendsRegionDetails extends Component {
                 if (trendsCheckRegion == regionName) {
                     trendsDetailListItems =
                         <ul className={trendsStyles.list_style}>
-                            <li>Baseline Avg: {trendsPageSettings[i].attributes.trend_values[0]} </li>
-                            <li>Rolling Avg: {trendsPageSettings[i].attributes.trend_values[1]}</li>
-                            <li>Latest Value: {trendsPageSettings[i].attributes.trend_values[2]}</li>
-                            <li>Latest Time: {trendsPageSettings[i].attributes.trend_values[3]} </li>
+                            <li>Total Avg: {trendsPageSettings[i].attributes.trend_values[0]} </li>
+                            <li>Ten Year Avg: {trendsPageSettings[i].attributes.trend_values[1]}</li>
+                            <li>Latest Avg: {trendsPageSettings[i].attributes.trend_values[2]}</li>
                         </ul>;
                 }
             }
