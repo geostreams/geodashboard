@@ -296,9 +296,7 @@ export function fetchRegionDetailTrends(parameter:string, season:string) {
         const api = state.backends.selected;
         const trends_region_detail_endpoint = api + '/api/trends/region/detail/';
 
-        const sensorsToFilter;
-
-        sensorsToFilter = state.chosenTrends.trends_regions;
+        const sensorsToFilter = state.chosenTrends.trends_regions;
 
         sensorsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
