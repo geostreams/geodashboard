@@ -82,7 +82,7 @@
 
 .header_hr_div {
   padding-top: 82px;
- }
+}
 
 
 .header_hr {
@@ -101,7 +101,6 @@ ul.navbar {
   float: right;
   margin-right: 10px;
   margin-top: -2px;
-  width: 871px;
   position: relative;
 }
 
@@ -109,7 +108,6 @@ ul.navbar > li {
   width: 148px;
   height: 29px;
   background-color: #cdcfd3;
-  line-height: 22px;
   font-size: 18px;
   letter-spacing: 1px;
   text-align: center;
@@ -142,17 +140,19 @@ ul.navbar > li:hover {
 }
 
 ul.navbar > li:hover > div.dropdown > a,
-ul.navbar > li:hover > a {
-  text-decoration: none;
-  color: white; }
+ul.navbar > li:hover > a,
+ul.navbar > li.hover > button  {
+  text-decoration: none !important;
+  color: white !important; }
 
 ul.navbar > li.active {
   background-color: #5f99c1; }
 
 ul.navbar > li.active > div.dropdown > a,
-ul.navbar > li.active > a {
-  text-decoration: none;
-  color: white; }
+ul.navbar > li.active > a,
+ul.navbar > li.active > button {
+  text-decoration: none !important;
+  color: white !important; }
 
 .rounded-btn .btn.active {
   color: white;
@@ -178,5 +178,32 @@ ul.navbar > li.active > a {
 .link-clickable {
   cursor: pointer; }
 
+.trendsButton {
+  color: #517187 !important;
+  height: 29px !important;
+  line-height: 22px !important;
+  font-size: 18px !important;
+  letter-spacing: 1px !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-weight: 800 !important;
+  -moz-border-radius: 30px !important;
+}
 
+.menu_style {
+  background-color: #cdcfd3 !important;
+  z-index: 10;
+}
 
+.menu_anchor_style{
+  position: absolute !important;
+  right: 20em !important;
+  top: 2em !important;
+}
+
+.button_style {
+  color: #517187 !important;
+  text-decoration: none !important;
+  font-size: 16px !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-weight: 800 !important;
+}
