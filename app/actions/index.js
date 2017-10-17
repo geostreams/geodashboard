@@ -247,22 +247,22 @@ export function fetchTrends(
 }
 
 export const ADD_SEARCH_DATASOURCE = 'ADD_SEARCH_DATASOURCE';
-export function addSearchDataSource(data_source:Array<string>) {
+export function addSearchDataSource(data_sources:Array<string>) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
         dispatch({
             type: ADD_SEARCH_DATASOURCE,
-            data_source,
+            data_sources,
             selected_filters
         });
-        const idx = selected_filters.indexOf('data_source');
+        const idx = selected_filters.indexOf('data_sources');
         dispatch(updateAvailableSensors(idx));
     }
 }
 
 export const ADD_START_DATE = 'ADD_START_DATE';
-export function addStartDate(date:Date) {
+export function addStartDate(date:?Date) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
@@ -279,7 +279,7 @@ export function addStartDate(date:Date) {
 }
 
 export const ADD_END_DATE = 'ADD_END_DATE';
-export function addEndDate(date:Date) {
+export function addEndDate(date:?Date) {
     return (dispatch:Dispatch, getState:GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
@@ -464,28 +464,28 @@ export function fetchSensor(name:string) {
         const state = getState();
         const api = state.backends.selected;
 
-            //get sensor id from the name
-            if (state.sensors.length > 0) {
-                const sensor = state.sensors.data.find(x => x.name === name).id;
-                dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-                dispatch(fetchSensorhelp(api, sensor.id));
+        //get sensor id from the name
+        if (state.sensors.length > 0) {
+            const sensor = state.sensors.data.find(x => x.name === name).id;
+            dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
+            dispatch(fetchSensorhelp(api, sensor.id));
 
-            } else {
-                const endpointsensors = api + '/api/geostreams/sensors';
-                let result = fetch(endpointsensors)
-                    .then(response => response.json())
-                    .then(json => {
-                        const sensor = json.find(x => x.name === name);
-                        console.log(sensor.id);
-                        dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-                        return fetch(api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + sensor.id)
-                    });
-                result
-                    .then(response => response.json())
-                    .then(json => {
+        } else {
+            const endpointsensors = api + '/api/geostreams/sensors';
+            let result = fetch(endpointsensors)
+                .then(response => response.json())
+                .then(json => {
+                    const sensor = json.find(x => x.name === name);
+                    console.log(sensor.id);
+                    dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
+                    return fetch(api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + sensor.id)
+                });
+            result
+                .then(response => response.json())
+                .then(json => {
                     dispatch(receiveSensor(json))
                 })
-            }
+        }
     }
 }
 
@@ -647,15 +647,6 @@ export function selectTrendsViewType(view_type:string) {
     };
 }
 
-export const UPDATE_TRENDS_REGIONS_POINTS = 'UPDATE_TRENDS_REGIONS_POINTS';
-export function updateTrendsRegionsPoints() {
-    return (dispatch:Dispatch) => {
-        dispatch({
-            type: UPDATE_TRENDS_REGIONS_POINTS
-        });
-    };
-}
-
 export const SELECT_TRENDS_CALC_BASELINE_SETTING= 'SELECT_TRENDS_CALC_BASELINE_SETTING';
 export function selectTrendsCalcBaselineSetting(baseline_total_year:number) {
     return {
@@ -697,3 +688,4 @@ export function fetchAnalysisRegion(region:string){
         })
     }
 }
+

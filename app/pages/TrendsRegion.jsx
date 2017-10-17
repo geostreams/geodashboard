@@ -10,6 +10,7 @@ import TrendsSeasons from '../containers/TrendsSeasons';
 import {Grid, Cell, Content, List} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
+import {connect} from 'react-redux';
 import { getTrendsPageSettings, getTrendsPageSeasons, getTrendsDefaultValues } from '../utils/getConfig';
 
 
@@ -64,4 +65,11 @@ class TrendsRegion extends Component {
 
 }
 
-export default TrendsRegion;
+const mapStateToProps = (state) => {
+    return {
+        view_type: state.chosenTrends.view_type
+    }
+};
+
+export default connect(mapStateToProps)(TrendsRegion);
+

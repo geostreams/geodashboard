@@ -24,7 +24,7 @@ class FilterList extends Component {
 
     selectAll = (event: InputEvent) => {
         let name = event.target.getAttribute("data-name");
-        if (name == "data_source") {
+        if (name == "data_sources") {
             let selectedDataSources;
             if (event.target.checked) {
                 selectedDataSources = Object.assign([], this.props.sources.map(s => s.id));
@@ -51,7 +51,7 @@ class FilterList extends Component {
         let divContents;
         let showButtons;
         let isAllSelected: boolean = false;
-        if (this.props.attribute == "data_source") {
+        if (this.props.attribute == "data_sources") {
             isAllSelected = this.props.selectedDataSources.length == this.props.sources.length
         } else if (this.props.attribute == "parameters") {
             isAllSelected = this.props.selectedParameters.length == this.props.parameters.length
@@ -68,7 +68,7 @@ class FilterList extends Component {
 
         let cardsubtitle;
         switch (this.props.attribute) {
-            case 'data_source':
+            case 'data_sources':
                 divContents = this.props.sources.map(p =>
                     <UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute} label={p.label}
                                    key={p.id}/>
@@ -83,8 +83,9 @@ class FilterList extends Component {
                     <UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute} label={p.label}
                                    key={p.id}/>
                 );
-                //TODO: replace with label
-                cardsubtitle = this.props.selectedParameters.join(", ");
+                cardsubtitle = this.props.selectedParameters.map( p =>
+                    this.props.parameters.find(item => item.id == p).label
+                ).join(", ");
                 showButtons = hideShowContents;
                 break;
             case "time":
@@ -175,11 +176,9 @@ class FilterList extends Component {
                             {options}
                         </Select>
                     </div>
-                    <div className={styles.close_button_open_card}>
-                        <a onClick={this.props.onClickRemove} data-idx={idx}>
-                            <Icon className={styles.closeIcon} name='close'/>
-                        </a>
-                    </div>
+                    <a className={styles.close_button_open_card} onClick={this.props.onClickRemove} data-idx={idx}>
+                        <Icon className={styles.closeIcon} name='close'/>
+                    </a>
                     <br/>
                 </CardHeader>
             );
@@ -189,7 +188,7 @@ class FilterList extends Component {
             cardhead = (
                 <CardHeader>
                     <CardTitle
-                        className={styles.title_card}>{this.props.attribute.replace("data_source", "data source")}
+                        className={styles.title_card}>{this.props.attribute.replace("data_sources", "data source")}
                         <a className={styles.close_button_collapsed_card} onClick={this.props.onClickRemove} data-idx={idx}>
                             <Icon className={styles.closeIcon} name='close'/>
                         </a>
@@ -210,7 +209,7 @@ class FilterList extends Component {
         } else {
             // if the filter is closed, display an open icon
             cardMedia =
-                <a className={styles.edit_filter_button} onClick={this.props.onExpand} >
+                <a id={this.props.attribute} className={styles.edit_filter_button} onClick={this.props.onExpand} >
                     <Icon name='keyboard_arrow_down'/>
                 </a>
         }

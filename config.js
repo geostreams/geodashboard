@@ -966,13 +966,13 @@ export const gd3 = {
         }
     ],
 
-trends_page_lake_regions:[
-{
+    trends_page_lake_regions:[
+        {
 
-        "lake": "ER",
-        "regions": "er-west,er-east,er-center"
-    }
-],
+            "lake": "ER",
+            "regions": "er-west,er-east,er-center"
+        }
+    ],
 
     trends_page_seasons: [
         {
@@ -1109,7 +1109,7 @@ trends_page_lake_regions:[
     ],
 
     // This variable is used to determine the location for links to the Detail Page
-    application_website: "https://seagrant-dev.ncsa.illinois.edu/geodashboard/",
+    application_website: "/",
 
     // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages
     parameter_subtitle: 'Click a Parameter to Explore',

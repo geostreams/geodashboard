@@ -68,8 +68,16 @@ class DownloadButtons extends Component {
         // refer to https://opensource.ncsa.illinois.edu/bitbucket/projects/CATS/repos/clowder/browse/app/api/Geostreams.scala#665
         let params = {};
         params["format"] = type;
-        params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
-        params["until"] = this.props.selectedEndDate.toISOString().slice(0, 10);
+        if(this.props.selectedFilters.indexOf("time") > -1) {
+            if(this.props.selectedStartDate != null && this.props.selectedStartDate !== "") {
+	            params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
+	            // Having until without since doesn't make much sense.
+	            if(this.props.selectedEndDate != null && this.props.selectedEndDate !== ""){
+		            params["until"] = this.props.selectedEndDate.toISOString().slice(0, 10);
+	            }
+            }
+
+        }
 
         if (this.props.selectedDataSources.length > 0) {
             params["sources"] = this.props.selectedDataSources;
@@ -80,14 +88,24 @@ class DownloadButtons extends Component {
 
         if (this.props.selectedLocation !== null) {
 
+            // Get the Drawn Shape Coordinates if they exist
             let draw_area = this.props.drawShapeCoordinates;
 
-            if (draw_area.length > 0) {
+            // For a Drawn Circle
+            if (draw_area.length == 1) {
+
+                params["geocode"] = draw_area.map(function (coordinate) {
+                    return [coordinate[1], coordinate[0], coordinate[2]]
+                }).join(",");
+
+            // For a Drawn Polygon
+            } else if (draw_area.length > 1) {
 
                 params["geocode"] = draw_area[0].map(function (coordinate) {
                     return [coordinate[1], coordinate[0]]
                 }).join(",");
 
+            // For a Predefined Location
             } else {
 
                 const area = getCustomLocation(this.props.selectedLocation);
@@ -121,6 +139,12 @@ class DownloadButtons extends Component {
     render() {
 
         let numSensors = this.props.availableSensors.length;
+        let disabled = true;
+        if(this.props.selectedParameters.length > 0 || this.props.selectedDataSources.length > 0
+            || this.props.selectedLocation !== null ||
+            (this.props.selectedStartDate !== null && this.props.selectedStartDate !== "")) {
+            disabled = false;
+        }
 
         // don't use a-href download for Download as CSV/JSON, otherwise buildLink
         // will be executed as the page loading, instead of onClick
@@ -144,13 +168,13 @@ class DownloadButtons extends Component {
                     </DialogFooter>
                 </Dialog>
 
-                <Button raised primary
+                <Button raised primary disabled={disabled}
                         onClick={this.onDownload.bind(this, "csv")}
                 >
                     Download Data
                 </Button>
 
-                <Button className={styles.iconButtonStyle}
+                <Button className={styles.iconButtonStyle} disabled={disabled}
                         onClick={() => {this.setState({openMenu: true})}}
                 >
                     <Icon name="get_app"/>

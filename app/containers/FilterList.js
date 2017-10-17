@@ -8,12 +8,24 @@ import { addSearchParameter, addSearchDataSource, addSearchLocation } from '../a
 import type { Dispatch } from '../utils/flowtype'
 
 const mapStateToProps = (state) => {
+    let startDate, endDate;
+    if(state.selectedSearch.dates.selected.start !== null)
+    {
+        startDate = state.selectedSearch.dates.selected.start.toISOString().slice(0,10)
+    } else {
+        startDate = ""
+    }
+	if(state.selectedSearch.dates.selected.end !== null)
+	{
+		endDate = state.selectedSearch.dates.selected.end.toISOString().slice(0,10)
+	} else {
+		endDate = ""
+	}
     return {
         locations: state.selectedSearch.locations.available,
         sources: state.selectedSearch.data_sources.available,
         parameters: state.selectedSearch.parameters.available,
-        selectDate: state.selectedSearch.dates.selected.start.toISOString().slice(0,10)
-        + " - "+ state.selectedSearch.dates.selected.end.toISOString().slice(0,10),
+        selectDate: startDate + "-" + endDate,
         selectedParameters: state.selectedSearch.parameters.selected,
         selectedDataSources: state.selectedSearch.data_sources.selected,
         selectedLocation: state.selectedSearch.locations.selected,

@@ -3,11 +3,34 @@ import React, {Component} from 'react'
 class TimeFilter extends Component {
     constructor(props) {
         super(props);
+        this.changeStartDate = this.changeStartDate.bind(this);
+        this.changeEndDate = this.changeEndDate.bind(this);
     }
 
-    changeDate = (isStart, event) => {
-        const date = new Date(event.target.value);
-        this.props.onDateChange(event, date, isStart);
+    changeStartDate(event) {
+	    const date = new Date(event.target.value.replace(/-/g, '\/'));
+	    //Update if the date is not Nan when the selected End Date is null (hasn't been selected)
+        // or the start date is before the currently selected end date
+	    if(!isNaN(date.getTime()) && (this.props.selectedEndDate === null ||
+            date.getTime() < this.props.selectedEndDate.getTime())) {
+            this.props.onDateChange(event, date, true);
+	    } else if(event.target.value === "") {
+	        //When the x next to date is selected set the date as null.
+	        this.props.onDateChange(event, null, true);
+        }
+    }
+
+    changeEndDate(event) {
+	    const date = new Date(event.target.value.replace(/-/g, '\/'));
+	    //Update if the date is not Nan when the sselected start date is null (hasn't been selected)
+        // or the end date is after the selected start date
+	    if(!isNaN(date.getTime()) && (this.props.selectedStartDate === null
+            || date.getTime() > this.props.selectedStartDate.getTime())) {
+            this.props.onDateChange(event, date, false);
+	    } else if(event.target.value === "") {
+		    //When the x next to date is selected set the date as null.
+	        this.props.onDateChange(event, null, false);
+        }
     }
 
     render() {
@@ -17,22 +40,32 @@ class TimeFilter extends Component {
             return local.toJSON().slice(0, 10)
         });
 
-        const selectedStartDate = this.props.selectedStartDate.toDateInputValue();
-        const availableStartDate = this.props.availableStartDate.toDateInputValue();
-        const selectedEndDate = this.props.selectedEndDate.toDateInputValue();
-        const availableEndDate = this.props.availableEndDate.toDateInputValue();
+	    const availableStartDate = this.props.availableStartDate.toDateInputValue();
+	    // If maximum end date is in the future. Use today as the last available end date.
+	    const availableEndDate = (this.props.availableEndDate.getTime() > new Date().getTime()) ?
+            new Date().toDateInputValue() : this.props.availableEndDate.toDateInputValue();
+        const selectedStartDate = (this.props.selectedStartDate !== "" && this.props.selectedStartDate !== null) ?
+            this.props.selectedStartDate.toDateInputValue() : "";
+        const selectedEndDate = (this.props.selectedEndDate !== "" && this.props.selectedEndDate !== null) ?
+            this.props.selectedEndDate.toDateInputValue() : "";
+        //If the selectedEndDate is empty, use today as maximul start date
+        const maxStartDate = (this.props.selectedEndDate !== "" && this.props.selectedEndDate !== null)
+            ? selectedEndDate : new Date().toDateInputValue();
+        //If the selected start date is not available, use the available start date as minimum time for the end date.
+        const minEndDate = (this.props.selectedStartDate !== "" && this.props.selectedEndDate !== null)
+            ? selectedStartDate : availableStartDate;
 
         return (
             <div>
                 <h5> Start Date</h5>
                 <input type="date" id="startDate" data-filterId={this.props.filterId}
-                       min={availableStartDate} max={selectedEndDate}
-                       value={selectedStartDate} onChange={this.changeDate.bind(this, true)}/>
+                       min={availableStartDate} max={maxStartDate}
+                       value={selectedStartDate} onChange={this.changeStartDate}/>
 
                 <h5> End Date</h5>
                 <input type="date"  id="endDate" data-filterId={this.props.filterId}
-                       min={selectedStartDate} max={availableEndDate}
-                       value={selectedEndDate} onChange={this.changeDate.bind(this, false)}/>
+                       min={minEndDate} max={availableEndDate}
+                       value={selectedEndDate} onChange={this.changeEndDate}/>
 
             </div>
 
