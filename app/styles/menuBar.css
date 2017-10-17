@@ -141,7 +141,7 @@ ul.navbar > li:hover {
 
 ul.navbar > li:hover > div.dropdown > a,
 ul.navbar > li:hover > a,
-ul.navbar > li.hover > button  {
+ul.navbar > li:hover > button  {
   text-decoration: none !important;
   color: white !important; }
 
