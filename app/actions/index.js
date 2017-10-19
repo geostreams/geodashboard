@@ -180,6 +180,7 @@ export function fetchTrends(
 
                     if (season)
                         trends_endpoint_args = trends_endpoint_args + "&semi=" + season;
+                    console.log("trends_endpoint_args = " + trends_endpoint_args);
 
                     result = fetch(trends_endpoint_args);
                     result
@@ -242,7 +243,8 @@ export function fetchRegionTrends(parameter:string, season:string) {
 
         const state = getState();
         const api = state.backends.selected;
-        const trends_region_endpoint = api + '/api/trends/region/';
+        const trends_region_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/';
+        console.log("trends_region_endpoint = " + trends_region_endpoint);
 
         const sensorsToFilter = state.chosenTrends.trends_regions;
 
@@ -250,6 +252,7 @@ export function fetchRegionTrends(parameter:string, season:string) {
             .map(sensor => {
                 const trends_region_endpoint_args = trends_region_endpoint + parameter +
                     "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
+                console.log("trends_region_endpoint_args = " + trends_region_endpoint_args);
 
                 const result = fetch(trends_region_endpoint_args);
                 result
@@ -294,7 +297,7 @@ export function fetchRegionDetailTrends(parameter:string, season:string) {
 
         const state = getState();
         const api = state.backends.selected;
-        const trends_region_detail_endpoint = api + '/api/trends/region/detail/';
+        const trends_region_detail_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/detail/';
 
         const sensorsToFilter = state.chosenTrends.trends_regions;
 
@@ -302,6 +305,7 @@ export function fetchRegionDetailTrends(parameter:string, season:string) {
             .map(sensor => {
                 const trends_region_detail_endpoint_args = trends_region_detail_endpoint + parameter +
                     "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
+                console.log("trends_region_detail_endpoint_args = " + trends_region_detail_endpoint_args);
 
                 const detail_result = fetch(trends_region_detail_endpoint_args);
                 detail_result
