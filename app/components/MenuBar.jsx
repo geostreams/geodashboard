@@ -49,7 +49,7 @@ class MenuBar extends Component {
                         </div>
                             <ul className={styles.navbar} id="navigation">
                                 <li className={this.props.selected === "home"? styles.active: '' }>
-                                    <a href="/" >HOME</a>
+                                    <a href="/geodashboard/" >HOME</a>
                                 </li>
                                 <li className={this.props.selected === "explore"? styles.active: '' }>
                                     <a href="/geodashboard/#explore">EXPLORE</a>
