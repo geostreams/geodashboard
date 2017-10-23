@@ -278,7 +278,7 @@ export function fetchRegionTrends(parameter:string, season:string) {
                                 dispatch({
                                     type: ADD_CHOOSE_TRENDS,
                                     sensor: Object.assign(sensor, {
-                                        "region_trends": json[0].trends
+                                        "region_trends": json.trends
                                     })
                                 });
                             }
@@ -333,8 +333,8 @@ export function fetchRegionDetailTrends(parameter:string, season:string) {
                                 dispatch({
                                     type: ADD_CHOOSE_TRENDS,
                                     sensor: Object.assign(sensor, {
-                                        "trends_detail": json[0].average,
-                                        "trends_deviation": json[0].deviation
+                                        "trends_detail": json.average,
+                                        "trends_deviation": json.deviation
                                     })
                                 });
                             }
