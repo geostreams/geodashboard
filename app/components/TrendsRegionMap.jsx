@@ -110,8 +110,16 @@ class TrendsRegionMap extends Component {
         this.state.areaPolygonSource.clear();
         this.state.areaPolygonSource.addFeatures(region_features);
 
+        let trends_parameter_lake_regions = [];
+        let trends_settings = this.props.trends_settings;
+        trends_settings.map(p => {
+            if (p.parameter.lake_regions == true) {
+                trends_parameter_lake_regions.push(p.parameter.id);
+            }
+        });
+
         features = sensorsToFeaturesTrendRegionPage(
-            map_items, this.props.selectedParameter, threshold);
+            map_items, this.props.selectedParameter, trends_parameter_lake_regions);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
