@@ -244,16 +244,13 @@ export function fetchRegionTrends(parameter:string, season:string) {
         const state = getState();
         const api = state.backends.selected;
         const trends_region_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/';
-        console.log("trends_region_endpoint = " + trends_region_endpoint);
 
         const sensorsToFilter = state.chosenTrends.trends_regions;
 
         sensorsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
-                console.log("******** sensor name = " + sensor.name);
                 const trends_region_endpoint_args = trends_region_endpoint + parameter +
                     "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
-                console.log("trends_region_endpoint_args = " + trends_region_endpoint_args);
 
                 const result = fetch(trends_region_endpoint_args);
                 result
@@ -304,10 +301,8 @@ export function fetchRegionDetailTrends(parameter:string, season:string) {
 
         sensorsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
-                console.log("******** sensor name = " + sensor.name);
                 const trends_region_detail_endpoint_args = trends_region_detail_endpoint + parameter +
                     "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
-                console.log("**** trends_region_detail_endpoint_args = " + trends_region_detail_endpoint_args);
 
                 const detail_result = fetch(trends_region_detail_endpoint_args);
                 detail_result
