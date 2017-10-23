@@ -121,10 +121,17 @@ export function sensorsToFeaturesTrendPage(
                     }
                 }
 
+                let units = '';
+
+                if (parameter) {
+                    let unitIndex = getParameterName(parameter).lastIndexOf(" ");
+                    units = getParameterName(parameter).substr(unitIndex + 1);
+                }
+
                 trend_values = [
-                    (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + " mg/L"),
+                    (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + ' ' + units),
+                    (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + ' ' + units),
+                    (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + ' ' + units),
                     (new Date(sensor["trend_end_time"]).toLocaleDateString()),
                     (Number(sensor.trends[parameter + "_percentage_change"]).toFixed(2) + " %")
                 ]
@@ -254,12 +261,12 @@ export function sensorsToFeaturesTrendRegionPage(
                     }
                     // Only blue or yellow arrows
                     if (threshold == 'n/a') {
-                        if (sensor.region_trends["percentage_change"] > 0 ) {
-
+                        if (sensor.region_trends["lastaverage"] >
+                            sensor.region_trends["totalaverage"] ) {
                             trend_type = "trendUp";
 
-                        } else if (sensor.region_trends["percentage_change"] < 0 ) {
-
+                        } else if (sensor.region_trends["lastaverage"] <
+                            sensor.region_trends["totalaverage"] ) {
                             trend_type = "trendDown";
 
                         } else {
@@ -267,22 +274,26 @@ export function sensorsToFeaturesTrendRegionPage(
                         }
                     } else {
                         // May have red arrows with Threshold check
-                        if (sensor.region_trends["percentage_change"] > 0 &&
+                        if (sensor.region_trends["lastaverage"] >
+                            sensor.region_trends["totalaverage"] &&
                             sensor.region_trends["lastaverage"] >= threshold) {
 
                             trend_type = "overThresholdUp";
 
-                        } else if (sensor.region_trends["percentage_change"] > 0 &&
+                        } else if (sensor.region_trends["lastaverage"] >
+                            sensor.region_trends["totalaverage"] &&
                             sensor.region_trends["lastaverage"] < threshold) {
 
                             trend_type = "trendUp";
 
-                        } else if (sensor.region_trends["percentage_change"] < 0 &&
+                        } else if (sensor.region_trends["lastaverage"] <
+                            sensor.region_trends["totalaverage"]&&
                             sensor.region_trends["lastaverage"] < threshold) {
 
                             trend_type = "trendDown";
 
-                        } else if (sensor.region_trends[parameter + "_percentage_change"] < 0 &&
+                        } else if (sensor.region_trends["lastaverage"] <
+                            sensor.region_trends["totalaverage"] &&
                             sensor.region_trends["lastaverage"] > threshold) {
 
                             trend_type = "overThresholdDown";
@@ -293,10 +304,17 @@ export function sensorsToFeaturesTrendRegionPage(
                     }
                 }
 
+                let units = '';
+
+                if (parameter) {
+                    let unitIndex = getParameterName(parameter).lastIndexOf(" ");
+                    units = getParameterName(parameter).substr(unitIndex + 1);
+                }
+
                 trend_values = [
-                    (Number(sensor.region_trends["totalaverage"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.region_trends["tenyearsaverage"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.region_trends["lastaverage"]).toFixed(2) + " mg/L")
+                    (Number(sensor.region_trends["totalaverage"]).toFixed(2) + ' ' + units),
+                    (Number(sensor.region_trends["tenyearsaverage"]).toFixed(2) + ' ' + units),
+                    (Number(sensor.region_trends["lastaverage"]).toFixed(2) + ' ' + units)
                 ]
 
             }
@@ -362,6 +380,7 @@ export function sensorsToFeaturesTrendRegionPage(
                 "display_trends": true,
                 "trends_detail": true,
                 "region": getCustomTrendsRegion(sensor.properties.region),
+                "parameter": getParameterName(parameter),
             };
 
             feature.setId(sensor.properties.popupContent);
@@ -558,10 +577,17 @@ export function sensorsToFeaturesTrendDetailPage(
                     }
                 }
 
+                let units = '';
+
+                if (parameter) {
+                    let unitIndex = getParameterName(parameter).lastIndexOf(" ");
+                    units = getParameterName(parameter).substr(unitIndex + 1);
+                }
+
                 trend_values = [
-                    (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + " mg/L"),
+                    (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + ' ' + units),
+                    (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + ' ' + units),
+                    (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + ' ' + units),
                     (new Date(sensor["trend_end_time"]).toLocaleDateString()),
                     (Number(sensor.trends[parameter + "_percentage_change"]).toFixed(2) + " %")
                 ]
