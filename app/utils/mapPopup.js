@@ -156,6 +156,7 @@ export function popupRegion(feature: ol.Feature, styles){
     let trendColor = sensorInfo.trend_color;
     let trendValues = sensorInfo.trend_values;
     let sourceColor = sensorInfo.color;
+    let parameter = sensorInfo.parameter;
 
     let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
         sourceColor + ';">' + id + '</h2>';
@@ -166,6 +167,7 @@ export function popupRegion(feature: ol.Feature, styles){
         trendColor + '; border-color: ' + trendColor + ';"></p></td></tr>';
 
     let trendsRight = '' +
+        '<tr><td><strong>Parameter: </strong>' + parameter + '</td></tr>' +
         '<tr><td><strong>Total Avg: </strong>' + trendValues[0] + '</td></tr>' +
         '<tr><td><strong>Ten Year Avg: </strong>' + trendValues[1] + '</td></tr>' +
         '<tr><td><strong>Latest Avg: </strong>' + trendValues[2] + '</td></tr>';
