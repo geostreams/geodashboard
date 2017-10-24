@@ -58,6 +58,7 @@ class TrendsDetail extends Component {
                                 <div className={trendsStyles.detailChart}>
                                     <RegionChart
                                         trends_settings={trendsPageSettings}
+                                        trends_region_name={trendsRegionName}
                                     />
                                 </div>
                             </Cell>
@@ -68,6 +69,7 @@ class TrendsDetail extends Component {
         );
 
     }
+
 }
 
 export default TrendsDetail
