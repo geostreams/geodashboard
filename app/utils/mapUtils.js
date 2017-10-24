@@ -650,8 +650,6 @@ export function sensorsToFeaturesTrendDetailPage(
                 "longitude": sensor.geometry.coordinates[0],
                 "location": sensor.properties.region,
                 "name": sensor.name,
-                //parameters has null in the array
-                "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
                 "color": getColor(sensor.properties.type.id),
                 "trend_color": getTrendColor(trend_type),
                 "trend_type": trend_type,
