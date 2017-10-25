@@ -26,6 +26,7 @@ class RegionChart extends Component {
 
         let trendsRegionName = this.props.trends_region_name;
         let trendRegions = this.props.trendRegions;
+
         let trendDataRaw = [];
         let trendData = [];
         let trendDeviationDataRaw = [];
@@ -77,37 +78,36 @@ class RegionChart extends Component {
 
                     trendData.push(
                         {
-                            name: "Trending",
-                            values: trendDataRaw,
-                            circleRadius: Number(5)
+                            name: "Deviation Up",
+                            values: trendPositiveDeviation
                         },
                         {
-                            name: "Positive",
-                            values: trendPositiveDeviation,
-                            circleRadius: Number(1)
+                            name: "Trending Values",
+                            values: trendDataRaw
                         },
                         {
-                            name: "Negative",
-                            values: trendNegativeDeviation,
-                            circleRadius: Number(1)
+                            name: "Deviation Down",
+                            values: trendNegativeDeviation
                         }
                     )
                 }
 
             }
-        } else {
+        }
+
+        if (trendData.length == 0) {
             trendData.push(
                 {
-                    name: "Trending",
-                    values: [{x:0, y:0}],
+                    name: "Deviation Up",
+                    values: [{x:0, y:0}]
                 },
                 {
-                    name: "Positive",
-                    values: [{x:0, y:0}],
+                    name: "Trending Values",
+                    values: [{x:0, y:0}]
                 },
                 {
-                    name: "Negative",
-                    values: [{x:0, y:0}],
+                    name: "Deviation Down",
+                    values: [{x:0, y:0}]
                 }
             )
         }
@@ -117,20 +117,24 @@ class RegionChart extends Component {
             <LineChart
                 data={trendData}
                 title={chartTitle} legend={true}
-                width={600} height={400}
+                width={650} height={400}
                 yAxisLabel="Amount" yAxisLabelOffset={Number(50)}
                 xAxisLabel="Time" xAxisLabelOffset={Number(50)}
                 gridHorizontal={true} gridVertical={true}
                 hoverAnimation={true}
                 colors={d3.scale.category10()}
-                margins={{top: 10, right: 120, bottom: 50, left: 100}}
+                margins={{top: 10, right: 150, bottom: 50, left: 60}}
+                xAccessor={(xa)=> {
+                    return new Date(xa.x);
+                }}
+                xAxisTickInterval={{unit: 'year', interval: 5}}
             />
         );
 
-        return (
-            <div>{lineChart}</div>
-        )
+        return (<div>{lineChart}</div>)
+
     }
+
 }
 
 export default RegionChart;
