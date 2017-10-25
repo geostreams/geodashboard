@@ -15,6 +15,7 @@ import {getTrendColor, getCustomLocation} from '../utils/getConfig';
 import {popupHelperTrendDetailPage, sensorsToFeaturesTrendDetailPage, getAttribution} from '../utils/mapUtils';
 import {drawHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
+import { matchRegionTrends} from '../utils/trendsUtils';
 
 class RegionMiniMap extends Component {
 
@@ -160,9 +161,16 @@ class RegionMiniMap extends Component {
 
         this.state.areaPolygonSource.clear();
         this.state.areaPolygonSource.addFeatures(region_features);
+        let regionalSensors = [];
+
+        map_items.map(m => {
+            if (matchRegionTrends(this.props.trends_region, m)) {
+                regionalSensors.push(m);
+            }
+        });
 
         features = sensorsToFeaturesTrendDetailPage(
-            map_items, this.props.selectedParameter, threshold, this.props.trends_region);
+            regionalSensors, this.props.selectedParameter, threshold, this.props.trends_region);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
@@ -197,61 +205,15 @@ class RegionMiniMap extends Component {
 
         let clusters = new ol.layer.Vector({
             source: clusterSource,
-            style: function (feature) {
-                let size = feature.get('features').length;
-                let style;
-
-                const trend_type = feature.getProperties().features[0].attributes.trend_type;
-                if (trend_type == "trendUp") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "trendDown") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            rotation: 3.141592654,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "overThresholdUp") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "overThresholdDown") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            rotation: 3.141592654,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "noTrend" || trend_type == "") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.Circle({
-                            radius: 4,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                }
-
+            style: function () {
+                let style = (new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 4,
+                        fill: new ol.style.Fill({color: getTrendColor("noTrend")}),
+                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                    })
+                }));
                 return style;
-
             }
         });
 
