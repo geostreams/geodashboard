@@ -86,6 +86,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-959](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-959)
 - Removed all instances of 'UPDATE_TRENDS_REGIONS_POINTS' and associated code
   [GEOD-975](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-975)
+- Finalize Trends Detail Page using D3
+  [GEOD-992](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-992)
 
 ### Fixed
 - Bug in filtering for custom locations
