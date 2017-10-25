@@ -44,6 +44,7 @@ class TrendsDetail extends Component {
                                         trends_settings={trendsPageSettings}
                                         trends_threshold_choice={trendsThresholdChoice}
                                         trends_defaults={trendsPageDefaults}
+                                        trends_detail_page={true}
                                     />
                                     <TrendsRegionDetails
                                         trends_region_name={trendsRegionName}
