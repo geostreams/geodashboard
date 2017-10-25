@@ -33,7 +33,7 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
                 },
                 name: trendsCheckRegionsAll[i].toString(),
                 properties: {
-                    region: trendsCheckRegionsAll[i].toString(),
+                    region: trendsPageRegionsSettings[i].properties.id.toString(),
                     type: {
                         id: i.toString(),
                         title: "",
@@ -89,7 +89,7 @@ export function filterCustomTrendLocation(selectedPointsLocations:Array<string>,
 
 export function matchRegionTrends(selectedRegion:string, sensor: Object) {
 
-    if (selectedRegion.toUpperCase() === sensor.properties.region)
+    if (selectedRegion.toUpperCase() === sensor.properties.region.toUpperCase())
         return true;
 
     function findRegion(location) {
