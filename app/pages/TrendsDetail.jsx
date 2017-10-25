@@ -32,7 +32,7 @@ class TrendsDetail extends Component {
                 <Content>
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>
-                            <Cell col={5}>
+                            <Cell col={4}>
                                 <Card className={trendsStyles.detailTitle}>
                                     <CardTitle>
                                         {trendsRegionTitle} Trends Detail
