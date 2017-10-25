@@ -536,132 +536,30 @@ export function sensorsToFeaturesTrendDetailPage(
     let features = Array();
     sensors.map((sensor) => {
 
-        if (sensor.name != 'ALL' && sensor.properties.region == region) {
+        let feature = new ol.Feature({
+            geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
+        });
 
-            let feature = new ol.Feature({
-                geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
-            });
+        feature.attributes = {
+            "dataSource": getSourceName(sensor.properties.type),
+            "maxEndTime": sensor.max_end_time,
+            "minStartTime": sensor.min_start_time,
+            "latitude": sensor.geometry.coordinates[1],
+            "longitude": sensor.geometry.coordinates[0],
+            "location": sensor.properties.region,
+            "name": sensor.name,
+            "color": getColor(sensor.properties.type.id),
+            "trend_color": getTrendColor(""),
+            "trend_type": "",
+            "trend_values": "",
+            "display_trends": true,
+            "trends_detail": true,
+            "region": getCustomTrendsRegion(sensor.properties.region),
+        };
 
-            let trend_type = "";
-            let trend_values = "";
+        feature.setId(sensor.properties.popupContent);
+        features.push(feature);
 
-            if (sensor.hasOwnProperty("trends")) {
-                if (sensor.trends === "not enough data" || sensor.trends === "trends return no data") {
-                    trend_type = "noTrend";
-                } else {
-
-                    if (sensor.trends[parameter + "_percentage_change"] > 0 &&
-                        sensor.trends[parameter + "_last_average"] >= threshold) {
-
-                        trend_type = "overThresholdUp";
-
-                    } else if (sensor.trends[parameter + "_percentage_change"] > 0 &&
-                        sensor.trends[parameter + "_last_average"] < threshold) {
-
-                        trend_type = "trendUp";
-
-                    } else if (sensor.trends[parameter + "_percentage_change"] < 0 &&
-                        sensor.trends[parameter + "_last_average"] < threshold) {
-
-                        trend_type = "trendDown";
-
-                    } else if (sensor.trends[parameter + "_percentage_change"] < 0 &&
-                        sensor.trends[parameter + "_last_average"] > threshold) {
-
-                        trend_type = "overThresholdDown";
-
-                    } else {
-
-                        trend_type = "noTrend";
-
-                    }
-                }
-
-                let units = '';
-
-                if (parameter) {
-                    let unitIndex = getParameterName(parameter).lastIndexOf(" ");
-                    units = getParameterName(parameter).substr(unitIndex + 1);
-                }
-
-                trend_values = [
-                    (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + ' ' + units),
-                    (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + ' ' + units),
-                    (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + ' ' + units),
-                    (new Date(sensor["trend_end_time"]).toLocaleDateString()),
-                    (Number(sensor.trends[parameter + "_percentage_change"]).toFixed(2) + " %")
-                ]
-
-            }
-
-            if (trend_type == "trendUp") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        points: 3,
-                        radius: 10,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            } else if (trend_type == "trendDown") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        points: 3,
-                        radius: 10,
-                        rotation: 3.141592654,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            } else if (trend_type == "overThresholdUp") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        points: 3,
-                        radius: 10,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            } else if (trend_type == "overThresholdDown") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        points: 3,
-                        radius: 10,
-                        rotation: 3.141592654,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            } else if (trend_type == "noTrend" || trend_type == "") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.Circle({
-                        radius: 4,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            }
-
-            feature.attributes = {
-                "dataSource": getSourceName(sensor.properties.type),
-                "maxEndTime": sensor.max_end_time,
-                "minStartTime": sensor.min_start_time,
-                "latitude": sensor.geometry.coordinates[1],
-                "longitude": sensor.geometry.coordinates[0],
-                "location": sensor.properties.region,
-                "name": sensor.name,
-                "color": getColor(sensor.properties.type.id),
-                "trend_color": getTrendColor(trend_type),
-                "trend_type": trend_type,
-                "trend_values": trend_values,
-                "display_trends": true,
-                "trends_detail": true,
-                "region": getCustomTrendsRegion(sensor.properties.region),
-            };
-
-            feature.setId(sensor.properties.popupContent);
-            features.push(feature);
-        }
     });
 
     return features;
