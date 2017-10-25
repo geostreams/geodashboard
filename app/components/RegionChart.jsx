@@ -26,7 +26,6 @@ class RegionChart extends Component {
 
         let trendsRegionName = this.props.trends_region_name;
         let trendRegions = this.props.trendRegions;
-
         let trendDataRaw = [];
         let trendData = [];
         let trendDeviationDataRaw = [];
@@ -37,7 +36,8 @@ class RegionChart extends Component {
 
             for (let i = 1; i < trendRegions.length; i++) {
 
-                if (trendRegions[i].name == trendsRegionName) {
+                if ((trendRegions[i].name == trendsRegionName) &&
+                    (trendRegions[i].trends_detail.length > 0)) {
 
                     // The Values
                     trendRegions[i].trends_detail.map(d => {
