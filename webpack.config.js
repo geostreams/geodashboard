@@ -4,7 +4,7 @@ var path = require("path");
 
 module.exports = {
   devtool: 'eval-source-map',
-  entry: "./main.jsx",
+  entry: ["babel-polyfill", "./main.jsx"],
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js"
