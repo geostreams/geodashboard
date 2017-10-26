@@ -3,7 +3,9 @@ import {render} from 'react-dom'
 import App from './app/containers/App'
 import { Provider } from 'react-redux'
 import './app/styles/main.css'
-import configureStore from './app/store/configureStore'
+import configureStore from './app/store/configureStore';
+import "babel-polyfill";
+
 // ref: http://stackoverflow.com/questions/33915826/exclude-module-from-webpack-minification
 // https://opensource.ncsa.illinois.edu/bitbucket/projects/GEOD/repos/geodashboard-v3/pull-requests/33/overview
 // set sendfile in nginx.conf as off to forbid browser cache config.js
