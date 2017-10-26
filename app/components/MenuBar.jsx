@@ -60,35 +60,35 @@ class MenuBar extends Component {
                                 <li className={this.props.selected === "search"? styles.active: '' }>
                                     <Link to="/search" >SEARCH</Link>
                                 </li>
-                                <li className={this.props.selected === "trends"? styles.active: '' }>
-                                    <Button className={styles.trendsButton}
-                                            onClick={this.onClickTrendButton.bind(this, true)} >
-                                        TRENDS
-                                    </Button>
-                                </li>
+                                {/*<li className={this.props.selected === "trends"? styles.active: '' }>*/}
+                                    {/*<Button className={styles.trendsButton}*/}
+                                            {/*onClick={this.onClickTrendButton.bind(this, true)} >*/}
+                                        {/*TRENDS*/}
+                                    {/*</Button>*/}
+                                {/*</li>*/}
                                 <li className={this.props.selected === "about"? styles.active: '' }>
                                     <a href="/geodashboard/#about">ABOUT</a>
                                 </li>
-                                <MenuAnchor className={styles.menu_anchor_style}>
-                                    <Menu className={styles.menu_style}
-                                          open={this.state.openMenu}
-                                          onClose={this.onClickTrendButton.bind(this, false)}>
-                                        <MenuItem>
-                                            <Button>
-                                                <Link className={styles.button_style} href={"#trendsstations"}>
-                                                    TRENDS STATIONS
-                                                </Link>
-                                            </Button>
-                                        </MenuItem>
-                                        <MenuItem>
-                                            <Button>
-                                                <Link className={styles.button_style} href={"#trendsregions"}>
-                                                    TRENDS REGIONS
-                                                </Link>
-                                            </Button>
-                                        </MenuItem>
-                                    </Menu>
-                                </MenuAnchor>
+                                {/*<MenuAnchor className={styles.menu_anchor_style}>*/}
+                                    {/*<Menu className={styles.menu_style}*/}
+                                          {/*open={this.state.openMenu}*/}
+                                          {/*onClose={this.onClickTrendButton.bind(this, false)}>*/}
+                                        {/*<MenuItem>*/}
+                                            {/*<Button>*/}
+                                                {/*<Link className={styles.button_style} href={"#trendsstations"}>*/}
+                                                    {/*TRENDS STATIONS*/}
+                                                {/*</Link>*/}
+                                            {/*</Button>*/}
+                                        {/*</MenuItem>*/}
+                                        {/*<MenuItem>*/}
+                                            {/*<Button>*/}
+                                                {/*<Link className={styles.button_style} href={"#trendsregions"}>*/}
+                                                    {/*TRENDS REGIONS*/}
+                                                {/*</Link>*/}
+                                            {/*</Button>*/}
+                                        {/*</MenuItem>*/}
+                                    {/*</Menu>*/}
+                                {/*</MenuAnchor>*/}
                             </ul>
                         </div>
                 </div>
