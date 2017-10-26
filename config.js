@@ -1109,7 +1109,7 @@ export const gd3 = {
     ],
 
     // This variable is used to determine the location for links to the Detail Page
-    application_website: "/",
+    application_website: "/geodashboard/",
 
     // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages
     parameter_subtitle: 'Click a Parameter to Explore',
