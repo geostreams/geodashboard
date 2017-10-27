@@ -84,6 +84,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-975](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-975)
 - Add the ability for Detail Links in V3 to go to V2
   [GEOD-959](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-959)
+- Add V2-Look Menu to V3 Code
+  [GEOD-994](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-994)
 
 ### Fixed
 - Bug in filtering for custom locations
