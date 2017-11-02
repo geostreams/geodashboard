@@ -27,7 +27,7 @@ export const gd3 = {
         "total-phosphorus-glenda": "Total Phosphorus (ug/L)",
         "turbidity-glenda": "Turbidity (NTU)",
         "ammonia-glenda" : "Ammonia (ug/l)" ,
-        "ammonia-nitrogen-glenna" : "Ammonia-Nitrogen (ug/l)",
+        "ammonia-nitrogen-glenda" : "Ammonia-Nitrogen (ug/l)",
         "ammonium-glenda" : "Ammonium (ug/l)" ,
         "chloride-glenda":"Chloride (mg/l)" ,
         "conductivity-glenda":"Conductivity (umho/cm)" ,
