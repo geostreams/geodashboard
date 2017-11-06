@@ -124,7 +124,10 @@ export function popupTrends(feature: ol.Feature, styles){
         '<table class=' + styles.tablestyle + '>' +
             trends +
         '</table>';
-    let paramsLength = (sensorInfo.parameters).length;
+    let paramsLength = 0;
+    if (sensorInfo.parameters.length > 0) {
+        paramsLength = sensorInfo.parameters.length;
+    }
     let sourceColor = sensorInfo.color;
     if(paramsLength > 0 && sensorInfo.trends_detail){
         bodyText += '<a href=" ' + application_sensors_website + '#detail/location/'+
@@ -132,12 +135,13 @@ export function popupTrends(feature: ol.Feature, styles){
             sourceColor + ';">View Details for the ' + sensorInfo.name + ' Site </a>';
     }
 
-    if(sensorInfo.trends_detail) {
+    if(sensorInfo.trend_type != 'noTrend' && sensorInfo.trend_type != "") {
         bodyText += '<a href="/#trendsdetail/region/'+
             sensorInfo.location + '/" class=' + styles.viewdetail + ' style="background-color: ' +
             sourceColor + ';">View Details for the ' + sensorInfo.region + ' Region </a>';
     }
     return bodyText;
+
 }
 
 export function removePopup(theMap){
@@ -180,7 +184,7 @@ export function popupRegion(feature: ol.Feature, styles){
         '</table>' +
         '<div class=' + styles.greyborder + '></div>';
 
-    if(sensorInfo.trends_detail) {
+    if(sensorInfo.trend_type != 'noTrend'  && sensorInfo.trend_type != "") {
         regionText += '<a href="#/trendsdetail/region/'+ sensorInfo.location + '" class=' + styles.viewdetail +
             ' style="background-color: ' + sourceColor + ';">View Details for the ' +
             sensorInfo.region + ' Region </a>';
