@@ -186,6 +186,13 @@ export function sensorsToFeaturesTrendPage(
                 }));
             }
 
+            let sensor_parameters = [];
+            if (sensor.parameters && (sensor.parameters.length > 0)) {
+                sensor_parameters = sensor.parameters.filter(
+                    x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)
+                );
+            }
+
             feature.attributes = {
                 "dataSource": getSourceName(sensor.properties.type),
                 "maxEndTime": sensor.max_end_time,
@@ -194,8 +201,7 @@ export function sensorsToFeaturesTrendPage(
                 "longitude": sensor.geometry.coordinates[0],
                 "location": sensor.properties.region,
                 "name": sensor.name,
-                //parameters has null in the array
-                "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x) != null).map(x => getParameterName(x)),
+                "parameters": sensor_parameters,
                 "color": getColor(sensor.properties.type.id),
                 "trend_color": getTrendColor(trend_type),
                 "trend_type": trend_type,
