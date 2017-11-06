@@ -34,25 +34,17 @@ class TrendsParameters extends Component {
 
         if (this.props.trends_detail_page == true) {
             title = "Selected Parameter";
-            if (this.props.chosenParameter.length == 0){
-                subtitle = (
-                    <div>
-                        <br/>
-                        <p className={trendsStyles.list_style}>
-                            None Selected
-                        </p>
-                    </div>
-                )
-            } else {
-                subtitle = (
-                    <div>
-                        <br/>
-                        <p className={trendsStyles.list_style}>
-                            {getParameterName(this.props.chosenParameter)}
-                        </p>
-                    </div>
-                );
+            let subtitleContents = "None Selected";
+            if(this.props.chosenParameter.length > 0) {
+                subtitleContents = getParameterName(this.props.chosenParameter)
             }
+            subtitle =
+                <div>
+                    <br/>
+                    <p className={trendsStyles.list_style}>
+                        {subtitleContents}
+                    </p>
+                </div>
         } else {
             if (trendsPageSettings) {
                 trendsPageSettings.map(p => {
