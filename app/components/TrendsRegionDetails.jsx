@@ -47,7 +47,7 @@ class TrendsRegionDetails extends Component {
             <Card className={trendsStyles.cardMargin}>
                 <CardHeader>
                     <CardTitle>
-                        Trend Details
+                        Trends Summary
                     </CardTitle>
                 </CardHeader>
                 <CardText>
