@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import rd3 from 'react-d3';
 import d3 from 'd3';
 
-class RegionChart extends Component {
+class LineChartWithDeviations extends Component {
 
     constructor(props: Object) {
         super(props);
@@ -133,4 +133,4 @@ class RegionChart extends Component {
 
 }
 
-export default RegionChart;
+export default LineChartWithDeviations;
