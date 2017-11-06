@@ -142,9 +142,9 @@ export type TrendsRegionSetup = {
     name: string;
     properties: Properties;
     type: string;
-    region_trends: [];
-    trends_detail: [];
-    trends_deviation: [];
+    region_trends: Array<Object>;
+    trends_detail: Array<Object>;
+    trends_deviation: Array<Object>;
 };
 
 export type TrendsRegions = TrendsRegionSetup[];
