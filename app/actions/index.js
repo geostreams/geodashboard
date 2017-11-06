@@ -229,6 +229,7 @@ export function fetchTrends(
                         })
                 }
             });
+        dispatch(fetchRegionTrends(parameter, season));
     }
 
 }
