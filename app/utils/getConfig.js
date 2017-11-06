@@ -77,7 +77,7 @@ export function getCustomTrendsRegion(region:string):string {
 
     if (trendsPageRegions) {
         custom_trends_region_map = trendsPageRegions.map(r => {
-            if (r.properties.id == region) {
+            if (r.properties.id.toUpperCase() == region.toUpperCase()) {
                 custom_trends_region = r.properties.title;
                 return custom_trends_region;
             }
