@@ -15,79 +15,75 @@ class RegionChart extends Component {
     render() {
 
         let chartTitle = 'No Chosen Parameter';
-        let trendsPageSettings = this.props.trends_settings;
-        if (trendsPageSettings) {
-            trendsPageSettings.map(p => {
+        let pageSettings = this.props.trends_settings;
+        if (pageSettings) {
+            pageSettings.map(p => {
                 if (p.parameter.id == this.props.selectedParameter) {
                     chartTitle = p.parameter.title;
                 }
             })
         }
 
-        let trendsRegionName = this.props.trends_region_name;
-        let trendRegions = this.props.trendRegions;
+        let regionName = this.props.trends_region_name;
+        let regions = this.props.trendRegions;
 
-        let trendDataRaw = [];
-        let trendData = [];
-        let trendDeviationDataRaw = [];
-        let trendPositiveDeviation = [];
-        let trendNegativeDeviation = [];
+        let dataRaw = [];
+        let averageData = [];
+        let deviationDataRaw = [];
+        let positiveDeviation = [];
+        let negativeDeviation = [];
 
-        if (trendRegions.length > 0) {
+        if (regions.length > 0) {
 
-            for (let i = 1; i < trendRegions.length; i++) {
+            for (let i = 1; i < regions.length; i++) {
 
-                if (trendRegions[i].properties.region.toUpperCase() == trendsRegionName.toUpperCase() &&
-                    trendRegions[i].trends_detail.length > 0) {
+                if (regions[i].properties.region.toUpperCase() == regionName.toUpperCase() &&
+                    regions[i].trends_detail.length > 0) {
 
                     // The Values
-                    trendRegions[i].trends_detail.map(d => {
+                    regions[i].trends_detail.map(d => {
                         for (let x in d) {
-                            trendDataRaw.push({"x": x, "y": d[x]})
+                            dataRaw.push({"x": x, "y": d[x]})
                         }
                     });
-                    trendDataRaw.sort(function (a, b) {
+                    dataRaw.sort(function (a, b) {
                         return Number(a.x) - Number(b.x);
                     });
 
                     // The Deviations
-                    trendRegions[i].trends_deviation.map(d => {
+                    regions[i].trends_deviation.map(d => {
                         for (let y in d) {
-                            trendDeviationDataRaw.push({"x": y, "y": d[y]})
+                            deviationDataRaw.push({"x": y, "y": d[y]})
                         }
                     });
-                    trendDeviationDataRaw.sort(function (a, b) {
+                    deviationDataRaw.sort(function (a, b) {
                         return Number(a.x) - Number(b.x);
                     });
 
                     // The Positive Deviations
-                    for (let g = 0; g < trendDeviationDataRaw.length; g++) {
-                        trendPositiveDeviation.push({
-                            "x": trendDeviationDataRaw[g].x,
-                            "y": (Number(trendDataRaw[g].y) + Number(trendDeviationDataRaw[g].y))
+                    for (let g = 0; g < deviationDataRaw.length; g++) {
+                        positiveDeviation.push({
+                            "x": deviationDataRaw[g].x,
+                            "y": (Number(dataRaw[g].y) + Number(deviationDataRaw[g].y))
+                        });
+                        negativeDeviation.push({
+                            "x": deviationDataRaw[g].x,
+                            "y": (Number(dataRaw[g].y) - Number(deviationDataRaw[g].y))
                         });
                     }
 
-                    // The Negative Deviations
-                    for (let g = 0; g < trendDeviationDataRaw.length; g++) {
-                        trendNegativeDeviation.push({
-                            "x": trendDeviationDataRaw[g].x,
-                            "y": (Number(trendDataRaw[g].y) - Number(trendDeviationDataRaw[g].y))
-                        });
-                    }
-
-                    trendData.push(
+                    averageData.push(
                         {
                             name: "Deviation Up",
-                            values: trendPositiveDeviation
+                            values: positiveDeviation
                         },
                         {
-                            name: "Trending Values",
-                            values: trendDataRaw
+                            name: "Average Values",
+                            values: dataRaw
                         },
                         {
                             name: "Deviation Down",
-                            values: trendNegativeDeviation
+                            values: negativeDeviation
                         }
                     )
                 }
@@ -95,14 +91,14 @@ class RegionChart extends Component {
             }
         }
 
-        if (trendData.length == 0) {
-            trendData.push(
+        if (averageData.length == 0) {
+            averageData.push(
                 {
                     name: "Deviation Up",
                     values: [{x:0, y:0}]
                 },
                 {
-                    name: "Trending Values",
+                    name: "Average Values",
                     values: [{x:0, y:0}]
                 },
                 {
@@ -115,7 +111,7 @@ class RegionChart extends Component {
         let LineChart = rd3.LineChart;
         let lineChart = (
             <LineChart
-                data={trendData}
+                data={averageData}
                 title={chartTitle} legend={true}
                 width={650} height={400}
                 yAxisLabel="Amount" yAxisLabelOffset={Number(50)}
