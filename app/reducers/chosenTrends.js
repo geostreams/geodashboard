@@ -5,6 +5,7 @@
 
 import {
     ADD_ANALYSIS_COUNT, ADD_CHOOSE_TRENDS, ADD_CUSTOM_TREND_LOCATIONS_FILTER,
+    ADD_REGION_TRENDS, ADD_REGION_DETAIL_TRENDS,
     CLEAR_TRENDS_SENSORS, FETCH_ANALYSIS_REGION, SELECT_TRENDS_CALC_BASELINE_SETTING,
     SELECT_ANALYSIS_REGION, SELECT_TRENDS_REGION, SELECT_TRENDS_CALC_ROLLING_SETTING,
     SELECT_ANALYSIS_PARAMETER, SELECT_TRENDS_PARAMETER, SELECT_TRENDS_SEASON,
@@ -97,6 +98,20 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
 
             return Object.assign({}, state, {
                 trends_sensors : tmpdata,
+                trends_regions : state.trends_regions
+            });
+
+        case ADD_REGION_TRENDS:
+
+            return Object.assign({}, state, {
+                trends_sensors : state.trends_sensors,
+                trends_regions : state.trends_regions
+            });
+
+        case ADD_REGION_DETAIL_TRENDS:
+
+            return Object.assign({}, state, {
+                trends_sensors : state.trends_sensors,
                 trends_regions : state.trends_regions
             });
 
@@ -314,4 +329,3 @@ function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
 }
 
 export default chosenTrends
-
