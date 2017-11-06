@@ -40,27 +40,29 @@ class MenuPage extends Component {
                 applicationOptions[i].pages.map((m) => {
                     if (m.name == 'TRENDS') {
                         menuOptionsMap.push(
-                            <Button key={m.name} className={styles.trends_button_style}
-                                onClick={this.onClickTrendButton.bind(this, true)}>
-                                TRENDS
-                            </Button>);
-                        menuOptionsMap.push(
-                            <MenuAnchor key="trendsAnchor" className={styles.menu_anchor_style}>
-                                <Menu className={styles.menu_style}
-                                      open={this.state.openMenu}
-                                      onClose={this.onClickTrendButton.bind(this, false)}>
-                                    <MenuItem>
-                                        <Button className={styles.button_style}>
-                                            <Link href={"#trendsstations"}>TRENDS STATIONS</Link>
-                                        </Button>
-                                    </MenuItem>
-                                    <MenuItem>
-                                        <Button className={styles.button_style}>
-                                            <Link href={"#trendsregions"}>TRENDS REGIONS</Link>
-                                        </Button>
-                                    </MenuItem>
-                                </Menu>
-                            </MenuAnchor>
+                            <span key={m.name}>
+                                <Button className={styles.trends_button_style}
+                                        onClick={this.onClickTrendButton.bind(this, true)}>
+                                    TRENDS
+                                </Button>
+
+                                <MenuAnchor className={styles.menu_anchor_style}>
+                                    <Menu className={styles.menu_style}
+                                          open={this.state.openMenu}
+                                          onClose={this.onClickTrendButton.bind(this, false)}>
+                                        <MenuItem>
+                                            <Button className={styles.button_style}>
+                                                <Link href={"#trendsstations"}>TRENDS STATIONS</Link>
+                                            </Button>
+                                        </MenuItem>
+                                        <MenuItem>
+                                            <Button className={styles.button_style}>
+                                                <Link href={"#trendsregions"}>TRENDS REGIONS</Link>
+                                            </Button>
+                                        </MenuItem>
+                                    </Menu>
+                                </MenuAnchor>
+                            </span>
                         )
                     } else {
                         menuOptionsMap.push(
