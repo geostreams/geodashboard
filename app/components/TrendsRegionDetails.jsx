@@ -31,7 +31,7 @@ class TrendsRegionDetails extends Component {
 
         if (trendsPageSettings && regionName) {
             for (let i = 0; i < trendsPageSettings.length; i++) {
-                trendsCheckRegion = trendsPageSettings[i].attributes.location;
+                trendsCheckRegion = trendsPageSettings[i].attributes.location.toUpperCase();
                 if (trendsCheckRegion == regionName) {
                     trendsDetailListItems =
                         <ul className={trendsStyles.list_style}>
