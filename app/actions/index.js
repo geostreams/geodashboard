@@ -265,14 +265,14 @@ export function fetchRegionTrends(parameter:string, season:string) {
                         if (json) {
                             if (json.length < 1) {
                                 dispatch({
-                                    type: ADD_CHOOSE_TRENDS,
+                                    type: ADD_REGION_TRENDS,
                                     sensor: Object.assign(sensor, {
                                         "region_trends": "trends return no data"
                                     })
                                 });
                             } else {
                                 dispatch({
-                                    type: ADD_CHOOSE_TRENDS,
+                                    type: ADD_REGION_TRENDS,
                                     sensor: Object.assign(sensor, {
                                         "region_trends": json.trends
                                     })
@@ -318,7 +318,7 @@ export function fetchRegionDetailTrends(parameter:string, season:string) {
                         if (json) {
                             if (json.length < 1) {
                                 dispatch({
-                                    type: ADD_CHOOSE_TRENDS,
+                                    type: ADD_REGION_DETAIL_TRENDS,
                                     sensor: Object.assign(sensor, {
                                         "trends_detail": "trends return no data",
                                         "trends_deviation": "trends return no data"
@@ -326,7 +326,7 @@ export function fetchRegionDetailTrends(parameter:string, season:string) {
                                 });
                             } else {
                                 dispatch({
-                                    type: ADD_CHOOSE_TRENDS,
+                                    type: ADD_REGION_DETAIL_TRENDS,
                                     sensor: Object.assign(sensor, {
                                         "trends_detail": json.average,
                                         "trends_deviation": json.deviation
