@@ -362,7 +362,8 @@ class Map extends Component {
                 return (new ol.style.Style({
                     image: new ol.style.Icon({
                         anchor: [0.5, 1],
-                        src: 'data:image/svg+xml,' + iconSvg,
+                        src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( iconSvg ),
+                        imgSize: [15, 25]
                     })
 
                 }));
@@ -761,7 +762,8 @@ class Map extends Component {
                     style = (new ol.style.Style({
                         image: new ol.style.Icon({
                             anchor: [0.5, 1],
-                            src: 'data:image/svg+xml;utf8,' + iconSvg,
+                            src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( iconSvg ),
+                            imgSize: [15, 25]
                         })
 
                     }));
