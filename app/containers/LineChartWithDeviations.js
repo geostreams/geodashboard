@@ -3,7 +3,7 @@
  */
 
 import { connect } from 'react-redux';
-import RegionChartComponent from '../components/RegionChart';
+import LineChartWithDeviationsComponent from '../components/LineChartWithDeviations';
 
 const mapStateToProps = (state) => {
     return {
@@ -12,6 +12,6 @@ const mapStateToProps = (state) => {
     }
 };
 
-const RegionChart = connect(mapStateToProps)(RegionChartComponent);
+const LineChartWithDeviations = connect(mapStateToProps)(LineChartWithDeviationsComponent);
 
-export default RegionChart
+export default LineChartWithDeviations
