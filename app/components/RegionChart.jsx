@@ -37,8 +37,8 @@ class RegionChart extends Component {
 
             for (let i = 1; i < trendRegions.length; i++) {
 
-                if ((trendRegions[i].properties.region.toUpperCase() == trendsRegionName.toUpperCase()) &&
-                    (trendRegions[i].trends_detail.length > 0)) {
+                if (trendRegions[i].properties.region.toUpperCase() == trendsRegionName.toUpperCase() &&
+                    trendRegions[i].trends_detail.length > 0) {
 
                     // The Values
                     trendRegions[i].trends_detail.map(d => {
