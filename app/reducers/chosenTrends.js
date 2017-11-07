@@ -45,8 +45,10 @@ type ChosenTrendsAction = {|
     selectedPointsLocations: Array<string>,
     trends_detail: Object,
     trends_deviation: Object,
-    region_trends: Object
+    region_trends: Object,
+    detail_region: string
 |};
+
 
 const defaultState = {
     parameter: '',
@@ -62,7 +64,8 @@ const defaultState = {
     rolling_interval: '',
     view_type: '',
     number_to_filter: 0,
-    draw_available_sensors:[]
+    draw_available_sensors:[],
+    detail_region: ''
 };
 
 
@@ -121,7 +124,8 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
 
             return Object.assign({}, state, {
                 trends_sensors : tmpdata3,
-                trends_regions : state.trends_regions
+                trends_regions : state.trends_regions,
+                detail_region : action.region
             });
 
         case SET_TRENDS_TIMEFRAMES:
