@@ -108,7 +108,9 @@ class RegionMiniMap extends Component {
         if (features) {
             features.map(s => {
                     sensorID = s.getId().toUpperCase();
-                    popupText += ('<li>' + sensorID  + '</li>');
+                    if (sensorID != this.props.trends_region_title.toUpperCase()) {
+                        popupText += ('<li>' + sensorID + '</li>');
+                    }
                 }
             )
         }
