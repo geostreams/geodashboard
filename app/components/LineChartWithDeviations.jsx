@@ -75,7 +75,9 @@ class LineChartWithDeviations extends Component {
                     averageData.push(
                         {
                             name: "Deviation Up",
-                            values: positiveDeviation
+                            values: positiveDeviation,
+                            strokeWidth: 2,
+                            strokeDashArray: "4"
                         },
                         {
                             name: "Average Values",
@@ -83,7 +85,9 @@ class LineChartWithDeviations extends Component {
                         },
                         {
                             name: "Deviation Down",
-                            values: negativeDeviation
+                            values: negativeDeviation,
+                            strokeWidth: 2,
+                            strokeDashArray: "4"
                         }
                     )
                 }
@@ -118,7 +122,7 @@ class LineChartWithDeviations extends Component {
                 xAxisLabel="Time" xAxisLabelOffset={Number(50)}
                 gridHorizontal={true} gridVertical={true}
                 hoverAnimation={true}
-                colors={d3.scale.category10()}
+                colors={d3.scale.category20b()}
                 margins={{top: 10, right: 150, bottom: 50, left: 60}}
                 xAccessor={(xa)=> {
                     return new Date(xa.x);
