@@ -13,6 +13,7 @@ import {Grid, Cell, Content, List, Card, CardTitle} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
 import { getCustomTrendsRegion, getTrendsPageSettings, getTrendsDefaultValues } from '../utils/getConfig';
+import {Link} from 'react-router';
 
 
 class TrendsDetail extends Component {
@@ -23,7 +24,7 @@ class TrendsDetail extends Component {
         let trendsPageDefaults = getTrendsDefaultValues();
         let trendsThresholdChoice = false;
         let trendsRegionsSensors = [];
-        let trendsRegionTitle = getCustomTrendsRegion(this.props.params.region);
+        let trendsRegionTitle =  " / " + getCustomTrendsRegion(this.props.params.region);
         let trendsRegionName = this.props.params.region;
 
         return (
@@ -35,6 +36,7 @@ class TrendsDetail extends Component {
                             <Cell col={4}>
                                 <Card className={trendsStyles.detailTitle}>
                                     <CardTitle>
+                                        <Link href={"#trendsregions"}>Trends Regions</Link>
                                         {trendsRegionTitle} Trends Detail
                                     </CardTitle>
                                 </Card>
