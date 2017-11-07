@@ -3,7 +3,7 @@
  */
 
 import React, {Component, PropTypes} from 'react';
-import {Link} from 'react-router';
+import {browserHistory, Link} from 'react-router';
 import styles from '../styles/menuPage.css';
 import {
     Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
@@ -21,56 +21,55 @@ class MenuPage extends Component {
         this.state = {
             openMenu: false
         };
+        this.onClickMenuItem = this.onClickMenuItem.bind(this);
+        this.toggleTrendMenu = this.toggleTrendMenu.bind(this);
     }
 
-    onClickTrendButton(openMenuValue: boolean) {
-        this.setState({openMenu: openMenuValue});
+    toggleTrendMenu(openMenuValue: boolean) {
+      this.setState({openMenu: openMenuValue});
     };
+
+    onClickMenuItem(route: String) {
+        browserHistory.push(route);
+    }
 
     render() {
 
         let application_title;
         let applicationOptions = getApplicationOptions();
         let menuOptions = [];
-        let menuOptionsMap = [];
 
         if (applicationOptions) {
             for (let i = 0; i < applicationOptions.length; i++) {
                 application_title = applicationOptions[i].title;
                 applicationOptions[i].pages.map((m) => {
                     if (m.name == 'TRENDS') {
-                        menuOptionsMap.push(
-                            <span key={m.name}>
-                                <Button className={styles.trends_button_style}
-                                        onClick={this.onClickTrendButton.bind(this, true)}>
+                        menuOptions.push(
+
+                                <MenuAnchor className={styles.inline}>
+                                <Button
+                                    onClick={() => this.toggleTrendMenu(true)}
+                                    key="trends"
+                                    className={styles.white_color}
+                                >
                                     TRENDS
                                 </Button>
-
-                                <MenuAnchor className={styles.menu_anchor_style}>
-                                    <Menu className={styles.menu_style}
-                                          open={this.state.openMenu}
-                                          onClose={this.onClickTrendButton.bind(this, false)}>
-                                        <MenuItem>
-                                            <Button className={styles.button_style}>
-                                                <Link href={"#trendsstations"}>TRENDS STATIONS</Link>
-                                            </Button>
-                                        </MenuItem>
-                                        <MenuItem>
-                                            <Button className={styles.button_style}>
-                                                <Link href={"#trendsregions"}>TRENDS REGIONS</Link>
-                                            </Button>
-                                        </MenuItem>
-                                    </Menu>
-                                </MenuAnchor>
-                            </span>
+                        <Menu className={styles.menu_style}
+                        open={this.state.openMenu}
+                        onClose={() => this.toggleTrendMenu(false)}
+                    >
+                            <MenuItem key="trends_stations" className="mdc-button"><Link href={"/#trendsstations"}>TRENDS BY STATION </Link></MenuItem>
+                            <MenuItem key="trends_regions" className="mdc-button"><Link href={"/#trendsregions"}>TRENDS BY REGIONS </Link></MenuItem>
+                    </Menu>
+                    </MenuAnchor>
                         )
+
                     } else {
-                        menuOptionsMap.push(
-                            <Button key={m.name}><Link href={m.url}>{m.name}</Link></Button>
+                        menuOptions.push(
+                            <div key={m.url} className="mdc-button"><Link href={m.url} >{m.name}</Link></div>
                         )
                     }
                 });
-                menuOptions = menuOptions.concat(menuOptionsMap);
             }
         }
 
@@ -88,6 +87,7 @@ class MenuPage extends Component {
                 </ToolbarRow>
             </Toolbar>
         );
+
     }
 
 }
