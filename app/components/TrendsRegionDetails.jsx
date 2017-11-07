@@ -31,8 +31,8 @@ class TrendsRegionDetails extends Component {
 
         if (trendsPageSettings && regionName) {
             for (let i = 0; i < trendsPageSettings.length; i++) {
-                trendsCheckRegion = trendsPageSettings[i].attributes.location.toUpperCase();
-                if (trendsCheckRegion == regionName) {
+                trendsCheckRegion = trendsPageSettings[i].attributes.location;
+                if (trendsCheckRegion.toUpperCase() == regionName.toUpperCase()) {
                     trendsDetailListItems =
                         <ul className={trendsStyles.list_style}>
                             <li>Total Avg: {trendsPageSettings[i].attributes.trend_values[0]} </li>
