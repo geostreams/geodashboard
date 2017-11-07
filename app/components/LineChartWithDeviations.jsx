@@ -8,11 +8,15 @@ import d3 from 'd3';
 
 class LineChartWithDeviations extends Component {
 
+    state = {
+        lineChart: ''
+    };
+
     constructor(props: Object) {
         super(props);
     }
 
-    render() {
+    componentWillMount() {
 
         let chartTitle = 'No Chosen Parameter';
         let pageSettings = this.props.trends_settings;
@@ -113,7 +117,7 @@ class LineChartWithDeviations extends Component {
         }
 
         let LineChart = rd3.LineChart;
-        let lineChart = (
+        this.lineChart = (
             <LineChart
                 data={averageData}
                 title={chartTitle} legend={true}
@@ -131,8 +135,10 @@ class LineChartWithDeviations extends Component {
             />
         );
 
-        return (<div>{lineChart}</div>)
+    }
 
+    render() {
+        return (<div>{this.lineChart} </div>)
     }
 
 }
