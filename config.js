@@ -376,13 +376,21 @@ export const gd3 = {
     ],
 
     clowder_endpoints: [
-        {url: "https://greatlakesmonitoring.org/clowder", label: "GLM PROD"},
-        {url: "https://seagrant-dev.ncsa.illinois.edu/clowder", label: "GLM DEV"},
-        {url: "https://greatlakestogulf.org/clowder", label: "GLTG PROD"},
-        {url: "http://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV"},
-        {url: "http://data.imlczo.org/clowder", label: "IMLCZO PROD"},
-        {url: "https://imlczo-dev.ncsa.illinois.edu/clowder", label: "IMLCZO DEV"},
-        {url: "http://141.142.211.37/clowder", label: "IMLCZO NEBULA"}
+        {url: "https://seagrant-dev.ncsa.illinois.edu/clowder", label: "GLM DEV", title: "Great Lakes Monitoring",
+            subtitle: "ILLINOIS-INDIANA SEA GRANT" },
+        {url: "https://greatlakesmonitoring.org/clowder", label: "GLM PROD", title: "Great Lakes Monitoring",
+            subtitle: "ILLINOIS-INDIANA SEA GRANT" },
+        {url: "https://greatlakestogulf.org/clowder", label: "GLTG PROD", title: "Great Lakes to Gulf",
+            subtitle: "VIRTUAL OBSERVATORY"},
+        {url: "http://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV", title: "Great Lakes to Gulf",
+            subtitle: "VIRTUAL OBSERVATORY"},
+        {url: "http://data.imlczo.org/clowder", label: "IMLCZO PROD",   title: "IMLCZO",
+            subtitle: ""},
+        {url: "https://imlczo-dev.ncsa.illinois.edu/clowder", label: "IMLCZO DEV", title: "IMLCZO",
+            subtitle: ""},
+        {url: "http://141.142.211.37/clowder", label: "IMLCZO NEBULA", title: "IMLCZO",
+            subtitle: ""},
+        {url:"http://localhost:9000", label:"TEST", title:"TEST", subtitle:"TEST"}
     ],
 
     additional_locations: [
@@ -972,12 +980,13 @@ export const gd3 = {
         }
     ],
 
-    trends_page_lake_regions: [
-            {
-                "lake": "ER",
-                "regions": "er-west,er-east,er-center"
-            }
-        ],
+    trends_page_lake_regions:[
+        {
+
+            "lake": "ER",
+            "regions": "er-west,er-east,er-center"
+        }
+    ],
 
     trends_page_seasons: [
         {
@@ -1114,7 +1123,7 @@ export const gd3 = {
     ],
 
     // This variable is used to determine the location for links to the Detail Page
-    application_website: "/",
+    application_website: "/geodashboard/",
 
     // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages
     parameter_subtitle: 'Click a Parameter to Explore',

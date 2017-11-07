@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import MenuPage from '../components/MenuPage';
+import Menu from '../containers/MenuBar';
 import styles from '../styles/main.css';
 
 class RouteMismatch extends Component {
 	render() {
 		return (
 			<div>
-				<MenuPage/>
+				<Menu/>
 				<div className={styles.contentcenter}>
 					<h3>404 Not Found.</h3>
 				</div>

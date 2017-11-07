@@ -3,7 +3,7 @@
  */
 
 import React, {Component, PropTypes} from 'react';
-import MenuPage from '../components/MenuPage';
+import Menu from '../containers/MenuBar';
 import Map from '../containers/TrendsRegionMap';
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsSeasons from '../containers/TrendsSeasons';
@@ -27,7 +27,7 @@ class TrendsRegion extends Component {
         return (
 
             <div>
-                <MenuPage selected='trends'/>
+                <Menu selected='trends'/>
                 <Content>
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>

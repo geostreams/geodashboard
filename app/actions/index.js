@@ -3,10 +3,12 @@
 import type { Sensors, Dispatch, GetState } from "../utils/flowtype";
 
 export const SWITCH_BACKEND = 'SWITCH_BACKEND';
-export const switchBackend = (selected:string) => {
+export const switchBackend = (selected:string, title:string, subtitle:string) => {
     return {
         type: SWITCH_BACKEND,
-        selected
+        selected,
+        title,
+        subtitle
     }
 };
 
@@ -220,6 +222,10 @@ export function fetchTrends(
                                                 "trend_end_time": end_time
                                             })
                                         });
+                                        if (type == 'ADD_CHOOSE_TRENDS') {
+                                            // Create the Region Points from the individual Sensors
+                                            dispatch(updateTrendsRegionsPoints());
+                                        }
                                     } else {
                                         dispatch({
                                             type: ADD_CHOOSE_TRENDS,
@@ -563,28 +569,28 @@ export function fetchSensor(name:string) {
         const state = getState();
         const api = state.backends.selected;
 
-            //get sensor id from the name
-            if (state.sensors.length > 0) {
-                const sensor = state.sensors.data.find(x => x.name === name).id;
-                dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-                dispatch(fetchSensorhelp(api, sensor.id));
+        //get sensor id from the name
+        if (state.sensors.length > 0) {
+            const sensor = state.sensors.data.find(x => x.name === name).id;
+            dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
+            dispatch(fetchSensorhelp(api, sensor.id));
 
-            } else {
-                const endpointsensors = api + '/api/geostreams/sensors';
-                let result = fetch(endpointsensors)
-                    .then(response => response.json())
-                    .then(json => {
-                        const sensor = json.find(x => x.name === name);
-                        console.log(sensor.id);
-                        dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-                        return fetch(api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + sensor.id)
-                    });
-                result
-                    .then(response => response.json())
-                    .then(json => {
+        } else {
+            const endpointsensors = api + '/api/geostreams/sensors';
+            let result = fetch(endpointsensors)
+                .then(response => response.json())
+                .then(json => {
+                    const sensor = json.find(x => x.name === name);
+                    console.log(sensor.id);
+                    dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
+                    return fetch(api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + sensor.id)
+                });
+            result
+                .then(response => response.json())
+                .then(json => {
                     dispatch(receiveSensor(json))
                 })
-            }
+        }
     }
 }
 

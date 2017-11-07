@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import MenuPage from '../components/MenuPage';
+import Menu from '../containers/MenuBar';
 import styles from '../styles/main.css';
 import analysisStyles from '../styles/analysis.css';
 import {
@@ -36,7 +36,7 @@ class Analysis extends Component {
 
         return (
             <div>
-                <MenuPage selected="analysis"/>
+                <Menu selected="analysis"/>
                 <Content>
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>

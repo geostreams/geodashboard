@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import MenuPage from '../components/MenuPage';
+import Menu from '../containers/MenuBar';
 import Map from '../containers/ExploreMap';
 import ExploreSourcesTab from '../containers/ExploreSourcesTab';
 import {Card, CardTitle, CardHeader, CardText, Grid, Cell, Content, List} from 'react-mdc-web';
@@ -29,7 +29,7 @@ class Explore extends Component {
 
         return (
             <div>
-                <MenuPage selected='explore'/>
+                <Menu selected='explore'/>
                 <Content>
                     <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>

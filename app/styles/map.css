@@ -1,5 +1,5 @@
 .root {
-    height: calc(100vh - 4em);
+    height: calc(100vh - 9.2em);
     width: calc(100vw - 25em);
     cursor: pointer;
 }
@@ -177,7 +177,7 @@
 
 .trends_legend {
   position: absolute;
-  top: 4.5em;
+  top: 8.8em;
   right: 0.5em;
 }
 
