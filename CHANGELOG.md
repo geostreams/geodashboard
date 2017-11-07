@@ -96,6 +96,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-981](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-981)
 - Removed the card max-height on the V3 Search Page
   [GEOD-982](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-982)
+- SVG icons not rendering in IE 11. Links not clickable on IE 11
+  [GEOD-1004](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1004)
 
 ## Changed
 - Changed how the Circle is created, and how the associated coordinates are assembled
