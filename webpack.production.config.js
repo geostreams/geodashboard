@@ -36,6 +36,9 @@ module.exports = {
         test: /\.css$/,
         exclude: /node_modules/,
         loader: 'style!css?modules!postcss'
+      },
+      { test: /\.(png|jpg)$/,
+        loader: 'url-loader?limit=8192'
       }
     ]
   },

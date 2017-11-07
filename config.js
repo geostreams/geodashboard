@@ -17,15 +17,30 @@ export const gd3 = {
         "usgs": "#39B54A",
         "wqp": "#F28E1E"
     },
+
     parameter_maps: {
         "biomass": "Zooplankton Biomass (ug/m^3)",
         "density": "Zooplankton Density (#/m^3)",
-        "alkalinity": "Alkalinity (mg/L)",
-        "chlorophyll-a": "Chlorophyll a (ug/L)",
-        "nitrogen": "Nitrite-Nitrate (mg/L)",
-        "silica": "Silica (mg/L)",
-        "total-phosphorus": "Total Phosphorus (ug/L)",
-        "turbidity": "Turbidity (NTU)",
+        "alkalinity-glenda": "Alkalinity (mg/L)",
+        "chlorophyll-a-glenda": "Chlorophyll a (ug/L)",
+        "nitrogen-glenda": "Nitrite-Nitrate (mg/L)",
+        "silica-glenda": "Silica (mg/L)",
+        "total-phosphorus-glenda": "Total Phosphorus (ug/L)",
+        "turbidity-glenda": "Turbidity (NTU)",
+        "ammonia-glenda" : "Ammonia (ug/l)" ,
+        "ammonia-nitrogen-glenda" : "Ammonia-Nitrogen (ug/l)",
+        "ammonium-glenda" : "Ammonium (ug/l)" ,
+        "chloride-glenda":"Chloride (mg/l)" ,
+        "conductivity-glenda":"Conductivity (umho/cm)" ,
+        "total-hardness-glenda": "Hardness, Total as CaCO3 (mg/l)",
+        "oxygen-dissolved-glenda":"Oxygen, Dissolved (mg/l)",
+        "phosphorus-orthophosphorus-glenda":"Phosphorus, Orthophosphorus as P (ug/l)",
+        "secchi-disc-transparency-glenda":"Secchi Disc Transparency (uS/cm)",
+        "silica-dissolved-glenda":"Silica, Dissolved as Si (mg/l)",
+        "silica-total-glenda":"Silica, Total (mg/l)",
+        "temperature-glenda":"Temperature (C)",
+        "transmittance-horizontal-glenda":"Transmittance, Horizontal (%)",
+        "ph-glenda":"pH",
         "phosphorus-load": "Total Phosphorus (ug/L)",
         "nitrogen-load": "Nitrogen (mg/L)",
         "mercury": "Mercury (ug/g)",
@@ -173,6 +188,7 @@ export const gd3 = {
         "vapor_total_pahs": "Vapor Total PAHs (pg/m^3)",
         "vapor_total_pests": "Vapor Total PESTs (pg/m^3)"
     },
+
     sourcename: {
         "glfmsp": "Great Lakes Fish Monitoring and Surveillance Program",
         "epa": "Water Quality Data",
@@ -181,6 +197,7 @@ export const gd3 = {
         "usgs": "United States Geological Survey",
         "iadn": "Integrated Atmospheric Deposition Network"
     },
+
     trend_colors: {
         "trendUp": "#FAE70B",
         "trendDown": "#29ABE2",
@@ -359,13 +376,21 @@ export const gd3 = {
     ],
 
     clowder_endpoints: [
-        {url: "https://greatlakesmonitoring.org/clowder", label: "GLM PROD"},
-        {url: "https://seagrant-dev.ncsa.illinois.edu/clowder", label: "GLM DEV"},
-        {url: "https://greatlakestogulf.org/clowder", label: "GLTG PROD"},
-        {url: "http://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV"},
-        {url: "http://data.imlczo.org/clowder", label: "IMLCZO PROD"},
-        {url: "https://imlczo-dev.ncsa.illinois.edu/clowder", label: "IMLCZO DEV"},
-        {url: "http://141.142.211.37/clowder", label: "IMLCZO NEBULA"}
+        {url: "https://seagrant-dev.ncsa.illinois.edu/clowder", label: "GLM DEV", title: "Great Lakes Monitoring",
+            subtitle: "ILLINOIS-INDIANA SEA GRANT" },
+        {url: "https://greatlakesmonitoring.org/clowder", label: "GLM PROD", title: "Great Lakes Monitoring",
+            subtitle: "ILLINOIS-INDIANA SEA GRANT" },
+        {url: "https://greatlakestogulf.org/clowder", label: "GLTG PROD", title: "Great Lakes to Gulf",
+            subtitle: "VIRTUAL OBSERVATORY"},
+        {url: "http://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV", title: "Great Lakes to Gulf",
+            subtitle: "VIRTUAL OBSERVATORY"},
+        {url: "http://data.imlczo.org/clowder", label: "IMLCZO PROD",   title: "IMLCZO",
+            subtitle: ""},
+        {url: "https://imlczo-dev.ncsa.illinois.edu/clowder", label: "IMLCZO DEV", title: "IMLCZO",
+            subtitle: ""},
+        {url: "http://141.142.211.37/clowder", label: "IMLCZO NEBULA", title: "IMLCZO",
+            subtitle: ""},
+        {url:"http://localhost:9000", label:"TEST", title:"TEST", subtitle:"TEST"}
     ],
 
     additional_locations: [
@@ -955,12 +980,13 @@ export const gd3 = {
         }
     ],
 
-    trends_page_lake_regions: [
-            {
-                "lake": "ER",
-                "regions": "er-west,er-east,er-center"
-            }
-        ],
+    trends_page_lake_regions:[
+        {
+
+            "lake": "ER",
+            "regions": "er-west,er-east,er-center"
+        }
+    ],
 
     trends_page_seasons: [
         {
@@ -1097,7 +1123,7 @@ export const gd3 = {
     ],
 
     // This variable is used to determine the location for links to the Detail Page
-    application_website: "/",
+    application_website: "/geodashboard/",
 
     // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages
     parameter_subtitle: 'Click a Parameter to Explore',

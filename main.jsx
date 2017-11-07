@@ -1,9 +1,11 @@
 import "babel-polyfill";
+import 'isomorphic-fetch';
 import React from 'react';
 import {render} from 'react-dom';
 import App from './app/containers/App';
 import { Provider } from 'react-redux';
 import './app/styles/main.css';
+import './app/styles_custom/react-mdc-web.css'
 import configureStore from './app/store/configureStore';
 
 // ref: http://stackoverflow.com/questions/33915826/exclude-module-from-webpack-minification

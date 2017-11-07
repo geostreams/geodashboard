@@ -32,13 +32,15 @@
     "react-mdc-web": "^0.12.2",
     "react-transform-hmr": "^1.0.4",
     "style-loader": "^0.13.1",
+    "url-loader": "^0.5.8",
     "webpack": "^1.12.15",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "flow-bin": "^0.42.0",
-    "openlayers": "^3.15.1",
+    "isomorphic-fetch": "^2.2.1",
+    "openlayers": "^3.16.0",
     "react": "^15.0.1",
     "react-boxplot": "^0.3.1",
     "react-dom": "^15.0.1",

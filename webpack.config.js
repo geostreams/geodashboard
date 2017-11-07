@@ -25,13 +25,16 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: /node_modules/,
+        include: [/node_modules/, /styles_custom/],
         loader: 'style-loader!css-loader'
       },
       {
         test: /\.css$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /styles_custom/],
         loader: 'style-loader!css-loader?modules'
+      },
+      { test: /\.(png|jpg)$/,
+        loader: 'url-loader?limit=8192'
       }
     ]
   },

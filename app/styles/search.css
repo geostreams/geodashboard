@@ -2,7 +2,7 @@
     width: 24em;
     margin: 4em 0em 3em 1em;
     float: left;
-    height: calc(100vh - 8em);
+    height: calc(100vh - 12em);
     overflow-y: auto;
 }
 

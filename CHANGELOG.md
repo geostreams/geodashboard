@@ -90,15 +90,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Bug in filtering for custom locations
   [GEOD-925](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-925)
-- Removed the card max-height on the V3 Search Page
-  [GEOD-982](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-982)
+- Bug in selected search not being updated when a filter was removed
+  [GEOD-953](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-953)
 - Fixed bug with Draw location filter not cleared up
   [GEOD-968](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-968)
+- Fixed bug with drawing shapes not erasing when location card does not exist
+  [GEOD-981](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-981)
+- Removed the card max-height on the V3 Search Page
+  [GEOD-982](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-982)
+- SVG icons not rendering in IE 11. Links not clickable on IE 11
+  [GEOD-1004](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1004)
+- Radio buttons border not showing up in IE 11 
+  [GEOD-1006](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1006)
 
 ## Changed
 - Changed how the Circle is created, and how the associated coordinates are assembled
   [GEOD-965](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-965)
-- Fixed bug with drawing shapes not erasing when location card does not exist
-  [GEOD-981](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-981)
-- Bug in selected search not being updated when a filter was removed
-  [GEOD-953](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-953)
+

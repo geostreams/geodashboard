@@ -6,7 +6,7 @@ import React, {Component} from 'react'
 import styles from '../styles/main.css';
 import stylesearch from '../styles/search.css';
 import SearchMap from '../containers/SearchMap';
-import MenuPage from '../components/MenuPage';
+import Menu from '../containers/MenuBar';
 import DownloadButtons from '../containers/DownloadButtons';
 import FilterSelection from '../containers/FilterSelection';
 import {Card, CardText, CardMedia, List, Content, Grid, Cell} from 'react-mdc-web';
@@ -17,7 +17,7 @@ class Search extends Component {
     render() {
         return (
             <div>
-                <MenuPage selected="search"/>
+                <Menu selected="search"/>
                 <Content>
                     <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>

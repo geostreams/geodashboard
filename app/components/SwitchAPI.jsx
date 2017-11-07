@@ -5,10 +5,11 @@ import {getErrorText} from '../utils/getConfig';
 
 class SwitchAPI extends Component {
 
-    handleChange = (e) => {
-        const value = e.target.options[e.target.selectedIndex].value;
-        this.props.onBackendChange(value);
-    };
+	handleChange = (e) => {
+        const index = e.target.selectedIndex;
+		this.props.onBackendChange(this.props.endpoints[index].url, this.props.endpoints[index].title,
+			this.props.endpoints[index].subtitle);
+	};
 
     render() {
 
