@@ -222,10 +222,6 @@ export function fetchTrends(
                                                 "trend_end_time": end_time
                                             })
                                         });
-                                        if (type == 'ADD_CHOOSE_TRENDS') {
-                                            // Create the Region Points from the individual Sensors
-                                            dispatch(updateTrendsRegionsPoints());
-                                        }
                                     } else {
                                         dispatch({
                                             type: ADD_CHOOSE_TRENDS,
