@@ -18,6 +18,12 @@ class LineChartWithDeviations extends Component {
 
     componentWillMount() {
 
+        this.props.loadDetailSensor(this.props.selectedParameter, this.props.selectedSeason, this.props.trends_region)
+
+    }
+
+    render() {
+
         let chartTitle = 'No Chosen Parameter';
         let pageSettings = this.props.trends_settings;
         if (pageSettings) {
@@ -135,10 +141,8 @@ class LineChartWithDeviations extends Component {
             />
         );
 
-    }
-
-    render() {
         return (<div>{this.lineChart} </div>)
+
     }
 
 }
