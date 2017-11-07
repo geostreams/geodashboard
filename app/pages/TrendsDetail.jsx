@@ -24,7 +24,8 @@ class TrendsDetail extends Component {
         let trendsPageDefaults = getTrendsDefaultValues();
         let trendsThresholdChoice = false;
         let trendsRegionsSensors = [];
-        let trendsRegionTitle =  " / " + getCustomTrendsRegion(this.props.params.region);
+        let trendsRegionTitle =  getCustomTrendsRegion(this.props.params.region);
+        let trendsRegionTitleLink =  " / " + getCustomTrendsRegion(this.props.params.region);
         let trendsRegionName = this.props.params.region;
 
         return (
@@ -37,7 +38,7 @@ class TrendsDetail extends Component {
                                 <Card className={trendsStyles.detailTitle}>
                                     <CardTitle>
                                         <Link href={"#trendsregions"}>Trends Regions</Link>
-                                        {trendsRegionTitle} Trends Detail
+                                        {trendsRegionTitleLink} Trends Detail
                                     </CardTitle>
                                 </Card>
                                 <List className={trendsStyles.detailListStyle}>
@@ -54,6 +55,7 @@ class TrendsDetail extends Component {
                                     <RegionMiniMap
                                         trends_region={this.props.params.region}
                                         trends_region_sensors={trendsRegionsSensors}
+                                        trends_region_title={trendsRegionTitle}
                                     />
                                 </List>
                             </Cell>
