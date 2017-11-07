@@ -19,13 +19,11 @@ class TrendsDataGraph extends Component {
 
     render() {
         return (
-
             <LineChartWithDeviations
                 trends_settings={this.props.trends_settings}
                 trends_region_name={this.props.trends_region_name}
                 trends_region={this.props.trends_region}
             />
-
         );
     }
 
