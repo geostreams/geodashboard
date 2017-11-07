@@ -8,7 +8,7 @@ import MenuPage from '../components/MenuPage';
 import TrendsParameters from '../containers/TrendsParameters';
 import RegionMiniMap from '../containers/RegionMiniMap';
 import TrendsRegionDetails from '../containers/TrendsRegionDetails';
-import LineChartWithDeviations from '../containers/LineChartWithDeviations';
+import TrendsDataGraph from '../containers/TrendsDataGraph';
 import {Grid, Cell, Content, List, Card, CardTitle} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
@@ -61,9 +61,10 @@ class TrendsDetail extends Component {
                             </Cell>
                             <Cell col={6}>
                                 <div className={trendsStyles.detailChart}>
-                                    <LineChartWithDeviations
+                                    <TrendsDataGraph
                                         trends_settings={trendsPageSettings}
                                         trends_region_name={trendsRegionName}
+                                        trends_region={this.props.params.region}
                                     />
                                 </div>
                             </Cell>
