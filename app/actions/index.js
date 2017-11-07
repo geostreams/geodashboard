@@ -32,6 +32,8 @@ export const CLEAR_SENSORS = 'CLEAR_SENSORS';
 
 export const CLEAR_TRENDS_SENSORS = 'CLEAR_TRENDS_SENSORS';
 
+export const RESET_TRENDS_SENSORS = 'RESET_TRENDS_SENSORS';
+
 export const ADD_ENDPOINTS = 'ADD_ENDPOINTS';
 export const addEndpoints = () =>{
     return {
@@ -135,6 +137,10 @@ export function fetchTrends(
             number_to_filter
         });
 
+        dispatch({
+            type: RESET_TRENDS_SENSORS
+        });
+
         sensorsToFilter.filter(s => s.parameters.indexOf(parameter) >= 0)
             .map(sensor => {
                 let start_time = new Date(sensor.min_start_time);
@@ -229,7 +235,6 @@ export function fetchTrends(
                         })
                 }
             });
-        dispatch(fetchRegionTrends(parameter, season));
     }
 
 }
@@ -629,8 +634,6 @@ export function selectTrendsParameter(
         if (view_type == 'by-regions') {
             dispatch(fetchRegionTrends(parameter, season));
         }
-        dispatch(updateTrendsSensors(view_type));
-
     };
 }
 
@@ -643,7 +646,6 @@ export function selectAnalysisRegion(region:string, view_type:string) {
             region
         });
         dispatch(updateTrendsSensors(view_type));
-
     };
 }
 
@@ -662,6 +664,7 @@ export function selectTrendsRegion(region:string, view_type: string) {
             region
         });
         dispatch(updateTrendsSensors(view_type));
+
         if (parameter != '') {
             if (view_type == 'by-sensors') {
                 dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
@@ -688,6 +691,7 @@ export function selectTrendsSeason(season:string, view_type: string) {
             season
         });
         dispatch(updateTrendsSensors(view_type));
+
         if (parameter != '') {
             if (view_type == 'by-sensors') {
                 dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
@@ -795,4 +799,3 @@ export function fetchAnalysisRegion(region:string){
         })
     }
 }
-
