@@ -6,7 +6,7 @@
 import {
     ADD_ANALYSIS_COUNT, ADD_CHOOSE_TRENDS, ADD_CUSTOM_TREND_LOCATIONS_FILTER,
     ADD_REGION_TRENDS, ADD_REGION_DETAIL_TRENDS,
-    CLEAR_TRENDS_SENSORS, FETCH_ANALYSIS_REGION, SELECT_TRENDS_CALC_BASELINE_SETTING,
+    CLEAR_TRENDS_SENSORS, FETCH_ANALYSIS_REGION, RESET_TRENDS_SENSORS, SELECT_TRENDS_CALC_BASELINE_SETTING,
     SELECT_ANALYSIS_REGION, SELECT_TRENDS_REGION, SELECT_TRENDS_CALC_ROLLING_SETTING,
     SELECT_ANALYSIS_PARAMETER, SELECT_TRENDS_PARAMETER, SELECT_TRENDS_SEASON,
     SELECT_TRENDS_THRESHOLD, SELECT_TRENDS_VIEW_TYPE, SET_TRENDS_TIMEFRAMES,
@@ -42,7 +42,10 @@ type ChosenTrendsAction = {|
     view_type: TrendsViewType,
     number_to_filter: number,
     draw_available_sensors: TrendsPageSensorsState,
-    selectedPointsLocations: Array<string>
+    selectedPointsLocations: Array<string>,
+    trends_detail: Object,
+    trends_deviation: Object,
+    region_trends: Object
 |};
 
 const defaultState = {
@@ -103,15 +106,21 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
 
         case ADD_REGION_TRENDS:
 
+            let tmpsensor2 = [action.sensor];
+            let tmpdata2 = tmpsensor2.concat(state["trends_sensors"]);
+
             return Object.assign({}, state, {
-                trends_sensors : state.trends_sensors,
+                trends_sensors : tmpdata2,
                 trends_regions : state.trends_regions
             });
 
         case ADD_REGION_DETAIL_TRENDS:
 
+            let tmpsensor3 = [action.sensor];
+            let tmpdata3 = tmpsensor3.concat(state["trends_sensors"]);
+
             return Object.assign({}, state, {
-                trends_sensors : state.trends_sensors,
+                trends_sensors : tmpdata3,
                 trends_regions : state.trends_regions
             });
 
@@ -227,6 +236,11 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
                 view_type: 'by-sensors',
                 number_to_filter: 0,
                 draw_available_sensors:[]
+            });
+
+        case RESET_TRENDS_SENSORS:
+            return Object.assign({}, state, {
+                trends_sensors: [],
             });
 
         default:
