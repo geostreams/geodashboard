@@ -394,7 +394,7 @@ export const gd3 = {
                 "id": "all",
                 "sortOrder": 0,
                 "threshold": {
-                    "total-phosphorus": 5
+                    "total-phosphorus-glenda": 5
                 }
 
             },
@@ -412,7 +412,7 @@ export const gd3 = {
                 "id": "su",
                 "sortOrder": 1,
                 "threshold": {
-                    "total-phosphorus": 5
+                    "total-phosphorus-glenda": 5
                 }
             },
             "geometry": {
@@ -452,7 +452,7 @@ export const gd3 = {
                 "id": "mi",
                 "sortOrder": 2,
                 "threshold": {
-                    "total-phosphorus": 7
+                    "total-phosphorus-glenda": 7
                 }
             },
             "geometry": {
@@ -495,7 +495,7 @@ export const gd3 = {
                 "id": "hu",
                 "sortOrder": 3,
                 "threshold": {
-                    "total-phosphorus": 5
+                    "total-phosphorus-glenda": 5
                 }
             },
             "geometry": {
@@ -556,7 +556,7 @@ export const gd3 = {
                 "id": "cl",
                 "sortOrder": 4,
                 "threshold": {
-                    "total-phosphorus": 5
+                    "total-phosphorus-glenda": 5
                 }
             },
             "geometry": {
@@ -596,7 +596,7 @@ export const gd3 = {
                 "id": "er",
                 "sortOrder": 5,
                 "threshold": {
-                    "total-phosphorus": 10
+                    "total-phosphorus-glenda": 10
                 }
             },
             "geometry": {
@@ -760,7 +760,7 @@ export const gd3 = {
                 "id": "er-east",
                 "sortOrder": 6,
                 "threshold": {
-                    "total-phosphorus": 10
+                    "total-phosphorus-glenda": 10
                 }
             },
             "geometry": {
@@ -803,7 +803,7 @@ export const gd3 = {
                 "id": "er-center",
                 "sortOrder": 7,
                 "threshold": {
-                    "total-phosphorus": 10
+                    "total-phosphorus-glenda": 10
                 }
             },
             "geometry": {
@@ -849,7 +849,7 @@ export const gd3 = {
                 "id": "er-west",
                 "sortOrder": 8,
                 "threshold": {
-                    "total-phosphorus": 15
+                    "total-phosphorus-glenda": 15
                 }
             },
             "geometry": {
@@ -886,7 +886,7 @@ export const gd3 = {
                 "id": "on",
                 "sortOrder": 9,
                 "threshold": {
-                    "total-phosphorus": 10
+                    "total-phosphorus-glenda": 10
                 }
             },
             "geometry": {
@@ -930,42 +930,42 @@ export const gd3 = {
     trends_page_settings: [
         {
             "parameter": {
-                "id": "total-phosphorus",
+                "id": "total-phosphorus-glenda",
                 "title": "Total Phosphorus (ug/L)",
                 "lake_regions": true
             }
         },
         {
             "parameter": {
-                "id": "nitrogen",
+                "id": "nitrogen-glenda",
                 "title": "Nitrogen (mg/L)",
                 "lake_regions": false
             }
         },
         {
             "parameter": {
-                "id": "alkalinity",
+                "id": "alkalinity-glenda",
                 "title": "Alkalinity (mg/L)",
                 "lake_regions": false
             }
         },
         {
             "parameter": {
-                "id": "chlorophyll-a",
+                "id": "chlorophyll-a-glenda",
                 "title": "Chlorophyll a (ug/L)",
                 "lake_regions": false
             }
         },
         {
             "parameter": {
-                "id": "silica",
+                "id": "silica-glenda",
                 "title": "Silica (mg/L)",
                 "lake_regions": false
             }
         },
         {
             "parameter": {
-                "id": "turbidity",
+                "id": "turbidity-glenda",
                 "title": "Turbidity (NTU)",
                 "lake_regions": false
             }
@@ -1128,3 +1128,4 @@ export const gd3 = {
     mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
+
