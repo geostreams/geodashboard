@@ -128,6 +128,7 @@ export function popupTrends(feature: ol.Feature, styles){
     if (sensorInfo.parameters.length > 0) {
         paramsLength = sensorInfo.parameters.length;
     }
+
     let sourceColor = sensorInfo.color;
     if(paramsLength > 0 && sensorInfo.trends_detail){
         bodyText += '<a href=" ' + application_sensors_website + '#detail/location/'+
@@ -135,11 +136,6 @@ export function popupTrends(feature: ol.Feature, styles){
             sourceColor + ';">View Details for the ' + sensorInfo.name + ' Site </a>';
     }
 
-    if(sensorInfo.trend_type != 'noTrend' && sensorInfo.trend_type != "") {
-        bodyText += '<a href="/#trendsdetail/region/'+
-            sensorInfo.location + '/" class=' + styles.viewdetail + ' style="background-color: ' +
-            sourceColor + ';">View Details for the ' + sensorInfo.region + ' Region </a>';
-    }
     return bodyText;
 
 }
