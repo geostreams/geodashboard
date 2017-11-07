@@ -328,7 +328,8 @@ export function fetchRegionDetailTrends(parameter:string, season:string, region:
                                     sensor: Object.assign(sensor, {
                                         "trends_detail": "trends return no data",
                                         "trends_deviation": "trends return no data"
-                                    })
+                                    }),
+                                    region
                                 });
                             } else {
                                 dispatch({
@@ -336,12 +337,12 @@ export function fetchRegionDetailTrends(parameter:string, season:string, region:
                                     sensor: Object.assign(sensor, {
                                         "trends_detail": json.average,
                                         "trends_deviation": json.deviation
-                                    })
+                                    }),
+                                    region
                                 });
                             }
                         }
                     });
-
             });
     }
 
