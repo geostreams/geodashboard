@@ -286,13 +286,12 @@ export function fetchRegionTrends(parameter:string, season:string) {
                         }
                     });
             });
-        dispatch(fetchRegionDetailTrends(parameter, season));
     }
 
 }
 
 export const ADD_REGION_DETAIL_TRENDS = 'ADD_REGION_DETAIL_TRENDS';
-export function fetchRegionDetailTrends(parameter:string, season:string) {
+export function fetchRegionDetailTrends(parameter:string, season:string, region:string) {
     return (dispatch:Dispatch, getState:GetState) => {
         // For each region sensor for the Chart on the Trends Detail Page,
         // use the parameter, geocode, and season to get the Trends.
@@ -303,7 +302,7 @@ export function fetchRegionDetailTrends(parameter:string, season:string) {
         // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/detail/'
         const trends_region_detail_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/detail/';
 
-        const sensorsToFilter = state.chosenTrends.trends_regions;
+        const sensorsToFilter = state.chosenTrends.trends_regions.filter(r => r.name.toUpperCase() == region.toUpperCase());
 
         sensorsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
