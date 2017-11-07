@@ -1090,37 +1090,47 @@ export const gd3 = {
 
     error_text: "An Error Occurred - Please Select Again",
 
-    application_options: [
-        {
-            "title": "Geodashboard 3.0",
-            "pages": [
-                {
-                    "name": "HOME",
-                    "url": "/#",
-                },
-                {
-                    "name": "EXPLORE",
-                    "url": "/#explore",
-                },
-                {
-                    "name": "SEARCH",
-                    "url": "/#search",
-                },
-                {
-                    "name": "EXPLORATORY ANALYSIS",
-                    "url": "/#analysis",
-                },
-                {
-                    "name": "TRENDS",
-                    "url": "",
-                },
-                {
-                    "name": "ABOUT",
-                    "url": "/#about",
-                },
-            ]
-        }
-    ],
+    application_options:
+    {
+        "title": "Geodashboard 3.0",
+        "pages": [
+            {
+                "name": "HOME",
+                "url": "/#",
+            },
+            {
+                "name": "EXPLORE",
+                "url": "/#explore",
+            },
+            {
+                "name": "SEARCH",
+                "url": "/#search",
+            },
+            {
+                "name": "ANALYSIS",
+                "url": "/#analysis",
+            },
+            {
+                "name": "TRENDS",
+                "children": [
+                    {
+                        "name": "TRENDS STATIONS",
+                        "url": "/#trendsstations"
+                    },
+                    {
+                        "name": "TRENDS REGIONS",
+                        "url": "/#trendsregions"
+                    }
+                ]
+
+
+            },
+            {
+                "name": "ABOUT",
+                "url": "/#about",
+            },
+        ]
+    },
 
     // This variable is used to determine the location for links to the Detail Page
     application_website: "/geodashboard/",

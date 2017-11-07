@@ -5,6 +5,7 @@ import {
     Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
     Button, MenuItem, Menu, MenuAnchor
 } from 'react-mdc-web';
+import {getApplicationOptions} from "../utils/getConfig";
 
 class MenuBar extends Component {
     state: {
@@ -16,22 +17,62 @@ class MenuBar extends Component {
         this.state = {
             openMenu: false
         };
+	    this.toggleTrendMenu = this.toggleTrendMenu.bind(this);
     }
 
     onClickTrendButton(openMenuValue: boolean) {
         this.setState({openMenu: openMenuValue});
     };
 
+	toggleTrendMenu(openMenuValue: boolean) {
+		this.setState({openMenu: openMenuValue});
+	};
+
     render() {
         let logo;
-        // TODO: check if logo exist
-        //if(resource("public/theme/logo.png").isDefined) {
+        try {
            logo =
                <div className={styles.header_image}>
                 <img src={require("../../theme/logo.png")} />
               </div>;
-        //}
+        } catch(e) {
 
+        }
+
+        const applicationOptions = getApplicationOptions();
+
+        const pageLinks = [];
+        applicationOptions.pages.map( page =>
+        {
+	        if(page.url) {
+		        pageLinks.push(<li key={page.name} className={this.props.selected === page.name.toLowerCase() ? styles.active: ''}> <a href={page.url}>{page.name}</a> </li>);
+	        } else if(page.children){
+
+                const menuItems = page.children.map(item =>
+                   <MenuItem key={item.name}> <a className={styles.menu_item} href={item.url}>{item.name}</a> </MenuItem>
+                );
+                pageLinks.push(
+                    <li key={page.name}>
+                        <span className={styles.navigation_item}
+                              onClick={() => this.toggleTrendMenu(true)}
+
+                        >
+                            {page.name}
+                        </span>
+                        <MenuAnchor className={styles.inline}>
+
+                        <Menu className={styles.menu_style}
+                              open={this.state.openMenu}
+                              onClose={() => this.toggleTrendMenu(false)}
+                        >
+                            {menuItems}
+                        </Menu>
+                        </MenuAnchor>
+                    </li>
+                )
+	        }
+        }
+        );
         return (
             <header>
                 <div className={styles.header_background}>
@@ -48,47 +89,7 @@ class MenuBar extends Component {
                             <hr className={styles.header_hr} />
                         </div>
                             <ul className={styles.navbar} id="navigation">
-                                <li className={this.props.selected === "home"? styles.active: '' }>
-                                    <a href="/geodashboard/" >HOME</a>
-                                </li>
-                                <li className={this.props.selected === "explore"? styles.active: '' }>
-                                    <a href="/geodashboard/#explore">EXPLORE</a>
-                                </li>
-                                <li className={this.props.selected === "compare"? styles.active: '' }>
-                                    <a href="/geodashboard/#compare">COMPARE</a>
-                                </li>
-                                <li className={this.props.selected === "search"? styles.active: '' }>
-                                    <Link to="/search" >SEARCH</Link>
-                                </li>
-                                {/*<li className={this.props.selected === "trends"? styles.active: '' }>*/}
-                                    {/*<Button className={styles.trendsButton}*/}
-                                            {/*onClick={this.onClickTrendButton.bind(this, true)} >*/}
-                                        {/*TRENDS*/}
-                                    {/*</Button>*/}
-                                {/*</li>*/}
-                                <li className={this.props.selected === "about"? styles.active: '' }>
-                                    <a href="/geodashboard/#about">ABOUT</a>
-                                </li>
-                                {/*<MenuAnchor className={styles.menu_anchor_style}>*/}
-                                    {/*<Menu className={styles.menu_style}*/}
-                                          {/*open={this.state.openMenu}*/}
-                                          {/*onClose={this.onClickTrendButton.bind(this, false)}>*/}
-                                        {/*<MenuItem>*/}
-                                            {/*<Button>*/}
-                                                {/*<Link className={styles.button_style} href={"#trendsstations"}>*/}
-                                                    {/*TRENDS STATIONS*/}
-                                                {/*</Link>*/}
-                                            {/*</Button>*/}
-                                        {/*</MenuItem>*/}
-                                        {/*<MenuItem>*/}
-                                            {/*<Button>*/}
-                                                {/*<Link className={styles.button_style} href={"#trendsregions"}>*/}
-                                                    {/*TRENDS REGIONS*/}
-                                                {/*</Link>*/}
-                                            {/*</Button>*/}
-                                        {/*</MenuItem>*/}
-                                    {/*</Menu>*/}
-                                {/*</MenuAnchor>*/}
+                                {pageLinks}
                             </ul>
                         </div>
                 </div>
