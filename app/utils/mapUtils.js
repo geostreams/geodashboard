@@ -64,7 +64,7 @@ export function sensorsToFeaturesTrendPage(
 
             if (sensor.hasOwnProperty("trends")) {
                 // Not enough information present
-                if (sensor.trends === "not enough data" || sensor.trends === "trends return no data") {
+                if (sensor.trends === "null") {
                     trend_type = "noTrend";
                 } else {
                     // For Trends Page, only check Threshold and assign red arrows for certain parameters.
@@ -249,7 +249,7 @@ export function sensorsToFeaturesTrendRegionPage(
 
             if (sensor.hasOwnProperty("region_trends")) {
                 // Not enough information present
-                if (sensor.trends === "not enough data" || sensor.region_trends === "trends return no data") {
+                if (sensor.trends === "null") {
                     trend_type = "noTrend";
                 } else {
                     // For Trends Page, only check Threshold and assign red arrows for certain parameters.
@@ -411,7 +411,7 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
             let trend_values = "";
 
             if (sensor.hasOwnProperty("trends")) {
-                if (sensor.trends === "not enough data" || sensor.trends === "trends return no data") {
+                if (sensor.trends === "null") {
                     trend_type = "noTrend";
                 } else {
                     if (sensor.trends[parameter + "_percentage_change"] > 0 &&
