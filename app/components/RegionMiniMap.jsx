@@ -7,8 +7,8 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import trendsStyles from '../styles/trends.css';
 import {Card, CardHeader, CardTitle, CardMedia,
-        Button, List, ListItem, Icon,
-        DialogBody, Dialog, DialogHeader, DialogTitle
+        Dialog, DialogBody, DialogHeader, DialogTitle,
+        List, ListItem, Icon
 } from 'react-mdc-web';
 import styles from '../styles/regionMiniMap.css';
 import {getTrendColor, getCustomLocation} from '../utils/getConfig';
@@ -19,7 +19,7 @@ import { matchRegionTrends} from '../utils/trendsUtils';
 
 class RegionMiniMap extends Component {
 
-    state: TrendsMapState & {openMenu: boolean, areaPolygonSource: ol.source.Vector,};
+    state: TrendsMapState & {openInfoButton: boolean, areaPolygonSource: ol.source.Vector,};
 
     constructor(props: MapProps) {
         super(props);
@@ -43,13 +43,13 @@ class RegionMiniMap extends Component {
                 ],
                 target: 'map'
             }),
-            openMenu: false
+            openInfoButton: false
         }
     }
 
     handleStationsIcon = (event: boolean) => {
         this.setState({
-            openMenu: event
+            openInfoButton: event
         });
     };
 
@@ -58,41 +58,42 @@ class RegionMiniMap extends Component {
         let return_item;
 
         return_item=(
-            <Card className={trendsStyles.cardMargin}>
-                <CardHeader>
-                    <CardTitle>
-                        <p className={styles.locations_text_style}>Location</p>
-                        <Button className={styles.locations_button_style}
-                                onClick={this.handleStationsIcon.bind(this, true)}>
-                            <Icon name="info"/>
-                        </Button>
-                        <Dialog className={styles.dialog_style}
-                                open={this.state.openMenu}
-                                onClose={()=>{this.setState({openMenu:false})}}>
-                            <DialogHeader >
-                                <DialogTitle>Monitoring Stations</DialogTitle>
-                                <Button compact
-                                        onClick={()=>{this.setState({openMenu: false})}}>
-                                    <Icon name="close"/>
-                                </Button>
-                            </DialogHeader>
-                            <DialogBody scrollable id="stations-content"></DialogBody>
-                        </Dialog>
-                    </CardTitle>
-                </CardHeader>
-                <CardMedia>
-                    <div>
-                        <div id='map' className={styles.map_style}></div>
-                        <div style={{display: "none"}}>
-                            <div id="marker" title="Marker" className="marker"></div>
-                            <div id="popup" className={styles.regionPopup}>
-                                <a href="#" id="popup-closer" className={styles.regionPopupCloser}></a>
-                                <div id="popup-content"></div>
+            <div>
+                <Dialog open={this.state.openInfoButton}
+                        onClose={()=>{this.setState({openInfoButton:false})}}>
+                    <DialogHeader >
+                        <DialogTitle>Monitoring Stations</DialogTitle>
+                        <a className={styles.close_button_style}
+                           onClick={()=>{this.setState({openInfoButton: false})}}>
+                            <Icon name="close"/>
+                        </a>
+                    </DialogHeader>
+                    <DialogBody scrollable id="stations-content"></DialogBody>
+                </Dialog>
+                <Card className={trendsStyles.cardMargin}>
+                    <CardHeader>
+                        <CardTitle>
+                            <p className={styles.locations_text_style}>Location</p>
+                            <a className={styles.locations_button_style}
+                               onClick={this.handleStationsIcon.bind(this, true)}>
+                                <Icon name="info"/>
+                            </a>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardMedia>
+                        <div>
+                            <div id='map' className={styles.map_style}></div>
+                            <div style={{display: "none"}}>
+                                <div id="marker" title="Marker" className="marker"></div>
+                                <div id="popup" className={styles.regionPopup}>
+                                    <a href="#" id="popup-closer" className={styles.regionPopupCloser}></a>
+                                    <div id="popup-content"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </CardMedia>
-            </Card>
+                    </CardMedia>
+                </Card>
+            </div>
         );
 
         return return_item;
@@ -124,7 +125,9 @@ class RegionMiniMap extends Component {
     }
 
     popupHandler(feature: ol.Feature, coordinate: number[]) {
+
         const content = document.getElementById('popup-content');
+
         if (feature && feature.getId()) {
 
             let popupText = popupHelperTrendDetailPage(feature, styles);
@@ -134,7 +137,9 @@ class RegionMiniMap extends Component {
             }
             let overlay = this.state.map.getOverlayById("marker");
             overlay.setPosition(coordinate);
+
         }
+
     }
 
     componentDidUpdate() {
@@ -324,6 +329,7 @@ class RegionMiniMap extends Component {
         this.setState({map: theMap});
 
         this.stationsPopupMenu(features);
+
     }
 
 }
