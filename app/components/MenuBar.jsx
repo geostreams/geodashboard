@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {Link} from 'react-router'
+import React, {Component} from 'react';
+import {Link, hashHistory} from 'react-router';
 import styles from '../styles/menuBar.css';
 import {
     Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
@@ -18,6 +18,7 @@ class MenuBar extends Component {
             openMenu: false
         };
 	    this.toggleTrendMenu = this.toggleTrendMenu.bind(this);
+	    this.onClickMenuItem = this.onClickMenuItem.bind(this);
     }
 
     onClickTrendButton(openMenuValue: boolean) {
@@ -28,7 +29,11 @@ class MenuBar extends Component {
 		this.setState({openMenu: openMenuValue});
 	};
 
-    render() {
+	onClickMenuItem(route: String) {
+		hashHistory.push(route);
+	}
+
+	render() {
         let logo;
         try {
            logo =
@@ -45,11 +50,11 @@ class MenuBar extends Component {
         applicationOptions.pages.map( page =>
         {
 	        if(page.url) {
-		        pageLinks.push(<li key={page.name} className={this.props.selected === page.name.toLowerCase() ? styles.active: ''}> <a href={page.url}>{page.name}</a> </li>);
+		        pageLinks.push(<li key={page.name} className={this.props.selected === page.name.toLowerCase() ? styles.active: ''}> <Link href={page.url}>{page.name}</Link> </li>);
 	        } else if(page.children){
 
                 const menuItems = page.children.map(item =>
-                   <MenuItem key={item.name}> <a className={styles.menu_item} href={item.url}>{item.name}</a> </MenuItem>
+                    <MenuItem  role="menuitem" key={item.name} onClick={() => this.onClickMenuItem(item.url)}> {item.name} </MenuItem>
                 );
                 pageLinks.push(
                     <li key={page.name}>

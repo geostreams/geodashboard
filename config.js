@@ -1115,11 +1115,11 @@ export const gd3 = {
                 "children": [
                     {
                         "name": "TRENDS STATIONS",
-                        "url": "/#trendsstations"
+                        "url": "/trendsstations"
                     },
                     {
                         "name": "TRENDS REGIONS",
-                        "url": "/#trendsregions"
+                        "url": "/trendsregions"
                     }
                 ]
 
