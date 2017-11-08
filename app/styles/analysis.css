@@ -18,7 +18,7 @@
     margin: 3.6em 0.1em 3em 0.1em;
     padding-top: 16.5em !important;
     float: left;
-    height: calc(100vh - 8em);
+    height: calc(100vh - 9em);
     overflow-y: auto;
 }
 
@@ -99,14 +99,14 @@
 }
 
 .parametersCardStyle {
-    max-height: 16.5em;
+    max-height: 16em;
     width: 22em;
     overflow-y: auto;
     overflow-x: auto;
     margin: 1em 0.1em 0.5em 1.1em;
     padding: 0.2em 0.2em 0.2em 0em !important;
     position: fixed;
-    top: 3em;
+    top: 7.3em;
     z-index: 100;
     background-color: #ffffff;
 }
