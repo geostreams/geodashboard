@@ -9,7 +9,7 @@ import d3 from 'd3';
 class LineChartWithDeviations extends Component {
 
     state = {
-        lineChart: ''
+        lineChart: Object
     };
 
     constructor(props: Object) {
@@ -26,10 +26,14 @@ class LineChartWithDeviations extends Component {
 
         let chartTitle = 'No Chosen Parameter';
         let pageSettings = this.props.trends_settings;
+        let unitIndex;
+        let units;
         if (pageSettings) {
             pageSettings.map(p => {
                 if (p.parameter.id == this.props.selectedParameter) {
                     chartTitle = p.parameter.title;
+                    unitIndex = chartTitle.lastIndexOf(" ");
+                    units = chartTitle.substr(unitIndex + 1);
                 }
             })
         }
@@ -90,14 +94,15 @@ class LineChartWithDeviations extends Component {
                             strokeDashArray: "4"
                         },
                         {
-                            name: "Average Values",
-                            values: dataRaw
-                        },
-                        {
                             name: "Deviation Down",
                             values: negativeDeviation,
                             strokeWidth: 2,
                             strokeDashArray: "4"
+                        },
+                        {
+                            name: "Average Values",
+                            values: dataRaw,
+                            strokeWidth: 2,
                         }
                     )
                 }
@@ -123,16 +128,16 @@ class LineChartWithDeviations extends Component {
         }
 
         let LineChart = rd3.LineChart;
-        this.lineChart = (
+        this.state.lineChart = (
             <LineChart
                 data={averageData}
                 title={chartTitle} legend={true}
                 width={650} height={400}
-                yAxisLabel="Amount" yAxisLabelOffset={Number(50)}
+                yAxisLabel={units} yAxisLabelOffset={Number(50)}
                 xAxisLabel="Time" xAxisLabelOffset={Number(50)}
                 gridHorizontal={true} gridVertical={true}
                 hoverAnimation={true}
-                colors={d3.scale.category20b()}
+                colors={d3.scale.linear().domain([1, 2]).range(["#FF0000", "#000000"])}
                 margins={{top: 10, right: 150, bottom: 50, left: 60}}
                 xAccessor={(xa)=> {
                     return new Date(xa.x);
@@ -141,7 +146,7 @@ class LineChartWithDeviations extends Component {
             />
         );
 
-        return (<div>{this.lineChart} </div>)
+        return (<div>{this.state.lineChart} </div>)
 
     }
 
