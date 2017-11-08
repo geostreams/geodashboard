@@ -136,15 +136,31 @@ export type RegionGeometry = {
     geocode: [];
 };
 
+export type RegionTrends = {
+    lastaverage: number;
+    tenyearsaverage: number;
+    totalaverage: number;
+}
+
+export type TrendsDetail = {
+    id: number;
+    value: number;
+}
+
+export type TrendsDeviation = {
+    id: number;
+    value: number;
+}
+
 export type TrendsRegionSetup = {
     id: number;
     geometry: RegionGeometry;
     name: string;
     properties: Properties;
     type: string;
-    region_trends: Array<Object>;
-    trends_detail: Array<Object>;
-    trends_deviation: Array<Object>;
+    region_trends: RegionTrends;
+    trends_detail: TrendsDetail;
+    trends_deviation: TrendsDeviation;
 };
 
 export type TrendsRegions = TrendsRegionSetup[];
