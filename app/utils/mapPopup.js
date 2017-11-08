@@ -154,6 +154,7 @@ export function popupRegion(feature: ol.Feature, styles){
     let sensorInfo = feature.attributes;
 
     let trendColor = sensorInfo.trend_color;
+    let sensorTrends = sensorInfo.trend_type;
     let trendValues = sensorInfo.trend_values;
     let sourceColor = sensorInfo.color;
     let parameter = sensorInfo.parameter;
@@ -166,11 +167,40 @@ export function popupRegion(feature: ol.Feature, styles){
     let trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
         trendColor + '; border-color: ' + trendColor + ';"></p></td></tr>';
 
-    let trendsRight = '' +
-        '<tr><td><strong>Parameter: </strong>' + parameter + '</td></tr>' +
-        '<tr><td><strong>Total Avg: </strong>' + trendValues[0] + '</td></tr>' +
-        '<tr><td><strong>Ten Year Avg: </strong>' + trendValues[1] + '</td></tr>' +
-        '<tr><td><strong>Latest Avg: </strong>' + trendValues[2] + '</td></tr>';
+    let trendsRight = '';
+
+    if (sensorTrends == "noTrend" || sensorTrends == "") {
+
+        let leftText = " ";
+        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+            trendColor + '; border-color: ' + trendColor + ';">' + leftText + '</p></td></tr>';
+
+        let rightText = "Not enough data to display";
+        trendsRight = '' +
+            '<tr><td><strong>' + rightText + '</strong></td></tr>';
+
+    } else {
+
+        if (sensorTrends == 'trendUp' || sensorTrends == 'overThresholdUp') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.upArrow + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + '; "> UP </p></td></tr>';
+        } else if (sensorTrends == 'trendDown' || sensorTrends == 'overThresholdDown') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.downArrow + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';"> DOWN </p></td></tr>';
+        } else if (sensorTrends == 'noTrend') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';"> UP </p></td></tr>';
+        } else {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';"> DOWN </p></td></tr>';
+        }
+
+        trendsRight = '' +
+            '<tr><td><strong>Parameter: </strong>' + parameter + '</td></tr>' +
+            '<tr><td><strong>Total Avg: </strong>' + trendValues[0] + '</td></tr>' +
+            '<tr><td><strong>Ten Year Avg: </strong>' + trendValues[1] + '</td></tr>' +
+            '<tr><td><strong>Latest Avg: </strong>' + trendValues[2] + '</td></tr>';
+    }
 
     let trends = trendsLeft + trendsRight;
 
