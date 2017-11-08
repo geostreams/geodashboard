@@ -153,7 +153,7 @@ export function fetchTrends(
                     dispatch({
                         type: ADD_CHOOSE_TRENDS,
                         sensor: Object.assign(sensor, {
-                            "trends": "not enough data",
+                            "trends": "null",
                             "trend_start_time": start_time,
                             "trend_end_time": end_time
                         })
@@ -203,7 +203,7 @@ export function fetchTrends(
                                     dispatch({
                                         type: ADD_CHOOSE_TRENDS,
                                         sensor: Object.assign(sensor, {
-                                            "trends": "trends return no data",
+                                            "trends": "null",
                                             "trend_start_time": start_time,
                                             "trend_end_time": end_time
                                         })
@@ -226,7 +226,7 @@ export function fetchTrends(
                                         dispatch({
                                             type: ADD_CHOOSE_TRENDS,
                                             sensor: Object.assign(sensor, {
-                                                "trends": "trends return no data",
+                                                "trends": "null",
                                                 "trend_start_time": start_time,
                                                 "trend_end_time": end_time
                                             })
@@ -274,7 +274,7 @@ export function fetchRegionTrends(parameter:string, season:string) {
                                 dispatch({
                                     type: ADD_REGION_TRENDS,
                                     sensor: Object.assign(sensor, {
-                                        "region_trends": "trends return no data"
+                                        "region_trends": "null"
                                     })
                                 });
                             } else {
@@ -326,8 +326,8 @@ export function fetchRegionDetailTrends(parameter:string, season:string, region:
                                 dispatch({
                                     type: ADD_REGION_DETAIL_TRENDS,
                                     sensor: Object.assign(sensor, {
-                                        "trends_detail": "trends return no data",
-                                        "trends_deviation": "trends return no data"
+                                        "trends_detail": "null",
+                                        "trends_deviation": "null"
                                     }),
                                     region
                                 });
