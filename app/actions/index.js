@@ -36,6 +36,8 @@ export const CLEAR_TRENDS_SENSORS = 'CLEAR_TRENDS_SENSORS';
 
 export const RESET_TRENDS_SENSORS = 'RESET_TRENDS_SENSORS';
 
+export const RESET_REGIONS_SENSORS = 'RESET_REGIONS_SENSORS';
+
 export const ADD_ENDPOINTS = 'ADD_ENDPOINTS';
 export const addEndpoints = () =>{
     return {
@@ -244,52 +246,30 @@ export function fetchTrends(
 export const ADD_REGION_TRENDS = 'ADD_REGION_TRENDS';
 export function fetchRegionTrends(parameter:string, season:string) {
     return (dispatch:Dispatch, getState:GetState) => {
-        // For each region sensor, use the parameter, geocode, and season to get the Trends.
 
         const state = getState();
         const api = state.backends.selected;
-
-        // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/'
-        const trends_region_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/';
-
         const regionsToFilter = state.chosenTrends.trends_regions;
+        const trendsStations = state.chosenTrends.trends_sensors;
 
-        regionsToFilter.filter(s => s.geometry.geocode.length > 0)
-            .map(sensor => {
-                const trends_region_endpoint_args = trends_region_endpoint + parameter +
-                    "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
+        dispatch({
+            type: RESET_TRENDS_SENSORS
+        });
 
-                const result = fetch(trends_region_endpoint_args);
-                result
-                    .then(response => {
-                        if (response) {
-                            return response.json();
-                        } else {
-                            return undefined
-                        }
-                    })
-                    .then(json => {
-                        if (json) {
-                            if (json.length < 1) {
-                                dispatch({
-                                    type: ADD_REGION_TRENDS,
-                                    sensor: Object.assign(sensor, {
-                                        "region_trends": "null"
-                                    })
-                                });
-                            } else {
-                                dispatch({
-                                    type: ADD_REGION_TRENDS,
-                                    sensor: Object.assign(sensor, {
-                                        "region_trends": json.trends
-                                    })
-                                });
-                            }
-                        }
-                    });
-            });
+        dispatch({
+            type: RESET_REGIONS_SENSORS
+        });
+
+        dispatch({
+            type: ADD_REGION_TRENDS,
+            api,
+            regionsToFilter,
+            parameter,
+            season,
+            trendsStations
+        });
+
     }
-
 }
 
 export const ADD_REGION_DETAIL_TRENDS = 'ADD_REGION_DETAIL_TRENDS';
