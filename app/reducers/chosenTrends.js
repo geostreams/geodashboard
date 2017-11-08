@@ -5,8 +5,8 @@
 
 import {
     ADD_ANALYSIS_COUNT, ADD_CHOOSE_TRENDS, ADD_CUSTOM_TREND_LOCATIONS_FILTER,
-    ADD_REGION_TRENDS, ADD_REGION_DETAIL_TRENDS,
-    CLEAR_TRENDS_SENSORS, FETCH_ANALYSIS_REGION, RESET_TRENDS_SENSORS, SELECT_TRENDS_CALC_BASELINE_SETTING,
+    ADD_REGION_TRENDS, ADD_REGION_DETAIL_TRENDS, CLEAR_TRENDS_SENSORS, FETCH_ANALYSIS_REGION,
+    RESET_REGIONS_SENSORS, RESET_TRENDS_SENSORS, SELECT_TRENDS_CALC_BASELINE_SETTING,
     SELECT_ANALYSIS_REGION, SELECT_TRENDS_REGION, SELECT_TRENDS_CALC_ROLLING_SETTING,
     SELECT_ANALYSIS_PARAMETER, SELECT_TRENDS_PARAMETER, SELECT_TRENDS_SEASON,
     SELECT_TRENDS_THRESHOLD, SELECT_TRENDS_VIEW_TYPE, SET_TRENDS_TIMEFRAMES,
@@ -109,12 +109,12 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
 
         case ADD_REGION_TRENDS:
 
-            let tmpsensor2 = [action.sensor];
-            let tmpdata2 = tmpsensor2.concat(state["trends_sensors"]);
+            let temp_data = getRegionTrends(
+                action.regionsToFilter, action.parameter, action.season, action.api, action.trendsStations);
 
             return Object.assign({}, state, {
-                trends_sensors : tmpdata2,
-                trends_regions : state.trends_regions
+                trends_sensors : temp_data,
+                trends_regions : action.regionsToFilter
             });
 
         case ADD_REGION_DETAIL_TRENDS:
@@ -247,12 +247,58 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
                 trends_sensors: [],
             });
 
+        case RESET_REGIONS_SENSORS:
+            return Object.assign({}, state, {
+                trends_regions: [],
+            });
+
         default:
             return state;
 
     }
 
 };
+
+function getRegionTrends(regionsToFilter: Object, parameter:string, season:string, api:string, trendsStations: Object) {
+    // For each region sensor, use the parameter, geocode, and season to get the Trends.
+
+    // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/'
+    const trends_region_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/';
+
+    let temp_sensor = [];
+    let temp_data = trendsStations;
+
+    regionsToFilter.filter(s => s.geometry.geocode.length > 0)
+        .map(sensor => {
+            const trends_region_endpoint_args = trends_region_endpoint + parameter +
+                "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
+
+            const result = fetch(trends_region_endpoint_args);
+            result
+                .then(response => {
+                    if (response) {
+                        return response.json();
+                    } else {
+                        return undefined
+                    }
+                })
+                .then(json => {
+                    if (json) {
+                        if (json.length < 1) {
+                            temp_sensor = [Object.assign(sensor, {
+                                "region_trends": "null"
+                            })];
+                        } else {
+                            temp_sensor = [Object.assign(sensor, {
+                                "region_trends": json.trends
+                            })];
+                        }
+                        temp_data = temp_data.concat(temp_sensor);
+                    }
+                });
+        });
+    return temp_data;
+}
 
 function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
 
