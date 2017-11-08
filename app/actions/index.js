@@ -284,7 +284,7 @@ export function fetchRegionDetailTrends(parameter:string, season:string, region:
         // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/detail/'
         const trends_region_detail_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/detail/';
 
-        const regionsToFilter = state.chosenTrends.trends_regions.filter(r => r.name.toUpperCase() == region.toUpperCase());
+        const regionsToFilter = state.chosenTrends.trends_regions.filter(r => r.properties.region.toUpperCase() == region.toUpperCase());
 
         regionsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
