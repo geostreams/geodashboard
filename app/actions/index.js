@@ -252,9 +252,9 @@ export function fetchRegionTrends(parameter:string, season:string) {
         // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/'
         const trends_region_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/';
 
-        const sensorsToFilter = state.chosenTrends.trends_regions;
+        const regionsToFilter = state.chosenTrends.trends_regions;
 
-        sensorsToFilter.filter(s => s.geometry.geocode.length > 0)
+        regionsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
                 const trends_region_endpoint_args = trends_region_endpoint + parameter +
                     "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
@@ -304,9 +304,9 @@ export function fetchRegionDetailTrends(parameter:string, season:string, region:
         // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/detail/'
         const trends_region_detail_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/detail/';
 
-        const sensorsToFilter = state.chosenTrends.trends_regions.filter(r => r.name.toUpperCase() == region.toUpperCase());
+        const regionsToFilter = state.chosenTrends.trends_regions.filter(r => r.name.toUpperCase() == region.toUpperCase());
 
-        sensorsToFilter.filter(s => s.geometry.geocode.length > 0)
+        regionsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
                 const trends_region_detail_endpoint_args = trends_region_detail_endpoint + parameter +
                     "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
