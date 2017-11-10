@@ -252,42 +252,36 @@ export function fetchRegionTrends(parameter:string, season:string) {
         // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/'
         const trends_region_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/';
 
-        const regionsToFilter = state.chosenTrends.trends_regions;
+        const regionsToFilter = Object.assign([], state.chosenTrends.trends_regions);
+        let temp_object = [];
 
-        regionsToFilter.filter(s => s.geometry.geocode.length > 0)
+        let results = regionsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
                 const trends_region_endpoint_args = trends_region_endpoint + parameter +
                     "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
 
-                const result = fetch(trends_region_endpoint_args);
-                result
-                    .then(response => {
-                        if (response) {
-                            return response.json();
-                        } else {
-                            return undefined
-                        }
-                    })
+                const result = fetch(trends_region_endpoint_args).then(response => {
+                    const json = response.json();
+                    return json;
+                })
                     .then(json => {
                         if (json) {
-                            if (json.length < 1) {
-                                dispatch({
-                                    type: ADD_REGION_TRENDS,
-                                    sensor: Object.assign(sensor, {
-                                        "region_trends": "null"
-                                    })
-                                });
-                            } else {
-                                dispatch({
-                                    type: ADD_REGION_TRENDS,
-                                    sensor: Object.assign(sensor, {
-                                        "region_trends": json.trends
-                                    })
-                                });
-                            }
+                            temp_object = temp_object.concat({id: sensor.id, data: json.trends});
                         }
+                    }).catch(function(error) {
+                        console.log(error);
+                        console.log(trends_region_endpoint_args);
                     });
+                return result;
             });
+
+        Promise.all(results).then( s => {
+                return (dispatch({
+                    type: ADD_REGION_TRENDS,
+                    regions_trends: temp_object
+                }))
+            }
+        );
     }
 
 }
