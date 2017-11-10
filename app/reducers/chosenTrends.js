@@ -46,7 +46,8 @@ type ChosenTrendsAction = {|
     trends_detail: Object,
     trends_deviation: Object,
     region_trends: Object,
-    detail_region: string
+    detail_region: string,
+    regions_trends: Object
 |};
 
 
@@ -109,12 +110,17 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
 
         case ADD_REGION_TRENDS:
 
-            let tmpsensor2 = [action.sensor];
-            let tmpdata2 = tmpsensor2.concat(state["trends_sensors"]);
+            let temp_regions_object = [];
+
+            action.regions_trends.map(region => {
+                let region_sensor = state.trends_regions.filter((x) => x.id === region.id)[0];
+
+                region_sensor['region_trends'] = region.data;
+                temp_regions_object = temp_regions_object.concat(region_sensor);
+            });
 
             return Object.assign({}, state, {
-                trends_sensors : tmpdata2,
-                trends_regions : state.trends_regions
+                trends_regions : temp_regions_object
             });
 
         case ADD_REGION_DETAIL_TRENDS:
