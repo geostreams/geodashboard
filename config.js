@@ -938,20 +938,6 @@ export const gd3 = {
     trends_page_settings: [
         {
             "parameter": {
-                "id": "total-phosphorus-glenda",
-                "title": "Total Phosphorus (ug/L)",
-                "lake_regions": true
-            }
-        },
-        {
-            "parameter": {
-                "id": "nitrogen-glenda",
-                "title": "Nitrogen (mg/L)",
-                "lake_regions": false
-            }
-        },
-        {
-            "parameter": {
                 "id": "alkalinity-glenda",
                 "title": "Alkalinity (mg/L)",
                 "lake_regions": false
@@ -966,9 +952,23 @@ export const gd3 = {
         },
         {
             "parameter": {
+                "id": "nitrogen-glenda",
+                "title": "Nitrogen (mg/L)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
                 "id": "silica-glenda",
                 "title": "Silica (mg/L)",
                 "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "total-phosphorus-glenda",
+                "title": "Total Phosphorus (ug/L)",
+                "lake_regions": true
             }
         },
         {
