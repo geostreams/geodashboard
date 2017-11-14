@@ -11,7 +11,6 @@ const mapStateToProps = (state) => {
     return {
         sensors: state.chosenTrends.sensors,
         threshold_value: state.chosenTrends.threshold,
-        trendSensors: state.chosenTrends.trends_sensors,
         trendRegions: state.chosenTrends.trends_regions,
         selectedParameter: state.chosenTrends.parameter,
         selectedRegion: state.chosenTrends.region,
@@ -23,3 +22,4 @@ const mapStateToProps = (state) => {
 const TrendsRegionMap = connect(mapStateToProps)(TrendsRegionMapComponent);
 
 export default TrendsRegionMap;
+
