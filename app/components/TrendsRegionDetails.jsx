@@ -35,6 +35,7 @@ class TrendsRegionDetails extends Component {
                 if (trendsCheckRegion.toUpperCase() == regionName.toUpperCase()) {
                     trendsDetailListItems =
                         <ul className={trendsStyles.list_style}>
+                            <li className={trendsStyles.capitalize_word}>Season: {this.props.selectedSeason}</li>
                             <li>Total Avg: {trendsPageSettings[i].attributes.trend_values[0]} </li>
                             <li>Ten Year Avg: {trendsPageSettings[i].attributes.trend_values[1]}</li>
                             <li>Latest Avg: {trendsPageSettings[i].attributes.trend_values[2]}</li>
@@ -61,3 +62,4 @@ class TrendsRegionDetails extends Component {
 }
 
 export default TrendsRegionDetails;
+
