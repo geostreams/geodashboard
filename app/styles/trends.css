@@ -109,3 +109,6 @@
     color: white;
 }
 
+.capitalize_word {
+    text-transform: capitalize;
+}
