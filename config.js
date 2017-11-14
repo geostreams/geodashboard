@@ -945,6 +945,34 @@ export const gd3 = {
         },
         {
             "parameter": {
+                "id": "ammonia-glenda",
+                "title": "Ammonia (ug/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "ammonia-nitrogen-glenda",
+                "title": "Ammonia-Nitrogen (ug/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "ammonium-glenda",
+                "title": "Ammonium (ug/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "chloride-glenda",
+                "title": "Chloride (mg/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
                 "id": "chlorophyll-a-glenda",
                 "title": "Chlorophyll a (ug/L)",
                 "lake_regions": false
@@ -952,8 +980,50 @@ export const gd3 = {
         },
         {
             "parameter": {
+                "id": "conductivity-glenda",
+                "title": "Conductivity (umho/cm)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "total-hardness-glenda",
+                "title": "Hardness, Total as CaCO3 (mg/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
                 "id": "nitrogen-glenda",
-                "title": "Nitrogen (mg/L)",
+                "title": "Nitrite-Nitrate (mg/L)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "oxygen-dissolved-glenda",
+                "title": "Oxygen, Dissolved (mg/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "ph-glenda",
+                "title": "pH",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "phosphorus-orthophosphorus-glenda",
+                "title": "Phosphorus, Orthophosphorus as P (ug/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "secchi-disc-transparency-glenda",
+                "title": "Secchi Disc Transparency (uS/cm)",
                 "lake_regions": false
             }
         },
@@ -966,9 +1036,37 @@ export const gd3 = {
         },
         {
             "parameter": {
+                "id": "silica-dissolved-glenda",
+                "title": "Silica, Dissolved as Si (mg/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "silica-total-glenda",
+                "title": "Silica, Total (mg/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "temperature-glenda",
+                "title": "Temperature (C)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
                 "id": "total-phosphorus-glenda",
                 "title": "Total Phosphorus (ug/L)",
                 "lake_regions": true
+            }
+        },
+        {
+            "parameter": {
+                "id": "transmittance-horizontal-glenda",
+                "title": "Transmittance, Horizontal (%)",
+                "lake_regions": false
             }
         },
         {
@@ -977,7 +1075,7 @@ export const gd3 = {
                 "title": "Turbidity (NTU)",
                 "lake_regions": false
             }
-        }
+        },
     ],
 
     trends_page_lake_regions:[
