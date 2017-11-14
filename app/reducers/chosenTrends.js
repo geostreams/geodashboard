@@ -125,11 +125,11 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
 
         case ADD_REGION_DETAIL_TRENDS:
 
-            let tmpsensor3 = [action.sensor];
-            let tmpdata3 = tmpsensor3.concat(state["trends_sensors"]);
+            let temp_region_detail = [action.sensor];
+            let temp_new_sensors = temp_region_detail.concat(state["trends_sensors"]);
 
             return Object.assign({}, state, {
-                trends_sensors : tmpdata3,
+                trends_sensors : temp_new_sensors,
                 trends_regions : state.trends_regions,
                 detail_region : action.region
             });
