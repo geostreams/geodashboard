@@ -195,7 +195,8 @@ export const gd3 = {
         "heidelberg": "Heidelberg University",
         "lec": "Lake Erie Committee Forage Task Group",
         "usgs": "United States Geological Survey",
-        "iadn": "Integrated Atmospheric Deposition Network"
+        "iadn": "Integrated Atmospheric Deposition Network",
+        "noaa": "National Oceanic and Atmospheric Administration"
     },
 
     trend_colors: {

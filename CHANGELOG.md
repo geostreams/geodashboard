@@ -88,6 +88,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-975](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-975)
 - Finalize Trends Detail Page using D3
   [GEOD-992](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-992)
+- Add NOAA Configuration name
+  [GLM-103](https://opensource.ncsa.illinois.edu/jira/browse/GLM-103)
 
 ### Fixed
 - Bug in filtering for custom locations
