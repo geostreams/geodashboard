@@ -1,19 +1,4 @@
-.raisedbutton {
-    float: left;
-    padding: 0.33em;
-    margin: 0.2em;
-}
-
-.icon {
-    float: left;
-    padding: 0.2em;
-}
-
 .button {
-    margin: auto;
-    width: 80%;
-}
-
-.iconButtonStyle {
-    padding-top: 0.5em !important;
+    margin-left: 1em;
+    margin-right: 1em;
 }
