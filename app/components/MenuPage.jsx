@@ -12,9 +12,9 @@ import {
 import {getApplicationOptions} from '../utils/getConfig';
 
 class MenuPage extends Component {
-	state: {
-		openMenu: boolean
-	};
+    state: {
+        openMenu: boolean
+    };
 
 	constructor(props: Object) {
 		super(props);
@@ -39,56 +39,55 @@ class MenuPage extends Component {
 		let applicationOptions = getApplicationOptions();
 		let menuOptions = [];
 
-		if (applicationOptions) {
-			for (let i = 0; i < applicationOptions.length; i++) {
-				application_title = applicationOptions[i].title;
-				applicationOptions[i].pages.map(m => {
-					if (m.name == 'TRENDS') {
-						menuOptions.push(
-							<MenuAnchor className={styles.inline}>
-								<Button
-									onClick={() => this.toggleTrendMenu(true)}
-									key="trends"
-									className={styles.white_color}
-								>
-									TRENDS
-								</Button>
-								<Menu className={styles.menu_style}
-								      open={this.state.openMenu}
-								      onClose={() => this.toggleTrendMenu(false)}
-								>
-									<MenuItem key="trends_stations" className="mdc-button"><Link
-										href={"/#trendsstations"}>TRENDS BY STATION </Link></MenuItem>
-									<MenuItem key="trends_regions" className="mdc-button"><Link
-										href={"/#trendsregions"}>TRENDS BY REGIONS </Link></MenuItem>
-								</Menu>
-							</MenuAnchor>
-						)
+        if (applicationOptions) {
+            for (let i = 0; i < applicationOptions.length; i++) {
+                application_title = applicationOptions[i].title;
+                applicationOptions[i].pages.map((m) => {
+                    if (m.name == 'TRENDS') {
+                        menuOptions.push(
 
-					} else {
-						menuOptions.push(
-							<div key={m.url} className="mdc-button"><Link href={m.url}>{m.name}</Link></div>
-						)
-					}
-				});
-			}
-		}
+                                <MenuAnchor key={m.name}className={styles.inline}>
+                                <Button
+                                    onClick={() => this.toggleTrendMenu(true)}
 
-		return (
-			<Toolbar className={styles.menu_style}>
-				<ToolbarRow>
-					<ToolbarSection align="start">
-						<ToolbarTitle>{application_title}</ToolbarTitle>
-					</ToolbarSection>
-					<ToolbarSection align="end">
-						<ToolbarTitle className={styles.menu_items}>
-							{menuOptions}
-						</ToolbarTitle>
-					</ToolbarSection>
-				</ToolbarRow>
-			</Toolbar>
-		);
-	}
+                                    className={styles.white_color}
+                                >
+                                    TRENDS
+                                </Button>
+                        <Menu className={styles.menu_style}
+                        open={this.state.openMenu}
+                        onClose={() => this.toggleTrendMenu(false)}
+                    >
+                            <MenuItem key="trends_stations" className="mdc-button"><Link href={"/#trendsstations"}>TRENDS BY STATION </Link></MenuItem>
+                            <MenuItem key="trends_regions" className="mdc-button"><Link href={"/#trendsregions"}>TRENDS BY REGIONS </Link></MenuItem>
+                    </Menu>
+                    </MenuAnchor>
+                        )
+
+                    } else {
+                        menuOptions.push(
+                            <div key={m.name} className="mdc-button"><Link href={m.url} >{m.name}</Link></div>
+                        )
+                    }
+                });
+            }
+        }
+
+        return (
+            <Toolbar className={styles.menu_style}>
+                <ToolbarRow>
+                    <ToolbarSection align="start">
+                        <ToolbarTitle>{application_title}</ToolbarTitle>
+                    </ToolbarSection>
+                    <ToolbarSection align="end">
+                        <ToolbarTitle className={styles.menu_items}>
+                            {menuOptions}
+                        </ToolbarTitle>
+                    </ToolbarSection>
+                </ToolbarRow>
+            </Toolbar>
+        );
+    }
 
 }
 

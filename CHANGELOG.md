@@ -84,6 +84,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-975](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-975)
 - Add the ability for Detail Links in V3 to go to V2
   [GEOD-959](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-959)
+- Removed all instances of 'UPDATE_TRENDS_REGIONS_POINTS' and associated code
+  [GEOD-975](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-975)
+- Finalize Trends Detail Page using D3
+  [GEOD-992](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-992)
+- Add NOAA Configuration name
+  [GLM-103](https://opensource.ncsa.illinois.edu/jira/browse/GLM-103)
 - Add V2-Look Menu to V3 Code
   [GEOD-994](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-994)
 
@@ -100,10 +106,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-982](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-982)
 - SVG icons not rendering in IE 11. Links not clickable on IE 11
   [GEOD-1004](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1004)
-- Radio buttons border not showing up in IE 11 
+- Radio buttons border not showing up in IE 11
   [GEOD-1006](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1006)
 
 ## Changed
 - Changed how the Circle is created, and how the associated coordinates are assembled
   [GEOD-965](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-965)
-
+- Fixed bug with drawing shapes not erasing when location card does not exist
+  [GEOD-981](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-981)
+- Bug in selected search not being updated when a filter was removed
+  [GEOD-953](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-953)
+- Use the API for Trends by Region and Detail
+  [GEOD-977](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-977)

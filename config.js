@@ -195,7 +195,8 @@ export const gd3 = {
         "heidelberg": "Heidelberg University",
         "lec": "Lake Erie Committee Forage Task Group",
         "usgs": "United States Geological Survey",
-        "iadn": "Integrated Atmospheric Deposition Network"
+        "iadn": "Integrated Atmospheric Deposition Network",
+        "noaa": "National Oceanic and Atmospheric Administration"
     },
 
     trend_colors: {
@@ -402,7 +403,7 @@ export const gd3 = {
                 "id": "all",
                 "sortOrder": 0,
                 "threshold": {
-                    "total-phosphorus": 5
+                    "total-phosphorus-glenda": 5
                 }
 
             },
@@ -420,7 +421,7 @@ export const gd3 = {
                 "id": "su",
                 "sortOrder": 1,
                 "threshold": {
-                    "total-phosphorus": 5
+                    "total-phosphorus-glenda": 5
                 }
             },
             "geometry": {
@@ -460,7 +461,7 @@ export const gd3 = {
                 "id": "mi",
                 "sortOrder": 2,
                 "threshold": {
-                    "total-phosphorus": 7
+                    "total-phosphorus-glenda": 7
                 }
             },
             "geometry": {
@@ -503,7 +504,7 @@ export const gd3 = {
                 "id": "hu",
                 "sortOrder": 3,
                 "threshold": {
-                    "total-phosphorus": 5
+                    "total-phosphorus-glenda": 5
                 }
             },
             "geometry": {
@@ -564,7 +565,7 @@ export const gd3 = {
                 "id": "cl",
                 "sortOrder": 4,
                 "threshold": {
-                    "total-phosphorus": 5
+                    "total-phosphorus-glenda": 5
                 }
             },
             "geometry": {
@@ -604,7 +605,7 @@ export const gd3 = {
                 "id": "er",
                 "sortOrder": 5,
                 "threshold": {
-                    "total-phosphorus": 10
+                    "total-phosphorus-glenda": 10
                 }
             },
             "geometry": {
@@ -768,7 +769,7 @@ export const gd3 = {
                 "id": "er-east",
                 "sortOrder": 6,
                 "threshold": {
-                    "total-phosphorus": 10
+                    "total-phosphorus-glenda": 10
                 }
             },
             "geometry": {
@@ -811,7 +812,7 @@ export const gd3 = {
                 "id": "er-center",
                 "sortOrder": 7,
                 "threshold": {
-                    "total-phosphorus": 10
+                    "total-phosphorus-glenda": 10
                 }
             },
             "geometry": {
@@ -857,7 +858,7 @@ export const gd3 = {
                 "id": "er-west",
                 "sortOrder": 8,
                 "threshold": {
-                    "total-phosphorus": 15
+                    "total-phosphorus-glenda": 15
                 }
             },
             "geometry": {
@@ -894,7 +895,7 @@ export const gd3 = {
                 "id": "on",
                 "sortOrder": 9,
                 "threshold": {
-                    "total-phosphorus": 10
+                    "total-phosphorus-glenda": 10
                 }
             },
             "geometry": {
@@ -938,46 +939,144 @@ export const gd3 = {
     trends_page_settings: [
         {
             "parameter": {
-                "id": "total-phosphorus",
-                "title": "Total Phosphorus (ug/L)",
-                "lake_regions": true
-            }
-        },
-        {
-            "parameter": {
-                "id": "nitrogen",
-                "title": "Nitrogen (mg/L)",
-                "lake_regions": false
-            }
-        },
-        {
-            "parameter": {
-                "id": "alkalinity",
+                "id": "alkalinity-glenda",
                 "title": "Alkalinity (mg/L)",
                 "lake_regions": false
             }
         },
         {
             "parameter": {
-                "id": "chlorophyll-a",
+                "id": "ammonia-glenda",
+                "title": "Ammonia (ug/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "ammonia-nitrogen-glenda",
+                "title": "Ammonia-Nitrogen (ug/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "ammonium-glenda",
+                "title": "Ammonium (ug/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "chloride-glenda",
+                "title": "Chloride (mg/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "chlorophyll-a-glenda",
                 "title": "Chlorophyll a (ug/L)",
                 "lake_regions": false
             }
         },
         {
             "parameter": {
-                "id": "silica",
+                "id": "conductivity-glenda",
+                "title": "Conductivity (umho/cm)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "total-hardness-glenda",
+                "title": "Hardness, Total as CaCO3 (mg/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "nitrogen-glenda",
+                "title": "Nitrite-Nitrate (mg/L)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "oxygen-dissolved-glenda",
+                "title": "Oxygen, Dissolved (mg/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "ph-glenda",
+                "title": "pH",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "phosphorus-orthophosphorus-glenda",
+                "title": "Phosphorus, Orthophosphorus as P (ug/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "secchi-disc-transparency-glenda",
+                "title": "Secchi Disc Transparency (uS/cm)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "silica-glenda",
                 "title": "Silica (mg/L)",
                 "lake_regions": false
             }
         },
         {
             "parameter": {
-                "id": "turbidity",
+                "id": "silica-dissolved-glenda",
+                "title": "Silica, Dissolved as Si (mg/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "silica-total-glenda",
+                "title": "Silica, Total (mg/l)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "temperature-glenda",
+                "title": "Temperature (C)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "total-phosphorus-glenda",
+                "title": "Total Phosphorus (ug/L)",
+                "lake_regions": true
+            }
+        },
+        {
+            "parameter": {
+                "id": "transmittance-horizontal-glenda",
+                "title": "Transmittance, Horizontal (%)",
+                "lake_regions": false
+            }
+        },
+        {
+            "parameter": {
+                "id": "turbidity-glenda",
                 "title": "Turbidity (NTU)",
                 "lake_regions": false
             }
-        }
+        },
     ],
 
     trends_page_lake_regions:[
@@ -1147,3 +1246,4 @@ export const gd3 = {
     mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
+

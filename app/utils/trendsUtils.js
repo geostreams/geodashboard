@@ -7,7 +7,6 @@ import {pnpoly} from '../utils/arrayUtils';
 import type { Sensors, TrendsRegions } from '../utils/flowtype';
 
 export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegions: Array<string>) {
-
     // Update each Region item
 
     let trendsCheckRegionsAll = allRegions;
@@ -15,35 +14,45 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
 
     // Create an item to represent each Region
     for (let i = 0; i < trendsCheckRegionsAll.length; i++) {
-        trendsRegionsSensors[i] = {
-            id:i,
-            created: "",
-            geometry: {
-                type: "Point",
-                coordinates: trendsPageRegionsSettings[i].geometry.region_coordinate
-            },
-            max_end_time: "",
-            min_start_time: "",
-            min_end_time:"",
-            name:trendsCheckRegionsAll[i].toString(),
-            parameters:[],
-            properties:{
-                region: trendsCheckRegionsAll[i].toString(),
-                type: {
-                    id: i.toString(),
-                    title: "",
+
+        let geocodeArray = [];
+
+        if (trendsPageRegionsSettings[i].geometry.coordinates.length > 0) {
+
+            trendsPageRegionsSettings[i].geometry.coordinates[0].map(function (coordinate) {
+                // swap coordinate
+                geocodeArray.push([coordinate[1], coordinate[0]]);
+            }).join(",");
+
+            trendsRegionsSensors[i] = {
+                id: i,
+                geometry: {
+                    type: "Point",
+                    coordinates: trendsPageRegionsSettings[i].geometry.region_coordinate,
+                    geocode: geocodeArray
                 },
                 name: trendsCheckRegionsAll[i].toString(),
-                popupContent: trendsPageRegionsSettings[i].properties.title.toString(),
-            },
-            type:"Feature",
-            trend_end_time:"",
-            trend_start_time:"",
-            trends:[],
-        };
+                properties: {
+                    region: trendsPageRegionsSettings[i].properties.id.toString(),
+                    type: {
+                        id: i.toString(),
+                        title: "",
+                    },
+                    name: trendsCheckRegionsAll[i].toString(),
+                    popupContent: trendsPageRegionsSettings[i].properties.title.toString(),
+                },
+                type: "Feature",
+                region_trends: [],
+                trends_detail: [],
+                trends_deviation: []
+            };
+
+        }
+
     }
 
     return trendsRegionsSensors;
+
 }
 
 export function filterPresetTrendLocation(region:string, origSensors: Sensors) {
@@ -80,7 +89,7 @@ export function filterCustomTrendLocation(selectedPointsLocations:Array<string>,
 
 export function matchRegionTrends(selectedRegion:string, sensor: Object) {
 
-    if (selectedRegion.toUpperCase() === sensor.properties.region)
+    if (selectedRegion.toUpperCase() === sensor.properties.region.toUpperCase())
         return true;
 
     function findRegion(location) {
@@ -176,4 +185,3 @@ export function getRegionalThreshold(selectedRegion:string, sensor: Object, para
     return false;
 
 }
-

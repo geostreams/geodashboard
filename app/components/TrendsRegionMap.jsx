@@ -8,8 +8,8 @@ require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import {getTrendColor, getCustomLocation} from '../utils/getConfig';
-import {popupHeader, popupTrends} from '../utils/mapPopup';
-import {sensorsToFeaturesTrendPage, getAttribution} from '../utils/mapUtils';
+import {popupRegion} from '../utils/mapPopup';
+import {sensorsToFeaturesTrendRegionPage, getAttribution} from '../utils/mapUtils';
 import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
 
@@ -67,7 +67,7 @@ class TrendsRegionMap extends Component {
         const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
 
-            let popupText = popupHeader(feature, styles) + popupTrends(feature, styles);
+            let popupText = popupRegion(feature, styles);
 
             if (content) {
                 content.innerHTML = popupText;
@@ -110,8 +110,16 @@ class TrendsRegionMap extends Component {
         this.state.areaPolygonSource.clear();
         this.state.areaPolygonSource.addFeatures(region_features);
 
-        features = sensorsToFeaturesTrendPage(
-            map_items, this.props.selectedParameter, threshold);
+        let trends_parameter_lake_regions = [];
+        let trends_settings = this.props.trends_settings;
+        trends_settings.map(p => {
+            if (p.parameter.lake_regions == true) {
+                trends_parameter_lake_regions.push(p.parameter.id);
+            }
+        });
+
+        features = sensorsToFeaturesTrendRegionPage(
+            map_items, this.props.selectedParameter, trends_parameter_lake_regions);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
@@ -140,7 +148,7 @@ class TrendsRegionMap extends Component {
             }
         });
 
-        let features = sensorsToFeaturesTrendPage(
+        let features = sensorsToFeaturesTrendRegionPage(
             map_items, this.props.selectedParameter, trends_parameter_lake_regions);
 
         let vectorSource = new ol.source.Vector({

@@ -24,13 +24,13 @@ class TrendsSubmitButton extends Component {
     handleClickAnalysis() {
 
         this.state.showResults = true;
+
         let chosenParameter = this.props.chosenParameter;
         let chosenRegion = this.props.chosenRegion;
         let baselinePeriod = this.props.baselinePeriod;
         let rollingPeriod = this.props.rollingPeriod;
         let thresholdChooseValue = this.props.thresholdChooseValue;
         let trendsSeason = this.props.trends_season;
-        let trendsType = this.props.trends_type;
         let trendsViewType = this.props.trends_view_type;
 
         if (baselinePeriod == '') {
@@ -42,7 +42,7 @@ class TrendsSubmitButton extends Component {
 
         this.props.onClickAnalysis(
             chosenParameter, chosenRegion, baselinePeriod, rollingPeriod,
-            thresholdChooseValue, trendsSeason, trendsType, trendsViewType
+            thresholdChooseValue, trendsSeason, trendsViewType
         )
     }
 

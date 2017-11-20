@@ -124,7 +124,11 @@ export function popupTrends(feature: ol.Feature, styles){
         '<table class=' + styles.tablestyle + '>' +
             trends +
         '</table>';
-    let paramsLength = (sensorInfo.parameters).length;
+    let paramsLength = 0;
+    if (sensorInfo.parameters.length > 0) {
+        paramsLength = sensorInfo.parameters.length;
+    }
+
     let sourceColor = sensorInfo.color;
     if(paramsLength > 0 && sensorInfo.trends_detail){
         bodyText += '<a href=" ' + application_sensors_website + '#detail/location/'+
@@ -132,12 +136,8 @@ export function popupTrends(feature: ol.Feature, styles){
             sourceColor + ';">View Details for the ' + sensorInfo.name + ' Site </a>';
     }
 
-    if(sensorInfo.trends_detail) {
-        bodyText += '<a href="/#trendsdetail/region/'+
-            sensorInfo.location + '/" class=' + styles.viewdetail + ' style="background-color: ' +
-            sourceColor + ';">View Details for the ' + sensorInfo.region + ' Region </a>';
-    }
     return bodyText;
+
 }
 
 export function removePopup(theMap){
@@ -146,4 +146,74 @@ export function removePopup(theMap){
         theMap.getOverlayById("marker").setPosition(undefined);
         closer.blur();
     }
+}
+
+export function popupRegion(feature: ol.Feature, styles){
+
+    let id = feature.getId().toUpperCase();
+    let sensorInfo = feature.attributes;
+
+    let trendColor = sensorInfo.trend_color;
+    let sensorTrends = sensorInfo.trend_type;
+    let trendValues = sensorInfo.trend_values;
+    let sourceColor = sensorInfo.color;
+    let parameter = sensorInfo.parameter;
+
+    let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
+        sourceColor + ';">' + id + '</h2>';
+
+    let bodyText = '<div class=' + styles.greyborder + '></div>';
+
+    let trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+        trendColor + '; border-color: ' + trendColor + ';"></p></td></tr>';
+
+    let trendsRight = '';
+
+    if (sensorTrends == "noTrend" || sensorTrends == "") {
+
+        let leftText = " ";
+        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+            trendColor + '; border-color: ' + trendColor + ';">' + leftText + '</p></td></tr>';
+
+        let rightText = "Not enough data to display";
+        trendsRight = '' +
+            '<tr><td><strong>' + rightText + '</strong></td></tr>';
+
+    } else {
+
+        if (sensorTrends == 'trendUp' || sensorTrends == 'overThresholdUp') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.upArrow + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + '; "> UP </p></td></tr>';
+        } else if (sensorTrends == 'trendDown' || sensorTrends == 'overThresholdDown') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.downArrow + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';"> DOWN </p></td></tr>';
+        } else if (sensorTrends == 'noTrend') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';"> UP </p></td></tr>';
+        } else {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';"> DOWN </p></td></tr>';
+        }
+
+        trendsRight = '' +
+            '<tr><td><strong>Parameter: </strong>' + parameter + '</td></tr>' +
+            '<tr><td><strong>Total Avg: </strong>' + trendValues[0] + '</td></tr>' +
+            '<tr><td><strong>Ten Year Avg: </strong>' + trendValues[1] + '</td></tr>' +
+            '<tr><td><strong>Latest Avg: </strong>' + trendValues[2] + '</td></tr>';
+    }
+
+    let trends = trendsLeft + trendsRight;
+
+    let regionText =
+        '<table class=' + styles.tablestyle + '>' +
+            trends +
+        '</table>' +
+        '<div class=' + styles.greyborder + '></div>';
+
+    if(sensorInfo.trend_type != 'noTrend'  && sensorInfo.trend_type != "") {
+        regionText += '<a href="#/trendsdetail/region/'+ sensorInfo.location + '" class=' + styles.viewdetail +
+            ' style="background-color: ' + sourceColor + ';">View Details for the ' +
+            sensorInfo.region + ' Region </a>';
+    }
+    return headerText + bodyText + regionText;
 }

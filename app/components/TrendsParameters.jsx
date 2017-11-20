@@ -5,8 +5,7 @@
 import React, {Component, PropTypes} from 'react';
 import trendsStyles from '../styles/trends.css';
 import {
-    Radio, RadioGroup,
-    Card, CardHeader, CardTitle, CardSubtitle, CardActions
+    Radio, RadioGroup, Card, CardHeader, CardTitle, CardSubtitle, CardActions
 } from 'react-mdc-web';
 import type {InputEvent} from '../utils/flowtype';
 
@@ -29,6 +28,8 @@ class TrendsParameters extends Component {
         let trendsPageSettings = this.props.trends_settings;
         let trendsPageParameters = [];
         let trendsPageParametersMap = [];
+        let title = "Select Parameter";
+        let subtitle = window.configruntime.gd3.parameter_subtitle;
 
         if (trendsPageSettings) {
             trendsPageSettings.map(p => {
@@ -48,6 +49,7 @@ class TrendsParameters extends Component {
                 }
             )
         }
+
         trendsPageParameters = trendsPageParameters.concat(trendsPageParametersMap);
         if (trendsPageParametersMap.length == 0) {
             trendsPageParameters = [<Radio id="9999" value="9999" key="9999"
@@ -58,10 +60,10 @@ class TrendsParameters extends Component {
             <Card className={this.props.className}>
                 <CardHeader>
                     <CardTitle>
-                        Select Parameter
+                        {title}
                     </CardTitle>
                     <CardSubtitle>
-                        {window.configruntime.gd3.parameter_subtitle}
+                        {subtitle}
                     </CardSubtitle>
                 </CardHeader>
                 <CardActions>

@@ -7,18 +7,19 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import trendsStyles from '../styles/trends.css';
 import {Card, CardHeader, CardTitle, CardMedia,
-        Button, List, ListItem, Icon,
-        DialogBody, Dialog, DialogHeader, DialogTitle
+        Dialog, DialogBody, DialogHeader, DialogTitle,
+        List, ListItem, Icon
 } from 'react-mdc-web';
 import styles from '../styles/regionMiniMap.css';
 import {getTrendColor, getCustomLocation} from '../utils/getConfig';
 import {popupHelperTrendDetailPage, sensorsToFeaturesTrendDetailPage, getAttribution} from '../utils/mapUtils';
 import {drawHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
+import { matchRegionTrends} from '../utils/trendsUtils';
 
 class RegionMiniMap extends Component {
 
-    state: TrendsMapState & {openMenu: boolean, areaPolygonSource: ol.source.Vector,};
+    state: TrendsMapState & {openInfoButton: boolean, areaPolygonSource: ol.source.Vector,};
 
     constructor(props: MapProps) {
         super(props);
@@ -42,13 +43,13 @@ class RegionMiniMap extends Component {
                 ],
                 target: 'map'
             }),
-            openMenu: false
+            openInfoButton: false
         }
     }
 
     handleStationsIcon = (event: boolean) => {
         this.setState({
-            openMenu: event
+            openInfoButton: event
         });
     };
 
@@ -57,41 +58,42 @@ class RegionMiniMap extends Component {
         let return_item;
 
         return_item=(
-            <Card className={trendsStyles.cardMargin}>
-                <CardHeader>
-                    <CardTitle>
-                        <p className={styles.locations_text_style}>Location</p>
-                        <Button className={styles.locations_button_style}
-                                onClick={this.handleStationsIcon.bind(this, true)}>
-                            <Icon name="info"/>
-                        </Button>
-                        <Dialog className={styles.dialog_style}
-                                open={this.state.openMenu}
-                                onClose={()=>{this.setState({openMenu:false})}}>
-                            <DialogHeader >
-                                <DialogTitle>Monitoring Stations</DialogTitle>
-                                <Button compact
-                                        onClick={()=>{this.setState({openMenu: false})}}>
-                                    <Icon name="close"/>
-                                </Button>
-                            </DialogHeader>
-                            <DialogBody scrollable id="stations-content"></DialogBody>
-                        </Dialog>
-                    </CardTitle>
-                </CardHeader>
-                <CardMedia>
-                    <div>
-                        <div id='map' className={styles.map_style}></div>
-                        <div style={{display: "none"}}>
-                            <div id="marker" title="Marker" className="marker"></div>
-                            <div id="popup" className={styles.regionPopup}>
-                                <a href="#" id="popup-closer" className={styles.regionPopupCloser}></a>
-                                <div id="popup-content"></div>
+            <div>
+                <Dialog open={this.state.openInfoButton}
+                        onClose={()=>{this.setState({openInfoButton:false})}}>
+                    <DialogHeader >
+                        <DialogTitle>Monitoring Stations</DialogTitle>
+                        <a className={styles.close_button_style}
+                           onClick={()=>{this.setState({openInfoButton: false})}}>
+                            <Icon name="close"/>
+                        </a>
+                    </DialogHeader>
+                    <DialogBody scrollable id="stations-content"></DialogBody>
+                </Dialog>
+                <Card className={trendsStyles.cardMargin}>
+                    <CardHeader>
+                        <CardTitle>
+                            <p className={styles.locations_text_style}>Location</p>
+                            <a className={styles.locations_button_style}
+                               onClick={this.handleStationsIcon.bind(this, true)}>
+                                <Icon name="info"/>
+                            </a>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardMedia>
+                        <div>
+                            <div id='map' className={styles.map_style}></div>
+                            <div style={{display: "none"}}>
+                                <div id="marker" title="Marker" className="marker"></div>
+                                <div id="popup" className={styles.regionPopup}>
+                                    <a href="#" id="popup-closer" className={styles.regionPopupCloser}></a>
+                                    <div id="popup-content"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </CardMedia>
-            </Card>
+                    </CardMedia>
+                </Card>
+            </div>
         );
 
         return return_item;
@@ -107,7 +109,9 @@ class RegionMiniMap extends Component {
         if (features) {
             features.map(s => {
                     sensorID = s.getId().toUpperCase();
-                    popupText += ('<li>' + sensorID  + '</li>');
+                    if (sensorID != this.props.trends_region_title.toUpperCase()) {
+                        popupText += ('<li>' + sensorID + '</li>');
+                    }
                 }
             )
         }
@@ -121,7 +125,9 @@ class RegionMiniMap extends Component {
     }
 
     popupHandler(feature: ol.Feature, coordinate: number[]) {
+
         const content = document.getElementById('popup-content');
+
         if (feature && feature.getId()) {
 
             let popupText = popupHelperTrendDetailPage(feature, styles);
@@ -131,7 +137,9 @@ class RegionMiniMap extends Component {
             }
             let overlay = this.state.map.getOverlayById("marker");
             overlay.setPosition(coordinate);
+
         }
+
     }
 
     componentDidUpdate() {
@@ -160,9 +168,16 @@ class RegionMiniMap extends Component {
 
         this.state.areaPolygonSource.clear();
         this.state.areaPolygonSource.addFeatures(region_features);
+        let regionalSensors = [];
+
+        map_items.map(m => {
+            if (matchRegionTrends(this.props.trends_region, m)) {
+                regionalSensors.push(m);
+            }
+        });
 
         features = sensorsToFeaturesTrendDetailPage(
-            map_items, this.props.selectedParameter, threshold, this.props.trends_region);
+            regionalSensors, this.props.selectedParameter, threshold, this.props.trends_region);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
@@ -197,61 +212,15 @@ class RegionMiniMap extends Component {
 
         let clusters = new ol.layer.Vector({
             source: clusterSource,
-            style: function (feature) {
-                let size = feature.get('features').length;
-                let style;
-
-                const trend_type = feature.getProperties().features[0].attributes.trend_type;
-                if (trend_type == "trendUp") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "trendDown") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            rotation: 3.141592654,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "overThresholdUp") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "overThresholdDown") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            rotation: 3.141592654,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "noTrend" || trend_type == "") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.Circle({
-                            radius: 4,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                }
-
+            style: function () {
+                let style = (new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 4,
+                        fill: new ol.style.Fill({color: getTrendColor("noTrend")}),
+                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                    })
+                }));
                 return style;
-
             }
         });
 
@@ -360,6 +329,7 @@ class RegionMiniMap extends Component {
         this.setState({map: theMap});
 
         this.stationsPopupMenu(features);
+
     }
 
 }

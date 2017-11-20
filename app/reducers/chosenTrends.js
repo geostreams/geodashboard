@@ -5,7 +5,8 @@
 
 import {
     ADD_ANALYSIS_COUNT, ADD_CHOOSE_TRENDS, ADD_CUSTOM_TREND_LOCATIONS_FILTER,
-    CLEAR_TRENDS_SENSORS, FETCH_ANALYSIS_REGION, SELECT_TRENDS_CALC_BASELINE_SETTING,
+    ADD_REGION_TRENDS, ADD_REGION_DETAIL_TRENDS,
+    CLEAR_TRENDS_SENSORS, FETCH_ANALYSIS_REGION, RESET_TRENDS_SENSORS, SELECT_TRENDS_CALC_BASELINE_SETTING,
     SELECT_ANALYSIS_REGION, SELECT_TRENDS_REGION, SELECT_TRENDS_CALC_ROLLING_SETTING,
     SELECT_ANALYSIS_PARAMETER, SELECT_TRENDS_PARAMETER, SELECT_TRENDS_SEASON,
     SELECT_TRENDS_THRESHOLD, SELECT_TRENDS_VIEW_TYPE, SET_TRENDS_TIMEFRAMES,
@@ -41,8 +42,14 @@ type ChosenTrendsAction = {|
     view_type: TrendsViewType,
     number_to_filter: number,
     draw_available_sensors: TrendsPageSensorsState,
-    selectedPointsLocations: Array<string>
+    selectedPointsLocations: Array<string>,
+    trends_detail: Object,
+    trends_deviation: Object,
+    region_trends: Object,
+    detail_region: string,
+    regions_trends: Object
 |};
+
 
 const defaultState = {
     parameter: '',
@@ -58,7 +65,8 @@ const defaultState = {
     rolling_interval: '',
     view_type: '',
     number_to_filter: 0,
-    draw_available_sensors:[]
+    draw_available_sensors:[],
+    detail_region: ''
 };
 
 
@@ -98,6 +106,32 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
             return Object.assign({}, state, {
                 trends_sensors : tmpdata,
                 trends_regions : state.trends_regions
+            });
+
+        case ADD_REGION_TRENDS:
+
+            let temp_regions_object = [];
+
+            action.regions_trends.map(region => {
+                let region_sensor = state.trends_regions.filter((x) => x.id === region.id)[0];
+
+                region_sensor['region_trends'] = region.data;
+                temp_regions_object = temp_regions_object.concat(region_sensor);
+            });
+
+            return Object.assign({}, state, {
+                trends_regions : temp_regions_object
+            });
+
+        case ADD_REGION_DETAIL_TRENDS:
+
+            let temp_region_detail = [action.sensor];
+            let temp_new_sensors = temp_region_detail.concat(state["trends_sensors"]);
+
+            return Object.assign({}, state, {
+                trends_sensors : temp_new_sensors,
+                trends_regions : state.trends_regions,
+                detail_region : action.region
             });
 
         case SET_TRENDS_TIMEFRAMES:
@@ -214,6 +248,11 @@ const chosenTrends = (state:ChosenTrendsState = defaultState,
                 draw_available_sensors:[]
             });
 
+        case RESET_TRENDS_SENSORS:
+            return Object.assign({}, state, {
+                trends_sensors: [],
+            });
+
         default:
             return state;
 
@@ -314,4 +353,3 @@ function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
 }
 
 export default chosenTrends
-

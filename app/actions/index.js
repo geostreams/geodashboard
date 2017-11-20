@@ -34,6 +34,8 @@ export const CLEAR_SENSORS = 'CLEAR_SENSORS';
 
 export const CLEAR_TRENDS_SENSORS = 'CLEAR_TRENDS_SENSORS';
 
+export const RESET_TRENDS_SENSORS = 'RESET_TRENDS_SENSORS';
+
 export const ADD_ENDPOINTS = 'ADD_ENDPOINTS';
 export const addEndpoints = () =>{
     return {
@@ -112,25 +114,20 @@ export function addSearchParameter(parameter:Array<string>) {
 
 export const ADD_CHOOSE_TRENDS = 'ADD_CHOOSE_TRENDS';
 export function fetchTrends(
-    parameter:string, total_year:number, interval:number, type:string, season_input:string, view_type:string
+    parameter:string, total_year:number, interval:number, view_type:string, season_input:string
 ) {
     return (dispatch:Dispatch, getState:GetState) => {
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
         // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
-        // Each sensor wil have a dispatch with type = ADD_ANALYSIS or ADD_CHOOSE_TRENDS.
         const state = getState();
         const api = state.backends.selected;
 
         const season = season_input;
-        const trendsendpoint = api + '/api/geostreams/datapoints/trends?binning=year';
+        const trends_endpoint = api + '/api/geostreams/datapoints/trends?binning=year';
 
         let sensorsToFilter;
         if (state.chosenTrends.trends_sensors.length > 0) {
-            if (view_type == 'by-regions'){
-                sensorsToFilter = state.sensors.data;
-            } else {
-                sensorsToFilter = state.chosenTrends.trends_sensors;
-            }
+            sensorsToFilter = state.chosenTrends.trends_sensors;
         } else {
             sensorsToFilter = state.sensors.data;
         }
@@ -142,17 +139,21 @@ export function fetchTrends(
             number_to_filter
         });
 
+        dispatch({
+            type: RESET_TRENDS_SENSORS
+        });
+
         sensorsToFilter.filter(s => s.parameters.indexOf(parameter) >= 0)
             .map(sensor => {
                 let start_time = new Date(sensor.min_start_time);
                 let end_time = new Date(sensor.max_end_time);
                 let result;
-                let timeframeDays = Math.floor((end_time - start_time) / (1000*60*60*24));
-                if (isNaN(end_time.getTime()) || timeframeDays <= (total_year * 365)) {
+                let time_frame_days = Math.floor((end_time - start_time) / (1000*60*60*24));
+                if (isNaN(end_time.getTime()) || time_frame_days <= (total_year * 365)) {
                     dispatch({
                         type: ADD_CHOOSE_TRENDS,
                         sensor: Object.assign(sensor, {
-                            "trends": "not enough data",
+                            "trends": "null",
                             "trend_start_time": start_time,
                             "trend_end_time": end_time
                         })
@@ -170,25 +171,23 @@ export function fetchTrends(
                         start.setFullYear(end_year - total_year);
                     }
 
-                    let trendsendpointargs;
-                    if (type == 'ADD_ANALYSIS') {
-                        trendsendpointargs = trendsendpoint +
+                    let trends_endpoint_args;
+                    trends_endpoint_args =
+                        trends_endpoint +
+                        "&sensor_id=" + sensor.id +
+                        "&attributes=" + parameter;
+                    if (view_type == 'by-analysis') {
+                        trends_endpoint_args +=
                             "&window_start=" + window_start.toISOString() +
                             "&window_end=" + end_time.toISOString() +
                             "&since=" + start.toISOString() +
-                            "&until=" + end_time.toISOString() +
-                            "&sensor_id=" + sensor.id +
-                            "&attributes=" + parameter;
-                    } else {
-                        trendsendpointargs = trendsendpoint +
-                            "&sensor_id=" + sensor.id +
-                            "&attributes=" + parameter;
+                            "&until=" + end_time.toISOString();
                     }
 
                     if (season)
-                        trendsendpointargs = trendsendpointargs + "&semi=" + season;
+                        trends_endpoint_args = trends_endpoint_args + "&semi=" + season;
 
-                    result = fetch(trendsendpointargs);
+                    result = fetch(trends_endpoint_args);
                     result
                         .then(response => {
                             if (response) {
@@ -204,17 +203,17 @@ export function fetchTrends(
                                     dispatch({
                                         type: ADD_CHOOSE_TRENDS,
                                         sensor: Object.assign(sensor, {
-                                            "trends": "trends return no data",
+                                            "trends": "null",
                                             "trend_start_time": start_time,
                                             "trend_end_time": end_time
                                         })
                                     });
                                 } else {
-                                    let trendStart = new Date(json[0].start_time);
-                                    let trendEnd = new Date(json[0].end_time);
-                                    let timeframeTrendsDays = Math.floor((trendEnd - trendStart) / (1000*60*60*24));
+                                    let trend_start = new Date(json[0].start_time);
+                                    let trend_end = new Date(json[0].end_time);
+                                    let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000*60*60*24));
 
-                                    if (timeframeTrendsDays >= (total_year * 365)-180) {
+                                    if (time_frame_trends_days >= (total_year * 365)-180) {
                                         dispatch({
                                             type: ADD_CHOOSE_TRENDS,
                                             sensor: Object.assign(sensor, {
@@ -223,15 +222,11 @@ export function fetchTrends(
                                                 "trend_end_time": end_time
                                             })
                                         });
-                                        if (type == 'ADD_CHOOSE_TRENDS') {
-                                            // Create the Region Points from the individual Sensors
-                                            dispatch(updateTrendsRegionsPoints());
-                                        }
                                     } else {
                                         dispatch({
                                             type: ADD_CHOOSE_TRENDS,
                                             sensor: Object.assign(sensor, {
-                                                "trends": "trends return no data",
+                                                "trends": "null",
                                                 "trend_start_time": start_time,
                                                 "trend_end_time": end_time
                                             })
@@ -241,6 +236,107 @@ export function fetchTrends(
                             }
                         })
                 }
+            });
+    }
+
+}
+
+export const ADD_REGION_TRENDS = 'ADD_REGION_TRENDS';
+export function fetchRegionTrends(parameter:string, season:string) {
+    return (dispatch:Dispatch, getState:GetState) => {
+        // For each region sensor, use the parameter, geocode, and season to get the Trends.
+
+        const state = getState();
+        const api = state.backends.selected;
+
+        // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/'
+        const trends_region_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/';
+
+        const regionsToFilter = Object.assign([], state.chosenTrends.trends_regions);
+        let temp_object = [];
+
+        let results = regionsToFilter.filter(s => s.geometry.geocode.length > 0)
+            .map(sensor => {
+                const trends_region_endpoint_args = trends_region_endpoint + parameter +
+                    "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
+
+                const result = fetch(trends_region_endpoint_args).then(response => {
+                    const json = response.json();
+                    return json;
+                })
+                    .then(json => {
+                        if (json) {
+                            temp_object = temp_object.concat({id: sensor.id, data: json.trends});
+                        }
+                    }).catch(function(error) {
+                        console.log(error);
+                        console.log(trends_region_endpoint_args);
+                    });
+                return result;
+            });
+
+        Promise.all(results).then( s => {
+                return (dispatch({
+                    type: ADD_REGION_TRENDS,
+                    regions_trends: temp_object
+                }))
+            }
+        );
+    }
+
+}
+
+export const ADD_REGION_DETAIL_TRENDS = 'ADD_REGION_DETAIL_TRENDS';
+export function fetchRegionDetailTrends(parameter:string, season:string, region:string) {
+    return (dispatch:Dispatch, getState:GetState) => {
+        // For each region sensor for the Chart on the Trends Detail Page,
+        // use the parameter, geocode, and season to get the Trends.
+
+        const state = getState();
+        const api = state.backends.selected;
+
+        // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/detail/'
+        const trends_region_detail_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/detail/';
+
+        const regionsToFilter = state.chosenTrends.trends_regions.filter(r => r.properties.region.toUpperCase() == region.toUpperCase());
+
+        regionsToFilter.filter(s => s.geometry.geocode.length > 0)
+            .map(sensor => {
+                const trends_region_detail_endpoint_args = trends_region_detail_endpoint + parameter +
+                    "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
+
+                const detail_result = fetch(trends_region_detail_endpoint_args);
+                detail_result
+                    .then(response => {
+                        if (response) {
+                            return response.json();
+                        } else {
+                            return undefined
+                        }
+                    })
+                    .then(json => {
+                        if (json) {
+                            if (json.length < 1) {
+                                dispatch({
+                                    type: ADD_REGION_DETAIL_TRENDS,
+                                    sensor: Object.assign(sensor, {
+                                        "trends_detail": "null",
+                                        "trends_deviation": "null"
+                                    }),
+                                    region
+                                });
+                            } else {
+                                dispatch({
+                                    type: ADD_REGION_DETAIL_TRENDS,
+                                    sensor: Object.assign(sensor, {
+                                        "trends_detail": json.average,
+                                        "trends_deviation": json.deviation
+                                    }),
+                                    region
+                                });
+                            }
+                        }
+                    });
             });
     }
 
@@ -518,7 +614,6 @@ export function selectTrendsParameter(
         let total_year = state.chosenTrends.baseline_total_year;
         let interval = state.chosenTrends.rolling_interval;
         let season = state.chosenTrends.season;
-        let type = 'ADD_CHOOSE_TRENDS';
 
         dispatch({
             type: SELECT_TRENDS_PARAMETER,
@@ -529,9 +624,12 @@ export function selectTrendsParameter(
             type: SELECT_TRENDS_VIEW_TYPE,
             view_type
         });
-        dispatch(fetchTrends(parameter, total_year, interval, type, season, view_type));
-        dispatch(updateTrendsSensors(view_type));
-
+        if (view_type == 'by-sensors') {
+            dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
+        }
+        if (view_type == 'by-regions') {
+            dispatch(fetchRegionTrends(parameter, season));
+        }
     };
 }
 
@@ -544,7 +642,6 @@ export function selectAnalysisRegion(region:string, view_type:string) {
             region
         });
         dispatch(updateTrendsSensors(view_type));
-
     };
 }
 
@@ -557,15 +654,20 @@ export function selectTrendsRegion(region:string, view_type: string) {
         let interval = state.chosenTrends.rolling_interval;
         let season = state.chosenTrends.season;
         let parameter = state.chosenTrends.parameter;
-        let type = 'ADD_CHOOSE_TRENDS';
 
         dispatch({
             type: SELECT_TRENDS_REGION,
             region
         });
         dispatch(updateTrendsSensors(view_type));
+
         if (parameter != '') {
-            dispatch(fetchTrends(parameter, total_year, interval, type, season, view_type));
+            if (view_type == 'by-sensors') {
+                dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
+            }
+            if (view_type == 'by-regions') {
+                dispatch(fetchRegionTrends(parameter, season));
+            }
         }
 
     };
@@ -579,15 +681,20 @@ export function selectTrendsSeason(season:string, view_type: string) {
         let total_year = state.chosenTrends.baseline_total_year;
         let interval = state.chosenTrends.rolling_interval;
         let parameter = state.chosenTrends.parameter;
-        let type = 'ADD_CHOOSE_TRENDS';
 
         dispatch({
             type: SELECT_TRENDS_SEASON,
             season
         });
         dispatch(updateTrendsSensors(view_type));
+
         if (parameter != '') {
-            dispatch(fetchTrends(parameter, total_year, interval, type, season, view_type));
+            if (view_type == 'by-sensors') {
+                dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
+            }
+            if (view_type == 'by-regions') {
+                dispatch(fetchRegionTrends(parameter, season));
+            }
         }
 
     };
@@ -688,4 +795,3 @@ export function fetchAnalysisRegion(region:string){
         })
     }
 }
-
