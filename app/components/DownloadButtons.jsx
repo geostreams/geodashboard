@@ -163,7 +163,7 @@ class DownloadButtons extends Component {
                 <Button raised primary disabled={disabled}
                         onClick={this.onDownload.bind(this, "csv")}
                 >
-                    Download Data
+                    Download
                 </Button>
 
                 <Button className={styles.button} raised disabled={disabled}  onClick={this.handleOpenPermalink}>
