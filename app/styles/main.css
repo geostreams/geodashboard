@@ -71,3 +71,41 @@ h1, h2, h3, h5, h6, p, ul {
     padding: 1em;
     font-weight: bold;
 }
+
+.loading_spinner {
+    border-radius: 50%;
+    width: 10em;
+    height: 10em;
+    border: 1em dashed #29ABE2;
+    -webkit-animation: spinner 4s linear infinite;
+    -moz-animation: spinner 4s linear infinite;
+    animation: spinner 4s linear infinite;
+    margin: 25vh auto;
+    z-index: 1000;
+}
+
+.make_modal {
+    background-color: rgba(0,0,0,0.6);
+    height: calc(100vh - 9.2em);
+    width: 100%;
+    z-index: 999;
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin: 8.2em 0 0 0;
+}
+
+@-webkit-keyframes spinner {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@-moz-keyframes spinner {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(360deg); }
+}
+
+@keyframes spinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

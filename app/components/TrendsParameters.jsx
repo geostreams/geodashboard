@@ -33,20 +33,10 @@ class TrendsParameters extends Component {
 
         if (trendsPageSettings) {
             trendsPageSettings.map(p => {
-                    if (p.parameter.id == this.props.chosenParameter) {
-                        trendsPageParametersMap.push(
-                            <Radio id={p.parameter.id} value={p.parameter.id}
-                                   key={p.parameter.id}>
-                                <p className={trendsStyles.selectedParameter}>{p.parameter.title}</p>
-                            </Radio>
-                        )
-                    } else {
-                        trendsPageParametersMap.push(
-                            <Radio id={p.parameter.id} value={p.parameter.id}
-                                   key={p.parameter.id}> {p.parameter.title} </Radio>
-                        )
-                    }
-                }
+                trendsPageParametersMap.push(
+                    <Radio id={p.parameter.id} value={p.parameter.id}
+                           key={p.parameter.id}> {p.parameter.title} </Radio>
+                )}
             )
         }
 

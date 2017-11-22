@@ -6,9 +6,10 @@ import React, {Component} from 'react';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
-import {Icon} from 'react-mdc-web';
+import trendsStyles from '../styles/trends.css';
+import {Dialog, DialogBody, DialogHeader, DialogTitle, List, ListItem, Icon} from 'react-mdc-web';
 import {getTrendColor, getCustomLocation} from '../utils/getConfig';
-import {sensorsToFeaturesTrendPage, getAttribution} from '../utils/mapUtils';
+import {sensorsToFeaturesTrendPage, getAttribution, aboutPopupMenu} from '../utils/mapUtils';
 import {popupHeader, popupTrends, removePopup} from '../utils/mapPopup';
 import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
@@ -20,7 +21,7 @@ class TrendsMap extends Component {
     constructor(props: MapProps) {
         super(props);
         this.state = {
-            center: [-84.44799549, 38.9203417],
+            center: [-84, 44],
             vectorSource: new ol.source.Vector,
             clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector}),
             areaPolygonSource: new ol.source.Vector,
@@ -38,9 +39,18 @@ class TrendsMap extends Component {
                     })
                 ],
                 target: 'map'
-            })
-        }
+            }),
+            openAboutButton: false
+        };
+        (this:any).handleInfoIcon = this.handleInfoIcon.bind(this);
     }
+
+
+    handleInfoIcon (button_status: boolean) {
+        this.setState({
+            openAboutButton: button_status
+        });
+    };
 
 
     render() {
@@ -58,6 +68,23 @@ class TrendsMap extends Component {
                         <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
                         <div id="popup-content"></div>
                     </div>
+                </div>
+                <Dialog open={Boolean(this.state.openAboutButton)}
+                        onClose={()=>{this.setState({openAboutButton:false})}}>
+                    <DialogHeader >
+                        <DialogTitle>About This Data</DialogTitle>
+                        <a className={trendsStyles.close_button_style}
+                           onClick={()=>{this.setState({openAboutButton: false})}}>
+                            <Icon name="close"/>
+                        </a>
+                    </DialogHeader>
+                    <DialogBody scrollable id="about-this-data"></DialogBody>
+                </Dialog>
+                <div className={trendsStyles.about_button}>
+                    <a className={trendsStyles.locations_button_style}
+                       onClick={this.handleInfoIcon}>
+                        <Icon name="info"/>
+                    </a>
                 </div>
             </div>
         );
@@ -79,9 +106,14 @@ class TrendsMap extends Component {
     }
 
     componentDidUpdate() {
+
+        aboutPopupMenu();
+
         let features;
 
         let copyOfMap = this.state.map;
+
+        removePopup(copyOfMap);
 
         let that = this;
 
@@ -124,8 +156,8 @@ class TrendsMap extends Component {
             this.state.map.getView().fit(
                 this.state.areaPolygonSource.getExtent(), this.state.map.getSize());
         } else {
-            this.state.map.getView().fit(
-                this.state.vectorSource.getExtent(), this.state.map.getSize());
+            this.state.map.getView().setZoom(this.state.map.getView().getZoom() - 10);
+            this.state.map.getView().setCenter(this.state.center);
         }
 
     }
@@ -204,7 +236,7 @@ class TrendsMap extends Component {
                 } else if (trend_type == "noTrend" || trend_type == "") {
                     style = (new ol.style.Style({
                         image: new ol.style.Circle({
-                            radius: 4,
+                            radius: 6,
                             fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })

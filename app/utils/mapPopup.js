@@ -1,5 +1,5 @@
 
-import {getApplicationWebsite} from './getConfig';
+import {getApplicationWebsite, getColor} from './getConfig';
 
 export function popupHeader(feature: ol.Feature, styles){
     let id = feature.getId().toUpperCase();
@@ -156,7 +156,7 @@ export function popupRegion(feature: ol.Feature, styles){
     let trendColor = sensorInfo.trend_color;
     let sensorTrends = sensorInfo.trend_type;
     let trendValues = sensorInfo.trend_values;
-    let sourceColor = sensorInfo.color;
+    let sourceColor = getColor('epa');
     let parameter = sensorInfo.parameter;
 
     let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
@@ -183,16 +183,16 @@ export function popupRegion(feature: ol.Feature, styles){
 
         if (sensorTrends == 'trendUp' || sensorTrends == 'overThresholdUp') {
             trendsLeft = '<tr><td rowspan="5"><p class=' + styles.upArrow + ' style="background: ' +
-                trendColor + '; border-color: ' + trendColor + '; "> UP </p></td></tr>';
+                trendColor + '; border-color: ' + trendColor + '; "> ' + trendValues[3] + ' </p></td></tr>';
         } else if (sensorTrends == 'trendDown' || sensorTrends == 'overThresholdDown') {
             trendsLeft = '<tr><td rowspan="5"><p class=' + styles.downArrow + ' style="background: ' +
-                trendColor + '; border-color: ' + trendColor + ';"> DOWN </p></td></tr>';
+                trendColor + '; border-color: ' + trendColor + ';"> ' + trendValues[3] + ' </p></td></tr>';
         } else if (sensorTrends == 'noTrend') {
             trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
-                trendColor + '; border-color: ' + trendColor + ';"> UP </p></td></tr>';
+                trendColor + '; border-color: ' + trendColor + ';"> ' + trendValues[3] + ' </p></td></tr>';
         } else {
             trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
-                trendColor + '; border-color: ' + trendColor + ';"> DOWN </p></td></tr>';
+                trendColor + '; border-color: ' + trendColor + ';"> ' + trendValues[3] + ' </p></td></tr>';
         }
 
         trendsRight = '' +
@@ -211,7 +211,9 @@ export function popupRegion(feature: ol.Feature, styles){
         '<div class=' + styles.greyborder + '></div>';
 
     if(sensorInfo.trend_type != 'noTrend'  && sensorInfo.trend_type != "") {
-        regionText += '<a href="#/trendsdetail/region/'+ sensorInfo.location + '" class=' + styles.viewdetail +
+        regionText += '<a href="#/trendsdetail/region/'+ sensorInfo.location +
+            '/'+ sensorInfo.url_parameter + '/'+ sensorInfo.season +
+            '" class=' + styles.viewdetail +
             ' style="background-color: ' + sourceColor + ';">View Details for the ' +
             sensorInfo.region + ' Region </a>';
     }

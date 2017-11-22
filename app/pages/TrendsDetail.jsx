@@ -14,7 +14,6 @@ import trendsStyles from '../styles/trends.css';
 import { getCustomTrendsRegion, getTrendsPageSettings } from '../utils/getConfig';
 import {Link} from 'react-router';
 
-
 class TrendsDetail extends Component {
 
     render() {
@@ -22,7 +21,7 @@ class TrendsDetail extends Component {
         let trendsPageSettings = getTrendsPageSettings();
         let trendsRegionsSensors = [];
         let trendsRegionTitle =  getCustomTrendsRegion(this.props.params.region);
-        let trendsRegionTitleLink =  " / " + getCustomTrendsRegion(this.props.params.region);
+        let trendsRegionTitleLink =  " > " + getCustomTrendsRegion(this.props.params.region);
         let trendsRegionName = this.props.params.region;
 
         return (
@@ -35,15 +34,18 @@ class TrendsDetail extends Component {
                                 <Card className={trendsStyles.detailTitle}>
                                     <CardTitle>
                                         <Link href={"#trendsregions"}>Trends Regions</Link>
-                                        {trendsRegionTitleLink} Trends Detail
+                                        {trendsRegionTitleLink}
                                     </CardTitle>
                                 </Card>
                                 <List className={trendsStyles.detailListStyle}>
                                     <TrendsRegionDetails
                                         trends_region_name={trendsRegionName}
+                                        trends_season={this.props.params.season}
+                                        trends_parameter={this.props.params.parameter}
                                     />
                                     <RegionMiniMap
                                         trends_region={this.props.params.region}
+                                        trends_parameter={this.props.params.parameter}
                                         trends_region_sensors={trendsRegionsSensors}
                                         trends_region_title={trendsRegionTitle}
                                     />
@@ -55,6 +57,8 @@ class TrendsDetail extends Component {
                                         trends_settings={trendsPageSettings}
                                         trends_region_name={trendsRegionName}
                                         trends_region={this.props.params.region}
+                                        trends_parameter={this.props.params.parameter}
+                                        trends_season={this.props.params.season}
                                     />
                                 </div>
                             </Cell>

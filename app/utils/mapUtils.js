@@ -64,9 +64,11 @@ export function sensorsToFeaturesTrendPage(
 
             if (sensor.hasOwnProperty("trends")) {
                 // Not enough information present
-                if (sensor.trends === "null") {
+                if (sensor.trends === null) {
                     trend_type = "noTrend";
+                    console.log("is null");
                 } else {
+                    console.log("not null");
                     // For Trends Page, only check Threshold and assign red arrows for certain parameters.
                     // Otherwise, only assign blue or yellow arrows with no Threshold check.
                     if (trends_parameter_lake_regions.indexOf(parameter) >= 0 ) {
@@ -119,23 +121,21 @@ export function sensorsToFeaturesTrendPage(
                             trend_type = "noTrend";
                         }
                     }
+
+                    let units = '';
+                    if (parameter) {
+                        let unitIndex = getParameterName(parameter).lastIndexOf(" ");
+                        units = getParameterName(parameter).substr(unitIndex + 1);
+                    }
+
+                    trend_values = [
+                        (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + ' ' + units),
+                        (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + ' ' + units),
+                        (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + ' ' + units),
+                        (new Date(sensor["trend_end_time"]).toLocaleDateString()),
+                        (Number(sensor.trends[parameter + "_percentage_change"]).toFixed(2) + " %")
+                    ]
                 }
-
-                let units = '';
-
-                if (parameter) {
-                    let unitIndex = getParameterName(parameter).lastIndexOf(" ");
-                    units = getParameterName(parameter).substr(unitIndex + 1);
-                }
-
-                trend_values = [
-                    (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + ' ' + units),
-                    (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + ' ' + units),
-                    (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + ' ' + units),
-                    (new Date(sensor["trend_end_time"]).toLocaleDateString()),
-                    (Number(sensor.trends[parameter + "_percentage_change"]).toFixed(2) + " %")
-                ]
-
             }
 
             if (trend_type == "trendUp") {
@@ -179,7 +179,7 @@ export function sensorsToFeaturesTrendPage(
             } else if (trend_type == "noTrend" || trend_type == "") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.Circle({
-                        radius: 4,
+                        radius: 6,
                         fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                         stroke: new ol.style.Stroke({color: '#000000', width: 1})
                     })
@@ -220,7 +220,7 @@ export function sensorsToFeaturesTrendPage(
 }
 
 export function sensorsToFeaturesTrendRegionPage(
-    sensors: Sensors, parameter: string, trends_parameter_lake_regions: Array):Array<ol.Feature>
+    sensors: Sensors, parameter: string, season: string, trends_parameter_lake_regions: Array):Array<ol.Feature>
 {
 
     let features = Array();
@@ -248,10 +248,16 @@ export function sensorsToFeaturesTrendRegionPage(
             let threshold = 'n/a';
 
             if (sensor.hasOwnProperty("region_trends")) {
+
+                let ten_years_average = sensor.region_trends["tenyearsaverage"];
+                let total_average = sensor.region_trends["totalaverage"];
+                let last_average = sensor.region_trends["lastaverage"];
+
                 // Not enough information present
-                if (sensor.trends === "null") {
+                if (sensor.trends === null) {
                     trend_type = "noTrend";
                 } else {
+
                     // For Trends Page, only check Threshold and assign red arrows for certain parameters.
                     // Otherwise, only assign blue or yellow arrows with no Threshold check.
                     if (trends_parameter_lake_regions.indexOf(parameter) >= 0 ) {
@@ -265,14 +271,13 @@ export function sensorsToFeaturesTrendRegionPage(
                             threshold = getRegionalThreshold(sensor.properties.region, sensor, parameter);
                         }
                     }
+
                     // Only blue or yellow arrows
                     if (threshold == 'n/a') {
-                        if (sensor.region_trends["lastaverage"] >
-                            sensor.region_trends["totalaverage"] ) {
+                        if (ten_years_average > total_average ) {
                             trend_type = "trendUp";
 
-                        } else if (sensor.region_trends["lastaverage"] <
-                            sensor.region_trends["totalaverage"] ) {
+                        } else if (ten_years_average < total_average ) {
                             trend_type = "trendDown";
 
                         } else {
@@ -280,27 +285,19 @@ export function sensorsToFeaturesTrendRegionPage(
                         }
                     } else {
                         // May have red arrows with Threshold check
-                        if (sensor.region_trends["lastaverage"] >
-                            sensor.region_trends["totalaverage"] &&
-                            sensor.region_trends["lastaverage"] >= threshold) {
+                        if (ten_years_average > total_average && ten_years_average >= threshold) {
 
                             trend_type = "overThresholdUp";
 
-                        } else if (sensor.region_trends["lastaverage"] >
-                            sensor.region_trends["totalaverage"] &&
-                            sensor.region_trends["lastaverage"] < threshold) {
+                        } else if (ten_years_average > total_average && ten_years_average < threshold) {
 
                             trend_type = "trendUp";
 
-                        } else if (sensor.region_trends["lastaverage"] <
-                            sensor.region_trends["totalaverage"]&&
-                            sensor.region_trends["lastaverage"] < threshold) {
+                        } else if (ten_years_average < total_average && ten_years_average < threshold) {
 
                             trend_type = "trendDown";
 
-                        } else if (sensor.region_trends["lastaverage"] <
-                            sensor.region_trends["totalaverage"] &&
-                            sensor.region_trends["lastaverage"] > threshold) {
+                        } else if (ten_years_average < total_average && ten_years_average > threshold) {
 
                             trend_type = "overThresholdDown";
 
@@ -317,10 +314,15 @@ export function sensorsToFeaturesTrendRegionPage(
                     units = getParameterName(parameter).substr(unitIndex + 1);
                 }
 
+                let percentage_change =
+                    (Number(ten_years_average) - Number(total_average))
+                    / Number(total_average) * 100;
+
                 trend_values = [
-                    (Number(sensor.region_trends["totalaverage"]).toFixed(2) + ' ' + units),
-                    (Number(sensor.region_trends["tenyearsaverage"]).toFixed(2) + ' ' + units),
-                    (Number(sensor.region_trends["lastaverage"]).toFixed(2) + ' ' + units)
+                    (Number(total_average).toFixed(2) + ' ' + units),
+                    (Number(ten_years_average).toFixed(2) + ' ' + units),
+                    (Number(last_average).toFixed(2) + ' ' + units),
+                    (Number(percentage_change).toFixed(2) + '%')
                 ]
 
             }
@@ -366,7 +368,7 @@ export function sensorsToFeaturesTrendRegionPage(
             } else if (trend_type == "noTrend" || trend_type == "") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.Circle({
-                        radius: 4,
+                        radius: 6,
                         fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                         stroke: new ol.style.Stroke({color: '#000000', width: 1})
                     })
@@ -387,6 +389,8 @@ export function sensorsToFeaturesTrendRegionPage(
                 "trends_detail": true,
                 "region": getCustomTrendsRegion(sensor.properties.region),
                 "parameter": getParameterName(parameter),
+                "url_parameter": parameter,
+                "season": season,
             };
 
             feature.setId(sensor.properties.popupContent);
@@ -411,7 +415,7 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
             let trend_values = "";
 
             if (sensor.hasOwnProperty("trends")) {
-                if (sensor.trends === "null") {
+                if (sensor.trends === null) {
                     trend_type = "noTrend";
                 } else {
                     if (sensor.trends[parameter + "_percentage_change"] > 0 &&
@@ -491,7 +495,7 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
             } else if (trend_type == "noTrend" || trend_type == "") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.Circle({
-                        radius: 4,
+                        radius: 6,
                         fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
                         stroke: new ol.style.Stroke({color: '#000000', width: 1})
                     })
@@ -537,35 +541,25 @@ export function popupHelperTrendDetailPage(feature: ol.Feature, styles){
 }
 
 export function sensorsToFeaturesTrendDetailPage(
-    sensors: Sensors, parameter: string, threshold: number, region: string):Array<ol.Feature> {
+    sensors: Sensors, parameter: string, region: string):Array<ol.Feature> {
 
     let features = Array();
     sensors.map((sensor) => {
 
-        let feature = new ol.Feature({
-            geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
-        });
+        if (sensor.properties.type.id == 'epa') {
 
-        feature.attributes = {
-            "dataSource": getSourceName(sensor.properties.type),
-            "maxEndTime": sensor.max_end_time,
-            "minStartTime": sensor.min_start_time,
-            "latitude": sensor.geometry.coordinates[1],
-            "longitude": sensor.geometry.coordinates[0],
-            "location": sensor.properties.region,
-            "name": sensor.name,
-            "color": getColor(sensor.properties.type.id),
-            "trend_color": getTrendColor(""),
-            "trend_type": "",
-            "trend_values": "",
-            "display_trends": true,
-            "trends_detail": true,
-            "region": getCustomTrendsRegion(sensor.properties.region),
-        };
+            let feature = new ol.Feature({
+                geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
+            });
 
-        feature.setId(sensor.properties.popupContent);
-        features.push(feature);
+            feature.attributes = {
+                "name": sensor.name,
+                "color": getColor(sensor.properties.type.id),
+            };
 
+            feature.setId(sensor.properties.popupContent);
+            features.push(feature);
+        }
     });
 
     return features;
@@ -673,4 +667,25 @@ export function getAttribution(){
         'rest/services/NatGeo_World_Map/MapServer">ArcGIS</a> &mdash; National Geographic, Esri, DeLorme, NAVTEQ, ' +
         'UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC'
     });
+}
+
+export function aboutPopupMenu() {
+
+    let icon_content = document.getElementById('about-this-data');
+
+    let popupText = (
+        '<br/> All trend calculations are utilizing the delta between the 10 year average ' +
+        'minus the lifetime average over the lifetime average to calculate the trending ' +
+        'direction. Even though this information provides a good indication towards the ' +
+        'stability of the lake environment, it should not be used as a definitive indication ' +
+        'and only predictor. <br/><br/>' +
+        '* Trends based on sensor data are calculated using the average ' +
+        'parameter value in the top two meters of the water column. Depth profiles for the ' +
+        'entire water column can be found at the explore data link. <br/>'
+    );
+
+    if (icon_content) {
+        icon_content.innerHTML = popupText.toString();
+    }
+
 }

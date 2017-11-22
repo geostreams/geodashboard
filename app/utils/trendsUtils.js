@@ -12,12 +12,13 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
     let trendsCheckRegionsAll = allRegions;
     let trendsRegionsSensors: TrendsRegions = [];
 
-    // Create an item to represent each Region
+    // Create an item to represent each Region (Excluding ER)
     for (let i = 0; i < trendsCheckRegionsAll.length; i++) {
 
         let geocodeArray = [];
 
-        if (trendsPageRegionsSettings[i].geometry.coordinates.length > 0) {
+        if (trendsPageRegionsSettings[i].geometry.coordinates.length > 0 &&
+            trendsPageRegionsSettings[i].properties.id.toString().toUpperCase() != 'ER') {
 
             trendsPageRegionsSettings[i].geometry.coordinates[0].map(function (coordinate) {
                 // swap coordinate
@@ -139,7 +140,7 @@ export function getAllRegions(trendsPageRegionsSettings: Object) {
 
     // Get all the available Regions
     for (let i = 0; i < trendsPageRegionsSettings.length; i++) {
-        trendsCheckRegion = trendsPageRegionsSettings[i].properties.region;
+        trendsCheckRegion = trendsPageRegionsSettings[i].properties.id;
         trendsCheckRegionsAll = trendsCheckRegionsAll.concat(trendsCheckRegion);
     }
 
@@ -185,3 +186,4 @@ export function getRegionalThreshold(selectedRegion:string, sensor: Object, para
     return false;
 
 }
+

@@ -802,7 +802,7 @@ export const gd3 = {
                         ]
                     ]
                 ],
-                "region_coordinate": [-80.0, 42.5, 0]
+                "region_coordinate": [-79.5, 42.7, 0]
             }
         }, {
             "type": "Feature",
@@ -848,7 +848,7 @@ export const gd3 = {
                         ]
                     ]
                 ],
-                "region_coordinate": [-82.0, 41.8, 0]
+                "region_coordinate": [-81.5, 42.0, 0]
             }
         }, {
             "type": "Feature",
@@ -1235,12 +1235,12 @@ export const gd3 = {
     application_website: "/geodashboard/",
 
     // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages
-    parameter_subtitle: 'Click a Parameter to Explore',
-    season_subtitle: 'Season to Explore',
-    region_subtitle: 'Region to Explore',
-    calculation_subtitle: 'Set Average Baseline and Rolling Periods',
-    threshold_subtitle: 'Change the threshold value for analysis',
-    threshold_none_subtitle: 'Threshold to Explore',
+    parameter_subtitle: '',
+    season_subtitle: '',
+    region_subtitle: '',
+    calculation_subtitle: '',
+    threshold_subtitle: '',
+    threshold_none_subtitle: '',
     // **********
 
     mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',

@@ -120,3 +120,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-977](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-977)
 - Layout of Download buttons
   [GEOD-1013](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1013)
+- UI Trends Improvements
+  [GEOD-1010](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1010)

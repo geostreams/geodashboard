@@ -24,7 +24,8 @@ class TrendsRegionDetails extends Component {
         });
 
         let trendsPageSettings = sensorsToFeaturesTrendRegionPage(
-            this.props.regionsStations, this.props.selectedParameter, trends_parameter_lake_regions);
+            this.props.regionsStations, this.props.trends_parameter,
+            this.props.trends_season, trends_parameter_lake_regions);
 
         let trendsCheckRegion;
         let trendsDetailListItems = '';
@@ -35,7 +36,7 @@ class TrendsRegionDetails extends Component {
                 if (trendsCheckRegion.toUpperCase() == regionName.toUpperCase()) {
                     trendsDetailListItems =
                         <ul className={trendsStyles.list_style}>
-                            <li className={trendsStyles.capitalize_word}>Season: {this.props.selectedSeason}</li>
+                            <li className={trendsStyles.capitalize_word}>Season: {this.props.trends_season}</li>
                             <li>Total Avg: {trendsPageSettings[i].attributes.trend_values[0]} </li>
                             <li>Ten Year Avg: {trendsPageSettings[i].attributes.trend_values[1]}</li>
                             <li>Latest Avg: {trendsPageSettings[i].attributes.trend_values[2]}</li>
@@ -62,4 +63,3 @@ class TrendsRegionDetails extends Component {
 }
 
 export default TrendsRegionDetails;
-

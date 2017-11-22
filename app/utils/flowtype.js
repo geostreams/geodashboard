@@ -119,6 +119,7 @@ export type TrendsMapState = {
     map: ol.Map,
     currentZoom: number,
     maxZoom: number,
+    openAboutButton: boolean
 };
 
 export type TrendsRegionMapState = {

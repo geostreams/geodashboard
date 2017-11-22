@@ -137,7 +137,7 @@ class Map extends Component {
                 // TODO: The arrow color should be partially decided by the latest returned value in sensor.trends
 
                 if (sensor.hasOwnProperty("trends")) {
-                    if (sensor.trends === "null") {
+                    if (sensor.trends === null) {
                         trend_type = "noTrend";
                     } else {
 

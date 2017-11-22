@@ -143,100 +143,96 @@ export function fetchTrends(
             type: RESET_TRENDS_SENSORS
         });
 
-        sensorsToFilter.filter(s => s.parameters.indexOf(parameter) >= 0)
+        let temp_object = [];
+
+        let results = sensorsToFilter
             .map(sensor => {
+
                 let start_time = new Date(sensor.min_start_time);
                 let end_time = new Date(sensor.max_end_time);
-                let result;
-                let time_frame_days = Math.floor((end_time - start_time) / (1000*60*60*24));
-                if (isNaN(end_time.getTime()) || time_frame_days <= (total_year * 365)) {
-                    dispatch({
-                        type: ADD_CHOOSE_TRENDS,
-                        sensor: Object.assign(sensor, {
-                            "trends": "null",
-                            "trend_start_time": start_time,
-                            "trend_end_time": end_time
-                        })
-                    });
-                    return undefined;
+                let json_data;
+
+                const end_year:number = end_time.getFullYear();
+                const window_start:Date = new Date(end_time);
+                window_start.setFullYear(end_year - interval);
+
+                let start:Date = new Date(end_time);
+                if (total_year == 0) {
+                    start = start_time;
                 } else {
-                    const end_year:number = end_time.getFullYear();
-                    const window_start:Date = new Date(end_time);
-                    window_start.setFullYear(end_year - interval);
-
-                    let start:Date = new Date(end_time);
-                    if (total_year == 0) {
-                        start = start_time;
-                    } else {
-                        start.setFullYear(end_year - total_year);
-                    }
-
-                    let trends_endpoint_args;
-                    trends_endpoint_args =
-                        trends_endpoint +
-                        "&sensor_id=" + sensor.id +
-                        "&attributes=" + parameter;
-                    if (view_type == 'by-analysis') {
-                        trends_endpoint_args +=
-                            "&window_start=" + window_start.toISOString() +
-                            "&window_end=" + end_time.toISOString() +
-                            "&since=" + start.toISOString() +
-                            "&until=" + end_time.toISOString();
-                    }
-
-                    if (season)
-                        trends_endpoint_args = trends_endpoint_args + "&semi=" + season;
-
-                    result = fetch(trends_endpoint_args);
-                    result
-                        .then(response => {
-                            if (response) {
-                                return response.json();
-                            } else {
-                                return undefined
-                            }
-                        })
-                        .then(json => {
-                            if (json) {
-                                // trends api return do result, not sure why.
-                                if (json.length < 1) {
-                                    dispatch({
-                                        type: ADD_CHOOSE_TRENDS,
-                                        sensor: Object.assign(sensor, {
-                                            "trends": "null",
-                                            "trend_start_time": start_time,
-                                            "trend_end_time": end_time
-                                        })
-                                    });
-                                } else {
-                                    let trend_start = new Date(json[0].start_time);
-                                    let trend_end = new Date(json[0].end_time);
-                                    let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000*60*60*24));
-
-                                    if (time_frame_trends_days >= (total_year * 365)-180) {
-                                        dispatch({
-                                            type: ADD_CHOOSE_TRENDS,
-                                            sensor: Object.assign(sensor, {
-                                                "trends": json[0].properties,
-                                                "trend_start_time": start_time,
-                                                "trend_end_time": end_time
-                                            })
-                                        });
-                                    } else {
-                                        dispatch({
-                                            type: ADD_CHOOSE_TRENDS,
-                                            sensor: Object.assign(sensor, {
-                                                "trends": "null",
-                                                "trend_start_time": start_time,
-                                                "trend_end_time": end_time
-                                            })
-                                        });
-                                    }
-                                }
-                            }
-                        })
+                    start.setFullYear(end_year - total_year);
                 }
+
+                let trends_endpoint_args;
+                trends_endpoint_args =
+                    trends_endpoint +
+                    "&sensor_id=" + sensor.id +
+                    "&attributes=" + parameter;
+                if (view_type == 'by-analysis') {
+                    trends_endpoint_args +=
+                        "&window_start=" + window_start.toISOString() +
+                        "&window_end=" + end_time.toISOString() +
+                        "&since=" + start.toISOString() +
+                        "&until=" + end_time.toISOString();
+                }
+
+                if (season)
+                    trends_endpoint_args = trends_endpoint_args + "&semi=" + season;
+
+                const result = fetch(trends_endpoint_args).then(response => {
+                    const json = response.json();
+                    return json;
+                })
+                    .then(json => {
+                        if (json) {
+                            let trend_start = new Date(json[0].start_time);
+                            let trend_end = new Date(json[0].end_time);
+                            let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000 * 60 * 60 * 24));
+                            if (time_frame_trends_days >= (total_year * 365) - 180 && json.length >= 1) {
+                                json_data = json[0].properties;
+                            } else {
+                                json_data = null;
+                            }
+                            temp_object = temp_object.concat({
+                                id: sensor.id,
+                                data: json_data,
+                                trend_start_time: start_time,
+                                trend_end_time: end_time
+                            })
+                        } else {
+                            json_data = null;
+                            temp_object = temp_object.concat({
+                                id: sensor.id,
+                                data: json_data,
+                                trend_start_time: null,
+                                trend_end_time: null
+                            });
+                        }
+                    }).catch(function(error) {
+                        console.log(error);
+                        console.log(trends_endpoint_args);
+                        json_data = null;
+                        temp_object = temp_object.concat({
+                            id: sensor.id,
+                            data: json_data,
+                            trend_start_time: null,
+                            trend_end_time: null
+                        });
+                    });
+                return result;
+
             });
+
+        Promise.all(results).then( s => {
+                return (dispatch({
+                    type: ADD_CHOOSE_TRENDS,
+                    sensors_trends: temp_object,
+                    parameter,
+                    season,
+                    sensorsToFilter
+                }))
+            }
+        );
     }
 
 }
@@ -278,7 +274,9 @@ export function fetchRegionTrends(parameter:string, season:string) {
         Promise.all(results).then( s => {
                 return (dispatch({
                     type: ADD_REGION_TRENDS,
-                    regions_trends: temp_object
+                    regions_trends: temp_object,
+                    parameter,
+                    season
                 }))
             }
         );
@@ -300,44 +298,44 @@ export function fetchRegionDetailTrends(parameter:string, season:string, region:
 
         const regionsToFilter = state.chosenTrends.trends_regions.filter(r => r.properties.region.toUpperCase() == region.toUpperCase());
 
-        regionsToFilter.filter(s => s.geometry.geocode.length > 0)
+        let temp_object = [];
+        let results = regionsToFilter.filter(s => s.geometry.geocode.length > 0)
             .map(sensor => {
                 const trends_region_detail_endpoint_args = trends_region_detail_endpoint + parameter +
                     "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
 
-                const detail_result = fetch(trends_region_detail_endpoint_args);
-                detail_result
-                    .then(response => {
-                        if (response) {
-                            return response.json();
-                        } else {
-                            return undefined
-                        }
-                    })
+                const result = fetch(trends_region_detail_endpoint_args).then(response => {
+                    const json = response.json();
+                    return json;
+                })
                     .then(json => {
                         if (json) {
-                            if (json.length < 1) {
-                                dispatch({
-                                    type: ADD_REGION_DETAIL_TRENDS,
-                                    sensor: Object.assign(sensor, {
-                                        "trends_detail": "null",
-                                        "trends_deviation": "null"
-                                    }),
-                                    region
-                                });
-                            } else {
-                                dispatch({
-                                    type: ADD_REGION_DETAIL_TRENDS,
-                                    sensor: Object.assign(sensor, {
+                            temp_object =
+                                Object.assign(
+                                    sensor, {
                                         "trends_detail": json.average,
                                         "trends_deviation": json.deviation
-                                    }),
-                                    region
-                                });
-                            }
+                                    }
+                                )
                         }
+                    }).catch(function(error) {
+                        console.log(error);
+                        console.log(trends_region_detail_endpoint_args);
                     });
+                return result;
             });
+
+        Promise.all(results).then( s => {
+                return (dispatch({
+                    type: ADD_REGION_DETAIL_TRENDS,
+                    regions_trends: temp_object,
+                    region,
+                    parameter,
+                    season
+                }))
+            }
+        );
+        dispatch(fetchRegionTrends(parameter, season));
     }
 
 }
@@ -537,6 +535,7 @@ export function fetchSensors(api:string) {
                 dispatch(receiveSensors(api, json))
             })
             .then(dispatch(updateAvailableSensors(-1)))
+            .then(dispatch(setRegionsSensors()))
             .catch((error) => {
                 console.log('An ERROR occurred! ' + error);
                 dispatch(switchBackendError());
@@ -710,6 +709,15 @@ export function setTrendsSensors() {
         dispatch({
             type: SET_TRENDS_SENSORS,
             sensors
+        });
+    }
+}
+
+export const SET_REGIONS_SENSORS = 'SET_REGIONS_SENSORS';
+export function setRegionsSensors() {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: SET_REGIONS_SENSORS
         });
     }
 }

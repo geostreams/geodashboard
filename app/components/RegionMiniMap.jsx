@@ -17,9 +17,10 @@ import {drawHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
 import { matchRegionTrends} from '../utils/trendsUtils';
 
+
 class RegionMiniMap extends Component {
 
-    state: TrendsMapState & {openInfoButton: boolean, areaPolygonSource: ol.source.Vector,};
+    state: TrendsMapState;
 
     constructor(props: MapProps) {
         super(props);
@@ -43,13 +44,14 @@ class RegionMiniMap extends Component {
                 ],
                 target: 'map'
             }),
-            openInfoButton: false
-        }
+            openAboutButton: false
+        };
+        (this:any).handleInfoIcon = this.handleInfoIcon.bind(this);
     }
 
-    handleStationsIcon = (event: boolean) => {
+    handleInfoIcon (button_status: boolean) {
         this.setState({
-            openInfoButton: event
+            openAboutButton: button_status
         });
     };
 
@@ -59,12 +61,12 @@ class RegionMiniMap extends Component {
 
         return_item=(
             <div>
-                <Dialog open={this.state.openInfoButton}
-                        onClose={()=>{this.setState({openInfoButton:false})}}>
+                <Dialog open={Boolean(this.state.openAboutButton)}
+                        onClose={()=>{this.setState({openAboutButton:false})}}>
                     <DialogHeader >
                         <DialogTitle>Monitoring Stations</DialogTitle>
-                        <a className={styles.close_button_style}
-                           onClick={()=>{this.setState({openInfoButton: false})}}>
+                        <a className={trendsStyles.close_button_style}
+                           onClick={()=>{this.setState({openAboutButton: false})}}>
                             <Icon name="close"/>
                         </a>
                     </DialogHeader>
@@ -74,8 +76,8 @@ class RegionMiniMap extends Component {
                     <CardHeader>
                         <CardTitle>
                             <p className={styles.locations_text_style}>Location</p>
-                            <a className={styles.locations_button_style}
-                               onClick={this.handleStationsIcon.bind(this, true)}>
+                            <a className={trendsStyles.locations_button_style}
+                               onClick={this.handleInfoIcon}>
                                 <Icon name="info"/>
                             </a>
                         </CardTitle>
@@ -157,7 +159,7 @@ class RegionMiniMap extends Component {
         let feature = new ol.Feature();
         let region_features = [];
 
-        map_items = this.props.trendSensors;
+        map_items = this.props.allSensors;
 
         // This is for the Region Outlines for one Region at a time
         area = getCustomLocation(trends_region_page);
@@ -176,8 +178,14 @@ class RegionMiniMap extends Component {
             }
         });
 
-        features = sensorsToFeaturesTrendDetailPage(
-            regionalSensors, this.props.selectedParameter, threshold, this.props.trends_region);
+        let region_parameter;
+        if (this.props.parameter != '') {
+            region_parameter = this.props.selectedParameter;
+        } else {
+            region_parameter = this.props.parameter;
+        }
+
+        features = sensorsToFeaturesTrendDetailPage(regionalSensors, region_parameter, this.props.trends_region);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
@@ -199,10 +207,10 @@ class RegionMiniMap extends Component {
         let map_items;
         let threshold = this.props.threshold_value;
 
-        map_items = this.props.trendSensors;
+        map_items = this.props.allSensors;
 
         let features = sensorsToFeaturesTrendDetailPage(
-            map_items, this.props.selectedParameter, threshold, this.props.trends_region);
+            map_items, this.props.selectedParameter, this.props.trends_region);
 
         const clusterSource = new ol.source.Cluster({
             distance: 1,
@@ -215,7 +223,7 @@ class RegionMiniMap extends Component {
             style: function () {
                 let style = (new ol.style.Style({
                     image: new ol.style.Circle({
-                        radius: 4,
+                        radius: 6,
                         fill: new ol.style.Fill({color: getTrendColor("noTrend")}),
                         stroke: new ol.style.Stroke({color: '#000000', width: 1})
                     })
@@ -266,7 +274,7 @@ class RegionMiniMap extends Component {
             overlays: [overlay],
             controls: ol.control.defaults({
                 attributionOptions: ({
-                    collapsible: false
+                    collapsible: true
                 })
             })
         });

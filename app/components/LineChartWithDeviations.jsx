@@ -17,9 +17,7 @@ class LineChartWithDeviations extends Component {
     }
 
     componentWillMount() {
-
-        this.props.loadDetailSensor(this.props.selectedParameter, this.props.selectedSeason, this.props.trends_region)
-
+        this.props.loadDetailSensor(this.props.trends_parameter, this.props.trends_season, this.props.trends_region)
     }
 
     render() {
@@ -40,7 +38,6 @@ class LineChartWithDeviations extends Component {
 
         let regionName = this.props.trends_region_name;
         let regions = this.props.trendRegions;
-
         let dataRaw = [];
         let averageData = [];
         let deviationDataRaw = [];
@@ -51,7 +48,8 @@ class LineChartWithDeviations extends Component {
 
             for (let i = 1; i < regions.length; i++) {
 
-                if (regions[i].properties.region.toUpperCase() == regionName.toUpperCase() &&
+                if (regions[i] !== undefined &&
+                    regions[i].properties.region.toUpperCase() == regionName.toUpperCase() &&
                     regions[i].trends_detail.length > 0) {
 
                     // The Values
@@ -133,12 +131,12 @@ class LineChartWithDeviations extends Component {
                 data={averageData}
                 title={chartTitle} legend={true}
                 width={650} height={400}
-                yAxisLabel={units} yAxisLabelOffset={Number(50)}
+                yAxisLabel={chartTitle} yAxisLabelOffset={Number(50)}
                 xAxisLabel="Time" xAxisLabelOffset={Number(50)}
                 gridHorizontal={true} gridVertical={true}
                 hoverAnimation={true}
                 colors={d3.scale.linear().domain([1, 2]).range(["#FF0000", "#000000"])}
-                margins={{top: 10, right: 150, bottom: 50, left: 60}}
+                margins={{top: 10, right: 150, bottom: 50, left: 70}}
                 xAccessor={(xa)=> {
                     return new Date(xa.x);
                 }}

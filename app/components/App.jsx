@@ -32,7 +32,7 @@ class App extends Component {
                 <Route path="/search" component={Search}/>
                 <Route path="/trendsstations" component={TrendsStation}/>
                 <Route path="/trendsregions" component={TrendsRegion}/>
-                <Route path="/trendsdetail/region/:region" component={TrendsDetail}/>
+                <Route path="/trendsdetail/region/:region/:parameter/:season" component={TrendsDetail}/>
                 <Route path="/analysis" component={Analysis}/>
                 <Route path="/about" component={About}/>
                 <Route path="*" component={RouteMismatch}/>

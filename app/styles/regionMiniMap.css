@@ -175,16 +175,6 @@
     float: left;
 }
 
-.locations_button_style {
-    float: right;
-    cursor: pointer;
-}
-
-.close_button_style {
-    color: red;
-    cursor: pointer;
-}
-
 .dialog_style {
     z-index: 10;
 }

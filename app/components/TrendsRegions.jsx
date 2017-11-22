@@ -26,11 +26,15 @@ class TrendsRegions extends Component {
         let trendsPageSettings = this.props.trends_regions;
         let trendsPageRegions = [];
         let trendsPageRegionsMap = [];
-
         if (trendsPageSettings) {
-            trendsPageRegionsMap = trendsPageSettings
-                .map(r => <Radio id={r.properties.id} value={r.properties.id}
-                                 key={r.properties.id}> {r.properties.title}</Radio>);
+            trendsPageSettings.map(r => {
+                if (r.properties.id.toString().toUpperCase() != 'ER') {
+                    trendsPageRegionsMap.push(
+                    <Radio id={r.properties.id} value={r.properties.id}
+                           key={r.properties.id}> {r.properties.title}</Radio>
+                    )
+                }
+            });
         }
         trendsPageRegions = trendsPageRegions.concat(trendsPageRegionsMap);
         if (trendsPageRegionsMap.length == 0) {
