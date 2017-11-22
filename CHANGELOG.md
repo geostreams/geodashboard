@@ -118,3 +118,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-953](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-953)
 - Use the API for Trends by Region and Detail
   [GEOD-977](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-977)
+- Layout of Download buttons
+  [GEOD-1013](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1013)

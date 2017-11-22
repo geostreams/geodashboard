@@ -21,7 +21,6 @@ import styles from '../styles/downloadButton.css';
 type DownloadStateType = {
     isOpen: boolean,
     link: string,
-    openMenu: ? boolean
 };
 
 class DownloadButtons extends Component {
@@ -32,13 +31,12 @@ class DownloadButtons extends Component {
         this.state = {
             isOpen: false,
             link: "",
-            openMenu: false
         };
     }
 
     // handle Permalink panel
     handleOpenPermalink = () => {
-        let link: string = this.buildLink("json");
+        let link: string = this.buildLink("csv");
         this.setState({isOpen: true, link: link});
     };
 
@@ -130,12 +128,6 @@ class DownloadButtons extends Component {
         window.open(link);
     };
 
-    handleDownloadOption = (value: boolean) => {
-        this.setState({
-            openMenu: value,
-        });
-    };
-
     render() {
 
         let numSensors = this.props.availableSensors.length;
@@ -171,31 +163,16 @@ class DownloadButtons extends Component {
                 <Button raised primary disabled={disabled}
                         onClick={this.onDownload.bind(this, "csv")}
                 >
-                    Download Data
+                    Download
                 </Button>
 
-                <Button className={styles.iconButtonStyle} disabled={disabled}
-                        onClick={() => {this.setState({openMenu: true})}}
-                >
-                    <Icon name="get_app"/>
+                <Button className={styles.button} raised disabled={disabled}  onClick={this.handleOpenPermalink}>
+                    Permalink
                 </Button>
 
                 <span className={styles.counterText}>
                     Sites: {numSensors}
                 </span>
-
-                <MenuAnchor>
-                    <Menu bottom open={this.state.openMenu} onClose={() => {
-                        this.setState({openMenu: false})
-                    }}>
-                        <MenuItem value="1" onClick={this.onDownload.bind(this, "json")}>
-                            Download as JSON
-                        </MenuItem>
-                        <MenuItem value="2" onClick={this.handleOpenPermalink}>
-                            Permalink
-                        </MenuItem>
-                    </Menu>
-                </MenuAnchor>
 
             </div>
         );
