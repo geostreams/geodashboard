@@ -122,3 +122,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1013](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1013)
 - UI Trends Improvements
   [GEOD-1010](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1010)
+- Configuration file, parameters and lakes ordering
+  [GEOD-1018](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1018)
