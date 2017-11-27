@@ -1199,11 +1199,15 @@ export const gd3 = {
             },
             {
                 "name": "EXPLORE",
-                "url": "/#explore",
+                "url": "/geodashboard/#explore",
+            },
+            {
+                "name": "COMPARE",
+                "url": "/geodashboard/#compare",
             },
             {
                 "name": "SEARCH",
-                "url": "/#search",
+                "url": "/gd3/#search",
             },
             {
                 "name": "TRENDS",
@@ -1222,7 +1226,7 @@ export const gd3 = {
 				},
 				{
 					"name": "ABOUT",
-					"url": "/#about",
+					"url": "/geodashboard/#about",
 				},
 			]
 		},
