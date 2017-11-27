@@ -108,6 +108,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1004](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1004)
 - Radio buttons border not showing up in IE 11
   [GEOD-1006](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1006)
+- Clearing the state for detail graphs.
+  [GEOD-1022](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1022)
 
 ## Changed
 - Changed how the Circle is created, and how the associated coordinates are assembled

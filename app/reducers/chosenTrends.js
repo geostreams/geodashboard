@@ -219,8 +219,8 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
             });
 
         case SELECT_TRENDS_PARAMETER:
-
-            return Object.assign({}, state, {
+            const cleared_details_state = clearDetails(state);
+            return Object.assign({}, cleared_details_state, {
                 parameter: action.parameter,
                 threshold_choice: action.threshold_choice,
                 show_spinner: true
@@ -430,4 +430,14 @@ function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
     return trends_sensors;
 }
 
+function clearDetails(state) {
+    let newState = Object.assign({}, state);
+
+    newState.trends_regions.map( region => {
+        region.trends_detail = [];
+        region.trends_deviation = [];
+    });
+
+    return newState;
+}
 export default chosenTrends
