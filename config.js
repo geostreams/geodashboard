@@ -1206,10 +1206,6 @@ export const gd3 = {
                 "url": "/#search",
             },
             {
-                "name": "ANALYSIS",
-                "url": "/#analysis",
-            },
-            {
                 "name": "TRENDS",
                 "children": [
                     {
