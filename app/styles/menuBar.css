@@ -1,3 +1,11 @@
+.header_background {
+  background-color: #17495B;
+  height: 132px;
+  width: 100%;
+  position:relative;
+  zIndex: 1;
+}
+
 .header_container {
   width: 1200px;
   height: 132px;
@@ -5,7 +13,7 @@
   margin: 0 auto; }
 
 .header_banner {
-  width: 100%;
+  width: 1200px;
   height: 132px;
   margin: 0 auto;
   background: -webkit-gradient(linear, center top, center bottom, #6396b2, color-stop(100%, white));
@@ -78,7 +86,7 @@
 
 
 .header_hr {
-  width: 100%;
+  width: 1200px;;
   height: 2px;
   border-color: #94B0C3;
   background-color: #749AA8;
@@ -183,6 +191,7 @@ ul.navbar > li.active > button {
 }
 
 .menu_style {
+  background-color: #cdcfd3 !important;
   z-index: 10;
 }
 

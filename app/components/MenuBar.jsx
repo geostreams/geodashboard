@@ -36,8 +36,7 @@ class MenuBar extends Component {
 	render() {
         let logo;
         try {
-           logo =
-               <div className={styles.header_image}>
+           logo = <div className={styles.header_image}>
                 <img src={require("../../theme/logo.png")} />
               </div>;
         } catch(e) {
@@ -82,7 +81,6 @@ class MenuBar extends Component {
             <header>
                 <div className={styles.header_background}>
                     <div className={styles.header_banner} >
-
                     {logo}
                         <div className={styles.header_title}>
                             <p id="header-title-text" className={styles.header_title_text}>{this.props.header_title}</p>
