@@ -123,6 +123,8 @@ ul.navbar > li {
 
 ul.navbar > li > div.dropdown > a,
 ul.navbar > li > a,
+ul.navbar > li > button,
+ul.navbar > li > span,
 .navigation_item{
   width: 148px;
   height: 29px;
