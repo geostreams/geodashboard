@@ -208,3 +208,8 @@ ul.navbar > li.active > button {
   font-family: 'Open Sans', sans-serif !important;
   font-weight: 800 !important;
 }
+
+.buttonTrends {
+    font-size: 18px !important;
+}
+
