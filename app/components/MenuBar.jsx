@@ -62,8 +62,8 @@ class MenuBar extends Component {
                     </MenuItem>
                 );
                 pageLinks.push(
-                    <li key={page.name}>
-                        <span className={styles.navigation_item}
+                    <li key={page.name} className={this.props.selected === page.name.toLowerCase() ? styles.active: ''}>
+                        <span className={styles.navigation_item ? styles.active: ''}
                               onClick={() => this.toggleTrendMenu(true)}
                         >
                             {page.name}<Icon className={styles.buttonTrends} name="arrow_drop_down"/>
