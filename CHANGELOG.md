@@ -110,6 +110,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1006](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1006)
 - Clearing the state for detail graphs.
   [GEOD-1022](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1022)
+- Correct Trends Menu Bar colors to update appropriately
+  [GEOD-1025](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1025)
 
 ## Changed
 - Changed how the Circle is created, and how the associated coordinates are assembled
