@@ -114,8 +114,10 @@ const mapStateToProps = (state) => {
         parameter: state.chosenTrends.parameter,
         sensor_season: state.chosenTrends.sensor_season,
         sensor_region: state.chosenTrends.sensor_region,
-        sensor_parameter: state.chosenTrends.sensor_parameter
+        sensor_parameter: state.chosenTrends.sensor_parameter,
+        show_spinner: state.chosenTrends.show_spinner
     }
 };
 
 export default connect(mapStateToProps)(TrendsSensor);
+
