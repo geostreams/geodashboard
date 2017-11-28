@@ -2,12 +2,14 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
 import {
     Radio, RadioGroup, Card, CardHeader, CardTitle, CardSubtitle, CardActions
 } from 'react-mdc-web';
 import type {InputEvent} from '../utils/flowtype';
+
 
 class TrendsParameters extends Component {
 
@@ -69,5 +71,13 @@ class TrendsParameters extends Component {
     }
 
 }
+
+TrendsParameters.propTypes = {
+    chosenParameter: React.PropTypes.string.isRequired,
+    className: React.PropTypes.string.isRequired,
+    trends_settings: React.PropTypes.array.isRequired,
+    trends_threshold_choice: React.PropTypes.bool.isRequired,
+    trends_view_type: React.PropTypes.string.isRequired
+};
 
 export default TrendsParameters;

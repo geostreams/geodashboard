@@ -2,7 +2,8 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import trendsStyles from '../styles/trends.css';
@@ -341,5 +342,13 @@ class RegionMiniMap extends Component {
     }
 
 }
+
+RegionMiniMap.propTypes = {
+    trends_region: React.PropTypes.string.isRequired,
+    trends_region_title: React.PropTypes.string.isRequired,
+    threshold_value: React.PropTypes.string.isRequired,
+    trendSensors: React.PropTypes.array.isRequired,
+    selectedParameter: React.PropTypes.string.isRequired
+};
 
 export default RegionMiniMap
