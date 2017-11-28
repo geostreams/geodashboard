@@ -1,5 +1,5 @@
 .liststyle {
-    width: 25em;
+    width: 24em;
     float: left;
     height: calc(100vh - 10em);
     overflow-y: scroll;
@@ -74,18 +74,18 @@
 }
 
 .parametersCardStyle {
-    width: 22em;
+    width: 21em;
     margin: 0em 0.1em 1em 0.1em;
 }
 
 .parametersCardStyleDetail {
-    width: 22em;
+    width: 21em;
     margin: 0em 0.1em 1em 0.1em;
 }
 
 .cardMargin {
     margin: 0em 0.1em 1em 0.1em;
-    width: 22em;
+    width: 21em;
 }
 
 .selectedParameter {

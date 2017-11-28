@@ -60,7 +60,7 @@ class TrendsRegion extends Component {
                 <Content>
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>
-                            <Cell col={2}>
+                            <Cell col={3}>
                                 <List className={trendsStyles.liststyle}>
                                     {selections}
                                     <TrendsSeasons
@@ -77,7 +77,7 @@ class TrendsRegion extends Component {
                                     />
                                 </List>
                             </Cell>
-                            <Cell col={10}>
+                            <Cell col={9}>
                                 <div className={styles.rightmap}>
                                     <Map
                                         display_draw='False'
