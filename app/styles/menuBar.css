@@ -156,7 +156,7 @@ ul.navbar > li.active {
 ul.navbar > li.active > div.dropdown > a,
 ul.navbar > li.active > a,
 ul.navbar > li.active > button,
-ul.navbar > li:active > span {
+ul.navbar > li.active > span {
   text-decoration: none !important;
   color: white !important; }
 
