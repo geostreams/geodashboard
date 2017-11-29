@@ -130,3 +130,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1018](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1018)
 - Changed Layout of the Grids.
   [GEOD-1023](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1023)
+- Added LEC parameters
+  [GLM-105](https://opensource.ncsa.illinois.edu/jira/browse/GLM-105)

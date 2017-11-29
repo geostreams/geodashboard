@@ -22,6 +22,8 @@ export const gd3 = {
 		"biomass": "Zooplankton Biomass (ug/m^3)",
 		"density": "Zooplankton Density (#/m^3)",
 		"alkalinity-glenda": "Alkalinity (mg/L)",
+		"chlorophyll-a": "Chlorophyll a (ug/L)",
+		"total-phosphorus": "Total Phosphorus (ug/L)",
 		"chlorophyll-a-glenda": "Chlorophyll a (ug/L)",
 		"nitrogen-glenda": "Nitrite-Nitrate (mg/L)",
 		"silica-glenda": "Silica (mg/L)",
