@@ -1,13 +1,5 @@
-.header_background {
-  background-color: #17495B;
-  height: 132px;
-  width: 100%;
-  position:relative;
-  zIndex: 1;
-}
-
 .header_container {
-  width: 1200px;
+  width: 100%;
   height: 132px;
   color: #d7e3e7;
   margin: 0 auto; }
@@ -86,7 +78,7 @@
 
 
 .header_hr {
-  width: 1200px;;
+  width: 100%;
   height: 2px;
   border-color: #94B0C3;
   background-color: #749AA8;
@@ -196,7 +188,6 @@ ul.navbar > li.active > span {
 }
 
 .menu_style {
-  background-color: #cdcfd3 !important;
   z-index: 10;
 }
 
