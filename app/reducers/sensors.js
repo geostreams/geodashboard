@@ -3,8 +3,8 @@
  */
 import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS} from '../actions';
 import type { Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype';
-import {inArray, sortByLabel, pnpoly} from '../utils/arrayUtils';
-import {getSourceName, getParameterName} from '../utils/getConfig';
+import {inArray, sortByLabel, pnpoly, intersectArrays} from '../utils/arrayUtils';
+import {getSourceName, getParameterName, getAlternateParameters, getAlternateParameterName} from '../utils/getConfig';
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS',
     sensors:Sensors,
@@ -112,16 +112,20 @@ function filterCustomLocation(state:sensorsState, selectedPointsLocations:Array<
 
 export function collectParameters(sensorsData:Sensors):MapWithLabels {
     let params:MapWithLabels = [];
+    let alternateParameters = getAlternateParameters();
     sensorsData.map(s => {
       s.parameters.map(p => {
         // check if parameters exists already
-        const found = params.some(function (e:MapWithLabel) {
-          return e.id === p;
+        let found = params.some(function (e:MapWithLabel) {
+          return e.id === p || e.id === alternateParameters[p];
         });
-        if (p === null)
-        	console.log(`Found sensor ${s.id} with null parameters`);
-        else if (!found && getParameterName(p) != null)
-        	params.push({'id': p, 'label': getParameterName(p) || ''});
+        if (p === null) {
+	        console.log(`Found sensor ${s.id} with null parameters`);
+        }  else if (!found && getParameterName(p) != null) {
+	        params.push({'id': p, 'label': getParameterName(p) || ''});
+        }  else if (!found &&  getAlternateParameterName(p, alternateParameters) != null ) {
+            params.push({'id': alternateParameters[p], 'label': getParameterName(alternateParameters[p]) || '' });
+        }
       });
     });
     // sort
@@ -226,8 +230,16 @@ function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string
             case 'parameters':
                 if(selectedSearch.parameters.selected.length > 0) {
                     new_sensors = [];
+                    let parametersToSearch = Object.assign([], selectedSearch.parameters.selected);
+                    let multiParameters = intersectArrays(Object.keys(window.configruntime.gd3.multi_parameter_map), selectedSearch.parameters.selected);
+                    multiParameters.map((parameter) =>
+                        window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
+                            parametersToSearch.push(alternate);
+                        })
+                    );
+
                     av_sensors.map((sensor) => {
-                        if(inArray(selectedSearch.parameters.selected, sensor.parameters)) {
+                        if(inArray(parametersToSearch, sensor.parameters)) {
                             new_sensors.push(sensor);
                         }
                     });

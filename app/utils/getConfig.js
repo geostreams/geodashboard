@@ -35,8 +35,23 @@ function capitalize(a:string):string {
     return a.charAt(0).toUpperCase() + a.slice(1);
 }
 
+export function getAlternateParameters() {
+    let parameters = {};
+	Object.keys(window.configruntime.gd3.multi_parameter_map).map((parameter) =>
+		window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
+            parameters[alternate] = parameter;
+        })
+    );
+    return parameters;
+}
+
+export function getAlternateParameterName(alternate: string, alternate_parameters_map) {
+	const parameter = alternate_parameters_map[alternate];
+	return getParameterName(parameter);
+}
+
 export function getParameterName(parameter:string):?string {
-    const parameter_maps = window.configruntime.gd3.parameter_maps;
+    const parameter_maps = Object.assign({}, window.configruntime.gd3.parameter_maps);
     return parameter_maps[parameter] !== undefined ? parameter_maps[parameter] :
         null;
 }

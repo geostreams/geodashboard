@@ -16,6 +16,7 @@ import {
     MenuAnchor
 } from 'react-mdc-web';
 import {getCustomLocation} from '../utils/getConfig';
+import {intersectArrays} from '../utils/arrayUtils';
 import styles from '../styles/downloadButton.css';
 
 type DownloadStateType = {
@@ -81,7 +82,14 @@ class DownloadButtons extends Component {
             params["sources"] = this.props.selectedDataSources;
         }
         if (this.props.selectedParameters.length > 0) {
-            params["attributes"] = this.props.selectedParameters;
+            let parametersToSearch = Object.assign([], this.props.selectedParameters);
+            const multiParameters = intersectArrays(Object.keys(window.configruntime.gd3.multi_parameter_map), this.props.selectedParameters);
+	        multiParameters.map((parameter) =>
+		        window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
+			        parametersToSearch.push(alternate);
+		        })
+	        );
+            params["attributes"] = parametersToSearch;
         }
 
         if (this.props.selectedLocation !== null) {

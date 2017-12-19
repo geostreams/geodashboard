@@ -17,15 +17,19 @@ export const gd3 = {
         "usgs": "#39B54A",
         "wqp": "#F28E1E"
     },
+    multi_parameter_map: {
+        "total-phosphorus": ["total-phosphorus-glenda", "phosphorus-load", "phosphorus-concentration"],
+        "chlorophyll-a": ["chlorophyll-a-glenda"]
+    },
 
     parameter_maps: {
         "biomass": "Zooplankton Biomass (ug/m^3)",
         "density": "Zooplankton Density (#/m^3)",
         "alkalinity-glenda": "Alkalinity (mg/L)",
-        "chlorophyll-a-glenda": "Chlorophyll a (ug/L)",
+        "chlorophyll-a": "Chlorophyll a (ug/L)",
         "nitrogen-glenda": "Nitrite-Nitrate (mg/L)",
         "silica-glenda": "Silica (mg/L)",
-        "total-phosphorus-glenda": "Total Phosphorus (ug/L)",
+        "total-phosphorus": "Total Phosphorus (ug/L)",
         "turbidity-glenda": "Turbidity (NTU)",
         "ammonia-glenda" : "Ammonia (ug/l)" ,
         "ammonia-nitrogen-glenda" : "Ammonia-Nitrogen (ug/l)",
@@ -41,7 +45,6 @@ export const gd3 = {
         "temperature-glenda":"Temperature (C)",
         "transmittance-horizontal-glenda":"Transmittance, Horizontal (%)",
         "ph-glenda":"pH",
-        "phosphorus-load": "Total Phosphorus (ug/L)",
         "nitrogen-load": "Nitrogen (mg/L)",
         "mercury": "Mercury (ug/g)",
         "mirex": "Mirex (ug/g)",
@@ -52,7 +55,6 @@ export const gd3 = {
         "toxaphene": "Toxaphene (ug/l)",
         "river-discharge": "River Discharge (cubic feet/s)",
         "srp-load": "Soluble Reactive Phosphorus (mg/L)",
-        "phosphorus-concentration": "Total Phosphorus (ug/L)",
         "nitrogen-concentration": "Nitrogen (mg/L)",
         "load-Mg": "Nitrate Load (Mg)",
         "cumulative-load-Mg": "Nitrate Cumulative Load (Mg)",

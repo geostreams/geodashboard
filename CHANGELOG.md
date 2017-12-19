@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## UNRELEASED
 
 ### Added
+
+### Changed
+
+### Fixed
+- Search page showing the same parameter multiple times
+  [GEOD-1027](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1027)
+
+## [3.0.0-alpha.1] - 2017-11-27
+
+### Added
 - Use [Yarn](https://yarnpkg.com) for package management.
 - Adopt `containers`/`components` distinction according to redux documentation.
   [GEOD-789](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-789)
