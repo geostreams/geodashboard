@@ -18,8 +18,9 @@ export const gd3 = {
         "wqp": "#F28E1E"
     },
     multi_parameter_map: {
-        "total-phosphorus": ["total-phosphorus-glenda", "phosphorus-load", "phosphorus-concentration"],
-        "chlorophyll-a": ["chlorophyll-a-glenda"]
+        "total-phosphorus": ["total-phosphorus-glenda", "phosphorus-load", "phosphorus-concentration", "total-phosphorus-mgl"],
+        "chlorophyll-a": ["chlorophyll-a-glenda"],
+	    "nitrogen-load": ["nitrogen-concentration"]
     },
 
     parameter_maps: {
@@ -55,7 +56,6 @@ export const gd3 = {
         "toxaphene": "Toxaphene (ug/l)",
         "river-discharge": "River Discharge (cubic feet/s)",
         "srp-load": "Soluble Reactive Phosphorus (mg/L)",
-        "nitrogen-concentration": "Nitrogen (mg/L)",
         "load-Mg": "Nitrate Load (Mg)",
         "cumulative-load-Mg": "Nitrate Cumulative Load (Mg)",
         "ammonia-ammonium-mgl": "Ammonia / Ammonium (mg/L)",
@@ -115,7 +115,6 @@ export const gd3 = {
         "fluorescent-dissolved-matter-rfu": "Fluorescent Dissolved Organic Matter (RFU)",
         "fluorescent-dissolved-organic-matter-qsu": "Fluorescent Dissolved Organic Matter (QSU)",
         "soluble-reactive-phosphorus-mgl": "Soluble Reactive Phosphorus (mg/L)",
-        "total-phosphorus-mgl": "Total Phosphorus (mg/L)",
         "total-soluble-nitrogen-mgl": "Total Soluble Nitrogen (mg/L)",
         "total-soluble-phosphorus-mgl": "Total Soluble Phosphorus (mg/L)",
         "water-turbidity-fnu": "Water Turbidity (FNU)",
