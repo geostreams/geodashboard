@@ -30,7 +30,7 @@ class Search extends Component {
                                 </div>
                             </Cell>
                             <Cell col={10}>
-                                <div className={styles.rightmap} >
+                                <div className={styles.rightMap} >
                                     <SearchMap />
                                 </div>
                             </Cell>

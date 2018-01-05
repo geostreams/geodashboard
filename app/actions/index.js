@@ -63,6 +63,7 @@ function receiveSensors(api:string, json:Sensors) {
         });
         dispatch(updateAvailableFilters());
         dispatch(setTrendsSensors());
+        dispatch(setAvailableLayers());
     }
 }
 
@@ -802,4 +803,29 @@ export function fetchAnalysisRegion(region:string){
             sensors
         })
     }
+}
+
+export const SET_AVAILABLE_LAYERS = 'SET_AVAILABLE_LAYERS';
+export function setAvailableLayers() {
+    return (dispatch:Dispatch) => {
+        dispatch({
+            type: SET_AVAILABLE_LAYERS
+        });
+    }
+}
+
+export const UPDATE_LAYER = 'UPDATE_LAYER';
+export function updateLayer(layer:Array<string>) {
+    return {
+        type: UPDATE_LAYER,
+        layer
+    };
+}
+
+export const SET_LAYER_OPACITY = 'SET_LAYER_OPACITY';
+export function setLayerOpacity(opacity:Array<string>) {
+    return {
+        type: SET_LAYER_OPACITY,
+        opacity
+    };
 }

@@ -93,8 +93,6 @@ class BasicMap extends Component {
 
     }
 
-
-
     componentDidUpdate() {
         this.props.mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
         this.state.clusterSource.clear();

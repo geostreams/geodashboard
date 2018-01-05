@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## UNRELEASED
+
+### Added
+- Add Explore Layers option on the Explore Page as a Drawer
+  [GLGVO-376](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-376)
+
+### Fixed
+
+
+### Changed
+
+
 ## [3.0.0-alpha.1] - 2017-11-22
 
 ### Added
