@@ -56,7 +56,7 @@ class DownloadButtons extends Component {
 
     buildLink = function (type: string): string {
 
-        let downloadApi = this.props.api + "/api/geostreams/datapoints?";
+        let downloadApi = this.props.api.slice(0, -8) + "/geostreams/datapoints/download?";
         // refer to https://opensource.ncsa.illinois.edu/bitbucket/projects/CATS/repos/clowder/browse/app/api/Geostreams.scala#665
         let params = {};
         params["format"] = type;
