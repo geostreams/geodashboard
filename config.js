@@ -1079,13 +1079,12 @@ export const gd3 = {
 		},
 	],
 
-	trends_page_lake_regions:[
-		{
-
-			"lake": "ER",
-			"regions": "er-west,er-east,er-center"
-		}
-	],
+    trends_page_lake_regions: [
+            {
+                "lake": "ER",
+                "regions": "er-west,er-east,er-center"
+            }
+        ],
 
 	trends_page_seasons: [
 		{
@@ -1243,7 +1242,10 @@ export const gd3 = {
 	threshold_none_subtitle: '',
 	// **********
 
-	mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
+    exploreLayers: [
+    ],
+
+    mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
 

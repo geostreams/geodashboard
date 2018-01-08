@@ -1,10 +1,9 @@
 /*
  * @flow
  */
-import { connect } from 'react-redux'
-import ExploreMapComponent from '../components/ExploreMap'
-import { addCustomLocationFilter, addCustomTrendLocationFilter } from '../actions'
-import type { Dispatch } from '../utils/flowtype'
+
+import { connect } from 'react-redux';
+import ExploreMapComponent from '../components/ExploreMap';
 
 const mapStateToProps = (state) => {
     return {

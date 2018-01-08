@@ -2,22 +2,25 @@ import React, {Component} from 'react';
 import Menu from '../containers/MenuBar';
 import Map from '../containers/ExploreMap';
 import ExploreSourcesTab from '../containers/ExploreSourcesTab';
-import {Card, CardTitle, CardHeader, CardText, Grid, Cell, Content, List} from 'react-mdc-web';
+import ExploreLayers from '../components/ExploreLayers';
+import {
+    Button, Card, CardTitle, CardHeader, CardText, Grid, Cell, Content, List
+} from 'react-mdc-web';
 import styles from '../styles/main.css';
+import exploreStyles from '../styles/explore.css';
 import {connect} from 'react-redux';
+import { getLayersDetails } from '../utils/getConfig';
 
 class Explore extends Component {
+
     constructor(props) {
         super(props);
-        this.state = {
-            isOpen: false
-        };
     }
 
     render() {
 
         let sourceLists = this.props.sources.map(s =>
-            <Card id={s.id} className={styles.card} key={s.id}>
+            <Card id={s.id} className={exploreStyles.exploreCard} key={s.id}>
                 <CardHeader>
                     <CardTitle>{s.label} </CardTitle>
                 </CardHeader>
@@ -27,6 +30,14 @@ class Explore extends Component {
             </Card>
         );
 
+        let exploreLayers, exploreLayersDetails, layersVisibility;
+
+        if (this.props.layersVisibility.length > 0) {
+            exploreLayersDetails = getLayersDetails();
+            exploreLayers = <ExploreLayers/>;
+            layersVisibility = this.props.layersVisibility;
+        }
+
         return (
             <div>
                 <Menu selected='explore'/>
@@ -34,26 +45,33 @@ class Explore extends Component {
                     <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>
                             <Cell col={2}>
-                                <List className={styles.leftcolumn}>
+                                <List className={styles.leftColumn}>
                                     {sourceLists}
                                 </List>
                             </Cell>
                             <Cell col={10}>
-                                <div className={styles.rightmap}>
-                                    <Map />
+                                <div className={styles.rightMap}>
+                                    <Map
+                                        exploreLayersDetails={exploreLayersDetails}
+                                        layersVisibility={layersVisibility}
+                                    />
                                 </div>
                             </Cell>
                         </Grid>
+                        {exploreLayers}
                     </div>
                 </Content>
+
             </div>
         )
+
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        sources: state.sensors.sources
+        sources: state.sensors.sources,
+        layersVisibility: state.exploreLayers.layers_visibility
     }
 };
 
