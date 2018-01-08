@@ -18,11 +18,21 @@ module.exports = {
         test: /\.json$/,
         loader: "json"
       },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: 'babel'
-      },
+        {
+            test: /\.jsx?$/,
+            exclude: /node_modules/,
+            loader: 'babel',
+
+            plugins: [
+                'react-transform', {
+                    transforms: [{
+                        transform: 'react-transform-hmr',
+                        imports: ['react'],
+                        locals: ['module']
+                    }]
+                }
+            ],
+        },
       {
         test: /\.css$/,
         include: [/node_modules/, /styles_custom/],
