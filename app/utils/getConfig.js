@@ -48,15 +48,19 @@ export function getAlternateParameters() {
 
 export function getAlternateParameterName(alternate: string, alternate_parameters_map) {
 	const parameter = alternate_parameters_map[alternate];
-	return getParameterName(parameter);
+	return getParameterNameNoAlternate(parameter);
 }
 
-export function getParameterName(parameter:string):?string {
+export function getParameterNameNoAlternate(parameter:string):?string {
     const parameter_maps = Object.assign({}, window.configruntime.gd3.parameter_maps);
     return parameter_maps[parameter] !== undefined ? parameter_maps[parameter] :
         null;
 }
 
+export function getParameterName(parameter:string, alternate_parameters_map ):?string {
+	const name = getParameterNameNoAlternate(parameter);
+	return name !== null ? name : getAlternateParameterName(parameter, alternate_parameters_map);
+}
 export function getTrendSettings() {
     return window.configruntime.gd3.trend_settings;
 }

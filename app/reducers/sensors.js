@@ -4,7 +4,7 @@
 import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS} from '../actions';
 import type { Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype';
 import {inArray, sortByLabel, pnpoly, intersectArrays, sortByLake} from '../utils/arrayUtils';
-import {getSourceName, getParameterName, getAlternateParameters, getAlternateParameterName} from '../utils/getConfig';
+import {getSourceName, getParameterName, getAlternateParameters, getAlternateParameterName, getParameterNameNoAlternate} from '../utils/getConfig';
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS',
     sensors:Sensors,
@@ -121,10 +121,10 @@ export function collectParameters(sensorsData:Sensors):MapWithLabels {
         });
         if (p === null) {
 	        console.log(`Found sensor ${s.id} with null parameters`);
-        }  else if (!found && getParameterName(p) != null) {
-	        params.push({'id': p, 'label': getParameterName(p) || ''});
+        }  else if (!found && getParameterNameNoAlternate(p) != null) {
+	        params.push({'id': p, 'label': getParameterNameNoAlternate(p) || ''});
         }  else if (!found &&  getAlternateParameterName(p, alternateParameters) != null ) {
-            params.push({'id': alternateParameters[p], 'label': getParameterName(alternateParameters[p]) || '' });
+            params.push({'id': alternateParameters[p], 'label': getParameterNameNoAlternate(alternateParameters[p]) || '' });
         }
       });
     });
