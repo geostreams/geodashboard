@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-376](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-376)
 
 ### Fixed
+- Search page permalink showing on the left side instead of centered
+  [GEOD-1034](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1034)
 
 ### Changed
 
