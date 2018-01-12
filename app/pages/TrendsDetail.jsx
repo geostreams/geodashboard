@@ -2,8 +2,7 @@
  * @flow
  */
 
-
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import Menu from '../containers/MenuBar';
 import RegionMiniMap from '../containers/RegionMiniMap';
 import TrendsRegionDetails from '../containers/TrendsRegionDetails';

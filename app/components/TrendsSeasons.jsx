@@ -2,13 +2,15 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
 import {
     Radio, RadioGroup, Button,
     Card, CardHeader, CardTitle, CardSubtitle, CardActions
 } from 'react-mdc-web';
 import type {InputEvent} from '../utils/flowtype';
+
 
 class TrendsSeasons extends Component {
 
@@ -69,5 +71,11 @@ class TrendsSeasons extends Component {
     }
 
 }
+
+TrendsSeasons.propTypes = {
+    trends_view_type: React.PropTypes.string.isRequired,
+    trends_defaults: React.PropTypes.array.isRequired,
+    trends_seasons: React.PropTypes.array.isRequired
+};
 
 export default TrendsSeasons;

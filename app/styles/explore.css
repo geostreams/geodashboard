@@ -1,0 +1,79 @@
+.layersButton {
+    position: absolute;
+    right: 1em;
+    top: 9em;
+    z-index: 1;
+    background-color: #5f99c1;
+}
+
+.layersButtonText {
+    font-weight: bold;
+    color: white;
+}
+
+.layersCloseButton {
+    color: white !important;
+}
+
+.layersCloseButtonDiv {
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    z-index: 5;
+}
+
+.layersHeader {
+    background-color: #467A9E !important;
+    color: white !important;
+    padding: 1em !important;
+    font-size: 120% !important;
+}
+
+.drawerSettings {
+    left: auto !important;
+    right: 0 !important;
+    margin-top: 8.25em;
+}
+
+.drawerSettings:before {
+    background: none !important;
+    right: 0 !important;
+}
+
+nav {
+    left: auto !important;
+    right: 0 !important;
+    width: 30em !important;
+}
+
+.layersDrawerClass {
+    visibility: hidden;
+}
+
+.exploreCard {
+    width: 22em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.checkboxWidth {
+    width: 1em;
+}
+
+.checkboxLabel {
+    margin-left: 1.1em;
+}
+
+.col {
+    margin-left: 1em;
+    margin-top: 0.6em;
+    margin-bottom: -0.5em;
+    width: 90%;
+}
+
+.sliderStyle {
+    margin-left: 4em;
+    margin-top: 0.6em;
+    width: 20em;
+}
+

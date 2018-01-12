@@ -2,11 +2,11 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
 import {
-    Radio, RadioGroup,
-    Card, CardHeader, CardTitle, CardSubtitle, CardActions
+    Radio, RadioGroup, Card, CardHeader, CardTitle, CardSubtitle, CardActions
 } from 'react-mdc-web';
 import type {InputEvent} from '../utils/flowtype';
 
@@ -73,5 +73,11 @@ class TrendsRegions extends Component {
     }
 
 }
+
+TrendsRegions.propTypes = {
+    trends_view_type: React.PropTypes.string.isRequired,
+    trends_regions: React.PropTypes.array.isRequired,
+    chosenRegion: React.PropTypes.string.isRequired
+};
 
 export default TrendsRegions;

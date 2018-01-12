@@ -35,13 +35,13 @@ h1, h2, h3, h5, h6, p, ul {
     overflow: hidden;
 }
 
-.rightmap {
+.rightMap {
     margin: 0em 0em 0em 0em;
     float: right;
 }
 
 /*TODO: change this. */
-.leftcolumn {
+.leftColumn {
     width: 24em;
     margin: 0em 0em 3em 1em;
     float: left;

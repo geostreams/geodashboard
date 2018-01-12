@@ -2,7 +2,8 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
 import {
     Textfield, Cell, Grid,
@@ -105,5 +106,8 @@ class TrendsCalculationSettings extends Component {
 
 }
 
-export default TrendsCalculationSettings;
+TrendsCalculationSettings.propTypes = {
+    trends_defaults: React.PropTypes.array.isRequired
+};
 
+export default TrendsCalculationSettings;

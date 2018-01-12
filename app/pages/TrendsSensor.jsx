@@ -2,7 +2,7 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import Menu from '../containers/MenuBar';
 import Map from '../containers/TrendsMap';
 import TrendsParameters from '../containers/TrendsParameters';
@@ -16,7 +16,6 @@ import {
     getTrendsPageSettings, getTrendsPageSeasons,
     getTrendsRegionsSettings, getTrendsDefaultValues
 } from '../utils/getConfig';
-
 
 class TrendsSensor extends Component {
 
@@ -90,7 +89,7 @@ class TrendsSensor extends Component {
                                 </List>
                             </Cell>
                             <Cell col={9}>
-                                <div className={styles.rightmap}>
+                                <div className={styles.rightMap}>
                                     <Map
                                         display_draw='False'
                                         trends_settings={trendsPageSettings}

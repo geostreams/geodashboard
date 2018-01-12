@@ -20,6 +20,16 @@ import {getAttribution} from '../utils/mapUtils';
 import type {MapProps, BasicMapState} from '../utils/flowtype';
 
 class BasicMap extends Component {
+    centerButton: ?HTMLButtonElement;
+    ol_centercontrol: ?HTMLButtonElement;
+    drawCircleButton: ?HTMLButtonElement;
+    ol_drawcirclecontrol: ?HTMLButtonElement;
+    drawCustomButton: ?HTMLButtonElement;
+    ol_drawsquarecontrol: ?HTMLButtonElement;
+    drawSquareButton: ?HTMLButtonElement;
+    ol_drawcustomcontrol: ?HTMLButtonElement;
+    drawClearButton: ?HTMLButtonElement;
+    ol_drawclearcontrol: ?HTMLButtonElement;
     state: BasicMapState;
 
     constructor(props: MapProps) {
@@ -61,39 +71,49 @@ class BasicMap extends Component {
                     <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
                     <div id="popup-content"></div>
                 </div>
-                <div id="ol-centercontrol" className={styles.olCenterButton}></div>
-                <button id="centerButton"><Icon name="gps_fixed"/></button>
+                <div id="ol-centercontrol" className={styles.olCenterButton}
+                     ref={(div) => { this.ol_centercontrol = div; }}
+                ></div>
+                <button id="centerButton" ref={(button) => { this.centerButton = button; }}>
+                    <Icon name="gps_fixed"/>
+                </button>
 
                 <div id="ol-drawcirclecontrol"
                      className={styles.olDrawCircleButton + ' ' +
-                    styles.olSharedDrawStyles + ' drawing_buttons'} ></div>
-                <button id="drawCircleButton" title="Click to Draw a Circle">
+                    styles.olSharedDrawStyles + ' drawing_buttons'}
+                     ref={(div) => { this.ol_drawcirclecontrol = div; }}
+                ></div>
+                <button id="drawCircleButton" title="Click to Draw a Circle" ref={(button) => { this.drawCircleButton = button; }}>
                     <Icon name="panorama_fish_eye"/></button>
 
                 <div id="ol-drawsquarecontrol"
                      className={styles.olDrawSquareButton + ' ' +
-                    styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                <button id="drawSquareButton" title="Click to Draw a Square">
+                    styles.olSharedDrawStyles + ' drawing_buttons'}
+                     ref={(div) => { this.ol_drawsquarecontrol = div; }}
+                ></div>
+                <button id="drawSquareButton" title="Click to Draw a Square" ref={(button) => { this.drawSquareButton = button; }}>
                     <Icon name="crop_square"/></button>
 
                 <div id="ol-drawcustomcontrol"
                      className={styles.olDrawCustomButton + ' ' +
-                    styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                <button id="drawCustomButton" title="Click to Draw a Custom Shape">
+                    styles.olSharedDrawStyles + ' drawing_buttons'}
+                     ref={(div) => { this.ol_drawcustomcontrol = div; }}
+                ></div>
+                <button id="drawCustomButton" title="Click to Draw a Custom Shape" ref={(button) => { this.drawCustomButton = button; }}>
                     <Icon name="star_border"/></button>
 
                 <div id="ol-drawclearcontrol"
                      className={styles.olDrawClearButton + ' ' +
-                     styles.olSharedDrawStyles + ' drawing_buttons'}></div>
-                <button id="drawClearButton" title="Click to Reset Drawing Selection">
+                     styles.olSharedDrawStyles + ' drawing_buttons'}
+                     ref={(div) => { this.ol_drawclearcontrol = div; }}
+                ></div>
+                <button id="drawClearButton" title="Click to Reset Drawing Selection" ref={(button) => { this.drawClearButton = button; }}>
                     <Icon name="clear"/></button>
             </div>
 
         </div>);
 
     }
-
-
 
     componentDidUpdate() {
         this.props.mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
@@ -165,387 +185,348 @@ class BasicMap extends Component {
             minZoom: 5.5,
             maxZoom: this.state.maxZoom
         });
+
         let theMap;
+        const that = this;
+        let centerControl;
 
-        window.app = {};
-        let app = window.app;
-        app.centerControl = function (opt_options) {
-            let options = opt_options || {};
-            const centerButton = document.getElementById('centerButton');
+        const centerButton = this.centerButton;
+        let element = this.ol_centercontrol;
 
-            let handleCenterButton = function () {
-                view.fit(vectorSource.getExtent(), theMap.getSize());
-            };
-            if (centerButton) {
-                centerButton.addEventListener('click', handleCenterButton, false);
-                centerButton.addEventListener('touchstart', handleCenterButton, false);
-            }
+        let handleCenterButton = function () {
+            view.fit(that.state.vectorSource.getExtent(), that.state.map.getSize());
+        };
 
-            const element = document.getElementById('ol-centercontrol');
-            if (element && centerButton) {
-                element.className += ' ol-unselectable ol-control';
-                element.appendChild(centerButton);
+        if (centerButton && element) {
+            centerButton.addEventListener('click', handleCenterButton, false);
+            centerButton.addEventListener('touchstart', handleCenterButton, false);
 
-                ol.control.Control.call(this, {
-                    element: element,
-                    target: options.target
-                });
+
+            element.className += ' ol-unselectable ol-control';
+            element.appendChild(centerButton);
+
+            centerControl = new ol.control.Control({
+                element: element
+            });
+        }
+
+
+        let drawClearControl;
+        let selectPoints = [];
+
+        // Add Draw Clear/Reset Button
+        const drawClearButton = this.drawClearButton;
+        let drawElement = this.ol_drawclearcontrol;
+
+        let handleDrawClearButton = function () {
+            theMap.getInteractions().forEach(function (e) {
+                if(e instanceof ol.interaction.Draw) {
+                    theMap.removeInteraction(e);
+                }
+            });
+
+            customLocationFilterLayer.getSource().clear();
+
+            selectPoints = [];
+
+            // Create empty array for points
+            let selectPointsLocations = [];
+
+            // Set this for resetting the points
+            selectPointsLocations[0] = 'reset_points';
+
+            // Get the shape coordinates
+            let drawCoordinates = [];
+
+            // This is the button that will reset the points
+            that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
+
+            // Reset the State Variable
+            that.setState({customLocationFilterVectorExtent: []});
+
+            let keep_draw_active = document.getElementById('draw');
+            if (keep_draw_active) {
+                keep_draw_active.click();
             }
 
         };
-        ol.inherits(app.centerControl, ol.control.Control);
 
-        let selectPoints = [];
+        if (drawElement && drawClearButton) {
 
-        const that = this;
+            drawClearButton.addEventListener('click', handleDrawClearButton, false);
+            drawClearButton.addEventListener('touchstart', handleDrawClearButton, false);
 
-        // Add Draw Clear/Reset Button
-        let appDrawClear = window.app;
-        appDrawClear.drawClearControl = function (opt_options) {
-            let options = opt_options || {};
-            const drawClearButton = document.getElementById('drawClearButton');
 
-            let handleDrawClearButton = function () {
+            drawElement.className += ' ol-unselectable ol-control';
+            drawElement.appendChild(drawClearButton);
+
+            drawClearControl = new ol.control.Control({
+                element: drawElement,
+            });
+        }
+
+        // Add Draw Square Button
+        let drawSquareControl;
+        const drawSquareButton = this.drawSquareButton;
+        drawElement = this.ol_drawsquarecontrol;
+
+        let handleDrawSquareButton = function () {
+
+            let drawSquare = new ol.interaction.Draw({
+                type: 'Circle',
+                source: customLocationFilterVector,
+                geometryFunction: ol.interaction.Draw.createRegularPolygon(4),
+            });
+
+            theMap.addInteraction(drawSquare);
+
+            drawSquare.on ('drawstart',function() {
+                selectItems.setActive(false);
+                selectPoints = [];
+            });
+
+            drawSquare.on('drawend', function (e) {
+                customLocationFilterLayer.getSource().clear();
+                selectItems.setActive(true);
+
                 theMap.getInteractions().forEach(function (e) {
                     if(e instanceof ol.interaction.Draw) {
                         theMap.removeInteraction(e);
                     }
                 });
 
-                customLocationFilterLayer.getSource().clear();
+                // Get the shape geometry
+                let drawExtent = e.feature.getGeometry();
+                that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
 
-                selectPoints = [];
+                // Get all the features in the layer
+                let featuresInLayer = clusters.getSource().getFeatures();
 
-                // Create empty array for points
-                let selectPointsLocations = [];
-
-                // Set this for resetting the points
-                selectPointsLocations[0] = 'reset_points';
-
-                // Get the shape coordinates
-                let drawCoordinates = [];
-
-                // This is the button that will reset the points
-                that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
-
-                // Reset the State Variable
-                that.setState({customLocationFilterVectorExtent: []});
-
-                let keep_draw_active = document.getElementById('draw');
-                if (keep_draw_active) {
-                    keep_draw_active.click();
+                // Check each feature
+                let loopFeatureExtent;
+                for (let j = 0; j < featuresInLayer.length; j++) {
+                    loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
+                    // Only select the features within the shape
+                    if (drawExtent.intersectsExtent(loopFeatureExtent)) {
+                        selectPoints.push(featuresInLayer[j]);
+                    }
                 }
 
-            };
+                let selectPointsLocations = [];
 
-            if (drawClearButton) {
-                drawClearButton.addEventListener('click', handleDrawClearButton, false);
-                drawClearButton.addEventListener('touchstart', handleDrawClearButton, false);
-            }
-
-            const drawElement = document.getElementById('ol-drawclearcontrol');
-            if (drawElement && drawClearButton) {
-                drawElement.className += ' ol-unselectable ol-control';
-                drawElement.appendChild(drawClearButton);
-
-                ol.control.Control.call(this, {
-                    element: drawElement,
-                    target: options.target
-                });
-            }
-
-        };
-
-        // Add Draw Square Button
-        let appDrawSquare = window.app;
-        appDrawSquare.drawSquareControl = function (opt_options) {
-            let options = opt_options || {};
-            const drawSquareButton = document.getElementById('drawSquareButton');
-
-            let handleDrawSquareButton = function () {
-
-                let drawSquare = new ol.interaction.Draw({
-                    type: 'Circle',
-                    source: customLocationFilterVector,
-                    geometryFunction: ol.interaction.Draw.createRegularPolygon(4),
-                });
-
-                theMap.addInteraction(drawSquare);
-
-                drawSquare.on ('drawstart',function() {
-                    selectItems.setActive(false);
-                    selectPoints = [];
-                });
-
-                drawSquare.on('drawend', function (e) {
-                    customLocationFilterLayer.getSource().clear();
-                    selectItems.setActive(true);
-
-                    theMap.getInteractions().forEach(function (e) {
-                        if(e instanceof ol.interaction.Draw) {
-                            theMap.removeInteraction(e);
-                        }
-                    });
-
-                    // Get the shape geometry
-                    let drawExtent = e.feature.getGeometry();
-                    that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
-
-                    // Get all the features in the layer
-                    let featuresInLayer = clusters.getSource().getFeatures();
-
-                    // Check each feature
-                    let loopFeatureExtent;
-                    for (let j = 0; j < featuresInLayer.length; j++) {
-                        loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
-                        // Only select the features within the shape
-                        if (drawExtent.intersectsExtent(loopFeatureExtent)) {
-                            selectPoints.push(featuresInLayer[j]);
-                        }
-                    }
-
-                    let selectPointsLocations = [];
-
-                    if (selectPoints.length > 0) {
-                        for (let i = 0; i < selectPoints.length; i++) {
-                            let selectPointFeatures = selectPoints[i].get('features');
-                            for(let j = 0; j < selectPointFeatures.length; j++) {
-                                let featureName = selectPointFeatures[j].attributes.name;
-                                if(!selectPointsLocations.includes(featureName.toString())) {
-                                    selectPointsLocations.push(featureName);
-                                }
+                if (selectPoints.length > 0) {
+                    for (let i = 0; i < selectPoints.length; i++) {
+                        let selectPointFeatures = selectPoints[i].get('features');
+                        for(let j = 0; j < selectPointFeatures.length; j++) {
+                            let featureName = selectPointFeatures[j].attributes.name;
+                            if(!selectPointsLocations.includes(featureName.toString())) {
+                                selectPointsLocations.push(featureName);
                             }
                         }
                     }
+                }
 
-                    // Get the shape coordinates
-                    let drawCoordinates = drawExtent.getCoordinates();
-                    that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
-                });
-            };
-
-            if (drawSquareButton) {
-                drawSquareButton.addEventListener('click', handleDrawSquareButton, false);
-                drawSquareButton.addEventListener('touchstart', handleDrawSquareButton, false);
-            }
-
-            const drawElement = document.getElementById('ol-drawsquarecontrol');
-            if (drawElement && drawSquareButton) {
-                drawElement.className += ' ol-unselectable ol-control';
-                drawElement.appendChild(drawSquareButton);
-
-                ol.control.Control.call(this, {
-                    element: drawElement,
-                    target: options.target
-                });
-            }
-
+                // Get the shape coordinates
+                let drawCoordinates = drawExtent.getCoordinates();
+                that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
+            });
         };
+
+        if (drawElement && drawSquareButton) {
+
+            drawSquareButton.addEventListener('click', handleDrawSquareButton, false);
+            drawSquareButton.addEventListener('touchstart', handleDrawSquareButton, false);
+            drawElement.className += ' ol-unselectable ol-control';
+            drawElement.appendChild(drawSquareButton);
+
+            drawSquareControl = new ol.control.Control({
+                element: drawElement,
+            });
+        }
+
 
         // Add Draw Circle Button
-        let appDrawCircle = window.app;
-        appDrawCircle.drawCircleControl = function (opt_options) {
-            let options = opt_options || {};
-            const drawCircleButton = document.getElementById('drawCircleButton');
+        let drawCircleControl;
+        const drawCircleButton = this.drawCircleButton;
+        drawElement = this.ol_drawcirclecontrol;
 
-            let handleDrawCircleButton = function () {
+        let handleDrawCircleButton = function () {
 
-                let drawCircle = new ol.interaction.Draw({
-                    type: 'Circle',
-                    source: customLocationFilterVector,
-                });
+            let drawCircle = new ol.interaction.Draw({
+                type: 'Circle',
+                source: customLocationFilterVector,
+            });
 
-                theMap.addInteraction(drawCircle);
+            theMap.addInteraction(drawCircle);
 
-                drawCircle.on ('drawstart',function() {
-                    selectItems.setActive(false);
-                    selectPoints = [];
-                });
+            drawCircle.on ('drawstart',function() {
+                selectItems.setActive(false);
+                selectPoints = [];
+            });
 
-                drawCircle.on('drawend', function (e) {
-                    customLocationFilterLayer.getSource().clear();
-                    selectItems.setActive(true);
+            drawCircle.on('drawend', function (e) {
+                customLocationFilterLayer.getSource().clear();
+                selectItems.setActive(true);
 
-                    theMap.getInteractions().forEach(function (e) {
-                        if(e instanceof ol.interaction.Draw) {
-                            theMap.removeInteraction(e);
-                        }
-                    });
-
-                    // Get the shape geometry
-                    let drawExtent = e.feature.getGeometry();
-                    that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
-
-                    // Get all the features in the layer
-                    let featuresInLayer = clusters.getSource().getFeatures();
-
-                    // Check each feature
-                    let loopFeatureExtent;
-                    for (let j = 0; j < featuresInLayer.length; j++) {
-                        loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
-                        // Only select the features within the shape
-                        if (drawExtent.intersectsExtent(loopFeatureExtent)) {
-                            selectPoints.push(featuresInLayer[j]);
-                        }
+                theMap.getInteractions().forEach(function (e) {
+                    if(e instanceof ol.interaction.Draw) {
+                        theMap.removeInteraction(e);
                     }
+                });
 
-                    let selectPointsLocations = [];
+                // Get the shape geometry
+                let drawExtent = e.feature.getGeometry();
+                that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
 
-                    if (selectPoints.length > 0) {
-                        for (let i = 0; i < selectPoints.length; i++) {
-                            let selectPointFeatures = selectPoints[i].get('features');
-                            for(let j = 0; j < selectPointFeatures.length; j++) {
-                                let featureName = selectPointFeatures[j].attributes.name;
-                                if(!selectPointsLocations.includes(featureName.toString())) {
-                                    selectPointsLocations.push(featureName);
-                                }
+                // Get all the features in the layer
+                let featuresInLayer = clusters.getSource().getFeatures();
+
+                // Check each feature
+                let loopFeatureExtent;
+                for (let j = 0; j < featuresInLayer.length; j++) {
+                    loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
+                    // Only select the features within the shape
+                    if (drawExtent.intersectsExtent(loopFeatureExtent)) {
+                        selectPoints.push(featuresInLayer[j]);
+                    }
+                }
+
+                let selectPointsLocations = [];
+
+                if (selectPoints.length > 0) {
+                    for (let i = 0; i < selectPoints.length; i++) {
+                        let selectPointFeatures = selectPoints[i].get('features');
+                        for(let j = 0; j < selectPointFeatures.length; j++) {
+                            let featureName = selectPointFeatures[j].attributes.name;
+                            if(!selectPointsLocations.includes(featureName.toString())) {
+                                selectPointsLocations.push(featureName);
                             }
                         }
                     }
-                    // Get the shape coordinates
-                    // (1) Get the Units for the Map Projection
-                    let units = theMap.getView().getProjection().getUnits();
-                    // (2) Get the Center Point of the Circle
-                    let drawCenter = drawExtent.getCenter();
-                    // (3) Get the Radius of the Circle in Meters
-                    let drawRadius = (drawExtent.getRadius() * ol.proj.METERS_PER_UNIT[units])/1000;
-                    // Assemble the Coordinates for the API call
-                    let drawCoordinates = [drawCenter.concat(drawRadius)];
-                    // Call the appropriate function
-                    that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
+                }
+                // Get the shape coordinates
+                // (1) Get the Units for the Map Projection
+                let units = theMap.getView().getProjection().getUnits();
+                // (2) Get the Center Point of the Circle
+                let drawCenter = drawExtent.getCenter();
+                // (3) Get the Radius of the Circle in Meters
+                let drawRadius = (drawExtent.getRadius() * ol.proj.METERS_PER_UNIT[units])/1000;
+                // Assemble the Coordinates for the API call
+                let drawCoordinates = [drawCenter.concat(drawRadius)];
+                // Call the appropriate function
+                that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
 
-                });
-
-            };
-
-            if (drawCircleButton) {
-                drawCircleButton.addEventListener('click', handleDrawCircleButton, false);
-                drawCircleButton.addEventListener('touchstart', handleDrawCircleButton, false);
-            }
-
-            const drawElement = document.getElementById('ol-drawcirclecontrol');
-            if (drawElement && drawCircleButton) {
-                drawElement.className += ' ol-unselectable ol-control';
-                drawElement.appendChild(drawCircleButton);
-
-                ol.control.Control.call(this, {
-                    element: drawElement,
-                    target: options.target
-                });
-            }
+            });
 
         };
+
+        if (drawElement && drawCircleButton) {
+            drawCircleButton.addEventListener('click', handleDrawCircleButton, false);
+            drawCircleButton.addEventListener('touchstart', handleDrawCircleButton, false);
+            drawElement.className += ' ol-unselectable ol-control';
+            drawElement.appendChild(drawCircleButton);
+
+            drawCircleControl = new ol.control.Control({
+                element: drawElement,
+            });
+        }
 
         // Add Draw Custom Button
-        let appDrawCustom = window.app;
-        appDrawCustom.drawCustomControl = function (opt_options) {
-            let options = opt_options || {};
-            const drawCustomButton = document.getElementById('drawCustomButton');
+        let drawCustomControl;
+        const drawCustomButton = this.drawCustomButton;
+        drawElement = this.ol_drawcustomcontrol;
 
-            let handleDrawCustomButton = function () {
+        let handleDrawCustomButton = function () {
 
-                let drawCustom = new ol.interaction.Draw({
-                    type: 'Polygon',
-                    source: customLocationFilterVector,
-                });
+            let drawCustom = new ol.interaction.Draw({
+                type: 'Polygon',
+                source: customLocationFilterVector,
+            });
 
-                theMap.addInteraction(drawCustom);
+            theMap.addInteraction(drawCustom);
 
-                drawCustom.on ('drawstart',function() {
-                    selectItems.setActive(false);
-                    selectPoints = [];
-                });
+            drawCustom.on ('drawstart',function() {
+                selectItems.setActive(false);
+                selectPoints = [];
+            });
 
-                drawCustom.on('drawend', function (e) {
-                    customLocationFilterLayer.getSource().clear();
-                    selectItems.setActive(true);
+            drawCustom.on('drawend', function (e) {
+                customLocationFilterLayer.getSource().clear();
+                selectItems.setActive(true);
 
-                    theMap.getInteractions().forEach(function (e) {
-                        if(e instanceof ol.interaction.Draw) {
-                            theMap.removeInteraction(e);
-                        }
-                    });
-
-                    // Get the shape geometry
-                    let drawExtent = e.feature.getGeometry();
-                    that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
-
-                    // Get all the features in the layer
-                    let featuresInLayer = clusters.getSource().getFeatures();
-
-                    // Check each feature
-                    let loopFeatureExtent;
-                    for (let j = 0; j < featuresInLayer.length; j++) {
-                        loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
-                        // Only select the features within the shape
-                        if (drawExtent.intersectsExtent(loopFeatureExtent)) {
-                            selectPoints.push(featuresInLayer[j]);
-                        }
+                theMap.getInteractions().forEach(function (e) {
+                    if(e instanceof ol.interaction.Draw) {
+                        theMap.removeInteraction(e);
                     }
+                });
 
-                    let selectPointsLocations = [];
+                // Get the shape geometry
+                let drawExtent = e.feature.getGeometry();
+                that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
 
-                    if (selectPoints.length > 0) {
-                        for (let i = 0; i < selectPoints.length; i++) {
-                            let selectPointFeatures = selectPoints[i].get('features');
-                            for(let j = 0; j < selectPointFeatures.length; j++) {
-                                let featureName = selectPointFeatures[j].attributes.name;
-                                if(!selectPointsLocations.includes(featureName.toString())) {
-                                    selectPointsLocations.push(featureName);
-                                }
+                // Get all the features in the layer
+                let featuresInLayer = clusters.getSource().getFeatures();
+
+                // Check each feature
+                let loopFeatureExtent;
+                for (let j = 0; j < featuresInLayer.length; j++) {
+                    loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
+                    // Only select the features within the shape
+                    if (drawExtent.intersectsExtent(loopFeatureExtent)) {
+                        selectPoints.push(featuresInLayer[j]);
+                    }
+                }
+
+                let selectPointsLocations = [];
+
+                if (selectPoints.length > 0) {
+                    for (let i = 0; i < selectPoints.length; i++) {
+                        let selectPointFeatures = selectPoints[i].get('features');
+                        for(let j = 0; j < selectPointFeatures.length; j++) {
+                            let featureName = selectPointFeatures[j].attributes.name;
+                            if(!selectPointsLocations.includes(featureName.toString())) {
+                                selectPointsLocations.push(featureName);
                             }
                         }
                     }
-                    // Get the shape coordinates
-                    let drawCoordinates = drawExtent.getCoordinates();
+                }
+                // Get the shape coordinates
+                let drawCoordinates = drawExtent.getCoordinates();
 
-                    that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
-                });
-
-            };
-
-            if (drawCustomButton) {
-                drawCustomButton.addEventListener('click', handleDrawCustomButton, false);
-                drawCustomButton.addEventListener('touchstart', handleDrawCustomButton, false);
-            }
-
-            const drawElement = document.getElementById('ol-drawcustomcontrol');
-            if (drawElement && drawCustomButton) {
-                drawElement.className += ' ol-unselectable ol-control';
-                drawElement.appendChild(drawCustomButton);
-
-                ol.control.Control.call(this, {
-                    element: drawElement,
-                    target: options.target
-                });
-            }
+                that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
+            });
 
         };
 
-        ol.inherits(appDrawClear.drawClearControl, ol.control.Control);
-        ol.inherits(appDrawSquare.drawSquareControl, ol.control.Control);
-        ol.inherits(appDrawCircle.drawCircleControl, ol.control.Control);
-        ol.inherits(appDrawCustom.drawCustomControl, ol.control.Control);
+        if (drawCustomButton && drawElement) {
+            drawCustomButton.addEventListener('click', handleDrawCustomButton, false);
+            drawCustomButton.addEventListener('touchstart', handleDrawCustomButton, false);
+            drawElement.className += ' ol-unselectable ol-control';
+            drawElement.appendChild(drawCustomButton);
+
+            drawCustomControl = new ol.control.Control({
+                element: drawElement,
+            });
+        }
+
 
         theMap = new ol.Map({
             target: 'map',
             layers: layers,
             view: view,
             overlays: [overlay],
-            controls: ol.control.defaults({
-                attributionOptions: ({
-                    collapsible: false
-                })
-            }).extend([
-                new app.centerControl(),
-                new appDrawCircle.drawCircleControl(),
-                new appDrawSquare.drawSquareControl(),
-                new appDrawCustom.drawCustomControl(),
-                new appDrawClear.drawClearControl()
-            ])
         });
 
-        let selectItems = new ol.interaction.Select();
+
+        theMap.addControl(centerControl);
+        theMap.addControl(drawClearControl);
+        theMap.addControl(drawSquareControl);
+        theMap.addControl(drawCircleControl);
+        theMap.addControl(drawCustomControl);
+
+        let selectItems = new ol.interaction.Select({
+                layers: [customLocationFilterLayer]
+            });
         theMap.addInteraction(selectItems);
 
         theMap.getView().on("change:resolution", function (e) {

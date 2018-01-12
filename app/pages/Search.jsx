@@ -21,7 +21,7 @@ class Search extends Component {
                 <Content>
                     <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>
-                            <Cell col={3}>
+                            <Cell col={2}>
                                 <List className={styles.list}>
                                     <FilterSelection/>
                                 </List>
@@ -29,8 +29,8 @@ class Search extends Component {
                                     <DownloadButtons/>
                                 </div>
                             </Cell>
-                            <Cell col={9}>
-                                <div className={styles.rightmap} >
+                            <Cell col={10}>
+                                <div className={styles.rightMap} >
                                     <SearchMap />
                                 </div>
                             </Cell>

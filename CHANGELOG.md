@@ -4,7 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.0.0-alpha.1] - 2017-11-27
+## UNRELEASED
+
+### Added
+- Add Explore Layers option on the Explore Page as a Drawer
+  [GLGVO-376](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-376)
+
+### Changed
+
+### Fixed
+- Search page showing the same parameter multiple times
+  [GEOD-1027](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1027)
+- Search page permalink showing on the left side instead of centered
+  [GEOD-1034](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1034)
+
+## [3.0.0-alpha.1] - 2017-11-22
 
 ### Added
 - Use [Yarn](https://yarnpkg.com) for package management.
@@ -108,12 +122,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1004](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1004)
 - Radio buttons border not showing up in IE 11
   [GEOD-1006](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1006)
+- Correct instances of PropTypes where utilized
+  [GEOD-998](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-998)
 - Clearing the state for detail graphs.
   [GEOD-1022](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1022)
 - Correct Trends Menu Bar colors to update appropriately
   [GEOD-1025](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1025)
 
-## Changed
+### Changed
 - Changed how the Circle is created, and how the associated coordinates are assembled
   [GEOD-965](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-965)
 - Fixed bug with drawing shapes not erasing when location card does not exist

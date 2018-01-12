@@ -2,7 +2,7 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import Menu from '../containers/MenuBar';
 import Map from '../containers/TrendsRegionMap';
 import TrendsParameters from '../containers/TrendsParameters';
@@ -12,7 +12,6 @@ import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
 import {connect} from 'react-redux';
 import { getTrendsPageSettings, getTrendsPageSeasons, getTrendsDefaultValues } from '../utils/getConfig';
-
 
 class TrendsRegion extends Component {
 
@@ -78,7 +77,7 @@ class TrendsRegion extends Component {
                                 </List>
                             </Cell>
                             <Cell col={9}>
-                                <div className={styles.rightmap}>
+                                <div className={styles.rightMap}>
                                     <Map
                                         display_draw='False'
                                         trends_settings={trendsPageSettings}
@@ -106,4 +105,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(TrendsRegion);
-

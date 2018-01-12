@@ -2,7 +2,7 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {browserHistory, Link} from 'react-router';
 import styles from '../styles/menuPage.css';
 import {
@@ -10,6 +10,7 @@ import {
 	Button, MenuItem, Menu, MenuAnchor
 } from 'react-mdc-web';
 import {getApplicationOptions} from '../utils/getConfig';
+
 
 class MenuPage extends Component {
     state: {

@@ -1,6 +1,7 @@
 /*
  * @flow
  */
+
 import type { PropertiesType } from './flowtype';
 
 export function getSourceName(source:PropertiesType):string {
@@ -35,12 +36,31 @@ function capitalize(a:string):string {
     return a.charAt(0).toUpperCase() + a.slice(1);
 }
 
-export function getParameterName(parameter:string):?string {
-    const parameter_maps = window.configruntime.gd3.parameter_maps;
+export function getAlternateParameters() {
+    let parameters = {};
+	Object.keys(window.configruntime.gd3.multi_parameter_map).map((parameter) =>
+		window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
+            parameters[alternate] = parameter;
+        })
+    );
+    return parameters;
+}
+
+export function getAlternateParameterName(alternate: string, alternate_parameters_map) {
+	const parameter = alternate_parameters_map[alternate];
+	return getParameterNameNoAlternate(parameter);
+}
+
+export function getParameterNameNoAlternate(parameter:string):?string {
+    const parameter_maps = Object.assign({}, window.configruntime.gd3.parameter_maps);
     return parameter_maps[parameter] !== undefined ? parameter_maps[parameter] :
         null;
 }
 
+export function getParameterName(parameter:string, alternate_parameters_map ):?string {
+	const name = getParameterNameNoAlternate(parameter);
+	return name !== null ? name : getAlternateParameterName(parameter, alternate_parameters_map);
+}
 export function getTrendSettings() {
     return window.configruntime.gd3.trend_settings;
 }
@@ -141,3 +161,24 @@ export function getErrorText() {
     return window.configruntime.gd3.error_text;
 }
 
+export function getLayersDetails() {
+    let layersDetails = [];
+    if (window.configruntime.gd3.exploreLayers){
+        layersDetails = window.configruntime.gd3.exploreLayers;
+    }
+    return layersDetails;
+}
+
+export function getAvailableLayers() {
+    let available_layers = [];
+
+    getLayersDetails().map(p =>
+        available_layers.push({
+            'title': p.title,
+            'opacity': p.opacity,
+            'visibility': p.visibility,
+        })
+    );
+
+    return available_layers;
+}
