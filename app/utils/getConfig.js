@@ -155,9 +155,9 @@ export function getAvailableLayers() {
 
     getLayersDetails().map(p =>
         available_layers.push({
-            'title': p.properties.title,
-            'opacity': p.properties.opacity,
-            'visibility': p.properties.visibility,
+            'title': p.title,
+            'opacity': p.opacity,
+            'visibility': p.visibility,
         })
     );
 

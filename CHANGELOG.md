@@ -12,9 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-
 ### Changed
-
 
 ## [3.0.0-alpha.1] - 2017-11-22
 
@@ -123,7 +121,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Correct instances of PropTypes where utilized
   [GEOD-998](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-998)
 
-## Changed
+### Changed
 - Changed how the Circle is created, and how the associated coordinates are assembled
   [GEOD-965](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-965)
 - Fixed bug with drawing shapes not erasing when location card does not exist

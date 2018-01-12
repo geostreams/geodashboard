@@ -110,17 +110,17 @@ class ExploreMap extends Component {
                 if (this.props.layersVisibility) {
 
                     let index = this.props.layersVisibility.findIndex(
-                        layer_visibility => layer_visibility.title == layerDetails.properties.title
+                        layer_visibility => layer_visibility.title == layerDetails.title
                     );
 
                     if (index > -1 && this.props.layersVisibility[index].visibility == true) {
                         exploreLayers.push(
                             new ol.layer.Image({
                                 source: new ol.source.ImageWMS({
-                                    url: layerDetails.properties.wms,
-                                    params: {'LAYERS': layerDetails.properties.id},
+                                    url: layerDetails.wms,
+                                    params: {'LAYERS': layerDetails.id},
                                 }),
-                                name: layerDetails.properties.title,
+                                name: layerDetails.title,
                                 opacity: this.props.layersVisibility[index].opacity,
                                 visible: true
                             })
@@ -129,7 +129,7 @@ class ExploreMap extends Component {
                     else if (index > -1 && this.props.layersVisibility[index].visibility == false) {
                         exploreLayers.push(
                             new ol.layer.Image({
-                                name: layerDetails.properties.title,
+                                name: layerDetails.title,
                                 visible: false
                             })
                         )
