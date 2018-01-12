@@ -1,8 +1,6 @@
 import React, {Component} from 'react'
 import styles from '../styles/search.css';
 import {Button} from 'react-mdc-web';
-import myHandler from '../components/Map.jsx'
-
 
 class ExploreSourcesTab extends Component {
     constructor(props) {

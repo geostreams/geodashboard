@@ -3,7 +3,7 @@
  */
 import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS} from '../actions';
 import type { Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype';
-import {inArray, sortByLabel, pnpoly, intersectArrays} from '../utils/arrayUtils';
+import {inArray, sortByLabel, pnpoly, intersectArrays, sortByLake} from '../utils/arrayUtils';
 import {getSourceName, getParameterName, getAlternateParameters, getAlternateParameterName} from '../utils/getConfig';
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS',
@@ -197,7 +197,7 @@ export function collectLocations(sensorsData:Sensors):MapWithLabels {
     });
 
     // sort
-    return sortByLabel(locations);
+    return sortByLake(locations);
 }
 
 function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string>, selectedSearch:Object) {

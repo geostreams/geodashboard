@@ -1,6 +1,7 @@
 /*
  * @flow
  */
+
 import type { PropertiesType } from './flowtype';
 
 export function getSourceName(source:PropertiesType):string {
@@ -156,3 +157,24 @@ export function getErrorText() {
     return window.configruntime.gd3.error_text;
 }
 
+export function getLayersDetails() {
+    let layersDetails = [];
+    if (window.configruntime.gd3.exploreLayers){
+        layersDetails = window.configruntime.gd3.exploreLayers;
+    }
+    return layersDetails;
+}
+
+export function getAvailableLayers() {
+    let available_layers = [];
+
+    getLayersDetails().map(p =>
+        available_layers.push({
+            'title': p.title,
+            'opacity': p.opacity,
+            'visibility': p.visibility,
+        })
+    );
+
+    return available_layers;
+}

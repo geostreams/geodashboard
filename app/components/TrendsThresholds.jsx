@@ -2,7 +2,8 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
 import {
     Textfield, Cell, Grid,
@@ -163,5 +164,12 @@ class TrendsThresholds extends Component {
     }
 
 }
+
+TrendsThresholds.propTypes = {
+    chosenParameter: React.PropTypes.string.isRequired,
+    trends_thresholds: React.PropTypes.array.isRequired,
+    trends_threshold_choice: React.PropTypes.bool.isRequired,
+    trends_defaults: React.PropTypes.array.isRequired
+};
 
 export default TrendsThresholds;

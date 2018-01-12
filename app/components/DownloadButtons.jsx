@@ -2,22 +2,16 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {
-    Button,
-    Dialog,
-    DialogHeader,
-    DialogTitle,
-    DialogBody,
-    DialogFooter,
-    Icon,
-    Menu,
-    MenuItem,
-    MenuAnchor
+    Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter,
+    Icon, Menu, MenuItem, MenuAnchor
 } from 'react-mdc-web';
 import {getCustomLocation} from '../utils/getConfig';
 import {intersectArrays} from '../utils/arrayUtils';
 import styles from '../styles/downloadButton.css';
+
 
 type DownloadStateType = {
     isOpen: boolean,
@@ -63,7 +57,7 @@ class DownloadButtons extends Component {
 
     buildLink = function (type: string): string {
 
-        let downloadApi = this.props.api + "/api/geostreams/datapoints?";
+        let downloadApi = this.props.api.slice(0, -8) + "/geostreams/datapoints/download?";
         // refer to https://opensource.ncsa.illinois.edu/bitbucket/projects/CATS/repos/clowder/browse/app/api/Geostreams.scala#665
         let params = {};
         params["format"] = type;
@@ -186,5 +180,17 @@ class DownloadButtons extends Component {
         );
     }
 }
+
+DownloadButtons.propTypes = {
+    api: React.PropTypes.string.isRequired,
+    selectedStartDate: React.PropTypes.string,
+    selectedEndDate: React.PropTypes.string,
+    selectedParameters: React.PropTypes.array,
+    selectedFilters: React.PropTypes.array,
+    availableSensors: React.PropTypes.array,
+    selectedLocation: React.PropTypes.string,
+    drawShapeCoordinates: React.PropTypes.array,
+    selectedDataSources: React.PropTypes.array
+};
 
 export default DownloadButtons

@@ -34,6 +34,33 @@ export function sortByLabel(list) {
     return list;
 }
 
+export function sortByLake(list) {
+    var order = {
+        "LAKE SUPERIOR": 0,
+        "LAKE HURON": 1,
+        "LAKE MICHIGAN": 2,
+        "LAKE ERIE": 3,
+        "LAKE ERIE WESTERN BASIN": 4,
+        "LAKE ERIE CENTRAL BASIN": 5,
+        "LAKE ERIE EASTERN BASIN": 6,
+        "LAKE ONTARIO": 7
+    };
+
+    list.sort(function(a, b) {
+        var idxA = order[a.label.toUpperCase()];
+        var idxB = order[b.label.toUpperCase()];
+        if (idxA < idxB) {
+            return -1;
+        }
+        if (idxA > idxB) {
+            return 1
+        }
+        return 0;
+    });
+    return list;
+
+}
+
 // Point in Polygon. same function from geodashboard
 // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html#Listing the Vertices
 

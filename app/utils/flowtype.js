@@ -1,6 +1,7 @@
 /*
  * @flow
  */
+
 let ol = require('openlayers');
 export type Geometry = {
     type:string;
@@ -95,6 +96,10 @@ export type trendsSensorsState = {
     number_to_filter: number,
 }
 
+export type exploreLayersState = {
+    layers_visibility: Array<string>
+};
+
 export type MapProps = {
     sensors: Sensors,
     availableSensors: Sensors
@@ -165,7 +170,6 @@ export type TrendsRegionSetup = {
 };
 
 export type TrendsRegions = TrendsRegionSetup[];
-
 export type TrendsParameter = string;
 export type TrendsSeason = string;
 export type TrendsRegion = string;
@@ -193,7 +197,6 @@ export type ChosenTrendsState = {
     number_to_filter: number,
     draw_available_sensors: TrendsPageSensorsState,
 };
-
 
 // export type Action = BackendAction | SearchFilterAction | SensorAction | SelectedSearchAction;
 export type Dispatch = (action:any) => null;

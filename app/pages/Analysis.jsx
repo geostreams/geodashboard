@@ -72,7 +72,7 @@ class Analysis extends Component {
                                 </div>
                             </Cell>
                             <Cell col={10}>
-                                <div className={styles.rightmap}>
+                                <div className={styles.rightMap}>
                                     <Card>
                                         <Map display_trends='True'
                                              display_draw='True'

@@ -2,7 +2,8 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
 import {Button} from 'react-mdc-web';
 
@@ -85,5 +86,16 @@ class TrendsSubmitButton extends Component {
     }
 
 }
+
+TrendsSubmitButton.propTypes = {
+    chosenParameter: React.PropTypes.string.isRequired,
+    chosenRegion: React.PropTypes.string.isRequired,
+    baselinePeriod: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    rollingPeriod: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    thresholdChooseValue: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    trends_season: React.PropTypes.string.isRequired,
+    trends_view_type: React.PropTypes.string.isRequired,
+    trends_defaults: React.PropTypes.array.isRequired
+};
 
 export default TrendsSubmitButton;

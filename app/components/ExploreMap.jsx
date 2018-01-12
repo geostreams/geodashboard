@@ -5,12 +5,13 @@
 import React, {Component} from 'react';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
-import styles from '../styles/map.css'
-import {Icon} from 'react-mdc-web'
-import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils'
-import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup'
-import BasicMap from './BasicMap'
-import type {InputEventMap} from '../utils/flowtype'
+import styles from '../styles/map.css';
+import {Icon} from 'react-mdc-web';
+import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
+import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup';
+import BasicMap from './BasicMap';
+import type {InputEventMap} from '../utils/flowtype';
+
 
 class ExploreMap extends Component {
     state: {
@@ -37,12 +38,12 @@ class ExploreMap extends Component {
         theMap.addLayer(multiLineLayer);
 
         this.setState({expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true})
-    }
+    };
 
     removeSpiderfiedClusterLayers = (theMap: ol.Map) => {
         theMap.removeLayer(this.state.expandedClusterLayer);
         theMap.removeLayer(this.state.multiLineLayer);
-    }
+    };
 
     popupHandler = (theMap: ol.Map, e: InputEventMap) => {
         const that = this;
@@ -82,7 +83,7 @@ class ExploreMap extends Component {
         if (closeClusters && that.state.expandedCluster) {
             that.removeSpiderfiedClusterLayers(theMap);
         }
-    }
+    };
 
     popupHandleHelper = (feature: ol.Feature, coordinate: number[], overlay: ol.Overlay) =>{
         const content = document.getElementById('popup-content');
@@ -95,9 +96,74 @@ class ExploreMap extends Component {
             }
             overlay.setPosition(coordinate);
         }
-    }
+    };
 
     mapDidUpdate = (theMap: ol.Map, customLocationFilterVectorExtent: Array<number>) => {
+
+        let exploreLayers = [];
+        let keep_map_view = false;
+
+        if (this.props.exploreLayersDetails) {
+
+            this.props.exploreLayersDetails.map(layerDetails => {
+
+                if (this.props.layersVisibility) {
+
+                    let index = this.props.layersVisibility.findIndex(
+                        layer_visibility => layer_visibility.title == layerDetails.title
+                    );
+
+                    if (index > -1 && this.props.layersVisibility[index].visibility == true) {
+                        exploreLayers.push(
+                            new ol.layer.Image({
+                                source: new ol.source.ImageWMS({
+                                    url: layerDetails.wms,
+                                    params: {'LAYERS': layerDetails.id},
+                                }),
+                                name: layerDetails.title,
+                                opacity: this.props.layersVisibility[index].opacity,
+                                visible: true
+                            })
+                        )
+                    }
+                    else if (index > -1 && this.props.layersVisibility[index].visibility == false) {
+                        exploreLayers.push(
+                            new ol.layer.Image({
+                                name: layerDetails.title,
+                                visible: false
+                            })
+                        )
+                    }
+
+                }
+
+            });
+
+        }
+
+        if(exploreLayers.length > 0){
+
+            let all_map_layers = theMap.getLayers().getArray().slice();
+            all_map_layers.map(map_layer => {
+                let layer_name = map_layer.get('name');
+                exploreLayers.map(explore_layer_remove => {
+                    let explore_layer_name = explore_layer_remove.get('name');
+                    if (explore_layer_name == layer_name) {
+                        keep_map_view = true;
+                        theMap.removeLayer(map_layer);
+                    }
+                });
+            });
+
+            exploreLayers.map(explore_layer_add => {
+                let explore_layers_visibility = explore_layer_add.get('visible');
+                if (explore_layers_visibility == true) {
+                    theMap.addLayer(explore_layer_add);
+                    keep_map_view = true;
+                }
+            });
+
+        }
 
         let features = this.getFeature();
         let that = this;
@@ -107,7 +173,7 @@ class ExploreMap extends Component {
         });
 
         if (features.length > 0) {
-            if (!this.state.expandedCluster){
+            if (!this.state.expandedCluster && keep_map_view == false){
                 theMap.getView().fit(tmpvectorSource.getExtent(), theMap.getSize());
             }
         }
@@ -128,11 +194,12 @@ class ExploreMap extends Component {
             // that.displayOverlappingMarkers(featuresAtPixel, that.state.map, that);
 
         }
-    }
+
+    };
 
     getFeature(){
-       return sensorsToFeatures(this.props.sensors);
-    }
+        return sensorsToFeatures(this.props.sensors);
+    };
 
     getCluster = (clusterSource: ol.source.Cluster) => {
         return new ol.layer.Vector({
@@ -185,7 +252,7 @@ class ExploreMap extends Component {
 
             }
         });
-    }
+    };
 
     onChangeZoom = (theMap: ol.map) =>{
         const that = this;
@@ -193,10 +260,9 @@ class ExploreMap extends Component {
         if (that.state.expandedCluster) {
             that.removeSpiderfiedClusterLayers(theMap);
         }
-    }
+    };
 
     render() {
-
         return (
             <div>
                 <BasicMap features={this.getFeature()}

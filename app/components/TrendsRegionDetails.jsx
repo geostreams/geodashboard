@@ -2,12 +2,13 @@
  * @flow
  */
 
-import React, {Component, PropTypes} from 'react';
+
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
 import {Card, CardHeader, CardTitle, CardText} from 'react-mdc-web';
 import {sensorsToFeaturesTrendRegionPage} from '../utils/mapUtils';
 import { getTrendsPageSettings } from '../utils/getConfig';
-
 
 class TrendsRegionDetails extends Component {
 
@@ -61,5 +62,12 @@ class TrendsRegionDetails extends Component {
     }
 
 }
+
+TrendsRegionDetails.propTypes = {
+    selectedParameter: React.PropTypes.string.isRequired,
+    trends_region_name: React.PropTypes.string.isRequired,
+    regionsStations: React.PropTypes.array.isRequired,
+    selectedSeason: React.PropTypes.string.isRequired
+};
 
 export default TrendsRegionDetails;
