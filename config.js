@@ -1202,7 +1202,7 @@ export const gd3 = {
 				},
 				{
 					"name": "EXPLORE",
-					"url": "/geodashboard/#explore",
+					"url": "/#explore",
 				},
 				{
 					"name": "COMPARE",
@@ -1210,7 +1210,7 @@ export const gd3 = {
 				},
 				{
 					"name": "SEARCH",
-					"url": "/gd3/#search",
+					"url": "/#search",
 				},
 				{
 					"name": "TRENDS",
