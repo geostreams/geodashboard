@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add Explore Layers option on the Explore Page as a Drawer
   [GLGVO-376](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-376)
 
+### Changed
+
 ### Fixed
+- Search page showing the same parameter multiple times
+  [GEOD-1027](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1027)
 - Search page permalink showing on the left side instead of centered
   [GEOD-1034](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1034)
-
-### Changed
 
 ## [3.0.0-alpha.1] - 2017-11-22
 

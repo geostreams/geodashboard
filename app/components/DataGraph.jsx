@@ -3,7 +3,7 @@ import Chart from '../containers/Chart'
 import MiniMap from '../components/MiniMap'
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import styles from "../styles/detail.css"
-import {getParameterName} from '../utils/getConfig'
+import {getParameterOrAlternateName, getAlternateParameters} from '../utils/getConfig'
 import { Checkbox, FormField, label} from 'react-mdc-web';
 
 class DataGraph extends Component {
@@ -47,12 +47,12 @@ class DataGraph extends Component {
             }
 
             sensor.parameters.map(p => {
-                if (getParameterName(p) != null) {
+                if (getParameterOrAlternateName(p, getAlternateParameters()) != null) {
                     paralist.push(
                         <FormField id={p} >
                             <Checkbox onChange={this.handleSelectParam} value={p} key={p} name="param"
                             checked={this.state.paralistselect.includes(p)}/>
-                            <label>{getParameterName(p)}</label>
+                            <label>{getParameterOrAlternateName(p, getAlternateParameters())}</label>
                         </FormField>
                 )
 
