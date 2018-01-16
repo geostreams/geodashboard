@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import rd3 from 'react-d3';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import {Card, CardHeader, CardTitle} from 'react-mdc-web';
-import {getParameterOrAlternateName, getAlternateParameters} from '../utils/getConfig'
+import {getParameterName, getAlternateParameters} from '../utils/getConfig'
 
 var LineChart = rd3.LineChart;
 
@@ -42,7 +42,7 @@ class Chart extends Component {
                             width: 700,
                             height: 400
                           }}
-                        title={getParameterOrAlternateName(this.props.param, getAlternateParameters())}
+                        title={getParameterName(this.props.param, getAlternateParameters())}
                         yAxisLabel="Altitude"
                         xAxisLabel="Elapsed Time (sec)"
                         //domain={{x: [,10], y: [0,]}}

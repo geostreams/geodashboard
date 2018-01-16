@@ -36,7 +36,7 @@ function capitalize(a:string):string {
     return a.charAt(0).toUpperCase() + a.slice(1);
 }
 
-export function getAlternateParameters() {
+export function getAlternateParameters(){
     let parameters = {};
 	Object.keys(window.configruntime.gd3.multi_parameter_map).map((parameter) =>
 		window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
@@ -46,7 +46,7 @@ export function getAlternateParameters() {
     return parameters;
 }
 
-export function getAlternateParameterName(alternate: string, alternate_parameters_map) {
+export function getAlternateParameterName(alternate: string, alternate_parameters_map:{}) {
 	const parameter = alternate_parameters_map[alternate];
 	return getParameterNameNoAlternate(parameter);
 }
@@ -57,7 +57,7 @@ export function getParameterNameNoAlternate(parameter:string):?string {
         null;
 }
 
-export function getParameterName(parameter:string, alternate_parameters_map ):?string {
+export function getParameterName(parameter:string, alternate_parameters_map:{} ):?string {
 	const name = getParameterNameNoAlternate(parameter);
 	return name !== null ? name : getAlternateParameterName(parameter, alternate_parameters_map);
 }
