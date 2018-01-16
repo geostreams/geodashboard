@@ -404,7 +404,7 @@ export function sensorsToFeaturesTrendRegionPage(
 
 export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: string, threshold: string):Array<ol.Feature> {
     let features = Array();
-    const alterateParameters = getAlternateParameters();
+	const alternateParameters = getAlternateParameters();
     sensors.map((sensor) => {
 
         if (sensor.name != 'ALL') {
