@@ -22,7 +22,7 @@ class TimeFilter extends Component {
 
     changeEndDate(event) {
 	    const date = new Date(event.target.value.replace(/-/g, '\/'));
-	    //Update if the date is not Nan when the sselected start date is null (hasn't been selected)
+	    //Update if the date is not Nan when the selected start date is null (hasn't been selected)
         // or the end date is after the selected start date
 	    if(!isNaN(date.getTime()) && (this.props.selectedStartDate === null
             || date.getTime() > this.props.selectedStartDate.getTime())) {
@@ -48,11 +48,11 @@ class TimeFilter extends Component {
             this.props.selectedStartDate.toDateInputValue() : "";
         const selectedEndDate = (this.props.selectedEndDate !== "" && this.props.selectedEndDate !== null) ?
             this.props.selectedEndDate.toDateInputValue() : "";
-        //If the selectedEndDate is empty, use today as maximul start date
+        //If the selectedEndDate is empty, use availableEndDate
         const maxStartDate = (this.props.selectedEndDate !== "" && this.props.selectedEndDate !== null)
-            ? selectedEndDate : new Date().toDateInputValue();
+            ? selectedEndDate : availableEndDate;
         //If the selected start date is not available, use the available start date as minimum time for the end date.
-        const minEndDate = (this.props.selectedStartDate !== "" && this.props.selectedEndDate !== null)
+        const minEndDate = (this.props.selectedStartDate !== "" && this.props.selectedStartDate !== null)
             ? selectedStartDate : availableStartDate;
 
         return (

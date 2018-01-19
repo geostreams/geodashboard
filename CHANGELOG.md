@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add Explore Layers option on the Explore Page as a Drawer
   [GLGVO-376](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-376)
+- Filtering available dates that show up on the search page based on previous filters.
+  [GEOD-1024](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1024)
 
 ### Changed
 

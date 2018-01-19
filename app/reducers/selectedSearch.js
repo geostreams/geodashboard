@@ -42,7 +42,9 @@ const selectedSearch = (state:selectedSearchState = defaultState, action:Selecte
 	                newStart = availableDatesS.start;
                 }
             }
-            const newStateSD = Object.assign({}, state, {dates: {selected: {start: newStart, end: state.dates.selected.end}, available: {start: availableDatesS.start, end: availableDatesS.end}}});
+            const newStateSD = Object.assign({}, state, {dates: {
+                selected: {start: newStart, end: state.dates.selected.end},
+                available: {start: availableDatesS.start, end: availableDatesS.end}}});
             return Object.assign({}, state, newStateSD);
 
         case ADD_END_DATE:
@@ -53,12 +55,21 @@ const selectedSearch = (state:selectedSearchState = defaultState, action:Selecte
                      newEnd = availableDatesE.end;
                  }
             }
-            const newStateED = Object.assign({}, state, {dates: {selected: {start: state.dates.selected.start, end: newEnd}, available: {start: availableDatesE.start, end: availableDatesE.end}}});
+            const newStateED = Object.assign({}, state, {dates: {
+                selected: {start: state.dates.selected.start, end: newEnd},
+                available: {start: availableDatesE.start, end: availableDatesE.end}}});
             return Object.assign({}, state, newStateED);
 
         case UPDATE_AVAILABLE_FILTERS:
             const newFilters = updateAvailable(action.sensors, action.selected_filters, action.allFilters, state);
             return Object.assign({}, state, newFilters);
+
+        case RECEIVE_SENSORS:
+            const initialAvailableDates = collectDates(action.sensors);
+            const newStateAvailableDates = Object.assign({}, state, {dates: {
+                selected: {start: state.dates.selected.start, end: state.dates.selected.end}},
+                available: {start: initialAvailableDates.start, end: initialAvailableDates.end}});
+            return Object.assign({}, state, newStateAvailableDates);
 
         default:
             return state
@@ -111,7 +122,13 @@ function updateAvailable(sensors, selected_filters, allFilters, state){
                         location = null;
                     //}
                     newState = Object.assign({}, newState, {locations: {selected: location, available: newAvailableLocations}});
-                    return
+                    return;
+                case 'time':
+                    const newAvailableDates = collectDates(sensors);
+                    let selected = state.dates.selected;
+                    newState = Object.assign({}, {dates: {selected: {start: selected.start, end: selected.end}, available: {start: newAvailableDates.start, end: newAvailableDates.end}}});
+                    return;
+
             }
         }
     });
