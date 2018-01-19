@@ -183,8 +183,8 @@ class DownloadButtons extends Component {
 
 DownloadButtons.propTypes = {
     api: React.PropTypes.string.isRequired,
-    selectedStartDate: React.PropTypes.string,
-    selectedEndDate: React.PropTypes.string,
+    selectedStartDate: React.PropTypes.instanceOf(Date),
+    selectedEndDate: React.PropTypes.instanceOf(Date),
     selectedParameters: React.PropTypes.array,
     selectedFilters: React.PropTypes.array,
     availableSensors: React.PropTypes.array,
