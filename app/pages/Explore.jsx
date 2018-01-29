@@ -9,7 +9,9 @@ import {
 import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
 import {connect} from 'react-redux';
-import { getLayersDetails } from '../utils/getConfig';
+import {
+    getMobileSourceNames, getMobileSizeMax, getLayersDetails
+} from '../utils/getConfig';
 
 class Explore extends Component {
 
@@ -19,13 +21,26 @@ class Explore extends Component {
 
     render() {
 
-        let sourceLists = this.props.sources.map(s =>
+        let sourceLists;
+        let sources;
+        let mobile_sourcenames = getMobileSourceNames();
+        if (screen.width <= getMobileSizeMax() && mobile_sourcenames.toUpperCase() != 'ALL') {
+            sources = this.props.sources
+                .filter(data => mobile_sourcenames.toUpperCase().includes((data.id).toString().toUpperCase()))
+                .filter(data => (data.id).toString() != '');
+        } else {
+            sources = this.props.sources;
+        }
+        sourceLists = sources.map(s =>
             <Card id={s.id} className={exploreStyles.exploreCard} key={s.id}>
                 <CardHeader>
                     <CardTitle>{s.label} </CardTitle>
                 </CardHeader>
                 <CardText>
-                    <ExploreSourcesTab source={s}/>
+                    <ExploreSourcesTab
+                        userStations={this.props.params.stations}
+                        source={s}
+                    />
                 </CardText>
             </Card>
         );
@@ -36,6 +51,15 @@ class Explore extends Component {
             exploreLayersDetails = getLayersDetails();
             exploreLayers = <ExploreLayers/>;
             layersVisibility = this.props.layersVisibility;
+        }
+
+        let mapObject = '';
+        if (screen.width > getMobileSizeMax()) {
+            mapObject =
+                <Map
+                    exploreLayersDetails={exploreLayersDetails}
+                    layersVisibility={layersVisibility}
+                />;
         }
 
         return (
@@ -51,17 +75,13 @@ class Explore extends Component {
                             </Cell>
                             <Cell col={10}>
                                 <div className={styles.rightMap}>
-                                    <Map
-                                        exploreLayersDetails={exploreLayersDetails}
-                                        layersVisibility={layersVisibility}
-                                    />
+                                    {mapObject}
                                 </div>
                             </Cell>
                         </Grid>
                         {exploreLayers}
                     </div>
                 </Content>
-
             </div>
         )
 

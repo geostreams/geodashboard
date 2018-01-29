@@ -9,6 +9,7 @@ import {
     Textfield, Cell, Grid,
     Card, CardHeader, CardTitle, CardSubtitle, CardActions, CardText
 } from 'react-mdc-web';
+import {getMobileSizeMax} from '../utils/getConfig';
 
 
 class TrendsCalculationSettings extends Component {
@@ -66,12 +67,18 @@ class TrendsCalculationSettings extends Component {
 
     render() {
 
+        let spacer;
+        if (screen.width <= getMobileSizeMax()) {
+            spacer = (<div><br/><br/></div>);
+        }
+
         return (
             <Card className={trendsStyles.cardMargin} key="calculate">
                 <CardHeader>
                     <CardTitle>Change Calculation Setting</CardTitle>
                     <CardSubtitle>{window.configruntime.gd3.calculation_subtitle}</CardSubtitle>
                 </CardHeader>
+                {spacer}
                 <CardText>
                     <Grid>
                         <Cell col={6}>
@@ -111,3 +118,4 @@ TrendsCalculationSettings.propTypes = {
 };
 
 export default TrendsCalculationSettings;
+

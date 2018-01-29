@@ -1,3 +1,19 @@
+@media screen and (max-device-width: 840px) {
+    .liststyle {
+        width: 100vw !important;
+        margin: auto !important;
+        height: auto !important;
+        overflow-y: scroll !important;
+        float: none !important;
+    }
+    .parametersCardStyle,
+    .parametersCardStyleDetail,
+    .cardMargin {
+        width: 100% !important;
+        margin-left: 0.5em !important;
+    }
+}
+
 .liststyle {
     width: 24em;
     float: left;

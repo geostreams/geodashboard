@@ -9,6 +9,14 @@ export function getSourceName(source:PropertiesType):string {
     return sourcename[source.id] !== undefined ? sourcename[source.id] : source.title;
 }
 
+export function getMobileSourceNames() {
+    return window.configruntime.gd3.mobile_sourcename;
+}
+
+export function getMobileSizeMax() {
+    return window.configruntime.gd3.mobile_size_max;
+}
+
 export function getCustomLocation(location:string):Object {
     const additional_location = window.configruntime.gd3.additional_locations;
 

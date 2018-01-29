@@ -96,6 +96,36 @@ ul.navbar {
   position: relative;
 }
 
+@media screen and (max-device-width: 840px) {
+  ul.navbar {
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: -2px;
+    position: relative;
+  }
+
+  ul.navbar > li > ul > li,
+  ul.navbar > li > a,
+  ul.navbar > li > button,
+  ul.navbar > li > span,
+  .navigation_item {
+    font-size: 120% !important;
+  }
+
+  .menu_list_item {
+    font-size: 150% !important;
+  }
+
+  .header_banner {
+    width: 1000px;
+  }
+
+  .header_subtitle {
+    width: auto;
+  }
+}
+
 ul.navbar > li {
   width: 148px;
   height: 29px;
@@ -207,4 +237,8 @@ ul.navbar > li.active > span {
 
 .buttonTrends {
     font-size: 18px !important;
+}
+
+.menu_list_item {
+  font-size: 100%;
 }

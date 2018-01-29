@@ -27,7 +27,7 @@ class App extends Component {
         return (
             <Router history={hashHistory}>
                 <Route path="/" component={Home}/>
-                <Route path="/explore" component={Explore}/>
+                <Route path="/explore/:stations" component={Explore}/>
                 <Route path="/detail/location/:name" component={Detail}/>
                 <Route path="/search" component={Search}/>
                 <Route path="/trendsstations" component={TrendsStation}/>

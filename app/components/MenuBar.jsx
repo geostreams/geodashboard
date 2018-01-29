@@ -58,7 +58,7 @@ class MenuBar extends Component {
 
                 const menuItems = page.children.map(item =>
                     <MenuItem role="menuitem" key={item.name} onClick={() => this.onClickMenuItem(item.url)}>
-                        {item.name}
+                        <span className={styles.menu_list_item}>{item.name}</span>
                     </MenuItem>
                 );
                 pageLinks.push(

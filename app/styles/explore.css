@@ -56,6 +56,18 @@ nav {
     margin-bottom: 0.5em;
 }
 
+@media screen and (max-device-width: 840px) {
+    .layersButton {
+        visibility: hidden;
+    }
+
+    .exploreCard {
+        width: 100% !important;
+        margin-left: 0.5em !important;
+    }
+
+}
+
 .checkboxWidth {
     width: 1em;
 }
