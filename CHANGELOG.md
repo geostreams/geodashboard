@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1027](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1027)
 - Search page permalink showing on the left side instead of centered
   [GEOD-1034](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1034)
+- Updating production config according to GEOD-1004 and grid layout from GEOD-1023
+  [GEOD-1043](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1043)
 
 ## [3.0.0-alpha.1] - 2017-11-22
 
