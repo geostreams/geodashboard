@@ -17,6 +17,13 @@ input[type=button] {
     vertical-align: middle;
 }
 
+@media screen and (max-device-width: 840px) {
+    .add {
+        margin-top: 1em !important;
+        margin-left: 50% !important;
+    }
+}
+
 .add {
     margin: 1em 1em 1em 13em;
 }
@@ -24,4 +31,3 @@ input[type=button] {
 .inline {
   display: inline-block;
 }
-

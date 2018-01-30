@@ -68,6 +68,13 @@
    color: red;
 }
 
+@media screen and (max-device-width: 840px) {
+    .filter_card {
+        width: 100% !important;
+        margin-left: 0.5em !important;
+    }
+}
+
 .filter_card {
     width: 20em;
     margin: 1em 0em 0em 0em;

@@ -5,13 +5,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
-    Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter,
-    Icon, Menu, MenuItem, MenuAnchor
+    Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon, Menu, MenuItem, MenuAnchor
 } from 'react-mdc-web';
 import {getCustomLocation} from '../utils/getConfig';
 import {intersectArrays} from '../utils/arrayUtils';
 import styles from '../styles/downloadButton.css';
-
 
 type DownloadStateType = {
     isOpen: boolean,
@@ -144,6 +142,7 @@ class DownloadButtons extends Component {
         // will be executed as the page loading, instead of onClick
         return (
             <div className={styles.bottomSection}>
+
                 <Dialog
                     open={this.state.isOpen}
                     onClose={this.handleClosePermalink}
@@ -162,7 +161,7 @@ class DownloadButtons extends Component {
                     </DialogFooter>
                 </Dialog>
 
-                <Button raised primary disabled={disabled}
+                <Button raised primary disabled={disabled} className={styles.button}
                         onClick={this.onDownload.bind(this, "csv")}
                 >
                     Download

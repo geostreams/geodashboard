@@ -1,3 +1,8 @@
 .parameters_list {
     margin-top: 2em;
 }
+
+.noData {
+    font-size: 200%;
+    padding: 1em 2em;
+}

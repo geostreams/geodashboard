@@ -544,9 +544,20 @@ export function fetchSensors(api:string) {
     }
 }
 
-function fetchSensorhelp(api:string, id:number){
+function fetchSensorHelp(api:string, id:number){
     return (dispatch:any) => {
         const endpoint = api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + id;
+        return fetch(endpoint)
+            .then(response => response.json())
+            .then(json => {
+                dispatch(receiveSensor(json))
+            })
+    }
+}
+
+function fetchSensorHelpMobile(api:string, id:number){
+    return (dispatch:any) => {
+        const endpoint = api + '/api/geostreams/datapoints/bin/day/1?sensor_id=' + id;
         return fetch(endpoint)
             .then(response => response.json())
             .then(json => {
@@ -564,7 +575,7 @@ export function fetchSensor(name:string) {
         if (state.sensors.length > 0) {
             const sensor = state.sensors.data.find(x => x.name === name).id;
             dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-            dispatch(fetchSensorhelp(api, sensor.id));
+            dispatch(fetchSensorHelp(api, sensor.id));
 
         } else {
             const endpointsensors = api + '/api/geostreams/sensors';
@@ -575,6 +586,42 @@ export function fetchSensor(name:string) {
                     console.log(sensor.id);
                     dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
                     return fetch(api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + sensor.id)
+                });
+            result
+                .then(response => response.json())
+                .then(json => {
+                    dispatch(receiveSensor(json))
+                })
+        }
+    }
+}
+
+export function fetchSensorMobile(name:string) {
+    return (dispatch:any, getState:GetState) => {
+        const state = getState();
+        const api = state.backends.selected;
+
+        //get sensor id from the name
+        if (state.sensors.length > 0) {
+            const sensor = state.sensors.data.find(x => x.name === name).id;
+            dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
+            dispatch(fetchSensorHelpMobile(api, sensor.id));
+
+        } else {
+            const endpointsensors = api + '/api/geostreams/sensors';
+
+            let twoWeeksAgo = new Date();
+            twoWeeksAgo.setDate((twoWeeksAgo.getDate() - 14));
+            twoWeeksAgo = twoWeeksAgo.toJSON();
+
+            let result = fetch(endpointsensors)
+                .then(response => response.json())
+                .then(json => {
+                    const sensor = json.find(x => x.name === name);
+                    console.log(sensor.id);
+                    dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
+                    return fetch(api + '/api/geostreams/datapoints/bin/day/1?&since=' +
+                        twoWeeksAgo.toString() + '&sensor_id=' + sensor.id)
                 });
             result
                 .then(response => response.json())
@@ -829,3 +876,4 @@ export function setLayerOpacity(opacity:Array<string>) {
         opacity
     };
 }
+

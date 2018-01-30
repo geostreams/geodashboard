@@ -1,9 +1,10 @@
-import React, {Component} from 'react'
-import Chart from '../containers/Chart'
-import MiniMap from '../components/MiniMap'
+import React, {Component} from 'react';
+import Chart from '../containers/Chart';
+import ChartMobile from '../containers/ChartMobile';
+import MiniMap from '../components/MiniMap';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import styles from "../styles/detail.css"
-import {getParameterName, getAlternateParameters} from '../utils/getConfig'
+import {getParameterName, getAlternateParameters, getMobileSizeMax} from '../utils/getConfig'
 import { Checkbox, FormField, label} from 'react-mdc-web';
 
 class DataGraph extends Component {
@@ -27,7 +28,7 @@ class DataGraph extends Component {
         }
 
         this.setState({paralistselect: paralistselect});
-    }
+    };
 
     render() {
         let sensor = this.props.property.find(x => x.name == this.props.sensorName);
@@ -49,17 +50,27 @@ class DataGraph extends Component {
             sensor.parameters.map(p => {
                 if (getParameterName(p, getAlternateParameters()) != null) {
                     paralist.push(
-                        <FormField id={p} >
-                            <Checkbox onChange={this.handleSelectParam} value={p} key={p} name="param"
-                            checked={this.state.paralistselect.includes(p)}/>
-                            <label>{getParameterOrAlternateName(p, getAlternateParameters())}</label>
-                        </FormField>
-                )
+                        <span key={p}>
+                            <FormField id={p} key={p}>
+                                <Checkbox onChange={this.handleSelectParam} value={p} key={p} name="param"
+                                          checked={this.state.paralistselect.includes(p)}
+                                />
+                                <label>{getParameterName(p, getAlternateParameters())}</label>
+                            </FormField>
+                            <br/>
+                        </span>
+                    );
 
                     if (this.state.paralistselect.length == 0 || this.state.paralistselect.indexOf(p) > -1) {
-                        charts.push(<Row key={p}>
+                        if (screen.width > getMobileSizeMax()) {
+                            charts.push(<Row key={p}>
                                 <Chart id={this.props.sensorName} param={p}/></Row>)
+                        } else {
+                            charts.push(<Row key={p}>
+                                <ChartMobile id={this.props.sensorName} param={p}/></Row>)
+                        }
                     }
+
 
                 }
 
@@ -70,13 +81,25 @@ class DataGraph extends Component {
             charts = <div></div>;
         }
 
+        if (paralist.length == 0) {
+            paralist = <div className={styles.noData}>No Parameters Available</div>;
+        }
+
+        let miniMapObject;
+        if (screen.width > getMobileSizeMax()) {
+            miniMapObject = (
+                <Row key="3" className={styles.parameters_list}>
+                    <MiniMap sensor={sensor} center={center} />
+                </Row>
+            );
+        }
 
         return (
             <Grid fluid>
                 <Row key="a">
                     <h1>{this.props.sensorName}</h1>
                 </Row>
-                <Row key="b"  around="xs">
+                <Row key="b" around="xs">
                     <Col md={3}>
                         <Row key="1" className={styles.parameters_list} >
                             <h3>Selected Parameters</h3>
@@ -86,11 +109,8 @@ class DataGraph extends Component {
                                 {paralist}
                             </div>
                         </Row>
-                        <Row key="3" className={styles.parameters_list}>
-                            <MiniMap sensor={sensor} center={center} />
-                        </Row>
+                        {miniMapObject}
                     </Col>
-
                     <Col md={8}>
                         {charts}
                     </Col>

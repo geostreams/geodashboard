@@ -1,3 +1,21 @@
+@media screen and (max-device-width: 840px) {
+    .list {
+        width: 100vw !important;
+        margin: auto !important;
+        height: calc(100vh - 30em) !important;
+        overflow-y: scroll !important;
+        float: none !important;
+    }
+    .bottomSection {
+        margin-left: auto !important;
+        padding: 0.5em 0em 0.5em 1em !important;
+        width: 100vw !important;
+        bottom: auto !important;
+        position: relative !important;
+        background-color: #fff !important;
+    }
+}
+
 .list {
     width: 24em;
     margin: 4em 0em 3em 1em;

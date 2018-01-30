@@ -1,9 +1,10 @@
 // @flow
 
-import { connect } from 'react-redux'
-import DataGraphComponent from '../components/DataGraph'
-import { fetchSensor } from '../actions/index'
-import type { Dispatch } from '../utils/flowtype'
+import { connect } from 'react-redux';
+import DataGraphComponent from '../components/DataGraph';
+import { fetchSensor, fetchSensorMobile } from '../actions/index';
+import type { Dispatch } from '../utils/flowtype';
+import {getLocationName, getMobileSizeMax} from '../utils/getConfig';
 
 const mapStateToProps = (state) => {
     return {
@@ -14,7 +15,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch:Dispatch) => {
     return {
         loadSensor: (id, name) => {
-            dispatch(fetchSensor(name))
+            if (screen.width <= getMobileSizeMax()) {
+                dispatch(fetchSensorMobile(name))
+            } else {
+                dispatch(fetchSensor(name))
+            }
         }
     }
 };

@@ -35,6 +35,53 @@ h1, h2, h3, h5, h6, p, ul {
     overflow: hidden;
 }
 
+@media screen and (max-device-width: 840px) {
+    .rightMap {
+        visibility: hidden;
+    }
+
+    .leftColumn {
+        width: 100vw !important;
+        margin: auto !important;
+        height: auto !important;
+        overflow-y: scroll !important;
+        float: none !important;
+    }
+
+    .card {
+        width: 100% !important;
+        margin-left: 0.5em !important;
+    }
+
+    h1 {
+        font-size: xx-large !important;
+        line-height: 120% !important;
+        font-weight: bold !important;
+    }
+
+    h2, h3, h4, text, select, section, p {
+        font-size: xx-large !important;
+    }
+
+    label {
+        font-size: xx-large !important;
+        line-height: 100% !important;
+    }
+
+    button {
+        font-size: xx-large !important;
+        margin: 0.2em !important;
+    }
+
+    .exploreButton {
+        font-size: xx-large !important;
+        margin: 0.2em 0.2em 0.2em 0em !important;
+        width: 100% !important;
+        padding-top: 0.25em !important;
+        padding-bottom: 1.5em !important;
+    }
+}
+
 .rightMap {
     margin: 0em 0em 0em 0em;
     float: right;
@@ -45,7 +92,7 @@ h1, h2, h3, h5, h6, p, ul {
     width: 24em;
     margin: 0em 0em 3em 1em;
     float: left;
-    height: calc(100vh - 20.6em);
+    height: calc(100vh - 9em);
     overflow-y: auto;
 }
 
@@ -109,3 +156,4 @@ h1, h2, h3, h5, h6, p, ul {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+

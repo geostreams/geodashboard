@@ -4,7 +4,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import {Card, CardHeader, CardTitle} from 'react-mdc-web';
 import {getParameterName, getAlternateParameters} from '../utils/getConfig'
 
-var LineChart = rd3.LineChart;
+let LineChart = rd3.LineChart;
 
 class Chart extends Component {
     constructor(props) {
@@ -23,7 +23,7 @@ class Chart extends Component {
         if(values.length == 0 ){
             values.push({x: 0, y: 0})
         }
-        var lineData = [
+        let lineData = [
             {
                 values: values
             },
