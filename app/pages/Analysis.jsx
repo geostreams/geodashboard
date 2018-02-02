@@ -40,7 +40,7 @@ class Analysis extends Component {
                 <Content>
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>
-                            <Cell col={2}>
+                            <Cell col={3}>
                                 <TrendsParameters
                                     className={analysisStyles.parametersCardStyle}
                                     trends_settings={trendsPageSettings}
@@ -71,7 +71,7 @@ class Analysis extends Component {
                                     />
                                 </div>
                             </Cell>
-                            <Cell col={10}>
+                            <Cell col={9}>
                                 <div className={styles.rightMap}>
                                     <Card>
                                         <Map display_trends='True'

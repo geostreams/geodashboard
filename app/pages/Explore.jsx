@@ -68,12 +68,12 @@ class Explore extends Component {
                 <Content>
                     <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>
-                            <Cell col={2}>
+                            <Cell col={3}>
                                 <List className={styles.leftColumn}>
                                     {sourceLists}
                                 </List>
                             </Cell>
-                            <Cell col={10}>
+                            <Cell col={9}>
                                 <div className={styles.rightMap}>
                                     {mapObject}
                                 </div>

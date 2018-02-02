@@ -28,7 +28,7 @@
 }
 
 .liststyle {
-    width: 25em;
+    width: 24em;
     margin: 0em 0.1em 3em 0.1em;
     float: left;
     height: calc(100vh - 30em);
