@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1024](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1024)
 - Added Mobile view options
   [IMLCZO-206](https://opensource.ncsa.illinois.edu/jira/browse/IMLCZO-206)
+- Added JavaScript not enabled message
+  [GEOD-1048](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1048)
 
 ### Fixed
 - Search page showing the same parameter multiple times
