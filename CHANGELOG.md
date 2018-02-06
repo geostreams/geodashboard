@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1048](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1048)
 
 ### Fixed
+
+### Changed
+- Change Maps to use config file for Custom Settings
+  [GEOD-1041](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1041)
+
+### Fixed
 - Search page showing the same parameter multiple times
   [GEOD-1027](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1027)
 - Search page permalink showing on the left side instead of centered

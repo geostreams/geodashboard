@@ -1,7 +1,9 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
-import type { Sensors } from '../utils/flowtype'
+import type { Sensors } from '../utils/flowtype';
+import {getMapTileURLSetting} from '../utils/getConfig';
+import {getAttribution, getMiniControls} from '../utils/mapUtils';
 
 class MiniMap extends Component {
 
@@ -11,7 +13,6 @@ class MiniMap extends Component {
 
     render() {
         return (
-
             <div>
             <div id='map' className="map" style={{"height":"200px", "width":"100%"}}></div>
             <div style={{display: "none"}}>
@@ -22,7 +23,7 @@ class MiniMap extends Component {
     }
 
     getColor(source:string):string {
-        var sourcecolor = window.configruntime.gd3.sourcecolor;
+        let sourcecolor = window.configruntime.gd3.sourcecolor;
         return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
     }
 
@@ -46,26 +47,25 @@ class MiniMap extends Component {
         let vectorLayer = new ol.layer.Vector({
             source: vectorSource
         });
+
         let layers = [
             new ol.layer.Tile({
                 source: new ol.source.XYZ({
-                    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
+                    attributions: getAttribution(),
+                    url: getMapTileURLSetting()
                 })
             }),
             vectorLayer
         ];
-        var map = new ol.Map({
+
+        let map = new ol.Map({
             target: 'map',
             layers: layers,
             view: new ol.View({
                 center: [0,1],
                 zoom: 5
             }),
-            controls: ol.control.defaults({
-                attributionOptions: ({
-                    collapsible: false
-                })
-            })
+            controls: getMiniControls()
         });
     }
 }

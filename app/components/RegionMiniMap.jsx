@@ -7,13 +7,15 @@ import PropTypes from 'prop-types';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import trendsStyles from '../styles/trends.css';
-import {Card, CardHeader, CardTitle, CardMedia,
-        Dialog, DialogBody, DialogHeader, DialogTitle,
-        List, ListItem, Icon
+import {
+    Card, CardHeader, CardTitle, CardMedia,
+    Dialog, DialogBody, DialogHeader, DialogTitle,
+    List, ListItem, Icon
 } from 'react-mdc-web';
 import styles from '../styles/regionMiniMap.css';
-import {getTrendColor, getCustomLocation} from '../utils/getConfig';
-import {popupHelperTrendDetailPage, sensorsToFeaturesTrendDetailPage, getAttribution} from '../utils/mapUtils';
+import {getTrendColor, getCustomLocation, getMapTileURLSetting,} from '../utils/getConfig';
+import {popupHelperTrendDetailPage, sensorsToFeaturesTrendDetailPage,
+    getAttribution, getMiniControls} from '../utils/mapUtils';
 import {drawHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
 import { matchRegionTrends} from '../utils/trendsUtils';
@@ -238,8 +240,8 @@ class RegionMiniMap extends Component {
         let layers = [
             new ol.layer.Tile({
                 source: new ol.source.XYZ({
-                    attributions: [getAttribution()],
-                    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
+                    attributions: getAttribution(),
+                    url: getMapTileURLSetting()
                 })
             }),
             clusters
@@ -273,11 +275,7 @@ class RegionMiniMap extends Component {
             layers: layers,
             view: view,
             overlays: [overlay],
-            controls: ol.control.defaults({
-                attributionOptions: ({
-                    collapsible: true
-                })
-            })
+            controls: getMiniControls()
         });
 
         let selectItems = new ol.interaction.Select();

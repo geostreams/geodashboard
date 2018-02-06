@@ -7,8 +7,8 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
-import {getCustomTrendRegion, getTrendColor} from '../utils/getConfig';
-import {sensorsToFeaturesAnalysisPage, getAttribution} from '../utils/mapUtils';
+import {getCustomTrendRegion, getTrendColor, getMapTileURLSetting} from '../utils/getConfig';
+import {sensorsToFeaturesAnalysisPage, getAttribution, getControls} from '../utils/mapUtils';
 import {popupHeader, popupTrends} from '../utils/mapPopup';
 import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
@@ -39,7 +39,8 @@ class AnalysisMap extends Component {
                     })
                 ],
                 target: 'map'
-            })
+            }),
+            openAboutButton: false
         }
     }
 
@@ -247,8 +248,8 @@ class AnalysisMap extends Component {
         let layers = [
             new ol.layer.Tile({
                 source: new ol.source.XYZ({
-                    attributions: [getAttribution()],
-                    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
+                    attributions: getAttribution(),
+                    url: getMapTileURLSetting()
                 })
             }),
             clusters,
@@ -614,11 +615,7 @@ class AnalysisMap extends Component {
             layers: layers,
             view: view,
             overlays: [overlay],
-            controls: ol.control.defaults({
-                attributionOptions: ({
-                    collapsible: false
-                })
-            }).extend([
+            controls: getControls().extend([
                 new appDrawCircle.drawCircleControl(),
                 new appDrawSquare.drawSquareControl(),
                 new appDrawCustom.drawCustomControl(),
@@ -636,14 +633,13 @@ class AnalysisMap extends Component {
             }
         });
 
-
         theMap.on('singleclick', function (e) {
             selectItems.setActive(false);
             let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
                 return featureChange;
             });
             if (featuresAtPixel && featuresAtPixel.get('features')
-                != undefined && featuresAtPixel.get('features').length == 1) {
+                !== undefined && featuresAtPixel.get('features').length === 1) {
                 const feature = featuresAtPixel.get('features')[0];
                 that.popupHandler(feature, e.coordinate);
             } else {
