@@ -1,7 +1,8 @@
 let ol = require('openlayers');
 import {
     getSourceName, getParameterName, getAlternateParameters, getCustomTrendsRegion,
-    getTrendColor, getColor, getTrendsPageLakeRegions
+    getTrendColor, getColor, getTrendsPageLakeRegions, getMapAttributionsSetting,
+    getMapAttributionsCollapsibleSetting, getMapMiniAttributionsCollapsibleSetting
 } from './getConfig';
 import {matchRegionTrends, getRegionalThreshold} from '../utils/trendsUtils';
 
@@ -663,14 +664,6 @@ export function getMultiLineLayer(featuresAtPixel: ol.features, theMap) {
     return [multiLineLayer, newFeaturesLayer];
 }
 
-export function getAttribution(){
-    return new ol.Attribution({
-        html: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' +
-        'rest/services/NatGeo_World_Map/MapServer">ArcGIS</a> &mdash; National Geographic, Esri, DeLorme, NAVTEQ, ' +
-        'UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC'
-    });
-}
-
 export function aboutPopupMenu() {
 
     let icon_content = document.getElementById('about-this-data');
@@ -690,4 +683,26 @@ export function aboutPopupMenu() {
         icon_content.innerHTML = popupText.toString();
     }
 
+}
+
+export function getAttribution(){
+    return new ol.Attribution({
+        html: getMapAttributionsSetting()
+    });
+}
+
+export function getControls(){
+    return ol.control.defaults({
+        attributionOptions: ({
+            collapsible: getMapAttributionsCollapsibleSetting()
+        })
+    })
+}
+
+export function getMiniControls(){
+    return ol.control.defaults({
+        attributionOptions: ({
+            collapsible: getMapMiniAttributionsCollapsibleSetting()
+        })
+    })
 }

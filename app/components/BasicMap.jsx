@@ -16,8 +16,10 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
-import {getAttribution} from '../utils/mapUtils';
 import type {MapProps, BasicMapState} from '../utils/flowtype';
+import {getMapTileURLSetting} from '../utils/getConfig';
+import {getAttribution, getControls} from '../utils/mapUtils';
+
 
 class BasicMap extends Component {
     centerButton: ?HTMLButtonElement;
@@ -60,58 +62,58 @@ class BasicMap extends Component {
     render() {
 
         return (
-         <div>
+            <div>
 
-            <div id='map' className={styles.root}>
-            </div>
-
-            <div style={{display: 'none'}}>
-                <div id="marker" title="Marker" className="marker"></div>
-                <div id="popup" className={styles.olPopup}>
-                    <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
-                    <div id="popup-content"></div>
+                <div id='map' className={styles.root}>
                 </div>
-                <div id="ol-centercontrol" className={styles.olCenterButton}
-                     ref={(div) => { this.ol_centercontrol = div; }}
-                ></div>
-                <button id="centerButton" ref={(button) => { this.centerButton = button; }}>
-                    <Icon name="gps_fixed"/>
-                </button>
 
-                <div id="ol-drawcirclecontrol"
-                     className={styles.olDrawCircleButton + ' ' +
-                    styles.olSharedDrawStyles + ' drawing_buttons'}
-                     ref={(div) => { this.ol_drawcirclecontrol = div; }}
-                ></div>
-                <button id="drawCircleButton" title="Click to Draw a Circle" ref={(button) => { this.drawCircleButton = button; }}>
-                    <Icon name="panorama_fish_eye"/></button>
+                <div style={{display: 'none'}}>
+                    <div id="marker" title="Marker" className="marker"></div>
+                    <div id="popup" className={styles.olPopup}>
+                        <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
+                        <div id="popup-content"></div>
+                    </div>
+                    <div id="ol-centercontrol" className={styles.olCenterButton}
+                         ref={(div) => { this.ol_centercontrol = div; }}
+                    ></div>
+                    <button id="centerButton" ref={(button) => { this.centerButton = button; }}>
+                        <Icon name="gps_fixed"/>
+                    </button>
 
-                <div id="ol-drawsquarecontrol"
-                     className={styles.olDrawSquareButton + ' ' +
-                    styles.olSharedDrawStyles + ' drawing_buttons'}
-                     ref={(div) => { this.ol_drawsquarecontrol = div; }}
-                ></div>
-                <button id="drawSquareButton" title="Click to Draw a Square" ref={(button) => { this.drawSquareButton = button; }}>
-                    <Icon name="crop_square"/></button>
+                    <div id="ol-drawcirclecontrol"
+                         className={styles.olDrawCircleButton + ' ' +
+                         styles.olSharedDrawStyles + ' drawing_buttons'}
+                         ref={(div) => { this.ol_drawcirclecontrol = div; }}
+                    ></div>
+                    <button id="drawCircleButton" title="Click to Draw a Circle" ref={(button) => { this.drawCircleButton = button; }}>
+                        <Icon name="panorama_fish_eye"/></button>
 
-                <div id="ol-drawcustomcontrol"
-                     className={styles.olDrawCustomButton + ' ' +
-                    styles.olSharedDrawStyles + ' drawing_buttons'}
-                     ref={(div) => { this.ol_drawcustomcontrol = div; }}
-                ></div>
-                <button id="drawCustomButton" title="Click to Draw a Custom Shape" ref={(button) => { this.drawCustomButton = button; }}>
-                    <Icon name="star_border"/></button>
+                    <div id="ol-drawsquarecontrol"
+                         className={styles.olDrawSquareButton + ' ' +
+                         styles.olSharedDrawStyles + ' drawing_buttons'}
+                         ref={(div) => { this.ol_drawsquarecontrol = div; }}
+                    ></div>
+                    <button id="drawSquareButton" title="Click to Draw a Square" ref={(button) => { this.drawSquareButton = button; }}>
+                        <Icon name="crop_square"/></button>
 
-                <div id="ol-drawclearcontrol"
-                     className={styles.olDrawClearButton + ' ' +
-                     styles.olSharedDrawStyles + ' drawing_buttons'}
-                     ref={(div) => { this.ol_drawclearcontrol = div; }}
-                ></div>
-                <button id="drawClearButton" title="Click to Reset Drawing Selection" ref={(button) => { this.drawClearButton = button; }}>
-                    <Icon name="clear"/></button>
-            </div>
+                    <div id="ol-drawcustomcontrol"
+                         className={styles.olDrawCustomButton + ' ' +
+                         styles.olSharedDrawStyles + ' drawing_buttons'}
+                         ref={(div) => { this.ol_drawcustomcontrol = div; }}
+                    ></div>
+                    <button id="drawCustomButton" title="Click to Draw a Custom Shape" ref={(button) => { this.drawCustomButton = button; }}>
+                        <Icon name="star_border"/></button>
 
-        </div>);
+                    <div id="ol-drawclearcontrol"
+                         className={styles.olDrawClearButton + ' ' +
+                         styles.olSharedDrawStyles + ' drawing_buttons'}
+                         ref={(div) => { this.ol_drawclearcontrol = div; }}
+                    ></div>
+                    <button id="drawClearButton" title="Click to Reset Drawing Selection" ref={(button) => { this.drawClearButton = button; }}>
+                        <Icon name="clear"/></button>
+                </div>
+
+            </div>);
 
     }
 
@@ -149,8 +151,8 @@ class BasicMap extends Component {
         let layers = [
             new ol.layer.Tile({
                 source: new ol.source.XYZ({
-                    attributions: [getAttribution()],
-                    url: window.configruntime.gd3.mapTileURL
+                    attributions: getAttribution(),
+                    url: getMapTileURLSetting()
                 })
             }),
             clusters,
@@ -509,14 +511,13 @@ class BasicMap extends Component {
             });
         }
 
-
         theMap = new ol.Map({
             target: 'map',
             layers: layers,
             view: view,
             overlays: [overlay],
+            controls: getControls()
         });
-
 
         theMap.addControl(centerControl);
         theMap.addControl(drawClearControl);
@@ -525,8 +526,8 @@ class BasicMap extends Component {
         theMap.addControl(drawCustomControl);
 
         let selectItems = new ol.interaction.Select({
-                layers: [customLocationFilterLayer]
-            });
+            layers: [customLocationFilterLayer]
+        });
         theMap.addInteraction(selectItems);
 
         theMap.getView().on("change:resolution", function (e) {

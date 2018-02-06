@@ -1331,7 +1331,13 @@ export const gd3 = {
     exploreLayers: [
     ],
 
+    // These variables are for Map settings
     mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
+    mapAttributions: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' +
+        'rest/services/NatGeo_World_Map/MapServer">ArcGIS</a> &mdash; National Geographic, Esri, DeLorme, NAVTEQ, ' +
+        'UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+    mapAttributionsCollapsible: true,
+    mapMiniAttributionsCollapsible: true,
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
 

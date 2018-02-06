@@ -7,9 +7,13 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import trendsStyles from '../styles/trends.css';
-import {Dialog, DialogBody, DialogHeader, DialogTitle, List, ListItem, Icon} from 'react-mdc-web';
-import {getTrendColor, getCustomLocation} from '../utils/getConfig';
-import {sensorsToFeaturesTrendPage, getAttribution, aboutPopupMenu} from '../utils/mapUtils';
+import {
+    Dialog, DialogBody, DialogHeader, DialogTitle, List, ListItem, Icon
+} from 'react-mdc-web';
+import {getTrendColor, getCustomLocation, getMapTileURLSetting,} from '../utils/getConfig';
+import {
+    sensorsToFeaturesTrendPage, aboutPopupMenu, getAttribution, getControls
+} from '../utils/mapUtils';
 import {popupHeader, popupTrends, removePopup} from '../utils/mapPopup';
 import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
@@ -253,8 +257,8 @@ class TrendsMap extends Component {
         let layers = [
             new ol.layer.Tile({
                 source: new ol.source.XYZ({
-                    attributions: [getAttribution()],
-                    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
+                    attributions: getAttribution(),
+                    url: getMapTileURLSetting()
                 })
             }),
             clusters
@@ -299,11 +303,7 @@ class TrendsMap extends Component {
             layers: layers,
             view: view,
             overlays: [overlay],
-            controls: ol.control.defaults({
-                attributionOptions: ({
-                    collapsible: false
-                })
-            })
+            controls: getControls()
         });
 
         let selectItems = new ol.interaction.Select();

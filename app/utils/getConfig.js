@@ -190,3 +190,35 @@ export function getAvailableLayers() {
 
     return available_layers;
 }
+
+export function getMapTileURLSetting() {
+    let mapTileURLSetting = '';
+    if (window.configruntime.gd3.mapTileURL) {
+        mapTileURLSetting = window.configruntime.gd3.mapTileURL;
+    }
+    return mapTileURLSetting;
+}
+
+export function getMapAttributionsSetting() {
+    let mapAttributionsSetting = '';
+    if (window.configruntime.gd3.mapAttributions) {
+        mapAttributionsSetting = window.configruntime.gd3.mapAttributions;
+    }
+    return mapAttributionsSetting;
+}
+
+export function getMapAttributionsCollapsibleSetting() {
+    let CollapsibleSetting = '';
+    if (window.configruntime.gd3.mapAttributionsCollapsible) {
+       CollapsibleSetting = window.configruntime.gd3.mapAttributionsCollapsible;
+    }
+    return CollapsibleSetting;
+}
+
+export function getMapMiniAttributionsCollapsibleSetting() {
+    let miniCollapsibleSetting = '';
+    if (window.configruntime.gd3.mapMiniAttributionsCollapsible) {
+        miniCollapsibleSetting = window.configruntime.gd3.mapMiniAttributionsCollapsible;
+    }
+    return miniCollapsibleSetting;
+}
