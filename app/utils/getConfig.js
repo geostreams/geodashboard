@@ -222,3 +222,75 @@ export function getMapMiniAttributionsCollapsibleSetting() {
     }
     return miniCollapsibleSetting;
 }
+
+export function getIEAlertBoxTitle() {
+    let getValue = '';
+    if (window.configruntime.gd3.ie_message_title) {
+        getValue = window.configruntime.gd3.ie_message_title;
+    }
+    return getValue;
+}
+
+export function getIEAlertBoxBody() {
+    let getValue = '';
+    if (window.configruntime.gd3.ie_message_text) {
+        getValue = window.configruntime.gd3.ie_message_text;
+    }
+    return getValue;
+}
+
+export function getIEAlertHeader() {
+    let getValue = '';
+    if (window.configruntime.gd3.ie_menu_bar_message_text) {
+        getValue = window.configruntime.gd3.ie_menu_bar_message_text;
+    }
+    return getValue;
+}
+
+export function getIEVersionsBeforeEleven() {
+    let getValue = '';
+    if (window.configruntime.gd3.ie_versions_before_eleven) {
+        getValue = window.configruntime.gd3.ie_versions_before_eleven;
+    }
+    return getValue;
+}
+
+export function getIEVersionEleven() {
+    let getValue = '';
+    if (window.configruntime.gd3.ie_version_eleven) {
+        getValue = window.configruntime.gd3.ie_version_eleven;
+    }
+    return getValue;
+}
+
+export function getIEVersionEdge() {
+    let getValue = '';
+    if (window.configruntime.gd3.ie_version_edge) {
+        getValue = window.configruntime.gd3.ie_version_edge;
+    }
+    return getValue;
+}
+
+export function getIEAlertButtonText() {
+    let getValue = '';
+    if (window.configruntime.gd3.ie_button_text) {
+        getValue = window.configruntime.gd3.ie_button_text;
+    }
+    return getValue;
+}
+
+export function getIEAlertShow() {
+    let getValue = '';
+    if (window.configruntime.gd3.ie_show_alert_popup) {
+        getValue = window.configruntime.gd3.ie_show_alert_popup;
+    }
+    return getValue;
+}
+
+export function getIEAlertMenuBarShow() {
+    let getValue = '';
+    if (window.configruntime.gd3.ie_show_alert_popup) {
+        getValue = window.configruntime.gd3.ie_show_menu_bar_alert;
+    }
+    return getValue;
+}

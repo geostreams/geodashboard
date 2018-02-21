@@ -19,16 +19,17 @@
   text-align: center; }
 
 .header_image {
-  zIndex: 32;
+  z-index: 32;
   width: 143px;
   margin-right: -10000px;
   margin-top: 15px;
   left: 5px;
   float: left;
+  position: relative;
 }
 
 .header_title {
-  zIndex: 63;
+  z-index: 63;
   width: 570px;
   min-height: 75px;
   margin-right: -10000px;
@@ -50,7 +51,7 @@
 }
 
 .header_subtitle {
-  zIndex: 24;
+  z-index: 24;
   width: 300px;
   min-height: 28px;
   margin-right: -10000px;
@@ -76,7 +77,6 @@
   padding-top: 82px;
 }
 
-
 .header_hr {
   width: 100%;
   height: 2px;
@@ -85,9 +85,17 @@
   border-top: 0;
   border-bottom: 0;
   position: relative;
-  zIndex: 31;
+  z-index: 31;
 }
 
+.header_alert {
+  float: right;
+  margin-bottom: -1em;
+  margin-top: -5em;
+  margin-right: 2em;
+  color: white;
+  font-weight: bold;
+}
 
 ul.navbar {
   float: right;

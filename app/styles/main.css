@@ -157,3 +157,24 @@ h1, h2, h3, h5, h6, p, ul {
     100% { transform: rotate(360deg); }
 }
 
+.alertHeader {
+    padding-bottom: 1em !important;
+}
+
+.alertHeaderIcon {
+    font-size: 200%;
+}
+
+.alertHeaderText {
+    font-weight: bold;
+    font-size: larger;
+}
+
+.alertBodyText {
+    color: #000000;
+    font-size: larger;
+}
+
+.alertButton {
+    font-weight: bold !important;
+}

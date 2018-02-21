@@ -15,8 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [IMLCZO-206](https://opensource.ncsa.illinois.edu/jira/browse/IMLCZO-206)
 - Added JavaScript not enabled message
   [GEOD-1048](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1048)
-
-### Fixed
+- Added alert popup for IE versions greater than 8
+  [GEOD-1048](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1048)
 
 ### Changed
 - Change Maps to use config file for Custom Settings
@@ -31,8 +31,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1043](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1043)
 - Some css styles for scroll bar visibility in IE and Edge
   [GEOD-1049](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1049)
-
-### Changed
 
 ## [3.0.0-alpha.1] - 2017-11-22
 

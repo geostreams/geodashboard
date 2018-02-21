@@ -1277,6 +1277,16 @@ export const gd3 = {
 
     error_text: "An Error Occurred - Please Select Again",
 
+    ie_show_alert_popup: false,
+    ie_versions_before_eleven: [],
+    ie_version_eleven: false,
+    ie_version_edge: false,
+    ie_message_title: "",
+    ie_message_text: "" ,
+    ie_button_text: "",
+    ie_show_menu_bar_alert: false,
+    ie_menu_bar_message_text: "",
+
     application_options: {
         "title": "Geodashboard 3.0",
         "pages": [
@@ -1340,4 +1350,3 @@ export const gd3 = {
     mapMiniAttributionsCollapsible: true,
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
-

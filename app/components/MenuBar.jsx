@@ -5,7 +5,10 @@ import {
     Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
     Button, MenuItem, Menu, MenuAnchor, Icon
 } from 'react-mdc-web';
-import {getApplicationOptions} from "../utils/getConfig";
+import {
+    getApplicationOptions, getIEAlertMenuBarShow, getIEAlertHeader,
+    getIEVersionEdge, getIEVersionEleven, getIEVersionsBeforeEleven
+} from "../utils/getConfig";
 
 class MenuBar extends Component {
     state: {
@@ -17,28 +20,24 @@ class MenuBar extends Component {
         this.state = {
             openMenu: false
         };
-	    this.toggleTrendMenu = this.toggleTrendMenu.bind(this);
-	    this.onClickMenuItem = this.onClickMenuItem.bind(this);
+        this.toggleTrendMenu = this.toggleTrendMenu.bind(this);
+        this.onClickMenuItem = this.onClickMenuItem.bind(this);
     }
 
-    onClickTrendButton(openMenuValue: boolean) {
+    toggleTrendMenu(openMenuValue: boolean) {
         this.setState({openMenu: openMenuValue});
     };
 
-	toggleTrendMenu(openMenuValue: boolean) {
-		this.setState({openMenu: openMenuValue});
-	};
+    onClickMenuItem(route: String) {
+        hashHistory.push(route);
+    }
 
-	onClickMenuItem(route: String) {
-		hashHistory.push(route);
-	}
-
-	render() {
+    render() {
         let logo;
         try {
-           logo = <div className={styles.header_image}>
+            logo = <div className={styles.header_image}>
                 <img src={require("../../theme/logo.png")} />
-              </div>;
+            </div>;
         } catch(e) {
 
         }
@@ -46,15 +45,14 @@ class MenuBar extends Component {
         const applicationOptions = getApplicationOptions();
 
         const pageLinks = [];
-        applicationOptions.pages.map( page =>
-        {
-	        if(page.url) {
-		        pageLinks.push(
-		            <li key={page.name} className={this.props.selected === page.name.toLowerCase() ? styles.active: ''}>
+        applicationOptions.pages.map( page => {
+            if(page.url) {
+                pageLinks.push(
+                    <li key={page.name} className={this.props.selected === page.name.toLowerCase() ? styles.active: ''}>
                         <Link href={page.url}>{page.name}</Link>
                     </li>
                 );
-	        } else if(page.children){
+            } else if(page.children){
 
                 const menuItems = page.children.map(item =>
                     <MenuItem role="menuitem" key={item.name} onClick={() => this.onClickMenuItem(item.url)}>
@@ -78,9 +76,27 @@ class MenuBar extends Component {
                         </MenuAnchor>
                     </li>
                 )
-	        }
+            }
+        });
+
+        let ie_error_text = '';
+        if (getIEAlertMenuBarShow() === true) {
+            let navUserAgent = navigator.userAgent.toLowerCase();
+            let isIE = 'false';
+            if (navUserAgent.indexOf('msie') !== -1){
+                isIE = parseInt(navUserAgent.split('msie')[1]).toString();
+                if (getIEVersionsBeforeEleven().indexOf(isIE) !== -1) {
+                    ie_error_text = <span className={styles.header_alert}>{getIEAlertHeader()}</span>
+                }
+            }
+            if (
+                (navUserAgent.indexOf('msie') === -1 && navUserAgent.indexOf('trident') !== -1 &&
+                    getIEVersionEleven() === true) ||
+                (navUserAgent.indexOf('edge') !== -1 && getIEVersionEdge() === true)) {
+                ie_error_text = <span className={styles.header_alert}>{getIEAlertHeader()}</span>
+            }
         }
-        );
+
         return (
             <header>
                 <div className={styles.header_background}>
@@ -93,15 +109,16 @@ class MenuBar extends Component {
                         </div>
                         <div className={styles.header_subtitle}>
                             <p id="header-subtitle-text" className={styles.header_subtitle_text}>
-                                {this.props.subtitle}
-                            </p>
+                                {this.props.subtitle} </p>
                         </div>
                         <div className={styles.header_hr_div}>
+                            {ie_error_text}
                             <hr className={styles.header_hr} />
                         </div>
-                            <ul className={styles.navbar} id="navigation">
-                                {pageLinks}
-                            </ul>
+                        <ul className={styles.navbar} id="navigation">
+                            {pageLinks}
+                        </ul>
+
                     </div>
                 </div>
             </header>
