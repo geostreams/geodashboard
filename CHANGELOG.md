@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1048](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1048)
 - Added alert popup for IE versions greater than 8
   [GEOD-1048](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1048)
+- Added Map interface in Mobile version
+  [GEOD-1042](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1042)
 
 ### Changed
 - Change Maps to use config file for Custom Settings

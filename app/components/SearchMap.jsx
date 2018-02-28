@@ -7,7 +7,7 @@ let ol = require('openlayers');
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
-import {getCustomLocation} from '../utils/getConfig';
+import {getCustomLocation, getMobileSizeMax} from '../utils/getConfig';
 import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
 import {drawHelper} from '../utils/mapDraw';
 import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup';
@@ -65,15 +65,15 @@ class SearchMap extends Component {
 
             // If a cluster is expanded we want to close it, unless there was a click in one of the features that is expanded
             let closeClusters = true;
-            if (featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type == "single"))) {
+            if (featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type === "single"))) {
                 // Case when a feature is expanded
                 that.popupHandleHelper(featuresAtPixel, e.coordinate, overlay);
                 closeClusters = false;
-            } else if (featuresAtPixel && featuresAtPixel.get('features') != undefined && featuresAtPixel.get('features').length == 1) {
+            } else if (featuresAtPixel && featuresAtPixel.get('features') !== undefined && featuresAtPixel.get('features').length === 1) {
                 // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
                 const feature = featuresAtPixel.get('features')[0];
                 that.popupHandleHelper(feature, e.coordinate, overlay);
-            } else if (featuresAtPixel && featuresAtPixel.get('features') != undefined && featuresAtPixel.get('features').length > 1) {
+            } else if (featuresAtPixel && featuresAtPixel.get('features') !== undefined && featuresAtPixel.get('features').length > 1) {
                 // Case when a clustered was click. If it has more than 4 features and is in a zoom level lower than maxZoom, zoom in
                 // if(featuresAtPixel.get('features').length > 4 && theMap.getView().getZoom() < that.state.maxZoom) {
                 //     theMap.getView().setZoom(theMap.getView().getZoom() + 1);
@@ -125,12 +125,12 @@ class SearchMap extends Component {
         let features = this.getFeature();
         // If the User drew a custom location, zoom to the shape
         if (customLocationFilterVectorExtent.length > 0 &&
-            this.props.selectedLocation == 'Custom Location') {
+            this.props.selectedLocation === 'Custom Location') {
             if (!this.state.expandedCluster) {
                 if (this.props.shapeCoordinates.length > 0) {
                     theMap.getView().fit(customLocationFilterVectorExtent, theMap.getSize());
                 }
-                if (this.props.drawn_sensors.length == 0) {
+                if (this.props.drawn_sensors.length === 0) {
                     let tmpVectorSource = new ol.source.Vector({
                         features: features
                     });
@@ -158,16 +158,23 @@ class SearchMap extends Component {
     };
 
     getCluster = (clusterSource: ol.source.Cluster) => {
-      return new ol.layer.Vector({
+        return new ol.layer.Vector({
             source: clusterSource,
             style: function (feature) {
                 let size = feature.get('features').length;
                 let style;
 
                 if (size > 1) {
+                    let radius_value = 10;
+                    let font_value = '10px sans-serif';
+                    if (screen.width <= getMobileSizeMax()) {
+                        radius_value = 20;
+                        font_value = '20px sans-serif';
+                    }
+
                     style = new ol.style.Style({
                         image: new ol.style.Circle({
-                            radius: 10,
+                            radius: radius_value,
                             stroke: new ol.style.Stroke({
                                 color: '#fff'
                             }),
@@ -179,7 +186,8 @@ class SearchMap extends Component {
                             text: size.toString(),
                             fill: new ol.style.Fill({
                                 color: '#fff'
-                            })
+                            }),
+                            font: font_value
                         })
                     });
                 } else {
@@ -194,13 +202,17 @@ class SearchMap extends Component {
                         + '</g>'
                         + '</svg>';
 
+                    let scale_value = 1.0;
+                    if (screen.width <= getMobileSizeMax()) {
+                        scale_value = 2.0;
+                    }
+
                     style = (new ol.style.Style({
                         image: new ol.style.Icon({
                             anchor: [0.5, 1],
                             src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( iconSvg ),
-                            imgSize: [15, 25]
+                            scale: scale_value
                         })
-
                     }));
                 }
 

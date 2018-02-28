@@ -1,4 +1,100 @@
 export const gd3 = {
+
+    // Clowder API Information - this is also displayed in the Welcome Page dropdown selector
+    clowder_endpoints: [
+        {url: "https://seagrant-dev.ncsa.illinois.edu/clowder", label: "GLM DEV", title: "Great Lakes Monitoring",
+            subtitle: "ILLINOIS-INDIANA SEA GRANT"},
+        {url: "https://greatlakesmonitoring.org/clowder", label: "GLM PROD", title: "Great Lakes Monitoring",
+            subtitle: "ILLINOIS-INDIANA SEA GRANT"},
+        {url: "https://greatlakestogulf.org/clowder", label: "GLTG PROD", title: "Great Lakes to Gulf",
+            subtitle: "VIRTUAL OBSERVATORY"},
+        {url: "http://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV", title: "Great Lakes to Gulf",
+            subtitle: "VIRTUAL OBSERVATORY"},
+        {url: "http://data.imlczo.org/clowder", label: "IMLCZO PROD",   title: "IMLCZO",
+            subtitle: ""},
+        {url: "https://imlczo-dev.ncsa.illinois.edu/clowder", label: "IMLCZO DEV", title: "IMLCZO",
+            subtitle: ""},
+        {url: "http://141.142.211.37/clowder", label: "IMLCZO NEBULA", title: "IMLCZO",
+            subtitle: ""},
+        {url:"http://localhost:9000", label:"TEST", title:"TEST", subtitle:"TEST"}
+    ],
+
+    // Menu Bar Information
+    application_options: {
+        "title": "Geodashboard 3.0",
+        "pages": [
+            {
+                "name": "HOME",
+                "url": "/#",
+            },
+            {
+                "name": "EXPLORE",
+                "url": "/#explore/all",
+            },
+            {
+                "name": "SEARCH",
+                "url": "/#search",
+            },
+            {
+                "name": "ANALYSIS",
+                "url": "/#analysis",
+            },
+            {
+                "name": "TRENDS",
+                "children": [
+                    {
+                        "name": "TRENDS STATIONS",
+                        "url": "/trendsstations"
+                    },
+                    {
+                        "name": "TRENDS REGIONS",
+                        "url": "/trendsregions"
+                    }
+                ]
+            },
+            {
+                "name": "ABOUT",
+                "url": "/#about",
+            },
+        ]
+    },
+
+    // This variable is used to determine the location for links to the Detail Page
+    application_website: "/",
+
+    // For Mobile Explore Page
+    mobile_sourcename: "all",
+    mobile_size_max: 840,
+
+    // This variable is for the Mobile Detail Page
+    mobile_detail_path: '/#detail/location/',
+
+    // Error Text if the API does not return on the Welcome Page
+    error_text: "An Error Occurred - Please Select Again",
+
+    // Error Items for IE
+    ie_show_alert_popup: false,
+    ie_versions_before_eleven: [],
+    ie_version_eleven: false,
+    ie_version_edge: false,
+    ie_message_title: "",
+    ie_message_text: "" ,
+    ie_button_text: "",
+    ie_show_menu_bar_alert: false,
+    ie_menu_bar_message_text: "",
+
+    // Source IDs and their Display Names
+    sourcename: {
+        "glfmsp": "Great Lakes Fish Monitoring and Surveillance Program",
+        "epa": "Water Quality Data",
+        "heidelberg": "Heidelberg University",
+        "lec": "Lake Erie Committee Forage Task Group",
+        "usgs": "United States Geological Survey",
+        "iadn": "Integrated Atmospheric Deposition Network",
+        "noaa": "National Oceanic and Atmospheric Administration"
+    },
+
+    // Colors associated with specific Sources
     sourcecolor: {
         "ads": "#bf5fff",
         "ats": "#0d71ba",
@@ -274,215 +370,7 @@ export const gd3 = {
         "Ws_ms": "Wind Speed +2.4m (m/s)"
     },
 
-    sourcename: {
-        "glfmsp": "Great Lakes Fish Monitoring and Surveillance Program",
-        "epa": "Water Quality Data",
-        "heidelberg": "Heidelberg University",
-        "lec": "Lake Erie Committee Forage Task Group",
-        "usgs": "United States Geological Survey",
-        "iadn": "Integrated Atmospheric Deposition Network",
-        "noaa": "National Oceanic and Atmospheric Administration"
-    },
-
-    mobile_sourcename: "imlczo",
-
-    mobile_size_max: 840,
-
-    trend_colors: {
-        "trendUp": "#FAE70B",
-        "trendDown": "#29ABE2",
-        "noTrend": "#7F7F7F",
-        "overThresholdUp": "#ED2026",
-        "overThresholdDown": "#ED2026"
-    },
-
-    trend_settings: [
-        {
-            "parameter": {
-                "id": "nitrate-as-n-mgl",
-                "title": "Nitrate as N"
-            },
-            "thresholds": [
-                {
-                    "title": "Standard01",
-                    "region": "Region01",
-                    "value": 3.1
-                },
-                {
-                    "title": "Standard02",
-                    "region": "Region02",
-                    "value": 1.1
-                },
-                {
-                    "title": "Standard03",
-                    "region": "Region03",
-                    "value": 2.5
-                }
-            ]
-        },
-        {
-            "parameter": {
-                "id": "pH",
-                "title": "Water Acidity"
-            },
-            "thresholds": [
-                {
-                    "title": "Standard04",
-                    "region": "Region04",
-                    "value": 6.3
-                },
-                {
-                    "title": "Standard05",
-                    "region": "Region05",
-                    "value": 7
-                },
-                {
-                    "title": "Standard06",
-                    "region": "Region06",
-                    "value": 7.2
-                }
-            ]
-        },
-        {
-            "parameter": {
-                "id": "load-Mg",
-                "title": "Nitrate Load"
-            },
-            "thresholds": [
-                {
-                    "title": "Standard07",
-                    "region": "Region07",
-                    "value": 0.6
-                },
-                {
-                    "title": "Standard08",
-                    "region": "Region08",
-                    "value": 1.5
-                },
-                {
-                    "title": "Standard09",
-                    "region": "Region09",
-                    "value": 2.0
-                }
-            ]
-        }
-    ],
-
-    trend_analysis_regions: [
-        {
-            "type": "Feature",
-            "properties": {
-                "title": "All Regions",
-                "region": "ALL",
-                "id": "all",
-                "sortOrder": 0,
-                "threshold": {}
-
-            },
-            "geometry": {
-                "type": "",
-                "coordinates": [],
-                "region_coordinate": []
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "title": "Draw Custom Region",
-                "region": "DRAW",
-                "id": "draw",
-                "sortOrder": 1,
-                "threshold": {}
-
-            },
-            "geometry": {
-                "type": "",
-                "coordinates": [],
-                "region_coordinate": []
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "title": "Preset Region 01",
-                "region": "PRESET01",
-                "id": "preset01",
-                "sortOrder": 2,
-                "threshold": {}
-
-            },
-            "geometry": {
-                "type": "",
-                "coordinates": [
-                    [
-                        [-85.85,
-                            44.44
-                        ],
-                        [-85.85,
-                            33.33
-                        ],
-                        [-95.95,
-                            44.44
-                        ],
-                        [-95.95,
-                            33.33
-                        ],
-                    ]
-                ],
-                "region_coordinate": []
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "title": "Preset Region 02",
-                "region": "PRESET02",
-                "id": "preset02",
-                "sortOrder": 3,
-                "threshold": {}
-
-            },
-            "geometry": {
-                "type": "",
-                "coordinates": [
-                    [
-                        [-85.85,
-                            44.44
-                        ],
-                        [-85.85,
-                            40.40
-                        ],
-                        [-90.90,
-                            40.40
-                        ],
-                        [-90.90,
-                            33.33
-                        ],
-                    ]
-                ],
-                "region_coordinate": []
-            }
-        }
-    ],
-
-    clowder_endpoints: [
-        {url: "https://seagrant-dev.ncsa.illinois.edu/clowder", label: "GLM DEV", title: "Great Lakes Monitoring",
-            subtitle: "ILLINOIS-INDIANA SEA GRANT"},
-        {url: "https://greatlakesmonitoring.org/clowder", label: "GLM PROD", title: "Great Lakes Monitoring",
-            subtitle: "ILLINOIS-INDIANA SEA GRANT"},
-        {url: "https://greatlakestogulf.org/clowder", label: "GLTG PROD", title: "Great Lakes to Gulf",
-            subtitle: "VIRTUAL OBSERVATORY"},
-        {url: "http://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV", title: "Great Lakes to Gulf",
-            subtitle: "VIRTUAL OBSERVATORY"},
-        {url: "http://data.imlczo.org/clowder", label: "IMLCZO PROD",   title: "IMLCZO",
-            subtitle: ""},
-        {url: "https://imlczo-dev.ncsa.illinois.edu/clowder", label: "IMLCZO DEV", title: "IMLCZO",
-            subtitle: ""},
-        {url: "http://141.142.211.37/clowder", label: "IMLCZO NEBULA", title: "IMLCZO",
-            subtitle: ""},
-        {url:"http://localhost:9000", label:"TEST", title:"TEST", subtitle:"TEST"}
-    ],
-
+    // This is used to define genearal areas on the map
     additional_locations: [
         {
             "type": "Feature",
@@ -1025,6 +913,193 @@ export const gd3 = {
         }
     ],
 
+    // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages
+    parameter_subtitle: '',
+    season_subtitle: '',
+    region_subtitle: '',
+    calculation_subtitle: '',
+    threshold_subtitle: '',
+    threshold_none_subtitle: '',
+    // **********
+
+    // These variables are for the Trends and Analysis Pages
+    trend_colors: {
+        "trendUp": "#FAE70B",
+        "trendDown": "#29ABE2",
+        "noTrend": "#7F7F7F",
+        "overThresholdUp": "#ED2026",
+        "overThresholdDown": "#ED2026"
+    },
+
+    trend_settings: [
+        {
+            "parameter": {
+                "id": "nitrate-as-n-mgl",
+                "title": "Nitrate as N"
+            },
+            "thresholds": [
+                {
+                    "title": "Standard01",
+                    "region": "Region01",
+                    "value": 3.1
+                },
+                {
+                    "title": "Standard02",
+                    "region": "Region02",
+                    "value": 1.1
+                },
+                {
+                    "title": "Standard03",
+                    "region": "Region03",
+                    "value": 2.5
+                }
+            ]
+        },
+        {
+            "parameter": {
+                "id": "pH",
+                "title": "Water Acidity"
+            },
+            "thresholds": [
+                {
+                    "title": "Standard04",
+                    "region": "Region04",
+                    "value": 6.3
+                },
+                {
+                    "title": "Standard05",
+                    "region": "Region05",
+                    "value": 7
+                },
+                {
+                    "title": "Standard06",
+                    "region": "Region06",
+                    "value": 7.2
+                }
+            ]
+        },
+        {
+            "parameter": {
+                "id": "load-Mg",
+                "title": "Nitrate Load"
+            },
+            "thresholds": [
+                {
+                    "title": "Standard07",
+                    "region": "Region07",
+                    "value": 0.6
+                },
+                {
+                    "title": "Standard08",
+                    "region": "Region08",
+                    "value": 1.5
+                },
+                {
+                    "title": "Standard09",
+                    "region": "Region09",
+                    "value": 2.0
+                }
+            ]
+        }
+    ],
+
+    trend_analysis_regions: [
+        {
+            "type": "Feature",
+            "properties": {
+                "title": "All Regions",
+                "region": "ALL",
+                "id": "all",
+                "sortOrder": 0,
+                "threshold": {}
+
+            },
+            "geometry": {
+                "type": "",
+                "coordinates": [],
+                "region_coordinate": []
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "title": "Draw Custom Region",
+                "region": "DRAW",
+                "id": "draw",
+                "sortOrder": 1,
+                "threshold": {}
+
+            },
+            "geometry": {
+                "type": "",
+                "coordinates": [],
+                "region_coordinate": []
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "title": "Preset Region 01",
+                "region": "PRESET01",
+                "id": "preset01",
+                "sortOrder": 2,
+                "threshold": {}
+
+            },
+            "geometry": {
+                "type": "",
+                "coordinates": [
+                    [
+                        [-85.85,
+                            44.44
+                        ],
+                        [-85.85,
+                            33.33
+                        ],
+                        [-95.95,
+                            44.44
+                        ],
+                        [-95.95,
+                            33.33
+                        ],
+                    ]
+                ],
+                "region_coordinate": []
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "title": "Preset Region 02",
+                "region": "PRESET02",
+                "id": "preset02",
+                "sortOrder": 3,
+                "threshold": {}
+
+            },
+            "geometry": {
+                "type": "",
+                "coordinates": [
+                    [
+                        [-85.85,
+                            44.44
+                        ],
+                        [-85.85,
+                            40.40
+                        ],
+                        [-90.90,
+                            40.40
+                        ],
+                        [-90.90,
+                            33.33
+                        ],
+                    ]
+                ],
+                "region_coordinate": []
+            }
+        }
+    ],
+
     trends_page_settings: [
         {
             "parameter": {
@@ -1274,68 +1349,6 @@ export const gd3 = {
             "value": 100,
         }
     ],
-
-    error_text: "An Error Occurred - Please Select Again",
-
-    ie_show_alert_popup: false,
-    ie_versions_before_eleven: [],
-    ie_version_eleven: false,
-    ie_version_edge: false,
-    ie_message_title: "",
-    ie_message_text: "" ,
-    ie_button_text: "",
-    ie_show_menu_bar_alert: false,
-    ie_menu_bar_message_text: "",
-
-    application_options: {
-        "title": "Geodashboard 3.0",
-        "pages": [
-            {
-                "name": "HOME",
-                "url": "/#",
-            },
-            {
-                "name": "EXPLORE",
-                "url": "/#explore/all",
-            },
-            {
-                "name": "SEARCH",
-                "url": "/#search",
-            },
-            {
-                "name": "ANALYSIS",
-                "url": "/#analysis",
-            },
-            {
-                "name": "TRENDS",
-                "children": [
-                    {
-                        "name": "TRENDS STATIONS",
-                        "url": "/trendsstations"
-                    },
-                    {
-                        "name": "TRENDS REGIONS",
-                        "url": "/trendsregions"
-                    }
-                ]
-            },
-            {
-                "name": "ABOUT",
-                "url": "/#about",
-            },
-        ]
-    },
-
-    // This variable is used to determine the location for links to the Detail Page
-    application_website: "/geodashboard/",
-
-    // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages
-    parameter_subtitle: '',
-    season_subtitle: '',
-    region_subtitle: '',
-    calculation_subtitle: '',
-    threshold_subtitle: '',
-    threshold_none_subtitle: '',
     // **********
 
     exploreLayers: [

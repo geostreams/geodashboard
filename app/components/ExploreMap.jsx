@@ -11,6 +11,7 @@ import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
 import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup';
 import BasicMap from './BasicMap';
 import type {InputEventMap} from '../utils/flowtype';
+import {getMobileSizeMax} from '../utils/getConfig';
 
 
 class ExploreMap extends Component {
@@ -55,15 +56,15 @@ class ExploreMap extends Component {
 
         // If a cluster is expanded we want to close it, unless there was a click in one of the features that is expanded
         let closeClusters = true;
-        if (featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type == "single"))) {
+        if (featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type === "single"))) {
             // Case when a feature is expanded
             that.popupHandleHelper(featuresAtPixel, e.coordinate, overlay);
             closeClusters = false;
-        } else if (featuresAtPixel && featuresAtPixel.get('features') != undefined && featuresAtPixel.get('features').length == 1) {
+        } else if (featuresAtPixel && featuresAtPixel.get('features') !== undefined && featuresAtPixel.get('features').length === 1) {
             // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
             const feature = featuresAtPixel.get('features')[0];
             that.popupHandleHelper(feature, e.coordinate, overlay);
-        } else if (featuresAtPixel && featuresAtPixel.get('features') != undefined && featuresAtPixel.get('features').length > 1) {
+        } else if (featuresAtPixel && featuresAtPixel.get('features') !== undefined && featuresAtPixel.get('features').length > 1) {
             // Case when a clustered was click. If it has more than 4 features and is in a zoom level lower than maxZoom, zoom in
             // if(featuresAtPixel.get('features').length > 4 && theMap.getView().getZoom() < that.state.maxZoom) {
             //     theMap.getView().setZoom(theMap.getView().getZoom() + 1);
@@ -110,10 +111,10 @@ class ExploreMap extends Component {
                 if (this.props.layersVisibility) {
 
                     let index = this.props.layersVisibility.findIndex(
-                        layer_visibility => layer_visibility.title == layerDetails.title
+                        layer_visibility => layer_visibility.title === layerDetails.title
                     );
 
-                    if (index > -1 && this.props.layersVisibility[index].visibility == true) {
+                    if (index > -1 && this.props.layersVisibility[index].visibility === true) {
                         exploreLayers.push(
                             new ol.layer.Image({
                                 source: new ol.source.ImageWMS({
@@ -126,7 +127,7 @@ class ExploreMap extends Component {
                             })
                         )
                     }
-                    else if (index > -1 && this.props.layersVisibility[index].visibility == false) {
+                    else if (index > -1 && this.props.layersVisibility[index].visibility === false) {
                         exploreLayers.push(
                             new ol.layer.Image({
                                 name: layerDetails.title,
@@ -148,7 +149,7 @@ class ExploreMap extends Component {
                 let layer_name = map_layer.get('name');
                 exploreLayers.map(explore_layer_remove => {
                     let explore_layer_name = explore_layer_remove.get('name');
-                    if (explore_layer_name == layer_name) {
+                    if (explore_layer_name === layer_name) {
                         keep_map_view = true;
                         theMap.removeLayer(map_layer);
                     }
@@ -157,7 +158,7 @@ class ExploreMap extends Component {
 
             exploreLayers.map(explore_layer_add => {
                 let explore_layers_visibility = explore_layer_add.get('visible');
-                if (explore_layers_visibility == true) {
+                if (explore_layers_visibility === true) {
                     theMap.addLayer(explore_layer_add);
                     keep_map_view = true;
                 }
@@ -173,7 +174,7 @@ class ExploreMap extends Component {
         });
 
         if (features.length > 0) {
-            if (!this.state.expandedCluster && keep_map_view == false){
+            if (!this.state.expandedCluster && keep_map_view === false){
                 theMap.getView().fit(tmpvectorSource.getExtent(), theMap.getSize());
             }
         }
@@ -209,9 +210,16 @@ class ExploreMap extends Component {
                 let style;
 
                 if (size > 1) {
+                    let radius_value = 10;
+                    let font_value = '10px sans-serif';
+                    if (screen.width <= getMobileSizeMax()) {
+                        radius_value = 20;
+                        font_value = '20px sans-serif';
+                    }
+
                     style = new ol.style.Style({
                         image: new ol.style.Circle({
-                            radius: 10,
+                            radius: radius_value,
                             stroke: new ol.style.Stroke({
                                 color: '#fff'
                             }),
@@ -223,7 +231,8 @@ class ExploreMap extends Component {
                             text: size.toString(),
                             fill: new ol.style.Fill({
                                 color: '#fff'
-                            })
+                            }),
+                            font: font_value
                         })
                     });
                 } else {
@@ -238,14 +247,19 @@ class ExploreMap extends Component {
                         + '</g>'
                         + '</svg>';
 
+                    let scale_value = 1.0;
+                    if (screen.width <= getMobileSizeMax()) {
+                        scale_value = 2.0;
+                    }
+
                     style = (new ol.style.Style({
                         image: new ol.style.Icon({
                             anchor: [0.5, 1],
                             src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( iconSvg ),
-                            imgSize: [15, 25]
+                            scale: scale_value
                         })
-
                     }));
+                    
                 }
 
                 return style;

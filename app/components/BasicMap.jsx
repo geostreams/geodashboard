@@ -68,14 +68,14 @@ class BasicMap extends Component {
                 </div>
 
                 <div style={{display: 'none'}}>
-                    <div id="marker" title="Marker" className="marker"></div>
+                    <div id="marker" title="Marker" className="marker"> </div>
                     <div id="popup" className={styles.olPopup}>
-                        <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
-                        <div id="popup-content"></div>
+                        <a href="#" id="popup-closer" className={styles.olPopupCloser}> </a>
+                        <div id="popup-content"> </div>
                     </div>
                     <div id="ol-centercontrol" className={styles.olCenterButton}
                          ref={(div) => { this.ol_centercontrol = div; }}
-                    ></div>
+                    > </div>
                     <button id="centerButton" ref={(button) => { this.centerButton = button; }}>
                         <Icon name="gps_fixed"/>
                     </button>
@@ -84,7 +84,7 @@ class BasicMap extends Component {
                          className={styles.olDrawCircleButton + ' ' +
                          styles.olSharedDrawStyles + ' drawing_buttons'}
                          ref={(div) => { this.ol_drawcirclecontrol = div; }}
-                    ></div>
+                    > </div>
                     <button id="drawCircleButton" title="Click to Draw a Circle" ref={(button) => { this.drawCircleButton = button; }}>
                         <Icon name="panorama_fish_eye"/></button>
 
@@ -92,7 +92,7 @@ class BasicMap extends Component {
                          className={styles.olDrawSquareButton + ' ' +
                          styles.olSharedDrawStyles + ' drawing_buttons'}
                          ref={(div) => { this.ol_drawsquarecontrol = div; }}
-                    ></div>
+                    > </div>
                     <button id="drawSquareButton" title="Click to Draw a Square" ref={(button) => { this.drawSquareButton = button; }}>
                         <Icon name="crop_square"/></button>
 
@@ -100,7 +100,7 @@ class BasicMap extends Component {
                          className={styles.olDrawCustomButton + ' ' +
                          styles.olSharedDrawStyles + ' drawing_buttons'}
                          ref={(div) => { this.ol_drawcustomcontrol = div; }}
-                    ></div>
+                    > </div>
                     <button id="drawCustomButton" title="Click to Draw a Custom Shape" ref={(button) => { this.drawCustomButton = button; }}>
                         <Icon name="star_border"/></button>
 
@@ -108,7 +108,7 @@ class BasicMap extends Component {
                          className={styles.olDrawClearButton + ' ' +
                          styles.olSharedDrawStyles + ' drawing_buttons'}
                          ref={(div) => { this.ol_drawclearcontrol = div; }}
-                    ></div>
+                    > </div>
                     <button id="drawClearButton" title="Click to Reset Drawing Selection" ref={(button) => { this.drawClearButton = button; }}>
                         <Icon name="clear"/></button>
                 </div>

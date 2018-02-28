@@ -89,3 +89,14 @@ nav {
     width: 20em;
 }
 
+.leftColumnExplore {
+    width: 24em;
+    margin: 0em 0em 3em 1em;
+    float: left;
+    height: calc(100vh - 12em);
+    overflow-y: auto;
+}
+
+.listHeaderStyle {
+    font-size: x-large !important;
+}

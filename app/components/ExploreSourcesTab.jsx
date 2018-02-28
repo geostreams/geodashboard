@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import styles from '../styles/main.css';
-import {Button} from 'react-mdc-web';
-import {getMobileSourceNames, getMobileSizeMax} from '../utils/getConfig';
+import {Button, Fab} from 'react-mdc-web';
+import {
+    getMobileSourceNames, getMobileSizeMax, getMobileDetailPath, getColor
+} from '../utils/getConfig';
 
 
 class ExploreSourcesTab extends Component {
@@ -21,34 +23,35 @@ class ExploreSourcesTab extends Component {
             let mobile_sourcenames = getMobileSourceNames().toUpperCase();
             let mobile_data = this.props.data
                 .filter(data => data.properties.type.id === this.props.source.id);
-            if (mobile_sourcenames != 'ALL') {
+            if (mobile_sourcenames !== 'ALL') {
                 mobile_data = mobile_data
                     .filter(data => mobile_sourcenames
                         .includes((data.properties.type.title).toString().toUpperCase()));
             }
-            if (this.props.userStations != 'all') {
+            if (this.props.userStations !== 'all') {
                 mobile_data = mobile_data
                     .filter(data => this.props.userStations.includes(data.properties.type.location));
             }
             mobile_data.map(data => {
-                let location = ("/#detail/location/" + data.name.toString());
+                let location = (getMobileDetailPath() + data.name.toString());
                 tabs.push(
                     <span key={data.id}>
                         <a key={data.id} href={location}>
-                            <Button className={styles.exploreButton} raised key={data.id} id={data.id}>
+                            <Button className={styles.exploreButtonMobile} raised key={data.id} id={data.id}>
                                 {data.name}
                             </Button>
                         </a>
                         <br/>
                     </span>)
-                });
+            });
         } else {
             this.props.data.filter(data => data.properties.type.id === this.props.source.id)
                 .map(data => {
-                    tabs.push(<Button key={data.id}
-                                      onClick={this.clickSensor.bind(this, data.id, data.name, data.geometry.coordinates)}
-                                      id={data.id}>
-                        {data.name}</Button>)
+                    let color = getColor(data.properties.type.id);
+                    tabs.push(<Fab key={data.id} className={styles.exploreButton} style={{backgroundColor: color}}
+                                   onClick={this.clickSensor.bind(this, data.id, data.name, data.geometry.coordinates)}
+                                   id={data.id} title={data.name}>
+                        <span className={styles.exploreButtonText}>{data.id}</span></Fab>)
                 });
         }
 

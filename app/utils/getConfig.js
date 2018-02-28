@@ -17,6 +17,10 @@ export function getMobileSizeMax() {
     return window.configruntime.gd3.mobile_size_max;
 }
 
+export function getMobileDetailPath() {
+    return window.configruntime.gd3.mobile_detail_path;
+}
+
 export function getCustomLocation(location:string):Object {
     const additional_location = window.configruntime.gd3.additional_locations;
 
@@ -69,6 +73,7 @@ export function getParameterName(parameter:string, alternate_parameters_map:{} )
 	const name = getParameterNameNoAlternate(parameter);
 	return name !== null ? name : getAlternateParameterName(parameter, alternate_parameters_map);
 }
+
 export function getTrendSettings() {
     return window.configruntime.gd3.trend_settings;
 }

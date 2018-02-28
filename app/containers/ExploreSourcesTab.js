@@ -2,10 +2,11 @@
  * @flow
  */
 
-import { connect } from 'react-redux'
-import ExploreSourcesTabComponent from '../components/ExploreSourcesTab'
-import { selectSensorDetail } from '../actions'
-import type { Dispatch } from '../utils/flowtype'
+import { connect } from 'react-redux';
+import ExploreSourcesTabComponent from '../components/ExploreSourcesTab';
+import { selectSensorDetail } from '../actions';
+import type { Dispatch } from '../utils/flowtype';
+
 
 const mapStateToProps = (state) => {
     return {

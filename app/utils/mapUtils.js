@@ -2,13 +2,27 @@ let ol = require('openlayers');
 import {
     getSourceName, getParameterName, getAlternateParameters, getCustomTrendsRegion,
     getTrendColor, getColor, getTrendsPageLakeRegions, getMapAttributionsSetting,
-    getMapAttributionsCollapsibleSetting, getMapMiniAttributionsCollapsibleSetting
+    getMapAttributionsCollapsibleSetting, getMapMiniAttributionsCollapsibleSetting,
+    getMobileSizeMax, getMobileSourceNames
 } from './getConfig';
 import {matchRegionTrends, getRegionalThreshold} from '../utils/trendsUtils';
+
 
 export function sensorsToFeatures(sensors: Sensors):Array<ol.Feature> {
     let features = Array();
     const alternateParameters = getAlternateParameters();
+
+    if (screen.width <= getMobileSizeMax()) {
+        let mobile_sourcenames = getMobileSourceNames().toUpperCase();
+        if (mobile_sourcenames !== 'ALL') {
+            let mobile_data = sensors;
+            mobile_data = mobile_data
+                .filter(data => mobile_sourcenames
+                    .includes((data.properties.type.id).toString().toUpperCase()));
+            sensors = mobile_data;
+        }
+    }
+
     sensors.map((sensor) => {
 
         let feature = new ol.Feature({
@@ -24,7 +38,7 @@ export function sensorsToFeatures(sensors: Sensors):Array<ol.Feature> {
             "longitude": sensor.geometry.coordinates[0],
             "location": sensor.properties.region,
             //parameters has null in the array
-            "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x, alternateParameters) != null).map(x => getParameterName(x, alternateParameters)),
+            "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x, alternateParameters) !== null).map(x => getParameterName(x, alternateParameters)),
             "color": getColor(sensor.properties.type.id),
             "type": "single"
         };
@@ -54,7 +68,7 @@ export function sensorsToFeaturesTrendPage(
     const alternateParameters = getAlternateParameters();
     sensors.map((sensor) => {
 
-        if (sensor.name != 'ALL') {
+        if (sensor.name !== 'ALL') {
 
             let feature = new ol.Feature({
                 geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
@@ -85,7 +99,7 @@ export function sensorsToFeaturesTrendPage(
                         }
                     }
                     // Only blue or yellow arrows
-                    if (threshold == 'n/a') {
+                    if (threshold === 'n/a') {
                         if (sensor.trends[parameter + "_percentage_change"] > 0 ) {
 
                             trend_type = "trendUp";
@@ -140,7 +154,7 @@ export function sensorsToFeaturesTrendPage(
                 }
             }
 
-            if (trend_type == "trendUp") {
+            if (trend_type === "trendUp") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.RegularShape({
                         points: 3,
@@ -149,26 +163,7 @@ export function sensorsToFeaturesTrendPage(
                         stroke: new ol.style.Stroke({color: '#000000', width: 1})
                     })
                 }));
-            } else if (trend_type == "trendDown") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        points: 3,
-                        radius: 10,
-                        rotation: 3.141592654,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            } else if (trend_type == "overThresholdUp") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        points: 3,
-                        radius: 10,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            } else if (trend_type == "overThresholdDown") {
+            } else if (trend_type === "trendDown") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.RegularShape({
                         points: 3,
@@ -178,7 +173,26 @@ export function sensorsToFeaturesTrendPage(
                         stroke: new ol.style.Stroke({color: '#000000', width: 1})
                     })
                 }));
-            } else if (trend_type == "noTrend" || trend_type == "") {
+            } else if (trend_type === "overThresholdUp") {
+                feature.setStyle(new ol.style.Style({
+                    image: new ol.style.RegularShape({
+                        points: 3,
+                        radius: 10,
+                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                    })
+                }));
+            } else if (trend_type === "overThresholdDown") {
+                feature.setStyle(new ol.style.Style({
+                    image: new ol.style.RegularShape({
+                        points: 3,
+                        radius: 10,
+                        rotation: 3.141592654,
+                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                    })
+                }));
+            } else if (trend_type === "noTrend" || trend_type === "") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.Circle({
                         radius: 6,
@@ -191,7 +205,7 @@ export function sensorsToFeaturesTrendPage(
             let sensor_parameters = [];
             if (sensor.parameters && (sensor.parameters.length > 0)) {
                 sensor_parameters = sensor.parameters.filter(
-                    x => x !== null && getParameterName(x, alternateParameters) != null).map(x => getParameterName(x, alternateParameters)
+                    x => x !== null && getParameterName(x, alternateParameters) !== null).map(x => getParameterName(x, alternateParameters)
                 );
             }
 
@@ -239,7 +253,7 @@ export function sensorsToFeaturesTrendRegionPage(
     const alternateParameters = getAlternateParameters();
     sensors.map((sensor) => {
 
-        if (sensor.name != 'ALL') {
+        if (sensor.name !== 'ALL') {
 
             let feature = new ol.Feature({
                 geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
@@ -275,7 +289,7 @@ export function sensorsToFeaturesTrendRegionPage(
                     }
 
                     // Only blue or yellow arrows
-                    if (threshold == 'n/a') {
+                    if (threshold === 'n/a') {
                         if (ten_years_average > total_average ) {
                             trend_type = "trendUp";
 
@@ -329,7 +343,7 @@ export function sensorsToFeaturesTrendRegionPage(
 
             }
 
-            if (trend_type == "trendUp") {
+            if (trend_type === "trendUp") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.RegularShape({
                         points: 3,
@@ -338,26 +352,7 @@ export function sensorsToFeaturesTrendRegionPage(
                         stroke: new ol.style.Stroke({color: '#000000', width: 1})
                     })
                 }));
-            } else if (trend_type == "trendDown") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        points: 3,
-                        radius: 10,
-                        rotation: 3.141592654,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            } else if (trend_type == "overThresholdUp") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        points: 3,
-                        radius: 10,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            } else if (trend_type == "overThresholdDown") {
+            } else if (trend_type === "trendDown") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.RegularShape({
                         points: 3,
@@ -367,7 +362,26 @@ export function sensorsToFeaturesTrendRegionPage(
                         stroke: new ol.style.Stroke({color: '#000000', width: 1})
                     })
                 }));
-            } else if (trend_type == "noTrend" || trend_type == "") {
+            } else if (trend_type === "overThresholdUp") {
+                feature.setStyle(new ol.style.Style({
+                    image: new ol.style.RegularShape({
+                        points: 3,
+                        radius: 10,
+                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                    })
+                }));
+            } else if (trend_type === "overThresholdDown") {
+                feature.setStyle(new ol.style.Style({
+                    image: new ol.style.RegularShape({
+                        points: 3,
+                        radius: 10,
+                        rotation: 3.141592654,
+                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                    })
+                }));
+            } else if (trend_type === "noTrend" || trend_type === "") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.Circle({
                         radius: 6,
@@ -408,7 +422,7 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
 	const alternateParameters = getAlternateParameters();
     sensors.map((sensor) => {
 
-        if (sensor.name != 'ALL') {
+        if (sensor.name !== 'ALL') {
 
             let feature = new ol.Feature({
                 geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
@@ -457,7 +471,7 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
 
             }
 
-            if (trend_type == "trendUp") {
+            if (trend_type === "trendUp") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.RegularShape({
                         points: 3,
@@ -466,26 +480,7 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
                         stroke: new ol.style.Stroke({color: '#000000', width: 1})
                     })
                 }));
-            } else if (trend_type == "trendDown") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        points: 3,
-                        radius: 10,
-                        rotation: 3.141592654,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            } else if (trend_type == "overThresholdUp") {
-                feature.setStyle(new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        points: 3,
-                        radius: 10,
-                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                    })
-                }));
-            } else if (trend_type == "overThresholdDown") {
+            } else if (trend_type === "trendDown") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.RegularShape({
                         points: 3,
@@ -495,7 +490,26 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
                         stroke: new ol.style.Stroke({color: '#000000', width: 1})
                     })
                 }));
-            } else if (trend_type == "noTrend" || trend_type == "") {
+            } else if (trend_type === "overThresholdUp") {
+                feature.setStyle(new ol.style.Style({
+                    image: new ol.style.RegularShape({
+                        points: 3,
+                        radius: 10,
+                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                    })
+                }));
+            } else if (trend_type === "overThresholdDown") {
+                feature.setStyle(new ol.style.Style({
+                    image: new ol.style.RegularShape({
+                        points: 3,
+                        radius: 10,
+                        rotation: 3.141592654,
+                        fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                        stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                    })
+                }));
+            } else if (trend_type === "noTrend" || trend_type === "") {
                 feature.setStyle(new ol.style.Style({
                     image: new ol.style.Circle({
                         radius: 6,
@@ -514,7 +528,7 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
                 "location": sensor.properties.region,
                 "name": sensor.name,
                 //parameters has null in the array
-                "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x, alternateParameters) != null).map(x => getParameterName(x, alternateParameters)),
+                "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x, alternateParameters) !== null).map(x => getParameterName(x, alternateParameters)),
                 "color": getColor(sensor.properties.type.id),
                 "trend_color": getTrendColor(trend_type),
                 "trend_type": trend_type,
@@ -549,7 +563,7 @@ export function sensorsToFeaturesTrendDetailPage(
     let features = Array();
     sensors.map((sensor) => {
 
-        if (sensor.properties.type.id == 'epa') {
+        if (sensor.properties.type.id === 'epa') {
 
             let feature = new ol.Feature({
                 geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
