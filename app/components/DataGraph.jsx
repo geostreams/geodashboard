@@ -3,9 +3,13 @@ import Chart from '../containers/Chart';
 import ChartMobile from '../containers/ChartMobile';
 import MiniMap from '../components/MiniMap';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import styles from "../styles/detail.css"
-import {getParameterName, getAlternateParameters, getMobileSizeMax} from '../utils/getConfig'
+import styles from "../styles/detail.css";
+import {
+    getParameterName, getAlternateParameters, getMobileSizeMax, getMobileExplorePath
+} from '../utils/getConfig';
 import { Checkbox, FormField, label} from 'react-mdc-web';
+import {Link} from 'react-router';
+
 
 class DataGraph extends Component {
     constructor(props) {
@@ -31,7 +35,7 @@ class DataGraph extends Component {
     };
 
     render() {
-        let sensor = this.props.property.find(x => x.name == this.props.sensorName);
+        let sensor = this.props.property.find(x => x.name === this.props.sensorName);
         let center = [0,1];
         if(sensor && sensor.geometry && sensor.geometry.coordinates){
             center =  sensor.geometry.coordinates.slice(0,2);
@@ -61,7 +65,7 @@ class DataGraph extends Component {
                         </span>
                     );
 
-                    if (this.state.paralistselect.length == 0 || this.state.paralistselect.indexOf(p) > -1) {
+                    if (this.state.paralistselect.length === 0 || this.state.paralistselect.indexOf(p) > -1) {
                         if (screen.width > getMobileSizeMax()) {
                             charts.push(<Row key={p}>
                                 <Chart id={this.props.sensorName} param={p}/></Row>)
@@ -77,12 +81,21 @@ class DataGraph extends Component {
             })
 
         } else {
-            paralist = <div></div>;
-            charts = <div></div>;
+            paralist = <div> </div>;
+            charts = <div> </div>;
         }
 
-        if (paralist.length == 0) {
+        if (paralist.length === 0) {
             paralist = <div className={styles.noData}>No Parameters Available</div>;
+        }
+
+        let headerValue = (
+            <h1>{this.props.sensorName}</h1>
+        );
+        if (screen.width <= getMobileSizeMax()) {
+            headerValue = (
+                <h1><Link href={getMobileExplorePath()}>Explore</Link><span> > {this.props.sensorName}</span></h1>
+            );
         }
 
         let miniMapObject;
@@ -97,7 +110,7 @@ class DataGraph extends Component {
         return (
             <Grid fluid>
                 <Row key="a">
-                    <h1>{this.props.sensorName}</h1>
+                    {headerValue}
                 </Row>
                 <Row key="b" around="xs">
                     <Col md={3}>
@@ -121,4 +134,4 @@ class DataGraph extends Component {
     }
 }
 
-export default DataGraph
+export default DataGraph;

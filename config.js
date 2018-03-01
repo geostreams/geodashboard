@@ -68,6 +68,7 @@ export const gd3 = {
 
     // This variable is for the Mobile Detail Page
     mobile_detail_path: '/#detail/location/',
+    mobile_explore_path: '/#explore/all/',
 
     // Error Text if the API does not return on the Welcome Page
     error_text: "An Error Occurred - Please Select Again",
@@ -370,7 +371,7 @@ export const gd3 = {
         "Ws_ms": "Wind Speed +2.4m (m/s)"
     },
 
-    // This is used to define genearal areas on the map
+    // This is used to define general areas on the map
     additional_locations: [
         {
             "type": "Feature",

@@ -21,6 +21,10 @@ export function getMobileDetailPath() {
     return window.configruntime.gd3.mobile_detail_path;
 }
 
+export function getMobileExplorePath() {
+    return window.configruntime.gd3.mobile_explore_path;
+}
+
 export function getCustomLocation(location:string):Object {
     const additional_location = window.configruntime.gd3.additional_locations;
 
