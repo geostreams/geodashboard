@@ -1,5 +1,5 @@
 
-import {getApplicationWebsite, getColor} from './getConfig';
+import {getApplicationWebsite, getColor, getMobileSizeMax, getMobileDetailPath} from './getConfig';
 
 export function popupHeader(feature: ol.Feature, styles){
     let id = feature.getId().toUpperCase();
@@ -67,7 +67,11 @@ export function popupParameters(feature: ol.Feature, styles){
         '<div class=' + styles.paramsborder + '>' + params + '</div>' ;
 
     if(paramsLength > 0) {
-        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/'+ sensorInfo.name +
+        let detail_link = application_sensors_website + '#detail/location/';
+        if (screen.width <= getMobileSizeMax()) {
+            detail_link = getMobileDetailPath();
+        }
+        bodyText += '<a href=" ' + detail_link + sensorInfo.name +
             '/" class=' + styles.viewdetail + ' style="background-color: ' +
             sourceColor + ';">View detail</a>';
     }
