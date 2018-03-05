@@ -22,8 +22,8 @@ class MenuPage extends Component {
 		this.state = {
 			openMenu: false
 		};
-		this.onClickMenuItem = this.onClickMenuItem.bind(this);
-		this.toggleTrendMenu = this.toggleTrendMenu.bind(this);
+        (this:any).onClickMenuItem = this.onClickMenuItem.bind(this);
+        (this:any).toggleTrendMenu = this.toggleTrendMenu.bind(this);
 	}
 
 	toggleTrendMenu(openMenuValue: boolean) {
@@ -44,7 +44,7 @@ class MenuPage extends Component {
             for (let i = 0; i < applicationOptions.length; i++) {
                 application_title = applicationOptions[i].title;
                 applicationOptions[i].pages.map((m) => {
-                    if (m.name == 'TRENDS') {
+                    if (m.name === 'TRENDS') {
                         menuOptions.push(
 
                                 <MenuAnchor key={m.name}className={styles.inline}>

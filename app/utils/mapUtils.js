@@ -38,7 +38,9 @@ export function sensorsToFeatures(sensors: Sensors):Array<ol.Feature> {
             "longitude": sensor.geometry.coordinates[0],
             "location": sensor.properties.region,
             //parameters has null in the array
-            "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x, alternateParameters) !== null).map(x => getParameterName(x, alternateParameters)),
+            "parameters": sensor.parameters.filter(
+                x => x !== null && getParameterName(x, alternateParameters) !== null)
+                .map(x => getParameterName(x, alternateParameters)),
             "color": getColor(sensor.properties.type.id),
             "type": "single"
         };
@@ -205,7 +207,8 @@ export function sensorsToFeaturesTrendPage(
             let sensor_parameters = [];
             if (sensor.parameters && (sensor.parameters.length > 0)) {
                 sensor_parameters = sensor.parameters.filter(
-                    x => x !== null && getParameterName(x, alternateParameters) !== null).map(x => getParameterName(x, alternateParameters)
+                    x => x !== null && getParameterName(x, alternateParameters) !== null)
+                    .map(x => getParameterName(x, alternateParameters)
                 );
             }
 
@@ -434,6 +437,15 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
             if (sensor.hasOwnProperty("trends")) {
                 if (sensor.trends === null) {
                     trend_type = "noTrend";
+                    trend_values = [
+                        threshold,
+                        "null",
+                        "null",
+                        "null",
+                        (new Date(sensor["trend_end_time"]).toLocaleDateString()),
+                        "null"
+                    ]
+
                 } else {
                     if (sensor.trends[parameter + "_percentage_change"] > 0 &&
                         sensor.trends[parameter + "_last_average"] >= threshold) {
@@ -458,16 +470,17 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
                     } else {
                         trend_type = "noTrend";
                     }
-                }
 
-                trend_values = [
-                    threshold,
-                    (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + " mg/L"),
-                    (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + " mg/L"),
-                    (new Date(sensor["trend_end_time"]).toLocaleDateString()),
-                    (Number(sensor.trends[parameter + "_percentage_change"]).toFixed(2) + " %")
-                ]
+                    trend_values = [
+                        threshold,
+                        (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + " mg/L"),
+                        (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + " mg/L"),
+                        (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + " mg/L"),
+                        (new Date(sensor["trend_end_time"]).toLocaleDateString()),
+                        (Number(sensor.trends[parameter + "_percentage_change"]).toFixed(2) + " %")
+                    ]
+
+                }
 
             }
 

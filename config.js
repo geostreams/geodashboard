@@ -8,7 +8,7 @@ export const gd3 = {
             subtitle: "ILLINOIS-INDIANA SEA GRANT"},
         {url: "https://greatlakestogulf.org/clowder", label: "GLTG PROD", title: "Great Lakes to Gulf",
             subtitle: "VIRTUAL OBSERVATORY"},
-        {url: "http://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV", title: "Great Lakes to Gulf",
+        {url: "https://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV", title: "Great Lakes to Gulf",
             subtitle: "VIRTUAL OBSERVATORY"},
         {url: "http://data.imlczo.org/clowder", label: "IMLCZO PROD",   title: "IMLCZO",
             subtitle: ""},
@@ -373,24 +373,6 @@ export const gd3 = {
 
     // This is used to define general areas on the map
     additional_locations: [
-        {
-            "type": "Feature",
-            "properties": {
-                "title": "All Regions",
-                "region": "ALL",
-                "id": "all",
-                "sortOrder": 0,
-                "threshold": {
-                    "total-phosphorus-glenda": 5
-                }
-
-            },
-            "geometry": {
-                "type": "",
-                "coordinates": [],
-                "region_coordinate": []
-            }
-        },
         {
             "type": "Feature",
             "properties": {
@@ -924,6 +906,7 @@ export const gd3 = {
     // **********
 
     // These variables are for the Trends and Analysis Pages
+    // Colors for all Trends
     trend_colors: {
         "trendUp": "#FAE70B",
         "trendDown": "#29ABE2",
@@ -932,6 +915,48 @@ export const gd3 = {
         "overThresholdDown": "#ED2026"
     },
 
+    // Set this to true if only want EPA sensors for all Trends
+    trends_only_epa: true,
+
+    // Will be added to the Exploratory Analysis and Trends Stations Regions
+    draw_and_all_regions: [
+        {
+            "type": "Feature",
+            "properties": {
+                "title": "All Regions",
+                "region": "ALL",
+                "id": "all",
+                "sortOrder": 0,
+                "threshold": {
+                    "total-phosphorus-glenda": 5
+                }
+
+            },
+            "geometry": {
+                "type": "",
+                "coordinates": [],
+                "region_coordinate": []
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "title": "Draw Custom Region",
+                "region": "DRAW",
+                "id": "draw",
+                "sortOrder": 1,
+                "threshold": {}
+
+            },
+            "geometry": {
+                "type": "",
+                "coordinates": [],
+                "region_coordinate": []
+            }
+        },
+    ],
+
+    // Exploratory Analysis Page Only
     trend_settings: [
         {
             "parameter": {
@@ -1004,103 +1029,7 @@ export const gd3 = {
         }
     ],
 
-    trend_analysis_regions: [
-        {
-            "type": "Feature",
-            "properties": {
-                "title": "All Regions",
-                "region": "ALL",
-                "id": "all",
-                "sortOrder": 0,
-                "threshold": {}
-
-            },
-            "geometry": {
-                "type": "",
-                "coordinates": [],
-                "region_coordinate": []
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "title": "Draw Custom Region",
-                "region": "DRAW",
-                "id": "draw",
-                "sortOrder": 1,
-                "threshold": {}
-
-            },
-            "geometry": {
-                "type": "",
-                "coordinates": [],
-                "region_coordinate": []
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "title": "Preset Region 01",
-                "region": "PRESET01",
-                "id": "preset01",
-                "sortOrder": 2,
-                "threshold": {}
-
-            },
-            "geometry": {
-                "type": "",
-                "coordinates": [
-                    [
-                        [-85.85,
-                            44.44
-                        ],
-                        [-85.85,
-                            33.33
-                        ],
-                        [-95.95,
-                            44.44
-                        ],
-                        [-95.95,
-                            33.33
-                        ],
-                    ]
-                ],
-                "region_coordinate": []
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "title": "Preset Region 02",
-                "region": "PRESET02",
-                "id": "preset02",
-                "sortOrder": 3,
-                "threshold": {}
-
-            },
-            "geometry": {
-                "type": "",
-                "coordinates": [
-                    [
-                        [-85.85,
-                            44.44
-                        ],
-                        [-85.85,
-                            40.40
-                        ],
-                        [-90.90,
-                            40.40
-                        ],
-                        [-90.90,
-                            33.33
-                        ],
-                    ]
-                ],
-                "region_coordinate": []
-            }
-        }
-    ],
-
+    // Trends Stations and Trends Regions Pages Only
     trends_page_settings: [
         {
             "parameter": {
@@ -1244,6 +1173,7 @@ export const gd3 = {
         },
     ],
 
+    // Trends Stations and Trends Regions Pages Only
     trends_page_lake_regions:[
         {
             "lake": "ER",
@@ -1251,6 +1181,7 @@ export const gd3 = {
         }
     ],
 
+    // Trends Stations and Trends Regions Pages Only
     trends_page_seasons: [
         {
             "id": "spring",
@@ -1261,16 +1192,7 @@ export const gd3 = {
         }
     ],
 
-    trends_page_view_types: [
-        {
-            "id": "by-sensors",
-            "title": "Stations"
-        }, {
-            "id": "by-regions",
-            "title": "Regions",
-        }
-    ],
-
+    // Trends Stations and Trends Regions Pages Only
     trends_page_timeframes: [
         {
             "id": "baseline_total_year",
@@ -1281,6 +1203,7 @@ export const gd3 = {
         }
     ],
 
+    // Trends Stations and Trends Regions Pages Only
     trends_page_defaults: [
         {
             "id": "parameter",
@@ -1300,6 +1223,7 @@ export const gd3 = {
         }
     ],
 
+    // Exploratory Analysis Page Only
     trends_analysis_defaults: [
         {
             "id": "parameter",
@@ -1318,30 +1242,6 @@ export const gd3 = {
             "value": "all",
         },
         {
-            "id": "baselinePeriod",
-            "value": 10,
-        },
-        {
-            "id": "baselineMin",
-            "value": 0,
-        },
-        {
-            "id": "baselineMax",
-            "value": 30,
-        },
-        {
-            "id": "rollingPeriod",
-            "value": 2,
-        },
-        {
-            "id": "rollingMin",
-            "value": 0,
-        },
-        {
-            "id": "rollingMax",
-            "value": 10,
-        },
-        {
             "id": "thresholdMin",
             "value": 0,
         },
@@ -1350,6 +1250,38 @@ export const gd3 = {
             "value": 100,
         }
     ],
+
+    // Exploratory Analysis Page Only
+    trends_analysis_baseline: [
+        {
+            "id": "17",
+            "value": 17,
+            "title": "17 Years"
+        },
+        {
+            "id": "30",
+            "value": 30,
+            "title": "30 Years"
+        }
+    ],
+
+    // Exploratory Analysis Page Only
+    trends_analysis_rolling: [
+        {
+            "id": "5",
+            "value": 5,
+            "title": "5 Years"
+        },
+        {
+            "id": "17",
+            "value": 17,
+            "title": "17 Years"
+        }
+    ],
+
+    // Exploratory Analysis Page Only
+    trends_analysis_water_year: false,
+    trends_analysis_semi_value: 'all',
     // **********
 
     exploreLayers: [

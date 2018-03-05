@@ -24,8 +24,8 @@ class TrendsThresholds extends Component {
         super(props);
         this.state = {
             chosenThreshold: Number(''),
-            thresholdMin: this.props.trends_defaults[10].value,
-            thresholdMax: this.props.trends_defaults[11].value
+            thresholdMin: this.props.trends_defaults[4].value,
+            thresholdMax: this.props.trends_defaults[5].value
         };
         (this:any).handleThresholdChooseValue = this.handleThresholdChooseValue.bind(this);
     }
@@ -56,13 +56,13 @@ class TrendsThresholds extends Component {
         let trendsPageThreshold;
 
         // Choice is Not Allowed
-        if (trendsPageThresholdChoice == false) {
+        if (trendsPageThresholdChoice === false) {
 
             let trendsCheckParameter;
             if (trendsPageSettings && trendsPageParameter) {
                 for (let i = 0; i < trendsPageSettings.length; i++) {
                     trendsCheckParameter = trendsPageSettings[i].parameter.id;
-                    if (trendsCheckParameter == trendsPageParameter) {
+                    if (trendsCheckParameter === trendsPageParameter) {
                         trendsPageThresholdsMap = trendsPageSettings[i].thresholds
                             .map(t => <p>{t.title}: {t.value} </p>);
                         trendsPageThresholds = trendsPageThresholds.concat(trendsPageThresholdsMap);
@@ -86,12 +86,12 @@ class TrendsThresholds extends Component {
         }
 
         // Choice is Allowed
-        if (trendsPageThresholdChoice == true) {
+        if (trendsPageThresholdChoice === true) {
 
             if (trendsPageSettings && trendsPageParameter) {
                 for (let i = 0; i < trendsPageSettings.length; i++) {
                     trendsCheckParameter = trendsPageSettings[i].parameter.id;
-                    if (trendsCheckParameter == trendsPageParameter) {
+                    if (trendsCheckParameter === trendsPageParameter) {
                         trendsPageThresholdsMap = trendsPageSettings[i].thresholds
                             .map(p => <option value={p.value} key={p.value} id={p.title}> {p.title} </option>);
                         trendsPageThresholds = trendsPageThresholds.concat(
@@ -140,7 +140,7 @@ class TrendsThresholds extends Component {
         }
 
         // Condition possible for both situations
-        if (trendsPageThresholdsMap.length == 0) {
+        if (trendsPageThresholdsMap.length === 0) {
             trendsPageThreshold =
                 <Card className={trendsStyles.cardMargin}>
                     <CardHeader>

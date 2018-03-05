@@ -12,13 +12,15 @@ import {
 } from 'react-mdc-web';
 import Map from '../containers/AnalysisMap';
 import {
-    getTrendSettings, getTrendRegions, getTrendsAnalysisDefaultValues
+    getTrendSettings, getTrendRegions, getTrendsAnalysisDefaultValues,
+    getTrendsPageBaseline, getTrendsPageRolling, getTrendsAnalysisSemiValue
 } from '../utils/getConfig';
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsThresholds from '../containers/TrendsThresholds';
 import TrendsRegions from '../containers/TrendsRegions';
 import TrendsCalculationSettings from '../containers/TrendsCalculationSettings';
 import TrendsSubmitButton from '../containers/TrendsSubmitButton';
+import {connect} from "react-redux";
 
 
 class Analysis extends Component {
@@ -28,14 +30,25 @@ class Analysis extends Component {
         let trendsPageSettings = getTrendSettings();
         let trendsPageDefaults = getTrendsAnalysisDefaultValues();
         let trendsPageRegions = getTrendRegions();
-        let trendsPageThresholds = getTrendSettings();
+        let trendsPageBaseline = getTrendsPageBaseline();
+        let trendsPageRolling = getTrendsPageRolling();
 
         let trendsThresholdChoice = true;
         let trendsPageViewType = 'by-analysis';
-        let trendsSeason = 'all';
+        let trendsSeason = getTrendsAnalysisSemiValue();
+
+        let loading_spinner;
+        if (this.props.show_spinner === true && this.props.parameter !== '') {
+            loading_spinner = (
+                <div className={styles.make_modal}>
+                    <div className={styles.loading_spinner}> </div>
+                </div>
+            );
+        }
 
         return (
             <div>
+                {loading_spinner}
                 <Menu selected="analysis"/>
                 <Content>
                     <div className={styles.body}>
@@ -51,9 +64,11 @@ class Analysis extends Component {
                                 <List className={analysisStyles.liststyle}>
                                     <TrendsCalculationSettings
                                         trends_defaults={trendsPageDefaults}
+                                        trends_baseline={trendsPageBaseline}
+                                        trends_rolling={trendsPageRolling}
                                     />
                                     <TrendsThresholds
-                                        trends_thresholds={trendsPageThresholds}
+                                        trends_thresholds={trendsPageSettings}
                                         trends_threshold_choice={trendsThresholdChoice}
                                         trends_defaults={trendsPageDefaults}
                                     />
@@ -86,8 +101,15 @@ class Analysis extends Component {
                 </Content>
             </div>
         );
+
     }
 
 }
 
-export default Analysis;
+const mapStateToProps = (state) => {
+    return {
+        show_spinner: state.chosenTrends.show_spinner
+    }
+};
+
+export default connect(mapStateToProps)(Analysis);

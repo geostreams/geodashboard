@@ -25,7 +25,6 @@ class TrendsSubmitButton extends Component {
     handleClickAnalysis() {
 
         this.state.showResults = true;
-
         let chosenParameter = this.props.chosenParameter;
         let chosenRegion = this.props.chosenRegion;
         let baselinePeriod = this.props.baselinePeriod;
@@ -33,13 +32,6 @@ class TrendsSubmitButton extends Component {
         let thresholdChooseValue = this.props.thresholdChooseValue;
         let trendsSeason = this.props.trends_season;
         let trendsViewType = this.props.trends_view_type;
-
-        if (baselinePeriod == '') {
-            baselinePeriod = this.props.trends_defaults[4].value;
-        }
-        if (rollingPeriod == '') {
-            rollingPeriod = this.props.trends_defaults[5].value;
-        }
 
         this.props.onClickAnalysis(
             chosenParameter, chosenRegion, baselinePeriod, rollingPeriod,
@@ -51,15 +43,17 @@ class TrendsSubmitButton extends Component {
 
         let trendsCompleted = 0;
         let trendsTotal = 0;
-        if (this.state.showResults == true) {
+        if (this.state.showResults === true) {
             trendsCompleted = this.props.trendNumberCompleted;
             trendsTotal = (this.props.originalSensors.filter(s =>
                 s.parameters.indexOf(this.props.chosenParameter) >= 0)).length;
         }
 
         let submit_button;
-        if (this.props.chosenParameter == '' ||
-            this.props.thresholdChooseValue == 'none' ||
+        if (this.props.chosenParameter === '' ||
+            this.props.baselinePeriod === '' || this.props.rollingPeriod === '' ||
+            isNaN(this.props.baselinePeriod) || isNaN(this.props.rollingPeriod) ||
+            this.props.thresholdChooseValue === 'none' ||
             this.props.thresholdChooseValue === undefined ||
             isNaN(this.props.thresholdChooseValue) )
         {

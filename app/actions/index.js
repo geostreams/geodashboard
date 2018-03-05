@@ -1,6 +1,7 @@
 // @flow
 
 import type { Sensors, Dispatch, GetState } from "../utils/flowtype";
+import {getWaterYearStatus} from "../utils/getConfig";
 
 export const SWITCH_BACKEND = 'SWITCH_BACKEND';
 export const switchBackend = (selected:string, title:string, subtitle:string) => {
@@ -113,6 +114,7 @@ export function addSearchParameter(parameter:Array<string>) {
     }
 }
 
+// This Action is utilized by both the Exploratory Analysis Page and the Trends Stations Page
 export const ADD_CHOOSE_TRENDS = 'ADD_CHOOSE_TRENDS';
 export function fetchTrends(
     parameter:string, total_year:number, interval:number, view_type:string, season_input:string
@@ -129,6 +131,12 @@ export function fetchTrends(
         let sensorsToFilter;
         if (state.chosenTrends.trends_sensors.length > 0) {
             sensorsToFilter = state.chosenTrends.trends_sensors;
+        } else if (view_type === 'by-analysis' && state.chosenTrends.trends_sensors.length === 0) {
+            // Only use API if there are Available Sensors
+            return (dispatch({
+                type: SET_TRENDS_SENSORS,
+                sensors: state.sensors.data
+            }))
         } else {
             sensorsToFilter = state.sensors.data;
         }
@@ -151,6 +159,21 @@ export function fetchTrends(
 
                 let start_time = new Date(sensor.min_start_time);
                 let end_time = new Date(sensor.max_end_time);
+
+                if (view_type === 'by-analysis' && getWaterYearStatus() === true) {
+                    // Use Water Year
+                    if (start_time.getMonth() <= 9) {
+                        start_time = new Date(start_time.getFullYear(),9,1,0,0,0);
+                    } else {
+                        start_time = new Date((start_time.getFullYear() + 1),9,1,0,0,0);
+                    }
+                    if (end_time.getMonth() >= 8) {
+                        end_time = new Date(end_time.getFullYear(),8,30,23,59,59);
+                    } else {
+                        end_time = new Date((end_time.getFullYear() - 1),8,30,23,59,59);
+                    }
+                }
+
                 let json_data;
 
                 const end_year:number = end_time.getFullYear();
@@ -158,7 +181,7 @@ export function fetchTrends(
                 window_start.setFullYear(end_year - interval);
 
                 let start:Date = new Date(end_time);
-                if (total_year == 0) {
+                if (total_year === 0) {
                     start = start_time;
                 } else {
                     start.setFullYear(end_year - total_year);
@@ -169,7 +192,7 @@ export function fetchTrends(
                     trends_endpoint +
                     "&sensor_id=" + sensor.id +
                     "&attributes=" + parameter;
-                if (view_type == 'by-analysis') {
+                if (view_type === 'by-analysis') {
                     trends_endpoint_args +=
                         "&window_start=" + window_start.toISOString() +
                         "&window_end=" + end_time.toISOString() +
@@ -297,7 +320,7 @@ export function fetchRegionDetailTrends(parameter:string, season:string, region:
         // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/detail/'
         const trends_region_detail_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/detail/';
 
-        const regionsToFilter = state.chosenTrends.trends_regions.filter(r => r.properties.region.toUpperCase() == region.toUpperCase());
+        const regionsToFilter = state.chosenTrends.trends_regions.filter(r => r.properties.region.toUpperCase() === region.toUpperCase());
 
         let temp_object = [];
         let results = regionsToFilter.filter(s => s.geometry.geocode.length > 0)
@@ -671,10 +694,10 @@ export function selectTrendsParameter(
             type: SELECT_TRENDS_VIEW_TYPE,
             view_type
         });
-        if (view_type == 'by-sensors') {
+        if (view_type === 'by-sensors') {
             dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
         }
-        if (view_type == 'by-regions') {
+        if (view_type === 'by-regions') {
             dispatch(fetchRegionTrends(parameter, season));
         }
     };
@@ -708,11 +731,11 @@ export function selectTrendsRegion(region:string, view_type: string) {
         });
         dispatch(updateTrendsSensors(view_type));
 
-        if (parameter != '') {
-            if (view_type == 'by-sensors') {
+        if (parameter !== '') {
+            if (view_type === 'by-sensors') {
                 dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
             }
-            if (view_type == 'by-regions') {
+            if (view_type === 'by-regions') {
                 dispatch(fetchRegionTrends(parameter, season));
             }
         }
@@ -735,11 +758,11 @@ export function selectTrendsSeason(season:string, view_type: string) {
         });
         dispatch(updateTrendsSensors(view_type));
 
-        if (parameter != '') {
-            if (view_type == 'by-sensors') {
+        if (parameter !== '') {
+            if (view_type === 'by-sensors') {
                 dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
             }
-            if (view_type == 'by-regions') {
+            if (view_type === 'by-regions') {
                 dispatch(fetchRegionTrends(parameter, season));
             }
         }
@@ -876,4 +899,3 @@ export function setLayerOpacity(opacity:Array<string>) {
         opacity
     };
 }
-

@@ -18,7 +18,7 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
         let geocodeArray = [];
 
         if (trendsPageRegionsSettings[i].geometry.coordinates.length > 0 &&
-            trendsPageRegionsSettings[i].properties.id.toString().toUpperCase() != 'ER') {
+            trendsPageRegionsSettings[i].properties.id.toString().toUpperCase() !== 'ER') {
 
             trendsPageRegionsSettings[i].geometry.coordinates[0].map(function (coordinate) {
                 // swap coordinate
@@ -43,9 +43,9 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
                     popupContent: trendsPageRegionsSettings[i].properties.title.toString(),
                 },
                 type: "Feature",
-                region_trends: [],
-                trends_detail: [],
-                trends_deviation: []
+                region_trends: {},
+                trends_detail: {},
+                trends_deviation: {}
             };
 
         }
@@ -73,7 +73,7 @@ export function filterCustomTrendLocation(selectedPointsLocations:Array<string>,
     let original_sensors: Sensors = state.sensors;
     let filteredSensors = [];
 
-    if (selectedPointsLocations[0] == 'reset_points') {
+    if (selectedPointsLocations[0] === 'reset_points') {
         filteredSensors = original_sensors;
 
     } else {
@@ -108,7 +108,7 @@ export function matchRegionTrends(selectedRegion:string, sensor: Object) {
 
 export function matchRegionAnalysis(selectedRegion:string, sensor: Object) {
 
-    if (selectedRegion.toUpperCase() == sensor.properties.region) {
+    if (selectedRegion.toUpperCase() === sensor.properties.region) {
         return true;
     }
 
@@ -117,7 +117,7 @@ export function matchRegionAnalysis(selectedRegion:string, sensor: Object) {
 
     if (the_analysis_regions) {
         the_analysis_regions.map(r => {
-                if (r.properties.id == selectedRegion) {
+                if (r.properties.id === selectedRegion) {
                     customLocation = r.geometry.coordinates;
                 }
             }
@@ -156,9 +156,9 @@ export function handleThresholdChangeNoChoice(
 
     for (let i = 0; i < trendsPageSettings.length; i++) {
         trendsCheckParameter = trendsPageSettings[i].parameter.id;
-        if (trendsCheckParameter == parameter) {
+        if (trendsCheckParameter === parameter) {
             trendsPageSettings[i].thresholds.map( t => {
-                if (t.region.toLowerCase() == region) {
+                if (t.region.toLowerCase() === region) {
                     trendsPageThreshold = t.value;
                 }
             });

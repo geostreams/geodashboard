@@ -5,15 +5,16 @@
 
 import {
     ADD_ANALYSIS_COUNT, ADD_CHOOSE_TRENDS, ADD_CUSTOM_TREND_LOCATIONS_FILTER,
-    ADD_REGION_TRENDS, ADD_REGION_DETAIL_TRENDS,
-    CLEAR_TRENDS_SENSORS, FETCH_ANALYSIS_REGION, RESET_TRENDS_SENSORS, SELECT_TRENDS_CALC_BASELINE_SETTING,
+    ADD_REGION_TRENDS, ADD_REGION_DETAIL_TRENDS, CLEAR_TRENDS_SENSORS,
+    FETCH_ANALYSIS_REGION, RESET_TRENDS_SENSORS, SELECT_TRENDS_CALC_BASELINE_SETTING,
     SELECT_ANALYSIS_REGION, SELECT_TRENDS_REGION, SELECT_TRENDS_CALC_ROLLING_SETTING,
     SELECT_ANALYSIS_PARAMETER, SELECT_TRENDS_PARAMETER, SELECT_TRENDS_SEASON,
     SELECT_TRENDS_THRESHOLD, SELECT_TRENDS_VIEW_TYPE, SET_TRENDS_TIMEFRAMES,
     SET_REGIONS_SENSORS, SET_TRENDS_SENSORS, UPDATE_TRENDS_SENSORS
 } from '../actions';
 import {
-    getTrendsPageTimeframes, getTrendsRegionsSettings, getTrendSettings, getTrendsPageSettings
+    getTrendsPageTimeframes, getTrendsRegionsSettings, getTrendSettings,
+    getTrendsPageSettings, getTrendsEPASetting
 } from '../utils/getConfig';
 import {
     createRegionalTrends, filterCustomTrendLocation, filterPresetTrendLocation,
@@ -94,9 +95,13 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
             let epa_sensor;
 
             origSensors.map(sensor => {
-                if (sensor.properties.type.id == 'epa') {
-                    epa_sensor = sensor;
-                    temp_sensors_object = temp_sensors_object.concat(epa_sensor);
+                if (getTrendsEPASetting() === true) {
+                    if (sensor.properties.type.id === 'epa') {
+                        epa_sensor = sensor;
+                        temp_sensors_object = temp_sensors_object.concat(epa_sensor);
+                    }
+                } else {
+                    temp_sensors_object = temp_sensors_object.concat(sensor);
                 }
             });
 
@@ -136,7 +141,7 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
             let sensor_param = action.parameter;
             if (sensors_parameters) {
                 sensors_parameters.map(p => {
-                        if (p.parameter.id == action.parameter) {
+                        if (p.parameter.id === action.parameter) {
                             sensor_param = p.parameter.title
                         }
                     }
@@ -166,7 +171,7 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
             let region_param = action.parameter;
             if (regions_parameters) {
                 regions_parameters.map(p => {
-                        if (p.parameter.id == action.parameter) {
+                        if (p.parameter.id === action.parameter) {
                             region_param = p.parameter.title
                         }
                     }
@@ -199,7 +204,7 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
             return Object.assign({}, state, {
                 baseline_total_year: trends_timeframes[0].value,
                 rolling_interval: trends_timeframes[1].value,
-                show_spinner: true
+                show_spinner: false
             });
 
         case SELECT_ANALYSIS_PARAMETER:
@@ -207,7 +212,7 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
             let analysisPageSettings = getTrendSettings();
             let params_threshold;
 
-            if (action.threshold_choice == false) {
+            if (action.threshold_choice === false) {
                 params_threshold = handleThresholdChangeNoChoice(
                     action.parameter, state.region, analysisPageSettings);
             }
@@ -215,7 +220,8 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
             return Object.assign({}, state, {
                 parameter: action.parameter,
                 threshold_choice: action.threshold_choice,
-                threshold: params_threshold
+                threshold: params_threshold,
+                show_spinner: false
             });
 
         case SELECT_TRENDS_PARAMETER:
@@ -235,6 +241,7 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
         case SELECT_ANALYSIS_REGION:
             return Object.assign({}, state, {
                 region: action.region,
+                show_spinner: false
             });
 
         case SELECT_TRENDS_REGION:
@@ -246,34 +253,40 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
         case UPDATE_TRENDS_SENSORS:
             let updated_trends_sensors = filterTrendsSensors(state, action.view_type);
 
+            let spinner_value = true;
+            if (action.view_type === 'by-analysis') {
+                spinner_value = false
+            }
+
             return Object.assign({}, state, {
                 trends_sensors: updated_trends_sensors,
                 trends_regions: state.trends_regions,
                 view_type: action.view_type,
-                show_spinner: true
+                show_spinner: spinner_value
             });
 
         case SELECT_TRENDS_THRESHOLD:
             return Object.assign({}, state, {
                 threshold: action.threshold,
-                show_spinner: true
+                show_spinner: false
             });
 
         case SELECT_TRENDS_CALC_BASELINE_SETTING:
             return Object.assign({}, state, {
                 baseline_total_year: action.baseline_total_year,
-                show_spinner: true
+                show_spinner: false
             });
 
         case SELECT_TRENDS_CALC_ROLLING_SETTING:
             return Object.assign({}, state, {
                 rolling_interval: action.rolling_interval,
-                show_spinner: true
+                show_spinner: false
             });
 
         case ADD_ANALYSIS_COUNT:
             return Object.assign({}, state, {
-                number_to_filter: action.number_to_filter
+                number_to_filter: action.number_to_filter,
+                show_spinner: true
             });
 
         case ADD_CUSTOM_TREND_LOCATIONS_FILTER:
@@ -286,14 +299,27 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
 
         case FETCH_ANALYSIS_REGION:
             let regionTrendSensors = state.trends_sensors;
-            if ((action.region != 'all') && (action.region != 'draw')
-                && (action.region != '')) {
+
+            // Filter out sensors that do not have the selected parameter
+            if (state.parameter !== '') {
+                let new_sensors = [];
+                state.trends_sensors.map((sensor) => {
+                    if (sensor.parameters.includes(state.parameter)) {
+                        new_sensors.push(sensor);
+                    }
+                });
+                regionTrendSensors = new_sensors;
+            }
+
+            if ((action.region !== 'all') && (action.region !== 'draw')
+                && (action.region !== '')) {
                 regionTrendSensors =
-                    filterPresetTrendLocation(action.region, action.sensors);
+                    filterPresetTrendLocation(action.region, regionTrendSensors);
             }
 
             return Object.assign({}, state, {
                 trends_sensors: regionTrendSensors,
+                show_spinner: false
             });
 
         case CLEAR_TRENDS_SENSORS:
@@ -335,9 +361,13 @@ function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
     let trends_sensors = [];
     let epa_sensor;
     all_sensors.map(sensor => {
-        if (sensor.properties.type.id == 'epa') {
-            epa_sensor = sensor;
-            trends_sensors = trends_sensors.concat(epa_sensor);
+        if (getTrendsEPASetting() === true) {
+            if (sensor.properties.type.id === 'epa') {
+                epa_sensor = sensor;
+                trends_sensors = trends_sensors.concat(epa_sensor);
+            }
+        }else {
+            trends_sensors = trends_sensors.concat(sensor);
         }
     });
 
@@ -355,13 +385,13 @@ function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
     }
 
     let selections = [];
-    if (selected_region != '') {
+    if (selected_region !== '') {
         selections = selections.concat('region');
     }
-    if (selected_season != '') {
+    if (selected_season !== '') {
         selections = selections.concat('season');
     }
-    if (selected_parameter != '') {
+    if (selected_parameter !== '') {
         selections = selections.concat('parameter');
     }
 
@@ -370,13 +400,13 @@ function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
         switch(filter) {
 
             case 'region':
-                if (selected_region != '') {
-                    if (selected_region == 'all') {
+                if (selected_region !== '') {
+                    if (selected_region === 'all') {
 
                         new_sensors = trends_sensors;
                         trends_sensors = new_sensors;
 
-                    } else if (selected_region == 'draw') {
+                    } else if (selected_region === 'draw') {
 
                         if (draw_sensors_names.length <= 0) {
                             new_sensors = trends_sensors;
@@ -390,12 +420,12 @@ function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
                     } else {
 
                         trends_sensors.map((sensor => {
-                            if (view_type == 'by-sensors' || view_type == 'by-regions' ) {
+                            if (view_type === 'by-sensors' || view_type === 'by-regions' ) {
                                 if (matchRegionTrends(selected_region, sensor)) {
                                     new_sensors.push(sensor);
                                 }
                             }
-                            if (view_type == 'by-analysis') {
+                            if (view_type === 'by-analysis') {
                                 if (matchRegionAnalysis(selected_region, sensor)) {
                                     new_sensors.push(sensor);
                                 }
@@ -408,14 +438,14 @@ function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
                 return;
 
             case 'season':
-                if (selected_season != '') {
+                if (selected_season !== '') {
                     new_sensors = trends_sensors;
                     trends_sensors = new_sensors;
                 }
                 return;
 
             case 'parameter':
-                if (selected_parameter != '') {
+                if (selected_parameter !== '') {
                     new_sensors = [];
                     trends_sensors.map((sensor) => {
                         if (sensor.parameters.includes(selected_parameter)) {
@@ -440,4 +470,5 @@ function clearDetails(state) {
 
     return newState;
 }
-export default chosenTrends
+
+export default chosenTrends;

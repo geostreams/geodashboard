@@ -5,8 +5,8 @@
 import type { PropertiesType } from './flowtype';
 
 export function getSourceName(source:PropertiesType):string {
-    const sourcename = window.configruntime.gd3.sourcename;
-    return sourcename[source.id] !== undefined ? sourcename[source.id] : source.title;
+    const sourceName = window.configruntime.gd3.sourcename;
+    return sourceName[source.id] !== undefined ? sourceName[source.id] : source.title;
 }
 
 export function getMobileSourceNames() {
@@ -28,11 +28,10 @@ export function getMobileExplorePath() {
 export function getCustomLocation(location:string):Object {
     const additional_location = window.configruntime.gd3.additional_locations;
 
-    const custom_location = additional_location.find(
+    return additional_location.find(
         function (custom_location) {
             return custom_location.properties.id === location;
         });
-    return custom_location;
 }
 
 export function getLocationName(location:string):string {
@@ -48,14 +47,10 @@ export function getLocationName(location:string):string {
     return location;
 }
 
-function capitalize(a:string):string {
-    return a.charAt(0).toUpperCase() + a.slice(1);
-}
-
 export function getAlternateParameters(){
     let parameters = {};
-	Object.keys(window.configruntime.gd3.multi_parameter_map).map((parameter) =>
-		window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
+    Object.keys(window.configruntime.gd3.multi_parameter_map).map((parameter) =>
+        window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
             parameters[alternate] = parameter;
         })
     );
@@ -63,27 +58,22 @@ export function getAlternateParameters(){
 }
 
 export function getAlternateParameterName(alternate: string, alternate_parameters_map:{}) {
-	const parameter = alternate_parameters_map[alternate];
-	return getParameterNameNoAlternate(parameter);
+    const parameter = alternate_parameters_map[alternate];
+    return getParameterNameNoAlternate(parameter);
 }
 
 export function getParameterNameNoAlternate(parameter:string):?string {
     const parameter_maps = Object.assign({}, window.configruntime.gd3.parameter_maps);
-    return parameter_maps[parameter] !== undefined ? parameter_maps[parameter] :
-        null;
+    return parameter_maps[parameter] !== undefined ? parameter_maps[parameter] : null;
 }
 
 export function getParameterName(parameter:string, alternate_parameters_map:{} ):?string {
-	const name = getParameterNameNoAlternate(parameter);
-	return name !== null ? name : getAlternateParameterName(parameter, alternate_parameters_map);
+    const name = getParameterNameNoAlternate(parameter);
+    return name !== null ? name : getAlternateParameterName(parameter, alternate_parameters_map);
 }
 
 export function getTrendSettings() {
     return window.configruntime.gd3.trend_settings;
-}
-
-export function getTrendsPageViewTypes() {
-    return window.configruntime.gd3.trends_page_view_types;
 }
 
 export function getTrendsPageSettings() {
@@ -95,7 +85,8 @@ export function getTrendsPageLakeRegions() {
 }
 
 export function getTrendsRegionsSettings() {
-    return window.configruntime.gd3.additional_locations;
+    return window.configruntime.gd3.draw_and_all_regions
+        .concat(window.configruntime.gd3.additional_locations);
 }
 
 export function getTrendsPageSeasons() {
@@ -107,14 +98,12 @@ export function getTrendsPageTimeframes() {
 }
 
 export function getCustomTrendsRegion(region:string):string {
-
     let custom_trends_region = '';
-    let custom_trends_region_map;
     let trendsPageRegions = getTrendsRegionsSettings();
 
     if (trendsPageRegions) {
-        custom_trends_region_map = trendsPageRegions.map(r => {
-            if (r.properties.id.toUpperCase() == region.toUpperCase()) {
+        trendsPageRegions.map(r => {
+            if (r.properties.id.toUpperCase() === region.toUpperCase()) {
                 custom_trends_region = r.properties.title;
                 return custom_trends_region;
             }
@@ -132,24 +121,22 @@ export function getTrendsAnalysisDefaultValues() {
     return window.configruntime.gd3.trends_analysis_defaults;
 }
 
-export function getTrendsThresholdsSettings() {
-    return window.configruntime.gd3.trends_page_settings;
-}
-
 export function getTrendRegions() {
-    return window.configruntime.gd3.trend_analysis_regions;
+    return window.configruntime.gd3.draw_and_all_regions
+        .concat(window.configruntime.gd3.additional_locations);
 }
 
 export function getCustomTrendRegion(region:string):Object {
-
     const trendsPageRegions = getTrendRegions();
 
-    const custom_trends_region = trendsPageRegions.find(
+    return trendsPageRegions.find(
         function (custom_trends_region) {
             return custom_trends_region.properties.id === region;
         });
+}
 
-    return custom_trends_region;
+export function getTrendsEPASetting() {
+    return window.configruntime.gd3.trends_only_epa;
 }
 
 export function getColor(source: string): string {
@@ -302,4 +289,20 @@ export function getIEAlertMenuBarShow() {
         getValue = window.configruntime.gd3.ie_show_menu_bar_alert;
     }
     return getValue;
+}
+
+export function getTrendsPageBaseline() {
+    return window.configruntime.gd3.trends_analysis_baseline;
+}
+
+export function getTrendsPageRolling() {
+    return window.configruntime.gd3.trends_analysis_rolling;
+}
+
+export function getWaterYearStatus() {
+    return window.configruntime.gd3.trends_analysis_water_year;
+}
+
+export function getTrendsAnalysisSemiValue() {
+    return window.configruntime.gd3.trends_analysis_semi_value;
 }

@@ -17,11 +17,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         onSelectTrendsParameter:(parameter, threshold_choice, view_type) => {
-            if (view_type == 'by-analysis') {
+            if (view_type === 'by-analysis') {
                 dispatch(selectAnalysisParameter(parameter, threshold_choice, view_type));
             }
 
-            if (view_type == 'by-sensors' || view_type == 'by-regions') {
+            if (view_type === 'by-sensors' || view_type === 'by-regions') {
                 dispatch(selectTrendsParameter(parameter, threshold_choice, view_type));
             }
         },

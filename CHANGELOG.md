@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Change Maps to use config file for Custom Settings
   [GEOD-1041](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1041)
+- Refactored Exploratory Analysis code
+  [GLGVO-410](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-410)
+  [GLGVO-412](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-412)
 
 ### Fixed
 - Search page showing the same parameter multiple times

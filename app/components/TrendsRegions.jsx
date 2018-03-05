@@ -28,7 +28,7 @@ class TrendsRegions extends Component {
         let trendsPageRegionsMap = [];
         if (trendsPageSettings) {
             trendsPageSettings.map(r => {
-                if (r.properties.id.toString().toUpperCase() != 'ER') {
+                if (r.properties.id.toString().toUpperCase() !== 'ER') {
                     trendsPageRegionsMap.push(
                     <Radio id={r.properties.id} value={r.properties.id}
                            key={r.properties.id}> {r.properties.title}</Radio>
@@ -37,12 +37,12 @@ class TrendsRegions extends Component {
             });
         }
         trendsPageRegions = trendsPageRegions.concat(trendsPageRegionsMap);
-        if (trendsPageRegionsMap.length == 0) {
+        if (trendsPageRegionsMap.length === 0) {
             trendsPageRegions = [<Radio id="9999" value="9999" key="9999"
                                         disabled={true}> None Available </Radio>];
         }
 
-        if (trendsPageRegions.length != 0) {
+        if (trendsPageRegions.length !== 0) {
 
             return (
                 <Card className={trendsStyles.cardMargin}>

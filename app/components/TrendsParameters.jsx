@@ -43,7 +43,7 @@ class TrendsParameters extends Component {
         }
 
         trendsPageParameters = trendsPageParameters.concat(trendsPageParametersMap);
-        if (trendsPageParametersMap.length == 0) {
+        if (trendsPageParametersMap.length === 0) {
             trendsPageParameters = [<Radio id="9999" value="9999" key="9999"
                                            disabled={true}> None Available </Radio>];
         }

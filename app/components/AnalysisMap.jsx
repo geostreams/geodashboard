@@ -48,40 +48,40 @@ class AnalysisMap extends Component {
 
         return (
             <div>
-                <div id='map' className={styles.root}></div>
-                <div id="trends_legend" className={styles.trends_legend}></div>
+                <div id='map' className={styles.root}> </div>
+                <div id="trends_legend" className={styles.trends_legend}> </div>
                 <div id="search" style={{position: 'absolute', bottom: '10px', left: '25em', padding: '5px'}}>
                     <button id="centerButton"><Icon name="gps_fixed"/></button>
                 </div>
                 <div style={{display: "none"}}>
 
-                    <div id="marker" title="Marker" className="marker"></div>
+                    <div id="marker" title="Marker" className="marker"> </div>
                     <div id="popup" className={styles.olPopup}>
-                        <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
-                        <div id="popup-content"></div>
+                        <a href="#" id="popup-closer" className={styles.olPopupCloser}> </a>
+                        <div id="popup-content"> </div>
                     </div>
 
                     <div id="ol-drawcirclecontrol"
                          className={styles.olDrawCircleButton + ' ' +
-                        styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                        styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
                     <button id="drawCircleButton" title="Click to Draw a Circle">
                         <Icon name="panorama_fish_eye"/></button>
 
                     <div id="ol-drawsquarecontrol"
                          className={styles.olDrawSquareButton + ' ' +
-                        styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                        styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
                     <button id="drawSquareButton" title="Click to Draw a Square">
                         <Icon name="crop_square"/></button>
 
                     <div id="ol-drawcustomcontrol"
                          className={styles.olDrawCustomButton + ' ' +
-                        styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                        styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
                     <button id="drawCustomButton" title="Click to Draw a Custom Shape">
                         <Icon name="star_border"/></button>
 
                     <div id="ol-drawclearcontrol"
                          className={styles.olDrawClearButton + ' ' +
-                         styles.olSharedDrawStyles + ' drawing_buttons'}></div>
+                         styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
                     <button id="drawClearButton" title="Click to Reset Drawing Selection">
                         <Icon name="clear"/></button>
 
@@ -130,7 +130,7 @@ class AnalysisMap extends Component {
         map_items = this.props.trendSensors;
 
         // This is for the Region Outlines for one Region at a time
-        if (that.props.selectedRegion != 'all' && that.props.selectedRegion != 'draw') {
+        if (that.props.selectedRegion !== 'all' && that.props.selectedRegion !== 'draw') {
             area = getCustomTrendRegion(that.props.selectedRegion);
             if (area && area.geometry) {
                 feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
@@ -151,8 +151,10 @@ class AnalysisMap extends Component {
             this.state.map.getView().fit(
                 this.state.areaPolygonSource.getExtent(), this.state.map.getSize());
         } else {
-            this.state.map.getView().fit(
-                this.state.vectorSource.getExtent(), this.state.map.getSize());
+            if (features.length > 0) {
+                this.state.map.getView().fit(
+                    this.state.vectorSource.getExtent(), this.state.map.getSize());
+            }
         }
 
     }
@@ -161,7 +163,6 @@ class AnalysisMap extends Component {
 
         let map_items;
         let threshold = this.props.threshold_value;
-        let view_type = this.props.trendViewType;
 
         map_items = this.props.sensors;
 
@@ -180,11 +181,10 @@ class AnalysisMap extends Component {
         let clusters = new ol.layer.Vector({
             source: clusterSource,
             style: function (feature) {
-                let size = feature.get('features').length;
                 let style;
 
                 const trend_type = feature.getProperties().features[0].attributes.trend_type;
-                if (trend_type == "trendUp") {
+                if (trend_type === "trendUp") {
                     style = (new ol.style.Style({
                         image: new ol.style.RegularShape({
                             points: 3,
@@ -193,26 +193,7 @@ class AnalysisMap extends Component {
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
                     }));
-                } else if (trend_type == "trendDown") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            rotation: 3.141592654,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "overThresholdUp") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "overThresholdDown") {
+                } else if (trend_type === "trendDown") {
                     style = (new ol.style.Style({
                         image: new ol.style.RegularShape({
                             points: 3,
@@ -222,7 +203,26 @@ class AnalysisMap extends Component {
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
                     }));
-                } else if (trend_type == "noTrend" || trend_type == "") {
+                } else if (trend_type === "overThresholdUp") {
+                    style = (new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 10,
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type === "overThresholdDown") {
+                    style = (new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 10,
+                            rotation: 3.141592654,
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type === "noTrend" || trend_type === "") {
                     style = (new ol.style.Style({
                         image: new ol.style.Circle({
                             radius: 4,
@@ -257,7 +257,6 @@ class AnalysisMap extends Component {
         ];
 
         const container = document.getElementById('popup');
-        const content = document.getElementById('popup-content');
         const closer = document.getElementById('popup-closer');
 
         let overlay = new ol.Overlay({
