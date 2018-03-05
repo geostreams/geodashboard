@@ -158,7 +158,6 @@ class RegionMiniMap extends Component {
 
         let map_items;
         let area;
-        let threshold = this.props.threshold_value;
         let feature = new ol.Feature();
         let region_features = [];
 
@@ -193,14 +192,10 @@ class RegionMiniMap extends Component {
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
 
-        if (area) {
+        if (area && this.state.map.getSize()) {
             this.state.map.getView().fit(
                 this.state.areaPolygonSource.getExtent(), this.state.map.getSize());
-        } else {
-            this.state.map.getView().fit(
-                this.state.vectorSource.getExtent(), this.state.map.getSize());
         }
-
         this.stationsPopupMenu(features);
 
     }
@@ -251,92 +246,94 @@ class RegionMiniMap extends Component {
         const container = document.getElementById('popup');
         const content = document.getElementById('popup-content');
         const closer = document.getElementById('popup-closer');
-
-        let overlay = new ol.Overlay({
-            id: "marker",
-            element: container,
-            autoPan: true,
-            autoPanAnimation: {
-                duration: 250
-            }
-        });
-
-        let view = new ol.View({
-            projection: 'EPSG:4326',
-            center: this.state.center,
-            zoom: this.state.currentZoom,
-            minZoom: 5.5,
-            maxZoom: this.state.maxZoom
-        });
         let theMap;
-
-        theMap = new ol.Map({
-            target: 'map',
-            layers: layers,
-            view: view,
-            overlays: [overlay],
-            controls: getMiniControls()
-        });
-
-        let selectItems = new ol.interaction.Select();
-        theMap.addInteraction(selectItems);
-
-        if (closer) {
-            closer.onclick = function () {
-                overlay.setPosition(undefined);
-                closer.blur();
-                return false;
-            };
-        }
-
-        theMap.on('singleclick', function (e) {
-            selectItems.setActive(false);
-            let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
-                return featureChange;
+        if(container) {
+            let overlay = new ol.Overlay({
+                id: "marker",
+                element: container,
+                autoPan: true,
+                autoPanAnimation: {
+                    duration: 250
+                }
             });
-            if (featuresAtPixel && featuresAtPixel.get('features')
-                != undefined && featuresAtPixel.get('features').length == 1) {
-                const feature = featuresAtPixel.get('features')[0];
-                that.popupHandler(feature, e.coordinate);
-            } else {
-                // Case when the click is anywhere else in the map
-                if (closer) {
+
+
+            let view = new ol.View({
+                projection: 'EPSG:4326',
+                center: this.state.center,
+                zoom: this.state.currentZoom,
+                minZoom: 5.5,
+                maxZoom: this.state.maxZoom
+            });
+
+
+            theMap = new ol.Map({
+                target: 'map',
+                layers: layers,
+                view: view,
+                overlays: [overlay],
+                controls: getMiniControls()
+            });
+
+            let selectItems = new ol.interaction.Select();
+            theMap.addInteraction(selectItems);
+
+            if (closer) {
+                closer.onclick = function () {
                     overlay.setPosition(undefined);
                     closer.blur();
-                }
+                    return false;
+                };
             }
-        });
 
-        let areaPolygonSource = new ol.source.Vector({
-            features: [
-                new ol.Feature({})
-            ]
-        });
+            theMap.on('singleclick', function (e) {
+                selectItems.setActive(false);
+                let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
+                    return featureChange;
+                });
+                if (featuresAtPixel && featuresAtPixel.get('features')
+                    != undefined && featuresAtPixel.get('features').length == 1) {
+                    const feature = featuresAtPixel.get('features')[0];
+                    that.popupHandler(feature, e.coordinate);
+                } else {
+                    // Case when the click is anywhere else in the map
+                    if (closer) {
+                        overlay.setPosition(undefined);
+                        closer.blur();
+                    }
+                }
+            });
 
-        this.setState({areaPolygonSource: areaPolygonSource});
+            let areaPolygonSource = new ol.source.Vector({
+                features: [
+                    new ol.Feature({})
+                ]
+            });
 
-        // This is for the Region Outlines
-        let areaPolygonLayer = new ol.layer.Vector({
-            id: "areaPolygon",
-            source: areaPolygonSource,
-            style: [
-                new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: 'rgba(0, 152, 254, 1)',
-                        width: 2
-                    }),
-                    fill: new ol.style.Fill({
-                        color: 'rgba(254, 254, 254, 0.3)'
+            this.setState({areaPolygonSource: areaPolygonSource});
+
+            // This is for the Region Outlines
+            let areaPolygonLayer = new ol.layer.Vector({
+                id: "areaPolygon",
+                source: areaPolygonSource,
+                style: [
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: 'rgba(0, 152, 254, 1)',
+                            width: 2
+                        }),
+                        fill: new ol.style.Fill({
+                            color: 'rgba(254, 254, 254, 0.3)'
+                        })
                     })
-                })
-            ]
-        });
-        theMap.addLayer(areaPolygonLayer);
+                ]
+            });
+            theMap.addLayer(areaPolygonLayer);
 
-        this.setState({map: theMap});
+            this.setState({map: theMap});
 
-        this.stationsPopupMenu(features);
-
+            this.stationsPopupMenu(features);
+        }
     }
 
 }
@@ -344,7 +341,6 @@ class RegionMiniMap extends Component {
 RegionMiniMap.propTypes = {
     trends_region: React.PropTypes.string.isRequired,
     trends_region_title: React.PropTypes.string.isRequired,
-    threshold_value: React.PropTypes.string.isRequired,
     trendSensors: React.PropTypes.array.isRequired,
     selectedParameter: React.PropTypes.string.isRequired
 };

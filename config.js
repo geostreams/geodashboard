@@ -127,7 +127,7 @@ export const gd3 = {
         "air-temperature-c": "Air Temperature (°C)",
         "albedo_Avg": "Albedo +10m (W/m^2)",
         "alkalinity-glenda": "Alkalinity (mg/L)",
-        "alkalinity-total-mgl": "AlkalinityTotal (mg/L)",
+        "alkalinity-total-mgl": "Alkalinity Total (mg/L)",
         "amb_press_li_mean": "Air Pressure +25m (kPa)",
         "ammonia-ammonium-mgl": "Ammonia / Ammonium (mg/L)",
         "ammonia-glenda" : "Ammonia (ug/l)" ,

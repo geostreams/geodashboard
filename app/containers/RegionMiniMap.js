@@ -7,7 +7,6 @@ import RegionMiniMapComponent from '../components/RegionMiniMap';
 
 const mapStateToProps = (state) => {
     return {
-        threshold_value: state.chosenTrends.threshold,
         trendSensors: state.chosenTrends.trends_sensors,
         allSensors: state.sensors.available_sensors,
         selectedParameter: state.chosenTrends.parameter
