@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import Menu from '../containers/MenuBar';
 import RegionMiniMap from '../containers/RegionMiniMap';
 import TrendsRegionDetails from '../containers/TrendsRegionDetails';
-import LineChartWithDeviations from '../containers/LineChartWithDeviations';
+import TrendsGraph from '../containers/TrendsGraph';
 import {Grid, Cell, Content, List, Card, CardTitle} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
@@ -18,10 +18,8 @@ class TrendsDetail extends Component {
     render() {
 
         let trendsPageSettings = getTrendsPageSettings();
-        let trendsRegionsSensors = [];
         let trendsRegionTitle =  getCustomTrendsRegion(this.props.params.region);
         let trendsRegionTitleLink =  " > " + getCustomTrendsRegion(this.props.params.region);
-        let trendsRegionName = this.props.params.region;
 
         return (
             <div>
@@ -38,24 +36,22 @@ class TrendsDetail extends Component {
                                 </Card>
                                 <List className={trendsStyles.detailListStyle}>
                                     <TrendsRegionDetails
-                                        trends_region_name={trendsRegionName}
+                                        trends_region_name={this.props.params.region}
                                         trends_season={this.props.params.season}
                                         trends_parameter={this.props.params.parameter}
                                     />
                                     <RegionMiniMap
                                         trends_region={this.props.params.region}
                                         trends_parameter={this.props.params.parameter}
-                                        trends_region_sensors={trendsRegionsSensors}
                                         trends_region_title={trendsRegionTitle}
                                     />
                                 </List>
                             </Cell>
-                            <Cell col={6}>
+                            <Cell col={8}>
                                 <div className={trendsStyles.detailChart}>
-                                    <LineChartWithDeviations
+                                    <TrendsGraph
                                         trends_settings={trendsPageSettings}
-                                        trends_region_name={trendsRegionName}
-                                        trends_region={this.props.params.region}
+                                        trends_region_id={this.props.params.region}
                                         trends_parameter={this.props.params.parameter}
                                         trends_season={this.props.params.season}
                                     />
@@ -66,7 +62,6 @@ class TrendsDetail extends Component {
                 </Content>
             </div>
         );
-
     }
 
 }
