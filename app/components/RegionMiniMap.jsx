@@ -73,7 +73,7 @@ class RegionMiniMap extends Component {
                             <Icon name="close"/>
                         </a>
                     </DialogHeader>
-                    <DialogBody scrollable id="stations-content"></DialogBody>
+                    <DialogBody scrollable id="stations-content"> </DialogBody>
                 </Dialog>
                 <Card className={trendsStyles.cardMargin}>
                     <CardHeader>
@@ -87,12 +87,12 @@ class RegionMiniMap extends Component {
                     </CardHeader>
                     <CardMedia>
                         <div>
-                            <div id='map' className={styles.map_style}></div>
+                            <div id='map' className={styles.map_style}> </div>
                             <div style={{display: "none"}}>
-                                <div id="marker" title="Marker" className="marker"></div>
+                                <div id="marker" title="Marker" className="marker"> </div>
                                 <div id="popup" className={styles.regionPopup}>
-                                    <a href="#" id="popup-closer" className={styles.regionPopupCloser}></a>
-                                    <div id="popup-content"></div>
+                                    <a href="#" id="popup-closer" className={styles.regionPopupCloser}> </a>
+                                    <div id="popup-content"> </div>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +114,7 @@ class RegionMiniMap extends Component {
         if (features) {
             features.map(s => {
                     sensorID = s.getId().toUpperCase();
-                    if (sensorID != this.props.trends_region_title.toUpperCase()) {
+                    if (sensorID !== this.props.trends_region_title.toUpperCase()) {
                         popupText += ('<li>' + sensorID + '</li>');
                     }
                 }
@@ -181,7 +181,7 @@ class RegionMiniMap extends Component {
         });
 
         let region_parameter;
-        if (this.props.parameter != '') {
+        if (this.props.parameter !== '') {
             region_parameter = this.props.selectedParameter;
         } else {
             region_parameter = this.props.parameter;
@@ -192,10 +192,13 @@ class RegionMiniMap extends Component {
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
 
-        if (area && this.state.map.getSize()) {
-            this.state.map.getView().fit(
-                this.state.areaPolygonSource.getExtent(), this.state.map.getSize());
+        if (area) {
+            this.state.map.getView().setZoom(this.state.map.getView().getZoom() - 10);
+            let lonLat = this.state.center;
+            let webMercator = ol.proj.fromLonLat(lonLat);
+            this.state.map.getView().setCenter(webMercator);
         }
+
         this.stationsPopupMenu(features);
 
     }
@@ -203,7 +206,6 @@ class RegionMiniMap extends Component {
     componentDidMount() {
 
         let map_items;
-        let threshold = this.props.threshold_value;
 
         map_items = this.props.allSensors;
 
@@ -244,7 +246,6 @@ class RegionMiniMap extends Component {
 
         const that = this;
         const container = document.getElementById('popup');
-        const content = document.getElementById('popup-content');
         const closer = document.getElementById('popup-closer');
         let theMap;
         if(container) {
@@ -257,15 +258,16 @@ class RegionMiniMap extends Component {
                 }
             });
 
+            let lonLat = this.state.center;
+            let webMercator = ol.proj.fromLonLat(lonLat);
 
             let view = new ol.View({
-                projection: 'EPSG:4326',
-                center: this.state.center,
+                projection: 'EPSG:3857',
+                center: webMercator,
                 zoom: this.state.currentZoom,
                 minZoom: 5.5,
                 maxZoom: this.state.maxZoom
             });
-
 
             theMap = new ol.Map({
                 target: 'map',
@@ -292,7 +294,7 @@ class RegionMiniMap extends Component {
                     return featureChange;
                 });
                 if (featuresAtPixel && featuresAtPixel.get('features')
-                    != undefined && featuresAtPixel.get('features').length == 1) {
+                    !== undefined && featuresAtPixel.get('features').length === 1) {
                     const feature = featuresAtPixel.get('features')[0];
                     that.popupHandler(feature, e.coordinate);
                 } else {
@@ -345,4 +347,4 @@ RegionMiniMap.propTypes = {
     selectedParameter: React.PropTypes.string.isRequired
 };
 
-export default RegionMiniMap
+export default RegionMiniMap;
