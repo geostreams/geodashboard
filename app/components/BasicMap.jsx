@@ -38,8 +38,8 @@ class BasicMap extends Component {
         super(props);
         this.state = {
             center: [-84.44799549, 38.9203417],
-            vectorSource: new ol.source.Vector({projection: "EPSG:3857"}),
-            clusterSource: new ol.source.Cluster({distance: 60, source: new ol.source.Vector({projection: "EPSG:3857"})}),
+            vectorSource: new ol.source.Vector(),
+            clusterSource: new ol.source.Cluster({distance: 60, source: new ol.source.Vector()}),
             customLocationFilterVectorExtent: [],
             currentZoom: 5.5,
             maxZoom: 12,
@@ -120,18 +120,12 @@ class BasicMap extends Component {
     componentDidUpdate() {
         this.props.mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
         this.state.clusterSource.clear();
-        // this.state.clusterSource.addFeatures(this.props.features);
+        this.state.clusterSource.addFeatures(this.props.features);
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(this.props.features);
     }
 
     componentDidMount() {
-
-        let features = this.props.features;
-
-        let vectorSource = new ol.source.Vector({
-            features: features
-        });
 
         const clusterSource = new ol.source.Cluster({
             projection: "EPSG:3857",
@@ -161,7 +155,6 @@ class BasicMap extends Component {
         ];
 
         const container = document.getElementById('popup');
-        const content = document.getElementById('popup-content');
         const closer = document.getElementById('popup-closer');
 
         let overlay = new ol.Overlay({
@@ -182,14 +175,7 @@ class BasicMap extends Component {
         }
 
         let lonLat = this.state.center;
-        console.log("lonLat = " + lonLat.toString());
-        // let lon = (lonLat[0]/2) * -1;
-        // let lat = lonLat[1];
         let webMercator = ol.proj.fromLonLat(lonLat);
-        console.log("webMercator = " + webMercator.toString());
-
-
-        // let webMercator = ol.proj.fromLonLat(lonLat);
 
         let view = new ol.View({
             projection: 'EPSG:3857',
