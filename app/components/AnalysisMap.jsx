@@ -134,6 +134,7 @@ class AnalysisMap extends Component {
             area = getCustomTrendRegion(that.props.selectedRegion);
             if (area && area.geometry) {
                 feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
+                feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
                 region_features.push(feature);
             }
         }
