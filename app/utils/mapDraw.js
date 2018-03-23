@@ -22,7 +22,7 @@ export function drawHelper(copyOfMap, display_trends){
     let all_auto_locations_radio = document.getElementsByName("location");
     if (all_auto_locations_radio) {
         for (let i=0; i < all_auto_locations_radio.length; i++){
-            if (all_auto_locations_radio[i].checked == true) {
+            if (all_auto_locations_radio[i].checked === true) {
                 clearDrawnShape();
             }
         }
@@ -30,7 +30,7 @@ export function drawHelper(copyOfMap, display_trends){
 
     let select_all_locations_radio = document.getElementById("allLocations");
     if (select_all_locations_radio) {
-        if (select_all_locations_radio.checked == true) {
+        if (select_all_locations_radio.checked === true) {
             clearDrawnShape();
         }
     }
@@ -44,7 +44,7 @@ export function drawHelper(copyOfMap, display_trends){
         });
 
         copyOfMap.getLayers().forEach(function(e) {
-            if (e.get('name') == 'drawing_layer') {
+            if (e.get('name') === 'drawing_layer') {
                 e.getSource().clear();
             }
         });
@@ -97,15 +97,15 @@ export function drawHelper(copyOfMap, display_trends){
     if (display_trends){
 
         if (draw_radio && all_regions_radio) {
-            if (all_regions_radio.checked == false && draw_radio.checked == false) {
+            if (all_regions_radio.checked === false && draw_radio.checked === false) {
                 clickedNotDrawRadioTrends();
             }
 
-            if (all_regions_radio.checked == true) {
+            if (all_regions_radio.checked === true) {
                 clickedNotDrawRadioTrends();
             }
 
-            if (draw_radio.checked == true) {
+            if (draw_radio.checked === true) {
                 clickedDrawRadioTrends();
             }
         }
