@@ -136,6 +136,7 @@ class TrendsRegionMap extends Component {
                 area = getCustomLocation(trendsPageRegions[i].toLowerCase());
                 if (area && area.geometry) {
                     feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
+                    feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
                     region_features.push(feature);
                 }
             }
