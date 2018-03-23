@@ -63,19 +63,19 @@ class AnalysisMap extends Component {
 
                     <div id="ol-drawcirclecontrol"
                          className={styles.olDrawCircleButton + ' ' +
-                        styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
+                         styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
                     <button id="drawCircleButton" title="Click to Draw a Circle">
                         <Icon name="panorama_fish_eye"/></button>
 
                     <div id="ol-drawsquarecontrol"
                          className={styles.olDrawSquareButton + ' ' +
-                        styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
+                         styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
                     <button id="drawSquareButton" title="Click to Draw a Square">
                         <Icon name="crop_square"/></button>
 
                     <div id="ol-drawcustomcontrol"
                          className={styles.olDrawCustomButton + ' ' +
-                        styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
+                         styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
                     <button id="drawCustomButton" title="Click to Draw a Custom Shape">
                         <Icon name="star_border"/></button>
 
@@ -93,7 +93,7 @@ class AnalysisMap extends Component {
 
     selectShapeLocation(event:Array<string>) {
 
-            this.props.onSelectShapeLocationTrend(event);
+        this.props.onSelectShapeLocationTrend(event);
 
     }
 
@@ -276,13 +276,17 @@ class AnalysisMap extends Component {
             };
         }
 
+        let lonLat = this.state.center;
+        let webMercator = ol.proj.fromLonLat(lonLat);
+
         let view = new ol.View({
-            projection: 'EPSG:4326',
-            center: this.state.center,
+            projection: 'EPSG:3857',
+            center: webMercator,
             zoom: this.state.currentZoom,
             minZoom: 5.5,
             maxZoom: this.state.maxZoom
         });
+
         let theMap;
 
         window.app = {};
@@ -717,4 +721,4 @@ class AnalysisMap extends Component {
 
 }
 
-export default AnalysisMap
+export default AnalysisMap;
