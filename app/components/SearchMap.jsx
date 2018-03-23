@@ -117,6 +117,7 @@ class SearchMap extends Component {
         let feature = new ol.Feature();
         if (area && area.geometry) {
             feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
+            feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
         }
 
         this.state.areaPolygonSource.clear();
