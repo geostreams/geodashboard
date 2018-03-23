@@ -209,7 +209,6 @@ class BasicMap extends Component {
             });
         }
 
-
         let drawClearControl;
         let selectPoints = [];
 
@@ -342,7 +341,6 @@ class BasicMap extends Component {
                 element: drawElement,
             });
         }
-
 
         // Add Draw Circle Button
         let drawCircleControl;
