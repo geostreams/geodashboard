@@ -167,6 +167,7 @@ class RegionMiniMap extends Component {
         area = getCustomLocation(trends_region_page);
         if (area && area.geometry) {
             feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
+            feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
             region_features.push(feature);
         }
 
@@ -192,13 +193,10 @@ class RegionMiniMap extends Component {
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
 
-        if (area) {
-            this.state.map.getView().setZoom(this.state.map.getView().getZoom() - 10);
-            let lonLat = this.state.center;
-            let webMercator = ol.proj.fromLonLat(lonLat);
-            this.state.map.getView().setCenter(webMercator);
+        if (area && this.state.map.getSize()) {
+            this.state.map.getView().fit(
+                this.state.areaPolygonSource.getExtent(), this.state.map.getSize());
         }
-
         this.stationsPopupMenu(features);
 
     }
