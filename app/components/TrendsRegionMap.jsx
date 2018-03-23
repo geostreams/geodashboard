@@ -25,7 +25,7 @@ class TrendsRegionMap extends Component {
     constructor(props: MapProps) {
         super(props);
         this.state = {
-            center: [-84.44799549, 38.9203417],
+            center: [-84.44799549, 42.9203417],
             vectorSource: new ol.source.Vector,
             clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector}),
             areaPolygonSource: new ol.source.Vector,
@@ -59,16 +59,16 @@ class TrendsRegionMap extends Component {
 
         return (
             <div>
-                <div id='map' className={styles.root}></div>
-                <div id="trends_legend" className={styles.trends_legend}></div>
+                <div id='map' className={styles.root}> </div>
+                <div id="trends_legend" className={styles.trends_legend}> </div>
                 <div id="search" style={{position: 'absolute', bottom: '10px', left: '25em', padding: '5px'}}>
                     <button id="centerButton"><Icon name="gps_fixed"/></button>
                 </div>
                 <div style={{display: "none"}}>
-                    <div id="marker" title="Marker" className="marker"></div>
+                    <div id="marker" title="Marker" className="marker"> </div>
                     <div id="popup" className={styles.olPopup}>
-                        <a href="#" id="popup-closer" className={styles.olPopupCloser}></a>
-                        <div id="popup-content"></div>
+                        <a href="#" id="popup-closer" className={styles.olPopupCloser}> </a>
+                        <div id="popup-content"> </div>
                     </div>
                 </div>
                 <Dialog open={Boolean(this.state.openAboutButton)}
@@ -80,7 +80,7 @@ class TrendsRegionMap extends Component {
                             <Icon name="close"/>
                         </a>
                     </DialogHeader>
-                    <DialogBody scrollable id="about-this-data"></DialogBody>
+                    <DialogBody scrollable id="about-this-data"> </DialogBody>
                 </Dialog>
                 <div className={trendsStyles.about_button}>
                     <a className={trendsStyles.locations_button_style}
@@ -132,7 +132,7 @@ class TrendsRegionMap extends Component {
         let trendsPageRegions = this.props.trendAllRegions;
 
         for (let i = 0; i < trendsPageRegions.length; i++) {
-            if (trendsPageRegions[i] != 'ALL' && trendsPageRegions[i] != 'er') {
+            if (trendsPageRegions[i] !== 'ALL' && trendsPageRegions[i] !== 'er') {
                 area = getCustomLocation(trendsPageRegions[i].toLowerCase());
                 if (area && area.geometry) {
                     feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
@@ -147,7 +147,7 @@ class TrendsRegionMap extends Component {
         let trends_parameter_lake_regions = [];
         let trends_settings = this.props.trends_settings;
         trends_settings.map(p => {
-            if (p.parameter.lake_regions == true) {
+            if (p.parameter.lake_regions === true) {
                 trends_parameter_lake_regions.push(p.parameter.id);
             }
         });
@@ -159,25 +159,22 @@ class TrendsRegionMap extends Component {
         this.state.vectorSource.addFeatures(features);
 
         if (area) {
-            this.state.map.getView().fit(
-                this.state.areaPolygonSource.getExtent(), this.state.map.getSize());
-        } else {
-            this.state.map.getView().fit(
-                this.state.vectorSource.getExtent(), this.state.map.getSize());
+            this.state.map.getView().setZoom(this.state.map.getView().getZoom() - 10);
+            let lonLat = this.state.center;
+            let webMercator = ol.proj.fromLonLat(lonLat);
+            this.state.map.getView().setCenter(webMercator);
         }
 
     }
 
     componentDidMount() {
 
-        let threshold = this.props.threshold_value;
-
         let map_items = this.props.trendRegions;
 
         let trends_parameter_lake_regions = [];
         let trends_settings = this.props.trends_settings;
         trends_settings.map(p => {
-            if (p.parameter.lake_regions == true) {
+            if (p.parameter.lake_regions === true) {
                 trends_parameter_lake_regions.push(p.parameter.id);
             }
         });
@@ -202,7 +199,7 @@ class TrendsRegionMap extends Component {
                 let style;
 
                 const trend_type = feature.getProperties().features[0].attributes.trend_type;
-                if (trend_type == "trendUp") {
+                if (trend_type === "trendUp") {
                     style = (new ol.style.Style({
                         image: new ol.style.RegularShape({
                             points: 3,
@@ -211,26 +208,7 @@ class TrendsRegionMap extends Component {
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
                     }));
-                } else if (trend_type == "trendDown") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            rotation: 3.141592654,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "overThresholdUp") {
-                    style = (new ol.style.Style({
-                        image: new ol.style.RegularShape({
-                            points: 3,
-                            radius: 10,
-                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
-                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
-                        })
-                    }));
-                } else if (trend_type == "overThresholdDown") {
+                } else if (trend_type === "trendDown") {
                     style = (new ol.style.Style({
                         image: new ol.style.RegularShape({
                             points: 3,
@@ -240,7 +218,26 @@ class TrendsRegionMap extends Component {
                             stroke: new ol.style.Stroke({color: '#000000', width: 1})
                         })
                     }));
-                } else if (trend_type == "noTrend" || trend_type == "") {
+                } else if (trend_type === "overThresholdUp") {
+                    style = (new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 10,
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type === "overThresholdDown") {
+                    style = (new ol.style.Style({
+                        image: new ol.style.RegularShape({
+                            points: 3,
+                            radius: 10,
+                            rotation: 3.141592654,
+                            fill: new ol.style.Fill({color: getTrendColor(trend_type)}),
+                            stroke: new ol.style.Stroke({color: '#000000', width: 1})
+                        })
+                    }));
+                } else if (trend_type === "noTrend" || trend_type === "") {
                     style = (new ol.style.Style({
                         image: new ol.style.Circle({
                             radius: 6,
@@ -268,7 +265,6 @@ class TrendsRegionMap extends Component {
         ];
 
         const container = document.getElementById('popup');
-        const content = document.getElementById('popup-content');
         const closer = document.getElementById('popup-closer');
 
         let overlay = new ol.Overlay({
@@ -288,16 +284,18 @@ class TrendsRegionMap extends Component {
             };
         }
 
+        let lonLat = this.state.center;
+        let webMercator = ol.proj.fromLonLat(lonLat);
+
         let view = new ol.View({
-            projection: 'EPSG:4326',
-            center: this.state.center,
+            projection: 'EPSG:3857',
+            center: webMercator,
             zoom: this.state.currentZoom,
             minZoom: 5.5,
             maxZoom: this.state.maxZoom
         });
-        let theMap;
 
-        let selectPoints = [];
+        let theMap;
 
         const that = this;
 
@@ -325,7 +323,7 @@ class TrendsRegionMap extends Component {
                 return featureChange;
             });
             if (featuresAtPixel && featuresAtPixel.get('features')
-                    != undefined && featuresAtPixel.get('features').length == 1) {
+                    !== undefined && featuresAtPixel.get('features').length === 1) {
                 const feature = featuresAtPixel.get('features')[0];
                 that.popupHandler(feature, e.coordinate);
             } else {
