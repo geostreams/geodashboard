@@ -516,8 +516,6 @@ class BasicMap extends Component {
             controls: getControls()
         });
 
-        console.log("view = " + view.getProjection().getCode());
-
         theMap.addControl(centerControl);
         theMap.addControl(drawClearControl);
         theMap.addControl(drawSquareControl);
