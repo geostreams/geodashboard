@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1043](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1043)
 - Some css styles for scroll bar visibility in IE and Edge
   [GEOD-1049](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1049)
+- Maps display with the incorrect projection
+  [GEOD-1071](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1071)
 
 ## [3.0.0-alpha.1] - 2017-11-22
 
