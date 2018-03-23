@@ -38,8 +38,8 @@ class BasicMap extends Component {
         super(props);
         this.state = {
             center: [-84.44799549, 38.9203417],
-            vectorSource: new ol.source.Vector,
-            clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector}),
+            vectorSource: new ol.source.Vector({projection: "EPSG:3857"}),
+            clusterSource: new ol.source.Cluster({distance: 60, source: new ol.source.Vector({projection: "EPSG:3857"})}),
             customLocationFilterVectorExtent: [],
             currentZoom: 5.5,
             maxZoom: 12,
@@ -120,7 +120,7 @@ class BasicMap extends Component {
     componentDidUpdate() {
         this.props.mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
         this.state.clusterSource.clear();
-        this.state.clusterSource.addFeatures(this.props.features);
+        // this.state.clusterSource.addFeatures(this.props.features);
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(this.props.features);
     }
@@ -134,6 +134,7 @@ class BasicMap extends Component {
         });
 
         const clusterSource = new ol.source.Cluster({
+            projection: "EPSG:3857",
             distance: 1,
             source: this.state.vectorSource
         });
@@ -141,7 +142,7 @@ class BasicMap extends Component {
 
         let clusters = this.props.getCluster(clusterSource);
         clusters.setZIndex(1);
-
+        // console.log("clusters layer = " + clusterSource.getProjection().getCode());
         let customLocationFilterVector = new ol.source.Vector();
         let customLocationFilterLayer = new ol.layer.Vector({
             source: customLocationFilterVector,
@@ -180,9 +181,19 @@ class BasicMap extends Component {
             };
         }
 
+        let lonLat = this.state.center;
+        console.log("lonLat = " + lonLat.toString());
+        // let lon = (lonLat[0]/2) * -1;
+        // let lat = lonLat[1];
+        let webMercator = ol.proj.fromLonLat(lonLat);
+        console.log("webMercator = " + webMercator.toString());
+
+
+        // let webMercator = ol.proj.fromLonLat(lonLat);
+
         let view = new ol.View({
-            projection: 'EPSG:4326',
-            center: this.state.center,
+            projection: 'EPSG:3857',
+            center: webMercator,
             zoom: this.state.currentZoom,
             minZoom: 5.5,
             maxZoom: this.state.maxZoom
@@ -519,6 +530,8 @@ class BasicMap extends Component {
             controls: getControls()
         });
 
+        console.log("view = " + view.getProjection().getCode());
+
         theMap.addControl(centerControl);
         theMap.addControl(drawClearControl);
         theMap.addControl(drawSquareControl);
@@ -534,12 +547,10 @@ class BasicMap extends Component {
             that.props.onMapChangeResolution(theMap, e);
         });
 
-
         theMap.on('singleclick', function (e) {
             selectItems.setActive(false);
             that.props.onMapSingleClick(theMap, e);
         });
-
 
         if(this.props.customLayers){
             this.props.customLayers.map(l=> theMap.addLayer(l));
