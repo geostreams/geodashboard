@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 let ol = require('openlayers');
 require("openlayers/css/ol.css");
-import type { Sensors } from '../utils/flowtype';
 import {getMapTileURLSetting} from '../utils/getConfig';
 import {getAttribution, getMiniControls} from '../utils/mapUtils';
 
@@ -14,10 +13,10 @@ class MiniMap extends Component {
     render() {
         return (
             <div>
-            <div id='map' className="map" style={{"height":"200px", "width":"100%"}}></div>
+            <div id='map' className="map" style={{"height":"200px", "width":"100%"}}> </div>
             <div style={{display: "none"}}>
                 <a className="overlay" id="vienna" target="_blank" href="http://en.wikipedia.org/wiki/Vienna">Vienna</a>
-                <div id="marker" title="Marker" className="marker"></div>
+                <div id="marker" title="Marker" className="marker"> </div>
             </div>
         </div>);
     }
@@ -28,10 +27,14 @@ class MiniMap extends Component {
     }
 
     componentDidMount() {
-        // TODO: chnage the center of map and the color of the point.
+
+        let sensor_geom = this.props.center;
+
         let feature = new ol.Feature({
-            geometry: new ol.geom.Point([0, 1])
+            geometry: new ol.geom.Point(sensor_geom)
         });
+        feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+
         feature.setStyle(new ol.style.Style({
             image: new ol.style.Circle({
                 radius: 5,
@@ -58,11 +61,15 @@ class MiniMap extends Component {
             vectorLayer
         ];
 
+        let lonLat = this.props.center;
+        let webMercator = ol.proj.fromLonLat(lonLat);
+
         let map = new ol.Map({
             target: 'map',
             layers: layers,
             view: new ol.View({
-                center: [0,1],
+                projection: 'EPSG:3857',
+                center: webMercator,
                 zoom: 5
             }),
             controls: getMiniControls()
@@ -70,4 +77,4 @@ class MiniMap extends Component {
     }
 }
 
-export default MiniMap
+export default MiniMap;
