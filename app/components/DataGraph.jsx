@@ -35,16 +35,25 @@ class DataGraph extends Component {
     };
 
     render() {
+        let miniMapObject;
+
         let sensor = this.props.property.find(x => x.name === this.props.sensorName);
-        let center = [0,1];
-        if(sensor && sensor.geometry && sensor.geometry.coordinates){
-            center =  sensor.geometry.coordinates.slice(0,2);
-        }
 
         let paralist = [];
         let charts = [];
 
         if (sensor) {
+
+            let center =  sensor.geometry.coordinates.slice(0,2);
+
+            if (screen.width > getMobileSizeMax()) {
+                miniMapObject = (
+                    <Row key="3" className={styles.parameters_list}>
+                        <MiniMap sensor={sensor} center={center} />
+                    </Row>
+                );
+            }
+
             // If there are not selected parameters, we mark all as selected. This was added to mark them all selected
             // on page load, since all the graphs are displayed initially.
             if(this.state.paralistselect.length < 1) {
@@ -67,6 +76,7 @@ class DataGraph extends Component {
 
                     if (this.state.paralistselect.length === 0 || this.state.paralistselect.indexOf(p) > -1) {
                         if (screen.width > getMobileSizeMax()) {
+                            center =  sensor.geometry.coordinates.slice(0,2);
                             charts.push(<Row key={p}>
                                 <Chart id={this.props.sensorName} param={p}/></Row>)
                         } else {
@@ -95,15 +105,6 @@ class DataGraph extends Component {
         if (screen.width <= getMobileSizeMax()) {
             headerValue = (
                 <h1><Link href={getMobileExplorePath()}>Explore</Link><span> > {this.props.sensorName}</span></h1>
-            );
-        }
-
-        let miniMapObject;
-        if (screen.width > getMobileSizeMax()) {
-            miniMapObject = (
-                <Row key="3" className={styles.parameters_list}>
-                    <MiniMap sensor={sensor} center={center} />
-                </Row>
             );
         }
 
