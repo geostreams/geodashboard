@@ -163,8 +163,8 @@ class TrendsMap extends Component {
         } else {
             this.state.map.getView().setZoom(this.state.map.getView().getZoom() - 10);
             let lonLatCenter = this.state.center;
-            let webMercator = ol.proj.fromLonLat(lonLatCenter);
-            this.state.map.getView().setCenter(webMercator);
+            let webMercatorCenter = ol.proj.fromLonLat(lonLatCenter);
+            this.state.map.getView().setCenter(webMercatorCenter);
         }
 
     }
