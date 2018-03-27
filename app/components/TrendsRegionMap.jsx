@@ -161,9 +161,9 @@ class TrendsRegionMap extends Component {
 
         if (area) {
             this.state.map.getView().setZoom(this.state.map.getView().getZoom() - 10);
-            let lonLat = this.state.center;
-            let webMercator = ol.proj.fromLonLat(lonLat);
-            this.state.map.getView().setCenter(webMercator);
+            let lonLatCenter = this.state.center;
+            let webMercatorCenter = ol.proj.fromLonLat(lonLatCenter);
+            this.state.map.getView().setCenter(webMercatorCenter);
         }
 
     }
@@ -285,12 +285,12 @@ class TrendsRegionMap extends Component {
             };
         }
 
-        let lonLat = this.state.center;
-        let webMercator = ol.proj.fromLonLat(lonLat);
+        let lonLatCenter = this.state.center;
+        let webMercatorCenter = ol.proj.fromLonLat(lonLatCenter);
 
         let view = new ol.View({
             projection: 'EPSG:3857',
-            center: webMercator,
+            center: webMercatorCenter,
             zoom: this.state.currentZoom,
             minZoom: 5.5,
             maxZoom: this.state.maxZoom
