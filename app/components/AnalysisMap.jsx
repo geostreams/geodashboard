@@ -277,17 +277,13 @@ class AnalysisMap extends Component {
             };
         }
 
-        let lonLatCenter = this.state.center;
-        let webMercatorCenter = ol.proj.fromLonLat(lonLatCenter);
-
         let view = new ol.View({
             projection: 'EPSG:3857',
-            center: webMercatorCenter,
+            center: ol.proj.fromLonLat(this.state.center),
             zoom: this.state.currentZoom,
             minZoom: 5.5,
             maxZoom: this.state.maxZoom
         });
-
         let theMap;
 
         window.app = {};
