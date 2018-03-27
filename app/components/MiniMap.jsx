@@ -61,15 +61,15 @@ class MiniMap extends Component {
             vectorLayer
         ];
 
-        let lonLat = this.props.center;
-        let webMercator = ol.proj.fromLonLat(lonLat);
+        let lonLatCenter = this.props.center;
+        let webMercatorCenter = ol.proj.fromLonLat(lonLatCenter);
 
         let map = new ol.Map({
             target: 'map',
             layers: layers,
             view: new ol.View({
                 projection: 'EPSG:3857',
-                center: webMercator,
+                center: webMercatorCenter,
                 zoom: 5
             }),
             controls: getMiniControls()
