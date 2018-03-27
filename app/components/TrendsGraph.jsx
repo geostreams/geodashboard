@@ -36,23 +36,28 @@ class TrendsGraph extends Component {
             return element !== undefined && element.name === that.props.trends_region_id;
         });
         // convert the array to a single object.
-        let trends_detail ={};
-        trend.trends_detail.map( d =>
-            trends_detail = Object.assign({}, trends_detail, d)
-        );
-        let trends_deviation = {};
+        if(Array.isArray(trend.trends_detail) && Array.isArray(trend.trends_deviation)){
+            let trends_detail ={};
+            trend.trends_detail.map( function(d) {
+                    trends_detail = Object.assign({}, trends_detail, d)
+                }
+            );
+            let trends_deviation = {};
 
-        trend.trends_deviation.map( d =>
-            trends_deviation = Object.assign({}, trends_deviation, d)
-        );
-        // Add Values
-        Object.keys(trends_detail).forEach(function(key) {
-            dataRaw.push({"x": parseInt(key), "y": parseFloat(trends_detail[key]), "d": parseFloat(trends_deviation[key])})
-        });
+            trend.trends_deviation.map( d =>
+                trends_deviation = Object.assign({}, trends_deviation, d)
+            );
+            // Add Values
+            let parseDate = d3.time.format("%Y").parse;
+            Object.keys(trends_detail).forEach(function(key) {
+                dataRaw.push({"x": parseDate(key), "y": parseFloat(trends_detail[key]), "d": parseFloat(trends_deviation[key])})
+            });
 
-        dataRaw.sort(function (a, b) {
-            return Number(a.x) - Number(b.x);
-        });
+            dataRaw.sort(function (a, b) {
+                return Number(a.x) - Number(b.x);
+            });
+        }
+
 	    const alternateParameters = getAlternateParameters();
         return (
             <div>
@@ -60,7 +65,7 @@ class TrendsGraph extends Component {
                     width={800} height={600}
                     margins={{top: 10, right: 10, bottom: 50, left: 60}}
                     chartData={dataRaw}
-                    xScale= 'linear'
+                    xScale= 'time'
                     xLabel= "Year"
                     yScale='linear'
                     yLabel={getParameterName(this.props.trends_parameter, alternateParameters)}
