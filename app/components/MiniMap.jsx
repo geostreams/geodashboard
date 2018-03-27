@@ -28,12 +28,9 @@ class MiniMap extends Component {
 
     componentDidMount() {
 
-        let sensor_geom = this.props.center;
-
         let feature = new ol.Feature({
-            geometry: new ol.geom.Point(sensor_geom)
+            geometry: new ol.geom.Point(this.props.center).transform('EPSG:4326', 'EPSG:3857')
         });
-        feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
 
         feature.setStyle(new ol.style.Style({
             image: new ol.style.Circle({
@@ -61,15 +58,12 @@ class MiniMap extends Component {
             vectorLayer
         ];
 
-        let lonLatCenter = this.props.center;
-        let webMercatorCenter = ol.proj.fromLonLat(lonLatCenter);
-
         let map = new ol.Map({
             target: 'map',
             layers: layers,
             view: new ol.View({
                 projection: 'EPSG:3857',
-                center: webMercatorCenter,
+                center: ol.proj.fromLonLat(this.props.center),
                 zoom: 5
             }),
             controls: getMiniControls()
