@@ -54,9 +54,9 @@ class LineChartWithDeviations extends Component {
                     .attr("height", bbox.height + (padding * 2));
                 //use i as flop condition instead of svg width.
                 if(i> chartData.length * 0.65){
-                    that.setState({xFocusText: that.state.xline(d.x)- bbox.width});
+                    that.setState({xFocusText: that.state.xline(d.x)- bbox.width - that.state.barLength});
                 } else {
-                    that.setState({xFocusText: that.state.xline(d.x)});
+                    that.setState({xFocusText: that.state.xline(d.x) + that.state.barLength});
                 }
 
             }
@@ -146,12 +146,12 @@ class LineChartWithDeviations extends Component {
                         r={6}
                         display={focus}
                     />
-                    <rect x={xFocusText} y={yFocus} rx={10} ry={10} width={150} height={50}
-                          fill="rgb(31, 119, 180)"
-                          stroke="rgb(31, 119, 180)"
+                    <rect x={xFocusText} y={yFocus + barLength} rx={10} ry={10} width={150} height={50}
+                          fill="rgb(29, 133, 172)"
+                          stroke="rgb(29, 133, 172)"
                     />
-                    <text x={xFocusText } y={yFocus + barLength} fill="white">
-                        <tspan x={xFocusText } dx="0.2em" dy=".6em">{this.props.xLabel + ": " + dFocus.x}</tspan>
+                    <text x={xFocusText } y={yFocus + 2*barLength} fill="white">
+                        <tspan x={xFocusText } dx="0.2em" dy=".6em">{this.props.xLabel + ": " + dFocus.x.getFullYear()}</tspan>
                         <tspan x={xFocusText } dx="0.2em" dy="1.2em">{this.props.yLabel + ": " + dFocus.y.toFixed(2)}</tspan>
                         <tspan x={xFocusText } dx="0.2em" dy="1.2em">{ "Deviation: " + dFocus.d.toFixed(2)}</tspan>
                     </text>
@@ -191,14 +191,14 @@ class LineChartWithDeviations extends Component {
                         height = {height}
                         width = '100%'
                     >
-                        <g id="focus">
-                            {this._mkFocus()}
-                        </g>
                         <g id="line">
                             {this._mkLine()}
                         </g>
                         <g id="marker">
                             {this._mkMarker()}
+                        </g>
+                        <g id="focus">
+                            {this._mkFocus()}
                         </g>
                         <g id="Xaxis-line" transform={`translate(0, ${height - margins.top - margins.bottom})`}>
                             <line x1={0} y1={0}
