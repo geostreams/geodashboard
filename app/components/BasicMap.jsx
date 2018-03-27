@@ -39,7 +39,7 @@ class BasicMap extends Component {
         this.state = {
             center: [-84.44799549, 38.9203417],
             vectorSource: new ol.source.Vector(),
-            clusterSource: new ol.source.Cluster({distance: 60, source: new ol.source.Vector()}),
+            clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector()}),
             customLocationFilterVectorExtent: [],
             currentZoom: 5.5,
             maxZoom: 12,
@@ -136,7 +136,7 @@ class BasicMap extends Component {
 
         let clusters = this.props.getCluster(clusterSource);
         clusters.setZIndex(1);
-        // console.log("clusters layer = " + clusterSource.getProjection().getCode());
+
         let customLocationFilterVector = new ol.source.Vector();
         let customLocationFilterLayer = new ol.layer.Vector({
             source: customLocationFilterVector,
