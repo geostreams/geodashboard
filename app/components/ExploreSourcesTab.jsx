@@ -48,7 +48,7 @@ class ExploreSourcesTab extends Component {
         } else {
             this.props.data.filter(data => data.properties.type.id === this.props.source.id)
                 .map(data => {
-                    // Pass Coordinates in Web Mercator Format
+                    // Convert to Web Mercator Format
                     let lonLat = [data.geometry.coordinates[0],data.geometry.coordinates[1]];
                     let webMercator = ol.proj.fromLonLat(lonLat);
                     let color = getColor(data.properties.type.id);
