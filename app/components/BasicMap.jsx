@@ -174,12 +174,12 @@ class BasicMap extends Component {
             };
         }
 
-        let lonLat = this.state.center;
-        let webMercator = ol.proj.fromLonLat(lonLat);
+        let lonLatCenter = this.state.center;
+        let webMercatorCenter = ol.proj.fromLonLat(lonLatCenter);
 
         let view = new ol.View({
             projection: 'EPSG:3857',
-            center: webMercator,
+            center: webMercatorCenter,
             zoom: this.state.currentZoom,
             minZoom: 5.5,
             maxZoom: this.state.maxZoom
