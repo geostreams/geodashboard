@@ -162,9 +162,7 @@ class TrendsMap extends Component {
                 this.state.areaPolygonSource.getExtent(), this.state.map.getSize());
         } else {
             this.state.map.getView().setZoom(this.state.map.getView().getZoom() - 10);
-            let lonLatCenter = this.state.center;
-            let webMercatorCenter = ol.proj.fromLonLat(lonLatCenter);
-            this.state.map.getView().setCenter(webMercatorCenter);
+            this.state.map.getView().setCenter(ol.proj.fromLonLat(this.state.center));
         }
 
     }
