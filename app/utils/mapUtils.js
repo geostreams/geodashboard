@@ -26,10 +26,10 @@ export function sensorsToFeatures(sensors: Sensors):Array<ol.Feature> {
     sensors.map((sensor) => {
 
         let feature = new ol.Feature({
-            geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
+            geometry: new ol.geom.Point(
+                [sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]]
+            ).transform('EPSG:4326', 'EPSG:3857')
         });
-
-        feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
 
         feature.attributes = {
             "name": sensor.name,
@@ -434,10 +434,10 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
         if (sensor.name !== 'ALL') {
 
             let feature = new ol.Feature({
-                geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
+                geometry: new ol.geom.Point(
+                    [sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]]
+                ).transform('EPSG:4326', 'EPSG:3857')
             });
-
-            feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
 
             let trend_type = "";
             let trend_values = "";
@@ -587,10 +587,10 @@ export function sensorsToFeaturesTrendDetailPage(
         if (sensor.properties.type.id === 'epa') {
 
             let feature = new ol.Feature({
-                geometry: new ol.geom.Point([sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]])
+                geometry: new ol.geom.Point(
+                    [sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]]
+                ).transform('EPSG:4326', 'EPSG:3857')
             });
-
-            feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
 
             feature.attributes = {
                 "name": sensor.name,
