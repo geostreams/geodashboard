@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-let ol = require('openlayers');
+import ol from 'openlayers';
 require("openlayers/css/ol.css");
 import {getMapTileURLSetting} from '../utils/getConfig';
 import {getAttribution, getMiniControls} from '../utils/mapUtils';

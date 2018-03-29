@@ -4,7 +4,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-let ol = require('openlayers');
+import ol from 'openlayers';
 require("openlayers/css/ol.css");
 import trendsStyles from '../styles/trends.css';
 import {

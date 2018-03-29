@@ -12,7 +12,7 @@
  */
 
 import React, {Component} from 'react';
-let ol = require('openlayers');
+import ol from 'openlayers';
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';

@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-let ol = require('openlayers');
+import ol from 'openlayers';
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import trendsStyles from '../styles/trends.css';

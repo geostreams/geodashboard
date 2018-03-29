@@ -4,7 +4,7 @@ import {Button, Fab} from 'react-mdc-web';
 import {
     getMobileSourceNames, getMobileSizeMax, getMobileDetailPath, getColor
 } from '../utils/getConfig';
-let ol = require('openlayers');
+import ol from 'openlayers';
 
 
 class ExploreSourcesTab extends Component {
