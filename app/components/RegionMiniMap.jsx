@@ -166,8 +166,9 @@ class RegionMiniMap extends Component {
         // This is for the Region Outlines for one Region at a time
         area = getCustomLocation(trends_region_page);
         if (area && area.geometry) {
-            feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
-            feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+            feature = new ol.Feature({
+                geometry: new ol.geom.Polygon(area.geometry.coordinates).transform('EPSG:4326', 'EPSG:3857')
+            });
             region_features.push(feature);
         }
 
