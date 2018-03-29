@@ -2,7 +2,7 @@
  * @flow
  */
 
-let ol = require('openlayers');
+import ol from 'openlayers';
 export type Geometry = {
     type:string;
     coordinates:string[]

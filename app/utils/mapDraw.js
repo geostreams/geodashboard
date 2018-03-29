@@ -1,4 +1,4 @@
-let ol = require('openlayers');
+import ol from 'openlayers';
 
 export function drawHelper(copyOfMap, display_trends){
 

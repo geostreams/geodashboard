@@ -1,4 +1,4 @@
-let ol = require('openlayers');
+import ol from 'openlayers';
 import {
     getSourceName, getParameterName, getAlternateParameters, getCustomTrendsRegion,
     getTrendColor, getColor, getTrendsPageLakeRegions, getMapAttributionsSetting,
