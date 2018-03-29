@@ -98,7 +98,6 @@ class TrendsMap extends Component {
     popupHandler(feature: ol.Feature, coordinate: number[]) {
         const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
-
             let popupText = popupHeader(feature, styles) + popupTrends(feature, styles);
 
             if (content) {
@@ -135,8 +134,9 @@ class TrendsMap extends Component {
         if (that.props.selectedRegion !== 'all' && that.props.selectedRegion !== 'draw') {
             area = getCustomLocation(that.props.selectedRegion);
             if (area && area.geometry) {
-                feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
-                feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+                feature = new ol.Feature({
+                    geometry: new ol.geom.Polygon(area.geometry.coordinates).transform('EPSG:4326', 'EPSG:3857')
+                });
                 region_features.push(feature);
             }
         }
