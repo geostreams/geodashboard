@@ -49,11 +49,11 @@ class ExploreSourcesTab extends Component {
             this.props.data.filter(data => data.properties.type.id === this.props.source.id)
                 .map(data => {
                     // Convert to Web Mercator Format
-                    let lonLat = [data.geometry.coordinates[0],data.geometry.coordinates[1]];
-                    let webMercator = ol.proj.fromLonLat(lonLat);
+                    let lonLatPoint = [data.geometry.coordinates[0],data.geometry.coordinates[1]];
+                    let webMercatorPoint = ol.proj.fromLonLat(lonLatPoint);
                     let color = getColor(data.properties.type.id);
                     tabs.push(<Fab key={data.id} className={styles.exploreButton} style={{backgroundColor: color}}
-                                   onClick={this.clickSensor.bind(this, data.id, data.name, webMercator)}
+                                   onClick={this.clickSensor.bind(this, data.id, data.name, webMercatorPoint)}
                                    id={data.id} title={data.name}>
                         <span className={styles.exploreButtonText}>{data.id}</span></Fab>)
                 });
