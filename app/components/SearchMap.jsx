@@ -14,6 +14,7 @@ import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup';
 import BasicMap from './BasicMap';
 import type {InputEventMap} from '../utils/flowtype';
 
+
 class SearchMap extends Component {
     state: {
         multiLineLayer: ol.layer.Vector,
@@ -116,8 +117,9 @@ class SearchMap extends Component {
         const area = getCustomLocation(this.props.selectedLocation);
         let feature = new ol.Feature();
         if (area && area.geometry) {
-            feature = new ol.Feature({geometry: new ol.geom.Polygon(area.geometry.coordinates)});
-            feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+            feature = new ol.Feature({
+                geometry: new ol.geom.Polygon(area.geometry.coordinates).transform('EPSG:4326', 'EPSG:3857')
+            });
         }
 
         this.state.areaPolygonSource.clear();
