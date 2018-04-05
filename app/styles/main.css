@@ -80,6 +80,8 @@ h1, h2, h3, h5, h6, p, ul {
         width: 100% !important;
         padding-top: 0.25em !important;
         padding-bottom: 1.5em !important;
+        background-color: white !important;
+        color: black !important;
     }
 
     .viewSelectionStyle {
@@ -209,4 +211,17 @@ h1, h2, h3, h5, h6, p, ul {
 
 .alertButton {
     font-weight: bold !important;
+}
+
+.title_card{
+    font-size: larger !important;
+    font-weight: bold !important;
+    text-transform: capitalize !important;
+}
+
+/* Substitute the theme primary colors in for the secondary colors*/
+:root {
+    --mdc-theme-secondary: #3f51b5 !important;
+    --mdc-theme-secondary-light: #a4addf !important;
+    --mdc-theme-secondary-dark: #6f7dcd !important;
 }

@@ -21,11 +21,17 @@ input[type=button] {
     .add {
         margin-top: 1em !important;
         margin-left: 50% !important;
+        --mdc-theme-secondary: #ff4081;
+        --mdc-theme-secondary-light: #ff87b0;
+        --mdc-theme-secondary-dark: #f80054;
     }
 }
 
 .add {
     margin: 1em 1em 1em 13em;
+    --mdc-theme-secondary: #ff4081;
+    --mdc-theme-secondary-light: #ff87b0;
+    --mdc-theme-secondary-dark: #f80054;
 }
 
 .inline {

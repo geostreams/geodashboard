@@ -5,6 +5,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
+import mainStyles from '../styles/main.css';
 import {
     Textfield, Cell, Grid,
     Card, CardHeader, CardTitle, CardSubtitle, CardActions, CardText
@@ -73,7 +74,7 @@ class TrendsThresholds extends Component {
             trendsPageThreshold = (
                 <Card className={trendsStyles.cardMargin}>
                     <CardHeader>
-                        <CardTitle>
+                        <CardTitle className={mainStyles.title_card}>
                             Threshold
                         </CardTitle>
                     </CardHeader>
@@ -104,7 +105,7 @@ class TrendsThresholds extends Component {
             trendsPageThreshold = (
                 <Card className={trendsStyles.cardMargin} key="Threshold">
                     <CardHeader>
-                        <CardTitle>
+                        <CardTitle className={mainStyles.title_card}>
                             Select Threshold Value
                         </CardTitle>
                         <CardSubtitle>
@@ -144,7 +145,7 @@ class TrendsThresholds extends Component {
             trendsPageThreshold =
                 <Card className={trendsStyles.cardMargin}>
                     <CardHeader>
-                        <CardTitle>
+                        <CardTitle className={mainStyles.title_card}>
                             Select Threshold
                         </CardTitle>
                         <CardSubtitle>

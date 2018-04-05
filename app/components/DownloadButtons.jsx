@@ -90,7 +90,7 @@ class DownloadButtons extends Component {
             let draw_area = this.props.drawShapeCoordinates;
 
             // For a Drawn Circle
-            if (draw_area.length == 1) {
+            if (draw_area.length === 1) {
 
                 params["geocode"] = draw_area.map(function (coordinate) {
                     return [coordinate[1], coordinate[0], coordinate[2]]
@@ -154,20 +154,17 @@ class DownloadButtons extends Component {
                         <a href={this.state.link}/> {this.state.link}
                     </DialogBody>
                     <DialogFooter>
-                        <Button
-                            primary
-                            onClick={this.handleClosePermalink}
-                        > Close </Button>
+                        <Button onClick={this.handleClosePermalink}> Close </Button>
                     </DialogFooter>
                 </Dialog>
 
-                <Button raised primary disabled={disabled} className={styles.button}
+                <Button raised disabled={disabled} className={styles.button}
                         onClick={this.onDownload.bind(this, "csv")}
                 >
                     Download
                 </Button>
 
-                <Button className={styles.button} raised disabled={disabled}  onClick={this.handleOpenPermalink}>
+                <Button className={styles.buttonPermalink} raised disabled={disabled} onClick={this.handleOpenPermalink}>
                     Permalink
                 </Button>
 
@@ -192,4 +189,4 @@ DownloadButtons.propTypes = {
     selectedDataSources: React.PropTypes.array
 };
 
-export default DownloadButtons
+export default DownloadButtons;

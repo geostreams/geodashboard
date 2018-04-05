@@ -5,6 +5,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
+import mainStyles from '../styles/main.css';
 import {
     Radio, RadioGroup, Card, CardHeader, CardTitle, CardSubtitle, CardActions
 } from 'react-mdc-web';
@@ -47,7 +48,7 @@ class TrendsRegions extends Component {
             return (
                 <Card className={trendsStyles.cardMargin}>
                     <CardHeader>
-                        <CardTitle>
+                        <CardTitle className={mainStyles.title_card}>
                             Select Region
                         </CardTitle>
                         <CardSubtitle>

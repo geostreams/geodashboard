@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import ol from 'openlayers';
 require("openlayers/css/ol.css");
 import trendsStyles from '../styles/trends.css';
+import mainStyles from '../styles/main.css';
 import {
     Card, CardHeader, CardTitle, CardMedia,
     Dialog, DialogBody, DialogHeader, DialogTitle,
@@ -77,7 +78,7 @@ class RegionMiniMap extends Component {
                 </Dialog>
                 <Card className={trendsStyles.cardMargin}>
                     <CardHeader>
-                        <CardTitle>
+                        <CardTitle className={mainStyles.title_card}>
                             <p className={styles.locations_text_style}>Location</p>
                             <a className={trendsStyles.locations_button_style}
                                onClick={this.handleInfoIcon}>

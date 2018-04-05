@@ -98,12 +98,6 @@
     margin-bottom: 1em;
 }
 
-.title_card{
-    fontSize: 15px;
-    fontWeight: bold;
-    text-transform: capitalize;
-}
-
 .radio{
     line-height: 1em;
     padding: 0em 1em 0em 1em;

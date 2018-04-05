@@ -5,6 +5,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
+import mainStyles from '../styles/main.css';
 import {
     Textfield, Cell, Grid,
     Card, CardHeader, CardTitle, CardSubtitle, CardActions, CardText
@@ -83,7 +84,7 @@ class TrendsCalculationSettings extends Component {
         return (
             <Card className={trendsStyles.cardMargin} key="calculate">
                 <CardHeader>
-                    <CardTitle>Change Calculation Setting</CardTitle>
+                    <CardTitle className={mainStyles.title_card}>Change Calculation Setting</CardTitle>
                     <CardSubtitle>{window.configruntime.gd3.calculation_subtitle}</CardSubtitle>
                 </CardHeader>
                 {spacer}
@@ -97,7 +98,6 @@ class TrendsCalculationSettings extends Component {
                                 {trendsBaseline}
                             </Select>
                         </Cell>
-
                         <Cell col={6}>
                             <Select className={trendsStyles.select}
                                     value={this.state.rollingPeriod.toString()}

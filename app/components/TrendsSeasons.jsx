@@ -5,6 +5,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
+import mainStyles from '../styles/main.css';
 import {
     Radio, RadioGroup, Button,
     Card, CardHeader, CardTitle, CardSubtitle, CardActions
@@ -43,7 +44,7 @@ class TrendsSeasons extends Component {
                                  key={p.id}> {p.title}</Radio>);
         }
         trendsPageSeasons = trendsPageSeasons.concat(trendsPageSeasonsMap);
-        if (trendsPageSeasonsMap.length == 0) {
+        if (trendsPageSeasonsMap.length === 0) {
             trendsPageSeasons = [<Radio id="9998" value="9998" key="9998"
                                            disabled={true}> None Available </Radio>];
         }
@@ -51,7 +52,7 @@ class TrendsSeasons extends Component {
         return (
             <Card className={trendsStyles.cardMargin}>
                 <CardHeader>
-                    <CardTitle>
+                    <CardTitle className={mainStyles.title_card}>
                         Select Season
                     </CardTitle>
                     <CardSubtitle>

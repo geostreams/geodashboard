@@ -59,11 +59,11 @@ class TrendsSubmitButton extends Component {
         {
             submit_button =
                 (<Button disabled raised className={trendsStyles.submitButtonStyle}
-                         primary onClick={this.handleClickAnalysis}> Apply Settings </Button>);
+                         onClick={this.handleClickAnalysis}> Apply Settings </Button>);
         } else {
             submit_button =
                 (<Button raised className={trendsStyles.submitButtonStyle}
-                         primary onClick={this.handleClickAnalysis}> Apply Settings </Button>);
+                         onClick={this.handleClickAnalysis}> Apply Settings </Button>);
         }
 
         return (

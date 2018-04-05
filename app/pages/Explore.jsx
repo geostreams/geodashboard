@@ -50,7 +50,7 @@ class Explore extends Component {
             sourceLists = sources.map(s =>
                 <Card id={s.id} className={exploreStyles.exploreCard} key={s.id}>
                     <CardHeader>
-                        <CardTitle>{s.label} </CardTitle>
+                        <CardTitle className={styles.title_card}>{s.label} </CardTitle>
                     </CardHeader>
                     <CardText>
                         <ExploreSourcesTab

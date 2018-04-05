@@ -29,7 +29,7 @@ class TrendsDetail extends Component {
                         <Grid className={styles.noPadding}>
                             <Cell col={4}>
                                 <Card className={trendsStyles.detailTitle}>
-                                    <CardTitle>
+                                    <CardTitle className={styles.title_card}>
                                         <Link href={"#trendsregions"}>Trends Regions</Link>
                                         {trendsRegionTitleLink}
                                     </CardTitle>

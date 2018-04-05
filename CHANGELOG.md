@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Refactored Exploratory Analysis code
   [GLGVO-410](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-410)
   [GLGVO-412](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-412)
+- Update react-mdc-web version from '0.12.2' to '0.17.0'
+  [GEOD-1073](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1073)
 
 ### Fixed
 - Search page showing the same parameter multiple times

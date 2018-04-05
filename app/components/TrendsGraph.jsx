@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 import LineChartWithDeviations from './LineChartWithDeviations';
 import {getAlternateParameters, getParameterName} from '../utils/getConfig';
+import d3 from 'd3';
 
 class TrendsGraph extends Component {
     constructor(props: Object) {
@@ -23,7 +24,7 @@ class TrendsGraph extends Component {
         let units;
         if (pageSettings) {
             pageSettings.map(p => {
-                if (p.parameter.id == this.props.trends_parameter) {
+                if (p.parameter.id === this.props.trends_parameter) {
                     chartTitle = p.parameter.title;
                     unitIndex = chartTitle.lastIndexOf(" ");
                     units = chartTitle.substr(unitIndex + 1);

@@ -1,12 +1,17 @@
-.button {
+.button, .buttonPermalink {
     margin-left: 1em;
+}
+
+.buttonPermalink:enabled {
+    background-color: white !important;
+    color: black !important;
 }
 
 @media screen and (max-device-width: 840px) {
     .counterText {
         font-size: xx-large !important;
     }
-    .button {
+    .button, .buttonPermalink {
         padding-top: 0.25em !important;
         padding-bottom: 1.5em !important;
     }

@@ -4,6 +4,7 @@
 
 import React, {Component} from 'react';
 import styles from '../styles/filterList.css';
+import mainStyles from '../styles/main.css';
 import TimeFilter from '../containers/TimeFilter';
 import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json';
@@ -24,7 +25,7 @@ class FilterList extends Component {
 
     selectAll = (event: InputEvent) => {
         let name = event.target.getAttribute("data-name");
-        if (name == "data_sources") {
+        if (name === "data_sources") {
             let selectedDataSources;
             if (event.target.checked) {
                 selectedDataSources = Object.assign([], this.props.sources.map(s => s.id));
@@ -32,7 +33,7 @@ class FilterList extends Component {
                 selectedDataSources = Object.assign([]);
             }
             this.props.onSelectAllDataSources(event, selectedDataSources)
-        } else if (name == "parameters") {
+        } else if (name === "parameters") {
             let selectedParameters;
             if (event.target.checked) {
                 selectedParameters = Object.assign([], this.props.parameters.map(s => s.id));
@@ -51,10 +52,10 @@ class FilterList extends Component {
         let divContents;
         let showButtons;
         let isAllSelected: boolean = false;
-        if (this.props.attribute == "data_sources") {
-            isAllSelected = this.props.selectedDataSources.length == this.props.sources.length
-        } else if (this.props.attribute == "parameters") {
-            isAllSelected = this.props.selectedParameters.length == this.props.parameters.length
+        if (this.props.attribute === "data_sources") {
+            isAllSelected = this.props.selectedDataSources.length === this.props.sources.length
+        } else if (this.props.attribute === "parameters") {
+            isAllSelected = this.props.selectedParameters.length === this.props.parameters.length
         }
 
         let hideShowContents =
@@ -84,7 +85,7 @@ class FilterList extends Component {
                                    key={p.id}/>
                 );
                 cardsubtitle = this.props.selectedParameters.map( p =>
-                    this.props.parameters.find(item => item.id == p).label
+                    this.props.parameters.find(item => item.id === p).label
                 ).join(", ");
                 showButtons = hideShowContents;
                 break;
@@ -135,10 +136,10 @@ class FilterList extends Component {
                                value={p.id} key={p.id}> {p.label}</Radio>);
 
                 } else {
-                    dividerLine = <div></div>;
-                    allLocations = <div></div>;
-                    drawRadioGroup = <div></div>;
-                    locationList = <div></div>;
+                    dividerLine = <div> </div>;
+                    allLocations = <div> </div>;
+                    drawRadioGroup = <div> </div>;
+                    locationList = <div> </div>;
                 }
 
                 divContents =
@@ -192,7 +193,7 @@ class FilterList extends Component {
             cardhead = (
                 <CardHeader>
                     <CardTitle
-                        className={styles.title_card}>{this.props.attribute.replace("data_sources", "data source")}
+                        className={mainStyles.title_card}>{this.props.attribute.replace("data_sources", "data source")}
                         <a className={styles.close_button_collapsed_card} onClick={this.props.onClickRemove} data-idx={idx}>
                             <Icon className={styles.closeIcon} name='close'/>
                         </a>
