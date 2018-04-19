@@ -100,3 +100,24 @@ nav {
 .listHeaderStyle {
     font-size: x-large !important;
 }
+
+.layersLegendDetails {
+    padding-left: 1em;
+    font-size: smaller;
+}
+
+.layersLegendText {
+    padding: 0.5em 1em;
+}
+
+img[src=""] {
+    display: none;
+}
+
+.layersGroup {
+    padding: 1em;
+}
+
+.layersGroupTitle {
+    padding-left: 1em;
+}
