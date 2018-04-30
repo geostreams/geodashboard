@@ -176,13 +176,24 @@ export function getLayersDetails() {
 export function getAvailableLayers() {
     let available_layers = [];
 
-    getLayersDetails().map(p =>
+    getLayersDetails().map(function(p) {
+        // Check if blank for HTML
+        if (p.legendImage.length === 0) {
+            p.legendImage = "";
+        }
+
         available_layers.push({
             'title': p.title,
             'opacity': p.opacity,
             'visibility': p.visibility,
+            'layerGroup': p.layerGroup,
+            'legendShow': p.legendShow,
+            'legendStartOpen': p.legendStartOpen,
+            'legendTitle': p.legendTitle,
+            'legendText': p.legendText,
+            'legendImage': p.legendImage
         })
-    );
+    });
 
     return available_layers;
 }
