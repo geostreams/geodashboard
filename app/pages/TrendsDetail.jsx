@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import Menu from '../containers/MenuBar';
 import RegionMiniMap from '../containers/RegionMiniMap';
 import TrendsRegionDetails from '../containers/TrendsRegionDetails';
-import TrendsGraph from '../containers/TrendsGraph';
+import TrendsDetailRight from '../containers/TrendsDetailRight';
 import {Grid, Cell, Content, List, Card, CardTitle} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
@@ -15,12 +15,24 @@ import {Link} from 'react-router';
 
 class TrendsDetail extends Component {
 
+    state: {
+        selectedStartYear: number,
+        selectedEndYear: number
+    };
+
+    constructor(props:  Object) {
+        super(props);
+        this.state={
+            selectedStartYear: 0,
+            selectedEndYear: 0
+        }
+    }
+
     render() {
 
-        let trendsPageSettings = getTrendsPageSettings();
-        let trendsRegionTitle =  getCustomTrendsRegion(this.props.params.region);
-        let trendsRegionTitleLink =  " > " + getCustomTrendsRegion(this.props.params.region);
-
+        const trendsPageSettings = getTrendsPageSettings();
+        const trendsRegionTitle =  getCustomTrendsRegion(this.props.params.region);
+        const trendsRegionTitleLink =  " > " + getCustomTrendsRegion(this.props.params.region);
         return (
             <div>
                 <Menu selected='trends'/>
@@ -48,12 +60,15 @@ class TrendsDetail extends Component {
                                 </List>
                             </Cell>
                             <Cell col={8}>
+
                                 <div className={trendsStyles.detailChart}>
-                                    <TrendsGraph
+                                    <TrendsDetailRight
                                         trends_settings={trendsPageSettings}
                                         trends_region_id={this.props.params.region}
                                         trends_parameter={this.props.params.parameter}
                                         trends_season={this.props.params.season}
+                                        start_year={this.state.selectedStartYear}
+                                        end_year={this.state.selectedEndYear}
                                     />
                                 </div>
                             </Cell>
@@ -61,9 +76,11 @@ class TrendsDetail extends Component {
                     </div>
                 </Content>
             </div>
-        );
+        )
     }
 
 }
 
-export default TrendsDetail
+export default TrendsDetail;
+
+

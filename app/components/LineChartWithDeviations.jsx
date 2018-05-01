@@ -10,16 +10,25 @@ class LineChartWithDeviations extends Component {
         this.state={
             xline: d3.scale.linear(),
             yline: d3.scale.linear()
-        }
+        };
+        this.setUpGraph = this.setUpGraph.bind(this);
+    }
+
+    componentWillMount() {
+        this.setUpGraph(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
+        this.setUpGraph(nextProps);
+    }
+
+    setUpGraph(props) {
         const {
             width,
             height,
             margins,
             chartData
-        } = nextProps;
+        } = props;
         let xRange = [0, width - margins.left - margins.right];
         let yRange = [height - margins.top - margins.bottom, 0];
         let xDomain = d3.extent(chartData, function(d){ return d.x ; });
@@ -54,12 +63,16 @@ class LineChartWithDeviations extends Component {
                     .attr("height", bbox.height + (padding * 2));
                 //use i as flop condition instead of svg width.
                 if(i> chartData.length * 0.65){
-                    that.setState({xFocusText: that.state.xline(d.x)- bbox.width - that.state.barLength});
+                    that.setState({xFocusText: that.state.xline(d.x) - bbox.width - that.state.barLength});
                 } else {
                     that.setState({xFocusText: that.state.xline(d.x) + that.state.barLength});
                 }
 
             }
+        });
+
+        d3.select(this.refs.svgContainer).on('mouseleave', function mouseOutHandler() {
+            that.setState({dFocus: undefined, xFocus: undefined, yFocus: undefined });
         })
     }
 
@@ -70,7 +83,7 @@ class LineChartWithDeviations extends Component {
                 stroke="black"
                 strokeWidth="2"
                 fill="none"
-                d={that._setAxes(this.props.chartData)}
+                d={that._setAxes(that.props.chartData)}
                 strokeDasharray="5,5"
             />
         )
@@ -80,12 +93,12 @@ class LineChartWithDeviations extends Component {
         let that = this;
         let line = d3.svg.line()
             .x(function(d) { return that.state.xline(d.x); })
-            .y(function(d) { return that.state.yline(d.y); })
+            .y(function(d) { return that.state.yline(d.y); });
         return line(data);
     }
 
     _setDeviations (x, center, dev) {
-        let devData= [{"x": x, "y": center + dev}, {"x": x, "y": center - dev}]
+        let devData= [{"x": x, "y": center + dev}, {"x": x, "y": center - dev}];
         return this._setAxes(devData)
     }
 
@@ -150,7 +163,7 @@ class LineChartWithDeviations extends Component {
                           fill="rgb(29, 133, 172)"
                           stroke="rgb(29, 133, 172)"
                     />
-                    <text x={xFocusText } y={yFocus + 2*barLength} fill="white">
+                    <text x={xFocusText } y={yFocus + barLength + 10 } fill="white">
                         <tspan x={xFocusText } dx="0.2em" dy=".6em">{this.props.xLabel + ": " + dFocus.x.getFullYear()}</tspan>
                         <tspan x={xFocusText } dx="0.2em" dy="1.2em">{this.props.yLabel + ": " + dFocus.y.toFixed(2)}</tspan>
                         <tspan x={xFocusText } dx="0.2em" dy="1.2em">{ "Deviation: " + dFocus.d.toFixed(2)}</tspan>

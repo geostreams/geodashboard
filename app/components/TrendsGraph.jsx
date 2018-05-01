@@ -8,22 +8,27 @@ import {getAlternateParameters, getParameterName} from '../utils/getConfig';
 import d3 from 'd3';
 
 class TrendsGraph extends Component {
+
+	state: {
+		loading: boolean
+	};
+
     constructor(props: Object) {
         super(props);
+        this.state = {
+            loading: false
+        }
     }
 
-    componentWillMount() {
-        this.props.loadDetailSensor(this.props.trends_parameter, this.props.trends_season, this.props.trends_region_id)
-    }
+	render() {
 
-    render() {
         let that = this;
         let chartTitle = 'No Chosen Parameter';
-        let pageSettings = this.props.trends_settings;
+        const {trends_settings, start_year, end_year} = this.props;
         let unitIndex;
         let units;
-        if (pageSettings) {
-            pageSettings.map(p => {
+        if (trends_settings) {
+            trends_settings.map(p => {
                 if (p.parameter.id === this.props.trends_parameter) {
                     chartTitle = p.parameter.title;
                     unitIndex = chartTitle.lastIndexOf(" ");
@@ -45,14 +50,20 @@ class TrendsGraph extends Component {
             );
             let trends_deviation = {};
 
-            trend.trends_deviation.map( d =>
-                trends_deviation = Object.assign({}, trends_deviation, d)
-            );
-            // Add Values
-            let parseDate = d3.time.format("%Y").parse;
-            Object.keys(trends_detail).forEach(function(key) {
-                dataRaw.push({"x": parseDate(key), "y": parseFloat(trends_detail[key]), "d": parseFloat(trends_deviation[key])})
-            });
+	        trend.trends_deviation.map( d =>
+	            trends_deviation = Object.assign({}, trends_deviation, d)
+	        );
+	        // Add Values
+	        let parseDate = d3.time.format("%Y").parse;
+	        Object.keys(trends_detail).forEach(function(key) {
+	            if(parseInt(key) >= parseInt(start_year) && parseInt(key) <= parseInt(end_year)) {
+		            dataRaw.push({
+			            "x": parseDate(key),
+			            "y": parseFloat(trends_detail[key]),
+			            "d": parseFloat(trends_deviation[key])
+		            })
+	            }
+	        });
 
             dataRaw.sort(function (a, b) {
                 return Number(a.x) - Number(b.x);

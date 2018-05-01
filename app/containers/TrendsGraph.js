@@ -14,15 +14,6 @@ const mapStateToProps = (state) => {
     }
 };
 
-
-const mapDispatchToProps = (dispatch:Dispatch) => {
-    return {
-        loadDetailSensor: (parameter, season, region) => {
-            dispatch(fetchRegionDetailTrends(parameter, season, region))
-        }
-    }
-};
-
-const TrendsGraph = connect(mapStateToProps, mapDispatchToProps)(TrendsGraphComponent);
+const TrendsGraph = connect(mapStateToProps)(TrendsGraphComponent);
 
 export default TrendsGraph

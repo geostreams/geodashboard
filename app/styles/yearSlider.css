@@ -1,0 +1,15 @@
+.wrapperStyle {
+    display: inline-block;
+    width: 730px;
+    margin-top: 20px;
+}
+
+.startYear {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.endYear {
+    display: inline-block;
+    margin-left: 20px;
+}

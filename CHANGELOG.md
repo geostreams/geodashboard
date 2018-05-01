@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [Unreleased]
+
+### Added
+- Time filtering functionality to trend regions detail page
+  [GEOD-1028](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1028)
+
+### Changed
+
+### Fixed
+
 ## [3.0.0-alpha.2] - 2018-04-12
 
 ### Added
