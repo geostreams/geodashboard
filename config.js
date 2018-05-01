@@ -62,6 +62,15 @@ export const gd3 = {
     // This variable is used to determine the location for links to the Detail Page
     application_website: "/",
 
+    // Should Tabs to select multi-parameter graphs be displayed on the Detail Page
+    show_detail_tabs: true,
+
+    // Detail Page Info Icon Text
+    detail_page_separate: 'Select a minimum of one Parameter to view',
+    detail_page_combined: 'Select a maximum of three Parameters to view',
+    detail_page_box_and_whisker: 'Box and Whisker Plots provide a visual look at the data distribution. ' +
+        'Lowest values are on the left, and the Highest values are on the right',
+
     // For Mobile Explore Page
     mobile_sourcename: "all",
     mobile_size_max: 840,
@@ -1284,8 +1293,7 @@ export const gd3 = {
     trends_analysis_semi_value: 'all',
     // **********
 
-    exploreLayers: [
-    ],
+    exploreLayers: [],
 
     // These variables are for Map settings
     mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',

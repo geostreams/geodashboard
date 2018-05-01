@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import DataGraphComponent from '../components/DataGraph';
 import { fetchSensor, fetchSensorMobile } from '../actions/index';
 import type { Dispatch } from '../utils/flowtype';
-import {getLocationName, getMobileSizeMax} from '../utils/getConfig';
+import {getMobileSizeMax} from '../utils/getConfig';
 
 const mapStateToProps = (state) => {
     return {
@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
             if (screen.width <= getMobileSizeMax()) {
                 dispatch(fetchSensorMobile(name))
             } else {
-                dispatch(fetchSensor(name))
+                dispatch(fetchSensor(name, 'semi'))
             }
         }
     }

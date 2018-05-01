@@ -100,7 +100,7 @@ class App extends Component {
                 <Router history={hashHistory}>
                     <Route path="/" component={Home}/>
                     <Route path="/explore/:stations" component={Explore}/>
-                    <Route path="/detail/location/:name" component={Detail}/>
+                    <Route path="/detail/location/:name/:chart_type" component={Detail}/>
                     <Route path="/search" component={Search}/>
                     <Route path="/trendsstations" component={TrendsStation}/>
                     <Route path="/trendsregions" component={TrendsRegion}/>

@@ -589,7 +589,7 @@ function fetchSensorHelpMobile(api:string, id:number){
     }
 }
 
-export function fetchSensor(name:string) {
+export function fetchSensor(name:string, bin:string) {
     return (dispatch:any, getState:GetState) => {
         const state = getState();
         const api = state.backends.selected;
@@ -608,7 +608,7 @@ export function fetchSensor(name:string) {
                     const sensor = json.find(x => x.name === name);
                     console.log(sensor.id);
                     dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-                    return fetch(api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + sensor.id)
+                    return fetch(api + '/api/geostreams/datapoints/bin/' + bin + '/1?sensor_id=' + sensor.id)
                 });
             result
                 .then(response => response.json())

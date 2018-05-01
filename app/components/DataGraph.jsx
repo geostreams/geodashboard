@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import Chart from '../containers/Chart';
 import ChartMobile from '../containers/ChartMobile';
-import MiniMap from '../components/MiniMap';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import {Row} from 'react-flexbox-grid';
 import styles from "../styles/detail.css";
 import {
-    getParameterName, getAlternateParameters, getMobileSizeMax, getMobileExplorePath
+    getParameterName, getAlternateParameters, getMobileSizeMax, getDetailPageSeparateInfoText
 } from '../utils/getConfig';
-import { Checkbox, FormField, label} from 'react-mdc-web';
-import {Link} from 'react-router';
+import {Checkbox, FormField, label} from 'react-mdc-web';
+import DetailPageContents from './DetailPageContents';
 
 
 class DataGraph extends Component {
@@ -35,24 +34,11 @@ class DataGraph extends Component {
     };
 
     render() {
-        let miniMapObject;
-
-        let sensor = this.props.property.find(x => x.name === this.props.sensorName);
-
         let paralist = [];
         let charts = [];
+        let sensor = this.props.property.find(x => x.name === this.props.sensorName);
 
         if (sensor) {
-
-            let center =  sensor.geometry.coordinates.slice(0,2);
-
-            if (screen.width > getMobileSizeMax()) {
-                miniMapObject = (
-                    <Row key="3" className={styles.parameters_list}>
-                        <MiniMap sensor={sensor} center={center} />
-                    </Row>
-                );
-            }
 
             // If there are not selected parameters, we mark all as selected. This was added to mark them all selected
             // on page load, since all the graphs are displayed initially.
@@ -73,10 +59,8 @@ class DataGraph extends Component {
                             <br/>
                         </span>
                     );
-
                     if (this.state.paralistselect.length === 0 || this.state.paralistselect.indexOf(p) > -1) {
                         if (screen.width > getMobileSizeMax()) {
-                            center =  sensor.geometry.coordinates.slice(0,2);
                             charts.push(<Row key={p}>
                                 <Chart id={this.props.sensorName} param={p}/></Row>)
                         } else {
@@ -99,38 +83,12 @@ class DataGraph extends Component {
             paralist = <div className={styles.noData}>No Parameters Available</div>;
         }
 
-        let headerValue = (
-            <h1>{this.props.sensorName}</h1>
-        );
-        if (screen.width <= getMobileSizeMax()) {
-            headerValue = (
-                <h1><Link href={getMobileExplorePath()}>Explore</Link><span> > {this.props.sensorName}</span></h1>
-            );
-        }
-
         return (
-            <Grid fluid>
-                <Row key="a">
-                    {headerValue}
-                </Row>
-                <Row key="b" around="xs">
-                    <Col md={3}>
-                        <Row key="1" className={styles.parameters_list} >
-                            <h3>Selected Parameters</h3>
-                        </Row>
-                        <Row key="2" className={styles.parameters_list} >
-                            <div>
-                                {paralist}
-                            </div>
-                        </Row>
-                        {miniMapObject}
-                    </Col>
-                    <Col md={8}>
-                        {charts}
-                    </Col>
-                </Row>
-            </Grid>
-
+            <DetailPageContents
+                sensorInfo={sensor}
+                paramInfoText={getDetailPageSeparateInfoText()}
+                charts={charts} paralist={paralist}
+            />
         );
     }
 }

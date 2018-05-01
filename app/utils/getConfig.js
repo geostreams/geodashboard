@@ -39,7 +39,6 @@ export function getLocationName(location:string):string {
     //const named_locations = window.configruntime.gd3.named_locations;
     //if( named_locations[location] !== undefined)
     //    return named_locations[location]
-
     const custom_location = getCustomLocation(location);
 
     if( custom_location)
@@ -217,7 +216,7 @@ export function getMapAttributionsSetting() {
 export function getMapAttributionsCollapsibleSetting() {
     let CollapsibleSetting = '';
     if (window.configruntime.gd3.mapAttributionsCollapsible) {
-       CollapsibleSetting = window.configruntime.gd3.mapAttributionsCollapsible;
+        CollapsibleSetting = window.configruntime.gd3.mapAttributionsCollapsible;
     }
     return CollapsibleSetting;
 }
@@ -316,4 +315,36 @@ export function getWaterYearStatus() {
 
 export function getTrendsAnalysisSemiValue() {
     return window.configruntime.gd3.trends_analysis_semi_value;
+}
+
+export function getShowDetailTabs() {
+    let getValue = '';
+    if (window.configruntime.gd3.show_detail_tabs) {
+        getValue = window.configruntime.gd3.show_detail_tabs;
+    }
+    return getValue;
+}
+
+export function getDetailPageSeparateInfoText() {
+    let getValue = '';
+    if (window.configruntime.gd3.detail_page_separate) {
+        getValue = window.configruntime.gd3.detail_page_separate;
+    }
+    return getValue;
+}
+
+export function getDetailPageCombinedInfoText() {
+    let getValue = '';
+    if (window.configruntime.gd3.detail_page_combined) {
+        getValue = window.configruntime.gd3.detail_page_combined;
+    }
+    return getValue;
+}
+
+export function getDetailPageBAWInfoText() {
+    let getValue = '';
+    if (window.configruntime.gd3.detail_page_box_and_whisker) {
+        getValue = window.configruntime.gd3.detail_page_box_and_whisker;
+    }
+    return getValue;
 }

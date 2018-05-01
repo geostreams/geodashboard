@@ -34,7 +34,7 @@ class ExploreSourcesTab extends Component {
                     .filter(data => this.props.userStations.includes(data.properties.type.location));
             }
             mobile_data.map(data => {
-                let location = (getMobileDetailPath() + data.name.toString());
+                let location = (getMobileDetailPath() + data.name.toString() + '/separate/');
                 tabs.push(
                     <span key={data.id}>
                         <a key={data.id} href={location}>

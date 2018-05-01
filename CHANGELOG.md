@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Time filtering functionality to trend regions detail page
   [GEOD-1028](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1028)
+- Added Detail Page multi-series line chart
+  [GEOD-1070](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1070)
 
 ### Changed
 

@@ -6,3 +6,44 @@
     font-size: 200%;
     padding: 1em 2em;
 }
+
+.open_button_style {
+    cursor: pointer;
+    margin-left: 1em;
+}
+
+.open_button_style_baw {
+    cursor: pointer;
+    margin-left: 1em;
+    float: right;
+}
+
+.close_button_style {
+    color: red;
+    cursor: pointer;
+}
+
+.card_margins {
+    margin: 0.5em;
+}
+
+.card_title_style {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.layout_style {
+    display: flex;
+}
+
+.float_item_left {
+    float: left;
+}
+
+.add_padding {
+    padding: 1em;
+}
+
+.float_item_right {
+    float: right;
+}
