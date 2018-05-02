@@ -33,7 +33,7 @@ class ExploreLayers extends Component {
 
     render() {
 
-        return (
+        let layersData = (
             <div>
                 <div className={exploreStyles.layersButton}>
                     <Button
@@ -45,32 +45,36 @@ class ExploreLayers extends Component {
                     </Button>
                 </div>
                 <div id="layersDrawer" className={exploreStyles.layersDrawerClass}>
-                    <Drawer
-                        className={exploreStyles.drawerSettings}
-                        open={true}
-                    >
-                        <DrawerSpacer className={exploreStyles.layersHeader}>
-                            <div className={exploreStyles.layersCloseButtonDiv}>
-                                <Button
-                                    className={exploreStyles.layersCloseButton}
-                                    id="closeButton"
-                                    default
-                                    onClick={this.closeLayersDrawer}
-                                >
-                                    <Icon name='close'/>
-                                </Button>
-                            </div>
-                            <span>
-                                Explore Layers
-                            </span>
-                        </DrawerSpacer>
-                        <DrawerContent>
-                            <ExploreLayersItems/>
-                        </DrawerContent>
-                    </Drawer>
+                    <span>
+                        <Drawer
+                            className={exploreStyles.drawerSettings}
+                            open={true}
+                        >
+                            <DrawerSpacer className={exploreStyles.layersHeader}>
+                                <div className={exploreStyles.layersCloseButtonDiv}>
+                                    <Button
+                                        className={exploreStyles.layersCloseButton}
+                                        id="closeButton"
+                                        default
+                                        onClick={this.closeLayersDrawer}
+                                    >
+                                        <Icon name='close'/>
+                                    </Button>
+                                </div>
+                                <span>
+                                    Explore Layers
+                                </span>
+                            </DrawerSpacer>
+                            <DrawerContent>
+                                <ExploreLayersItems/>
+                            </DrawerContent>
+                        </Drawer>
+                    </span>
                 </div>
             </div>
         );
+
+        return (layersData);
 
     }
 

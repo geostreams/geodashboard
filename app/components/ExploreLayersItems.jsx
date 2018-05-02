@@ -6,6 +6,7 @@ import React, {Component, PropTypes} from 'react';
 import exploreStyles from '../styles/explore.css';
 import {Checkbox, FormField} from 'react-mdc-web';
 import type {InputEvent} from '../utils/flowtype';
+import ExploreLayersDetails from "../components/ExploreLayersDetails";
 
 class ExploreLayersItems extends Component {
 
@@ -13,7 +14,7 @@ class ExploreLayersItems extends Component {
         super(props);
         (this:any).selectLayers = this.selectLayers.bind(this);
         (this:any).handleOpacityChange = this.handleOpacityChange.bind(this);
-        (this:any).setIndividualLayerDetails = this.setIndividualLayerDetails.bind(this);
+        (this:any).selectGroupLayers = this.selectGroupLayers.bind(this);
     }
 
     selectLayers(event: InputEvent) {
@@ -46,6 +47,46 @@ class ExploreLayersItems extends Component {
         this.props.onSelectLayers(layersVisibility);
     }
 
+    selectGroupLayers(event: InputEvent) {
+        let group = event.target.name;
+        let groupChecked = event.target.checked;
+
+        this.props.layersVisibility.filter(layer => layer.layerGroup === group).map(layer => {
+
+            let layersVisibility = Object.assign([], this.props.layersVisibility);
+
+            let index = this.props.layersVisibility.findIndex(
+                (selectedLayer => selectedLayer.title === layer.title));
+
+            let layerCheckbox = document.getElementById(layer.title.toString());
+            if (layerCheckbox instanceof HTMLInputElement) {
+
+                if (groupChecked === false) {
+                    layerCheckbox.checked = false;
+                    if (index > -1) {
+                        layersVisibility[index].visibility = false;
+                    }
+                }
+                else {
+                    layerCheckbox.checked = true;
+                    if (index > -1) {
+                        layersVisibility[index].visibility = true;
+                    } else {
+                        layersVisibility.push({
+                            'title': layer.title,
+                            'opacity': layer.opacity,
+                            'visibility': true,
+                        });
+                    }
+                }
+
+            }
+
+            this.props.onSelectLayers(layersVisibility);
+
+        });
+    }
+
     handleOpacityChange(event: InputEvent) {
         let layersVisibility = Object.assign([], this.props.layersVisibility);
         let name = event.target.name;
@@ -57,127 +98,87 @@ class ExploreLayersItems extends Component {
         this.props.onOpacityChange(layersVisibility);
     }
 
-    setIndividualLayerDetails(availableLayer: Object) {
-
-        let slider_value = availableLayer.opacity;
-        let index = this.props.layersVisibility.findIndex(
-            (selectedLayer => selectedLayer.title === availableLayer.title));
-        if (index > -1) {
-            slider_value = this.props.layersVisibility[index].opacity;
-        }
-
-        let layersLegendItems = '';
-
-        if (availableLayer.legendShow === true) {
-            if (availableLayer.legendStartOpen === true) {
-                layersLegendItems = (
-                    <div>
-                        <details open className={exploreStyles.layersLegendDetails}>
-                            <summary>{availableLayer.legendTitle}</summary>
-                            <div className={exploreStyles.layersLegendText}>{availableLayer.legendText}</div>
-                            <img src={availableLayer.legendImage}/>
-                        </details>
-                    </div>
-                );
-            } else {
-                layersLegendItems = (
-                    <div>
-                        <details className={exploreStyles.layersLegendDetails}>
-                            <summary>{availableLayer.legendTitle}</summary>
-                            <div className={exploreStyles.layersLegendText}>{availableLayer.legendText}</div>
-                            <img src={availableLayer.legendImage}/>
-                        </details>
-                    </div>
-                );
-            }
-        } else {
-            layersLegendItems = '';
-        }
-
-        return (
-            <div className={exploreStyles.col} key={availableLayer.title}>
-                <FormField id="explore-layers">
-                    <span className={exploreStyles.checkboxWidth}>
-                        <Checkbox name={availableLayer.title}
-                                  value={availableLayer.opacity}
-                                  onChange={this.selectLayers}
-                                  checked={this.props.layersVisibility.findIndex(
-                                      (selectedLayer => ((selectedLayer.title === availableLayer.title) &&
-                                          (selectedLayer.visibility === true)))
-                                  ) > -1}
-                        />
-                    </span>
-                    <label className={exploreStyles.checkboxLabel}> {availableLayer.title}</label>
-                </FormField>
-                {layersLegendItems}
-                <input className={exploreStyles.sliderStyle}
-                       type="range" name={availableLayer.title}
-                       min="0" max="1" step="0.05"
-                       value={slider_value}
-                       disabled={this.props.layersVisibility.findIndex(
-                           (selectedLayer => ((selectedLayer.title === availableLayer.title) &&
-                               (selectedLayer.visibility === true)))
-                       ) < 0}
-                       onChange={this.handleOpacityChange}
-                />
-            </div>
-        )
-    }
-
     render() {
-
         let layersDiv = [];
         let layersInformation = '';
         let layersInGroup = [];
         let layersGroup = '';
         let layersGroups = [];
 
-        this.props.layersVisibility.filter(l => l.layerGroup === '').map(availableLayer => {
-
-            layersInformation = this.setIndividualLayerDetails(availableLayer);
-
-            layersDiv.push(
-                layersInformation
-            )
-
-        });
-
-        this.props.layersVisibility.filter(l => l.layerGroup !== '').map(availableLayer => {
-
+        this.props.layersVisibility.filter(layer => layer.layerGroup !== '').map(availableLayer => {
             if (layersGroups.indexOf(availableLayer.layerGroup) < 0) {
                 layersGroups.push(availableLayer.layerGroup);
             }
-
         });
 
-        layersGroups.map(g => {
+        layersGroups.map(group => {
 
             layersInGroup = [];
 
-            this.props.layersVisibility.filter(l => l.layerGroup === g).map(layerInGroup => {
-
-                layersInformation = this.setIndividualLayerDetails(layerInGroup);
+            this.props.layersVisibility.filter(layer => layer.layerGroup === group).map(layerInGroup => {
+                layersInformation =
+                    <ExploreLayersDetails
+                        availableLayer={layerInGroup}
+                        layersVisibility={this.props.layersVisibility}
+                        selectLayers={this.selectLayers}
+                        handleOpacityChange={this.handleOpacityChange}
+                    />;
                 layersInGroup.push(layersInformation);
-
             });
 
+            let isAllSelected: boolean = false;
+
+            let numVisible = (this.props.layersVisibility
+                .filter(layer => layer.layerGroup === group)
+                .filter(layer_visibility => layer_visibility.visibility === true)).length;
+
+            if (layersInGroup.length === numVisible) {
+                isAllSelected = true
+            }
+
+            let selectAllGroup = (
+                <div className={exploreStyles.col} key={group}>
+                    <FormField id="explore-group-layers">
+                    <span className={exploreStyles.checkboxWidth}>
+                        <Checkbox name={group}
+                                  value={group}
+                                  onChange={this.selectGroupLayers}
+                                  checked={isAllSelected}
+                        />
+                    </span>
+                        <label className={exploreStyles.checkboxLabel}>Select All</label>
+                    </FormField>
+                </div>
+            );
+
             layersGroup = (
-                <div key={g}>
+                <div key={group}>
                     <details className={exploreStyles.layersGroup}>
-                        <summary className={exploreStyles.layersGroupTitle}>{g}</summary>
+                        <summary className={exploreStyles.layersGroupTitle}>{group}</summary>
+                        <div>{selectAllGroup}</div>
                         <div>{layersInGroup}</div>
                     </details>
                 </div>
             );
 
-            layersDiv.push(
-                layersGroup
-            )
+            layersDiv.push(layersGroup)
 
         });
 
-        return ( <div>{layersDiv}</div> );
+        this.props.layersVisibility.filter(layer => layer.layerGroup === '').map(availableLayer => {
+            layersInformation =
+                <ExploreLayersDetails
+                    availableLayer={availableLayer}
+                    layersVisibility={this.props.layersVisibility}
+                    selectLayers={this.selectLayers}
+                    handleOpacityChange={this.handleOpacityChange}
+                />;
+            layersDiv.push(layersInformation)
+        });
 
+        let layersDivContents = <div>{layersDiv}</div>;
+
+        return (layersDivContents);
     }
 
 }
