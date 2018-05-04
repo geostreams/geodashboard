@@ -72,6 +72,8 @@ class ChartMultiLine extends Component {
             }
         });
 
+        let {interval_val} = this.props;
+
         return (
             <div>
                 <Dialog open={Boolean(this.state.openInfoButton)}
@@ -103,7 +105,7 @@ class ChartMultiLine extends Component {
                                     xAxisLabelOffset={Number(50)}
                                     viewBoxObject={{x: 0, y: 0, width: 700, height: 400}}
                                     colors={d3.scale.quantize().domain([0, 1, 2]).range(colorsRange)}
-                                    xAxisTickInterval={{unit: 'year', interval: 4}}
+                                    xAxisTickInterval={{unit: 'year', interval: Number(interval_val)}}
                                 />
                             </CardMedia>
                             <CardText>

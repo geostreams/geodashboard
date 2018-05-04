@@ -70,12 +70,26 @@ export const gd3 = {
     detail_page_combined: 'Select a maximum of three Parameters to view',
     detail_page_box_and_whisker: 'Box and Whisker Plots provide a visual look at the data distribution. ' +
         'Lowest values are on the left, and the Highest values are on the right',
+    detail_page_raw_processed: [
+        {listText: 'Level 0: No Processing - Raw Data'},
+        {listText: 'Level 1: Minimal Processing'},
+        {listText: 'Level 2: Increased Processing'},
+        {listText: 'Level 3: Fully Processed - No Raw Data'}
+    ],
 
-    // For Mobile Explore Page
+    // Detail Graphs - Display RAW vs PROCESSED for Day Average
+    show_raw_processed: false,
+    // Property Name that contains the PROCESSED property name
+    raw_processed_property: '',
+
+    // Layers for the Explore Page
+    exploreLayers: [],
+
+    // For Mobile Explore and Detail Pages
     mobile_sourcename: "all",
     mobile_size_max: 840,
-
-    // This variable is for the Mobile Detail Page
+    chrome_detail_mobile_disabled: true,
+    filter_unavailable_sensors: true,
     mobile_detail_path: '/#detail/location/',
     mobile_explore_path: '/#explore/all/',
 
@@ -905,7 +919,7 @@ export const gd3 = {
         }
     ],
 
-    // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages
+    // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages ****
     parameter_subtitle: '',
     season_subtitle: '',
     region_subtitle: '',
@@ -914,7 +928,7 @@ export const gd3 = {
     threshold_none_subtitle: '',
     // **********
 
-    // These variables are for the Trends and Analysis Pages
+    // These variables are for the Trends and Analysis Pages ****
     // Colors for all Trends
     trend_colors: {
         "trendUp": "#FAE70B",
@@ -1292,8 +1306,6 @@ export const gd3 = {
     trends_analysis_water_year: false,
     trends_analysis_semi_value: 'all',
     // **********
-
-    exploreLayers: [],
 
     // These variables are for Map settings
     mapTileURL: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',

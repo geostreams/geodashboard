@@ -23,7 +23,7 @@ class ChartMobile extends Component {
         if(this.props.sensorData[this.props.param]) {
             chartTitle = getParameterName(this.props.param);
             unitIndex = chartTitle.lastIndexOf("(");
-            if (unitIndex == -1) {
+            if (unitIndex === -1) {
                 units = 'Amount';
             } else {
                 units = chartTitle.substr(unitIndex);
@@ -39,7 +39,7 @@ class ChartMobile extends Component {
 
         let subtitleText = '';
 
-        if(values.length == 0 ){
+        if(values.length === 0 ){
             values.push({x: 0, y: 0});
             subtitleText = (
                 <div className={styles.noData}>No Data to Display for {getParameterName(this.props.param)}</div>

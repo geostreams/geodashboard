@@ -44,6 +44,14 @@ class DataGraphMultiLine extends Component {
 
         if (sensor) {
 
+            let start_year = new Date(sensor.min_start_time).getFullYear();
+            let end_year = new Date(sensor.max_end_time).getFullYear();
+            let num_years = end_year - start_year;
+            let interval_val = 5;
+            if (num_years <= 5) {
+                interval_val = 1;
+            }
+
             sensor.parameters.map(p => {
                 if (getParameterName(p, getAlternateParameters()) != null) {
                     let paramChecked = this.state.paramListSelect.includes(p);
@@ -71,6 +79,7 @@ class DataGraphMultiLine extends Component {
                 charts.push(
                     <Row key='multi-line-chart'>
                         <ChartMultiLine
+                            interval_val={interval_val}
                             id={this.props.sensorName}
                             params={this.state.paramListSelect}
                             num_params={this.state.paramListSelect.length}

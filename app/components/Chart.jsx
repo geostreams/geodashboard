@@ -31,13 +31,14 @@ class Chart extends Component {
         ];
 
         // Get Units for Chart
-        let unitIndex;
-        let units = "Value";
-        if (this.props.param) {
-            let chartTitle = this.props.param;
-            unitIndex = chartTitle.lastIndexOf(" ");
-            units = chartTitle.substr(unitIndex + 1);
+        let units = 'Value';
+        let chartTitle = getParameterName(this.props.param, getAlternateParameters());
+        let unitIndex = chartTitle.lastIndexOf("(");
+        if (unitIndex > 0) {
+            units = chartTitle.substr(unitIndex);
         }
+
+        let {interval_val} = this.props;
 
         return (
             <Row>
@@ -54,7 +55,7 @@ class Chart extends Component {
                                 yAxisLabel={units}
                                 xAxisLabelOffset={Number(50)}
                                 xAxisLabel="Time"
-                                xAxisTickInterval={{unit: 'year'}}
+                                xAxisTickInterval={{unit: 'year', interval: Number(interval_val)}}
                             />
                         </div>
                         <div>

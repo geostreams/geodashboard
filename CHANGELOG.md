@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1070](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1070)
 - Added the ability to turn Layer Groups on and off
   [GEOD-1076](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1076)
+- Added the ability to display Raw vs Processed data in the Detail Page Graphs
+  [GEOD-1063](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1063)
 
 ### Changed
 

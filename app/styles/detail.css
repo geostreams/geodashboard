@@ -2,6 +2,14 @@
     margin-top: 2em;
 }
 
+.parameters_chart_title {
+    margin-top: 2em;
+}
+
+.parameters_chart_positioning {
+    margin-left: 0.5em;
+}
+
 .noData {
     font-size: 200%;
     padding: 1em 2em;
@@ -46,4 +54,8 @@
 
 .float_item_right {
     float: right;
+}
+
+.rawProcessedLineChart > div > div > div > ul {
+    list-style-position: outside !important;
 }

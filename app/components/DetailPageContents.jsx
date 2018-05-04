@@ -78,7 +78,12 @@ class DetailPageContents extends Component {
                         {miniMapObject}
                     </Col>
                     <Col md={8}>
-                        {this.props.charts}
+                        <Row key="paramChartTitle" className={styles.parameters_chart_title} >
+                            <h3>Parameter Charts</h3>{this.props.paramChartsInfoText}
+                        </Row>
+                        <Row className={styles.parameters_chart_positioning}>
+                            {this.props.charts}
+                        </Row>
                     </Col>
                 </Row>
             </Grid>

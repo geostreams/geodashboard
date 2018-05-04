@@ -38,7 +38,8 @@ class ExploreMap extends Component {
         theMap.addLayer(newFeaturesLayer);
         theMap.addLayer(multiLineLayer);
 
-        this.setState({expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true})
+        this.setState({
+            expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true})
     };
 
     removeSpiderfiedClusterLayers = (theMap: ol.Map) => {
@@ -86,7 +87,7 @@ class ExploreMap extends Component {
         }
     };
 
-    popupHandleHelper = (feature: ol.Feature, coordinate: number[], overlay: ol.Overlay) =>{
+    popupHandleHelper = (feature: ol.Feature, coordinate: number[], overlay: ol.Overlay) => {
         const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
 
@@ -99,7 +100,7 @@ class ExploreMap extends Component {
         }
     };
 
-    mapDidUpdate = (theMap: ol.Map, customLocationFilterVectorExtent: Array<number>) => {
+    mapDidUpdate = (theMap: ol.Map) => {
 
         let exploreLayers = [];
         let keep_map_view = false;
@@ -167,7 +168,6 @@ class ExploreMap extends Component {
         }
 
         let features = this.getFeature();
-        let that = this;
 
         let tmpvectorSource = new ol.source.Vector({
             features: features
@@ -177,23 +177,6 @@ class ExploreMap extends Component {
             if (!this.state.expandedCluster && keep_map_view === false){
                 theMap.getView().fit(tmpvectorSource.getExtent(), theMap.getSize());
             }
-        }
-
-        if (this.props.popupSensorname) {
-            let featuresAtPixel = tmpvectorSource.getFeatures().find(function (feature) {
-                return feature.attributes.name === that.props.popupSensorname;
-            });
-            const overlay = theMap.getOverlayById("marker");
-
-            this.popupHandleHelper(featuresAtPixel, this.props.popupCoordinates, overlay);
-
-            //TODO: Need to update the global state. This is causing an infinite loop.
-            // After calling the overlapping markers we need to clear out the this.props.coordinates through the global state
-            // if(that.state.expandedCluster) {
-            //     that.removeSpiderfiedClusterLayers(that.state.map);
-            // }
-            // that.displayOverlappingMarkers(featuresAtPixel, that.state.map, that);
-
         }
 
     };
@@ -259,7 +242,7 @@ class ExploreMap extends Component {
                             scale: scale_value
                         })
                     }));
-                    
+
                 }
 
                 return style;

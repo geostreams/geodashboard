@@ -348,3 +348,25 @@ export function getDetailPageBAWInfoText() {
     }
     return getValue;
 }
+
+export function getRawProcessedInfoText() {
+    let getValue = [];
+    if (window.configruntime.gd3.detail_page_raw_processed) {
+        let listValues = window.configruntime.gd3.detail_page_raw_processed;
+        listValues.map(function(value) {
+            getValue.push({
+                'listText': value.listText,
+            })
+        });
+
+    }
+    return getValue;
+}
+
+export function getShowRawProcessed() {
+    return window.configruntime.gd3.show_raw_processed;
+}
+
+export function getProcessedProperty() {
+    return window.configruntime.gd3.raw_processed_property;
+}
