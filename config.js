@@ -109,13 +109,23 @@ export const gd3 = {
 
     // Source IDs and their Display Names
     sourcename: {
-        "glfmsp": "Great Lakes Fish Monitoring and Surveillance Program",
         "epa": "Water Quality Data",
+        "glfmsp": "Great Lakes Fish Monitoring and Surveillance Program",
         "heidelberg": "Heidelberg University",
+        "iadn": "Integrated Atmospheric Deposition Network",
         "lec": "Lake Erie Committee Forage Task Group",
         "usgs": "United States Geological Survey",
-        "iadn": "Integrated Atmospheric Deposition Network",
         "noaa": "National Oceanic and Atmospheric Administration"
+    },
+
+    source_order: {
+        "EPA": 0,
+        "GLFMSP": 1,
+        "HEIDELBERG": 2,
+        "IADN": 3,
+        "LEC": 4,
+        "USGS": 5,
+        "NOAA": 6
     },
 
     // Colors associated with specific Sources

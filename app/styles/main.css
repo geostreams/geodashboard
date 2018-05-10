@@ -104,18 +104,6 @@ h1, h2, h3, h5, h6, p, ul {
     }
 }
 
-.exploreButton {
-    width: 4em !important;
-    height: 2em !important;
-    font-weight: bold;
-    margin: 0.2em;
-}
-
-.exploreButtonText {
-    color: white;
-    text-shadow: black 0.1em 0.1em 0.1em
-}
-
 .rightMap {
     margin: 0em 0em 0em 0em;
     float: right;

@@ -1,6 +1,6 @@
 export function inArray(array1, array2) {
     if(array1.length > 0 && array2.length > 0) {
-        for(var i = 0; i < array1.length; i++) {
+        for(let i = 0; i < array1.length; i++) {
             if(array2.indexOf(array1[i]) > -1) {
                 return true;
             }
@@ -21,8 +21,8 @@ export function intersectArrays(array1, array2) {
 
 export function sortByLabel(list) {
     list.sort(function(a, b) {
-        var labelA = a.label.toUpperCase();
-        var labelB = b.label.toUpperCase();
+        const labelA = a.label.toUpperCase();
+        const labelB = b.label.toUpperCase();
         if (labelA < labelB) {
             return -1;
         }
@@ -34,50 +34,61 @@ export function sortByLabel(list) {
     return list;
 }
 
-export function sortByLake(list) {
-    var order = {
-        "LAKE SUPERIOR": 0,
-        "LAKE HURON": 1,
-        "LAKE MICHIGAN": 2,
-        "LAKE ERIE": 3,
-        "LAKE ERIE WESTERN BASIN": 4,
-        "LAKE ERIE CENTRAL BASIN": 5,
-        "LAKE ERIE EASTERN BASIN": 6,
-        "LAKE ONTARIO": 7
-    };
-
-    list.sort(function(a, b) {
-        var idxA = order[a.label.toUpperCase()];
-        var idxB = order[b.label.toUpperCase()];
-        if (idxA < idxB) {
+function sortWithOrder(order, key, list) {
+    list.sort(function(a, b){
+        const idxA = key === null ? order[a.toUpperCase()] : order[a[key].toUpperCase()];
+        const idxB = key === null ? order[b.toUpperCase()] : order[b[key].toUpperCase()];
+        if(idxA < idxB) {
             return -1;
         }
-        if (idxA > idxB) {
-            return 1
+        if(idxA > idxB) {
+            return 1;
         }
-        return 0;
+        return 0
     });
+    return list
+}
+
+export function sortBySource(list, order) {
+    if(Object.keys(order).length > 0) {
+        list = sortWithOrder(order, "id", list);
+    } else {
+        list = sortByLabel(list);
+    }
+    return list;
+}
+
+export function sortByRegion(list, order) {
+    if(Object.keys(order).length > 0) {
+        list = sortWithOrder(order, null, list);
+    } else {
+        list.sort();
+    }
     return list;
 
+}
+
+export function sortByLake(list, order) {
+    return sortWithOrder(order, "label", list);
 }
 
 // Point in Polygon. same function from geodashboard
 // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html#Listing the Vertices
 
 export function pnpoly (x,y,coords) {
-    var vert = [ [0,0] ]
+    let vert = [ [0,0] ];
 
-    for (var i = 0; i < coords.length; i++) {
-        for (var j = 0; j < coords[i].length; j++) {
+    for (let i = 0; i < coords.length; i++) {
+        for (let j = 0; j < coords[i].length; j++) {
             vert.push(coords[i][j])
         }
-        vert.push(coords[i][0])
+        vert.push(coords[i][0]);
         vert.push([0,0])
     }
 
-    var inside = false
-    for (var i = 0, j = vert.length - 1; i < vert.length; j = i++) {
-        if (((vert[i][0] > y) != (vert[j][0] > y)) && (x < (vert[j][1] - vert[i][1]) * (y - vert[i][0]) / (vert[j][0] - vert[i][0]) + vert[i][1])) inside = !inside
+    let inside = false;
+    for (let i = 0, j = vert.length - 1; i < vert.length; j = i++) {
+        if (((vert[i][0] > y) !== (vert[j][0] > y)) && (x < (vert[j][1] - vert[i][1]) * (y - vert[i][0]) / (vert[j][0] - vert[i][0]) + vert[i][1])) inside = !inside
     }
 
     return inside

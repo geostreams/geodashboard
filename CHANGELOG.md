@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1063](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1063)
 
 ### Changed
+- Organize the data sources and classify the pills by region on the left navigation of the explore page.
+  [GEOD-1086](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1086)
 
 ### Fixed
 

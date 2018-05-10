@@ -80,6 +80,7 @@ export type sensorsState= {
         available_sensors:Sensors,
         locations:MapWithLabels,
         sources:MapWithLabels,
+        regions: Array<string>,
         parameters:MapWithLabels,
         data:Sensors,
         draw_available_sensors:Sensors,

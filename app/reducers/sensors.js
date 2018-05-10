@@ -3,8 +3,9 @@
  */
 import { RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS} from '../actions';
 import type { Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels } from '../utils/flowtype';
-import {inArray, sortByLabel, pnpoly, intersectArrays, sortByLake} from '../utils/arrayUtils';
-import {getSourceName, getParameterName, getAlternateParameters, getAlternateParameterName, getParameterNameNoAlternate} from '../utils/getConfig';
+import {inArray, sortByLabel, pnpoly, intersectArrays, sortByLake, sortByRegion, sortBySource} from '../utils/arrayUtils';
+import {getSourceName, getAlternateParameters, getAlternateParameterName, getParameterNameNoAlternate,
+getSourceOrder, getLakesOrdering} from '../utils/getConfig';
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS',
     sensors:Sensors,
@@ -18,6 +19,7 @@ const defaultState = {
     data:[],
     parameters: [],
     sources: [],
+    regions: [],
     locations:[],
     available_sensors:[],
     draw_available_sensors:[],
@@ -36,6 +38,7 @@ const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
 		        api: action.api,
 		        parameters: collectParameters(action.sensors),
 		        sources: collectSources(action.sensors),
+                regions: collectRegions(action.sensors),
                 locations: collectLocations(action.sensors),
                 available_sensors: action.sensors,
                 shape_coordinates: []
@@ -131,6 +134,22 @@ export function collectParameters(sensorsData:Sensors):MapWithLabels {
     // sort
     return sortByLabel(params);
   }
+export function collectRegions(sensorsData: Sensors) {
+    let regions = [];
+    sensorsData.map(s => {
+        let region = s.properties.region;
+        // Check if region exists already
+        const found = regions.filter(x => x === region);
+        if(region === null) {
+            console.log(`Found sensor ${s.id} with null region`)
+        } else if (found.length === 0) {
+            regions.push(region);
+        }
+
+    });
+    const order = getLakesOrdering("region");
+    return sortByRegion(regions, order);
+}
 
 export function collectSources(sensorsData:Sensors):MapWithLabels {
     let sources:MapWithLabels = [];
@@ -146,7 +165,8 @@ export function collectSources(sensorsData:Sensors):MapWithLabels {
       	sources.push({'id':source.id, 'label': getSourceName(source) || ''});
     });
     // sort
-    return sortByLabel(sources);
+    const source_order = getSourceOrder();
+    return sortBySource(sources, source_order);
   }
 
 type CollectDate = {'start': Date, 'end': Date};
@@ -197,7 +217,8 @@ export function collectLocations(sensorsData:Sensors):MapWithLabels {
     });
 
     // sort
-    return sortByLake(locations);
+    const order = getLakesOrdering("title");
+    return sortByLake(locations, order);
 }
 
 function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string>, selectedSearch:Object) {

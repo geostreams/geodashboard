@@ -10,8 +10,8 @@ import type { Dispatch } from '../utils/flowtype';
 
 const mapStateToProps = (state) => {
     return {
-        locations: state.sensors.data,
         data: state.sensors.data,
+        regions: state.sensors.regions
     }
 };
 

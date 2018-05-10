@@ -9,6 +9,10 @@ export function getSourceName(source:PropertiesType):string {
     return sourceName[source.id] !== undefined ? sourceName[source.id] : source.title;
 }
 
+export function getSourceOrder() {
+    return window.configruntime.gd3.source_order;
+}
+
 export function getMobileSourceNames() {
     return window.configruntime.gd3.mobile_sourcename;
 }
@@ -32,6 +36,27 @@ export function getCustomLocation(location:string):Object {
         function (custom_location) {
             return custom_location.properties.id === location;
         });
+}
+
+export function getLakesOrdering(key){
+    const additional_locations = window.configruntime.gd3.additional_locations;
+    let order = {};
+    additional_locations.map(location => {
+        order[location.properties[key].toUpperCase()] = location.properties.sortOrder;
+    });
+
+    return order;
+}
+
+export function getRegionToTitleMap(){
+    const additional_locations = window.configruntime.gd3.additional_locations;
+    let map = {};
+    additional_locations.map(location => {
+        if(Object.keys(map).indexOf(location.properties.region.toUpperCase()) < 0)
+            map[location.properties.region.toUpperCase()] = location.properties.title;
+    });
+
+    return map;
 }
 
 export function getLocationName(location:string):string {
