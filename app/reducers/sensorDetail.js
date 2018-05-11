@@ -11,17 +11,20 @@ const sensorDetail = (state:backendsState = defaultState, action) => {
             return Object.assign({}, state, {
                 id: action.id,
                 name: action.name,
-                coordinates: action.coordinates
+                coordinates: action.coordinates,
+                showExplorePopup: true
             });
         case RECEIVE_SENSOR:
             return Object.assign({}, state, {
-                datapoints: collectdata(action.sensor_data)
+                datapoints: collectdata(action.sensor_data),
+                showExplorePopup: false
             });
         case UPDATE_DETAIL:
             return Object.assign({}, state, {
                 id: action.id,
                 name: action.name,
-                coordinates: action.coordinates
+                coordinates: action.coordinates,
+                showExplorePopup: false
             });
         default:
             return state

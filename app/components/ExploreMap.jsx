@@ -168,6 +168,7 @@ class ExploreMap extends Component {
         }
 
         let features = this.getFeature();
+        let that = this;
 
         let tmpvectorSource = new ol.source.Vector({
             features: features
@@ -178,6 +179,24 @@ class ExploreMap extends Component {
                 theMap.getView().fit(tmpvectorSource.getExtent(), theMap.getSize());
             }
         }
+
+        if (that.props.showPopup) {
+            let featuresAtPixel = tmpvectorSource.getFeatures().find(function (feature) {
+                return feature.attributes.name === that.props.popupSensorname;
+            });
+            const overlay = theMap.getOverlayById("marker");
+
+            that.popupHandleHelper(featuresAtPixel, that.props.popupCoordinates, overlay);
+
+            //TODO: Need to update the global state. This is causing an infinite loop.
+            // After calling the overlapping markers we need to clear out the this.props.coordinates through the global state
+            // if(that.state.expandedCluster) {
+            //     that.removeSpiderfiedClusterLayers(that.state.map);
+            // }
+            // that.displayOverlappingMarkers(featuresAtPixel, that.state.map, that);
+
+        }
+
 
     };
 

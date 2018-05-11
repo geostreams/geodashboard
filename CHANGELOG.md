@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1086](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1086)
 
 ### Fixed
+- When clicking on a pill in explore left navigation, open the popup on the map
+  [GEOD-1088](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1088)
 
 ## [3.0.0-alpha.2] - 2018-04-12
 
