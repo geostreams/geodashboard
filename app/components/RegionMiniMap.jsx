@@ -339,10 +339,10 @@ class RegionMiniMap extends Component {
 }
 
 RegionMiniMap.propTypes = {
-    trends_region: React.PropTypes.string.isRequired,
-    trends_region_title: React.PropTypes.string.isRequired,
-    trendSensors: React.PropTypes.array.isRequired,
-    selectedParameter: React.PropTypes.string.isRequired
+    trends_region: PropTypes.string.isRequired,
+    trends_region_title: PropTypes.string.isRequired,
+    trendSensors: PropTypes.array.isRequired,
+    selectedParameter: PropTypes.string.isRequired
 };
 
 export default RegionMiniMap;

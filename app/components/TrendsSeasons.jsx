@@ -74,9 +74,9 @@ class TrendsSeasons extends Component {
 }
 
 TrendsSeasons.propTypes = {
-    trends_view_type: React.PropTypes.string.isRequired,
-    trends_defaults: React.PropTypes.array.isRequired,
-    trends_seasons: React.PropTypes.array.isRequired
+    trends_view_type: PropTypes.string.isRequired,
+    trends_defaults: PropTypes.array.isRequired,
+    trends_seasons: PropTypes.array.isRequired
 };
 
 export default TrendsSeasons;

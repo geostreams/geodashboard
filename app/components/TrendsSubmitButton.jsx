@@ -82,14 +82,14 @@ class TrendsSubmitButton extends Component {
 }
 
 TrendsSubmitButton.propTypes = {
-    chosenParameter: React.PropTypes.string.isRequired,
-    chosenRegion: React.PropTypes.string.isRequired,
-    baselinePeriod: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    rollingPeriod: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    thresholdChooseValue: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    trends_season: React.PropTypes.string.isRequired,
-    trends_view_type: React.PropTypes.string.isRequired,
-    trends_defaults: React.PropTypes.array.isRequired
+    chosenParameter: PropTypes.string.isRequired,
+    chosenRegion: PropTypes.string.isRequired,
+    baselinePeriod: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    rollingPeriod: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    thresholdChooseValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    trends_season: PropTypes.string.isRequired,
+    trends_view_type: PropTypes.string.isRequired,
+    trends_defaults: PropTypes.array.isRequired
 };
 
 export default TrendsSubmitButton;

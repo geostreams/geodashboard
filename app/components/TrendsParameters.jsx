@@ -73,11 +73,11 @@ class TrendsParameters extends Component {
 }
 
 TrendsParameters.propTypes = {
-    chosenParameter: React.PropTypes.string.isRequired,
-    className: React.PropTypes.string.isRequired,
-    trends_settings: React.PropTypes.array.isRequired,
-    trends_threshold_choice: React.PropTypes.bool.isRequired,
-    trends_view_type: React.PropTypes.string.isRequired
+    chosenParameter: PropTypes.string.isRequired,
+    className: PropTypes.string.isRequired,
+    trends_settings: PropTypes.array.isRequired,
+    trends_threshold_choice: PropTypes.bool.isRequired,
+    trends_view_type: PropTypes.string.isRequired
 };
 
 export default TrendsParameters;

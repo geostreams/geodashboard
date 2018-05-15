@@ -22,6 +22,20 @@ import {
 } from "../utils/getConfig";
 import styles from '../styles/main.css';
 
+const routes = (
+    <Route component={App}>
+        <Route path="/" component={Home}/>
+        <Route path="/explore/:stations" component={Explore}/>
+        <Route path="/detail/location/:name/:chart_type" component={Detail}/>
+        <Route path="/search" component={Search}/>
+        <Route path="/trendsstations" component={TrendsStation}/>
+        <Route path="/trendsregions" component={TrendsRegion}/>
+        <Route path="/trendsdetail/region/:region/:parameter/:season" component={TrendsDetail}/>
+        <Route path="/analysis" component={Analysis}/>
+        <Route path="/about" component={About}/>
+        <Route path="*" component={RouteMismatch}/>
+    </Route>
+);
 
 class App extends Component {
 
@@ -98,16 +112,7 @@ class App extends Component {
         return (
             <div>
                 <Router history={hashHistory}>
-                    <Route path="/" component={Home}/>
-                    <Route path="/explore/:stations" component={Explore}/>
-                    <Route path="/detail/location/:name/:chart_type" component={Detail}/>
-                    <Route path="/search" component={Search}/>
-                    <Route path="/trendsstations" component={TrendsStation}/>
-                    <Route path="/trendsregions" component={TrendsRegion}/>
-                    <Route path="/trendsdetail/region/:region/:parameter/:season" component={TrendsDetail}/>
-                    <Route path="/analysis" component={Analysis}/>
-                    <Route path="/about" component={About}/>
-                    <Route path="*" component={RouteMismatch}/>
+                    {routes}
                 </Router>
                 {popup_alert_content}
             </div>

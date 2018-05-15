@@ -66,10 +66,10 @@ class TrendsRegionDetails extends Component {
 }
 
 TrendsRegionDetails.propTypes = {
-    selectedParameter: React.PropTypes.string.isRequired,
-    trends_region_name: React.PropTypes.string.isRequired,
-    regionsStations: React.PropTypes.array.isRequired,
-    selectedSeason: React.PropTypes.string.isRequired
+    selectedParameter: PropTypes.string.isRequired,
+    trends_region_name: PropTypes.string.isRequired,
+    regionsStations: PropTypes.array.isRequired,
+    selectedSeason: PropTypes.string.isRequired
 };
 
 export default TrendsRegionDetails;

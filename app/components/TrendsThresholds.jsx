@@ -167,10 +167,10 @@ class TrendsThresholds extends Component {
 }
 
 TrendsThresholds.propTypes = {
-    chosenParameter: React.PropTypes.string.isRequired,
-    trends_thresholds: React.PropTypes.array.isRequired,
-    trends_threshold_choice: React.PropTypes.bool.isRequired,
-    trends_defaults: React.PropTypes.array.isRequired
+    chosenParameter: PropTypes.string.isRequired,
+    trends_thresholds: PropTypes.array.isRequired,
+    trends_threshold_choice: PropTypes.bool.isRequired,
+    trends_defaults: PropTypes.array.isRequired
 };
 
 export default TrendsThresholds;

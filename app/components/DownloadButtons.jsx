@@ -178,15 +178,15 @@ class DownloadButtons extends Component {
 }
 
 DownloadButtons.propTypes = {
-    api: React.PropTypes.string.isRequired,
-    selectedStartDate: React.PropTypes.instanceOf(Date),
-    selectedEndDate: React.PropTypes.instanceOf(Date),
-    selectedParameters: React.PropTypes.array,
-    selectedFilters: React.PropTypes.array,
-    availableSensors: React.PropTypes.array,
-    selectedLocation: React.PropTypes.string,
-    drawShapeCoordinates: React.PropTypes.array,
-    selectedDataSources: React.PropTypes.array
+    api: PropTypes.string.isRequired,
+    selectedStartDate: PropTypes.instanceOf(Date),
+    selectedEndDate: PropTypes.instanceOf(Date),
+    selectedParameters: PropTypes.array,
+    selectedFilters: PropTypes.array,
+    availableSensors: PropTypes.array,
+    selectedLocation: PropTypes.string,
+    drawShapeCoordinates: PropTypes.array,
+    selectedDataSources: PropTypes.array
 };
 
 export default DownloadButtons;

@@ -76,9 +76,9 @@ class TrendsRegions extends Component {
 }
 
 TrendsRegions.propTypes = {
-    trends_view_type: React.PropTypes.string.isRequired,
-    trends_regions: React.PropTypes.array.isRequired,
-    chosenRegion: React.PropTypes.string.isRequired
+    trends_view_type: PropTypes.string.isRequired,
+    trends_regions: PropTypes.array.isRequired,
+    chosenRegion: PropTypes.string.isRequired
 };
 
 export default TrendsRegions;

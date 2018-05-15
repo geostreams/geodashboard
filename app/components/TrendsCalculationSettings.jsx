@@ -116,7 +116,7 @@ class TrendsCalculationSettings extends Component {
 }
 
 TrendsCalculationSettings.propTypes = {
-    trends_defaults: React.PropTypes.array.isRequired
+    trends_defaults: PropTypes.array.isRequired
 };
 
 export default TrendsCalculationSettings;
