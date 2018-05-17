@@ -1,20 +1,38 @@
 import React, { Component } from 'react';
 import rd3 from 'react-d3';
 import { Row, Col } from 'react-flexbox-grid';
-import {Card, CardHeader, CardTitle} from 'react-mdc-web';
 import {
-    getParameterName, getAlternateParameters, getProcessedProperty
+    Card, CardHeader, CardTitle, CardText, CardMedia,
+    Dialog, DialogBody, DialogHeader, DialogTitle, Icon
+} from 'react-mdc-web';
+import {
+    getParameterName, getAlternateParameters, getProcessedProperty, getDetailPageBAWInfoText
 } from '../utils/getConfig';
-let LineChart = rd3.LineChart;
 import styles from "../styles/detail.css";
+import BoxAndWhisker from '../components/BoxAndWhisker';
+let LineChart = rd3.LineChart;
 
 
 class ChartRawProcessed extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            openInfoButton: false
+        };
+        (this:any).handleInfoIcon = this.handleInfoIcon.bind(this);
     }
 
+    handleInfoIcon (button_status: boolean) {
+        this.setState({
+            openInfoButton: button_status
+        });
+    };
+
     render() {
+
+        let param_name = '';
+        let BAWValues = [];
+        let boxAndWhiskers = [];
 
         // Initialize for all 4 possible levels of processing
         let valuesLevel0 = [];
@@ -47,7 +65,14 @@ class ChartRawProcessed extends Component {
                 if (d[processedProperty] === 3) {
                     valuesLevel3.push({x: datepoint_date, y: d.average})
                 }
+                BAWValues.push(d.average);
             });
+            boxAndWhiskers.push(
+                <BoxAndWhisker key={param_name}
+                               paramName={param_name}
+                               paramValues={BAWValues}
+                               paramColor={'#000000'}/>
+            );
         }
 
         // Give default values if empty
@@ -70,7 +95,7 @@ class ChartRawProcessed extends Component {
             if (index >=0) {
                 colorsRange.splice(index, 1);
             }
-        }else {
+        } else {
             lineData.push(
                 {
                     name: "Level 1",
@@ -84,7 +109,7 @@ class ChartRawProcessed extends Component {
             if (index >=0) {
                 colorsRange.splice(index, 1);
             }
-        }else {
+        } else {
             lineData.push(
                 {
                     name: "Level 2",
@@ -98,7 +123,7 @@ class ChartRawProcessed extends Component {
             if (index >=0) {
                 colorsRange.splice(index, 1);
             }
-        }else {
+        } else {
             lineData.push(
                 {
                     name: "Level 3",
@@ -125,28 +150,59 @@ class ChartRawProcessed extends Component {
 
         let {interval_val} = this.props;
 
-        let chartData = (
+        return (
             <Row>
                 <Col md={8}>
-                    <span className={styles.rawProcessedLineChart}>
-                    <LineChart
-                        legend={true}
-                        data={lineData}
-                        width={700} height={400}
-                        margins={{top: 10, right: 150, bottom: 50, left: 100}}
-                        viewBoxObject={{x: 0, y: 0, width: 700, height: 400}}
-                        title={chartTitle}
-                        yAxisLabel={units} yAxisLabelOffset={Number(50)}
-                        xAxisLabel="Time" xAxisLabelOffset={Number(50)}
-                        xAxisTickInterval={{unit: 'year', interval: Number(interval_val)}}
-                        colors={d3.scale.quantize().domain([0, 1, 3]).range(colorsRange)}
-                    />
-                    </span>
+                    <Dialog open={Boolean(this.state.openInfoButton)}
+                            onClose={()=>{this.setState({openInfoButton:false})}}>
+                        <DialogHeader >
+                            <DialogTitle>Box and Whisker Plots</DialogTitle>
+                            <a className={styles.close_button_style}
+                               onClick={()=>{this.setState({openInfoButton: false})}}>
+                                <Icon name="close"/>
+                            </a>
+                        </DialogHeader>
+                        <DialogBody scrollable>
+                            {getDetailPageBAWInfoText()}
+                        </DialogBody>
+                    </Dialog>
+                    <div className={styles.layout_style}>
+                        <div className={styles.float_item_left}>
+                            <span className={styles.rawProcessedLineChart}>
+                                <LineChart
+                                    legend={true}
+                                    data={lineData}
+                                    width={700} height={400}
+                                    margins={{top: 10, right: 150, bottom: 50, left: 100}}
+                                    viewBoxObject={{x: 0, y: 0, width: 700, height: 400}}
+                                    title={chartTitle}
+                                    yAxisLabel={units} yAxisLabelOffset={Number(50)}
+                                    xAxisLabel="Time" xAxisLabelOffset={Number(50)}
+                                    xAxisTickInterval={{unit: 'year', interval: Number(interval_val)}}
+                                    colors={d3.scale.quantize().domain([0, 1, 3]).range(colorsRange)}
+                                />
+                            </span>
+                        </div>
+                        <div className={styles.float_item_left}>
+                            <Card className={styles.card_margins}>
+                                <CardHeader>
+                                    <CardTitle>
+                                        <span className={styles.card_title_style}>Box and Whisker</span>
+                                        <a className={styles.open_button_style_baw}
+                                           onClick={this.handleInfoIcon}>
+                                            <Icon name="info"/>
+                                        </a>
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardText>
+                                    {boxAndWhiskers}
+                                </CardText>
+                            </Card>
+                        </div>
+                    </div>
                 </Col>
             </Row>
         );
-
-        return (chartData)
     }
 }
 

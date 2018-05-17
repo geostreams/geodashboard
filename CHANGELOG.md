@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1076](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1076)
 - Added the ability to display Raw vs Processed data in the Detail Page Graphs
   [GEOD-1063](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1063)
+- Added Box and Whisker Plots to the separate graphs Detail Pages
+  [GEOD-1093](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1093)
 
 ### Changed
 - Organize the data sources and classify the pills by region on the left navigation of the explore page.

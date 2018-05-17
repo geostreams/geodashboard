@@ -1,25 +1,54 @@
 import React, { Component } from 'react';
 import rd3 from 'react-d3';
 import { Row, Col } from 'react-flexbox-grid';
-import {Card, CardHeader, CardTitle} from 'react-mdc-web';
-import {getParameterName, getAlternateParameters} from '../utils/getConfig';
+import {
+    Card, CardHeader, CardTitle, CardText, CardMedia,
+    Dialog, DialogBody, DialogHeader, DialogTitle, Icon
+} from 'react-mdc-web';
+import {
+    getParameterName, getAlternateParameters, getDetailPageBAWInfoText
+} from '../utils/getConfig';
 import styles from "../styles/detail.css";
+import BoxAndWhisker from '../components/BoxAndWhisker';
 let LineChart = rd3.LineChart;
+
 
 class Chart extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            openInfoButton: false
+        };
+        (this:any).handleInfoIcon = this.handleInfoIcon.bind(this);
     }
 
+    handleInfoIcon (button_status: boolean) {
+        this.setState({
+            openInfoButton: button_status
+        });
+    };
+
     render() {
+
+        let param_name = '';
+        let BAWValues = [];
+        let boxAndWhiskers = [];
 
         let values = [];
         // Getting the datapoints for parameter: this.props.param
         if(this.props.sensorData[this.props.param]) {
+            param_name = getParameterName(this.props.param, getAlternateParameters());
             this.props.sensorData[this.props.param].filter(p => p.label.includes("spring"))
                 .map(function(d) {
                     values.push({x: new Date(d.label.substring(0, 4)), y: d.average});
+                    BAWValues.push(d.average);
                 });
+            boxAndWhiskers.push(
+                <BoxAndWhisker key={param_name}
+                               paramName={param_name}
+                               paramValues={BAWValues}
+                               paramColor={'#000000'}/>
+            );
         }
         if(values.length === 0 ){
             values.push({x: 0, y: 0})
@@ -43,6 +72,19 @@ class Chart extends Component {
         return (
             <Row>
                 <Col md={8}>
+                    <Dialog open={Boolean(this.state.openInfoButton)}
+                            onClose={()=>{this.setState({openInfoButton:false})}}>
+                        <DialogHeader >
+                            <DialogTitle>Box and Whisker Plots</DialogTitle>
+                            <a className={styles.close_button_style}
+                               onClick={()=>{this.setState({openInfoButton: false})}}>
+                                <Icon name="close"/>
+                            </a>
+                        </DialogHeader>
+                        <DialogBody scrollable>
+                            {getDetailPageBAWInfoText()}
+                        </DialogBody>
+                    </Dialog>
                     <div className={styles.layout_style}>
                         <div className={styles.float_item_left}>
                             <LineChart
@@ -58,11 +100,20 @@ class Chart extends Component {
                                 xAxisTickInterval={{unit: 'year', interval: Number(interval_val)}}
                             />
                         </div>
-                        <div>
-                            <Card>
+                        <div className={styles.float_item_left}>
+                            <Card className={styles.card_margins}>
                                 <CardHeader>
-                                    <CardTitle> Box and Whisker holder</CardTitle>
+                                    <CardTitle>
+                                        <span className={styles.card_title_style}>Box and Whisker</span>
+                                        <a className={styles.open_button_style_baw}
+                                           onClick={this.handleInfoIcon}>
+                                            <Icon name="info"/>
+                                        </a>
+                                    </CardTitle>
                                 </CardHeader>
+                                <CardText>
+                                    {boxAndWhiskers}
+                                </CardText>
                             </Card>
                         </div>
                     </div>
