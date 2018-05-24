@@ -20,6 +20,21 @@
     margin-left: 1em;
 }
 
+@media screen and (max-device-width: 840px) {
+    .parameters_list {
+        margin-left: -5em;
+    }
+
+    .open_button_style {
+        margin-left: 0.5em;
+        font-size: xx-large;
+    }
+
+    .close_button_style {
+        font-size: xx-large;
+    }
+}
+
 .open_button_style_baw {
     cursor: pointer;
     margin-left: 1em;
@@ -58,4 +73,18 @@
 
 .rawProcessedLineChart > div > div > div > ul {
     list-style-position: outside !important;
+}
+
+.checkboxStyle {
+    width: 4em;
+    height: 4em;
+    margin-left: 4em;
+}
+
+.parametersLabel {
+    padding: 0.5em 0;
+}
+
+.positionChart{
+    margin-left: 2em;
 }

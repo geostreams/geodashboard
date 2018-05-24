@@ -39,9 +39,18 @@ class DetailPageContents extends Component {
             }
         }
 
+        let info_icon = <Icon className={styles.open_button_style} name="info"/>;
+
         if (screen.width <= getMobileSizeMax()) {
+            let sensor_name = '';
+            info_icon = <Icon className={styles.open_button_style} name="info_outline"/>;
+            if (sensor) {
+                sensor_name = sensor.properties.popupContent;
+            }
             headerValue = (
-                <h1><Link href={getMobileExplorePath()}>Explore</Link><span> > {this.props.sensorName}</span></h1>
+                <h1><Link
+                    href={getMobileExplorePath()}>Explore Mobile</Link><span> > {sensor_name}</span>
+                </h1>
             );
         }
 
@@ -51,9 +60,8 @@ class DetailPageContents extends Component {
                         onClose={()=>{this.setState({openAboutButton:false})}}>
                     <DialogHeader >
                         <DialogTitle>Selecting Chart Parameters</DialogTitle>
-                        <a className={styles.close_button_style}
-                           onClick={()=>{this.setState({openAboutButton: false})}}>
-                            <Icon name="close"/>
+                        <a onClick={()=>{this.setState({openAboutButton: false})}}>
+                            <Icon className={styles.close_button_style} name="close"/>
                         </a>
                     </DialogHeader>
                     <DialogBody scrollable>
@@ -63,14 +71,11 @@ class DetailPageContents extends Component {
                 <Row key="header">{headerValue}</Row>
                 <Row key="pageContents" around="xs">
                     <Col md={3}>
-                        <Row key="paramTitle" className={styles.parameters_list} >
+                        <Row key="paramTitle" className={styles.parameters_list}>
                             <h3>Selected Parameters</h3>
-                            <a className={styles.open_button_style}
-                               onClick={this.handleInfoIcon}>
-                                <Icon name="info"/>
-                            </a>
+                            <a onClick={this.handleInfoIcon}>{info_icon}</a>
                         </Row>
-                        <Row key="paramList" className={styles.parameters_list} >
+                        <Row key="paramList" className={styles.parameters_list}>
                             <div>
                                 {this.props.paralist}
                             </div>
@@ -87,7 +92,6 @@ class DetailPageContents extends Component {
                     </Col>
                 </Row>
             </Grid>
-
         );
     }
 }

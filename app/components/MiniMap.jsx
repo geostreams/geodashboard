@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ol from 'openlayers';
 require("openlayers/css/ol.css");
-import {getMapTileURLSetting} from '../utils/getConfig';
+import {getColor, getMapTileURLSetting} from '../utils/getConfig';
 import {getAttribution, getMiniControls} from '../utils/mapUtils';
 
 class MiniMap extends Component {
@@ -13,12 +13,12 @@ class MiniMap extends Component {
     render() {
         return (
             <div>
-            <div id='map' className="map" style={{"height":"200px", "width":"100%"}}> </div>
-            <div style={{display: "none"}}>
-                <a className="overlay" id="vienna" target="_blank" href="http://en.wikipedia.org/wiki/Vienna">Vienna</a>
-                <div id="marker" title="Marker" className="marker"> </div>
-            </div>
-        </div>);
+                <div id='map' className="map" style={{"height":"200px", "width":"100%"}}> </div>
+                <div style={{display: "none"}}>
+                    <a className="overlay" id="vienna" target="_blank" href="http://en.wikipedia.org/wiki/Vienna">Vienna</a>
+                    <div id="marker" title="Marker" className="marker"> </div>
+                </div>
+            </div>);
     }
 
     getColor(source:string):string {
@@ -32,11 +32,21 @@ class MiniMap extends Component {
             geometry: new ol.geom.Point(this.props.center).transform('EPSG:4326', 'EPSG:3857')
         });
 
+        let featureColor = getColor(this.props.sensor.properties.type.id);
+        let iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
+            + '<g class="marker-g">'
+            + '<path d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke="black" stroke-width="1" fill="white" />'
+            + '	<ellipse cx="7.5" cy="8.5" rx="4.5" ry="5.5" class="map-pin-color" style="fill:' +
+            featureColor + '"/>'
+            + '<path class="mouseCapture" d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke-width="1" opacity="0"/>'
+            + '</g>'
+            + '</svg>';
+
         feature.setStyle(new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: 5,
-                fill: new ol.style.Fill({color:'#467A9E' }),
-                stroke: new ol.style.Stroke({color: '#467A9E', width: 1})
+            image: new ol.style.Icon({
+                anchor: [0.5, 1],
+                src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( iconSvg ),
+                scale: 1.0
             })
         }));
 

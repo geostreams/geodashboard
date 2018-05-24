@@ -213,7 +213,7 @@ export function sensorsToFeaturesTrendPage(
                 sensor_parameters = sensor.parameters.filter(
                     x => x !== null && getParameterName(x, alternateParameters) !== null)
                     .map(x => getParameterName(x, alternateParameters)
-                );
+                    );
             }
 
             feature.attributes = {
@@ -428,7 +428,7 @@ export function sensorsToFeaturesTrendRegionPage(
 
 export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: string, threshold: string):Array<ol.Feature> {
     let features = Array();
-	const alternateParameters = getAlternateParameters();
+    const alternateParameters = getAlternateParameters();
     sensors.map((sensor) => {
 
         if (sensor.name !== 'ALL') {
@@ -608,7 +608,10 @@ export function sensorsToFeaturesTrendDetailPage(
 
 export function generatePointsCircle(count: number, centerPixel) {
     // Generate points within a circle where the markers will be displayed.
-    const separation = 20;
+    let separation = 20;
+    if (screen.width <= getMobileSizeMax()) {
+        separation = 100;
+    }
     const twoPi = Math.PI * 2;
     const start_angle = twoPi/12;
     const circumference = separation * (2 + count);
@@ -678,6 +681,10 @@ export function getMultiLineLayer(featuresAtPixel: ol.features, theMap) {
     let newFeaturesLayer = new ol.layer.Vector({
         source: newFeaturesSource,
         style: function(feature) {
+            let scale_value = 1.0;
+            if (screen.width <= getMobileSizeMax()) {
+                scale_value = 4.0;
+            }
             let sensorColor = feature.attributes.color;
             let iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
                 + '<g class="marker-g">'
@@ -691,7 +698,8 @@ export function getMultiLineLayer(featuresAtPixel: ol.features, theMap) {
                 image: new ol.style.Icon({
                     anchor: [0.5, 1],
                     src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( iconSvg ),
-                    imgSize: [15, 25]
+                    imgSize: [15, 25],
+                    scale: scale_value
                 })
 
             }));

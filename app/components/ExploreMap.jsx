@@ -11,7 +11,9 @@ import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
 import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup';
 import BasicMap from './BasicMap';
 import type {InputEventMap} from '../utils/flowtype';
-import {getMobileSizeMax} from '../utils/getConfig';
+import {
+    getMobileFilterSensors, getMobileSizeMax, getMobileSourceNames
+} from '../utils/getConfig';
 
 
 class ExploreMap extends Component {
@@ -201,7 +203,30 @@ class ExploreMap extends Component {
     };
 
     getFeature(){
-        return sensorsToFeatures(this.props.sensors);
+        let sensors = this.props.sensors;
+
+        if (screen.width <= getMobileSizeMax()) {
+            let mobile_sourcenames = getMobileSourceNames().toUpperCase();
+            let mobile_data = sensors;
+            if (mobile_sourcenames !== 'ALL') {
+                mobile_data = mobile_data
+                    .filter(data => mobile_sourcenames
+                        .includes((data.properties.type.title).toString().toUpperCase()));
+            }
+            if (this.props.userStations !== 'all') {
+                mobile_data = mobile_data
+                    .filter(data => this.props.userStations.includes(data.properties.type.location));
+            }
+            if (getMobileFilterSensors() === true) {
+                let twoWeeksAgo = new Date();
+                twoWeeksAgo.setDate((twoWeeksAgo.getDate() - 14));
+                twoWeeksAgo = twoWeeksAgo.toJSON();
+                mobile_data = mobile_data.filter(data => (data.max_end_time) >= twoWeeksAgo);
+            }
+            sensors = mobile_data;
+        }
+
+        return sensorsToFeatures(sensors);
     };
 
     getCluster = (clusterSource: ol.source.Cluster) => {
@@ -215,8 +240,8 @@ class ExploreMap extends Component {
                     let radius_value = 10;
                     let font_value = '10px sans-serif';
                     if (screen.width <= getMobileSizeMax()) {
-                        radius_value = 20;
-                        font_value = '20px sans-serif';
+                        radius_value = 30;
+                        font_value = '40px sans-serif';
                     }
 
                     style = new ol.style.Style({
@@ -251,7 +276,7 @@ class ExploreMap extends Component {
 
                     let scale_value = 1.0;
                     if (screen.width <= getMobileSizeMax()) {
-                        scale_value = 2.0;
+                        scale_value = 4.0;
                     }
 
                     style = (new ol.style.Style({

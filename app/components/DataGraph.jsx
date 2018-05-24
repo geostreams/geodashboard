@@ -111,7 +111,22 @@ class DataGraph extends Component {
 
             sensor.parameters.map(p => {
                 if (getParameterName(p, getAlternateParameters()) != null) {
-                    paralist.push(
+                    if (screen.width <= getMobileSizeMax()) {
+                        paralist.push(
+                            <span key={p}>
+                                <FormField id={p} key={p}>
+                                    <input type="checkbox" className={styles.checkboxStyle}
+                                           onChange={this.handleSelectParam} value={p} key={p} name="param"
+                                           checked={this.state.paralistselect.includes(p)}
+                                    />
+                                    <label className={styles.parametersLabel}>
+                                        {getParameterName(p, getAlternateParameters())}
+                                    </label>
+                                </FormField>
+                                <br/>
+                            </span>
+                        );
+                    } else {paralist.push(
                         <span key={p}>
                             <FormField id={p} key={p}>
                                 <Checkbox onChange={this.handleSelectParam} value={p} key={p} name="param"
@@ -122,6 +137,7 @@ class DataGraph extends Component {
                             <br/>
                         </span>
                     );
+}
                     if (this.state.paralistselect.length === 0 || this.state.paralistselect.indexOf(p) > -1) {
                         if (screen.width > getMobileSizeMax()) {
                             if (getShowRawProcessed() === true) {

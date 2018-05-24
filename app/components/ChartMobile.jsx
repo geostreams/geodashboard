@@ -4,8 +4,6 @@ import { Row, Col } from 'react-flexbox-grid';
 import {Card, CardHeader, CardTitle} from 'react-mdc-web';
 import {getParameterName} from '../utils/getConfig';
 import styles from '../styles/detail.css';
-
-
 let LineChart = rd3.LineChart;
 
 class ChartMobile extends Component {
@@ -24,7 +22,7 @@ class ChartMobile extends Component {
             chartTitle = getParameterName(this.props.param);
             unitIndex = chartTitle.lastIndexOf("(");
             if (unitIndex === -1) {
-                units = 'Amount';
+                units = 'Value';
             } else {
                 units = chartTitle.substr(unitIndex);
             }
@@ -56,35 +54,34 @@ class ChartMobile extends Component {
 
         if(values.length > 0 && subtitleText.length < 1){
             lineChartObject = (
-                <Col md={10}>
-                    {subtitleText}
-                    <LineChart
-                        data={lineData}
-                        width={800} height={600}
-                        margins={{top: 10, right: 150, bottom: 100, left: 150}}
-                        title={getParameterName(this.props.param)}
-                        yAxisLabel={units} yAxisLabelOffset={Number(120)}
-                        xAxisLabel="Time" xAxisLabelOffset={Number(75)}
-                        gridHorizontal={true} gridVertical={true}
-                        hoverAnimation={true}
-                        xAxisTickInterval={{unit: 'day', interval: 4}}
-                    />
-                </Col>
+                <Row>
+                    <Col md={10} className={styles.positionChart}>
+                        {subtitleText}
+                        <LineChart
+                            data={lineData}
+                            width={800} height={600}
+                            margins={{top: 10, right: 50, bottom: 100, left: 200}}
+                            title={getParameterName(this.props.param)}
+                            yAxisLabel={units} yAxisLabelOffset={Number(150)}
+                            xAxisLabel="Time (last two weeks)" xAxisLabelOffset={Number(75)}
+                            gridHorizontal={true} gridVertical={true}
+                            hoverAnimation={true}
+                            xAxisTickInterval={{unit: 'week', interval: 1}}
+                        />
+                    </Col>
+                </Row>
             );
         } else {
             lineChartObject = (
-                <Col md={10}>
-                    {subtitleText}
-                </Col>
+                <Row>
+                    <Col md={10}>
+                        {subtitleText}
+                    </Col>
+                </Row>
             );
         }
 
-        return (
-            <Row>
-                {lineChartObject}
-            </Row>
-
-        )
+        return (lineChartObject)
     }
 }
 

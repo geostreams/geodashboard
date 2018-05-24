@@ -6,8 +6,8 @@ import {
     Button, MenuItem, Menu, MenuAnchor, Icon
 } from 'react-mdc-web';
 import {
-    getApplicationOptions, getIEAlertMenuBarShow, getIEAlertHeader,
-    getIEVersionEdge, getIEVersionEleven, getIEVersionsBeforeEleven
+    getApplicationOptions, getIEAlertMenuBarShow, getIEAlertHeader, getIEVersionEdge,
+    getIEVersionEleven, getIEVersionsBeforeEleven, getMobileSizeMax, getMobileExplorePath
 } from "../utils/getConfig";
 
 class MenuBar extends Component {
@@ -47,6 +47,10 @@ class MenuBar extends Component {
         const pageLinks = [];
         applicationOptions.pages.map( page => {
             if(page.url) {
+                // If Explore Page and Mobile View Active, then replace V2 with V3 in the Menu Bar Link
+                if(page.url.includes('explore') && page.url.includes('geodashboard') && screen.width <= getMobileSizeMax()) {
+                    page.url = getMobileExplorePath();
+                }
                 pageLinks.push(
                     <li key={page.name} className={this.props.selected === page.name.toLowerCase() ? styles.active: ''}>
                         <Link href={page.url}>{page.name}</Link>

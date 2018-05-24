@@ -4,14 +4,14 @@ import Map from '../containers/ExploreMap';
 import ExploreSourcesTab from '../containers/ExploreSourcesTab';
 import ExploreLayers from '../components/ExploreLayers';
 import {
-    Button, Card, CardTitle, CardHeader, CardText, Cell,
-    Content, Grid, List, ListHeader, ListGroup, ListDivider, Radio, RadioGroup
+    Card, CardTitle, CardHeader, CardText, Cell,  Content, Grid,
+    List, ListHeader, ListGroup, ListDivider, Radio, RadioGroup, Tabbar, Tab
 } from 'react-mdc-web';
 import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
 import {connect} from 'react-redux';
 import {
-    getMobileSourceNames, getMobileSizeMax, getLayersDetails
+    getMobileSourceNames, getMobileSizeMax, getLayersDetails, getChromeDisabled
 } from '../utils/getConfig';
 
 class Explore extends Component {
@@ -28,8 +28,8 @@ class Explore extends Component {
         viewSelection: string
     };
 
-    clickedViewSelection(event) {
-        this.setState({viewSelection: event.target.value});
+    clickedViewSelection(value) {
+        this.setState({viewSelection: value});
     }
 
     render() {
@@ -91,42 +91,54 @@ class Explore extends Component {
         if (screen.width > getMobileSizeMax() || this.state.viewSelection === 'map-view') {
             mapObject =
                 <Map
+                    userStations={this.props.params.stations}
                     exploreLayersDetails={exploreLayersDetails}
                     layersVisibility={layersVisibility}
                 />;
         }
 
-        let mobileViewSelection = '';
+        let mapViewText = (<span className={exploreStyles.tabTextStyle}>Map View</span>);
+        let mobilePageTabs = '';
         if (screen.width <= getMobileSizeMax()) {
-            let map_radio = (<Radio value="map-view" name="map-view">Map</Radio>);
-            if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-                map_radio = (
-                    <Radio disabled={true} value="map-view" name="map-view">
-                        Map (View unavailable with Chrome for Mobile)
-                    </Radio>
-                )
+            let mapDisabled = false;
+            if (navigator.userAgent.toLowerCase().indexOf('mobile/') > -1 && getChromeDisabled() === true) {
+                mapDisabled = true;
+                mapViewText = (
+                    <span className={exploreStyles.tabTextStyleDisabled}>
+                        Map View (Unavailable with Chrome for Mobile)
+                    </span>
+                );
             }
 
-            mobileViewSelection =
-                <div className={styles.viewSelectionStyle}>
-                    <h2 className={styles.viewSelectionLabel}>View By: </h2>
-                    <RadioGroup
-                        className={styles.viewSelectionRadios}
-                        name="view-selection"
-                        value={this.state.viewSelection}
-                        onChange={this.clickedViewSelection}
-                    >
-                        <Radio value="list-view" name="list-view">List</Radio>
-                        {map_radio}
-                    </RadioGroup>
+            mobilePageTabs = (
+                <div className={exploreStyles.tabBackground}>
+                    <Tabbar key='mobile_tabs'>
+                        <Tab active={this.state.viewSelection === "list-view"}
+                             key='list-view' value="list-view"
+                             onClick={() => {this.clickedViewSelection("list-view")}}
+                        >
+                            <span className={exploreStyles.tabTextStyle}>List View</span>
+                        </Tab>
+                        <Tab active={this.state.viewSelection === "map-view"}
+                             key='map-view' value="map-view"
+                             onClick={() => {
+                                 if (mapDisabled === false) {
+                                     this.clickedViewSelection("map-view")
+                                 }
+                             }}
+                        >
+                            {mapViewText}
+                        </Tab>
+                    </Tabbar>
                 </div>
+            );
         }
 
-        return (
+        let page_content = (
             <div>
                 <Menu selected='explore'/>
                 <Content>
-                    {mobileViewSelection}
+                    {mobilePageTabs}
                     <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>
                             <Cell col={3}>
@@ -142,7 +154,9 @@ class Explore extends Component {
                     </div>
                 </Content>
             </div>
-        )
+        );
+
+        return (page_content)
 
     }
 }

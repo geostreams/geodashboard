@@ -3,7 +3,7 @@ import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
 import {Button, Fab} from 'react-mdc-web';
 import {
-    getMobileSourceNames, getMobileSizeMax, getMobileDetailPath, getColor, getRegionToTitleMap
+    getMobileSourceNames, getMobileSizeMax, getMobileDetailPath, getColor, getRegionToTitleMap, getMobileFilterSensors
 } from '../utils/getConfig';
 import ol from 'openlayers';
 
@@ -34,7 +34,21 @@ class ExploreSourcesTab extends Component {
                 mobile_data = mobile_data
                     .filter(data => this.props.userStations.includes(data.properties.type.location));
             }
-            mobile_data.map(data => {
+            if (getMobileFilterSensors() === true) {
+                let twoWeeksAgo = new Date();
+                twoWeeksAgo.setDate((twoWeeksAgo.getDate() - 14));
+                twoWeeksAgo = twoWeeksAgo.toJSON();
+                mobile_data = mobile_data.filter(data => (data.max_end_time) >= twoWeeksAgo);
+            }
+            if (mobile_data.length === 0) {
+                contents.push(
+                    <span key="no_data">
+                        <Button className={styles.exploreButtonMobile} raised disabled >
+                            No Data Available
+                        </Button>
+                        <br/>
+                    </span>)
+            } else {mobile_data.map(data => {
                 let location = (getMobileDetailPath() + data.name.toString() + '/separate/');
                 contents.push(
                     <span key={data.id}>
@@ -45,7 +59,8 @@ class ExploreSourcesTab extends Component {
                         </a>
                         <br/>
                     </span>)
-            });
+                });
+            }
         } else {
             let regionToTitleMap = getRegionToTitleMap();
 

@@ -29,7 +29,7 @@
     background-color: white;
     -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
     filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-    border-radius: 10px;
+    border-radius: 30px;
     bottom: 12px;
     left: -50px;
     min-width: 22em;
@@ -240,4 +240,18 @@
     padding-top: 0.5em;
     padding-bottom: 0.5em;
     font-weight: lighter;
+}
+
+@media screen and (max-device-width: 840px) {
+    .popup_table, .paramsborder, .viewdetail, .viewsitedetail {
+        font-size: xx-large !important;
+    }
+
+    .header2style {
+        font-size: 200% !important;
+    }
+
+    .olPopup {
+        min-width: 30em !important;
+    }
 }

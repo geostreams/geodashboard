@@ -395,3 +395,19 @@ export function getShowRawProcessed() {
 export function getProcessedProperty() {
     return window.configruntime.gd3.raw_processed_property;
 }
+
+export function getChromeDisabled() {
+    let getValue = false;
+    if (window.configruntime.gd3.chrome_detail_mobile_disabled) {
+        getValue = window.configruntime.gd3.chrome_detail_mobile_disabled;
+    }
+    return getValue;
+}
+
+export function getMobileFilterSensors() {
+    let getValue = false;
+    if (window.configruntime.gd3.filter_unavailable_sensors) {
+        getValue = window.configruntime.gd3.filter_unavailable_sensors;
+    }
+    return getValue;
+}
