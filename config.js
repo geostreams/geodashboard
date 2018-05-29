@@ -1314,7 +1314,6 @@ export const gd3 = {
 
     // Exploratory Analysis Page Only
     trends_analysis_water_year: false,
-    trends_analysis_semi_value: 'all',
     // **********
 
     // These variables are for Map settings

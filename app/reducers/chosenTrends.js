@@ -4,7 +4,7 @@
 
 
 import {
-    ADD_ANALYSIS_COUNT, ADD_CHOOSE_TRENDS, ADD_CUSTOM_TREND_LOCATIONS_FILTER,
+    ADD_ANALYSIS_COUNT, ADD_CHOOSE_ANALYSIS, ADD_CHOOSE_TRENDS, ADD_CUSTOM_TREND_LOCATIONS_FILTER,
     ADD_REGION_TRENDS, ADD_REGION_DETAIL_TRENDS, CLEAR_TRENDS_SENSORS,
     FETCH_ANALYSIS_REGION, RESET_TRENDS_SENSORS, SELECT_TRENDS_CALC_BASELINE_SETTING,
     SELECT_ANALYSIS_REGION, SELECT_TRENDS_REGION, SELECT_TRENDS_CALC_ROLLING_SETTING,
@@ -125,6 +125,33 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
                 show_spinner: false
             });
 
+        case ADD_CHOOSE_ANALYSIS:
+
+            let temp_analysis_object = [];
+
+            action.sensors_trends.map(sensor => {
+                let temp_sensor = action.sensorsToFilter.filter((x) => x.id === sensor.id)[0];
+                temp_sensor['trends'] = sensor.data;
+                temp_sensor['trend_start_time'] = sensor.trend_start_time;
+                temp_sensor['trend_end_time'] = sensor.trend_end_time;
+                temp_analysis_object = temp_analysis_object.concat(temp_sensor);
+            });
+
+            let analysis_parameters = getTrendSettings();
+            let analysis_param = analysis_parameters
+                .find(p => p.parameter.id.toString() === action.parameter.toString());
+            if (analysis_param) {
+                analysis_param = analysis_param.parameter.title
+            }
+
+            return Object.assign({}, state, {
+                trends_sensors : temp_analysis_object,
+                show_spinner: false,
+                analysis_parameter: analysis_param,
+                sensor_season: 'all',
+                sensor_region: state.region
+            });
+            
         case ADD_CHOOSE_TRENDS:
 
             let temp_sensor_object = [];
@@ -464,8 +491,8 @@ function clearDetails(state) {
     let newState = Object.assign({}, state);
 
     newState.trends_regions.map( region => {
-        region.trends_detail = [];
-        region.trends_deviation = [];
+        region.trends_detail = {'id':0, 'value':0};
+        region.trends_deviation = {'id':0, 'value':0};
     });
 
     return newState;

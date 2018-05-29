@@ -22,7 +22,7 @@ class DataGraph extends Component {
             paralistselect: [],
             openInfoButton: false
         };
-        (this:any).handleInfoIcon = this.handleInfoIcon.bind(this);
+        (this: any).handleInfoIcon = this.handleInfoIcon.bind(this);
     }
 
     handleInfoIcon(button_status: boolean) {
@@ -32,7 +32,7 @@ class DataGraph extends Component {
     };
 
     componentWillMount() {
-        const { loadSensor } = this.props;
+        const {loadSensor} = this.props;
         loadSensor(null, this.props.sensorName);
     }
 
@@ -60,15 +60,19 @@ class DataGraph extends Component {
             info_box_data = (
                 <div>
                     <Dialog open={Boolean(this.state.openAboutButton)}
-                            onClose={()=>{this.setState({openAboutButton:false})}}>
-                        <DialogHeader >
+                            onClose={() => {
+                                this.setState({openAboutButton: false})
+                            }}>
+                        <DialogHeader>
                             <DialogTitle>Levels of Processing</DialogTitle>
                             <a className={styles.close_button_style}
-                               onClick={()=>{this.setState({openAboutButton: false})}}>
+                               onClick={() => {
+                                   this.setState({openAboutButton: false})
+                               }}>
                                 <Icon name="close"/>
                             </a>
                         </DialogHeader>
-                        <DialogBody >
+                        <DialogBody>
                             <List>{info_text}</List>
                         </DialogBody>
                     </Dialog>
@@ -86,8 +90,8 @@ class DataGraph extends Component {
         if (sensor) {
             // If there are not selected parameters, we mark all as selected. This was added to mark them all selected
             // on page load, since all the graphs are displayed initially.
-            if(this.state.paralistselect.length < 1) {
-                this.setState({paralistselect: sensor.parameters })
+            if (this.state.paralistselect.length < 1) {
+                this.setState({paralistselect: sensor.parameters})
             }
 
             // These calculations determine the X-Axis interval for the graphs
@@ -110,7 +114,7 @@ class DataGraph extends Component {
             }
 
             sensor.parameters.map(p => {
-                if (getParameterName(p, getAlternateParameters()) != null) {
+                if (getParameterName(p, getAlternateParameters()) !== null) {
                     if (screen.width <= getMobileSizeMax()) {
                         paralist.push(
                             <span key={p}>

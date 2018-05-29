@@ -53,7 +53,7 @@ class TrendDetailRight extends Component {
         if(this.state.loading) {
             return (
                 <div className={styles.make_modal}>
-                    <div className={styles.loading_spinner}></div>
+                    <div className={styles.loading_spinner}> </div>
                 </div>
             )
         }
@@ -63,8 +63,8 @@ class TrendDetailRight extends Component {
         });
         const minYear = Math.min.apply(null, years);
         const maxYear = Math.max.apply(null, years);
-        const start_year = this.state.selectedStartYear == 0 ? minYear: this.state.selectedStartYear;
-        const end_year = this.state.selectedEndYear == 0 ? maxYear : this.state.selectedEndYear;
+        const start_year = this.state.selectedStartYear === 0 ? minYear: this.state.selectedStartYear;
+        const end_year = this.state.selectedEndYear === 0 ? maxYear : this.state.selectedEndYear;
         return (
             <div>
                 <YearSlider start_year={minYear} end_year={maxYear}

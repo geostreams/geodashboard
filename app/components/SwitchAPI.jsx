@@ -14,7 +14,7 @@ class SwitchAPI extends Component {
     render() {
 
         let error_text;
-        if (this.props.error == true) {
+        if (this.props.error === true) {
             error_text = getErrorText();
         }
 

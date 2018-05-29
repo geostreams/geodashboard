@@ -1,10 +1,10 @@
 // @flow
 
-import type { Sensors, Dispatch, GetState } from "../utils/flowtype";
+import type {Sensors, Dispatch, GetState} from "../utils/flowtype";
 import {getWaterYearStatus} from "../utils/getConfig";
 
 export const SWITCH_BACKEND = 'SWITCH_BACKEND';
-export const switchBackend = (selected:string, title:string, subtitle:string) => {
+export const switchBackend = (selected: string, title: string, subtitle: string) => {
     return {
         type: SWITCH_BACKEND,
         selected,
@@ -15,7 +15,7 @@ export const switchBackend = (selected:string, title:string, subtitle:string) =>
 
 export const SWITCH_BACKEND_ERROR = 'SWITCH_BACKEND_ERROR';
 export const switchBackendError = () => {
-    return (dispatch:Dispatch, getState:GetState) => {
+    return (dispatch: Dispatch, getState: GetState) => {
         const state = getState();
         let fetched_api = state.sensors.api;
         dispatch({
@@ -38,14 +38,14 @@ export const CLEAR_TRENDS_SENSORS = 'CLEAR_TRENDS_SENSORS';
 export const RESET_TRENDS_SENSORS = 'RESET_TRENDS_SENSORS';
 
 export const ADD_ENDPOINTS = 'ADD_ENDPOINTS';
-export const addEndpoints = () =>{
+export const addEndpoints = () => {
     return {
         type: ADD_ENDPOINTS
     }
 };
 
 export const REQUEST_SENSORS = 'REQUEST_SENSORS';
-function requestSensors(api:string) {
+function requestSensors(api: string) {
     return {
         type: REQUEST_SENSORS,
         api
@@ -53,8 +53,8 @@ function requestSensors(api:string) {
 }
 
 export const RECEIVE_SENSORS = 'RECEIVE_SENSORS';
-function receiveSensors(api:string, json:Sensors) {
-    return (dispatch:Dispatch) => {
+function receiveSensors(api: string, json: Sensors) {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: RECEIVE_SENSORS,
             api,
@@ -69,8 +69,8 @@ function receiveSensors(api:string, json:Sensors) {
 }
 
 export const RECEIVE_SENSOR = 'RECEIVE_SENSOR';
-function receiveSensor(json:Sensors) {
-    return (dispatch:Dispatch) => {
+function receiveSensor(json: Sensors) {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: RECEIVE_SENSOR,
             sensor_data: json,
@@ -79,8 +79,8 @@ function receiveSensor(json:Sensors) {
 }
 
 export const UPDATE_DETAIL = 'UPDATE_DETAIL';
-export function updateDetail(id:string, name:string, coordinates:number[]){
-    return (dispatch:Dispatch) => {
+export function updateDetail(id: string, name: string, coordinates: number[]) {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: UPDATE_DETAIL,
             id,
@@ -92,7 +92,7 @@ export function updateDetail(id:string, name:string, coordinates:number[]){
 
 export const ADD_SEARCH_FILTER = 'ADD_SEARCH_FILTER';
 // this is not used for now, it push a new field in state.searchFilters.filters, not state.searchFilters.selected
-function addSearchFilter(filter:string) {
+function addSearchFilter(filter: string) {
     return {
         type: ADD_SEARCH_FILTER,
         filter
@@ -100,8 +100,8 @@ function addSearchFilter(filter:string) {
 }
 
 export const ADD_SEARCH_PARAMETER = 'ADD_SEARCH_PARAMETER';
-export function addSearchParameter(parameter:Array<string>) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function addSearchParameter(parameter: Array<string>) {
+    return (dispatch: Dispatch, getState: GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
         dispatch({
@@ -114,29 +114,20 @@ export function addSearchParameter(parameter:Array<string>) {
     }
 }
 
-// This Action is utilized by both the Exploratory Analysis Page and the Trends Stations Page
-export const ADD_CHOOSE_TRENDS = 'ADD_CHOOSE_TRENDS';
-export function fetchTrends(
-    parameter:string, total_year:number, interval:number, view_type:string, season_input:string
-) {
-    return (dispatch:Dispatch, getState:GetState) => {
+// This Action is utilized by the Exploratory Analysis Page
+export const ADD_CHOOSE_ANALYSIS = 'ADD_CHOOSE_ANALYSIS';
+export function fetchAnalysis(parameter: string, total_year: number, interval: number) {
+    return (dispatch: Dispatch, getState: GetState) => {
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
         // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
         const state = getState();
         const api = state.backends.selected;
 
-        const season = season_input;
         const trends_endpoint = api + '/api/geostreams/datapoints/trends?binning=year';
 
         let sensorsToFilter;
         if (state.chosenTrends.trends_sensors.length > 0) {
             sensorsToFilter = state.chosenTrends.trends_sensors;
-        } else if (view_type === 'by-analysis' && state.chosenTrends.trends_sensors.length === 0) {
-            // Only use API if there are Available Sensors
-            return (dispatch({
-                type: SET_TRENDS_SENSORS,
-                sensors: state.sensors.data
-            }))
         } else {
             sensorsToFilter = state.sensors.data;
         }
@@ -154,100 +145,183 @@ export function fetchTrends(
 
         let temp_object = [];
 
-        let results = sensorsToFilter
-            .map(sensor => {
+        let results = sensorsToFilter.map(sensor => {
 
-                let start_time = new Date(sensor.min_start_time);
-                let end_time = new Date(sensor.max_end_time);
+            let start_time = new Date(sensor.min_start_time);
+            let end_time = new Date(sensor.max_end_time);
 
-                if (view_type === 'by-analysis' && getWaterYearStatus() === true) {
-                    // Use Water Year
-                    if (start_time.getMonth() <= 9) {
-                        start_time = new Date(start_time.getFullYear(),9,1,0,0,0);
-                    } else {
-                        start_time = new Date((start_time.getFullYear() + 1),9,1,0,0,0);
-                    }
-                    if (end_time.getMonth() >= 8) {
-                        end_time = new Date(end_time.getFullYear(),8,30,23,59,59);
-                    } else {
-                        end_time = new Date((end_time.getFullYear() - 1),8,30,23,59,59);
-                    }
-                }
-
-                let json_data;
-
-                const end_year:number = end_time.getFullYear();
-                const window_start:Date = new Date(end_time);
-                window_start.setFullYear(end_year - interval);
-
-                let start:Date = new Date(end_time);
-                if (total_year === 0) {
-                    start = start_time;
+            if (getWaterYearStatus() === true) {
+                // Use Water Year
+                if (start_time.getMonth() <= 9) {
+                    start_time = new Date(start_time.getFullYear(), 9, 1, 0, 0, 0);
                 } else {
-                    start.setFullYear(end_year - total_year);
+                    start_time = new Date((start_time.getFullYear() + 1), 9, 1, 0, 0, 0);
                 }
-
-                let trends_endpoint_args;
-                trends_endpoint_args =
-                    trends_endpoint +
-                    "&sensor_id=" + sensor.id +
-                    "&attributes=" + parameter;
-                if (view_type === 'by-analysis') {
-                    trends_endpoint_args +=
-                        "&window_start=" + window_start.toISOString() +
-                        "&window_end=" + end_time.toISOString() +
-                        "&since=" + start.toISOString() +
-                        "&until=" + end_time.toISOString();
+                if (end_time.getMonth() >= 8) {
+                    end_time = new Date(end_time.getFullYear(), 8, 30, 23, 59, 59);
+                } else {
+                    end_time = new Date((end_time.getFullYear() - 1), 8, 30, 23, 59, 59);
                 }
+            }
 
-                if (season)
-                    trends_endpoint_args = trends_endpoint_args + "&semi=" + season;
+            let json_data;
 
-                const result = fetch(trends_endpoint_args).then(response => {
-                    const json = response.json();
-                    return json;
-                })
-                    .then(json => {
-                        if (json) {
-                            let trend_start = new Date(json[0].start_time);
-                            let trend_end = new Date(json[0].end_time);
-                            let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000 * 60 * 60 * 24));
-                            if (time_frame_trends_days >= (total_year * 365) - 180 && json.length >= 1) {
-                                json_data = json[0].properties;
-                            } else {
-                                json_data = null;
-                            }
-                            temp_object = temp_object.concat({
-                                id: sensor.id,
-                                data: json_data,
-                                trend_start_time: start_time,
-                                trend_end_time: end_time
-                            })
-                        } else {
-                            json_data = null;
-                            temp_object = temp_object.concat({
-                                id: sensor.id,
-                                data: json_data,
-                                trend_start_time: null,
-                                trend_end_time: null
-                            });
-                        }
-                    }).catch(function(error) {
-                        console.log(error);
-                        console.log(trends_endpoint_args);
+            const end_year: number = end_time.getFullYear();
+            const window_start: Date = new Date(end_time);
+            window_start.setFullYear(end_year - interval);
+
+            let start: Date = new Date(end_time);
+            if (total_year === 0) {
+                start = start_time;
+            } else {
+                start.setFullYear(end_year - total_year);
+            }
+
+            let trends_endpoint_args =
+                trends_endpoint +
+                "&sensor_id=" + sensor.id +
+                "&attributes=" + parameter +
+                "&window_start=" + window_start.toISOString() +
+                "&window_end=" + end_time.toISOString() +
+                "&since=" + start.toISOString() +
+                "&until=" + end_time.toISOString();
+
+            const result = fetch(trends_endpoint_args).then(response => {
+                const json = response.json();
+                return json;
+            }).then(json => {
+                if (json) {
+                    let trend_start = new Date(json[0].start_time);
+                    let trend_end = new Date(json[0].end_time);
+                    let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000 * 60 * 60 * 24));
+                    if (time_frame_trends_days >= (total_year * 365) - 180 && json.length >= 1) {
+                        json_data = json[0].properties;
+                    } else {
                         json_data = null;
-                        temp_object = temp_object.concat({
-                            id: sensor.id,
-                            data: json_data,
-                            trend_start_time: null,
-                            trend_end_time: null
-                        });
+                    }
+                    temp_object = temp_object.concat({
+                        id: sensor.id,
+                        data: json_data,
+                        trend_start_time: start_time,
+                        trend_end_time: end_time
+                    })
+                } else {
+                    temp_object = temp_object.concat({
+                        id: sensor.id,
+                        data: null,
+                        trend_start_time: null,
+                        trend_end_time: null
                     });
-                return result;
-
+                }
+            }).catch(function (error) {
+                console.log(error);
+                console.log(trends_endpoint_args);
+                temp_object = temp_object.concat({
+                    id: sensor.id,
+                    data: null,
+                    trend_start_time: null,
+                    trend_end_time: null
+                });
             });
+            return result;
 
-        Promise.all(results).then( s => {
+        });
+
+        Promise.all(results).then(s => {
+                return (dispatch({
+                    type: ADD_CHOOSE_ANALYSIS,
+                    sensors_trends: temp_object,
+                    parameter,
+                    sensorsToFilter
+                }))
+            }
+        );
+    }
+}
+
+// This Action is utilized by the Trends Stations Page
+export const ADD_CHOOSE_TRENDS = 'ADD_CHOOSE_TRENDS';
+export function fetchTrends(parameter: string, total_year: number, interval: number, season_input: string) {
+    return (dispatch: Dispatch, getState: GetState) => {
+        // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
+        // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
+        const state = getState();
+        const api = state.backends.selected;
+
+        const season = season_input;
+        const trends_endpoint = api + '/api/geostreams/datapoints/trends?binning=year';
+
+        let sensorsToFilter;
+        if (state.chosenTrends.trends_sensors.length > 0) {
+            sensorsToFilter = state.chosenTrends.trends_sensors;
+        } else {
+            sensorsToFilter = state.sensors.data;
+        }
+
+        dispatch({
+            type: RESET_TRENDS_SENSORS
+        });
+
+        let temp_object = [];
+
+        let results = sensorsToFilter.map(sensor => {
+
+            let start_time = new Date(sensor.min_start_time);
+            let end_time = new Date(sensor.max_end_time);
+
+            let json_data;
+
+            let trends_endpoint_args =
+                trends_endpoint +
+                "&sensor_id=" + sensor.id +
+                "&attributes=" + parameter;
+
+            if (season) {
+                trends_endpoint_args = trends_endpoint_args + "&semi=" + season;
+            }
+
+            const result = fetch(trends_endpoint_args).then(response => {
+                const json = response.json();
+                return json;
+            }).then(json => {
+                if (json) {
+                    let trend_start = new Date(json[0].start_time);
+                    let trend_end = new Date(json[0].end_time);
+                    let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000 * 60 * 60 * 24));
+                    if (time_frame_trends_days >= (total_year * 365) - 180 && json.length >= 1) {
+                        json_data = json[0].properties;
+                    } else {
+                        json_data = null;
+                    }
+                    temp_object = temp_object.concat({
+                        id: sensor.id,
+                        data: json_data,
+                        trend_start_time: start_time,
+                        trend_end_time: end_time
+                    })
+                } else {
+                    temp_object = temp_object.concat({
+                        id: sensor.id,
+                        data: null,
+                        trend_start_time: null,
+                        trend_end_time: null
+                    });
+                }
+            }).catch(function (error) {
+                console.log(error);
+                console.log(trends_endpoint_args);
+                temp_object = temp_object.concat({
+                    id: sensor.id,
+                    data: null,
+                    trend_start_time: null,
+                    trend_end_time: null
+                });
+            });
+            return result;
+
+        });
+
+        Promise.all(results).then(s => {
                 return (dispatch({
                     type: ADD_CHOOSE_TRENDS,
                     sensors_trends: temp_object,
@@ -258,12 +332,11 @@ export function fetchTrends(
             }
         );
     }
-
 }
 
 export const ADD_REGION_TRENDS = 'ADD_REGION_TRENDS';
-export function fetchRegionTrends(parameter:string, season:string) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function fetchRegionTrends(parameter: string, season: string) {
+    return (dispatch: Dispatch, getState: GetState) => {
         // For each region sensor, use the parameter, geocode, and season to get the Trends.
 
         const state = getState();
@@ -288,14 +361,14 @@ export function fetchRegionTrends(parameter:string, season:string) {
                         if (json) {
                             temp_object = temp_object.concat({id: sensor.id, data: json.trends});
                         }
-                    }).catch(function(error) {
+                    }).catch(function (error) {
                         console.log(error);
                         console.log(trends_region_endpoint_args);
                     });
                 return result;
             });
 
-        Promise.all(results).then( s => {
+        Promise.all(results).then(s => {
                 return (dispatch({
                     type: ADD_REGION_TRENDS,
                     regions_trends: temp_object,
@@ -309,8 +382,8 @@ export function fetchRegionTrends(parameter:string, season:string) {
 }
 
 export const ADD_REGION_DETAIL_TRENDS = 'ADD_REGION_DETAIL_TRENDS';
-export function fetchRegionDetailTrends(parameter:string, season:string, region:string) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function fetchRegionDetailTrends(parameter: string, season: string, region: string) {
+    return (dispatch: Dispatch, getState: GetState) => {
         // For each region sensor for the Chart on the Trends Detail Page,
         // use the parameter, geocode, and season to get the Trends.
 
@@ -342,14 +415,14 @@ export function fetchRegionDetailTrends(parameter:string, season:string, region:
                                     }
                                 )
                         }
-                    }).catch(function(error) {
+                    }).catch(function (error) {
                         console.log(error);
                         console.log(trends_region_detail_endpoint_args);
                     });
                 return result;
             });
 
-        Promise.all(results).then( s => {
+        Promise.all(results).then(s => {
                 return (dispatch({
                     type: ADD_REGION_DETAIL_TRENDS,
                     regions_trends: temp_object,
@@ -365,8 +438,8 @@ export function fetchRegionDetailTrends(parameter:string, season:string, region:
 }
 
 export const ADD_SEARCH_DATASOURCE = 'ADD_SEARCH_DATASOURCE';
-export function addSearchDataSource(data_sources:Array<string>) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function addSearchDataSource(data_sources: Array<string>) {
+    return (dispatch: Dispatch, getState: GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
         dispatch({
@@ -380,8 +453,8 @@ export function addSearchDataSource(data_sources:Array<string>) {
 }
 
 export const ADD_START_DATE = 'ADD_START_DATE';
-export function addStartDate(date:?Date) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function addStartDate(date: ?Date) {
+    return (dispatch: Dispatch, getState: GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
         const availableSensors = state.sensors.available_sensors;
@@ -397,8 +470,8 @@ export function addStartDate(date:?Date) {
 }
 
 export const ADD_END_DATE = 'ADD_END_DATE';
-export function addEndDate(date:?Date) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function addEndDate(date: ?Date) {
+    return (dispatch: Dispatch, getState: GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
         const availableSensors = state.sensors.available_sensors;
@@ -414,8 +487,8 @@ export function addEndDate(date:?Date) {
 }
 
 export const ADD_SEARCH_LOCATION = 'ADD_SEARCH_LOCATION';
-export function addSearchLocation(location:? string) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function addSearchLocation(location: ? string) {
+    return (dispatch: Dispatch, getState: GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
         dispatch({
@@ -429,8 +502,8 @@ export function addSearchLocation(location:? string) {
 }
 
 export const ADD_CUSTOM_LOCATION_FILTER = 'ADD_CUSTOM_LOCATION_FILTER';
-export function addCustomLocationFilter(selectedPointsLocations:Array<string>, shapeCoordinates: Array<number>) {
-    return (dispatch:Dispatch) => {
+export function addCustomLocationFilter(selectedPointsLocations: Array<string>, shapeCoordinates: Array<number>) {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: ADD_CUSTOM_LOCATION_FILTER,
             selectedPointsLocations,
@@ -441,8 +514,8 @@ export function addCustomLocationFilter(selectedPointsLocations:Array<string>, s
 }
 
 export const ADD_CUSTOM_TREND_LOCATION_FILTER = 'ADD_CUSTOM_TREND_LOCATION_FILTER';
-export function addCustomTrendLocationFilter(selectedPointsLocations:Array<string>) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function addCustomTrendLocationFilter(selectedPointsLocations: Array<string>) {
+    return (dispatch: Dispatch, getState: GetState) => {
 
         const state = getState();
         let origSensors = state.sensors.data;
@@ -457,8 +530,8 @@ export function addCustomTrendLocationFilter(selectedPointsLocations:Array<strin
 }
 
 export const ADD_CUSTOM_TREND_LOCATIONS_FILTER = 'ADD_CUSTOM_TREND_LOCATIONS_FILTER';
-export function addCustomTrendLocationsFilter(selectedPointsLocations:Array<string>) {
-    return (dispatch:Dispatch) => {
+export function addCustomTrendLocationsFilter(selectedPointsLocations: Array<string>) {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: ADD_CUSTOM_TREND_LOCATIONS_FILTER,
             selectedPointsLocations
@@ -467,8 +540,8 @@ export function addCustomTrendLocationsFilter(selectedPointsLocations:Array<stri
 }
 
 export const ADD_FILTER = 'ADD_FILTER';
-export function addFilter(selectedFilter:string) {
-    return (dispatch:Dispatch) => {
+export function addFilter(selectedFilter: string) {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: ADD_FILTER,
             selectedFilter
@@ -478,8 +551,8 @@ export function addFilter(selectedFilter:string) {
 }
 
 export const CHANGE_FILTER = 'CHANGE_FILTER';
-export function changeFilter(selectedFilter:string, idx:number) {
-    return (dispatch:Dispatch) => {
+export function changeFilter(selectedFilter: string, idx: number) {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: CHANGE_FILTER,
             selectedFilter,
@@ -491,15 +564,15 @@ export function changeFilter(selectedFilter:string, idx:number) {
 }
 
 export const DELETE_FILTER = 'DELETE_FILTER';
-export function deleteFilter(idx:number) {
-    return (dispatch:Dispatch) => {
+export function deleteFilter(idx: number) {
+    return (dispatch: Dispatch) => {
         dispatch(updateAvailableSensors(idx - 1));
     }
 }
 
 export const UPDATE_AVAILABLE_FILTERS = 'UPDATE_AVAILABLE_FILTERS';
 export function updateAvailableFilters() {
-    return (dispatch:Dispatch, getState:GetState) => {
+    return (dispatch: Dispatch, getState: GetState) => {
         const state = getState();
         const selected_filters = state.searchFilters.selected;
         const selected_search = state.selectedSearch;
@@ -517,10 +590,10 @@ export function updateAvailableFilters() {
 
 export const UPDATE_AVAILABLE_SENSORS = 'UPDATE_AVAILABLE_SENSORS';
 export const DELETE_FILTERS_AFTER = 'DELETE_FILTERS_AFTER';
-export function updateAvailableSensors(idx:number) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function updateAvailableSensors(idx: number) {
+    return (dispatch: Dispatch, getState: GetState) => {
         const state = getState();
-        if (state.searchFilters.selected.length > (idx + 1 )) {
+        if (state.searchFilters.selected.length > (idx + 1)) {
             dispatch({
                 type: DELETE_FILTERS_AFTER,
                 idx
@@ -538,7 +611,7 @@ export function updateAvailableSensors(idx:number) {
 }
 
 export const SELECT_SENSOR = 'SELECT_SENSOR';
-export function selectSensorDetail(id:string, name:string, coordinates:Array<number>) {
+export function selectSensorDetail(id: string, name: string, coordinates: Array<number>) {
     return {
         type: SELECT_SENSOR,
         id,
@@ -547,9 +620,9 @@ export function selectSensorDetail(id:string, name:string, coordinates:Array<num
     };
 }
 
-export function fetchSensors(api:string) {
+export function fetchSensors(api: string) {
     //TODO: dispatch type is not defined.
-    return (dispatch:any) => {
+    return (dispatch: any) => {
         dispatch(requestSensors(api));
 
         const endpoint = api + '/api/geostreams/sensors';
@@ -567,8 +640,8 @@ export function fetchSensors(api:string) {
     }
 }
 
-function fetchSensorHelp(api:string, id:number){
-    return (dispatch:any) => {
+function fetchSensorHelp(api: string, id: number) {
+    return (dispatch: any) => {
         const endpoint = api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + id;
         return fetch(endpoint)
             .then(response => response.json())
@@ -578,8 +651,8 @@ function fetchSensorHelp(api:string, id:number){
     }
 }
 
-function fetchSensorHelpMobile(api:string, id:number){
-    return (dispatch:any) => {
+function fetchSensorHelpMobile(api: string, id: number) {
+    return (dispatch: any) => {
         const endpoint = api + '/api/geostreams/datapoints/bin/day/1?sensor_id=' + id;
         return fetch(endpoint)
             .then(response => response.json())
@@ -589,8 +662,8 @@ function fetchSensorHelpMobile(api:string, id:number){
     }
 }
 
-export function fetchSensor(name:string, bin:string) {
-    return (dispatch:any, getState:GetState) => {
+export function fetchSensor(name: string, bin: string) {
+    return (dispatch: any, getState: GetState) => {
         const state = getState();
         const api = state.backends.selected;
 
@@ -619,8 +692,8 @@ export function fetchSensor(name:string, bin:string) {
     }
 }
 
-export function fetchSensorMobile(name:string) {
-    return (dispatch:any, getState:GetState) => {
+export function fetchSensorMobile(name: string) {
+    return (dispatch: any, getState: GetState) => {
         const state = getState();
         const api = state.backends.selected;
 
@@ -656,10 +729,8 @@ export function fetchSensorMobile(name:string) {
 }
 
 export const SELECT_ANALYSIS_PARAMETER = 'SELECT_ANALYSIS_PARAMETER';
-export function selectAnalysisParameter(
-    parameter:string, threshold_choice:boolean, view_type: string
-) {
-    return (dispatch:Dispatch) => {
+export function selectAnalysisParameter(parameter: string, threshold_choice: boolean, view_type: string) {
+    return (dispatch: Dispatch) => {
 
         dispatch({
             type: SELECT_ANALYSIS_PARAMETER,
@@ -675,10 +746,8 @@ export function selectAnalysisParameter(
 }
 
 export const SELECT_TRENDS_PARAMETER = 'SELECT_TRENDS_PARAMETER';
-export function selectTrendsParameter(
-    parameter:string, threshold_choice:boolean, view_type: string
-) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function selectTrendsParameter(parameter: string, threshold_choice: boolean, view_type: string) {
+    return (dispatch: Dispatch, getState: GetState) => {
 
         const state = getState();
         let total_year = state.chosenTrends.baseline_total_year;
@@ -695,7 +764,7 @@ export function selectTrendsParameter(
             view_type
         });
         if (view_type === 'by-sensors') {
-            dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
+            dispatch(fetchTrends(parameter, total_year, interval, season));
         }
         if (view_type === 'by-regions') {
             dispatch(fetchRegionTrends(parameter, season));
@@ -704,8 +773,8 @@ export function selectTrendsParameter(
 }
 
 export const SELECT_ANALYSIS_REGION = 'SELECT_ANALYSIS_REGION';
-export function selectAnalysisRegion(region:string, view_type:string) {
-    return (dispatch:Dispatch) => {
+export function selectAnalysisRegion(region: string, view_type: string) {
+    return (dispatch: Dispatch) => {
 
         dispatch({
             type: SELECT_ANALYSIS_REGION,
@@ -716,8 +785,8 @@ export function selectAnalysisRegion(region:string, view_type:string) {
 }
 
 export const SELECT_TRENDS_REGION = 'SELECT_TRENDS_REGION';
-export function selectTrendsRegion(region:string, view_type: string) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function selectTrendsRegion(region: string, view_type: string) {
+    return (dispatch: Dispatch, getState: GetState) => {
 
         const state = getState();
         let total_year = state.chosenTrends.baseline_total_year;
@@ -733,7 +802,7 @@ export function selectTrendsRegion(region:string, view_type: string) {
 
         if (parameter !== '') {
             if (view_type === 'by-sensors') {
-                dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
+                dispatch(fetchTrends(parameter, total_year, interval, season));
             }
             if (view_type === 'by-regions') {
                 dispatch(fetchRegionTrends(parameter, season));
@@ -744,8 +813,8 @@ export function selectTrendsRegion(region:string, view_type: string) {
 }
 
 export const SELECT_TRENDS_SEASON = 'SELECT_TRENDS_SEASON';
-export function selectTrendsSeason(season:string, view_type: string) {
-    return (dispatch:Dispatch, getState:GetState) => {
+export function selectTrendsSeason(season: string, view_type: string) {
+    return (dispatch: Dispatch, getState: GetState) => {
 
         const state = getState();
         let total_year = state.chosenTrends.baseline_total_year;
@@ -760,7 +829,7 @@ export function selectTrendsSeason(season:string, view_type: string) {
 
         if (parameter !== '') {
             if (view_type === 'by-sensors') {
-                dispatch(fetchTrends(parameter, total_year, interval, view_type, season));
+                dispatch(fetchTrends(parameter, total_year, interval, season));
             }
             if (view_type === 'by-regions') {
                 dispatch(fetchRegionTrends(parameter, season));
@@ -772,7 +841,7 @@ export function selectTrendsSeason(season:string, view_type: string) {
 
 export const SET_TRENDS_SENSORS = 'SET_TRENDS_SENSORS';
 export function setTrendsSensors() {
-    return (dispatch:Dispatch, getState:GetState) => {
+    return (dispatch: Dispatch, getState: GetState) => {
 
         const state = getState();
         let sensors = state.sensors.data;
@@ -786,7 +855,7 @@ export function setTrendsSensors() {
 
 export const SET_REGIONS_SENSORS = 'SET_REGIONS_SENSORS';
 export function setRegionsSensors() {
-    return (dispatch:Dispatch) => {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: SET_REGIONS_SENSORS
         });
@@ -795,7 +864,7 @@ export function setRegionsSensors() {
 
 export const SET_TRENDS_TIMEFRAMES = 'SET_TRENDS_TIMEFRAMES';
 export function setTrendsTimeframes() {
-    return (dispatch:Dispatch) => {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: SET_TRENDS_TIMEFRAMES
         });
@@ -803,8 +872,8 @@ export function setTrendsTimeframes() {
 }
 
 export const UPDATE_TRENDS_SENSORS = 'UPDATE_TRENDS_SENSORS';
-export function updateTrendsSensors(view_type:string) {
-    return (dispatch:Dispatch) => {
+export function updateTrendsSensors(view_type: string) {
+    return (dispatch: Dispatch) => {
         dispatch(setTrendsTimeframes());
         dispatch({
             type: UPDATE_TRENDS_SENSORS,
@@ -814,7 +883,7 @@ export function updateTrendsSensors(view_type:string) {
 }
 
 export const SELECT_TRENDS_THRESHOLD = 'SELECT_TRENDS_THRESHOLD';
-export function selectTrendsThreshold(threshold:number) {
+export function selectTrendsThreshold(threshold: number) {
     return {
         type: SELECT_TRENDS_THRESHOLD,
         threshold
@@ -822,8 +891,8 @@ export function selectTrendsThreshold(threshold:number) {
 }
 
 export const SELECT_TRENDS_VIEW_TYPE = 'SELECT_TRENDS_VIEW_TYPE';
-export function selectTrendsViewType(view_type:string) {
-    return (dispatch:Dispatch) => {
+export function selectTrendsViewType(view_type: string) {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: SELECT_TRENDS_VIEW_TYPE,
             view_type
@@ -833,16 +902,16 @@ export function selectTrendsViewType(view_type:string) {
     };
 }
 
-export const SELECT_TRENDS_CALC_BASELINE_SETTING= 'SELECT_TRENDS_CALC_BASELINE_SETTING';
-export function selectTrendsCalcBaselineSetting(baseline_total_year:number) {
+export const SELECT_TRENDS_CALC_BASELINE_SETTING = 'SELECT_TRENDS_CALC_BASELINE_SETTING';
+export function selectTrendsCalcBaselineSetting(baseline_total_year: number) {
     return {
         type: SELECT_TRENDS_CALC_BASELINE_SETTING,
         baseline_total_year
     };
 }
 
-export const SELECT_TRENDS_CALC_ROLLING_SETTING= 'SELECT_TRENDS_CALC_ROLLING_SETTING';
-export function selectTrendsCalcRollingSetting(rolling_interval:number) {
+export const SELECT_TRENDS_CALC_ROLLING_SETTING = 'SELECT_TRENDS_CALC_ROLLING_SETTING';
+export function selectTrendsCalcRollingSetting(rolling_interval: number) {
     return {
         type: SELECT_TRENDS_CALC_ROLLING_SETTING,
         rolling_interval
@@ -850,8 +919,8 @@ export function selectTrendsCalcRollingSetting(rolling_interval:number) {
 }
 
 export const ADD_ANALYSIS_COUNT = 'ADD_ANALYSIS_COUNT';
-export function addAnalysisCount(number_to_filter:number){
-    return (dispatch:Dispatch) => {
+export function addAnalysisCount(number_to_filter: number) {
+    return (dispatch: Dispatch) => {
 
         dispatch({
             type: ADD_ANALYSIS_COUNT,
@@ -861,8 +930,8 @@ export function addAnalysisCount(number_to_filter:number){
 }
 
 export const FETCH_ANALYSIS_REGION = 'FETCH_ANALYSIS_REGION';
-export function fetchAnalysisRegion(region:string){
-    return (dispatch:Dispatch, getState:GetState) => {
+export function fetchAnalysisRegion(region: string) {
+    return (dispatch: Dispatch, getState: GetState) => {
 
         const state = getState();
         let sensors = state.chosenTrends.sensors;
@@ -877,7 +946,7 @@ export function fetchAnalysisRegion(region:string){
 
 export const SET_AVAILABLE_LAYERS = 'SET_AVAILABLE_LAYERS';
 export function setAvailableLayers() {
-    return (dispatch:Dispatch) => {
+    return (dispatch: Dispatch) => {
         dispatch({
             type: SET_AVAILABLE_LAYERS
         });
@@ -885,7 +954,7 @@ export function setAvailableLayers() {
 }
 
 export const UPDATE_LAYER = 'UPDATE_LAYER';
-export function updateLayer(layer:Array<string>) {
+export function updateLayer(layer: Array<string>) {
     return {
         type: UPDATE_LAYER,
         layer
@@ -893,7 +962,7 @@ export function updateLayer(layer:Array<string>) {
 }
 
 export const SET_LAYER_OPACITY = 'SET_LAYER_OPACITY';
-export function setLayerOpacity(opacity:Array<string>) {
+export function setLayerOpacity(opacity: Array<string>) {
     return {
         type: SET_LAYER_OPACITY,
         opacity

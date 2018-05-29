@@ -53,7 +53,7 @@ class DataGraphMultiLine extends Component {
             }
 
             sensor.parameters.map(p => {
-                if (getParameterName(p, getAlternateParameters()) != null) {
+                if (getParameterName(p, getAlternateParameters()) !== null) {
                     let paramChecked = this.state.paramListSelect.includes(p);
                     let checkboxDisabled = false;
                     if (paramChecked === false && this.state.paramListSelect.length >= 3) {

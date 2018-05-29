@@ -18,26 +18,26 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
     return {
         onOptionChange: (event, selectedParameters, selectedDataSources) => {
 
-            var value = event.target.value;
+            const value = event.target.value;
             if (event.target.checked) {
-                if (event.target.name == "parameters") {
+                if (event.target.name === "parameters") {
                     selectedParameters.push(value);
                     dispatch(addSearchParameter(selectedParameters));
 
-                } else if (event.target.name == "data_sources") {
+                } else if (event.target.name === "data_sources") {
                     selectedDataSources.push(value);
                     dispatch(addSearchDataSource(selectedDataSources));
                 }
 
             } else {
-                if (event.target.name == "parameters") {
-                    var idx:number = selectedParameters.indexOf(value);
+                if (event.target.name === "parameters") {
+                    const idx:number = selectedParameters.indexOf(value);
                     if (idx > -1) {
                         selectedParameters.splice(idx, 1);
                         dispatch(addSearchParameter(selectedParameters));
                     }
-                } else if (event.target.name == "data_sources") {
-                    var idx:number = selectedDataSources.indexOf(value);
+                } else if (event.target.name === "data_sources") {
+                    const idx:number = selectedDataSources.indexOf(value);
                     if (idx > -1) {
                         selectedDataSources.splice(idx, 1);
                         dispatch(addSearchDataSource(selectedDataSources));

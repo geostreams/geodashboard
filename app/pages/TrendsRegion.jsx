@@ -24,16 +24,16 @@ class TrendsRegion extends Component {
         let trendsThresholdChoice = false;
 
         let loading_spinner;
-        if (this.props.show_spinner == true && this.props.parameter != '') {
+        if (this.props.show_spinner === true && this.props.parameter !== '') {
             loading_spinner = (
                 <div className={styles.make_modal}>
-                    <div className={styles.loading_spinner}></div>
+                    <div className={styles.loading_spinner}> </div>
                 </div>
             );
         }
 
         let selections = '';
-        if (this.props.region_parameter != '') {
+        if (this.props.region_parameter !== '') {
             selections = (
                 <Card className={trendsStyles.cardMargin}>
                     <CardHeader>

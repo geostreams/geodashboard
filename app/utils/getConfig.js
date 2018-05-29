@@ -38,7 +38,7 @@ export function getCustomLocation(location:string):Object {
         });
 }
 
-export function getLakesOrdering(key){
+export function getLakesOrdering(key:string){
     const additional_locations = window.configruntime.gd3.additional_locations;
     let order = {};
     additional_locations.map(location => {
@@ -336,10 +336,6 @@ export function getTrendsPageRolling() {
 
 export function getWaterYearStatus() {
     return window.configruntime.gd3.trends_analysis_water_year;
-}
-
-export function getTrendsAnalysisSemiValue() {
-    return window.configruntime.gd3.trends_analysis_semi_value;
 }
 
 export function getShowDetailTabs() {

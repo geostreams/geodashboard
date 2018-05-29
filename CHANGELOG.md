@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1086](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1086)
 - Mobile Detail Page Improvements
   [IMLCZO-230](https://opensource.ncsa.illinois.edu/jira/browse/IMLCZO-230)
+- Separate Actions for Exploratory Analysis and Trends
+  [GLGVO-416](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-416)
 
 ### Fixed
 - When clicking on a pill in explore left navigation, open the popup on the map

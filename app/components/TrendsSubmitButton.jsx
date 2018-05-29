@@ -29,13 +29,9 @@ class TrendsSubmitButton extends Component {
         let chosenRegion = this.props.chosenRegion;
         let baselinePeriod = this.props.baselinePeriod;
         let rollingPeriod = this.props.rollingPeriod;
-        let thresholdChooseValue = this.props.thresholdChooseValue;
-        let trendsSeason = this.props.trends_season;
-        let trendsViewType = this.props.trends_view_type;
 
         this.props.onClickAnalysis(
-            chosenParameter, chosenRegion, baselinePeriod, rollingPeriod,
-            thresholdChooseValue, trendsSeason, trendsViewType
+            chosenParameter, chosenRegion, baselinePeriod, rollingPeriod
         )
     }
 
@@ -87,8 +83,6 @@ TrendsSubmitButton.propTypes = {
     baselinePeriod: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     rollingPeriod: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     thresholdChooseValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    trends_season: PropTypes.string.isRequired,
-    trends_view_type: PropTypes.string.isRequired,
     trends_defaults: PropTypes.array.isRequired
 };
 

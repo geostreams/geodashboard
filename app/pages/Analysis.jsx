@@ -13,7 +13,7 @@ import {
 import Map from '../containers/AnalysisMap';
 import {
     getTrendSettings, getTrendRegions, getTrendsAnalysisDefaultValues,
-    getTrendsPageBaseline, getTrendsPageRolling, getTrendsAnalysisSemiValue
+    getTrendsPageBaseline, getTrendsPageRolling
 } from '../utils/getConfig';
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsThresholds from '../containers/TrendsThresholds';
@@ -35,7 +35,6 @@ class Analysis extends Component {
 
         let trendsThresholdChoice = true;
         let trendsPageViewType = 'by-analysis';
-        let trendsSeason = getTrendsAnalysisSemiValue();
 
         let loading_spinner;
         if (this.props.show_spinner === true && this.props.parameter !== '') {
@@ -80,7 +79,6 @@ class Analysis extends Component {
                                 </List>
                                 <div className={analysisStyles.actionStyle}>
                                     <TrendsSubmitButton
-                                        trends_season={trendsSeason}
                                         trends_defaults={trendsPageDefaults}
                                         trends_view_type={trendsPageViewType}
                                     />

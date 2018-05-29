@@ -60,12 +60,12 @@ class DownloadButtons extends Component {
         let params = {};
         params["format"] = type;
         if(this.props.selectedFilters.indexOf("time") > -1) {
-            if(this.props.selectedStartDate != null && this.props.selectedStartDate !== "") {
-	            params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
-	            // Having until without since doesn't make much sense.
-	            if(this.props.selectedEndDate != null && this.props.selectedEndDate !== ""){
-		            params["until"] = this.props.selectedEndDate.toISOString().slice(0, 10);
-	            }
+            if(this.props.selectedStartDate !== null && this.props.selectedStartDate !== "") {
+                params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
+                // Having until without since doesn't make much sense.
+                if(this.props.selectedEndDate !== null && this.props.selectedEndDate !== ""){
+                    params["until"] = this.props.selectedEndDate.toISOString().slice(0, 10);
+                }
             }
 
         }
@@ -76,11 +76,11 @@ class DownloadButtons extends Component {
         if (this.props.selectedParameters.length > 0) {
             let parametersToSearch = Object.assign([], this.props.selectedParameters);
             const multiParameters = intersectArrays(Object.keys(window.configruntime.gd3.multi_parameter_map), this.props.selectedParameters);
-	        multiParameters.map((parameter) =>
-		        window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
-			        parametersToSearch.push(alternate);
-		        })
-	        );
+            multiParameters.map((parameter) =>
+                window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
+                    parametersToSearch.push(alternate);
+                })
+            );
             params["attributes"] = parametersToSearch;
         }
 

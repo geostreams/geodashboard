@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux';
 import TrendsSubmitButtonComponent from '../components/TrendsSubmitButton';
-import { fetchTrends, fetchAnalysisRegion } from '../actions';
+import { fetchAnalysis, fetchAnalysisRegion } from '../actions';
 import type { Dispatch } from '../utils/flowtype';
 
 
@@ -23,16 +23,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onClickAnalysis:(chosenParameter, chosenRegion, baselinePeriod, rollingPeriod,
-                         thresholdChooseValue, trendsSeason, trendsViewType) => {
+        onClickAnalysis:(chosenParameter, chosenRegion, baselinePeriod, rollingPeriod) => {
 
-            dispatch(fetchAnalysisRegion(
-                chosenRegion
-            ));
+            dispatch(fetchAnalysisRegion(chosenRegion));
 
-            dispatch(fetchTrends(
-                chosenParameter, baselinePeriod, rollingPeriod, trendsViewType, trendsSeason
-            ));
+            dispatch(fetchAnalysis(chosenParameter, baselinePeriod, rollingPeriod));
 
         }
     }

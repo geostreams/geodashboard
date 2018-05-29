@@ -30,16 +30,16 @@ class FilterSelection extends Component {
         const idx = event.target.dataset.idx; //Idx of the selected filter
         const value = event.target.options[event.target.selectedIndex].value;
         console.log(value, " was selected");
-        if (value == "parameters" || this.props.selectedFilters[idx] == "parameters") {
+        if (value === "parameters" || this.props.selectedFilters[idx] === "parameters") {
             this.props.onClearFilter(true, false);
         }
-        if (value == "data_sources" || this.props.selectedFilters[idx] == "data_sources") {
+        if (value === "data_sources" || this.props.selectedFilters[idx] === "data_sources") {
             this.props.onClearFilter(false, true);
         }
-        if (value == "time" || this.props.selectedFilters[idx] == "time") {
+        if (value === "time" || this.props.selectedFilters[idx] === "time") {
             this.props.onClearTime();
         }
-        if (value == "locations" || this.props.selectedFilters[idx] == "locations") {
+        if (value === "locations" || this.props.selectedFilters[idx] === "locations") {
             this.props.onClearLocation();
         }
         let newSelected = Object.assign([], this.props.selectedFilters);
@@ -49,23 +49,23 @@ class FilterSelection extends Component {
     }
 
     handleClickRemoveFilter(event) {
-        var idx = event.target.parentElement.dataset.idx;
-        var value = this.props.selectedFilters[idx];
+        const idx = event.target.parentElement.dataset.idx;
+        const value = this.props.selectedFilters[idx];
 
         console.log(value, " was removed");
-        if (value == "parameters" || this.props.selectedFilters[idx] == "parameters") {
+        if (value === "parameters" || this.props.selectedFilters[idx] === "parameters") {
             this.props.onClearFilter(true, false);
         }
-        if (value == "data_sources" || this.props.selectedFilters[idx] == "data_sources") {
+        if (value === "data_sources" || this.props.selectedFilters[idx] === "data_sources") {
             this.props.onClearFilter(false, true);
         }
-        if (value == "time" || this.props.selectedFilters[idx] == "time") {
+        if (value === "time" || this.props.selectedFilters[idx] === "time") {
             this.props.onClearTime();
         }
-        if (value == "locations" || this.props.selectedFilters[idx] == "locations") {
+        if (value === "locations" || this.props.selectedFilters[idx] === "locations") {
             this.props.onClearLocation();
         }
-        var newSelected = Object.assign([], this.props.selectedFilters);
+        let newSelected = Object.assign([], this.props.selectedFilters);
         newSelected.splice(idx, 1);
         this.props.onDeleteFilter(idx);
 
