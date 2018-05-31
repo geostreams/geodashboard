@@ -149,6 +149,7 @@ class SearchMap extends Component {
                 theMap.getView().fit(tmpvectorSource.getExtent(), theMap.getSize());
             }
         }
+
     };
 
     getFeature = () => {
@@ -163,6 +164,7 @@ class SearchMap extends Component {
     getCluster = (clusterSource: ol.source.Cluster) => {
         return new ol.layer.Vector({
             source: clusterSource,
+            name: 'clusters_layer',
             style: function (feature) {
                 let size = feature.get('features').length;
                 let style;
@@ -194,7 +196,6 @@ class SearchMap extends Component {
                         })
                     });
                 } else {
-
                     let featureColor = feature.getProperties().features[0].attributes.color;
                     let iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
                         + '<g class="marker-g">'
@@ -220,7 +221,6 @@ class SearchMap extends Component {
                 }
 
                 return style;
-
             }
         });
     };
@@ -273,6 +273,7 @@ class SearchMap extends Component {
                           onMapSingleClick={this.popupHandler}
                           onMapChangeResolution={this.onChangeZoom}
                           mapDidUpdate={this.mapDidUpdate}
+                          disableClusters={this.props.disable_clusters}
                 />
             </div>
 

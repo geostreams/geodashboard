@@ -10,10 +10,12 @@ import Menu from '../containers/MenuBar';
 import DownloadButtons from '../containers/DownloadButtons';
 import FilterSelection from '../containers/FilterSelection';
 import {
-    Card, CardText, CardMedia, List, Content, Grid, Cell,
-    Radio, RadioGroup
+    Card, CardText, CardMedia, Cell, Checkbox, Content,
+    FormField, Grid, List, Radio, RadioGroup
 } from 'react-mdc-web';
-import {getMobileSizeMax} from '../utils/getConfig';
+import {clustersChoiceOption, getMobileSizeMax} from '../utils/getConfig';
+import MapToggleClusters from "../components/MapToggleClusters";
+
 
 Object.assign(styles, stylesearch);
 
@@ -22,20 +24,30 @@ class Search extends Component {
     constructor(props: Object) {
         super(props);
         this.state = {
-            viewSelection: "list-view"
+            viewSelection: "list-view",
+            disableClusters: false
         };
         (this:any).clickedViewSelection = this.clickedViewSelection.bind(this);
+        (this:any).toggleClustersSearch = this.toggleClustersSearch.bind(this);
+
     }
 
     state: {
-        viewSelection: string
+        viewSelection: string,
+        disableClusters: boolean
     };
 
     clickedViewSelection(event: Object) {
         this.setState({viewSelection: event.target.value});
     }
 
+    toggleClustersSearch() {
+        this.setState({disableClusters: !this.state.disableClusters});
+    };
+
     render() {
+
+        let disableClusters = this.state.disableClusters;
 
         let filterLists = '';
         if (screen.width > getMobileSizeMax()  || this.state.viewSelection === 'list-view') {
@@ -44,9 +56,22 @@ class Search extends Component {
                     <FilterSelection/>
                 </List>
         }
+
+        let toggleClustersSearch = '';
+        let toggleClustersSearchOption = clustersChoiceOption();
+        if (toggleClustersSearchOption === true && screen.width > getMobileSizeMax()) {
+            toggleClustersSearch = <MapToggleClusters
+                onChangeFunction={this.toggleClustersSearch}
+                disableClusters={disableClusters}
+            />
+        }
+
         let mapObject = '';
-        if (screen.width > getMobileSizeMax()  || this.state.viewSelection === 'map-view') {
-            mapObject = <SearchMap />
+        if (screen.width > getMobileSizeMax() || this.state.viewSelection === 'map-view') {
+            if (screen.width <= getMobileSizeMax()) {
+                disableClusters = false;
+            }
+            mapObject = <SearchMap disable_clusters={disableClusters}/>;
         }
 
         let mobileViewSelection = '';
@@ -83,6 +108,7 @@ class Search extends Component {
                     <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>
                             <Cell col={3}>
+                                {toggleClustersSearch}
                                 {filterLists}
                             </Cell>
                             <div className={styles.bottomSection}>

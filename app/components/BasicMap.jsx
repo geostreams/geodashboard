@@ -17,8 +17,8 @@ require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import type {MapProps, BasicMapState} from '../utils/flowtype';
-import {getMapTileURLSetting} from '../utils/getConfig';
-import {getAttribution, getControls} from '../utils/mapUtils';
+import {getMapTileURLSetting, getClustersDistance} from '../utils/getConfig';
+import {clusteringOptions, getAttribution, getControls} from '../utils/mapUtils';
 
 
 class BasicMap extends Component {
@@ -63,62 +63,66 @@ class BasicMap extends Component {
 
         return (
             <div>
-
-                <div id='map' className={styles.root}>
-                </div>
-
+                <div id='map' className={styles.root}> </div>
                 <div style={{display: 'none'}}>
                     <div id="marker" title="Marker" className="marker"> </div>
                     <div id="popup" className={styles.olPopup}>
                         <a href="#" id="popup-closer" className={styles.olPopupCloser}> </a>
                         <div id="popup-content"> </div>
                     </div>
+
                     <div id="ol-centercontrol" className={styles.olCenterButton}
-                         ref={(div) => { this.ol_centercontrol = div; }}
-                    > </div>
-                    <button id="centerButton" ref={(button) => { this.centerButton = button; }}>
+                         ref={(div) => { this.ol_centercontrol = div; }}>
+                    </div>
+                    <button id="centerButton" title="Click to Center the Map"
+                            ref={(button) => { this.centerButton = button; }}>
                         <Icon name="gps_fixed"/>
                     </button>
 
                     <div id="ol-drawcirclecontrol"
-                         className={styles.olDrawCircleButton + ' ' +
-                         styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawcirclecontrol = div; }}
-                    > </div>
-                    <button id="drawCircleButton" title="Click to Draw a Circle" ref={(button) => { this.drawCircleButton = button; }}>
-                        <Icon name="panorama_fish_eye"/></button>
+                         className={styles.olDrawCircleButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
+                         ref={(div) => { this.ol_drawcirclecontrol = div; }}>
+                    </div>
+                    <button id="drawCircleButton" title="Click to Draw a Circle"
+                            ref={(button) => { this.drawCircleButton = button; }}>
+                        <Icon name="panorama_fish_eye"/>
+                    </button>
 
                     <div id="ol-drawsquarecontrol"
-                         className={styles.olDrawSquareButton + ' ' +
-                         styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawsquarecontrol = div; }}
-                    > </div>
-                    <button id="drawSquareButton" title="Click to Draw a Square" ref={(button) => { this.drawSquareButton = button; }}>
-                        <Icon name="crop_square"/></button>
+                         className={styles.olDrawSquareButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
+                         ref={(div) => { this.ol_drawsquarecontrol = div; }}>
+                    </div>
+                    <button id="drawSquareButton" title="Click to Draw a Square"
+                            ref={(button) => { this.drawSquareButton = button; }}>
+                        <Icon name="crop_square"/>
+                    </button>
 
                     <div id="ol-drawcustomcontrol"
-                         className={styles.olDrawCustomButton + ' ' +
-                         styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawcustomcontrol = div; }}
-                    > </div>
-                    <button id="drawCustomButton" title="Click to Draw a Custom Shape" ref={(button) => { this.drawCustomButton = button; }}>
-                        <Icon name="star_border"/></button>
+                         className={styles.olDrawCustomButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
+                         ref={(div) => { this.ol_drawcustomcontrol = div; }}>
+                    </div>
+                    <button id="drawCustomButton" title="Click to Draw a Custom Shape"
+                            ref={(button) => { this.drawCustomButton = button; }}>
+                        <Icon name="star_border"/>
+                    </button>
 
                     <div id="ol-drawclearcontrol"
-                         className={styles.olDrawClearButton + ' ' +
-                         styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawclearcontrol = div; }}
-                    > </div>
-                    <button id="drawClearButton" title="Click to Reset Drawing Selection" ref={(button) => { this.drawClearButton = button; }}>
-                        <Icon name="clear"/></button>
+                         className={styles.olDrawClearButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
+                         ref={(div) => { this.ol_drawclearcontrol = div; }}>
+                    </div>
+                    <button id="drawClearButton" title="Click to Reset Drawing Selection"
+                            ref={(button) => { this.drawClearButton = button; }}>
+                        <Icon name="clear"/>
+                    </button>
                 </div>
-
-            </div>);
+            </div>
+        );
 
     }
 
     componentDidUpdate() {
         this.props.mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
+        clusteringOptions(this.state.map, this.props.disableClusters);
         this.state.clusterSource.clear();
         this.state.clusterSource.addFeatures(this.props.features);
         this.state.vectorSource.clear();
@@ -126,10 +130,9 @@ class BasicMap extends Component {
     }
 
     componentDidMount() {
-
         const clusterSource = new ol.source.Cluster({
             projection: "EPSG:3857",
-            distance: 1,
+            distance: getClustersDistance(),
             source: this.state.vectorSource
         });
         this.setState({clusterSource: clusterSource});
@@ -216,7 +219,7 @@ class BasicMap extends Component {
 
         let handleDrawClearButton = function () {
             theMap.getInteractions().forEach(function (e) {
-                if(e instanceof ol.interaction.Draw) {
+                if (e instanceof ol.interaction.Draw) {
                     theMap.removeInteraction(e);
                 }
             });
@@ -276,7 +279,7 @@ class BasicMap extends Component {
 
             theMap.addInteraction(drawSquare);
 
-            drawSquare.on ('drawstart',function() {
+            drawSquare.on('drawstart', function () {
                 selectItems.setActive(false);
                 selectPoints = [];
             });
@@ -286,7 +289,7 @@ class BasicMap extends Component {
                 selectItems.setActive(true);
 
                 theMap.getInteractions().forEach(function (e) {
-                    if(e instanceof ol.interaction.Draw) {
+                    if (e instanceof ol.interaction.Draw) {
                         theMap.removeInteraction(e);
                     }
                 });
@@ -313,9 +316,9 @@ class BasicMap extends Component {
                 if (selectPoints.length > 0) {
                     for (let i = 0; i < selectPoints.length; i++) {
                         let selectPointFeatures = selectPoints[i].get('features');
-                        for(let j = 0; j < selectPointFeatures.length; j++) {
+                        for (let j = 0; j < selectPointFeatures.length; j++) {
                             let featureName = selectPointFeatures[j].attributes.name;
-                            if(!selectPointsLocations.includes(featureName.toString())) {
+                            if (!selectPointsLocations.includes(featureName.toString())) {
                                 selectPointsLocations.push(featureName);
                             }
                         }
@@ -354,7 +357,7 @@ class BasicMap extends Component {
 
             theMap.addInteraction(drawCircle);
 
-            drawCircle.on ('drawstart',function() {
+            drawCircle.on('drawstart', function () {
                 selectItems.setActive(false);
                 selectPoints = [];
             });
@@ -364,7 +367,7 @@ class BasicMap extends Component {
                 selectItems.setActive(true);
 
                 theMap.getInteractions().forEach(function (e) {
-                    if(e instanceof ol.interaction.Draw) {
+                    if (e instanceof ol.interaction.Draw) {
                         theMap.removeInteraction(e);
                     }
                 });
@@ -391,9 +394,9 @@ class BasicMap extends Component {
                 if (selectPoints.length > 0) {
                     for (let i = 0; i < selectPoints.length; i++) {
                         let selectPointFeatures = selectPoints[i].get('features');
-                        for(let j = 0; j < selectPointFeatures.length; j++) {
+                        for (let j = 0; j < selectPointFeatures.length; j++) {
                             let featureName = selectPointFeatures[j].attributes.name;
-                            if(!selectPointsLocations.includes(featureName.toString())) {
+                            if (!selectPointsLocations.includes(featureName.toString())) {
                                 selectPointsLocations.push(featureName);
                             }
                         }
@@ -405,7 +408,7 @@ class BasicMap extends Component {
                 // (2) Get the Center Point of the Circle
                 let drawCenter = drawExtent.getCenter();
                 // (3) Get the Radius of the Circle in Meters
-                let drawRadius = (drawExtent.getRadius() * ol.proj.METERS_PER_UNIT[units])/1000;
+                let drawRadius = (drawExtent.getRadius() * ol.proj.METERS_PER_UNIT[units]) / 1000;
                 // Assemble the Coordinates for the API call
                 let drawCoordinates = [drawCenter.concat(drawRadius)];
                 // Call the appropriate function
@@ -440,7 +443,7 @@ class BasicMap extends Component {
 
             theMap.addInteraction(drawCustom);
 
-            drawCustom.on ('drawstart',function() {
+            drawCustom.on('drawstart', function () {
                 selectItems.setActive(false);
                 selectPoints = [];
             });
@@ -450,7 +453,7 @@ class BasicMap extends Component {
                 selectItems.setActive(true);
 
                 theMap.getInteractions().forEach(function (e) {
-                    if(e instanceof ol.interaction.Draw) {
+                    if (e instanceof ol.interaction.Draw) {
                         theMap.removeInteraction(e);
                     }
                 });
@@ -477,9 +480,9 @@ class BasicMap extends Component {
                 if (selectPoints.length > 0) {
                     for (let i = 0; i < selectPoints.length; i++) {
                         let selectPointFeatures = selectPoints[i].get('features');
-                        for(let j = 0; j < selectPointFeatures.length; j++) {
+                        for (let j = 0; j < selectPointFeatures.length; j++) {
                             let featureName = selectPointFeatures[j].attributes.name;
-                            if(!selectPointsLocations.includes(featureName.toString())) {
+                            if (!selectPointsLocations.includes(featureName.toString())) {
                                 selectPointsLocations.push(featureName);
                             }
                         }
@@ -532,13 +535,12 @@ class BasicMap extends Component {
             that.props.onMapSingleClick(theMap, e);
         });
 
-        if(this.props.customLayers){
-            this.props.customLayers.map(l=> theMap.addLayer(l));
+        if (this.props.customLayers) {
+            this.props.customLayers.map(l => theMap.addLayer(l));
         }
 
         this.setState({map: theMap});
     }
-
 }
 
 export default BasicMap;

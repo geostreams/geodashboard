@@ -4,35 +4,47 @@ import Map from '../containers/ExploreMap';
 import ExploreSourcesTab from '../containers/ExploreSourcesTab';
 import ExploreLayers from '../components/ExploreLayers';
 import {
-    Card, CardTitle, CardHeader, CardText, Cell,  Content, Grid,
-    List, ListHeader, ListGroup, ListDivider, Radio, RadioGroup, Tabbar, Tab
+    Button, Card, CardTitle, CardHeader, CardText, Cell, Checkbox, Content,
+    FormField, Grid, List, ListHeader, ListGroup, ListDivider, Radio, RadioGroup,
+    Tabbar, Tab
 } from 'react-mdc-web';
 import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
 import {connect} from 'react-redux';
 import {
-    getMobileSourceNames, getMobileSizeMax, getLayersDetails, getChromeDisabled
+    getMobileSourceNames, getMobileSizeMax, getLayersDetails, getChromeDisabled, clustersChoiceOption
 } from '../utils/getConfig';
+import MapToggleClusters from "../components/MapToggleClusters";
+
 
 class Explore extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            viewSelection: "list-view"
+            viewSelection: "list-view",
+            disableClusters: false
         };
         (this:any).clickedViewSelection = this.clickedViewSelection.bind(this);
+        (this:any).toggleClustersExplore = this.toggleClustersExplore.bind(this);
     }
 
     state: {
-        viewSelection: string
+        viewSelection: string,
+        disableClusters: boolean
     };
 
     clickedViewSelection(value) {
         this.setState({viewSelection: value});
     }
 
+    toggleClustersExplore() {
+        this.setState({disableClusters: !this.state.disableClusters});
+    };
+
     render() {
+
+        let disableClusters = this.state.disableClusters;
 
         let sourceLists = '';
         let sourcesSection = '';
@@ -87,13 +99,25 @@ class Explore extends Component {
             layersVisibility = this.props.layersVisibility;
         }
 
+        let toggleClustersExplore = '';
+        let toggleClustersExploreOption = clustersChoiceOption();
+        if (toggleClustersExploreOption === true && screen.width > getMobileSizeMax()) {
+            toggleClustersExplore = <MapToggleClusters
+                onChangeFunction={this.toggleClustersExplore}
+                disableClusters={disableClusters}
+            />
+        }
+
         let mapObject = '';
         if (screen.width > getMobileSizeMax() || this.state.viewSelection === 'map-view') {
+            if (screen.width <= getMobileSizeMax()) {
+                disableClusters = false;
+            }
             mapObject =
-                <Map
-                    userStations={this.props.params.stations}
-                    exploreLayersDetails={exploreLayersDetails}
-                    layersVisibility={layersVisibility}
+                <Map disable_clusters={disableClusters}
+                     userStations={this.props.params.stations}
+                     exploreLayersDetails={exploreLayersDetails}
+                     layersVisibility={layersVisibility}
                 />;
         }
 
@@ -146,6 +170,7 @@ class Explore extends Component {
                             </Cell>
                             <Cell col={9}>
                                 <div id="mapItems" className={styles.rightMap}>
+                                    {toggleClustersExplore}
                                     {mapObject}
                                 </div>
                             </Cell>
@@ -159,6 +184,7 @@ class Explore extends Component {
         return (page_content)
 
     }
+
 }
 
 

@@ -1323,5 +1323,7 @@ export const gd3 = {
         'UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
     mapAttributionsCollapsible: true,
     mapMiniAttributionsCollapsible: true,
+    mapClustersDistance: 1,
+    clustersChoiceOption: true,
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}

@@ -3,12 +3,12 @@ import {
     getSourceName, getParameterName, getAlternateParameters, getCustomTrendsRegion,
     getTrendColor, getColor, getTrendsPageLakeRegions, getMapAttributionsSetting,
     getMapAttributionsCollapsibleSetting, getMapMiniAttributionsCollapsibleSetting,
-    getMobileSizeMax, getMobileSourceNames
+    getMobileSizeMax, getMobileSourceNames, getClustersDistance
 } from './getConfig';
 import {matchRegionTrends, getRegionalThreshold} from '../utils/trendsUtils';
 
 
-export function sensorsToFeatures(sensors: Sensors):Array<ol.Feature> {
+export function sensorsToFeatures(sensors: Sensors): Array<ol.Feature> {
     let features = Array();
     const alternateParameters = getAlternateParameters();
 
@@ -55,8 +55,7 @@ export function sensorsToFeatures(sensors: Sensors):Array<ol.Feature> {
 }
 
 export function sensorsToFeaturesTrendPage(
-    sensors: Sensors, parameter: string, trends_parameter_lake_regions: Array):Array<ol.Feature>
-{
+    sensors: Sensors, parameter: string, trends_parameter_lake_regions: Array): Array<ol.Feature> {
 
     let features = Array();
 
@@ -93,8 +92,8 @@ export function sensorsToFeaturesTrendPage(
                     console.log("not null");
                     // For Trends Page, only check Threshold and assign red arrows for certain parameters.
                     // Otherwise, only assign blue or yellow arrows with no Threshold check.
-                    if (trends_parameter_lake_regions.indexOf(parameter) >= 0 ) {
-                        if (trends_lakes_with_regions.indexOf(sensor.properties.region) >= 0 ) {
+                    if (trends_parameter_lake_regions.indexOf(parameter) >= 0) {
+                        if (trends_lakes_with_regions.indexOf(sensor.properties.region) >= 0) {
                             for (let i = 0; i < trends_lake_regions.length; i++) {
                                 if (matchRegionTrends(trends_lake_regions[i], sensor)) {
                                     threshold = getRegionalThreshold(trends_lake_regions[i], sensor, parameter);
@@ -106,11 +105,11 @@ export function sensorsToFeaturesTrendPage(
                     }
                     // Only blue or yellow arrows
                     if (threshold === 'n/a') {
-                        if (sensor.trends[parameter + "_percentage_change"] > 0 ) {
+                        if (sensor.trends[parameter + "_percentage_change"] > 0) {
 
                             trend_type = "trendUp";
 
-                        } else if (sensor.trends[parameter + "_percentage_change"] < 0 ) {
+                        } else if (sensor.trends[parameter + "_percentage_change"] < 0) {
 
                             trend_type = "trendDown";
 
@@ -243,8 +242,7 @@ export function sensorsToFeaturesTrendPage(
 }
 
 export function sensorsToFeaturesTrendRegionPage(
-    sensors: Sensors, parameter: string, season: string, trends_parameter_lake_regions: Array):Array<ol.Feature>
-{
+    sensors: Sensors, parameter: string, season: string, trends_parameter_lake_regions: Array): Array<ol.Feature> {
 
     let features = Array();
 
@@ -285,8 +283,8 @@ export function sensorsToFeaturesTrendRegionPage(
 
                     // For Trends Page, only check Threshold and assign red arrows for certain parameters.
                     // Otherwise, only assign blue or yellow arrows with no Threshold check.
-                    if (trends_parameter_lake_regions.indexOf(parameter) >= 0 ) {
-                        if (trends_lakes_with_regions.indexOf(sensor.properties.region) >= 0 ) {
+                    if (trends_parameter_lake_regions.indexOf(parameter) >= 0) {
+                        if (trends_lakes_with_regions.indexOf(sensor.properties.region) >= 0) {
                             for (let i = 0; i < trends_lake_regions.length; i++) {
                                 if (matchRegionTrends(trends_lake_regions[i], sensor)) {
                                     threshold = getRegionalThreshold(trends_lake_regions[i], sensor, parameter);
@@ -299,10 +297,10 @@ export function sensorsToFeaturesTrendRegionPage(
 
                     // Only blue or yellow arrows
                     if (threshold === 'n/a') {
-                        if (ten_years_average > total_average ) {
+                        if (ten_years_average > total_average) {
                             trend_type = "trendUp";
 
-                        } else if (ten_years_average < total_average ) {
+                        } else if (ten_years_average < total_average) {
                             trend_type = "trendDown";
 
                         } else {
@@ -426,7 +424,7 @@ export function sensorsToFeaturesTrendRegionPage(
     return features;
 }
 
-export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: string, threshold: string):Array<ol.Feature> {
+export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: string, threshold: string): Array<ol.Feature> {
     let features = Array();
     const alternateParameters = getAlternateParameters();
     sensors.map((sensor) => {
@@ -567,7 +565,7 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
     return features;
 }
 
-export function popupHelperTrendDetailPage(feature: ol.Feature, styles){
+export function popupHelperTrendDetailPage(feature: ol.Feature, styles) {
 
     let id = feature.getId().toUpperCase();
     let sourceColor = feature.attributes.color;
@@ -579,7 +577,7 @@ export function popupHelperTrendDetailPage(feature: ol.Feature, styles){
 }
 
 export function sensorsToFeaturesTrendDetailPage(
-    sensors: Sensors, parameter: string, region: string):Array<ol.Feature> {
+    sensors: Sensors, parameter: string, region: string): Array<ol.Feature> {
 
     let features = Array();
     sensors.map((sensor) => {
@@ -613,13 +611,13 @@ export function generatePointsCircle(count: number, centerPixel) {
         separation = 100;
     }
     const twoPi = Math.PI * 2;
-    const start_angle = twoPi/12;
+    const start_angle = twoPi / 12;
     const circumference = separation * (2 + count);
-    const legLength = circumference/ twoPi;
-    const angleStep = twoPi/count;
-    const res=[];
+    const legLength = circumference / twoPi;
+    const angleStep = twoPi / count;
+    const res = [];
 
-    for(let i = count -1; i >=0; i--) {
+    for (let i = count - 1; i >= 0; i--) {
         const angle = start_angle + i * angleStep;
         res[i] = [centerPixel[0] + legLength * Math.cos(angle),
             centerPixel[1] + legLength * Math.sin(angle)];
@@ -635,7 +633,7 @@ export function getMultiLineLayer(featuresAtPixel: ol.features, theMap) {
     const coordinates = geometry.getCoordinates();
     const px = theMap.getPixelFromCoordinate(coordinates);
     const size = featuresAtPixel.get('features').length;
-    let points =generatePointsCircle(size, px);
+    let points = generatePointsCircle(size, px);
     // Create lines to where each marker is going to be placed
     let multiLineString = new ol.geom.MultiLineString([]);
     let multiLineLayer = new ol.layer.Vector({
@@ -660,7 +658,7 @@ export function getMultiLineLayer(featuresAtPixel: ol.features, theMap) {
 
     // Create new features to place in the ends of the line with the right styling
     let newFeatures = Array();
-    featuresAtPixel.get('features').forEach(function(feature, index) {
+    featuresAtPixel.get('features').forEach(function (feature, index) {
         let cd_end = theMap.getCoordinateFromPixel(points[index]);
 
         multiLineString.appendLineString(
@@ -680,7 +678,7 @@ export function getMultiLineLayer(featuresAtPixel: ol.features, theMap) {
 
     let newFeaturesLayer = new ol.layer.Vector({
         source: newFeaturesSource,
-        style: function(feature) {
+        style: function (feature) {
             let scale_value = 1.0;
             if (screen.width <= getMobileSizeMax()) {
                 scale_value = 4.0;
@@ -697,7 +695,7 @@ export function getMultiLineLayer(featuresAtPixel: ol.features, theMap) {
             return (new ol.style.Style({
                 image: new ol.style.Icon({
                     anchor: [0.5, 1],
-                    src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( iconSvg ),
+                    src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg),
                     imgSize: [15, 25],
                     scale: scale_value
                 })
@@ -730,13 +728,13 @@ export function aboutPopupMenu() {
 
 }
 
-export function getAttribution(){
+export function getAttribution() {
     return new ol.Attribution({
         html: getMapAttributionsSetting()
     });
 }
 
-export function getControls(){
+export function getControls() {
     return ol.control.defaults({
         attributionOptions: ({
             collapsible: getMapAttributionsCollapsibleSetting()
@@ -744,10 +742,22 @@ export function getControls(){
     })
 }
 
-export function getMiniControls(){
+export function getMiniControls() {
     return ol.control.defaults({
         attributionOptions: ({
             collapsible: getMapMiniAttributionsCollapsibleSetting()
         })
     })
+}
+
+export function clusteringOptions(theMap, disable_clusters) {
+    let clusterDistance = disable_clusters ? 0 : getClustersDistance();
+    let all_map_layers = theMap.getLayers().getArray().slice();
+    all_map_layers.map(map_layer => {
+        let layer_name = map_layer.get('name');
+        if ('clusters_layer' === layer_name) {
+            let source = map_layer.getSource();
+            source.setDistance(clusterDistance);
+        }
+    });
 }

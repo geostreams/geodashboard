@@ -122,7 +122,7 @@ h1, h2, h3, h5, h6, p, ul {
     margin-left: auto;
     padding: 0.5em 0em 0.5em 1em;
     width: 24em;
-    bottom:0;
+    bottom: 0;
     background-color: #fff;
     text-align: center;
 }
@@ -154,7 +154,7 @@ h1, h2, h3, h5, h6, p, ul {
 }
 
 .make_modal {
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     height: calc(100vh - 8em);
     width: 100%;
     z-index: 999;
@@ -201,7 +201,7 @@ h1, h2, h3, h5, h6, p, ul {
     font-weight: bold !important;
 }
 
-.title_card{
+.title_card {
     font-size: larger !important;
     font-weight: bold !important;
     text-transform: capitalize !important;
@@ -212,4 +212,30 @@ h1, h2, h3, h5, h6, p, ul {
     --mdc-theme-secondary: #3f51b5 !important;
     --mdc-theme-secondary-light: #a4addf !important;
     --mdc-theme-secondary-dark: #6f7dcd !important;
+}
+
+.clusterChoiceText {
+    font-weight: bold;
+    color: white;
+}
+
+.clusterChoiceTextActive {
+    font-weight: bold;
+    filter: invert(100%);
+}
+
+.clusterChoicePositioning {
+    position: fixed;
+    z-index: 1;
+    width: 15em;
+    bottom: 0;
+    left: 57%;
+    margin: 0 auto 0.9em auto;
+    background-color: rgba(0, 60, 136, 0.6) !important;
+    border-radius: 0.2em;
+    border: solid rgba(255, 255, 255, 0.7);
+}
+
+.clusterStyleActive {
+    filter: invert(100%);
 }

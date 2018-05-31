@@ -407,3 +407,19 @@ export function getMobileFilterSensors() {
     }
     return getValue;
 }
+
+export function getClustersDistance() {
+    let cluster_distance = 1;
+    if (window.configruntime.gd3.mapClustersDistance) {
+        cluster_distance = window.configruntime.gd3.mapClustersDistance;
+    }
+    return cluster_distance;
+}
+
+export function clustersChoiceOption() {
+    let cluster_choice = false;
+    if (window.configruntime.gd3.clustersChoiceOption) {
+        cluster_choice = window.configruntime.gd3.clustersChoiceOption;
+    }
+    return cluster_choice;
+}

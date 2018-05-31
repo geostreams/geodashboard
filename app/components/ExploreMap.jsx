@@ -11,9 +11,7 @@ import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
 import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup';
 import BasicMap from './BasicMap';
 import type {InputEventMap} from '../utils/flowtype';
-import {
-    getMobileFilterSensors, getMobileSizeMax, getMobileSourceNames
-} from '../utils/getConfig';
+import {getMobileFilterSensors, getMobileSizeMax, getMobileSourceNames} from '../utils/getConfig';
 
 
 class ExploreMap extends Component {
@@ -196,9 +194,7 @@ class ExploreMap extends Component {
             //     that.removeSpiderfiedClusterLayers(that.state.map);
             // }
             // that.displayOverlappingMarkers(featuresAtPixel, that.state.map, that);
-
         }
-
 
     };
 
@@ -232,6 +228,7 @@ class ExploreMap extends Component {
     getCluster = (clusterSource: ol.source.Cluster) => {
         return new ol.layer.Vector({
             source: clusterSource,
+            name: 'clusters_layer',
             style: function (feature) {
                 let size = feature.get('features').length;
                 let style;
@@ -263,7 +260,6 @@ class ExploreMap extends Component {
                         })
                     });
                 } else {
-
                     let featureColor = feature.getProperties().features[0].attributes.color;
                     let iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
                         + '<g class="marker-g">'
@@ -290,7 +286,6 @@ class ExploreMap extends Component {
                 }
 
                 return style;
-
             }
         });
     };
@@ -311,6 +306,7 @@ class ExploreMap extends Component {
                           onMapSingleClick={this.popupHandler}
                           onMapChangeResolution={this.onChangeZoom}
                           mapDidUpdate={this.mapDidUpdate}
+                          disableClusters={this.props.disable_clusters}
                 />
             </div>
         );
