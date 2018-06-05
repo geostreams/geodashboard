@@ -190,7 +190,7 @@ export function fetchAnalysis(parameter: string, total_year: number, interval: n
                 const json = response.json();
                 return json;
             }).then(json => {
-                if (json) {
+                if (json && json.length > 0) {
                     let trend_start = new Date(json[0].start_time);
                     let trend_end = new Date(json[0].end_time);
                     let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000 * 60 * 60 * 24));
@@ -284,7 +284,7 @@ export function fetchTrends(parameter: string, total_year: number, interval: num
                 const json = response.json();
                 return json;
             }).then(json => {
-                if (json) {
+                if (json && json.length > 0) {
                     let trend_start = new Date(json[0].start_time);
                     let trend_end = new Date(json[0].end_time);
                     let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000 * 60 * 60 * 24));

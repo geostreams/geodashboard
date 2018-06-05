@@ -163,7 +163,6 @@ export const gd3 = {
         "alkalinity-total-mgl": "Alkalinity Total (mg/L)",
         "amb_press_li_mean": "Air Pressure +25m (kPa)",
         "ammonia-ammonium-mgl": "Ammonia / Ammonium (mg/L)",
-        "ammonia-glenda" : "Ammonia (ug/l)" ,
         "ammonia-nitrogen-glenda" : "Ammonia-Nitrogen (ug/l)",
         "ammonia-unionized- as -n-mgl": "Ammonia Unionized as N (mg/L)",
         "ammonia-unionized-temp-ph-nh4-mgl": "Ammonia Unionized Temp pH NH4 (mg/L)",
@@ -301,7 +300,6 @@ export const gd3 = {
         "ortho-phosphate-nes-algal-assay-mgl": "Ortho-Phosphate NES Algal Assay (mg/L)",
         "outgoing-global-solar-radiation": "Outgoing Global Solar Radiation",
         "outgoing-longwave-radiation": "Outgoing Longwave Radiation",
-        "oxygen-dissolved-glenda": "Oxygen, Dissolved (mg/l)",
         "par-density-avg": "PAR Density",
         "pbde": "PBDEs Total, fish tissue (ug/g)",
         "pcb": "PCB, fish tissue (ug/g)",
@@ -376,7 +374,6 @@ export const gd3 = {
         "total-soluble-nitrogen-mgl": "Total Soluble Nitrogen (mg/L)",
         "total-soluble-phosphorus-mgl": "Total Soluble Phosphorus (mg/L)",
         "toxaphene": "Toxaphene, fish tissue (ug/l)",
-        "transmittance-horizontal-glenda": "Transmittance, Horizontal (%)",
         "ts1-depth-cm": "ts1-depth-cm (cm)",
         "ts2-depth-cm": "ts2-depth-cm (cm)",
         "turbidity-fnu": "Turbidity (FNU)",
@@ -1073,13 +1070,6 @@ export const gd3 = {
         },
         {
             "parameter": {
-                "id": "ammonia-glenda",
-                "title": "Ammonia (ug/l)",
-                "lake_regions": false
-            }
-        },
-        {
-            "parameter": {
                 "id": "ammonia-nitrogen-glenda",
                 "title": "Ammonia-Nitrogen (ug/l)",
                 "lake_regions": false
@@ -1124,13 +1114,6 @@ export const gd3 = {
             "parameter": {
                 "id": "nitrogen-glenda",
                 "title": "Nitrite-Nitrate (mg/L)",
-                "lake_regions": false
-            }
-        },
-        {
-            "parameter": {
-                "id": "oxygen-dissolved-glenda",
-                "title": "Oxygen, Dissolved (mg/l)",
                 "lake_regions": false
             }
         },
@@ -1188,13 +1171,6 @@ export const gd3 = {
                 "id": "total-phosphorus-glenda",
                 "title": "Total Phosphorus (ug/L)",
                 "lake_regions": true
-            }
-        },
-        {
-            "parameter": {
-                "id": "transmittance-horizontal-glenda",
-                "title": "Transmittance, Horizontal (%)",
-                "lake_regions": false
             }
         },
         {

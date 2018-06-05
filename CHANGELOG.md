@@ -34,6 +34,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1088](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1088)
 - Using prop-types package instead of React.PropTypes. Updated routes to be constant
   [GEOD-1095](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1095)
+- Error handling for trends when there are no results available.
+  [GEOD-1096](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1096)
 
 ## [3.0.0-alpha.2] - 2018-04-12
 
