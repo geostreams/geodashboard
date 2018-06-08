@@ -337,48 +337,32 @@ export function fetchTrends(parameter: string, total_year: number, interval: num
 export const ADD_REGION_TRENDS = 'ADD_REGION_TRENDS';
 export function fetchRegionTrends(parameter: string, season: string) {
     return (dispatch: Dispatch, getState: GetState) => {
-        // For each region sensor, use the parameter, geocode, and season to get the Trends.
-
         const state = getState();
         const api = state.backends.selected;
 
         // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/'
-        const trends_region_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/';
+        const trends_region_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/' + parameter;
 
-        const regionsToFilter = Object.assign([], state.chosenTrends.trends_regions);
-        let temp_object = [];
+        const result = fetch(trends_region_endpoint).then(response => {
+            const json = response.json();
+            return json;
+        })
+            .then(json => {
+                if (json) {
+                    dispatch({
+                        type: ADD_REGION_TRENDS,
+                        regions_trends: json.trends,
+                        parameter,
+                        season
 
-        let results = regionsToFilter.filter(s => s.geometry.geocode.length > 0)
-            .map(sensor => {
-                const trends_region_endpoint_args = trends_region_endpoint + parameter +
-                    "?geocode=" + sensor.geometry.geocode.toString().replace(/,/g, "%2C") + "&season=" + season;
-
-                const result = fetch(trends_region_endpoint_args).then(response => {
-                    const json = response.json();
-                    return json;
-                })
-                    .then(json => {
-                        if (json) {
-                            temp_object = temp_object.concat({id: sensor.id, data: json.trends});
-                        }
-                    }).catch(function (error) {
-                        console.log(error);
-                        console.log(trends_region_endpoint_args);
-                    });
-                return result;
+                    })
+                }
+            }).catch(function (error) {
+                console.log(error);
+                console.log("Error retrieving trends by region: " + trends_region_endpoint);
             });
-
-        Promise.all(results).then(s => {
-                return (dispatch({
-                    type: ADD_REGION_TRENDS,
-                    regions_trends: temp_object,
-                    parameter,
-                    season
-                }))
-            }
-        );
+        return result;
     }
-
 }
 
 export const ADD_REGION_DETAIL_TRENDS = 'ADD_REGION_DETAIL_TRENDS';
