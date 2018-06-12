@@ -186,13 +186,18 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
         case ADD_REGION_TRENDS:
 
             let temp_regions_object = [];
-
-            action.regions_trends.map(region => {
-                let region_sensor = state.trends_regions.filter((x) => x.id === region.id)[0];
-
-                region_sensor['region_trends'] = region.data;
-                temp_regions_object = temp_regions_object.concat(region_sensor);
+            let temp_trends_regions = Object.assign({}, state.trends_regions)
+            temp_trends_regions.map(region_sensor =>{
+                    let region = action.regions_trends.filter((x) => x.region_id === region_sensor.name);
+                    if(region.length >0 ){
+                        region_sensor['region_trends'] = region[0];
+                    } else {
+                        // this is add because of the old API
+                        region_sensor['region_trends'] = "no data";
+                    }
+                    temp_regions_object = temp_regions_object.concat(region_sensor);
             });
+
 
             let regions_parameters = getTrendsPageSettings();
             let region_param = action.parameter;

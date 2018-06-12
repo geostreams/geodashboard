@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [IMLCZO-230](https://opensource.ncsa.illinois.edu/jira/browse/IMLCZO-230)
 - Separate Actions for Exploratory Analysis and Trends
   [GLGVO-416](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-416)
+- Save trends region into DB and use new API to get trends region
+  [GEOD-1087](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1087)
 
 ### Fixed
 - When clicking on a pill in explore left navigation, open the popup on the map
