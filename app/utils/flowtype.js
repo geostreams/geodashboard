@@ -40,7 +40,21 @@ export type Sensor = {
 
 export type Sensors = Sensor[];
 
-//type for Parameter/Source/ Location in state. 
+export type Parameter = {
+    id: number,
+    name: string,
+    title: string,
+    unit: string,
+    categories: string[],
+    detail_view: string[],
+    search_view: boolean,
+    explore_view: boolean,
+    scale_names: string[],
+    scale_colors: string[]
+}
+
+export type Parameters = Parameter[];
+//type for Parameter/Source/ Location in state.
 export type MapWithLabel = {
     id: string,
     label: string
@@ -68,9 +82,13 @@ export type Location = {
 
 //TODO: this is not fully checked now, ref: http://redux.js.org/docs/basics/DataFlow.html
 export type backendsState = {
-    endpoints: Array<endpoint>,
-    selected: string
-};
+      endpoints: Array<endpoint>,
+      selected: string
+    };
+
+export type parameterState = {
+    parameters: Parameters
+}
 
 export type searchFiltersState = {
     filters: Array<Object>,

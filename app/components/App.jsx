@@ -26,7 +26,7 @@ const routes = (
     <Route component={App}>
         <Route path="/" component={Home}/>
         <Route path="/explore/:stations" component={Explore}/>
-        <Route path="/detail/location/:name/:chart_type" component={Detail}/>
+        <Route path="/detail/location/:name/:category" component={Detail}/>
         <Route path="/search" component={Search}/>
         <Route path="/trendsstations" component={TrendsStation}/>
         <Route path="/trendsregions" component={TrendsRegion}/>

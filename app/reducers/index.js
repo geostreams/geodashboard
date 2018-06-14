@@ -6,6 +6,7 @@ import selectedSearch from './selectedSearch';
 import sensorDetail from './sensorDetail';
 import chosenTrends from './chosenTrends';
 import exploreLayers from './exploreLayers';
+import parameters from './parameters'
 
 
 const geodashboardApp = combineReducers({
@@ -15,7 +16,8 @@ const geodashboardApp = combineReducers({
     selectedSearch,
     sensorDetail,
     chosenTrends,
-    exploreLayers
+    exploreLayers,
+    parameters
 });
 
 export default geodashboardApp

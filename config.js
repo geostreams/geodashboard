@@ -151,7 +151,8 @@ export const gd3 = {
     multi_parameter_map: {
         "total-phosphorus": ["total-phosphorus-glenda", "phosphorus-load", "phosphorus-concentration", "total-phosphorus-mgl"],
         "chlorophyll-a": ["chlorophyll-a-glenda"],
-        "nitrogen-load": ["nitrogen-concentration"]
+        "nitrogen-load": ["nitrogen-concentration"],
+        "dissolved-oxygen-mgl": ["00300-dissolved-oxygen"]
     },
 
     parameter_maps: {
@@ -401,7 +402,10 @@ export const gd3 = {
         "wind-speed-mps": "Wind Speed (m/s)",
         "WindDir": "Wind Direction +2.4m (degrees)",
         "wnd_dir_compass": "Wind Direction from N +25m (degrees)",
-        "Ws_ms": "Wind Speed +2.4m (m/s)"
+        "Ws_ms": "Wind Speed +2.4m (m/s)",
+        "specific-cond-at-25C": "Specific Cunductance at 25C (uS/cm)",
+        "temperature-water": "Temperature Water (C)",
+        "turbidity-neph": "Turbidity, Form Neph (NTU)"
     },
 
     // This is used to define general areas on the map

@@ -1,15 +1,9 @@
 // @flow
 
 import { connect } from 'react-redux';
-import DataGraphMultiLineComponent from '../components/DataGraphMultiLine';
+import StackedLineChartComponent from '../components/StackedLineChart';
 import { fetchSensor } from '../actions/index';
 import type { Dispatch } from '../utils/flowtype';
-
-const mapStateToProps = (state) => {
-    return {
-        property: state.sensors.data,
-    }
-};
 
 const mapDispatchToProps = (dispatch:Dispatch) => {
     return {
@@ -19,6 +13,6 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
     }
 };
 
-const DataGraphMultiLine = connect(mapStateToProps, mapDispatchToProps)(DataGraphMultiLineComponent);
+const StackedLineChart = connect(null, mapDispatchToProps)(StackedLineChartComponent);
 
-export default DataGraphMultiLine;
+export default StackedLineChart;
