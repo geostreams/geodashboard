@@ -1,14 +1,12 @@
-// @flow
-
-import { connect } from 'react-redux';
-import DataGraphComponent from '../components/DataGraph';
-import { fetchSensor, fetchSensorMobile } from '../actions/index';
-import type { Dispatch } from '../utils/flowtype';
+import { connect } from 'react-redux'
+import LineChartComponent from '../components/Linechart'
+import type {Dispatch} from "../utils/flowtype";
+import {fetchSensor, fetchSensorMobile} from "../actions";
 import { getMobileSizeMax, getShowRawProcessed} from '../utils/getConfig';
 
 const mapStateToProps = (state) => {
     return {
-        property: state.sensors.data,
+        sensorData: state.sensorDetail.datapoints
     }
 };
 
@@ -28,6 +26,7 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
     }
 };
 
-const DataGraph = connect(mapStateToProps, mapDispatchToProps)(DataGraphComponent);
 
-export default DataGraph;
+const LineChart = connect(mapStateToProps, mapDispatchToProps)(LineChartComponent);
+
+export default LineChart;

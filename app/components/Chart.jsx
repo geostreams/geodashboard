@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import rd3 from 'react-d3';
 import { Row, Col } from 'react-flexbox-grid';
 import {
-    Card, CardHeader, CardTitle, CardText, CardMedia,
-    Dialog, DialogBody, DialogHeader, DialogTitle, Icon
+    Card, CardHeader, CardTitle, CardText, CardMedia, Icon
 } from 'react-mdc-web';
 import {
     getParameterName, getAlternateParameters, getDetailPageBAWInfoText
@@ -19,18 +18,11 @@ class Chart extends Component {
         this.state = {
             openInfoButton: false
         };
-        (this:any).handleInfoIcon = this.handleInfoIcon.bind(this);
     }
-
-    handleInfoIcon (button_status: boolean) {
-        this.setState({
-            openInfoButton: button_status
-        });
-    };
 
     render() {
 
-        let param_name = '';
+        let param_name;
         let BAWValues = [];
         let boxAndWhiskers = [];
 
@@ -72,19 +64,6 @@ class Chart extends Component {
         return (
             <Row>
                 <Col md={8}>
-                    <Dialog open={Boolean(this.state.openInfoButton)}
-                            onClose={()=>{this.setState({openInfoButton:false})}}>
-                        <DialogHeader >
-                            <DialogTitle>Box and Whisker Plots</DialogTitle>
-                            <a className={styles.close_button_style}
-                               onClick={()=>{this.setState({openInfoButton: false})}}>
-                                <Icon name="close"/>
-                            </a>
-                        </DialogHeader>
-                        <DialogBody scrollable>
-                            {getDetailPageBAWInfoText()}
-                        </DialogBody>
-                    </Dialog>
                     <div className={styles.layout_style}>
                         <div className={styles.float_item_left}>
                             <LineChart
@@ -102,15 +81,6 @@ class Chart extends Component {
                         </div>
                         <div className={styles.float_item_left}>
                             <Card className={styles.card_margins}>
-                                <CardHeader>
-                                    <CardTitle>
-                                        <span className={styles.card_title_style}>Box and Whisker</span>
-                                        <a className={styles.open_button_style_baw}
-                                           onClick={this.handleInfoIcon}>
-                                            <Icon name="info"/>
-                                        </a>
-                                    </CardTitle>
-                                </CardHeader>
                                 <CardText>
                                     {boxAndWhiskers}
                                 </CardText>

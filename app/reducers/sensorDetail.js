@@ -1,5 +1,5 @@
 import {
-    SELECT_SENSOR, RECEIVE_SENSOR, UPDATE_DETAIL
+    SELECT_SENSOR, RECEIVE_SENSOR, UPDATE_DETAIL, CLEAN_DETAIL
 } from '../actions';
 import {getProcessedProperty} from '../utils/getConfig';
 
@@ -24,6 +24,13 @@ const sensorDetail = (state:backendsState = defaultState, action) => {
                 id: action.id,
                 name: action.name,
                 coordinates: action.coordinates,
+                showExplorePopup: false
+            });
+        case CLEAN_DETAIL:
+            return Object.assign({}, state, {
+                datapoints: [],
+                id: null,
+                name: null,
                 showExplorePopup: false
             });
         default:

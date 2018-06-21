@@ -6,8 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased]
+**Important - Need to have database with parameters setup before release in all projects**
 
 ### Added
+- Ability to classify parameters in different tabs on the detail page
+  [GEOD-895](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-895).
 - Time filtering functionality to trend regions detail page
   [GEOD-1028](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1028)
 - Added Detail Page multi-series line chart

@@ -1,6 +1,6 @@
 // @flow
 
-import type {Sensors, Dispatch, GetState} from "../utils/flowtype";
+import type { Sensors, Dispatch, GetState, Parameters } from "../utils/flowtype";
 import {getWaterYearStatus} from "../utils/getConfig";
 
 export const SWITCH_BACKEND = 'SWITCH_BACKEND';
@@ -86,6 +86,15 @@ export function updateDetail(id: string, name: string, coordinates: number[]) {
             id,
             name,
             coordinates
+        });
+    }
+}
+
+export const CLEAN_DETAIL = 'CLEAN_DETAIL';
+export function resetDetailPage() {
+    return (dispatch: Dispatch) => {
+        dispatch({
+            type: CLEAN_DETAIL
         });
     }
 }
@@ -594,6 +603,27 @@ export function updateAvailableSensors(idx: number) {
     }
 }
 
+
+export const RECEIVE_PARAMETERS = "RECEIVE_PARAMETERS";
+export function fetchParameters(api: string) {
+    return(dispatch: any) => {
+        // TODO: use the api endpoint selected in the dropdown instead of localhost
+        // const endpoint = api + '/api/parameters';
+        const endpoint = "http://localhost:9000/api/parameters";
+        return fetch(endpoint)
+            .then(response => response.json())
+            .then(json =>
+                dispatch({
+                    type: RECEIVE_PARAMETERS,
+                    parameters: json.parameters,
+                    categories: json.categories,
+                    mappings: json.mappings
+                })
+            )
+    }
+
+}
+
 export const SELECT_SENSOR = 'SELECT_SENSOR';
 export function selectSensorDetail(id: string, name: string, coordinates: Array<number>) {
     return {
@@ -617,6 +647,7 @@ export function fetchSensors(api: string) {
             })
             .then(dispatch(updateAvailableSensors(-1)))
             .then(dispatch(setRegionsSensors()))
+            .then(dispatch(fetchParameters(api)))
             .catch((error) => {
                 console.log('An ERROR occurred! ' + error);
                 dispatch(switchBackendError());

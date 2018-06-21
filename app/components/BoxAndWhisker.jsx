@@ -20,7 +20,6 @@ class BoxAndWhisker extends Component {
         // Return the Box and Whisker
         return (
             <div className={styles.add_padding}>
-                <ListDivider/>
                 <span style={{'color': paramColor}}>{paramName}</span>
                 <br/><br/>
                 <Boxplot

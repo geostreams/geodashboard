@@ -20,7 +20,6 @@ h1, h2, h3, h5, h6, p, ul {
 }
 
 .content {
-    margin-top: 50px;
     padding: 10px;
 }
 
@@ -207,11 +206,20 @@ h1, h2, h3, h5, h6, p, ul {
     text-transform: capitalize !important;
 }
 
+.close_button_style {
+    color: red;
+    cursor: pointer;
+}
+
 /* Substitute the theme primary colors in for the secondary colors*/
 :root {
     --mdc-theme-secondary: #3f51b5 !important;
     --mdc-theme-secondary-light: #a4addf !important;
     --mdc-theme-secondary-dark: #6f7dcd !important;
+}
+
+.detail_title {
+    margin-left: 50px;
 }
 
 .clusterChoiceText {
