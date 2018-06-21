@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import ChartMultiLine from '../components/ChartMultiLine';
+import Spinner from './Spinner';
 import {Row} from 'react-flexbox-grid';
 import mainStyles from '../styles/main.css'
 
@@ -10,6 +11,11 @@ class StackedLineChart extends Component {
     }
 
     render() {
+        if(Object.keys(this.props.sensorData).length === 0) {
+            return (
+                <Spinner/>
+            )
+        }
         const {sensor, selected_parameters, num_years, sensorData} = this.props;
         let charts = [];
         if(sensor) {

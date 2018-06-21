@@ -3,6 +3,7 @@ import { Row } from 'react-flexbox-grid';
 import Chart from './Chart';
 import ChartRawProcessed from './ChartRawProcessed';
 import ChartMobile from './ChartMobile';
+import Spinner from './Spinner';
 import {getMobileSizeMax, getShowRawProcessed} from "../utils/getConfig";
 import {getIntervalValue} from "../utils/graphUtils";
 import mainStyles from '../styles/main.css'
@@ -14,6 +15,11 @@ class LineChart extends Component {
     }
 
     render() {
+        if(Object.keys(this.props.sensorData).length === 0) {
+            return (
+                <Spinner/>
+            )
+        }
         const {sensor, selected_parameters, num_years} = this.props;
         let charts=[];
         if(sensor) {
@@ -37,6 +43,8 @@ class LineChart extends Component {
                                    selectedEndDate={this.props.selectedEndDate}
                                    filterBySeason={this.props.filterBySeason}
                                    selectedSeason={this.props.selectedSeason}
+                                   category_parameters={this.props.category_parameters}
+                                   parameterSources={this.props.parameterSources}
                                    id={sensor.name} param={parameter} sensorData={this.props.sensorData}/></Row>)
                     }
                 } else {

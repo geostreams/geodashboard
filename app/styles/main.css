@@ -211,11 +211,8 @@ h1, h2, h3, h5, h6, p, ul {
     cursor: pointer;
 }
 
-/* Substitute the theme primary colors in for the secondary colors*/
-:root {
-    --mdc-theme-secondary: #3f51b5 !important;
-    --mdc-theme-secondary-light: #a4addf !important;
-    --mdc-theme-secondary-dark: #6f7dcd !important;
+.detail_title {
+    margin-left: 50px;
 }
 
 .detail_title {

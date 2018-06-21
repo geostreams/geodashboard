@@ -7,6 +7,7 @@ import Menu from '../containers/MenuBar';
 import Map from '../containers/TrendsRegionMap';
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsSeasons from '../containers/TrendsSeasons';
+import Spinner from '../components/Spinner';
 import {Grid, Cell, Content, List, Card, CardHeader, CardTitle, CardText} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
@@ -26,9 +27,7 @@ class TrendsRegion extends Component {
         let loading_spinner;
         if (this.props.show_spinner === true && this.props.parameter !== '') {
             loading_spinner = (
-                <div className={styles.make_modal}>
-                    <div className={styles.loading_spinner}> </div>
-                </div>
+                <Spinner/>
             );
         }
 

@@ -77,6 +77,9 @@ export const gd3 = {
         {listText: 'Level 3: Fully Processed - No Raw Data'}
     ],
 
+    // Make all time series have the same time frame
+    time_series_sensor_extent: true,
+
     // Detail Graphs - Display RAW vs PROCESSED for Day Average
     show_raw_processed: false,
     // Property Name that contains the PROCESSED property name

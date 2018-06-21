@@ -170,6 +170,7 @@ class DetailContents extends Component {
             if(chart_type === "time") {
                 graph = <LineChart sensorName={sensor.name} sensor={sensor}
                                    sensorData={this.props.sensorData}
+                                   parameterSources={this.props.parameterSources}
                                    selectedStartDate={selected_start}
                                    selectedEndDate={selected_end}
                                    filterBySeason={this.state.showSeasonFilter}

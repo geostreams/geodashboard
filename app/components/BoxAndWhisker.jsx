@@ -23,7 +23,7 @@ class BoxAndWhisker extends Component {
                 <span style={{'color': paramColor}}>{paramName}</span>
                 <br/><br/>
                 <Boxplot
-                    width={ 400 }
+                    width={ 300 }
                     height={ 20 }
                     orientation="horizontal"
                     min={ Math.floor(minimum) }

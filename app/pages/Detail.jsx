@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Link} from 'react-router';
 import Menu from '../containers/MenuBar';
 import DetailTabs from '../components/DetailTabs';
+import Spinner from '../components/Spinner';
 import DetailContents from '../containers/DetailContents';
 import {getMobileSizeMax, getSourceName, getMobileExplorePath} from "../utils/getConfig";
 import { resetDetailPage } from '../actions';
@@ -16,7 +17,9 @@ class Detail extends Component {
         super(props);
         this.state = {
             category_mappings: {},
-            sensor: []
+            sensor: [],
+            isPageReady: false,
+            showError: false
         };
         this.setUpCategoryMappings = this.setUpCategoryMappings.bind(this);
     }
@@ -60,14 +63,19 @@ class Detail extends Component {
 
     render() {
 
-        if(Object.keys(this.state.category_mappings).length === 0 ) {
+        if(Object.keys(this.state.category_mappings).length === 0) {
+            let contents;
+            if(this.props.parameters.failed) {
+                contents = (<div className={[styles.error_text, styles.contentscenter].join(" ")}>Error retrieving parameter Configuration</div>)
+            }
+            else {
+                contents = (<Spinner/>);
+            }
             return (
                 <div>
                     <Menu selected='explore'/>
                     <h1> {this.props.selected_detail}</h1>
-                    <div className={styles.make_modal}>
-                        <div className={styles.loading_spinner}></div>
-                    </div>
+                        {contents}
                 </div>
             )
         }
@@ -93,7 +101,7 @@ class Detail extends Component {
                 </h1>);
             } else {
                 title = (<h1 className={styles.detail_title}>
-                    <Link  href={"/#explore/all"}> <Icon name="chevron_left"/></Link>
+                    <Link  href={"/#explore/all"}> <Icon name="arrow_back"/></Link>
                     {source_name} <Icon name="chevron_right"/> {sensor.properties.popupContent}</h1>);
             }
 

@@ -605,6 +605,7 @@ export function updateAvailableSensors(idx: number) {
 
 
 export const RECEIVE_PARAMETERS = "RECEIVE_PARAMETERS";
+export const FAILED_RECEIVE_PARAMETERS = "FAILED_RECEIVE_PARAMETERS";
 export function fetchParameters(api: string) {
     return(dispatch: any) => {
         // TODO: use the api endpoint selected in the dropdown instead of localhost
@@ -620,6 +621,12 @@ export function fetchParameters(api: string) {
                     mappings: json.mappings
                 })
             )
+            .catch((error) => {
+                console.log('An ERROR occurred! ' + error);
+                dispatch({
+                    type: FAILED_RECEIVE_PARAMETERS
+                });
+            })
     }
 
 }
@@ -655,20 +662,9 @@ export function fetchSensors(api: string) {
     }
 }
 
-function fetchSensorHelp(api: string, id: number) {
+function fetchSensorHelp(api: string, id: number, bin:string) {
     return (dispatch: any) => {
-        const endpoint = api + '/api/geostreams/datapoints/bin/semi/1?sensor_id=' + id;
-        return fetch(endpoint)
-            .then(response => response.json())
-            .then(json => {
-                dispatch(receiveSensor(json))
-            })
-    }
-}
-
-function fetchSensorHelpMobile(api: string, id: number) {
-    return (dispatch: any) => {
-        const endpoint = api + '/api/geostreams/datapoints/bin/day/1?sensor_id=' + id;
+        const endpoint = api + '/api/geostreams/datapoints/bin/'+ bin + '/1?sensor_id=' + id;
         return fetch(endpoint)
             .then(response => response.json())
             .then(json => {
@@ -686,7 +682,7 @@ export function fetchSensor(name: string, bin: string) {
         if (state.sensors.length > 0) {
             const sensor = state.sensors.data.find(x => x.name === name).id;
             dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-            dispatch(fetchSensorHelp(api, sensor.id));
+            dispatch(fetchSensorHelp(api, sensor.id, bin));
 
         } else {
             const endpointsensors = api + '/api/geostreams/sensors';
@@ -716,7 +712,7 @@ export function fetchSensorMobile(name: string) {
         if (state.sensors.length > 0) {
             const sensor = state.sensors.data.find(x => x.name === name).id;
             dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-            dispatch(fetchSensorHelpMobile(api, sensor.id));
+            dispatch(fetchSensorHelp(api, sensor.id, day));
 
         } else {
             const endpointsensors = api + '/api/geostreams/sensors';

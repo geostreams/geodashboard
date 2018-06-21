@@ -18,6 +18,7 @@ import {
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsThresholds from '../containers/TrendsThresholds';
 import TrendsRegions from '../containers/TrendsRegions';
+import Spinner from '../components/Spinner';
 import TrendsCalculationSettings from '../containers/TrendsCalculationSettings';
 import TrendsSubmitButton from '../containers/TrendsSubmitButton';
 import {connect} from "react-redux";
@@ -38,11 +39,7 @@ class Analysis extends Component {
 
         let loading_spinner;
         if (this.props.show_spinner === true && this.props.parameter !== '') {
-            loading_spinner = (
-                <div className={styles.make_modal}>
-                    <div className={styles.loading_spinner}> </div>
-                </div>
-            );
+            loading_spinner = (<Spinner/>);
         }
 
         return (

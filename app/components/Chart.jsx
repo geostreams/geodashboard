@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import rd3 from 'react-d3';
 import { Row, Col } from 'react-flexbox-grid';
 import {
     Card, CardHeader, CardTitle, CardText, CardMedia, Icon
 } from 'react-mdc-web';
 import {
-    getParameterName, getAlternateParameters, getDetailPageBAWInfoText
+    getParameterName, getAlternateParameters
 } from '../utils/getConfig';
 import styles from "../styles/detail.css";
 import mainStyles from '../styles/main.css'
 import BoxAndWhisker from '../components/BoxAndWhisker';
-
-let LineChart = rd3.LineChart;
+import Line from './Line';
 
 
 class Chart extends Component {
@@ -24,15 +22,15 @@ class Chart extends Component {
 
     render() {
 
-        let param_name;
+        let selected_parameter = this.props.category_parameters.find(x => x.name === this.props.param);
         let BAWValues = [];
         let boxAndWhiskers = [];
-
+        let param_name;
         let values = [];
         let that = this;
         // Getting the datapoints for parameter: this.props.param
         if(this.props.sensorData[this.props.param]) {
-            param_name = getParameterName(this.props.param, getAlternateParameters());
+            param_name = selected_parameter.title;
             let sensor_data =  this.props.sensorData[this.props.param];
 
             if(this.props.filterBySeason) {
@@ -40,15 +38,19 @@ class Chart extends Component {
                 const selectedSeason = this.props.selectedSeason.length > 0 ? this.props.selectedSeason : "spring";
                 sensor_data = sensor_data.filter(p => p.label.includes(selectedSeason))
             }
+
             sensor_data.map(function(d) {
                     const bin_date = that.props.filterBySeason ? new Date(d.label.substring(0, 4)): new Date(d.label);
                     if(bin_date.getTime() > that.props.selectedStartDate.getTime() &&
                     bin_date.getTime() < that.props.selectedEndDate.getTime()) {
-                        values.push({x: bin_date, y: d.average});
+                        values.push({date: bin_date, average: d.average});
                         BAWValues.push(d.average);
                     }
 
-                });
+            });
+            if(values.length === 0) {
+                return (<div></div>);
+            }
 
             boxAndWhiskers.push(
                 <BoxAndWhisker key={param_name}
@@ -58,40 +60,34 @@ class Chart extends Component {
             );
         }
         if(values.length === 0 ){
-            values.push({x: 0, y: 0})
+            values.push({date: new Date(0), average: 0})
         }
-        let lineData = [
-            {
-                values: values
-            },
-        ];
 
         // Get Units for Chart
-        let units = 'Value';
-        let chartTitle = getParameterName(this.props.param, getAlternateParameters());
-        let unitIndex = chartTitle.lastIndexOf("(");
-        if (unitIndex > 0) {
-            units = chartTitle.substr(unitIndex);
+        let units = selected_parameter.unit;
+        let chartTitle = selected_parameter.title;
+        if(units !== "") {
+             chartTitle += " (" + units + ")";
         }
 
         let {interval_val} = this.props;
-
+        let sources = [];
+        if(this.props.parameterSources) {
+            sources = this.props.parameterSources[this.props.param];
+        }
         return (
             <Row className={mainStyles.fullWidth}>
                 <Col md={6}>
                     <div className={styles.layout_style}>
                         <div className={styles.float_item_left}>
-                            <LineChart
-                                data={lineData}
-                                width={500} height={400}
-                                margins={{top: 10, right: 150, bottom: 50, left: 100}}
-                                viewBoxObject={{x: 0, y: 0, width: 700, height: 400}}
-                                title={getParameterName(this.props.param, getAlternateParameters())}
-                                yAxisLabelOffset={Number(60)}
-                                yAxisLabel={units}
-                                xAxisLabelOffset={Number(50)}
-                                xAxisLabel="Time"
-                                xAxisTickInterval={{unit: 'year', interval: Number(interval_val)}}
+                            <Line data={values}
+                                  class_name_line={styles.graph_line}
+                                  class_name_dots={styles.graph_dot}
+                                  selectedStartDate={this.props.selectedStartDate}
+                                  selectedEndDate={this.props.selectedEndDate}
+                                  yAxisLabel={units}
+                                  title={chartTitle}
+                                  sources={sources}
                             />
                         </div>
                     </div>

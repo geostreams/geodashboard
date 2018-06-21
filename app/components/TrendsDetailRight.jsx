@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import TrendsGraph from '../components/TrendsGraph';
-import styles from '../styles/main.css';
+import Spinner from './Spinner';
 import YearSlider from './YearSlider';
-import {fetchRegionDetailTrends} from "../actions";
 
 class TrendDetailRight extends Component {
 
@@ -52,9 +51,7 @@ class TrendDetailRight extends Component {
 
         if(this.state.loading) {
             return (
-                <div className={styles.make_modal}>
-                    <div className={styles.loading_spinner}> </div>
-                </div>
+                <Spinner/>
             )
         }
         let years = [];

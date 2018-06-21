@@ -1,3 +1,16 @@
 .mdc-radio__outer-circle {
     border: 2px solid rgba(0,0,0,.54);
 }
+
+:root {
+    --mdc-theme-secondary: #3f51b5;
+    --mdc-theme-secondary-light: #a4addf;
+    --mdc-theme-secondary-dark: #6f7dcd;
+}
+
+.mdc-checkbox:after, .mdc-checkbox:before,
+.mdc-radio:after, .mdc-radio:before
+{
+    background-color: #a4addf;
+}
+

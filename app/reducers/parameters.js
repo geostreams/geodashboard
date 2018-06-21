@@ -1,4 +1,4 @@
-import {RECEIVE_PARAMETERS} from "../actions";
+import {RECEIVE_PARAMETERS, FAILED_RECEIVE_PARAMETERS} from "../actions";
 import type {Parameters, parametersState} from "../utils/flowtype";
 
 type ParameterAction= {|type: RECEIVE_PARAMETERS, parameters: Array<string>|};
@@ -8,7 +8,8 @@ const defaultState = {
     categories: [],
     mappings: [],
     explore: [],
-    search: []
+    search: [],
+    failed: false
 };
 
 const parameters = (state: parametersState = defaultState, action: ParameterAction) => {
@@ -20,6 +21,10 @@ const parameters = (state: parametersState = defaultState, action: ParameterActi
                 mappings: action.mappings,
                 explore: collectExploreParameters(action.parameters),
                 search: collectSearchParameters(action.parameters)
+            });
+        case FAILED_RECEIVE_PARAMETERS:
+            return Object.assign({}, state, {
+                failed: true
             });
         default:
             return state

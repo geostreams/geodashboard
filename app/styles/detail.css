@@ -88,3 +88,14 @@
 .positionChart{
     margin-left: 2em;
 }
+
+.graph_line{
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
+.graph_dot {
+    fill: steelblue;
+    stroke: #fff;
+}

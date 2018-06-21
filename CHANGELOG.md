@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-416](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-416)
 - Save trends region into DB and use new API to get trends region
   [GEOD-1087](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1087)
+- Using d3 implementation of LineChart instead of react-d3.LineChart
+  [GEOD-1103](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1103)
 
 ### Fixed
 - When clicking on a pill in explore left navigation, open the popup on the map

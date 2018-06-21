@@ -423,3 +423,11 @@ export function clustersChoiceOption() {
     }
     return cluster_choice;
 }
+
+export function getTimeSeriesSensorExtent() {
+    let time_series_sensor_extent = false;
+    if(window.configruntime.gd3.time_series_sensor_extent) {
+        time_series_sensor_extent = true;
+    }
+    return time_series_sensor_extent;
+}
