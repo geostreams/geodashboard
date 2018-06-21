@@ -4,12 +4,13 @@ import Chart from './Chart';
 import ChartRawProcessed from './ChartRawProcessed';
 import ChartMobile from './ChartMobile';
 import {getMobileSizeMax, getShowRawProcessed} from "../utils/getConfig";
-import {getIntervalValue} from "../utils/graphUtils"
+import {getIntervalValue} from "../utils/graphUtils";
+import mainStyles from '../styles/main.css'
 
 class LineChart extends Component {
 
     componentWillMount() {
-        this.props.loadSensor(null, this.props.sensor.name);
+        this.props.loadSensor(null, this.props.sensor.name, this.props.filterBySeason);
     }
 
     render() {
@@ -23,11 +24,19 @@ class LineChart extends Component {
                     if (getShowRawProcessed() === true) {
                         charts.push(<Row key={parameter}>
                             <ChartRawProcessed interval_val={interval_val}
+                                               selectedStartDate={this.props.selectedStartDate}
+                                               selectedEndDate={this.props.selectedEndDate}
+                                               filterBySeason={this.props.filterBySeason}
+                                               selectedSeason={this.props.selectedSeason}
                                                id={sensor.name} parameter={parameter} sensorData={this.props.sensorData}/>
                         </Row>)
                     } else {
-                        charts.push(<Row key={parameter}>
+                        charts.push(<Row key={parameter} className={mainStyles.fullWidth}>
                             <Chart interval_val={interval_val} title={parameter.title}
+                                   selectedStartDate={this.props.selectedStartDate}
+                                   selectedEndDate={this.props.selectedEndDate}
+                                   filterBySeason={this.props.filterBySeason}
+                                   selectedSeason={this.props.selectedSeason}
                                    id={sensor.name} param={parameter} sensorData={this.props.sensorData}/></Row>)
                     }
                 } else {
@@ -40,9 +49,9 @@ class LineChart extends Component {
 
         }
         return (
-            <div>
+            <Row className={mainStyles.fullWidth}>
                 {charts}
-            </div>
+            </Row>
         );
     }
 

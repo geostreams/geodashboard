@@ -41,10 +41,13 @@
     float: right;
 }
 
-
+.season_label {
+    margin-left: 50px;
+    margin-right: 20px;
+}
 
 .card_margins {
-    margin: 0.5em;
+    margin: 0.5em 1.5em;
 }
 
 .card_title_style {

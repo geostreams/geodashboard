@@ -1304,6 +1304,6 @@ export const gd3 = {
     mapAttributionsCollapsible: true,
     mapMiniAttributionsCollapsible: true,
     mapClustersDistance: 1,
-    clustersChoiceOption: true,
+    clustersChoiceOption: false,
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}

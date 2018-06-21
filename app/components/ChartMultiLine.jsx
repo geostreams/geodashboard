@@ -3,9 +3,12 @@ import rd3 from 'react-d3';
 import {
     Card, CardHeader, CardTitle, CardText, CardMedia, Icon
 } from 'react-mdc-web';
+import { Grid, Row, Col } from 'react-flexbox-grid';
 import {getParameterName, getAlternateParameters} from '../utils/getConfig';
 import BoxAndWhisker from '../components/BoxAndWhisker';
-import styles from "../styles/detail.css";
+import styles from '../styles/detail.css';
+import mainStyles from '../styles/main.css'
+
 let LineChart = rd3.LineChart;
 
 
@@ -32,7 +35,7 @@ class ChartMultiLine extends Component {
         let BAWValues = [];
         let boxAndWhiskers = [];
         let colorsRange = ["#FF6600", "#006600", "#000099"];
-
+        const that = this;
         legend_box = legend_box.concat("Legend: ").concat('\n');
 
         params.map(p => {
@@ -41,9 +44,19 @@ class ChartMultiLine extends Component {
             BAWValues = [];
 
             if(this.props.sensorData[p]) {
-                this.props.sensorData[p].map(function(d) {
-                    loopValues.push({x: new Date(d.label), y: d.average});
-                    BAWValues.push(d.average);
+                let sensor_data =  this.props.sensorData[p];
+                if(this.props.filterBySeason) {
+                    const selectedSeason = this.props.selectedSeason.length > 0 ? this.props.selectedSeason : "spring";
+                    sensor_data = sensor_data.filter(p => p.label.includes(selectedSeason))
+                }
+                sensor_data.map(function(d) {
+                    const datapoint_date = that.props.filterBySeason ? new Date(d.label.substring(0, 4)): new Date(d.label);
+                    if(datapoint_date.getTime() > that.props.selectedStartDate.getTime() &&
+                        datapoint_date.getTime() < that.props.selectedEndDate.getTime()) {
+
+                        loopValues.push({x: datapoint_date, y: d.average});
+                        BAWValues.push(d.average);
+                    }
                 });
                 param_name = getParameterName(p, getAlternateParameters());
                 param_color = colorsRange[params.indexOf(p)];
@@ -65,40 +78,39 @@ class ChartMultiLine extends Component {
         });
 
         return (
-            <div>
-                <div className={styles.layout_style}>
-                    <div className={styles.float_item_left}>
-                        <Card className={styles.card_margins}>
-                            <CardHeader>
-                                <CardTitle>
-                                    <span className={styles.card_title_style}>{chartTitle}</span>
-                                </CardTitle>
-                            </CardHeader>
-                            <CardMedia>
-                                <LineChart
-                                    data={lineData}
-                                    width={500} height={300}
-                                    xAxisLabel="Time"
-                                    xAxisLabelOffset={Number(50)}
-                                    viewBoxObject={{x: 0, y: 0, width: 700, height: 400}}
-                                    colors={d3.scale.quantize().domain([0, 1, 2]).range(colorsRange)}
-                                    xAxisTickInterval={{unit: 'year', interval: Number(interval_val)}}
-                                />
-                            </CardMedia>
-                            <CardText>
-                                {legend_box}
-                            </CardText>
-                        </Card>
-                    </div>
-                    <div className={styles.float_item_left}>
-                        <Card className={styles.card_margins}>
-                            <CardText>
-                                {boxAndWhiskers}
-                            </CardText>
-                        </Card>
-                    </div>
-                </div>
-            </div>
+            <Row className={mainStyles.fullWidth}>
+                <Col md={6}>
+                    <Card className={styles.card_margins}>
+                        <CardHeader>
+                            <CardTitle>
+                                <span className={styles.card_title_style}>{chartTitle}</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardMedia>
+                            <LineChart
+                                data={lineData}
+                                width={500} height={300}
+                                xAxisLabel="Time"
+                                xAxisLabelOffset={Number(50)}
+                                viewBoxObject={{x: 0, y: 0, width: 700, height: 400}}
+                                colors={d3.scale.quantize().domain([0, 1, 2]).range(colorsRange)}
+                                xAxisTickInterval={{unit: 'year', interval: Number(interval_val)}}
+                            />
+                        </CardMedia>
+                        <CardText>
+                            {legend_box}
+                        </CardText>
+                    </Card>
+                </Col>
+                <Col md={6}>
+                    <Card className={styles.card_margins}>
+                        <CardText>
+                            {boxAndWhiskers}
+                        </CardText>
+                    </Card>
+                </Col>
+            </Row>
+
         )
 
     }

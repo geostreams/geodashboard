@@ -23,6 +23,7 @@ class ChartRawProcessed extends Component {
         let param_name = '';
         let BAWValues = [];
         let boxAndWhiskers = [];
+        const that = this;
 
         // Initialize for all 4 possible levels of processing
         let valuesLevel0 = [];
@@ -41,21 +42,29 @@ class ChartRawProcessed extends Component {
 
         // Getting the datapoints for parameter: this.props.param
         if(this.props.sensorData[this.props.parameter.name]) {
-            this.props.sensorData[this.props.parameter.name].map(function(d) {
-                let datepoint_date = new Date(d.label);
-                if (d[processedProperty] === 0 || processedProperty === '') {
-                    valuesLevel0.push({x: datepoint_date, y: d.average})
+            let sensor_data = this.props.sensorData[this.props.param];
+            if(this.props.filterBySeason) {
+                const selectedSeason = this.props.selectedSeason.length > 0 ? this.props.selectedSeason : "spring";
+                sensor_data = sensor_data.filter(p => p.label.includes(selectedSeason))
+            }
+            sensor_data.map(function(d) {
+                let datapoint_date = that.props.filterBySeason ? new Date(d.label.substring(0, 4)): new Date(d.label);
+                if(datapoint_date.getTime() > that.props.selectedStartDate.getTime() &&
+                    datapoint_date.getTime() < that.props.selectedEndDate.getTime()) {
+                    if (d[processedProperty] === 0 || processedProperty === '') {
+                        valuesLevel0.push({x: datapoint_date, y: d.average})
+                    }
+                    if (d[processedProperty] === 1) {
+                        valuesLevel1.push({x: datapoint_date, y: d.average})
+                    }
+                    if (d[processedProperty] === 2) {
+                        valuesLevel2.push({x: datapoint_date, y: d.average})
+                    }
+                    if (d[processedProperty] === 3) {
+                        valuesLevel3.push({x: datapoint_date, y: d.average})
+                    }
+                    BAWValues.push(d.average);
                 }
-                if (d[processedProperty] === 1) {
-                    valuesLevel1.push({x: datepoint_date, y: d.average})
-                }
-                if (d[processedProperty] === 2) {
-                    valuesLevel2.push({x: datepoint_date, y: d.average})
-                }
-                if (d[processedProperty] === 3) {
-                    valuesLevel3.push({x: datepoint_date, y: d.average})
-                }
-                BAWValues.push(d.average);
             });
             boxAndWhiskers.push(
                 <BoxAndWhisker key={param_name}

@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1093](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1093)
 - Added the ability to enable and disable Clustering on the Explore and Search Maps
   [GEOD-1091](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1091)
+- Added filtering by time and season for detail page
+  [GEOD-873](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-873)
 
 ### Changed
 - Organize the data sources and classify the pills by region on the left navigation of the explore page.

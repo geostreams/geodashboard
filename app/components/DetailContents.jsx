@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 import DialogWrapper from './DialogWrapper';
 import MiniMap from '../components/MiniMap';
 import DetailParameterList from './DetailParameterList';
-import LineChart from '../containers/LineChart';
-import StackedLineChart from '../containers/StackedLineChart';
+import LineChart from './LineChart';
+import StackedLineChart from './StackedLineChart';
 import styles from '../styles/detail.css';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import {Icon} from 'react-mdc-web';
 import {getMobileSizeMax, getDetailPageSeparateInfoText, getDetailPageCombinedInfoText,
     getDetailPageBAWInfoText} from '../utils/getConfig';
+import Select from './material/Select';
+import DateSlider from "./DateSlider";
 
 class DetailContents extends Component {
 
@@ -17,25 +19,44 @@ class DetailContents extends Component {
         this.state = {
             openParameterDialog: false,
             openBoxAndWhiskerDialog: false,
-            selected_parameters: []
+            selected_parameters: [],
+            selectedStartDate: new Date(0),
+            selectedEndDate: new Date(0),
+            showSeasonFilter: false,
+            selectedSeason: "",
         };
         this.closeParameterDialog = this.closeParameterDialog.bind(this);
         this.openParameterDialog = this.openParameterDialog.bind(this);
         this.openBoxAndWhiskerDialog = this.openBoxAndWhiskerDialog.bind(this);
         this.closeBoxAndWhiskerDialog = this.closeBoxAndWhiskerDialog.bind(this);
         this.handleSelectedParameter = this.handleSelectedParameter.bind(this);
-        this.updateSelectedParameters = this.updateSelectedParameters.bind(this);
+        this.updateParametersAndSeason = this.updateParametersAndSeason.bind(this);
+        this.onSliderChange = this.onSliderChange.bind(this);
+        this.onChangeSeason = this.onChangeSeason.bind(this);
     }
 
     componentWillMount() {
-        this.updateSelectedParameters(this.props);
+        this.updateParametersAndSeason(this.props);
     }
 
     componentWillReceiveProps(newProps) {
-        this.updateSelectedParameters(newProps)
+
+        this.updateParametersAndSeason(newProps)
     }
 
-    updateSelectedParameters(newProps){
+    onChangeSeason(event) {
+        if(this.state.showSeasonFilter) {
+            const value = event.target.options[event.target.selectedIndex].value;
+            this.setState({selectedSeason: value});
+        }
+
+    }
+
+    updateParametersAndSeason(newProps){
+        const {sensor} = newProps;
+        if(sensor && sensor.properties && sensor.properties.type.id.toLowerCase() === "epa") {
+            this.setState({showSeasonFilter: true});
+        }
         // Note: Stacked_line has a limit of 3 parameters that the user should select
         if(newProps.chart_type !== 'stacked_line') {
             const all_parameters = newProps.category_parameters.map(parameter => {return parameter.name} );
@@ -45,6 +66,9 @@ class DetailContents extends Component {
         }
     }
 
+    onSliderChange(value) {
+        this.setState({selectedStartDate: value[0], selectedEndDate: value[1]})
+    }
     closeParameterDialog() {
         this.setState({openParameterDialog: false})
     }
@@ -84,10 +108,17 @@ class DetailContents extends Component {
         let mini_map_object, box_and_whiskers_header;
         let {sensor, chart_type} = this.props;
         let graph = {};
+        let filters;
+        // Set up the variables for the slider
+        const minDate = new Date(sensor.min_start_time);
+        const maxDate = new Date(sensor.max_end_time);
+        const selected_start = this.state.selectedStartDate.getTime() === new Date(0).getTime() ? minDate : this.state.selectedStartDate;
+        const selected_end = this.state.selectedEndDate.getTime() === new Date(0).getTime() ? maxDate: this.state.selectedEndDate;
+
         if (sensor) {
             // These calculations determine the X-Axis interval for the graphs
-            let start_year = new Date(sensor.min_start_time).getFullYear();
-            let end_year = new Date(sensor.max_end_time).getFullYear();
+            let start_year = selected_start.getFullYear();
+            let end_year = selected_end.getFullYear();
             let num_years = end_year - start_year;
 
             let center = sensor.geometry.coordinates.slice(0, 2);
@@ -104,18 +135,58 @@ class DetailContents extends Component {
                             <Icon name="info"/>
                         </a> </h3>
                     </Col>
+                );
+
+                let season_filter;
+                if(this.state.showSeasonFilter) {
+                    // Setup the filter for region. Do more stuff
+                    season_filter = (<div>
+                        <span className={styles.season_label}> Season </span>
+                        <Select value={this.props.season} onChange={this.onChangeSeason} >
+                            <option value="spring" key="spring"> Spring </option>
+                            <option value="summer" key="summer"> Summer </option>
+                        </Select>
+                    </div>);
+                }
+
+                filters = (
+                    <Row key="detail_filters" around="xs">
+                        <Col md={3}>
+                            {season_filter}
+                        </Col>
+                        <Col md={8}>
+                            <DateSlider start={minDate} end={maxDate}
+                                        selectedStart={selected_start} selectedEnd ={selected_end}
+                                        onSliderChange={this.onSliderChange}
+                            />
+                        </Col>
+                        <Col md={1}>
+                            Download Button
+                        </Col>
+                    </Row>
                 )
+
             }
             if(chart_type === "time") {
                 graph = <LineChart sensorName={sensor.name} sensor={sensor}
                                    sensorData={this.props.sensorData}
+                                   selectedStartDate={selected_start}
+                                   selectedEndDate={selected_end}
+                                   filterBySeason={this.state.showSeasonFilter}
+                                   selectedSeason={this.state.selectedSeason}
                                    num_years ={num_years}
+                                   loadSensor={this.props.loadSensor}
                                    category_parameters={this.props.category_parameters}
                                    selected_parameters={this.state.selected_parameters}/>;
             } else if(chart_type === "stacked_line") {
                 graph = <StackedLineChart sensorName={sensor.name} sensor={sensor}
                                           sensorData={this.props.sensorData}
+                                          selectedStartDate={selected_start}
+                                          selectedEndDate={selected_end}
                                           num_years ={num_years}
+                                          filterBySeason={this.state.showSeasonFilter}
+                                          selectedSeason={this.state.selectedSeason}
+                                          loadSensor={this.props.loadSensor}
                                           category_parameters={this.props.category_parameters}
                                           selected_parameters={this.state.selected_parameters}/>;
                 parameter_dialog_contents = getDetailPageCombinedInfoText();
@@ -132,6 +203,7 @@ class DetailContents extends Component {
                 closeDialog ={this.closeParameterDialog}/>
                 <DialogWrapper title={box_and_whisker_title} body={box_and_whisker_contents} isOpen={this.state.openBoxAndWhiskerDialog}
                                closeDialog ={this.closeBoxAndWhiskerDialog}/>
+                {filters}
                 <Row key="detail_contents" around="xs">
                     <Col md={3}>
                         <Row key="parameter_title" className={styles.parameters_list} >

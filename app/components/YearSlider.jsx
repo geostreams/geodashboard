@@ -1,7 +1,7 @@
-import 'rc-slider/assets/index.css';
 import React, {Component} from "react";
 import Slider from 'rc-slider';
-import styles from '../styles/yearSlider.css';
+import 'rc-slider/assets/index.css';
+import styles from '../styles/slider.css';
 
 class YearSlider extends Component {
 

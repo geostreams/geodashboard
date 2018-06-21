@@ -8,7 +8,9 @@ import {
     getParameterName, getAlternateParameters, getDetailPageBAWInfoText
 } from '../utils/getConfig';
 import styles from "../styles/detail.css";
+import mainStyles from '../styles/main.css'
 import BoxAndWhisker from '../components/BoxAndWhisker';
+
 let LineChart = rd3.LineChart;
 
 
@@ -27,14 +29,27 @@ class Chart extends Component {
         let boxAndWhiskers = [];
 
         let values = [];
+        let that = this;
         // Getting the datapoints for parameter: this.props.param
         if(this.props.sensorData[this.props.param]) {
             param_name = getParameterName(this.props.param, getAlternateParameters());
-            this.props.sensorData[this.props.param].filter(p => p.label.includes("spring"))
-                .map(function(d) {
-                    values.push({x: new Date(d.label.substring(0, 4)), y: d.average});
-                    BAWValues.push(d.average);
+            let sensor_data =  this.props.sensorData[this.props.param];
+
+            if(this.props.filterBySeason) {
+
+                const selectedSeason = this.props.selectedSeason.length > 0 ? this.props.selectedSeason : "spring";
+                sensor_data = sensor_data.filter(p => p.label.includes(selectedSeason))
+            }
+            sensor_data.map(function(d) {
+                    const bin_date = that.props.filterBySeason ? new Date(d.label.substring(0, 4)): new Date(d.label);
+                    if(bin_date.getTime() > that.props.selectedStartDate.getTime() &&
+                    bin_date.getTime() < that.props.selectedEndDate.getTime()) {
+                        values.push({x: bin_date, y: d.average});
+                        BAWValues.push(d.average);
+                    }
+
                 });
+
             boxAndWhiskers.push(
                 <BoxAndWhisker key={param_name}
                                paramName={param_name}
@@ -62,8 +77,8 @@ class Chart extends Component {
         let {interval_val} = this.props;
 
         return (
-            <Row>
-                <Col md={8}>
+            <Row className={mainStyles.fullWidth}>
+                <Col md={6}>
                     <div className={styles.layout_style}>
                         <div className={styles.float_item_left}>
                             <LineChart
@@ -79,14 +94,14 @@ class Chart extends Component {
                                 xAxisTickInterval={{unit: 'year', interval: Number(interval_val)}}
                             />
                         </div>
-                        <div className={styles.float_item_left}>
-                            <Card className={styles.card_margins}>
-                                <CardText>
-                                    {boxAndWhiskers}
-                                </CardText>
-                            </Card>
-                        </div>
                     </div>
+                </Col>
+                <Col md={6} className={styles.float_item_left}>
+                    <Card className={styles.card_margins}>
+                        <CardText>
+                            {boxAndWhiskers}
+                        </CardText>
+                    </Card>
                 </Col>
             </Row>
         )

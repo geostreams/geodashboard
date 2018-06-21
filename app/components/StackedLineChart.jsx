@@ -1,11 +1,12 @@
 import React, {Component} from "react";
 import ChartMultiLine from '../components/ChartMultiLine';
 import {Row} from 'react-flexbox-grid';
+import mainStyles from '../styles/main.css'
 
 class StackedLineChart extends Component {
 
     componentWillMount() {
-        this.props.loadSensor(null, this.props.sensor.name);
+        this.props.loadSensor(null, this.props.sensor.name, this.props.filterBySeason);
     }
 
     render() {
@@ -17,11 +18,15 @@ class StackedLineChart extends Component {
                 interval_val = 1;
             }
             if(selected_parameters.length > 0) {
-                charts.push(<Row key='multi-line-chart'>
+                charts.push(<Row key='multi-line-chart' className={mainStyles.fullWidth}>
                     <ChartMultiLine
                         sensorData={sensorData}
                         interval_val={interval_val}
                         id={sensor.name}
+                        selectedStartDate={this.props.selectedStartDate}
+                        selectedEndDate={this.props.selectedEndDate}
+                        filterBySeason={this.props.filterBySeason}
+                        selectedSeason={this.props.selectedSeason}
                         params={selected_parameters}
                         num_params={selected_parameters.length}
                         open_box_and_whiskers={this.props.open_box_and_whiskers}
@@ -31,9 +36,9 @@ class StackedLineChart extends Component {
         }
 
         return (
-            <div>
+            <Row className={mainStyles.fullWidth}>
             {charts}
-            </div>
+            </Row>
         );
     }
 

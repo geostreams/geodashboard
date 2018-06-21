@@ -247,3 +247,7 @@ h1, h2, h3, h5, h6, p, ul {
 .clusterStyleActive {
     filter: invert(100%);
 }
+
+.fullWidth {
+    width: 100%;
+}
