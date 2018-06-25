@@ -25,32 +25,37 @@ class LineChart extends Component {
         if(sensor) {
             const interval_val = getIntervalValue(num_years);
 
-            selected_parameters.map(parameter => {
+            selected_parameters.map(parameter_id => {
+                const parameter = this.props.category_parameters.find(x => x.name === parameter_id);
                 if (screen.width > getMobileSizeMax()) {
                     if (getShowRawProcessed() === true) {
-                        charts.push(<Row key={parameter}>
+                        charts.push(<Row key={parameter_id}>
                             <ChartRawProcessed interval_val={interval_val}
                                                selectedStartDate={this.props.selectedStartDate}
                                                selectedEndDate={this.props.selectedEndDate}
+                                               title={parameter.title}
+                                               units={parameter.unit}
                                                filterBySeason={this.props.filterBySeason}
                                                selectedSeason={this.props.selectedSeason}
-                                               id={sensor.name} parameter={parameter} sensorData={this.props.sensorData}/>
+                                               id={sensor.name} parameter={parameter_id} sensorData={this.props.sensorData}/>
                         </Row>)
                     } else {
-                        charts.push(<Row key={parameter} className={mainStyles.fullWidth}>
-                            <Chart interval_val={interval_val} title={parameter.title}
+                        charts.push(<Row key={parameter_id} className={mainStyles.fullWidth}>
+                            <Chart interval_val={interval_val}
+                                   title={parameter.title}
+                                   units={parameter.unit}
                                    selectedStartDate={this.props.selectedStartDate}
                                    selectedEndDate={this.props.selectedEndDate}
                                    filterBySeason={this.props.filterBySeason}
                                    selectedSeason={this.props.selectedSeason}
                                    category_parameters={this.props.category_parameters}
                                    parameterSources={this.props.parameterSources}
-                                   id={sensor.name} param={parameter} sensorData={this.props.sensorData}/></Row>)
+                                   id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}/></Row>)
                     }
                 } else {
-                    charts.push(<Row key={parameter}>
+                    charts.push(<Row key={parameter_id}>
                         <ChartMobile interval_val={interval_val} title={parameter.title}
-                                     id={sensor.name} param={parameter} sensorData={this.props.sensorData}/></Row>)
+                                     id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}/></Row>)
                 }
 
             })

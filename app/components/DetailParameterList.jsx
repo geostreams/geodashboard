@@ -20,9 +20,6 @@ class DetailParameterList extends Component {
                 checkboxDisabled = true;
             }
             let parameter_label = parameter.title;
-            if(parameter.unit != "") {
-                parameter_label += " ("+ parameter.unit + ")";
-            }
             parameter_list.push(
                 <div key={parameter.name}>
                     <FormField id={parameter.name} key={parameter.name}>

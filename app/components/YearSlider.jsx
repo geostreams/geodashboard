@@ -15,7 +15,7 @@ class YearSlider extends Component {
 
         return (
             <div>
-                <span className={styles.startYear}>{this.props.start_year}</span>
+                <span className={styles.start}>{this.props.start_year}</span>
                 <div className={styles.wrapperStyle} >
                 <Range min={this.props.start_year} max={this.props.end_year}
                        value={[this.props.selectedStartYear, this.props.selectedEndYear]}
@@ -25,7 +25,7 @@ class YearSlider extends Component {
                        dots
                 />
                 </div>
-                <span className={styles.endYear}>{this.props.end_year}</span> <br/>
+                <span className={styles.end}>{this.props.end_year}</span> <br/>
                 Selected: {this.props.selectedStartYear} - {this.props.selectedEndYear}
             </div>
         );

@@ -571,11 +571,15 @@ export function updateAvailableFilters() {
         const selected_search = state.selectedSearch;
         const sensors = state.sensors.available_sensors;
         const allFilters = state.searchFilters.filters;
+        const searchParameters = state.parameters.search;
+        const multiParameterMap = state.parameters.multi_parameter_map;
         dispatch({
             type: UPDATE_AVAILABLE_FILTERS,
             selected_filters,
             selected_search,
             allFilters,
+            searchParameters,
+            multiParameterMap,
             sensors
         })
     }
@@ -595,8 +599,10 @@ export function updateAvailableSensors(idx: number) {
         const state2 = getState();
         const selected_filters = state2.searchFilters.selected;
         const selected_search = state2.selectedSearch;
+        const multi_parameters = state2.parameters.multi_parameter_map;
         dispatch({
             type: UPDATE_AVAILABLE_SENSORS,
+            multi_parameters,
             selected_filters,
             selected_search
         })
@@ -605,9 +611,10 @@ export function updateAvailableSensors(idx: number) {
 
 
 export const RECEIVE_PARAMETERS = "RECEIVE_PARAMETERS";
+export const RECEIVE_MULTI_PARAMETERS = "RECEIVE_MULTI_PARAMETERS";
 export const FAILED_RECEIVE_PARAMETERS = "FAILED_RECEIVE_PARAMETERS";
 export function fetchParameters(api: string) {
-    return(dispatch: any) => {
+    return(dispatch: Dispatch, getState: GetState) => {
         // TODO: use the api endpoint selected in the dropdown instead of localhost
         // const endpoint = api + '/api/parameters';
         const endpoint = "http://localhost:9000/api/parameters";
@@ -620,7 +627,15 @@ export function fetchParameters(api: string) {
                     categories: json.categories,
                     mappings: json.mappings
                 })
-            )
+
+            ).then( json => {
+                    let state = getState();
+                    dispatch({
+                        type: RECEIVE_MULTI_PARAMETERS,
+                        parameters: state.parameters,
+                        multi_parameter_map: state.parameters.multi_parameter_map
+                    })
+            })
             .catch((error) => {
                 console.log('An ERROR occurred! ' + error);
                 dispatch({

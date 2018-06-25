@@ -78,7 +78,8 @@ const selectedSearch = (state: selectedSearchState = defaultState, action: Selec
             return Object.assign({}, state, newStateED);
 
         case UPDATE_AVAILABLE_FILTERS:
-            const newFilters = updateAvailable(action.sensors, action.selected_filters, action.allFilters, state);
+            const newFilters = updateAvailable(action.sensors, action.selected_filters, action.allFilters,
+                action.searchParameters, action.multi_parameter_map, state);
             return Object.assign({}, state, newFilters);
 
         case RECEIVE_SENSORS:
@@ -116,7 +117,7 @@ function updateSelected(selected_filters, state, type) {
 
 }
 
-function updateAvailable(sensors, selected_filters, allFilters, state) {
+function updateAvailable(sensors, selected_filters, allFilters, searchParameters, multi_parameter_map, state) {
     let newState = Object.assign({}, state);
     allFilters.map((filterA) => {
         if (selected_filters.indexOf(filterA.id) === selected_filters.length - 1) {
@@ -128,7 +129,7 @@ function updateAvailable(sensors, selected_filters, allFilters, state) {
                         {data_sources: {selected: newSelectedDataSources, available: newAvailableDataSources}});
                     return;
                 case 'parameters':
-                    const newAvailableParameters = collectParameters(sensors);
+                    const newAvailableParameters = collectParameters(sensors, searchParameters, multi_parameter_map);
                     const newSelectedParameters = intersectArrays(newAvailableParameters, state.parameters.selected);
                     newState = Object.assign({}, newState,
                         {parameters: {selected: newSelectedParameters, available: newAvailableParameters}});

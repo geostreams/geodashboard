@@ -10,7 +10,8 @@ const mapStateToProps = (state) => {
         sensors: state.sensors.data,
         popupSensorname: state.sensorDetail.name,
         popupCoordinates: state.sensorDetail.coordinates,
-        showPopup: state.sensorDetail.showExplorePopup
+        showPopup: state.sensorDetail.showExplorePopup,
+        parameters: state.parameters.explore
     }
 };
 

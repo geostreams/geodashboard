@@ -154,9 +154,9 @@ class SearchMap extends Component {
 
     getFeature = () => {
         if(this.props.updateSensors){
-            return sensorsToFeatures(this.props.updateSensors);
+            return sensorsToFeatures(this.props.updateSensors, this.props.parameters);
         } else {
-            return sensorsToFeatures(this.props.sensors);
+            return sensorsToFeatures(this.props.sensors, this.props.parameters);
         }
 
     };

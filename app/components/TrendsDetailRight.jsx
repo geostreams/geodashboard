@@ -21,10 +21,10 @@ class TrendDetailRight extends Component {
         const that = this;
         const promise = new Promise((resolve) => {
             setInterval(() => {
-                let trend = this.props.trends_regions.find(function(element) {
+                let trend = that.props.trends_regions.find(function(element) {
                     return element !== undefined && element.name === that.props.trends_region_id;
                 });
-                if( Object.keys(trend.trends_detail).length > 0) {
+                if( trend !== undefined && Object.keys(trend.trends_detail).length > 0) {
                     resolve(trend.trends_detail);
                 }
 
@@ -58,6 +58,7 @@ class TrendDetailRight extends Component {
         this.state.data.map( k => {
             Object.keys(k).map( l => years.push(parseInt(l)));
         });
+        const parameter = this.props.parameters.find(x => x.name === this.props.trends_parameter);
         const minYear = Math.min.apply(null, years);
         const maxYear = Math.max.apply(null, years);
         const start_year = this.state.selectedStartYear === 0 ? minYear: this.state.selectedStartYear;
@@ -72,6 +73,8 @@ class TrendDetailRight extends Component {
                     trends_settings={this.props.trends_settings}
                     trends_region_id={this.props.trends_region_id}
                     trends_parameter={this.props.trends_parameter}
+                    title={parameter.title}
+                    units={parameter.unit}
                     trends_season={this.props.trends_season}
                     start_year={start_year}
                     end_year={end_year}

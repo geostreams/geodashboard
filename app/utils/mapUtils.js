@@ -1,6 +1,6 @@
 import ol from 'openlayers';
 import {
-    getSourceName, getParameterName, getAlternateParameters, getCustomTrendsRegion,
+    getSourceName, getCustomTrendsRegion,
     getTrendColor, getColor, getTrendsPageLakeRegions, getMapAttributionsSetting,
     getMapAttributionsCollapsibleSetting, getMapMiniAttributionsCollapsibleSetting,
     getMobileSizeMax, getMobileSourceNames, getClustersDistance
@@ -8,9 +8,8 @@ import {
 import {matchRegionTrends, getRegionalThreshold} from '../utils/trendsUtils';
 
 
-export function sensorsToFeatures(sensors: Sensors): Array<ol.Feature> {
+export function sensorsToFeatures(sensors: Sensors, parameters: Parameters): Array<ol.Feature> {
     let features = Array();
-    const alternateParameters = getAlternateParameters();
 
     if (screen.width <= getMobileSizeMax()) {
         let mobile_sourcenames = getMobileSourceNames().toUpperCase();
@@ -30,7 +29,14 @@ export function sensorsToFeatures(sensors: Sensors): Array<ol.Feature> {
                 [sensor.geometry.coordinates[0], sensor.geometry.coordinates[1]]
             ).transform('EPSG:4326', 'EPSG:3857')
         });
-
+        let sensor_parameters = [];
+        sensor.parameters.filter(x => x !== null).map(y => {
+                const parameter = parameters.find(x => x.name === y);
+                if (parameter !== undefined && parameter.title !== undefined) {
+                    sensor_parameters.push(parameter.title);
+                }
+            }
+        );
         feature.attributes = {
             "name": sensor.name,
             "dataSource": getSourceName(sensor.properties.type),
@@ -39,10 +45,7 @@ export function sensorsToFeatures(sensors: Sensors): Array<ol.Feature> {
             "latitude": sensor.geometry.coordinates[1],
             "longitude": sensor.geometry.coordinates[0],
             "location": sensor.properties.region,
-            //parameters has null in the array
-            "parameters": sensor.parameters.filter(
-                x => x !== null && getParameterName(x, alternateParameters) !== null)
-                .map(x => getParameterName(x, alternateParameters)),
+            "parameters": sensor_parameters,
             "color": getColor(sensor.properties.type.id),
             "type": "single"
         };
@@ -55,7 +58,7 @@ export function sensorsToFeatures(sensors: Sensors): Array<ol.Feature> {
 }
 
 export function sensorsToFeaturesTrendPage(
-    sensors: Sensors, parameter: string, trends_parameter_lake_regions: Array): Array<ol.Feature> {
+    sensors: Sensors, parameter: string, trends_parameter_lake_regions: Array, parameters:Parameters): Array<ol.Feature> {
 
     let features = Array();
 
@@ -68,7 +71,6 @@ export function sensorsToFeaturesTrendPage(
     //This is the regions within the lakes
     let trends_lake_regions = [];
     trends_lake_regions_config.map(p => trends_lake_regions = p.regions.split(','));
-    const alternateParameters = getAlternateParameters();
     sensors.map((sensor) => {
 
         if (sensor.name !== 'ALL') {
@@ -142,12 +144,8 @@ export function sensorsToFeaturesTrendPage(
                             trend_type = "noTrend";
                         }
                     }
-
-                    let units = '';
-                    if (parameter) {
-                        let unitIndex = getParameterName(parameter, alternateParameters).lastIndexOf(" ");
-                        units = getParameterName(parameter, alternateParameters).substr(unitIndex + 1);
-                    }
+                    const the_parameter = parameters.find(x => x.name === parameter);
+                    const units = the_parameter.unit;
 
                     trend_values = [
                         (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + ' ' + units),
@@ -209,10 +207,13 @@ export function sensorsToFeaturesTrendPage(
 
             let sensor_parameters = [];
             if (sensor.parameters && (sensor.parameters.length > 0)) {
-                sensor_parameters = sensor.parameters.filter(
-                    x => x !== null && getParameterName(x, alternateParameters) !== null)
-                    .map(x => getParameterName(x, alternateParameters)
-                    );
+                sensor.parameters.filter(x => x !== null).map(y => {
+                        const parameter = parameters.find(x => x.name === y);
+                        if (parameter !== undefined && parameter.title !== undefined) {
+                            sensor_parameters.push(parameter.title);
+                        }
+                    }
+                );
             }
 
             feature.attributes = {
@@ -241,8 +242,8 @@ export function sensorsToFeaturesTrendPage(
     return features;
 }
 
-export function sensorsToFeaturesTrendRegionPage(
-    sensors: Sensors, parameter: string, season: string, trends_parameter_lake_regions: Array): Array<ol.Feature> {
+export function sensorsToFeaturesTrendRegionPage(sensors: Sensors, parameter: string, season: string,
+                             trends_parameter_lake_regions: Array, parameters: Parameter): Array<ol.Feature> {
 
     let features = Array();
 
@@ -255,7 +256,7 @@ export function sensorsToFeaturesTrendRegionPage(
     //This is the regions within the lakes
     let trends_lake_regions = [];
     trends_lake_regions_config.map(p => trends_lake_regions = p.regions.split(','));
-    const alternateParameters = getAlternateParameters();
+    const the_parameter = parameters.find(x => x.name === parameter);
     sensors.map((sensor) => {
 
         if (sensor.name !== 'ALL') {
@@ -330,13 +331,8 @@ export function sensorsToFeaturesTrendRegionPage(
                     }
                 }
 
-                let units = '';
 
-                if (parameter) {
-                    let unitIndex = getParameterName(parameter, alternateParameters).lastIndexOf(" ");
-                    units = getParameterName(parameter, alternateParameters).substr(unitIndex + 1);
-                }
-
+                const units = the_parameter !== undefined ? the_parameter.unit: '';
                 let percentage_change =
                     (Number(ten_years_average) - Number(total_average))
                     / Number(total_average) * 100;
@@ -397,6 +393,7 @@ export function sensorsToFeaturesTrendRegionPage(
                     })
                 }));
             }
+            const parameter_title = the_parameter !== undefined ? the_parameter.title : '' ;
 
             feature.attributes = {
                 "dataSource": getSourceName(sensor.properties.type),
@@ -411,7 +408,7 @@ export function sensorsToFeaturesTrendRegionPage(
                 "display_trends": true,
                 "trends_detail": true,
                 "region": getCustomTrendsRegion(sensor.properties.region),
-                "parameter": getParameterName(parameter, alternateParameters),
+                "parameter": parameter_title,
                 "url_parameter": parameter,
                 "season": season,
             };
@@ -424,9 +421,8 @@ export function sensorsToFeaturesTrendRegionPage(
     return features;
 }
 
-export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: string, threshold: string): Array<ol.Feature> {
+export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: string, threshold: string, parameters: Parameters): Array<ol.Feature> {
     let features = Array();
-    const alternateParameters = getAlternateParameters();
     sensors.map((sensor) => {
 
         if (sensor.name !== 'ALL') {
@@ -538,6 +534,15 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
                 }));
             }
 
+            let sensor_parameters = [];
+            sensor.parameters.filter(x => x !== null).map(y => {
+                    const parameter = parameters.find(x => x.name === y);
+                    if (parameter !== undefined && parameter.title !== undefined) {
+                        sensor_parameters.push(parameter.title);
+                    }
+                }
+            );
+
             feature.attributes = {
                 "dataSource": getSourceName(sensor.properties.type),
                 "maxEndTime": sensor.max_end_time,
@@ -546,8 +551,7 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
                 "longitude": sensor.geometry.coordinates[0],
                 "location": sensor.properties.region,
                 "name": sensor.name,
-                //parameters has null in the array
-                "parameters": sensor.parameters.filter(x => x !== null && getParameterName(x, alternateParameters) !== null).map(x => getParameterName(x, alternateParameters)),
+                "parameters": sensor_parameters,
                 "color": getColor(sensor.properties.type.id),
                 "trend_color": getTrendColor(trend_type),
                 "trend_type": trend_type,

@@ -4,7 +4,6 @@ import {
     Card, CardHeader, CardTitle, CardText, CardMedia, Icon
 } from 'react-mdc-web';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import {getParameterName, getAlternateParameters} from '../utils/getConfig';
 import BoxAndWhisker from '../components/BoxAndWhisker';
 import styles from '../styles/detail.css';
 import mainStyles from '../styles/main.css'
@@ -39,6 +38,7 @@ class ChartMultiLine extends Component {
         legend_box = legend_box.concat("Legend: ").concat('\n');
 
         params.map(p => {
+            const parameter = this.props.category_parameters.find(x => x.name === p);
             loopValues = [];
             lineDataValues = {};
             BAWValues = [];
@@ -58,7 +58,7 @@ class ChartMultiLine extends Component {
                         BAWValues.push(d.average);
                     }
                 });
-                param_name = getParameterName(p, getAlternateParameters());
+                param_name = parameter.title;
                 param_color = colorsRange[params.indexOf(p)];
                 lineDataValues = {
                     name: param_name,

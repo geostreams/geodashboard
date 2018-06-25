@@ -73,11 +73,12 @@ class DownloadButtons extends Component {
         if (this.props.selectedDataSources.length > 0) {
             params["sources"] = this.props.selectedDataSources;
         }
+        let {multi_parameter_map} = this.props;
         if (this.props.selectedParameters.length > 0) {
             let parametersToSearch = Object.assign([], this.props.selectedParameters);
-            const multiParameters = intersectArrays(Object.keys(window.configruntime.gd3.multi_parameter_map), this.props.selectedParameters);
+            const multiParameters = intersectArrays(Object.keys(multi_parameter_map), this.props.selectedParameters);
             multiParameters.map((parameter) =>
-                window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
+                multi_parameter_map[parameter].map((alternate) => {
                     parametersToSearch.push(alternate);
                 })
             );

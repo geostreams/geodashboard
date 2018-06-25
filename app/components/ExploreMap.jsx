@@ -222,7 +222,7 @@ class ExploreMap extends Component {
             sensors = mobile_data;
         }
 
-        return sensorsToFeatures(sensors);
+        return sensorsToFeatures(sensors, this.props.parameters);
     };
 
     getCluster = (clusterSource: ol.source.Cluster) => {

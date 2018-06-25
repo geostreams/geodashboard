@@ -5,9 +5,7 @@ import {
     Card, CardHeader, CardTitle, CardText, CardMedia,
     Dialog, DialogBody, DialogHeader, DialogTitle, Icon
 } from 'react-mdc-web';
-import {
-    getParameterName, getAlternateParameters, getProcessedProperty, getDetailPageBAWInfoText
-} from '../utils/getConfig';
+import {getProcessedProperty} from '../utils/getConfig';
 import styles from "../styles/detail.css";
 import BoxAndWhisker from '../components/BoxAndWhisker';
 let LineChart = rd3.LineChart;
@@ -20,7 +18,7 @@ class ChartRawProcessed extends Component {
 
     render() {
 
-        let param_name = '';
+        let param_name = this.props.title;
         let BAWValues = [];
         let boxAndWhiskers = [];
         const that = this;
@@ -41,8 +39,8 @@ class ChartRawProcessed extends Component {
         let processedProperty = getProcessedProperty();
 
         // Getting the datapoints for parameter: this.props.param
-        if(this.props.sensorData[this.props.parameter.name]) {
-            let sensor_data = this.props.sensorData[this.props.param];
+        if(this.props.sensorData[this.props.parameter]) {
+            let sensor_data = this.props.sensorData[this.props.parameter];
             if(this.props.filterBySeason) {
                 const selectedSeason = this.props.selectedSeason.length > 0 ? this.props.selectedSeason : "spring";
                 sensor_data = sensor_data.filter(p => p.label.includes(selectedSeason))
@@ -140,8 +138,8 @@ class ChartRawProcessed extends Component {
                 })
         }
 
-        const units = this.props.parameter.unit === "" ? "Value" : this.props.parameter.unit;
-        const chartTitle = this.props.parameter.title;
+        const units = this.props.unit === "" ? "Value" : this.props.unit;
+        const chartTitle = this.props.title;
 
         let {interval_val} = this.props;
 

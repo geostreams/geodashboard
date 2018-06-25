@@ -36,6 +36,7 @@ class StackedLineChart extends Component {
                         params={selected_parameters}
                         num_params={selected_parameters.length}
                         open_box_and_whiskers={this.props.open_box_and_whiskers}
+                        category_parameters={this.props.category_parameters}
                     />
                 </Row>)
             }

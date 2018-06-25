@@ -16,7 +16,8 @@ const mapStateToProps = (state) => {
         selectedParameter: state.chosenTrends.parameter,
         selectedRegion: state.chosenTrends.region,
         trendViewType: state.chosenTrends.view_type,
-        trendAllRegions: state.chosenTrends.all_regions
+        trendAllRegions: state.chosenTrends.all_regions,
+        parameters: state.parameters.parameters
     }
 };
 

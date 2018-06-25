@@ -1,12 +1,12 @@
 /*
  * @flow
  */
-import {RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS} from '../actions';
+import {RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS,
+    RECEIVE_MULTI_PARAMETERS} from '../actions';
 import type {Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels} from '../utils/flowtype';
 import {inArray, sortByLabel, pnpoly, intersectArrays, sortByLake, sortByRegion, sortBySource} from '../utils/arrayUtils';
 import {
-    getSourceName, getAlternateParameters, getAlternateParameterName, getParameterNameNoAlternate,
-    getSourceOrder, getLakesOrdering
+    getSourceName, getSourceOrder, getLakesOrdering,
 } from '../utils/getConfig';
 
 type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS',
@@ -38,7 +38,7 @@ const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
                 data: action.sensors,
                 receivedAt: action.receivedAt,
                 api: action.api,
-                parameters: collectParameters(action.sensors),
+                // parameters: collectParameters(action.sensors),
                 sources: collectSources(action.sensors),
                 regions: collectRegions(action.sensors),
                 locations: collectLocations(action.sensors),
@@ -46,8 +46,14 @@ const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
                 shape_coordinates: []
             });
 
+        case RECEIVE_MULTI_PARAMETERS:
+            const copy_sensors = Object.assign([], state.sensors);
+            return Object.assign({}, state, {
+                parameters: collectParameters(copy_sensors, action.parameters, action.multi_parameter_map)
+            });
+
         case UPDATE_AVAILABLE_SENSORS:
-            let newSensors = filterAvailableSensors(state, action.selected_filters, action.selected_search);
+            let newSensors = filterAvailableSensors(state, action.selected_filters, action.selected_search, action.multi_parameters);
             if (action.selected_search.locations.selected === 'Custom Location') {
                 shapeCoordinates = state.shape_coordinates;
                 return Object.assign({}, state, {
@@ -115,26 +121,41 @@ function filterCustomLocation(state:sensorsState, selectedPointsLocations:Array<
     return filteredSensors;
 }
 
-export function collectParameters(sensorsData:Sensors):MapWithLabels {
+export function collectParameters(sensorsData:Sensors, parameters:Parameters, multi_parameter_map):MapWithLabels {
     let params:MapWithLabels = [];
-    let alternateParameters = getAlternateParameters();
+    const alternateParameters = getAlternateParameters(multi_parameter_map);
     sensorsData.map(s => {
         s.parameters.map(p => {
-            // check if parameters exists already
+            // check if parameters exists already_
             let found = params.some(function (e:MapWithLabel) {
                 return e.id === p || e.id === alternateParameters[p];
             });
             if (p === null) {
                 console.log(`Found sensor ${s.id} with null parameters`);
-            }  else if (!found && getParameterNameNoAlternate(p) !== null) {
-                params.push({'id': p, 'label': getParameterNameNoAlternate(p) || ''});
-            }  else if (!found &&  getAlternateParameterName(p, alternateParameters) !== null ) {
-                params.push({'id': alternateParameters[p], 'label': getParameterNameNoAlternate(alternateParameters[p]) || '' });
+
+            }  else if (!found) {
+                let parameter = parameters.find(x => x.name === p);
+                if(parameter && parameter.name !== "") {
+                    params.push({'id': p, 'label': parameter.title || ''});
+                }
+
             }
         });
     });
     // sort
     return sortByLabel(params);
+}
+
+function getAlternateParameters(multi_parameter_map){
+    let parameters = {};
+    if(multi_parameter_map) {
+        Object.keys(multi_parameter_map).map((parameter) =>
+            multi_parameter_map[parameter].map((alternate) => {
+                parameters[alternate] = parameter;
+            })
+        );
+    }
+    return parameters;
 }
 
 export function collectRegions(sensorsData: Sensors) {
@@ -224,7 +245,7 @@ export function collectLocations(sensorsData:Sensors):MapWithLabels {
     return sortByLake(locations, order);
 }
 
-function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string>, selectedSearch:Object) {
+function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string>, selectedSearch:Object, multi_parameter_map: Object) {
     let av_sensors: Sensors = state.data;
     let new_sensors: Sensors = [];
     let draw_sensors = state.draw_available_sensors;
@@ -255,9 +276,9 @@ function filterAvailableSensors(state:sensorsState, selectedFilters:Array<string
                 if(selectedSearch.parameters.selected.length > 0) {
                     new_sensors = [];
                     let parametersToSearch = Object.assign([], selectedSearch.parameters.selected);
-                    let multiParameters = intersectArrays(Object.keys(window.configruntime.gd3.multi_parameter_map), selectedSearch.parameters.selected);
+                    let multiParameters = intersectArrays(Object.keys(multi_parameter_map), selectedSearch.parameters.selected);
                     multiParameters.map((parameter) =>
-                        window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
+                        multi_parameter_map[parameter].map((alternate) => {
                             parametersToSearch.push(alternate);
                         })
                     );

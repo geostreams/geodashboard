@@ -10,7 +10,8 @@ const mapStateToProps = (state) => {
         regionsStations: state.chosenTrends.trends_regions,
         selectedParameter: state.chosenTrends.parameter,
         selectedSeason: state.chosenTrends.season,
-        detailRegion: state.chosenTrends.detail_region
+        detailRegion: state.chosenTrends.detail_region,
+        parameters: state.parameters.parameters
     }
 };
 

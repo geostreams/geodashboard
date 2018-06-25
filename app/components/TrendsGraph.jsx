@@ -4,8 +4,8 @@
 
 import React, { Component } from 'react';
 import LineChartWithDeviations from './LineChartWithDeviations';
-import {getAlternateParameters, getParameterName} from '../utils/getConfig';
-import d3 from 'd3';
+const d3 = require('d3');
+
 
 class TrendsGraph extends Component {
 
@@ -23,19 +23,7 @@ class TrendsGraph extends Component {
 	render() {
 
         let that = this;
-        let chartTitle = 'No Chosen Parameter';
-        const {trends_settings, start_year, end_year} = this.props;
-        let unitIndex;
-        let units;
-        if (trends_settings) {
-            trends_settings.map(p => {
-                if (p.parameter.id === this.props.trends_parameter) {
-                    chartTitle = p.parameter.title;
-                    unitIndex = chartTitle.lastIndexOf(" ");
-                    units = chartTitle.substr(unitIndex + 1);
-                }
-            })
-        }
+        const {trends_settings, start_year, end_year, title, units} = this.props;
 
         let dataRaw = [];
         let trend = this.props.trends_regions.find(function(element) {
@@ -54,7 +42,7 @@ class TrendsGraph extends Component {
 	            trends_deviation = Object.assign({}, trends_deviation, d)
 	        );
 	        // Add Values
-	        let parseDate = d3.time.format("%Y").parse;
+	        let parseDate = d3.timeParse("%Y");
 	        Object.keys(trends_detail).forEach(function(key) {
 	            if(parseInt(key) >= parseInt(start_year) && parseInt(key) <= parseInt(end_year)) {
 		            dataRaw.push({
@@ -70,7 +58,6 @@ class TrendsGraph extends Component {
             });
         }
 
-	    const alternateParameters = getAlternateParameters();
         return (
             <div>
                 <LineChartWithDeviations
@@ -80,7 +67,7 @@ class TrendsGraph extends Component {
                     xScale= 'time'
                     xLabel= "Year"
                     yScale='linear'
-                    yLabel={getParameterName(this.props.trends_parameter, alternateParameters)}
+                    yLabel={title}
                 />
             </div>
         )

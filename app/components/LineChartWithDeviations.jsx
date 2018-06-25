@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import d3 from 'd3';
 import { Xaxis, Yaxis, Chart, Svg } from 'react-d3-core';
+const d3 = require('d3');
 
 
 class LineChartWithDeviations extends Component {
@@ -8,8 +8,8 @@ class LineChartWithDeviations extends Component {
     constructor(props: Object) {
         super(props);
         this.state={
-            xline: d3.scale.linear(),
-            yline: d3.scale.linear()
+            xline: d3.scaleLinear(),
+            yline: d3.scaleLinear()
         };
         this.setUpGraph = this.setUpGraph.bind(this);
     }
@@ -36,8 +36,8 @@ class LineChartWithDeviations extends Component {
         let yMin = d3.extent(chartData, function(d){ return d.y - d.d; })[0];
         let yDomain = [yMin, yMax];
         this.setState({xRange, xDomain, yRange, yDomain});
-        this.setState({xline : d3.scale.linear().domain(xDomain).range(xRange)});
-        this.setState({yline : d3.scale.linear().domain(yDomain).range(yRange)});
+        this.setState({xline : d3.scaleLinear().domain(xDomain).range(xRange)});
+        this.setState({yline : d3.scaleLinear().domain(yDomain).range(yRange)});
         this.setState({barLength: 0.3*(xRange[1]/chartData.length)});
         let that = this;
 
@@ -91,7 +91,7 @@ class LineChartWithDeviations extends Component {
 
     _setAxes (data) {
         let that = this;
-        let line = d3.svg.line()
+        let line = d3.line()
             .x(function(d) { return that.state.xline(d.x); })
             .y(function(d) { return that.state.yline(d.y); });
         return line(data);

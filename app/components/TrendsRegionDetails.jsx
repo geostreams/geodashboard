@@ -28,7 +28,7 @@ class TrendsRegionDetails extends Component {
 
         let trendsPageSettings = sensorsToFeaturesTrendRegionPage(
             this.props.regionsStations, this.props.trends_parameter,
-            this.props.trends_season, trends_parameter_lake_regions);
+            this.props.trends_season, trends_parameter_lake_regions, this.props.parameters);
 
         let trendsCheckRegion;
         let trendsDetailListItems = '';

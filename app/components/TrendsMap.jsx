@@ -152,7 +152,8 @@ class TrendsMap extends Component {
             }
         });
 
-        features = sensorsToFeaturesTrendPage(map_items, this.props.selectedParameter, trends_parameter_lake_regions);
+        features = sensorsToFeaturesTrendPage(map_items, this.props.selectedParameter, trends_parameter_lake_regions,
+            this.props.parameters);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
@@ -181,7 +182,8 @@ class TrendsMap extends Component {
             }
         });
 
-        let features = sensorsToFeaturesTrendPage(map_items, this.props.selectedParameter, trends_lake_regions);
+        let features = sensorsToFeaturesTrendPage(map_items, this.props.selectedParameter, trends_lake_regions,
+            this.props.parameters);
 
         let vectorSource = new ol.source.Vector({
             features: features

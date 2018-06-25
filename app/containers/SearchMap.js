@@ -13,6 +13,7 @@ const mapStateToProps = (state) => {
         drawn_sensors: state.sensors.draw_available_sensors,
         selectedLocation: state.selectedSearch.locations.selected,
         shapeCoordinates: state.sensors.shape_coordinates,
+        parameters: state.parameters.search
     }
 };
 

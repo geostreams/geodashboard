@@ -6,7 +6,8 @@ import type {Dispatch} from "../utils/flowtype";
 
 const mapStateToProps = (state) => {
     return {
-        trends_regions: state.chosenTrends.trends_regions
+        trends_regions: state.chosenTrends.trends_regions,
+        parameters: state.parameters.parameters
     }
 };
 

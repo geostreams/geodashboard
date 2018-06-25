@@ -3,9 +3,6 @@ import { Row, Col } from 'react-flexbox-grid';
 import {
     Card, CardHeader, CardTitle, CardText, CardMedia, Icon
 } from 'react-mdc-web';
-import {
-    getParameterName, getAlternateParameters
-} from '../utils/getConfig';
 import styles from "../styles/detail.css";
 import mainStyles from '../styles/main.css'
 import BoxAndWhisker from '../components/BoxAndWhisker';
@@ -22,15 +19,13 @@ class Chart extends Component {
 
     render() {
 
-        let selected_parameter = this.props.category_parameters.find(x => x.name === this.props.param);
         let BAWValues = [];
         let boxAndWhiskers = [];
-        let param_name;
+        const {units, title} = this.props;
         let values = [];
         let that = this;
         // Getting the datapoints for parameter: this.props.param
         if(this.props.sensorData[this.props.param]) {
-            param_name = selected_parameter.title;
             let sensor_data =  this.props.sensorData[this.props.param];
 
             if(this.props.filterBySeason) {
@@ -53,24 +48,17 @@ class Chart extends Component {
             }
 
             boxAndWhiskers.push(
-                <BoxAndWhisker key={param_name}
-                               paramName={param_name}
+                <BoxAndWhisker key={title}
+                               paramName={title}
                                paramValues={BAWValues}
                                paramColor={'#000000'}/>
             );
         }
+
         if(values.length === 0 ){
             values.push({date: new Date(0), average: 0})
         }
 
-        // Get Units for Chart
-        let units = selected_parameter.unit;
-        let chartTitle = selected_parameter.title;
-        if(units !== "") {
-             chartTitle += " (" + units + ")";
-        }
-
-        let {interval_val} = this.props;
         let sources = [];
         if(this.props.parameterSources) {
             sources = this.props.parameterSources[this.props.param];
@@ -86,7 +74,7 @@ class Chart extends Component {
                                   selectedStartDate={this.props.selectedStartDate}
                                   selectedEndDate={this.props.selectedEndDate}
                                   yAxisLabel={units}
-                                  title={chartTitle}
+                                  title={title}
                                   sources={sources}
                             />
                         </div>

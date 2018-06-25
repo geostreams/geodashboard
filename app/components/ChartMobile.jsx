@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import rd3 from 'react-d3';
 import { Row, Col } from 'react-flexbox-grid';
 import {Card, CardHeader, CardTitle} from 'react-mdc-web';
-import {getParameterName} from '../utils/getConfig';
 import styles from '../styles/detail.css';
 let LineChart = rd3.LineChart;
 
@@ -14,18 +13,11 @@ class ChartMobile extends Component {
     render() {
 
         let values = [];
-        let chartTitle = '';
+        const {title, units}  = this.props;
+
         let unitIndex = -1;
-        let units = '';
         // Getting the datapoints for parameter: this.props.param
         if(this.props.sensorData[this.props.param]) {
-            chartTitle = getParameterName(this.props.param);
-            unitIndex = chartTitle.lastIndexOf("(");
-            if (unitIndex === -1) {
-                units = 'Value';
-            } else {
-                units = chartTitle.substr(unitIndex);
-            }
             this.props.sensorData[this.props.param].map(
                 d => {
                     let makeValueX;
@@ -40,7 +32,7 @@ class ChartMobile extends Component {
         if(values.length === 0 ){
             values.push({x: 0, y: 0});
             subtitleText = (
-                <div className={styles.noData}>No Data to Display for {getParameterName(this.props.param)}</div>
+                <div className={styles.noData}>No Data to Display for {title}</div>
             );
         }
 
@@ -61,7 +53,7 @@ class ChartMobile extends Component {
                             data={lineData}
                             width={800} height={600}
                             margins={{top: 10, right: 50, bottom: 100, left: 200}}
-                            title={getParameterName(this.props.param)}
+                            title={title}
                             yAxisLabel={units} yAxisLabelOffset={Number(150)}
                             xAxisLabel="Time (last two weeks)" xAxisLabelOffset={Number(75)}
                             gridHorizontal={true} gridVertical={true}
