@@ -52,11 +52,11 @@ class DateSlider extends Component {
             <span className={styles.start}>{minDate.format("MM/DD/YYYY")}</span>
             <div className={styles.wrapperStyle} >
             <Range min={0} max={maxValue}
-                   value={[selected_start, selected_end]}
+                   defaultValue={[selected_start, selected_end]}
                    allowCross={false}
                    tipFormatter={value => this.popupDateValue(value)}
-                   onChange={this.onSliderChange}
-                   dots
+                   onAfterChange={this.onSliderChange}
+
             />
             </div>
             <span className={styles.end}>{maxDate.format("MM/DD/YYYY")}</span> <br/>

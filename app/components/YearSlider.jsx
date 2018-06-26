@@ -18,10 +18,10 @@ class YearSlider extends Component {
                 <span className={styles.start}>{this.props.start_year}</span>
                 <div className={styles.wrapperStyle} >
                 <Range min={this.props.start_year} max={this.props.end_year}
-                       value={[this.props.selectedStartYear, this.props.selectedEndYear]}
+                       defaultValue={[this.props.selectedStartYear, this.props.selectedEndYear]}
                        allowCross={false}
                        tipFormatter={value => `${value}`}
-                       onChange={this.props.onSliderChange}
+                       onAfterChange={this.props.onSliderChange}
                        dots
                 />
                 </div>

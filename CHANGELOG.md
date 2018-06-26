@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1103](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1103)
 - Removed parameters from configuration file. Using only the database
   [GEOD-1102](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1102)
+- Changed sliders on change function to on after change.
 
 ### Fixed
 - When clicking on a pill in explore left navigation, open the popup on the map
