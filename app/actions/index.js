@@ -615,9 +615,7 @@ export const RECEIVE_MULTI_PARAMETERS = "RECEIVE_MULTI_PARAMETERS";
 export const FAILED_RECEIVE_PARAMETERS = "FAILED_RECEIVE_PARAMETERS";
 export function fetchParameters(api: string) {
     return(dispatch: Dispatch, getState: GetState) => {
-        // TODO: use the api endpoint selected in the dropdown instead of localhost
-        // const endpoint = api + '/api/parameters';
-        const endpoint = "http://localhost:9000/api/parameters";
+        const endpoint = api.slice(0, -8) + "/geostreams/api/parameters";
         return fetch(endpoint)
             .then(response => response.json())
             .then(json =>
