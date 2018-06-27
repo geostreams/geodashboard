@@ -15,6 +15,7 @@ import {
     getMobileSourceNames, getMobileSizeMax, getLayersDetails, getChromeDisabled, clustersChoiceOption
 } from '../utils/getConfig';
 import MapToggleClusters from "../components/MapToggleClusters";
+import Spinner from "../components/Spinner";
 
 
 class Explore extends Component {
@@ -56,6 +57,15 @@ class Explore extends Component {
                 .filter(data => (data.id).toString() !== '');
         } else {
             sources = this.props.sources;
+        }
+        if(sources.length === 0 ) {
+            return (
+                <div>
+                    <Menu selected='explore'/>
+                    <Spinner/>
+                </div>
+
+            )
         }
 
         if (screen.width > getMobileSizeMax() || this.state.viewSelection === 'list-view') {
