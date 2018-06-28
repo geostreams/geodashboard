@@ -38,7 +38,8 @@ class Line extends Component {
             use_sensor_extent: getTimeSeriesSensorExtent(),
             selectedStartDate: this.props.selectedStartDate,
             selectedEndDate: this.props.selectedEndDate,
-            sources: this.props.sources
+            sources: this.props.sources,
+            displayLines: this.props.displayLines
         }
     }
     componentWillUnmount() {

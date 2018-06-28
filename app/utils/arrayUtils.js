@@ -93,3 +93,18 @@ export function pnpoly (x,y,coords) {
 
     return inside
 }
+
+export function serialize(obj: Object): string {
+    let str = [];
+    for (let p in obj)
+        if (obj.hasOwnProperty(p)) {
+            if (Array.isArray(obj[p])) {
+                for (let a in obj[p]) {
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][a]));
+                }
+            } else {
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            }
+        }
+    return str.join("&");
+}

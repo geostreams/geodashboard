@@ -406,3 +406,27 @@ export function getTimeSeriesSensorExtent() {
     }
     return time_series_sensor_extent;
 }
+
+export function getChartLineDefault() {
+    let getValue = false;
+    if (window.configruntime.gd3.lines_default) {
+        getValue = window.configruntime.gd3.lines_default;
+    }
+    return getValue;
+}
+
+export function getChartLineChoice() {
+    let getValue = false;
+    if (window.configruntime.gd3.lines_choice) {
+        getValue = window.configruntime.gd3.lines_choice;
+    }
+    return getValue;
+}
+
+export function getDownloadButtonPath() {
+    let getValue = '/geostreams/datapoints/download?';
+    if (window.configruntime.gd3.download_button_path) {
+        getValue = window.configruntime.gd3.download_button_path;
+    }
+    return getValue;
+}

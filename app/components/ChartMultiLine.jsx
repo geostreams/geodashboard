@@ -8,9 +8,6 @@ import BoxAndWhisker from '../components/BoxAndWhisker';
 import styles from '../styles/detail.css';
 import mainStyles from '../styles/main.css'
 
-let LineChart = rd3.LineChart;
-
-
 class ChartMultiLine extends Component {
     constructor(props) {
         super(props);
@@ -20,6 +17,11 @@ class ChartMultiLine extends Component {
     }
 
     render() {
+
+        let ChartType = rd3.ScatterChart;
+        if (this.props.displayLines === true) {
+            ChartType = rd3.LineChart;
+        }
 
         // Up to three parameters on one graph
         let loopValues = [];
@@ -87,7 +89,7 @@ class ChartMultiLine extends Component {
                             </CardTitle>
                         </CardHeader>
                         <CardMedia>
-                            <LineChart
+                            <ChartType
                                 data={lineData}
                                 width={500} height={300}
                                 xAxisLabel="Time"
@@ -110,7 +112,6 @@ class ChartMultiLine extends Component {
                     </Card>
                 </Col>
             </Row>
-
         )
 
     }

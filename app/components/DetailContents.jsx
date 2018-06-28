@@ -6,11 +6,15 @@ import LineChart from './LineChart';
 import StackedLineChart from './StackedLineChart';
 import styles from '../styles/detail.css';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import {Icon} from 'react-mdc-web';
-import {getMobileSizeMax, getDetailPageSeparateInfoText, getDetailPageCombinedInfoText,
-    getDetailPageBAWInfoText} from '../utils/getConfig';
+import {Checkbox, FormField, Icon} from 'react-mdc-web';
+import {
+    getMobileSizeMax, getDetailPageSeparateInfoText, getDetailPageCombinedInfoText,
+    getDetailPageBAWInfoText, getChartLineDefault, getChartLineChoice
+} from '../utils/getConfig';
 import Select from './material/Select';
 import DateSlider from "./DateSlider";
+import DetailPageDownload from "../containers/DetailPageDownload";
+
 
 class DetailContents extends Component {
 
@@ -24,6 +28,7 @@ class DetailContents extends Component {
             selectedEndDate: new Date(0),
             showSeasonFilter: false,
             selectedSeason: "",
+            displayLines: getChartLineDefault()
         };
         this.closeParameterDialog = this.closeParameterDialog.bind(this);
         this.openParameterDialog = this.openParameterDialog.bind(this);
@@ -33,6 +38,7 @@ class DetailContents extends Component {
         this.updateParametersAndSeason = this.updateParametersAndSeason.bind(this);
         this.onSliderChange = this.onSliderChange.bind(this);
         this.onChangeSeason = this.onChangeSeason.bind(this);
+        this.displayChartLines = this.displayChartLines.bind(this);
     }
 
     componentWillMount() {
@@ -69,6 +75,7 @@ class DetailContents extends Component {
     onSliderChange(value) {
         this.setState({selectedStartDate: value[0], selectedEndDate: value[1]})
     }
+
     closeParameterDialog() {
         this.setState({openParameterDialog: false})
     }
@@ -89,13 +96,22 @@ class DetailContents extends Component {
         let new_parameters = Object.assign([], this.state.selected_parameters);
         const idx = this.state.selected_parameters.indexOf(parameter);
         if( idx === -1) {
-           new_parameters.push(parameter);
+            new_parameters.push(parameter);
         } else {
             new_parameters.splice(idx, 1);
         }
 
         this.setState({selected_parameters: new_parameters.sort()});
     }
+
+    displayChartLines() {
+        const checkbox = document.getElementById('displayLines');
+        if (checkbox.checked === true) {
+            this.setState({displayLines: true});
+        } else {
+            this.setState({displayLines: false});
+        }
+    };
 
     render() {
 
@@ -154,14 +170,19 @@ class DetailContents extends Component {
                         <Col md={3}>
                             {season_filter}
                         </Col>
-                        <Col md={8}>
+                        <Col md={7}>
                             <DateSlider start={minDate} end={maxDate}
-                                        selectedStart={selected_start} selectedEnd ={selected_end}
+                                        selectedStart={selected_start} selectedEnd={selected_end}
                                         onSliderChange={this.onSliderChange}
                             />
                         </Col>
-                        <Col md={1}>
-                            Download Button
+                        <Col md={2}>
+                            <DetailPageDownload
+                                selected_parameters={this.state.selected_parameters}
+                                sensor_id={sensor.id}
+                                selected_start_date={selected_start}
+                                selected_end_date={selected_end}
+                            />
                         </Col>
                     </Row>
                 )
@@ -178,7 +199,9 @@ class DetailContents extends Component {
                                    num_years ={num_years}
                                    loadSensor={this.props.loadSensor}
                                    category_parameters={this.props.category_parameters}
-                                   selected_parameters={this.state.selected_parameters}/>;
+                                   selected_parameters={this.state.selected_parameters}
+                                   displayLines={this.state.displayLines}
+                />;
             } else if(chart_type === "stacked_line") {
                 graph = <StackedLineChart sensorName={sensor.name} sensor={sensor}
                                           sensorData={this.props.sensorData}
@@ -189,7 +212,9 @@ class DetailContents extends Component {
                                           selectedSeason={this.state.selectedSeason}
                                           loadSensor={this.props.loadSensor}
                                           category_parameters={this.props.category_parameters}
-                                          selected_parameters={this.state.selected_parameters}/>;
+                                          selected_parameters={this.state.selected_parameters}
+                                          displayLines={this.state.displayLines}
+                />;
                 parameter_dialog_contents = getDetailPageCombinedInfoText();
                 max_parameters = 3;
 
@@ -198,11 +223,25 @@ class DetailContents extends Component {
             }
         }
 
+        let displayLinesChoice = <div> </div>;
+        if (getChartLineChoice() === true) {
+            displayLinesChoice =
+                <FormField id="displayLines" key="displayLines">
+                    <Checkbox onChange={this.displayChartLines}
+                              value="displayLines" key="displayLines" name="displayLines" id="displayLines"
+                              checked={this.state.displayLines}
+                    />
+                    <label>Display Graph Lines</label>
+                </FormField>;
+        }
+
         return (
             <Grid fluid>
-                <DialogWrapper title={parameter_dialog_title} body={parameter_dialog_contents} isOpen={this.state.openParameterDialog}
-                closeDialog ={this.closeParameterDialog}/>
-                <DialogWrapper title={box_and_whisker_title} body={box_and_whisker_contents} isOpen={this.state.openBoxAndWhiskerDialog}
+                <DialogWrapper title={parameter_dialog_title} body={parameter_dialog_contents}
+                               isOpen={this.state.openParameterDialog}
+                               closeDialog ={this.closeParameterDialog}/>
+                <DialogWrapper title={box_and_whisker_title} body={box_and_whisker_contents}
+                               isOpen={this.state.openBoxAndWhiskerDialog}
                                closeDialog ={this.closeBoxAndWhiskerDialog}/>
                 {filters}
                 <Row key="detail_contents" around="xs">
@@ -226,9 +265,12 @@ class DetailContents extends Component {
                     <Col md={8}>
                         <Row key="paramChartTitle" className={styles.parameters_chart_title} >
                             <Col md={6}>
-                            <h3>Parameter Charts</h3>
+                                <h3>Parameter Charts</h3>
                             </Col>
                             {box_and_whiskers_header}
+                        </Row>
+                        <Row>
+                            {displayLinesChoice}
                         </Row>
                         <Row className={styles.parameters_chart_positioning}>
                             {graph}
@@ -237,6 +279,7 @@ class DetailContents extends Component {
                 </Row>
             </Grid>
         );
+
     }
 
 }

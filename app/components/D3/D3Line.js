@@ -50,7 +50,7 @@ D3Line._scales = function (el, data, state){
 };
 
 D3Line._drawPoints = function(el, state) {
-    const {data, class_name_line, class_name_dots, yAxisLabel, width, height, title, sources } = state;
+    const {data, class_name_line, class_name_dots, yAxisLabel, width, height, title, sources, displayLines } = state;
     const svg = d3.select(el).selectAll('svg');
     // The next 4 lines clean up previously existing graphs
     let g = svg.selectAll('.d3-line-charts');
@@ -77,16 +77,18 @@ D3Line._drawPoints = function(el, state) {
     });
     const scales = this._scales(el, data, state);
 
-    // This is the function that creates the line based on the input. It is used in the next step
-    const value_line = d3.line()
-        .x(function(d) { return scales.x(d.date);})
-        .y(function(d) { return scales.y(d.average);});
+    if(displayLines) {
+        // This is the function that creates the line based on the input. It is used in the next step
+        const value_line = d3.line()
+            .x(function(d) { return scales.x(d.date);})
+            .y(function(d) { return scales.y(d.average);});
 
-    // This creates and adds the data to the path svg element and creates the line graph
-    g.append("path")
-        .data([data])
-        .attr("class", class_name_line)
-        .attr("d", value_line);
+        // This creates and adds the data to the path svg element and creates the line graph
+        g.append("path")
+            .data([data])
+            .attr("class", class_name_line)
+            .attr("d", value_line);
+    }
 
     // Creates the horizontal axis and adds the label.
     g.append("g")

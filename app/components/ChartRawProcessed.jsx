@@ -8,7 +8,6 @@ import {
 import {getProcessedProperty} from '../utils/getConfig';
 import styles from "../styles/detail.css";
 import BoxAndWhisker from '../components/BoxAndWhisker';
-let LineChart = rd3.LineChart;
 
 
 class ChartRawProcessed extends Component {
@@ -17,6 +16,11 @@ class ChartRawProcessed extends Component {
     }
 
     render() {
+
+        let ChartType = rd3.ScatterChart;
+        if (this.props.displayLines === true) {
+            ChartType = rd3.LineChart;
+        }
 
         let param_name = this.props.title;
         let BAWValues = [];
@@ -149,7 +153,7 @@ class ChartRawProcessed extends Component {
                     <div className={styles.layout_style}>
                         <div className={styles.float_item_left}>
                             <span className={styles.rawProcessedLineChart}>
-                                <LineChart
+                                <ChartType
                                     legend={true}
                                     data={lineData}
                                     width={700} height={400}
@@ -174,6 +178,7 @@ class ChartRawProcessed extends Component {
                 </Col>
             </Row>
         );
+
     }
 }
 

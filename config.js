@@ -59,6 +59,10 @@ export const gd3 = {
         ]
     },
 
+    // Paths for Downloads
+    download_button_path: '/geostreams/datapoints/download?',
+    // download_button_path: '/clowder/api/geostreams/datapoints?',
+
     // This variable is used to determine the location for links to the Detail Page
     application_website: "/",
 
@@ -79,6 +83,17 @@ export const gd3 = {
 
     // Make all time series have the same time frame
     time_series_sensor_extent: true,
+
+    // Detail Graph Lines ****
+    // Detail Graph Display Lines Default Value
+    // - 'true' === display lines by default
+    // - 'false' === do not display lines by default
+    lines_default: true,
+    // Detail Graph Display Lines User Choice
+    // - 'true' === User is provided the option to toggle lines on and off
+    // - 'false' === User is not provided the option to toggle lines on and off
+    lines_choice: false,
+    // **********
 
     // Detail Graphs - Display RAW vs PROCESSED for Day Average
     show_raw_processed: false,

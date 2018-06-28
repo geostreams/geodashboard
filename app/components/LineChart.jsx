@@ -50,6 +50,7 @@ class LineChart extends Component {
                                    selectedSeason={this.props.selectedSeason}
                                    category_parameters={this.props.category_parameters}
                                    parameterSources={this.props.parameterSources}
+                                   displayLines={this.props.displayLines}
                                    id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}/></Row>)
                     }
                 } else {

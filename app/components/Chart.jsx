@@ -74,6 +74,7 @@ class Chart extends Component {
                                   selectedStartDate={this.props.selectedStartDate}
                                   selectedEndDate={this.props.selectedEndDate}
                                   yAxisLabel={units}
+                                  displayLines={this.props.displayLines}
                                   title={title}
                                   sources={sources}
                             />

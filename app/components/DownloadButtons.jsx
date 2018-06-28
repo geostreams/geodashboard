@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import {
     Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon, Menu, MenuItem, MenuAnchor
 } from 'react-mdc-web';
-import {getCustomLocation} from '../utils/getConfig';
-import {intersectArrays} from '../utils/arrayUtils';
+import {getCustomLocation, getDownloadButtonPath} from '../utils/getConfig';
+import {intersectArrays, serialize} from '../utils/arrayUtils';
 import styles from '../styles/downloadButton.css';
+
 
 type DownloadStateType = {
     isOpen: boolean,
@@ -37,25 +38,10 @@ class DownloadButtons extends Component {
         this.setState({isOpen: false});
     };
 
-    //convert a map object to url parameters
-    serialize = function (obj: Object): string {
-        let str = [];
-        for (let p in obj)
-            if (obj.hasOwnProperty(p)) {
-                if (Array.isArray(obj[p])) {
-                    for (let a in obj[p]) {
-                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][a]));
-                    }
-                } else {
-                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                }
-            }
-        return str.join("&");
-    };
-
     buildLink = function (type: string): string {
 
-        let downloadApi = this.props.api.slice(0, -8) + "/geostreams/datapoints/download?";
+        let downloadApi = this.props.api.slice(0, -8) + getDownloadButtonPath();
+
         // refer to https://opensource.ncsa.illinois.edu/bitbucket/projects/CATS/repos/clowder/browse/app/api/Geostreams.scala#665
         let params = {};
         params["format"] = type;
@@ -118,7 +104,7 @@ class DownloadButtons extends Component {
             }
         }
 
-        let link = this.serialize(params);
+        let link = serialize(params);
         console.log(link);
 
         return downloadApi + link;

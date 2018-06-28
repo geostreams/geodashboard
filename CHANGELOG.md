@@ -25,9 +25,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1091](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1091)
 - Added filtering by time and season for detail page
   [GEOD-873](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-873)
-- Added the spinner to detail page while it loads
+- Added the spinner to explore page while it loads
   [GEOD-1109](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1109)
-  
+- Added the ability to optionally display Detail Page Graph Lines
+  [GEOD-1093](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1093)
+- Create download button for Detail Page
+  [GEOD-878](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-878)
+
 ### Changed
 - Organize the data sources and classify the pills by region on the left navigation of the explore page.
   [GEOD-1086](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1086)

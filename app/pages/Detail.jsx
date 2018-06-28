@@ -9,7 +9,7 @@ import {getMobileSizeMax, getSourceName, getMobileExplorePath} from "../utils/ge
 import { resetDetailPage } from '../actions';
 import type { Dispatch } from '../utils/flowtype'
 import styles from '../styles/main.css';
-import {Icon} from 'react-mdc-web'
+import {Icon} from 'react-mdc-web';
 
 class Detail extends Component {
 

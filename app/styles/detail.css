@@ -99,3 +99,16 @@
     fill: steelblue;
     stroke: #fff;
 }
+
+.detailDownloadButtonText {
+    font-weight: bold !important;
+    color: white !important;
+}
+
+.detailDownloadButtonPosition {
+    margin-top: 1em;
+}
+
+.detailDownloadButton {
+    background-color: #5f99c1 !important;
+}
