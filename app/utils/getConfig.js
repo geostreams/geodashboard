@@ -438,3 +438,7 @@ export function getDownloadButtonPath() {
     }
     return getValue;
 }
+
+export function getTimeSeriesZeroStart() {
+    return window.configruntime.gd3.time_series_zero_start;
+}

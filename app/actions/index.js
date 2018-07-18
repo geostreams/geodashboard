@@ -725,7 +725,7 @@ export function fetchSensorMobile(name: string) {
         if (state.sensors.length > 0) {
             const sensor = state.sensors.data.find(x => x.name === name).id;
             dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-            dispatch(fetchSensorHelp(api, sensor.id, day));
+            dispatch(fetchSensorHelp(api, sensor.id, "day"));
 
         } else {
             const endpointsensors = api + '/api/geostreams/sensors';

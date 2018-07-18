@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
-import D3Line from './D3/D3Line'
+import D3Line from './D3/D3Line';
 import PropTypes from 'prop-types';
 import {getTimeSeriesSensorExtent} from '../utils/getConfig.js'
+import styles from '../styles/detail.css';
 
 class Line extends Component {
 
     static propTypes = {
         data: PropTypes.array,
-        domain: PropTypes.object
+        domain: PropTypes.object,
+        selectedStartDate: PropTypes.instanceOf(Date),
+        selectedEndDate: PropTypes.instanceOf(Date),
+        sources: PropTypes.array,
+        yAxisLabel: PropTypes.string,
+        title: PropTypes.string
     };
 
     componentDidMount() {
@@ -27,23 +33,27 @@ class Line extends Component {
 
     getLineState() {
         return{
-            data: this.props.data,
-            domain: this.props.domain,
-            class_name_line: this.props.class_name_line,
-            class_name_dots: this.props.class_name_dots,
-            yAxisLabel: this.props.yAxisLabel,
-            title: this.props.title,
             width: 500,
             height: 400,
+            class_name_line: styles.graph_line,
+            class_name_dots: styles.graph_dot,
+            boxClass: styles.box,
+            lineClass: styles.line,
+            rectClass: styles.rect,
+            medianClass: styles.median_line,
+            outlierClass: styles.outlier,
             use_sensor_extent: getTimeSeriesSensorExtent(),
             selectedStartDate: this.props.selectedStartDate,
             selectedEndDate: this.props.selectedEndDate,
             sources: this.props.sources,
-            displayLines: this.props.displayLines
+            displayLines: this.props.displayLines,
+            data: this.props.data,
+            domain: this.props.domain,
+            yAxisLabel: this.props.yAxisLabel,
+            title: this.props.title,
         }
     }
     componentWillUnmount() {
-
         D3Line.destroy(this._rootNode);
     }
 

@@ -145,7 +145,7 @@ class DetailContents extends Component {
                     </Row>
                 );
                 box_and_whiskers_header = (
-                    <Col md={6}>
+                    <Col md={4}>
                         <h3>Box and Whiskers
                             <DialogWrapper title={box_and_whisker_title}
                                            body={box_and_whisker_contents}
@@ -263,8 +263,8 @@ class DetailContents extends Component {
                     </Col>
                     <Col md={8}>
                         <Row key="paramChartTitle" className={styles.parameters_chart_title} >
-                            <Col md={6}>
-                                <h3>Parameter Charts</h3>
+                            <Col md={8}>
+                            <h3>Parameter Charts</h3>
                             </Col>
                             {box_and_whiskers_header}
                         </Row>

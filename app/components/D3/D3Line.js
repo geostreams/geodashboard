@@ -1,6 +1,8 @@
+import {boxQuartiles, iqr}  from "./D3BoxAndWhiskers";
+import {getTimeSeriesZeroStart, getTimeSeriesSensorExtent} from "../../utils/getConfig";
+
 const D3Line = {};
 const d3 = require('d3');
-
 
 const margin =  {top: 30, right: 20, bottom: 50, left: 50};
 
@@ -33,7 +35,7 @@ D3Line._scales = function (el, data, state){
     const x = d3.scaleTime()
         .range([0, width]);
 
-    if(state.use_sensor_extent) {
+    if(getTimeSeriesSensorExtent()) {
         //Use as extent the full sensor range
         x.domain([state.selectedStartDate, state.selectedEndDate]);
     } else {
@@ -42,15 +44,23 @@ D3Line._scales = function (el, data, state){
     }
 
     const y = d3.scaleLinear()
-        .range([height, 0])
-        .domain([0, d3.max(data, function(d){return d.average;})]);
+        .range([height, 0]);
+    if(getTimeSeriesZeroStart()) {
+        y.domain([0, d3.max(data, function(d){return d.average;})]);
+    } else {
+        y.domain([d3.min(data, function(d){return d.average;}),
+             d3.max(data, function(d){return d.average;})]);
+    }
 
     return {x: x, y: y};
 
 };
 
 D3Line._drawPoints = function(el, state) {
-    const {data, class_name_line, class_name_dots, yAxisLabel, width, height, title, sources, displayLines } = state;
+    const {data, class_name_line, class_name_dots, yAxisLabel, width, height, title, sources,
+    boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines} = state;
+    const graphWidth = width - margin.right - margin.left;
+    const graphHeight = height - margin.top - margin.bottom;
     const svg = d3.select(el).selectAll('svg');
     // The next 4 lines clean up previously existing graphs
     let g = svg.selectAll('.d3-line-charts');
@@ -71,11 +81,61 @@ D3Line._drawPoints = function(el, state) {
 
     // Set up data
     const parseTime = d3.timeParse("%d-%b-%y");
-
+    let averages = [];
     data.forEach(function(d){
-        d.average = +d.average
+        d.average = +d.average;
+        averages.push(d.average);
     });
+
     const scales = this._scales(el, data, state);
+
+    let domain = null;
+    averages = averages.sort(d3.ascending);
+    const min = getTimeSeriesZeroStart() ? 0 : averages[0];
+    const max = averages[averages.length-1];
+    const quartileData = averages.quartiles = boxQuartiles(averages);
+    const box = g.selectAll("rect.box")
+        .data([quartileData]);
+
+    let boxClasses = "box " + boxClass + " " + rectClass;
+    box.enter().append("rect")
+        .attr("class", boxClasses)
+        .attr("x", 0)
+        .attr("y", function(d) {return scales.y(d[2]);})
+        .attr("width", graphWidth)
+        .attr("height", function(d) {return scales.y(d[0]) - scales.y(d[2])});
+
+    // Draw Median Line
+    const medianLine = g.selectAll("line.median")
+        .data([quartileData[1]]);
+
+    const medianClasses = "median " + medianClass+ " " + lineClass;
+    medianLine.enter().append("line")
+        .attr("class", medianClasses)
+        .attr("x1", 0)
+        .attr("y1", scales.y)
+        .attr("x2", graphWidth)
+        .attr("y2", scales.y);
+
+    const whiskers = iqr(1.5);
+
+    // Compute whiskers. Must return exactly 2 elements, or null.
+    const whiskerIndices = whiskers && whiskers.call(this, averages);
+
+    const whiskerData = whiskerIndices && whiskerIndices.map(function(i) {return averages[i]});
+
+    // Add Whiskers
+    const whisker = g.selectAll("line.whisker")
+        .data(whiskerData || []);
+
+    const whiskerClasses = "whisker " + lineClass;
+    whisker.enter().insert("line")
+        .attr("class", whiskerClasses)
+        .attr("x1", 0)
+        .attr("y1", scales.y)
+        .attr("x2", graphWidth)
+        .attr("y2", scales.y)
+        .style("opacity", 1);
 
     if(displayLines) {
         // This is the function that creates the line based on the input. It is used in the next step
@@ -92,11 +152,11 @@ D3Line._drawPoints = function(el, state) {
 
     // Creates the horizontal axis and adds the label.
     g.append("g")
-        .attr("transform", "translate(0," + (height - margin.top - margin.bottom + 3) + ")")
+        .attr("transform", "translate(0," + (graphHeight + 3) + ")")
         .call(d3.axisBottom(scales.x))
         .append("text")
         .attr("fill", "#000")
-        .attr("transform", "translate("+ ((width - margin.left - margin.right)/2) + "," +
+        .attr("transform", "translate("+ ((graphWidth)/2) + "," +
            28 + ")")
         .attr("text-anchor", "end")
         .text("Date");
@@ -117,10 +177,13 @@ D3Line._drawPoints = function(el, state) {
     g_dots.selectAll(".dot")
         .data(data)
         .enter().append("circle")
-        .attr("class", class_name_dots)
+        .attr("class", function(d) {
+            if(d.average > whiskerData[1] || d.average < whiskerData[0]) {return outlierClass; }
+            else {return class_name_dots; }
+        })
         .attr("cx", function(d) {return scales.x(d.date)})
         .attr("cy", function(d) { return scales.y(d.average)})
-        .attr("r", 5);
+        .attr("r", 4);
 
     // Add title and sources
     svg.append("text")

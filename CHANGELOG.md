@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added Optional Info Buttons on the Explore Page
   [GEOD-1090](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1090)
+- Added D3 box and whiskers for the time series. Updated time series graphs to reflect quartiles.
+  [GEOD-1113](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1113)
+
+### Changed
+
+### Fixed
 
 ## [3.0.0-alpha.3] - 2018-06-29
 **Important - Need to have database with parameters setup before release in all projects**
@@ -47,7 +53,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-416](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-416)
 - Save trends region into DB and use new API to get trends region
   [GEOD-1087](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1087)
-- Using d3 implementation of LineChart instead of react-d3.LineChart
+- Using D3 implementation of LineChart instead of react-d3.LineChart
   [GEOD-1103](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1103)
 - Removed parameters from configuration file. Using only the database
   [GEOD-1102](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1102)

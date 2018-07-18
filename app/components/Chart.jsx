@@ -5,7 +5,7 @@ import {
 } from 'react-mdc-web';
 import styles from "../styles/detail.css";
 import mainStyles from '../styles/main.css'
-import BoxAndWhisker from '../components/BoxAndWhisker';
+import BoxAndWhiskers from '../components/BoxAndWhiskers';
 import Line from './Line';
 
 
@@ -48,10 +48,8 @@ class Chart extends Component {
             }
 
             boxAndWhiskers.push(
-                <BoxAndWhisker key={title}
-                               paramName={title}
-                               paramValues={BAWValues}
-                               paramColor={'#000000'}/>
+                <BoxAndWhiskers key={title}
+                               data={BAWValues}/>
             );
         }
 
@@ -65,12 +63,10 @@ class Chart extends Component {
         }
         return (
             <Row className={mainStyles.fullWidth}>
-                <Col md={6}>
+                <Col md={8}>
                     <div className={styles.layout_style}>
                         <div className={styles.float_item_left}>
                             <Line data={values}
-                                  class_name_line={styles.graph_line}
-                                  class_name_dots={styles.graph_dot}
                                   selectedStartDate={this.props.selectedStartDate}
                                   selectedEndDate={this.props.selectedEndDate}
                                   yAxisLabel={units}
@@ -81,12 +77,8 @@ class Chart extends Component {
                         </div>
                     </div>
                 </Col>
-                <Col md={6} className={styles.float_item_left}>
-                    <Card className={styles.card_margins}>
-                        <CardText>
-                            {boxAndWhiskers}
-                        </CardText>
-                    </Card>
+                <Col md={4} className={styles.float_item_left}>
+                    {boxAndWhiskers}
                 </Col>
             </Row>
         )

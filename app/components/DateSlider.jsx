@@ -50,7 +50,7 @@ class DateSlider extends Component {
 
             <div>
             <span className={styles.start}>{minDate.format("MM/DD/YYYY")}</span>
-            <div className={styles.wrapperStyle} >
+            <div className={styles.dateWrapper} >
             <Range min={0} max={maxValue}
                    defaultValue={[selected_start, selected_end]}
                    allowCross={false}

@@ -16,7 +16,7 @@ class YearSlider extends Component {
         return (
             <div>
                 <span className={styles.start}>{this.props.start_year}</span>
-                <div className={styles.wrapperStyle} >
+                <div className={styles.yearWrapper} >
                 <Range min={this.props.start_year} max={this.props.end_year}
                        defaultValue={[this.props.selectedStartYear, this.props.selectedEndYear]}
                        allowCross={false}

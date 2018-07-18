@@ -89,6 +89,8 @@ export const gd3 = {
 
     // Make all time series have the same time frame
     time_series_sensor_extent: true,
+    // If true, time series y axis start at 0. If false the y axis starts at the minimum value for the function
+    time_series_zero_start: false,
 
     // Detail Graph Lines ****
     // Detail Graph Display Lines Default Value
