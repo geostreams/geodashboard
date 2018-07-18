@@ -106,6 +106,7 @@ export type selectedSearchState = {
 };
 
 export type sensorsState = {
+    sensors: Sensors,
     available_sensors: Sensors,
     locations: MapWithLabels,
     sources: MapWithLabels,

@@ -6,13 +6,14 @@ import {
     ADD_START_DATE, ADD_END_DATE, RECEIVE_SENSORS
 } from '../actions'
 import {collectSources, collectLocations, collectParameters, collectDates} from './sensors'
-import type {selectedSearchState, Sensors, DatasourceParameter, Location} from '../utils/flowtype'
+import type {selectedSearchState, Sensors, DatasourceParameter, Location, Parameters} from '../utils/flowtype'
 import {intersectArrays} from '../utils/arrayUtils'
 
 type SelectedSearchAction = {|
     type: string, sensors: Sensors, data_sources: DatasourceParameter,
     parameters: DatasourceParameter, locations: Location, data_sources: Array<string>, parameter: Array<string>,
-    location: ?string, date: ?Date, availableSensors: Sensors, selected_filters: Array<string>, allFilters: Array<Object>
+    location: ?string, date: ?Date, availableSensors: Sensors, selected_filters: Array<string>, allFilters: Array<Object>,
+    multi_parameter_map: { [string]: Array<string> }, searchParameters: Parameters
 |};
 
 const defaultState = {

@@ -3,7 +3,7 @@
  */
 import {RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS,
     RECEIVE_MULTI_PARAMETERS} from '../actions';
-import type {Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels} from '../utils/flowtype';
+import type {Sensor,Sensors, sensorsState, MapWithLabel, MapWithLabels, Parameters} from '../utils/flowtype';
 import {inArray, sortByLabel, pnpoly, intersectArrays, sortByLake, sortByRegion, sortBySource} from '../utils/arrayUtils';
 import {
     getSourceName, getSourceOrder, getLakesOrdering,
@@ -15,6 +15,7 @@ type SensorAction = {| type:'RECEIVE_SENSORS' | 'UPDATE_AVAILABLE_SENSORS',
     receivedAt:Date,
     selected_search:Object,
     selected_filters:Array<string>,
+    multi_parameter_map: { [string]: Array<string> },
     shape_coordinates: Array<number> |};
 
 const defaultState = {
@@ -23,8 +24,9 @@ const defaultState = {
     sources: [],
     regions: [],
     locations:[],
-    available_sensors:[],
-    draw_available_sensors:[],
+    sensors: [],
+    available_sensors: [],
+    draw_available_sensors: [],
     shape_coordinates: []
 };
 
@@ -47,13 +49,13 @@ const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
             });
 
         case RECEIVE_MULTI_PARAMETERS:
-            const copy_sensors = Object.assign([], state.sensors);
+            const copy_sensors = state.sensors.slice(0);
             return Object.assign({}, state, {
                 parameters: collectParameters(copy_sensors, action.parameters, action.multi_parameter_map)
             });
 
         case UPDATE_AVAILABLE_SENSORS:
-            let newSensors = filterAvailableSensors(state, action.selected_filters, action.selected_search, action.multi_parameters);
+            let newSensors = filterAvailableSensors(state, action.selected_filters, action.selected_search, action.multi_parameter_map);
             if (action.selected_search.locations.selected === 'Custom Location') {
                 shapeCoordinates = state.shape_coordinates;
                 return Object.assign({}, state, {
@@ -121,7 +123,7 @@ function filterCustomLocation(state:sensorsState, selectedPointsLocations:Array<
     return filteredSensors;
 }
 
-export function collectParameters(sensorsData:Sensors, parameters:Parameters, multi_parameter_map):MapWithLabels {
+export function collectParameters(sensorsData:Sensors, parameters:Parameters, multi_parameter_map:{ [string]: Array<string> }):MapWithLabels {
     let params:MapWithLabels = [];
     const alternateParameters = getAlternateParameters(multi_parameter_map);
     sensorsData.map(s => {
