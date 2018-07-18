@@ -244,3 +244,9 @@ h1, h2, h3, h5, h6, p, ul {
 .fullWidth {
     width: 100%;
 }
+
+.open_button_style {
+    cursor: pointer;
+    margin-left: 2em;
+    float: right;
+}

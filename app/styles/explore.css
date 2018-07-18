@@ -209,3 +209,7 @@ img[src=""] {
     font-weight: bold;
     color: #a9a9a9;
 }
+
+.exploreSourcesIcon {
+    float: right;
+}

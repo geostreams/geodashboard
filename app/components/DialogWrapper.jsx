@@ -1,24 +1,71 @@
 import React, {Component} from "react";
-import {Dialog, DialogBody, DialogHeader, DialogTitle, Icon} from 'react-mdc-web';
+import {
+    Body1, Body2, Dialog, DialogBody, DialogHeader, DialogTitle, Icon
+} from 'react-mdc-web';
 import styles from "../styles/main.css";
+import {Link} from 'react-router';
+
 
 class DialogWrapper extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            openDialog: false
+        };
+        this.closeDialog = this.closeDialog.bind(this);
+        this.openDialog = this.openDialog.bind(this);
+    }
+
+    closeDialog() {
+        this.setState({openDialog: false})
+    }
+
+    openDialog() {
+        this.setState({openDialog: true})
+    }
+
     render() {
+
+        let body_text = "";
+        let moreinfo_text = "";
+        let moreinfo_link = "";
+
+        if (this.props.body !== undefined) {
+            if (this.props.body.description !== undefined) {
+                body_text = this.props.body.description;
+            }
+            if (this.props.body.more_info !== undefined) {
+                moreinfo_text = this.props.body.more_info;
+            }
+            if (this.props.body.link !== undefined) {
+                moreinfo_link = this.props.body.link;
+            }
+        }
+
         return (
-            <Dialog open={Boolean(this.props.isOpen)}
-                    onClose={this.props.closeDialog}>
-                <DialogHeader >
-                    <DialogTitle>{this.props.title}</DialogTitle>
-                    <a className={styles.close_button_style}
-                       onClick={this.props.closeDialog}>
-                        <Icon name="close"/>
-                    </a>
-                </DialogHeader>
-                <DialogBody>
-                    {this.props.body}
-                </DialogBody>
-            </Dialog>
+            <span>
+                <Dialog open={Boolean(this.state.openDialog)}
+                        onClose={this.closeDialog}>
+                    <DialogHeader>
+                        <DialogTitle>{this.props.title}</DialogTitle>
+                        <a className={styles.close_button_style} onClick={this.closeDialog}>
+                            <Icon name="close"/>
+                        </a>
+                    </DialogHeader>
+                    <DialogBody>
+                        <Body1>
+                            {body_text}
+                        </Body1>
+                        <Body2>
+                            <Link href={moreinfo_link}>{moreinfo_text}</Link>
+                        </Body2>
+                    </DialogBody>
+                </Dialog>
+                <a onClick={this.openDialog} title={this.props.title}>
+                    <Icon className={styles.open_button_style} name="info"/>
+                </a>
+            </span>
         );
     }
 

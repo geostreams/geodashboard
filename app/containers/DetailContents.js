@@ -4,6 +4,7 @@ import {fetchSensorMobile, fetchSensor } from "../actions";
 import { getMobileSizeMax} from '../utils/getConfig';
 import type {Dispatch} from "../utils/flowtype";
 
+
 const mapStateToProps = (state, ownProps) => {
     return {
         sensorData: state.sensorDetail.datapoints,

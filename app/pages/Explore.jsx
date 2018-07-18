@@ -3,16 +3,18 @@ import Menu from '../containers/MenuBar';
 import Map from '../containers/ExploreMap';
 import ExploreSourcesTab from '../containers/ExploreSourcesTab';
 import ExploreLayers from '../components/ExploreLayers';
+import DialogWrapper from '../components/DialogWrapper';
 import {
     Button, Card, CardTitle, CardHeader, CardText, Cell, Checkbox, Content,
-    FormField, Grid, List, ListHeader, ListGroup, ListDivider, Radio, RadioGroup,
-    Tabbar, Tab
+    FormField, Grid, Icon, List, ListHeader, ListGroup, ListDivider,
+    Radio, RadioGroup, Tabbar, Tab
 } from 'react-mdc-web';
 import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
 import {connect} from 'react-redux';
 import {
-    getMobileSourceNames, getMobileSizeMax, getLayersDetails, getChromeDisabled, clustersChoiceOption
+    getMobileSourceNames, getMobileSizeMax, getLayersDetails,
+    getChromeDisabled, clustersChoiceOption, getSourceInfo, getShowSourceInfoBoxes
 } from '../utils/getConfig';
 import MapToggleClusters from "../components/MapToggleClusters";
 import Spinner from "../components/Spinner";
@@ -46,7 +48,6 @@ class Explore extends Component {
     render() {
 
         let disableClusters = this.state.disableClusters;
-
         let sourceLists = '';
         let sourcesSection = '';
         let sources;
@@ -69,18 +70,30 @@ class Explore extends Component {
         }
 
         if (screen.width > getMobileSizeMax() || this.state.viewSelection === 'list-view') {
-            sourceLists = sources.map(s =>
-                <Card id={s.id} className={exploreStyles.exploreCard} key={s.id}>
-                    <CardHeader>
-                        <CardTitle className={styles.title_card}>{s.label} </CardTitle>
-                    </CardHeader>
-                    <CardText>
-                        <ExploreSourcesTab
-                            userStations={this.props.params.stations}
-                            source={s}
-                        />
-                    </CardText>
-                </Card>
+            sourceLists = sources.map(s => {
+                let dialogContents = '';
+                let sourceInfo = getSourceInfo(s.id);
+                if (getShowSourceInfoBoxes() && sourceInfo !== undefined) {
+                    dialogContents = <DialogWrapper title={s.label} body={sourceInfo}/>;
+                }
+                return(
+                    <Card id={s.id} className={exploreStyles.exploreCard} key={s.id}>
+                        <CardHeader>
+                            <span className={exploreStyles.exploreSourcesIcon}>
+                                {dialogContents}
+                            </span>
+                            <CardTitle className={styles.title_card}>
+                                {s.label}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardText>
+                            <ExploreSourcesTab
+                                userStations={this.props.params.stations}
+                                source={s}
+                            />
+                        </CardText>
+                    </Card>
+                )}
             );
             if (screen.width > getMobileSizeMax()) {
                 sourcesSection = (

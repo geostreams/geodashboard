@@ -70,10 +70,16 @@ export const gd3 = {
     show_detail_tabs: true,
 
     // Detail Page Info Icon Text
-    detail_page_separate: 'Select a minimum of one Parameter to view',
-    detail_page_combined: 'Select a maximum of three Parameters to view',
-    detail_page_box_and_whisker: 'Box and Whisker Plots provide a visual look at the data distribution. ' +
-        'Lowest values are on the left, and the Highest values are on the right',
+    detail_page_separate: {
+        'description': 'Select a minimum of one Parameter to view'
+    },
+    detail_page_combined: {
+        'description': 'Select a maximum of three Parameters to view'
+    },
+    detail_page_box_and_whisker: {
+        'description': 'Box and Whisker Plots provide a visual look at the data distribution. ' +
+                        'Lowest values are on the left, and the Highest values are on the right'
+    },
     detail_page_raw_processed: [
         {listText: 'Level 0: No Processing - Raw Data'},
         {listText: 'Level 1: Minimal Processing'},
@@ -134,6 +140,34 @@ export const gd3 = {
         "lec": "Lake Erie Committee Forage Task Group",
         "usgs": "United States Geological Survey",
         "noaa": "National Oceanic and Atmospheric Administration"
+    },
+
+    // Show Info Boxes on the Explore Page
+    show_source_info_boxes: true,
+    // For Source Info Boxes on the Explore Page
+    source_information: {
+        "epa": {
+            "description": "This is descriptive Text for the EPA source.",
+            "more_info": "More Information"
+        },
+        "glfmsp": {
+            "more_info": "Click here for more information",
+            "link": "http://localhost:8080"
+        },
+        "heidelberg" : {},
+        "iadn": {
+            "description":
+                "This is descriptive Text for the IADN source, " +
+                "and it is multiline.",
+        },
+        "usgs": {
+            "link": "http://localhost:8080"
+        },
+        "noaa": {
+            "description": "This is descriptive Text for the NOAA source.",
+            "more_info": "Click here for more information",
+            "link": "http://localhost:8080"
+        }
     },
 
     source_order: {

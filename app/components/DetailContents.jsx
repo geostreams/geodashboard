@@ -146,10 +146,13 @@ class DetailContents extends Component {
                 );
                 box_and_whiskers_header = (
                     <Col md={6}>
-                        <h3>Box and Whiskers <a className={styles.open_button_style_baw}
-                                                onClick={this.openBoxAndWhiskerDialog}>
-                            <Icon name="info"/>
-                        </a> </h3>
+                        <h3>Box and Whiskers
+                            <DialogWrapper title={box_and_whisker_title}
+                                           body={box_and_whisker_contents}
+                                           isOpen={this.openBoxAndWhiskerDialog}
+                                           closeDialog ={this.closeBoxAndWhiskerDialog}
+                            />
+                        </h3>
                     </Col>
                 );
 
@@ -237,21 +240,17 @@ class DetailContents extends Component {
 
         return (
             <Grid fluid>
-                <DialogWrapper title={parameter_dialog_title} body={parameter_dialog_contents}
-                               isOpen={this.state.openParameterDialog}
-                               closeDialog ={this.closeParameterDialog}/>
-                <DialogWrapper title={box_and_whisker_title} body={box_and_whisker_contents}
-                               isOpen={this.state.openBoxAndWhiskerDialog}
-                               closeDialog ={this.closeBoxAndWhiskerDialog}/>
                 {filters}
                 <Row key="detail_contents" around="xs">
                     <Col md={3}>
                         <Row key="parameter_title" className={styles.parameters_list} >
-                            <h3>Selected Parameters</h3>
-                            <a className={styles.open_button_style}
-                               onClick={this.openParameterDialog}>
-                                <Icon name="info"/>
-                            </a>
+                            <h3>Selected Parameters
+                                <DialogWrapper title={parameter_dialog_title}
+                                               body={parameter_dialog_contents}
+                                               isOpen={this.openParameterDialog}
+                                               closeDialog ={this.closeParameterDialog}
+                                />
+                            </h3>
                         </Row>
                         <Row key="parameter_list" className={styles.parameters_list} >
                             <DetailParameterList sensor={sensor}

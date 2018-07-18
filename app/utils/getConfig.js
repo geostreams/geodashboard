@@ -13,6 +13,15 @@ export function getSourceOrder() {
     return window.configruntime.gd3.source_order;
 }
 
+export function getSourceInfo(id:string) {
+    const sourceInfo = window.configruntime.gd3.source_information;
+    return sourceInfo[id];
+}
+
+export function getShowSourceInfoBoxes() {
+    return window.configruntime.gd3.show_source_info_boxes;
+}
+
 export function getMobileSourceNames() {
     return window.configruntime.gd3.mobile_sourcename;
 }
@@ -354,7 +363,6 @@ export function getRawProcessedInfoText() {
                 'listText': value.listText,
             })
         });
-
     }
     return getValue;
 }
