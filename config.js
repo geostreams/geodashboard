@@ -163,6 +163,7 @@ export const gd3 = {
                 "and it is multiline.",
         },
         "usgs": {
+            "more_info": "Click here for more information",
             "link": "http://localhost:8080"
         },
         "noaa": {
@@ -201,6 +202,13 @@ export const gd3 = {
         "usgs": "#39B54A",
         "wqp": "#F28E1E"
     },
+
+    // Explore Page Accordion Source Section Initial Open Status
+    // true === open, false === closed
+    sources_explore_accordion_open: true,
+
+    // Explore Page Additional Accordion Sections
+    additional_explore_accordion_sections: [],
 
     // This is used to define general areas on the map
     additional_locations: [

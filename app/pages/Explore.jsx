@@ -1,20 +1,16 @@
 import React, {Component} from 'react';
 import Menu from '../containers/MenuBar';
 import Map from '../containers/ExploreMap';
-import ExploreSourcesTab from '../containers/ExploreSourcesTab';
+import ExploreSourcesTab from '../components/ExploreSourcesTab';
+import ExploreCustomItemsTab from '../components/ExploreCustomItemsTab';
 import ExploreLayers from '../components/ExploreLayers';
-import DialogWrapper from '../components/DialogWrapper';
-import {
-    Button, Card, CardTitle, CardHeader, CardText, Cell, Checkbox, Content,
-    FormField, Grid, Icon, List, ListHeader, ListGroup, ListDivider,
-    Radio, RadioGroup, Tabbar, Tab
-} from 'react-mdc-web';
+import {Cell, Content, Grid, Tabbar, Tab} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
 import {connect} from 'react-redux';
 import {
     getMobileSourceNames, getMobileSizeMax, getLayersDetails,
-    getChromeDisabled, clustersChoiceOption, getSourceInfo, getShowSourceInfoBoxes
+    getChromeDisabled, clustersChoiceOption, getExploreSections
 } from '../utils/getConfig';
 import MapToggleClusters from "../components/MapToggleClusters";
 import Spinner from "../components/Spinner";
@@ -48,8 +44,8 @@ class Explore extends Component {
     render() {
 
         let disableClusters = this.state.disableClusters;
-        let sourceLists = '';
         let sourcesSection = '';
+        let exploreCustomSections = [];
         let sources;
         let mobile_sourcenames = getMobileSourceNames();
         if (screen.width <= getMobileSizeMax() && mobile_sourcenames.toUpperCase() !== 'ALL') {
@@ -59,59 +55,35 @@ class Explore extends Component {
         } else {
             sources = this.props.sources;
         }
-        if(sources.length === 0 ) {
+
+        if (sources.length === 0) {
             return (
                 <div>
                     <Menu selected='explore'/>
                     <Spinner/>
                 </div>
-
-            )
+            );
         }
 
         if (screen.width > getMobileSizeMax() || this.state.viewSelection === 'list-view') {
-            sourceLists = sources.map(s => {
-                let dialogContents = '';
-                let sourceInfo = getSourceInfo(s.id);
-                if (getShowSourceInfoBoxes() && sourceInfo !== undefined) {
-                    dialogContents = <DialogWrapper title={s.label} body={sourceInfo}/>;
-                }
-                return(
-                    <Card id={s.id} className={exploreStyles.exploreCard} key={s.id}>
-                        <CardHeader>
-                            <span className={exploreStyles.exploreSourcesIcon}>
-                                {dialogContents}
-                            </span>
-                            <CardTitle className={styles.title_card}>
-                                {s.label}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardText>
-                            <ExploreSourcesTab
-                                userStations={this.props.params.stations}
-                                source={s}
-                            />
-                        </CardText>
-                    </Card>
-                )}
-            );
+
+            sourcesSection = <ExploreSourcesTab
+                key='source_data' regions={this.props.regions} data={this.props.data}
+                userStations={this.props.params.stations} sources={sources}
+            />;
+
             if (screen.width > getMobileSizeMax()) {
-                sourcesSection = (
-                    <ListGroup>
-                        <ListHeader className={exploreStyles.listHeaderStyle}>Explore Sources</ListHeader>
-                        <List id="listItems" className={exploreStyles.leftColumnExplore}>
-                            {sourceLists}
-                        </List>
-                        <ListDivider/>
-                    </ListGroup>
-                )
-            } else {
-                sourcesSection = (
-                    <List id="listItems" className={styles.leftColumn}>
-                        {sourceLists}
-                    </List>
-                )
+                if (getExploreSections().length > 0) {
+                    getExploreSections().map(item => {
+                        exploreCustomSections.push(
+                            <ExploreCustomItemsTab
+                                key={item.title} data={this.props.data} sources={sources} item={item}
+                            />
+                        );
+                    });
+                }
             }
+
         }
 
         let exploreLayers, exploreLayersDetails, layersVisibility;
@@ -189,7 +161,10 @@ class Explore extends Component {
                     <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>
                             <Cell col={3}>
-                                {sourcesSection}
+                                <div className={exploreStyles.leftColumnExplore}>
+                                    {sourcesSection}
+                                    {exploreCustomSections}
+                                </div>
                             </Cell>
                             <Cell col={9}>
                                 <div id="mapItems" className={styles.rightMap}>
@@ -210,11 +185,12 @@ class Explore extends Component {
 
 }
 
-
 const mapStateToProps = (state) => {
     return {
         sources: state.sensors.sources,
-        layersVisibility: state.exploreLayers.layers_visibility
+        layersVisibility: state.exploreLayers.layers_visibility,
+        data: state.sensors.data,
+        regions: state.sensors.regions
     }
 };
 

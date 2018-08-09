@@ -108,3 +108,13 @@ export function serialize(obj: Object): string {
         }
     return str.join("&");
 }
+
+export function sortSitesNumerically (source_data) {
+    // If the Name is a Number, then sort numerically instead of alphabetically
+    if (source_data.length > 0 && !isNaN(source_data[0].name)) {
+        source_data.sort(function(x, y){
+            return x.name - y.name;
+        });
+    }
+    return source_data;
+}

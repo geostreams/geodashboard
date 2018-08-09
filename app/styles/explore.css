@@ -55,9 +55,13 @@ div > span > aside {
 }
 
 .exploreCard {
-    width: 21em;
-    margin-top: 0.5em;
+    width: 24em;
+    margin-top: 0;
     margin-bottom: 0.5em;
+}
+
+.headerSpacing {
+    padding-top: 0.5em !important;
 }
 
 @media screen and (max-device-width: 840px) {
@@ -94,15 +98,31 @@ div > span > aside {
 }
 
 .leftColumnExplore {
-    width: 24em;
-    margin: 0em 0em 3em 1em;
     float: left;
-    height: calc(100vh - 12em);
+    height: calc(100vh - 9.2em);
     overflow-y: auto;
 }
 
 .listHeaderStyle {
+    width: 16em;
     font-size: x-large !important;
+    font-weight: bold !important;
+    background: #5f99c1;
+    padding: 0.5em;
+    color: #ffffff !important;
+    cursor: pointer;
+}
+
+.listHeadlineStyle {
+    margin-left: -0.7em !important;
+}
+
+.listItemsStyleOpen {
+    display: flex;
+}
+
+.listItemsStyleClosed {
+    display: none;
 }
 
 .layersLegendDetails {
@@ -126,17 +146,23 @@ img[src=""] {
     padding-left: 1em;
 }
 
+.sectionPills {
+    margin-left: 0.5em;
+}
+
 .exploreButton {
-    width: 4em !important;
+    width: 6em !important;
     height: 2em !important;
-    font-weight: bold;
-    margin: 0.2em;
+    font-weight: bold !important;
+    margin: 0.05em;
     z-index: 0;
+    line-height: 0 !important;
 }
 
 .exploreButtonText {
     color: white;
-    text-shadow: black 0.1em 0.1em 0.1em
+    text-shadow: black 0.1em 0.1em 0.1em;
+    margin-left: -0.5em;
 }
 
 .regionLabel {
@@ -192,7 +218,6 @@ img[src=""] {
     z-index: 50;
 }
 
-
 .tabBackground {
     background: #F5F5F5;
     padding: 1em 0;
@@ -208,6 +233,10 @@ img[src=""] {
     font-size: x-large;
     font-weight: bold;
     color: #a9a9a9;
+}
+
+.accordionIcon {
+    float: right;
 }
 
 .exploreSourcesIcon {

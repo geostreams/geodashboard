@@ -442,3 +442,19 @@ export function getDownloadButtonPath() {
 export function getTimeSeriesZeroStart() {
     return window.configruntime.gd3.time_series_zero_start;
 }
+
+export function getExploreSections() {
+    let exploreSections = [];
+    if (window.configruntime.gd3.additional_explore_accordion_sections){
+        exploreSections = window.configruntime.gd3.additional_explore_accordion_sections;
+    }
+    return exploreSections;
+}
+
+export function getExploreSourcesOpen() {
+    let exploreSourcesOpen = false;
+    if (window.configruntime.gd3.sources_explore_accordion_open){
+        exploreSourcesOpen = window.configruntime.gd3.sources_explore_accordion_open;
+    }
+    return exploreSourcesOpen;
+}

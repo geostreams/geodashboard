@@ -12,8 +12,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1090](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1090)
 - Added D3 box and whiskers for the time series. Updated time series graphs to reflect quartiles.
   [GEOD-1113](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1113)
+- Added the option to have more sections for organizing Sites on the Explore Page
+  [GEOD-1111](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1111)
+- Added Collapsible Accordions on the Explore Page
+  [GEOD-1114](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1114)
 
 ### Changed
+- Changed the Explore Page Pills to be larger and have more descriptive text
+  [GEOD-1112](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1112)
 
 ### Fixed
 
