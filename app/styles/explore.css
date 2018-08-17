@@ -242,3 +242,7 @@ img[src=""] {
 .exploreSourcesIcon {
     float: right;
 }
+
+.listWidthStyle {
+    padding: 0 0.2em !important;
+}

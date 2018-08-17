@@ -167,7 +167,7 @@ class ExploreSourcesTab extends Component {
 
         if (screen.width > getMobileSizeMax()) {
             sourcesSection = (
-                <ListGroup>
+                <ListGroup className={exploreStyles.listWidthStyle}>
                     <ListHeader className={exploreStyles.listHeaderStyle}
                                 onClick={() => {this.clickedSourcesAccordion()}}
                     >
