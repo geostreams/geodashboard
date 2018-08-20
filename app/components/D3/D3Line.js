@@ -183,7 +183,7 @@ D3Line._drawPoints = function(el, state) {
         })
         .attr("cx", function(d) {return scales.x(d.date)})
         .attr("cy", function(d) { return scales.y(d.average)})
-        .attr("r", 4);
+        .attr("r", 2);
 
     // Add title and sources
     svg.append("text")

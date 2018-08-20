@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Changed the Explore Page Pills to be larger and have more descriptive text
   [GEOD-1112](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1112)
+- Changed styling for dots in the d3 graphs
+  [GEOD-1125](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1125)
 
 ### Fixed
 

@@ -127,7 +127,7 @@ D3BoxAndWhisker._drawPoints = function(el, state) {
     const outlierClasses = "circle " + outlierClass;
     outlier.enter().insert("circle", "text")
         .attr("class", outlierClasses)
-        .attr("r", 4)
+        .attr("r", 2)
         .attr("cx", boxWidth/2)
         .attr("cy", function(i) { return xScale(data[i]); })
         .style("opacity", 1);
