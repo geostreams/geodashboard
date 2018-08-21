@@ -103,7 +103,7 @@ class Explore extends Component {
                         );
                     });
                     exploreCategoriesSections = (
-                        <ListGroup>
+                        <ListGroup className={exploreStyles.listWidthStyle}>
                             <ListHeader className={exploreStyles.listHeaderStyle}
                                         onClick={() => {this.clickedCategoriesAccordion()}}>
                                 Categories

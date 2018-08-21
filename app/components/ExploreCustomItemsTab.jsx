@@ -26,10 +26,12 @@ class ExploreCustomItemsTab extends Component {
 
         let item_card = [];
         let list_cards = [];
+        let sites_count = 0;
 
         this.props.item.sections.map(item_section => {
 
             let contents = [];
+            sites_count = 0;
 
             this.props.sources.map(source => {
 
@@ -44,16 +46,18 @@ class ExploreCustomItemsTab extends Component {
 
                 // If the Name is a Number, then sort numerically instead of alphabetically
                 source_data = sortSitesNumerically(source_data);
-
-                let section_data = (
-                    <ExploreAccordionSections
-                        sourceData={source_data} tooltipVal={tooltip_val}
-                        id={key_val} key={key_val} sectionLabel={section_label}
-                    />
-                );
-
-                if (section_data.props.sourceData.length > 0) {
-                    contents.push(section_data);
+                sites_count = sites_count + source_data.length;
+                let section_data;
+                if (source_data.length > 0) {
+                    section_data = (
+                        <ExploreAccordionSections
+                            sourceData={source_data} tooltipVal={tooltip_val} id={key_val}
+                            key={key_val} sectionLabel={section_label} sourceId={source.id}
+                        />
+                    );
+                    if (section_data.props.sourceData.length > 0) {
+                        contents.push(section_data);
+                    }
                 }
 
             });
@@ -65,8 +69,8 @@ class ExploreCustomItemsTab extends Component {
                     >
                         <Card id={item_section.title} className={exploreStyles.exploreCard} key={item_section.title}>
                             <CardHeader>
-                                <CardTitle className={styles.title_card}>
-                                    {item_section.title}: {item_section.value.toString().replace(/,/g, ', ')}
+                                <CardTitle className={exploreStyles.exploreTitleCard}>
+                                    {item_section.title}: {item_section.value.toString().replace(/,/g, ', ')} ({sites_count})
                                 </CardTitle>
                             </CardHeader>
                             <CardText>

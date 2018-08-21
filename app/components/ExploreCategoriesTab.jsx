@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
 import {
     Button, Card, CardTitle, CardSubtitle, CardHeader, CardText, Title,
@@ -77,7 +76,7 @@ class ExploreCategoriesTab extends Component {
                     >
                         <Card id={parameter.title} className={exploreStyles.exploreSubCard} key={parameter.title}>
                             <CardHeader>
-                                <CardTitle className={styles.title_card}>
+                                <CardTitle className={exploreStyles.exploreTitleCard}>
                                     {parameter.title}
                                 </CardTitle>
                             </CardHeader>
@@ -99,12 +98,17 @@ class ExploreCategoriesTab extends Component {
 
             list_cards.push(item_card);
 
+            let label = category.name;
+            if (label.length === 0) {
+                label = "other";
+            }
+
             return_list = (
-                <ListGroup>
+                <ListGroup className={exploreStyles.listWidthStyle}>
                     <ListHeader className={exploreStyles.listSubheaderStyle}
                                 onClick={() => {this.clickedCategoriesAccordion()}}
                     >
-                        {category.name}
+                        {label}
                         <Icon className={"material-icons " + exploreStyles.accordionIcon}
                               name={this.state.accordion_icon ? 'expand_less' : 'expand_more'}
                         />

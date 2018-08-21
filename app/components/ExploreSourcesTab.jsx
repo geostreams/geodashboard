@@ -38,6 +38,7 @@ class ExploreSourcesTab extends Component {
         let source_card_group = [];
         let dialogContents = '';
         let sourcesSection = '';
+        let sites_count = 0;
 
         this.props.sources.map(source => {
 
@@ -92,6 +93,7 @@ class ExploreSourcesTab extends Component {
 
                 if (this.state.accordion_icon) {
 
+                    sites_count = 0;
                     let sourceInfo = getSourceInfo(source.id);
                     if (getShowSourceInfoBoxes() && sourceInfo !== undefined) {
                         dialogContents = <DialogWrapper title={source.label} body={sourceInfo}/>;
@@ -116,13 +118,15 @@ class ExploreSourcesTab extends Component {
 
                         // If the Name is a Number, then sort numerically instead of alphabetically
                         source_data = sortSitesNumerically(source_data);
-
-                        contents.push(
-                            <ExploreAccordionSections
-                                sourceData={source_data} tooltipVal={tooltip_val}
-                                id={key_val} key={key_val} sectionLabel={section_label}
-                            />
-                        )
+                        sites_count = sites_count + source_data.length;
+                        if (source_data.length > 0) {
+                            contents.push(
+                                <ExploreAccordionSections
+                                    sourceData={source_data} tooltipVal={tooltip_val} id={key_val}
+                                    key={key_val} sectionLabel={section_label} sourceId={source.id}
+                                />
+                            )
+                        }
 
                     });
 
@@ -134,11 +138,13 @@ class ExploreSourcesTab extends Component {
 
                 source_card = (
                     <Card id={source.id} className={exploreStyles.exploreCard} key={source.id}>
-                        <CardHeader className={exploreStyles.headerSpacing}>
+                        <CardHeader>
                             <span className={exploreStyles.exploreSourcesIcon}>
                                 {dialogContents}
                             </span>
-                            <CardTitle className={styles.title_card}>{source.label}</CardTitle>
+                            <CardTitle className={exploreStyles.exploreTitleCard}>
+                                <div>{source.label} ({sites_count})</div>
+                            </CardTitle>
                         </CardHeader>
                         <CardText>
                             <div key={this.id}>

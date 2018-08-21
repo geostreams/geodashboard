@@ -8,6 +8,12 @@ import { selectSensorDetail } from '../actions';
 import type { Dispatch } from '../utils/flowtype';
 
 
+const mapStateToProps = (state) => {
+    return {
+        selectedSensorID: state.sensorDetail.id
+    }
+};
+
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         selectSensor: (id, name, coordinates) => {
@@ -16,6 +22,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     }
 };
 
-const ExploreAccordionSections = connect(null, mapDispatchToProps)(ExploreAccordionSectionsComponent);
+const ExploreAccordionSections = connect(mapStateToProps, mapDispatchToProps)(ExploreAccordionSectionsComponent);
 
 export default ExploreAccordionSections;

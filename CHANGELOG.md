@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1125](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1125)
 - Using geotemporal api v3 for binning in the detail page.
   [GEOD-1118](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1118)
+- Explore Page Accordions Style Updates
+  [GEOD-1123](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1123)
 
 ### Fixed
 - Missing scroll bar on Explore Page

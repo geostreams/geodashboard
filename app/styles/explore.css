@@ -60,10 +60,6 @@ div > span > aside {
     margin-bottom: 0.5em;
 }
 
-.headerSpacing {
-    padding-top: 0.5em !important;
-}
-
 @media screen and (max-device-width: 840px) {
     .layersButton {
         visibility: hidden;
@@ -119,6 +115,7 @@ div > span > aside {
 
 .listItemsStyleOpen {
     display: block;
+    padding-left: 0.5em;
 }
 
 .listItemsStyleClosed {
@@ -147,7 +144,7 @@ img[src=""] {
 }
 
 .sectionPills {
-    margin-left: 0.5em;
+    margin: 0.5em 0 0.5em 0.5em;
 }
 
 .exploreButton {
@@ -160,18 +157,21 @@ img[src=""] {
 }
 
 .exploreButtonText {
-    color: white;
-    text-shadow: black 0.1em 0.1em 0.1em;
+    color: black;
     margin-left: -0.5em;
+}
+
+.regionCount{
+    float: right;
+    margin-top: 0.6em;
 }
 
 .regionLabel {
     position: relative;
-    cursor: help;
+    cursor: pointer;
     padding: 4px;
-    margin-left: 5px;
+    margin: 5px 7.3px;
     display: inline-block;
-    font-weight: bold;
 }
 
 .regionLabel:before {
@@ -186,7 +186,7 @@ img[src=""] {
     min-width: 100px;
     text-align: center;
     border-radius: 4px;
-    left: 50%;
+    left: 10%;
     -ms-transform: translateX(-20%);
     -moz-transform: translateX(-20%);
     -webkit-transform: translateX(-20%);
@@ -204,7 +204,7 @@ img[src=""] {
     height: 0;
     border-color: transparent;
     border-style: solid;
-    left: 50%;
+    left: 10%;
     margin-left: -6px;
     top: 100%;
     border-width: 0 6px 6px;
@@ -248,12 +248,11 @@ img[src=""] {
 }
 
 .listSubheaderStyle {
-    width: 16.3em;
+    width: 15.8em;
     font-size: x-large !important;
-    font-weight: bold !important;
     padding: 0.5em;
-    margin-left: -1em !important;
     cursor: pointer;
+    text-transform: capitalize !important;
 }
 
 .exploreSubCard {
@@ -261,4 +260,10 @@ img[src=""] {
     margin-top: 0;
     margin-bottom: 0.5em;
     margin-left: -1em !important;
+}
+
+.exploreTitleCard {
+    font-size: larger !important;
+    background-color: #D3D3D3;
+    padding: 1em;
 }
