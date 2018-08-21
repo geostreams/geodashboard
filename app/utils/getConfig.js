@@ -458,3 +458,12 @@ export function getExploreSourcesOpen() {
     }
     return exploreSourcesOpen;
 }
+
+export function getExploreCategoriesOpen() {
+    let exploreCategoriesOpen = false;
+    if (window.configruntime.gd3.categories_accordion_section_display){
+        exploreCategoriesOpen = window.configruntime.gd3.categories_accordion_section_display;
+    }
+    return exploreCategoriesOpen;
+}
+

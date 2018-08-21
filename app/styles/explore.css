@@ -118,7 +118,7 @@ div > span > aside {
 }
 
 .listItemsStyleOpen {
-    display: flex;
+    display: block;
 }
 
 .listItemsStyleClosed {
@@ -245,4 +245,20 @@ img[src=""] {
 
 .listWidthStyle {
     padding: 0 0.2em !important;
+}
+
+.listSubheaderStyle {
+    width: 16.3em;
+    font-size: x-large !important;
+    font-weight: bold !important;
+    padding: 0.5em;
+    margin-left: -1em !important;
+    cursor: pointer;
+}
+
+.exploreSubCard {
+    width: 24em;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    margin-left: -1em !important;
 }

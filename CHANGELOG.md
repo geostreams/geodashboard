@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1111](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1111)
 - Added Collapsible Accordions on the Explore Page
   [GEOD-1114](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1114)
+- Added Explore Page Accordions Categories Section
+  [GEOD-1124](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1124)
 
 ### Changed
 - Changed the Explore Page Pills to be larger and have more descriptive text

@@ -210,6 +210,9 @@ export const gd3 = {
     // Explore Page Additional Accordion Sections
     additional_explore_accordion_sections: [],
 
+    // Explore Page Display Categories Accordion
+    categories_accordion_section_display: false,
+
     // This is used to define general areas on the map
     additional_locations: [
         {

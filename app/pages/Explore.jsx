@@ -3,13 +3,14 @@ import Menu from '../containers/MenuBar';
 import Map from '../containers/ExploreMap';
 import ExploreSourcesTab from '../components/ExploreSourcesTab';
 import ExploreCustomItemsTab from '../components/ExploreCustomItemsTab';
+import ExploreCategoriesTab from '../components/ExploreCategoriesTab';
 import ExploreLayers from '../components/ExploreLayers';
-import {Cell, Content, Grid, Tabbar, Tab} from 'react-mdc-web';
+import {Cell, Content, Grid, Icon, List, ListHeader, ListGroup, Tabbar, Tab} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
 import {connect} from 'react-redux';
 import {
-    getMobileSourceNames, getMobileSizeMax, getLayersDetails,
+    getMobileSourceNames, getMobileSizeMax, getLayersDetails, getExploreCategoriesOpen,
     getChromeDisabled, clustersChoiceOption, getExploreSections
 } from '../utils/getConfig';
 import MapToggleClusters from "../components/MapToggleClusters";
@@ -22,15 +23,22 @@ class Explore extends Component {
         super(props);
         this.state = {
             viewSelection: "list-view",
-            disableClusters: false
+            disableClusters: false,
+            categories_accordion_icon: false,
         };
         (this:any).clickedViewSelection = this.clickedViewSelection.bind(this);
         (this:any).toggleClustersExplore = this.toggleClustersExplore.bind(this);
+        (this:any).clickedCategoriesAccordion = this.clickedCategoriesAccordion.bind(this);
+    }
+
+    clickedCategoriesAccordion() {
+        this.setState({categories_accordion_icon: !this.state.categories_accordion_icon});
     }
 
     state: {
         viewSelection: string,
-        disableClusters: boolean
+        disableClusters: boolean,
+        categories_accordion_icon: boolean,
     };
 
     clickedViewSelection(value) {
@@ -46,6 +54,8 @@ class Explore extends Component {
         let disableClusters = this.state.disableClusters;
         let sourcesSection = '';
         let exploreCustomSections = [];
+        let exploreCategories = [];
+        let exploreCategoriesSections = [];
         let sources;
         let mobile_sourcenames = getMobileSourceNames();
         if (screen.width <= getMobileSizeMax() && mobile_sourcenames.toUpperCase() !== 'ALL') {
@@ -81,6 +91,32 @@ class Explore extends Component {
                             />
                         );
                     });
+                }
+                if (getExploreCategoriesOpen() && this.props.parameterCategories.length > 0) {
+                    this.props.parameterCategories.map(category => {
+                        exploreCategories.push(
+                            <ExploreCategoriesTab
+                                key={category.title} data={this.props.data} sources={sources}
+                                parameterCategory={category} parameterMappings={this.props.parameterMappings}
+                                parameters={this.props.parameters}
+                            />
+                        );
+                    });
+                    exploreCategoriesSections = (
+                        <ListGroup>
+                            <ListHeader className={exploreStyles.listHeaderStyle}
+                                        onClick={() => {this.clickedCategoriesAccordion()}}>
+                                Categories
+                                <Icon className={"material-icons " + exploreStyles.accordionIcon}
+                                      name={this.state.categories_accordion_icon ? 'expand_less' : 'expand_more'}
+                                />
+                            </ListHeader>
+                            <div className={this.state.categories_accordion_icon ?
+                                exploreStyles.listItemsStyleOpen : exploreStyles.listItemsStyleClosed}>
+                                {exploreCategories}
+                            </div>
+                        </ListGroup>
+                    );
                 }
             }
 
@@ -164,6 +200,7 @@ class Explore extends Component {
                                 <div className={exploreStyles.leftColumnExplore}>
                                     {sourcesSection}
                                     {exploreCustomSections}
+                                    {exploreCategoriesSections}
                                 </div>
                             </Cell>
                             <Cell col={9}>
@@ -190,7 +227,10 @@ const mapStateToProps = (state) => {
         sources: state.sensors.sources,
         layersVisibility: state.exploreLayers.layers_visibility,
         data: state.sensors.data,
-        regions: state.sensors.regions
+        regions: state.sensors.regions,
+        parameters: state.parameters.parameters,
+        parameterCategories: state.parameters.categories,
+        parameterMappings: state.parameters.mappings
     }
 };
 
