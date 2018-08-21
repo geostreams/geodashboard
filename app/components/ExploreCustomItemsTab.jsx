@@ -88,7 +88,7 @@ class ExploreCustomItemsTab extends Component {
             list_cards.push(item_card);
 
             return_list = (
-                <ListGroup>
+                <ListGroup className={exploreStyles.listWidthStyle}>
                     <ListHeader className={exploreStyles.listHeaderStyle}
                                 onClick={() => {this.clickedItemsAccordion()}}
                     >
