@@ -57,16 +57,18 @@ D3Line._scales = function (el, data, state){
 };
 
 D3Line._drawPoints = function(el, state) {
-    const {data, class_name_line, class_name_dots, yAxisLabel, width, height, title, sources,
+    const {class_name_line, class_name_dots, yAxisLabel, width, height, title, sources,
     boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines} = state;
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
+    let {data} = state;
     const svg = d3.select(el).selectAll('svg');
     // The next 4 lines clean up previously existing graphs
     let g = svg.selectAll('.d3-line-charts');
     let g_dots = svg.selectAll(".d3-dots");
     g.remove();
     g_dots.remove();
+    svg.selectAll("text").remove();
 
     // This creates a placeholder for the graph
     g = svg.append('g')
@@ -82,11 +84,15 @@ D3Line._drawPoints = function(el, state) {
     // Set up data
     const parseTime = d3.timeParse("%d-%b-%y");
     let averages = [];
+    function sortByDateAscending(a, b) {
+        return a.date - b.date;
+    }
+
     data.forEach(function(d){
         d.average = +d.average;
         averages.push(d.average);
     });
-
+    data = data.sort(sortByDateAscending);
     const scales = this._scales(el, data, state);
 
     let domain = null;

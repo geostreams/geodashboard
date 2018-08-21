@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1112](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1112)
 - Changed styling for dots in the d3 graphs
   [GEOD-1125](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1125)
+- Using geotemporal api v3 for binning in the detail page.
+  [GEOD-1118](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1118)
 
 ### Fixed
 - Missing scroll bar on Explore Page

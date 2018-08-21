@@ -71,17 +71,17 @@ function collect_data(data){
     }
 
     let output = [];
-    for(let key in data[0].properties){
-        output[key] = groupBy(data[0].properties[key], 'label', 'average', getProcessedProperty());
+    for(let key in data.properties){
+        output[key] = groupBy(data.properties[key], 'label', 'average', getProcessedProperty());
     }
     return output;
 }
 
 function  collect_sources(data) {
     let output = [];
-    for (let key in data[0].properties) {
+    for (let key in data.properties) {
         let sources =[];
-        data[0].properties[key].forEach( x => {
+        data.properties[key].forEach( x => {
            x.sources.forEach(source => {
                if(sources.indexOf(source) === -1) {
                    sources.push(source);

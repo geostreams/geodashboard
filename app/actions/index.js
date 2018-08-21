@@ -130,10 +130,9 @@ export function fetchAnalysis(parameter: string, total_year: number, interval: n
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
         // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
         const state = getState();
-        const api = state.backends.selected;
+        const api = getApi(getState).api;
 
         const trends_endpoint = api + '/api/geostreams/datapoints/trends?binning=year';
-
         let sensorsToFilter;
         if (state.chosenTrends.trends_sensors.length > 0) {
             sensorsToFilter = state.chosenTrends.trends_sensors;
@@ -255,7 +254,7 @@ export function fetchTrends(parameter: string, total_year: number, interval: num
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
         // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
         const state = getState();
-        const api = state.backends.selected;
+        const api = getApi(getState).api;
 
         const season = season_input;
         const trends_endpoint = api + '/api/geostreams/datapoints/trends?binning=year';
@@ -342,15 +341,18 @@ export function fetchTrends(parameter: string, total_year: number, interval: num
         );
     }
 }
+function getApi(getState: GetState) {
+    const state = getState();
+    return {api: state.backends.selected, v3: state.backends.selected.slice(0, -8) + "/geostreams"};
+
+}
 
 export const ADD_REGION_TRENDS = 'ADD_REGION_TRENDS';
 export function fetchRegionTrends(parameter: string, season: string) {
     return (dispatch: Dispatch, getState: GetState) => {
-        const state = getState();
-        const api = state.backends.selected;
 
         // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/'
-        const trends_region_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/' + parameter;
+        const trends_region_endpoint = getApi(getState).v3 + "/api/trends/region" + parameter;
 
         const result = fetch(trends_region_endpoint).then(response => {
             const json = response.json();
@@ -379,13 +381,8 @@ export function fetchRegionDetailTrends(parameter: string, season: string, regio
     return (dispatch: Dispatch, getState: GetState) => {
         // For each region sensor for the Chart on the Trends Detail Page,
         // use the parameter, geocode, and season to get the Trends.
-
         const state = getState();
-        const api = state.backends.selected;
-
-        // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/detail/'
-        const trends_region_detail_endpoint = api.slice(0, -8) + '/geostreams/api/trends/region/detail/';
-
+        const trends_region_detail_endpoint = getApi(getState).v3 + "/api/trends/region/detail";
         const regionsToFilter = state.chosenTrends.trends_regions.filter(r => r.properties.region.toUpperCase() === region.toUpperCase());
 
         let temp_object = [];
@@ -613,9 +610,9 @@ export function updateAvailableSensors(idx: number) {
 export const RECEIVE_PARAMETERS = "RECEIVE_PARAMETERS";
 export const RECEIVE_MULTI_PARAMETERS = "RECEIVE_MULTI_PARAMETERS";
 export const FAILED_RECEIVE_PARAMETERS = "FAILED_RECEIVE_PARAMETERS";
-export function fetchParameters(api: string) {
+export function fetchParameters() {
     return(dispatch: Dispatch, getState: GetState) => {
-        const endpoint = api.slice(0, -8) + "/geostreams/api/parameters";
+        const endpoint = getApi(getState).v3 + "/api/parameters";
         return fetch(endpoint)
             .then(response => response.json())
             .then(json =>
@@ -667,7 +664,7 @@ export function fetchSensors(api: string) {
             })
             .then(dispatch(updateAvailableSensors(-1)))
             .then(dispatch(setRegionsSensors()))
-            .then(dispatch(fetchParameters(api)))
+            .then(dispatch(fetchParameters()))
             .catch((error) => {
                 console.log('An ERROR occurred! ' + error);
                 dispatch(switchBackendError());
@@ -675,9 +672,10 @@ export function fetchSensors(api: string) {
     }
 }
 
-function fetchSensorHelp(api: string, id: number, bin:string) {
-    return (dispatch: any) => {
-        const endpoint = api + '/api/geostreams/datapoints/bin/'+ bin + '/1?sensor_id=' + id;
+function fetchSensorHelp(api: string, id: number, bin:string, dateFilter:string) {
+    return (dispatch: any, getState: GetState) => {
+        const endpoint = getApi(getState).v3 + '/api/cache/' + bin + '/' + id + dateFilter;
+
         return fetch(endpoint)
             .then(response => response.json())
             .then(json => {
@@ -686,26 +684,34 @@ function fetchSensorHelp(api: string, id: number, bin:string) {
     }
 }
 
-export function fetchSensor(name: string, bin: string) {
+export function fetchSensor(name: string, bin: string, start_date: Date, end_date:Date) {
     return (dispatch: any, getState: GetState) => {
         const state = getState();
-        const api = state.backends.selected;
+        const endpoints = getApi(getState);
+        let dateFilter = "";
+        if(typeof start_date !== 'undefined') {
+            dateFilter += "?since=" + start_date.toISOString();
+            if(typeof end_date !== 'undefined')
+            {
+                dateFilter += "&until=" + end_date.toISOString();
+            }
+        }
 
         //get sensor id from the name
         if (state.sensors.length > 0) {
             const sensor = state.sensors.data.find(x => x.name === name).id;
             dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-            dispatch(fetchSensorHelp(api, sensor.id, bin));
+            dispatch(fetchSensorHelp(endpoints.api, sensor.id, bin, dateFilter));
 
         } else {
-            const endpointsensors = api + '/api/geostreams/sensors';
+            const endpointsensors = endpoints.api + '/api/geostreams/sensors';
             let result = fetch(endpointsensors)
                 .then(response => response.json())
                 .then(json => {
                     const sensor = json.find(x => x.name === name);
                     console.log(sensor.id);
                     dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-                    return fetch(api + '/api/geostreams/datapoints/bin/' + bin + '/1?sensor_id=' + sensor.id)
+                    return fetch(endpoints.v3  + '/api/cache/' + bin + '/' + sensor.id + dateFilter)
                 });
             result
                 .then(response => response.json())
@@ -719,20 +725,21 @@ export function fetchSensor(name: string, bin: string) {
 export function fetchSensorMobile(name: string) {
     return (dispatch: any, getState: GetState) => {
         const state = getState();
-        const api = state.backends.selected;
+        const api = getApi(getState).api;
+
+        let twoWeeksAgo = new Date();
+        twoWeeksAgo.setDate((twoWeeksAgo.getDate() - 14));
+        twoWeeksAgo = twoWeeksAgo.toJSON();
+        const dateFilter = "?since=" + twoWeeksAgo.toString();
 
         //get sensor id from the name
         if (state.sensors.length > 0) {
             const sensor = state.sensors.data.find(x => x.name === name).id;
             dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-            dispatch(fetchSensorHelp(api, sensor.id, "day"));
+            dispatch(fetchSensorHelp(api, sensor.id, "day", dateFilter));
 
         } else {
             const endpointsensors = api + '/api/geostreams/sensors';
-
-            let twoWeeksAgo = new Date();
-            twoWeeksAgo.setDate((twoWeeksAgo.getDate() - 14));
-            twoWeeksAgo = twoWeeksAgo.toJSON();
 
             let result = fetch(endpointsensors)
                 .then(response => response.json())
@@ -740,8 +747,7 @@ export function fetchSensorMobile(name: string) {
                     const sensor = json.find(x => x.name === name);
                     console.log(sensor.id);
                     dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-                    return fetch(api + '/api/geostreams/datapoints/bin/day/1?&since=' +
-                        twoWeeksAgo.toString() + '&sensor_id=' + sensor.id)
+                    return fetch(getApi(getState).v3 + '/api/cache/day/' + sensor.id + dateFilter)
                 });
             result
                 .then(response => response.json())

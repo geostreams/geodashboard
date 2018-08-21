@@ -69,8 +69,8 @@ DetailPageDownload.propTypes = {
     api: PropTypes.string.isRequired,
     selected_parameters: PropTypes.array,
     id: PropTypes.number,
-    selected_start_date: PropTypes.date,
-    selected_end_date: PropTypes.date
+    selected_start_date: PropTypes.instanceOf(Date),
+    selected_end_date: PropTypes.instanceOf(Date)
 };
 
 export default DetailPageDownload;

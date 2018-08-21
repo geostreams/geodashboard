@@ -35,7 +35,7 @@ class Chart extends Component {
             }
 
             sensor_data.map(function(d) {
-                    const bin_date = that.props.filterBySeason ? new Date(d.label.substring(0, 4)): new Date(d.label);
+                    const bin_date = that.props.filterBySeason || that.props.binType === "season" ? new Date(d.label.substring(0, 4)): new Date(d.label);
                     if(bin_date.getTime() > that.props.selectedStartDate.getTime() &&
                     bin_date.getTime() < that.props.selectedEndDate.getTime()) {
                         values.push({date: bin_date, average: d.average});

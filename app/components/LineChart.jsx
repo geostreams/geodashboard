@@ -11,7 +11,8 @@ import mainStyles from '../styles/main.css'
 class LineChart extends Component {
 
     componentWillMount() {
-        this.props.loadSensor(null, this.props.sensor.name, this.props.filterBySeason);
+        this.props.loadSensor(null, this.props.sensor.name, this.props.filterBySeason, this.props.binType,
+            this.props.selectedStartDate, this.props.selectedEndDate);
     }
 
     render() {
@@ -51,6 +52,7 @@ class LineChart extends Component {
                                    category_parameters={this.props.category_parameters}
                                    parameterSources={this.props.parameterSources}
                                    displayLines={this.props.displayLines}
+                                   binType={this.props.binType}
                                    id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}/></Row>)
                     }
                 } else {

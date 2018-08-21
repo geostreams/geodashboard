@@ -14,7 +14,7 @@ import {
 import Select from './material/Select';
 import DateSlider from "./DateSlider";
 import DetailPageDownload from "../containers/DetailPageDownload";
-
+let moment = require('moment');
 
 class DetailContents extends Component {
 
@@ -24,11 +24,12 @@ class DetailContents extends Component {
             openParameterDialog: false,
             openBoxAndWhiskerDialog: false,
             selected_parameters: [],
-            selectedStartDate: new Date(0),
-            selectedEndDate: new Date(0),
+            selectedStartDate: new Date(props.sensor.min_start_time),
+            selectedEndDate: new Date(props.sensor.max_end_time),
             showSeasonFilter: false,
             selectedSeason: "",
-            displayLines: getChartLineDefault()
+            displayLines: getChartLineDefault(),
+            binType: "year",
         };
         this.closeParameterDialog = this.closeParameterDialog.bind(this);
         this.openParameterDialog = this.openParameterDialog.bind(this);
@@ -39,15 +40,17 @@ class DetailContents extends Component {
         this.onSliderChange = this.onSliderChange.bind(this);
         this.onChangeSeason = this.onChangeSeason.bind(this);
         this.displayChartLines = this.displayChartLines.bind(this);
+        this.updateBinningType = this.updateBinningType.bind(this);
     }
 
     componentWillMount() {
         this.updateParametersAndSeason(this.props);
+        this.updateBinningType(this.state.selectedStartDate, this.state.selectedEndDate);
     }
 
     componentWillReceiveProps(newProps) {
 
-        this.updateParametersAndSeason(newProps)
+        this.updateParametersAndSeason(newProps);
     }
 
     onChangeSeason(event) {
@@ -70,10 +73,35 @@ class DetailContents extends Component {
         } else {
             this.setState({selected_parameters: []})
         }
+
+    }
+
+    updateBinningType(start_date, end_date) {
+
+        let start_moment = moment(start_date);
+        let end_moment = moment(end_date);
+        let diff_days = end_moment.diff(start_moment, 'days');
+        let diff_years = end_moment.diff(start_moment, 'years');
+        let binType = "day";
+        if(diff_years > 25) {
+            binType = "year";
+        } else if ( diff_years > 10 && diff_years <= 25) {
+            binType = "season";
+        } else if ( diff_years > 2 && diff_years <= 10) {
+            binType= "month";
+        } else if (diff_days > 3 && diff_days <= 14) {
+            binType = "hour";
+        }
+        if(this.state.binType !== binType) {
+            this.props.loadSensor(this.props.sensor.id, this.props.sensor.name, this.state.showSeasonFilter, binType,
+                start_date, end_date);
+            this.setState({binType: binType})
+        }
     }
 
     onSliderChange(value) {
-        this.setState({selectedStartDate: value[0], selectedEndDate: value[1]})
+        this.setState({selectedStartDate: value[0], selectedEndDate: value[1]});
+        this.updateBinningType(value[0], value[1]);
     }
 
     closeParameterDialog() {
@@ -128,8 +156,8 @@ class DetailContents extends Component {
         // Set up the variables for the slider
         const minDate = new Date(sensor.min_start_time);
         const maxDate = new Date(sensor.max_end_time);
-        const selected_start = this.state.selectedStartDate.getTime() === new Date(0).getTime() ? minDate : this.state.selectedStartDate;
-        const selected_end = this.state.selectedEndDate.getTime() === new Date(0).getTime() ? maxDate: this.state.selectedEndDate;
+        const selected_start = this.state.selectedStartDate;
+        const selected_end = this.state.selectedEndDate;
 
         if (sensor) {
             // These calculations determine the X-Axis interval for the graphs
@@ -204,6 +232,7 @@ class DetailContents extends Component {
                                    category_parameters={this.props.category_parameters}
                                    selected_parameters={this.state.selected_parameters}
                                    displayLines={this.state.displayLines}
+                                   binType={this.state.binType}
                 />;
             } else if(chart_type === "stacked_line") {
                 graph = <StackedLineChart sensorName={sensor.name} sensor={sensor}
