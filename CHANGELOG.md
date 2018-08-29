@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Missing scroll bar on Explore Page
   [GEOD-1127](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1127)
+- Fixed headers on Search Page
+  [GEOD-1132](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1132)
 
 ## [3.0.0-alpha.3] - 2018-06-29
 **Important - Need to have database with parameters setup before release in all projects**

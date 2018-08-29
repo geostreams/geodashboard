@@ -203,8 +203,7 @@ h1, h2, h3, h5, h6, p, ul {
 .title_card {
     font-size: larger !important;
     font-weight: bold !important;
-    background-color: #D3D3D3;
-    padding: 1em;
+    text-transform: capitalize !important;
 }
 
 .close_button_style {
