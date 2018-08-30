@@ -343,7 +343,7 @@ export function fetchTrends(parameter: string, total_year: number, interval: num
 }
 function getApi(getState: GetState) {
     const state = getState();
-    return {api: state.backends.selected, v3: state.backends.selected.slice(0, -8) + "/geostreams"};
+    return {api: state.backends.selected + '/clowder', v3: state.backends.selected + '/geostreams'};
 
 }
 
@@ -656,11 +656,11 @@ export function fetchSensors(api: string) {
     return (dispatch: any) => {
         dispatch(requestSensors(api));
 
-        const endpoint = api + '/api/geostreams/sensors';
+        const endpoint = api + '/geostreams/api/sensors';
         return fetch(endpoint)
             .then(response => response.json())
             .then(json => {
-                dispatch(receiveSensors(api, json))
+                dispatch(receiveSensors(api, json.sensors))
             })
             .then(dispatch(updateAvailableSensors(-1)))
             .then(dispatch(setRegionsSensors()))
@@ -701,14 +701,14 @@ export function fetchSensor(name: string, bin: string, start_date: Date, end_dat
         if (state.sensors.length > 0) {
             const sensor = state.sensors.data.find(x => x.name === name).id;
             dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-            dispatch(fetchSensorHelp(endpoints.api, sensor.id, bin, dateFilter));
+            dispatch(fetchSensorHelp(endpoints.v3, sensor.id, bin, dateFilter));
 
         } else {
-            const endpointsensors = endpoints.api + '/api/geostreams/sensors';
+            const endpointsensors = endpoints.v3 + '/api/sensors';
             let result = fetch(endpointsensors)
                 .then(response => response.json())
                 .then(json => {
-                    const sensor = json.find(x => x.name === name);
+                    const sensor = json.sensors.find(x => x.name === name);
                     console.log(sensor.id);
                     dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
                     return fetch(endpoints.v3  + '/api/cache/' + bin + '/' + sensor.id + dateFilter)
@@ -725,7 +725,7 @@ export function fetchSensor(name: string, bin: string, start_date: Date, end_dat
 export function fetchSensorMobile(name: string) {
     return (dispatch: any, getState: GetState) => {
         const state = getState();
-        const api = getApi(getState).api;
+        const api = getApi(getState).v3;
 
         let twoWeeksAgo = new Date();
         twoWeeksAgo.setDate((twoWeeksAgo.getDate() - 14));
@@ -739,7 +739,7 @@ export function fetchSensorMobile(name: string) {
             dispatch(fetchSensorHelp(api, sensor.id, "day", dateFilter));
 
         } else {
-            const endpointsensors = api + '/api/geostreams/sensors';
+            const endpointsensors = api + '/api/sensors';
 
             let result = fetch(endpointsensors)
                 .then(response => response.json())

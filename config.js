@@ -2,19 +2,19 @@ export const gd3 = {
 
     // Clowder API Information - this is also displayed in the Welcome Page dropdown selector
     clowder_endpoints: [
-        {url: "https://seagrant-dev.ncsa.illinois.edu/clowder", label: "GLM DEV", title: "Great Lakes Monitoring",
+        {url: "https://seagrant-dev.ncsa.illinois.edu", label: "GLM DEV", title: "Great Lakes Monitoring",
             subtitle: "ILLINOIS-INDIANA SEA GRANT"},
-        {url: "https://greatlakesmonitoring.org/clowder", label: "GLM PROD", title: "Great Lakes Monitoring",
+        {url: "https://greatlakesmonitoring.org", label: "GLM PROD", title: "Great Lakes Monitoring",
             subtitle: "ILLINOIS-INDIANA SEA GRANT"},
-        {url: "https://greatlakestogulf.org/clowder", label: "GLTG PROD", title: "Great Lakes to Gulf",
+        {url: "https://greatlakestogulf.org", label: "GLTG PROD", title: "Great Lakes to Gulf",
             subtitle: "VIRTUAL OBSERVATORY"},
-        {url: "https://gltg-dev.ncsa.illinois.edu/clowder", label: "GLTG DEV", title: "Great Lakes to Gulf",
+        {url: "https://gltg-dev.ncsa.illinois.edu", label: "GLTG DEV", title: "Great Lakes to Gulf",
             subtitle: "VIRTUAL OBSERVATORY"},
-        {url: "http://data.imlczo.org/clowder", label: "IMLCZO PROD",   title: "IMLCZO",
+        {url: "http://data.imlczo.org", label: "IMLCZO PROD",   title: "IMLCZO",
             subtitle: ""},
-        {url: "https://imlczo-dev.ncsa.illinois.edu/clowder", label: "IMLCZO DEV", title: "IMLCZO",
+        {url: "https://imlczo-dev.ncsa.illinois.edu", label: "IMLCZO DEV", title: "IMLCZO",
             subtitle: ""},
-        {url: "http://141.142.211.37/clowder", label: "IMLCZO NEBULA", title: "IMLCZO",
+        {url: "http://141.142.211.37", label: "IMLCZO NEBULA", title: "IMLCZO",
             subtitle: ""},
         {url:"http://localhost:9000", label:"TEST", title:"TEST", subtitle:"TEST"}
     ],
