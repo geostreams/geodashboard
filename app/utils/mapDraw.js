@@ -110,8 +110,6 @@ export function drawHelper(copyOfMap, display_trends){
             }
         }
 
-
-
     } else {
         if (draw_radio) {
             if (draw_radio.checked) {
@@ -157,12 +155,4 @@ export function centerHelper(view, vectorSource, theMap){
     } else {
         console.log("cannot find button");
     }
-
-    //const element = document.getElementById('ol-centercontrol');
-    ////if (element && centerButton) {
-    //    element.className += ' ol-unselectable ol-control';
-    //    element.appendChild(centerButton);
-    //
-    //   return element;
-    //}
 }

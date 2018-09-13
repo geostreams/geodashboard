@@ -119,9 +119,12 @@ class DownloadButtons extends Component {
 
         let numSensors = this.props.availableSensors.length;
         let disabled = true;
-        if(this.props.selectedParameters.length > 0 || this.props.selectedDataSources.length > 0
+        if(
+            ( this.props.selectedParameters.length > 0 || this.props.selectedDataSources.length > 0
             || this.props.selectedLocation !== null ||
-            (this.props.selectedStartDate !== null && this.props.selectedStartDate !== "")) {
+            (this.props.selectedStartDate !== null && this.props.selectedStartDate !== "") ) &&
+            numSensors !== 0
+        ) {
             disabled = false;
         }
 

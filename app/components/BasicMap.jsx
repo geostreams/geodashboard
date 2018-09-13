@@ -328,7 +328,9 @@ class BasicMap extends Component {
                 // Get the shape coordinates
                 let drawCoordinates = drawExtent.getCoordinates();
                 that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
+
             });
+
         };
 
         if (drawElement && drawSquareButton) {
@@ -402,6 +404,7 @@ class BasicMap extends Component {
                         }
                     }
                 }
+
                 // Get the shape coordinates
                 // (1) Get the Units for the Map Projection
                 let units = theMap.getView().getProjection().getUnits();
@@ -488,10 +491,11 @@ class BasicMap extends Component {
                         }
                     }
                 }
+
                 // Get the shape coordinates
                 let drawCoordinates = drawExtent.getCoordinates();
-
                 that.props.selectShapeLocation(selectPointsLocations, drawCoordinates);
+
             });
 
         };

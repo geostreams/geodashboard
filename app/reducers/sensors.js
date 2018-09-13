@@ -40,7 +40,6 @@ const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
                 data: action.sensors,
                 receivedAt: action.receivedAt,
                 api: action.api,
-                // parameters: collectParameters(action.sensors),
                 sources: collectSources(action.sensors),
                 regions: collectRegions(action.sensors),
                 locations: collectLocations(action.sensors),
@@ -73,10 +72,16 @@ const sensors = (state:sensorsState = defaultState, action:SensorAction) => {
 
         case ADD_CUSTOM_LOCATION_FILTER:
             let customLocationSensors = filterCustomLocation(state, action.selectedPointsLocations);
+            let availableSensors = customLocationSensors;
+
             shapeCoordinates = action.shapeCoordinates;
 
+            if (action.selectedPointsLocations.length === 0) {
+                availableSensors = [];
+            }
+
             return Object.assign({}, state, {
-                available_sensors: customLocationSensors,
+                available_sensors: availableSensors,
                 draw_available_sensors: customLocationSensors,
                 shape_coordinates: shapeCoordinates
             });
@@ -102,11 +107,17 @@ function filterCustomLocation(state:sensorsState, selectedPointsLocations:Array<
     let origSensors = state.data;
     let filteredSensors = [];
 
-    if ( state.available_sensors.length < state.draw_available_sensors.length) {
+    if (selectedPointsLocations[0] !== undefined &&
+        selectedPointsLocations[0] !== 'reset_points' &&
+        state.available_sensors.length < state.draw_available_sensors.length) {
+
         origSensors = state.available_sensors;
+
     }
 
-    if (selectedPointsLocations[0] === 'reset_points') {
+    if (selectedPointsLocations[0] === 'reset_points' ||
+        selectedPointsLocations[0] === undefined ||
+        selectedPointsLocations.length === 0) {
 
         filteredSensors = origSensors;
 
