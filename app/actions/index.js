@@ -1,7 +1,7 @@
 // @flow
 
 import type { Sensors, Dispatch, GetState, Parameters } from "../utils/flowtype";
-import {getWaterYearStatus} from "../utils/getConfig";
+import {getTrendsSources, getWaterYearStatus} from "../utils/getConfig";
 
 export const SWITCH_BACKEND = 'SWITCH_BACKEND';
 export const switchBackend = (selected: string, title: string, subtitle: string) => {
@@ -254,16 +254,17 @@ export function fetchTrends(parameter: string, total_year: number, interval: num
         // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
         // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
         const state = getState();
-        const api = getApi(getState).api;
+        const api = getApi(getState).v3;
 
         const season = season_input;
-        const trends_endpoint = api + '/api/geostreams/datapoints/trends?binning=year';
 
-        let sensorsToFilter;
-        if (state.chosenTrends.trends_sensors.length > 0) {
-            sensorsToFilter = state.chosenTrends.trends_sensors;
-        } else {
-            sensorsToFilter = state.sensors.data;
+
+        let trends_endpoint = api + '/api/cache/trends?parameter='+ parameter + "&season=" + season;
+        const trends_sources = getTrendsSources();
+        if(trends_sources.length > 0 ) {
+            trends_sources.map(source => {
+                trends_endpoint += '&source=' + source;
+            })
         }
 
         dispatch({
@@ -272,73 +273,38 @@ export function fetchTrends(parameter: string, total_year: number, interval: num
 
         let temp_object = [];
 
-        let results = sensorsToFilter.map(sensor => {
-
-            let start_time = new Date(sensor.min_start_time);
-            let end_time = new Date(sensor.max_end_time);
-
-            let json_data;
-
-            let trends_endpoint_args =
-                trends_endpoint +
-                "&sensor_id=" + sensor.id +
-                "&attributes=" + parameter;
-
-            if (season) {
-                trends_endpoint_args = trends_endpoint_args + "&semi=" + season;
-            }
-
-            const result = fetch(trends_endpoint_args).then(response => {
-                const json = response.json();
-                return json;
-            }).then(json => {
-                if (json && json.length > 0) {
-                    let trend_start = new Date(json[0].start_time);
-                    let trend_end = new Date(json[0].end_time);
-                    let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000 * 60 * 60 * 24));
-                    if (time_frame_trends_days >= (total_year * 365) - 180 && json.length >= 1) {
-                        json_data = json[0].properties;
+        fetch(trends_endpoint).then(response => {
+            const json = response.json();
+            return json;
+        }).then(json => {
+            if(json && Object.keys(json).length > 0) {
+                let json_data;
+                json["trends"].map(trend_sensor => {
+                    if(trend_sensor.diff >= 10) {
+                        json_data = trend_sensor.properties;
                     } else {
                         json_data = null;
                     }
                     temp_object = temp_object.concat({
-                        id: sensor.id,
                         data: json_data,
-                        trend_start_time: start_time,
-                        trend_end_time: end_time
+                        trend_start_time: trend_sensor.first_year,
+                        trend_end_time: trend_sensor.last_time,
+                        sensor: trend_sensor.sensor
                     })
-                } else {
-                    temp_object = temp_object.concat({
-                        id: sensor.id,
-                        data: null,
-                        trend_start_time: null,
-                        trend_end_time: null
-                    });
-                }
-            }).catch(function (error) {
-                console.log(error);
-                console.log(trends_endpoint_args);
-                temp_object = temp_object.concat({
-                    id: sensor.id,
-                    data: null,
-                    trend_start_time: null,
-                    trend_end_time: null
-                });
-            });
-            return result;
+                })
+            }
+            return (dispatch({
+                type: ADD_CHOOSE_TRENDS,
+                sensors_trends: temp_object,
+                parameter,
+                season
 
+            }))
+        }).catch(function (error) {
+            console.log(error);
+            console.log(trends_endpoint);
         });
 
-        Promise.all(results).then(s => {
-                return (dispatch({
-                    type: ADD_CHOOSE_TRENDS,
-                    sensors_trends: temp_object,
-                    parameter,
-                    season,
-                    sensorsToFilter
-                }))
-            }
-        );
     }
 }
 function getApi(getState: GetState) {
@@ -352,7 +318,7 @@ export function fetchRegionTrends(parameter: string, season: string) {
     return (dispatch: Dispatch, getState: GetState) => {
 
         // Set trends_region_endpoint to be: API - '/clowder' + '/geostreams/api/trends/region/'
-        const trends_region_endpoint = getApi(getState).v3 + "/api/trends/region" + parameter;
+        const trends_region_endpoint = getApi(getState).v3 + "/api/trends/region/" + parameter;
 
         const result = fetch(trends_region_endpoint).then(response => {
             const json = response.json();

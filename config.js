@@ -757,8 +757,8 @@ export const gd3 = {
         "overThresholdDown": "#ED2026"
     },
 
-    // Set this to true if only want EPA sensors for all Trends
-    trends_only_epa: true,
+    // List of sources for sensors that show up in the trends page.
+    trends_sources: ["epa"],
 
     // Will be added to the Exploratory Analysis and Trends Stations Regions
     draw_and_all_regions: [

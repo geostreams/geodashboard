@@ -143,8 +143,8 @@ export function getCustomTrendRegion(region:string):Object {
         });
 }
 
-export function getTrendsEPASetting() {
-    return window.configruntime.gd3.trends_only_epa;
+export function getTrendsSources() {
+    return window.configruntime.gd3.trends_sources;
 }
 
 export function getColor(source: string): string {

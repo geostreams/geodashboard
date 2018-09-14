@@ -89,9 +89,7 @@ export function sensorsToFeaturesTrendPage(
                 // Not enough information present
                 if (sensor.trends === null) {
                     trend_type = "noTrend";
-                    console.log("is null");
                 } else {
-                    console.log("not null");
                     // For Trends Page, only check Threshold and assign red arrows for certain parameters.
                     // Otherwise, only assign blue or yellow arrows with no Threshold check.
                     if (trends_parameter_lake_regions.indexOf(parameter) >= 0) {
@@ -107,11 +105,11 @@ export function sensorsToFeaturesTrendPage(
                     }
                     // Only blue or yellow arrows
                     if (threshold === 'n/a') {
-                        if (sensor.trends[parameter + "_percentage_change"] > 0) {
+                        if (sensor.trends["percentage_change"] > 0) {
 
                             trend_type = "trendUp";
 
-                        } else if (sensor.trends[parameter + "_percentage_change"] < 0) {
+                        } else if (sensor.trends["percentage_change"] < 0) {
 
                             trend_type = "trendDown";
 
@@ -120,23 +118,23 @@ export function sensorsToFeaturesTrendPage(
                         }
                     } else {
                         // May have red arrows with Threshold check
-                        if (sensor.trends[parameter + "_percentage_change"] > 0 &&
-                            sensor.trends[parameter + "_last_average"] >= threshold) {
+                        if (sensor.trends["percentage_change"] > 0 &&
+                            sensor.trends["last_average"] >= threshold) {
 
                             trend_type = "overThresholdUp";
 
-                        } else if (sensor.trends[parameter + "_percentage_change"] > 0 &&
-                            sensor.trends[parameter + "_last_average"] < threshold) {
+                        } else if (sensor.trends["percentage_change"] > 0 &&
+                            sensor.trends["last_average"] < threshold) {
 
                             trend_type = "trendUp";
 
-                        } else if (sensor.trends[parameter + "_percentage_change"] < 0 &&
-                            sensor.trends[parameter + "_last_average"] < threshold) {
+                        } else if (sensor.trends["percentage_change"] < 0 &&
+                            sensor.trends["last_average"] < threshold) {
 
                             trend_type = "trendDown";
 
-                        } else if (sensor.trends[parameter + "_percentage_change"] < 0 &&
-                            sensor.trends[parameter + "_last_average"] > threshold) {
+                        } else if (sensor.trends["percentage_change"] < 0 &&
+                            sensor.trends["last_average"] > threshold) {
 
                             trend_type = "overThresholdDown";
 
@@ -148,11 +146,11 @@ export function sensorsToFeaturesTrendPage(
                     const units = the_parameter.unit;
 
                     trend_values = [
-                        (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + ' ' + units),
-                        (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + ' ' + units),
-                        (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + ' ' + units),
+                        (Number(sensor.trends["total_average"]).toFixed(2) + ' ' + units),
+                        (Number(sensor.trends["interval_average"]).toFixed(2) + ' ' + units),
+                        (Number(sensor.trends["last_average"]).toFixed(2) + ' ' + units),
                         (new Date(sensor["trend_end_time"]).toLocaleDateString()),
-                        (Number(sensor.trends[parameter + "_percentage_change"]).toFixed(2) + " %")
+                        (Number(sensor.trends["percentage_change"]).toFixed(2) + " %")
                     ]
                 }
             }
