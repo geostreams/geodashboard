@@ -14,7 +14,7 @@ import {
 } from '../actions';
 import {
     getTrendsPageTimeframes, getTrendsRegionsSettings, getTrendSettings,
-    getTrendsPageSettings, getTrendsEPASetting
+    getTrendsPageSettings, getTrendsSources
 } from '../utils/getConfig';
 import {
     createRegionalTrends, filterCustomTrendLocation, filterPresetTrendLocation,
@@ -91,12 +91,13 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
         case SET_TRENDS_SENSORS:
 
             let origSensors = action.sensors;
+            const trends_sources = getTrendsSources();
             let temp_sensors_object = [];
             let epa_sensor;
 
             origSensors.map(sensor => {
-                if (getTrendsEPASetting() === true) {
-                    if (sensor.properties.type.id === 'epa') {
+                if (trends_sources.size > 0) {
+                    if (trends_sources.indexOf(sensor.properties.type.id) > -1) {
                         epa_sensor = sensor;
                         temp_sensors_object = temp_sensors_object.concat(epa_sensor);
                     }
@@ -156,11 +157,11 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
 
             let temp_sensor_object = [];
 
-            action.sensors_trends.map(sensor => {
-                let temp_sensor = action.sensorsToFilter.filter((x) => x.id === sensor.id)[0];
-                temp_sensor['trends'] = sensor.data;
-                temp_sensor['trend_start_time'] = sensor.trend_start_time;
-                temp_sensor['trend_end_time'] = sensor.trend_end_time;
+            action.sensors_trends.map(sensor_trend => {
+                let temp_sensor = sensor_trend.sensor;
+                temp_sensor['trends'] = sensor_trend.data;
+                temp_sensor['trend_start_time'] = sensor_trend.trend_start_time;
+                temp_sensor['trend_end_time'] = sensor_trend.trend_end_time;
                 temp_sensor_object = temp_sensor_object.concat(temp_sensor);
             });
 
@@ -389,12 +390,13 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
 function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
 
     let all_sensors: Sensors = state.sensors;
-
+    const trends_sources = getTrendsSources();
     let trends_sensors = [];
     let epa_sensor;
+
     all_sensors.map(sensor => {
-        if (getTrendsEPASetting() === true) {
-            if (sensor.properties.type.id === 'epa') {
+        if (trends_sources.size > 0) {
+            if (trends_sources.indexOf(sensor.properties.type.id) > -1) {
                 epa_sensor = sensor;
                 trends_sensors = trends_sensors.concat(epa_sensor);
             }
