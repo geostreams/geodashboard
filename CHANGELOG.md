@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1114](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1114)
 - Added Explore Page Accordions Categories Section
   [GEOD-1124](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1124)
+- Added tooltip for line graph
+  [GEOD-1126](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1126)
 
 ### Changed
 - Changed the Explore Page Pills to be larger and have more descriptive text

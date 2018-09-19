@@ -57,8 +57,9 @@ D3Line._scales = function (el, data, state){
 };
 
 D3Line._drawPoints = function(el, state) {
-    const {class_name_line, class_name_dots, yAxisLabel, width, height, title, sources,
-    boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines} = state;
+    const {class_name_line, class_name_dots, yAxisLabel, width, height, title,  sources,
+    boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines, startAtZero,
+    hoverClass, overlayClass, tooltipClass } = state;
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
     let {data} = state;
@@ -69,7 +70,9 @@ D3Line._drawPoints = function(el, state) {
     g.remove();
     g_dots.remove();
     svg.selectAll("text").remove();
-
+    d3.selectAll(tooltipClass).remove();
+    svg.selectAll(".focus").remove();
+    svg.selectAll("rect").remove();
     // This creates a placeholder for the graph
     g = svg.append('g')
         .attr('class', 'd3-line-charts')
@@ -207,7 +210,6 @@ D3Line._drawPoints = function(el, state) {
          .style("text-anchor", "end")
          .text("Sources: ");
 
-
     let sourceLabelIndex = sourceLabel.selectAll(".graphs-sourceLabelIndex").data(sources, function(d) { return(d); });
     sourceLabelIndex.enter()
         .append("a")
@@ -219,6 +221,90 @@ D3Line._drawPoints = function(el, state) {
         .append("title")
         .text("Original data source");
     sourceLabelIndex.exit().remove();
+
+    const rect = svg.append("rect");
+
+    let focus = svg.append("g")
+        .attr("class", "focus")
+        .style("display", "none");
+
+    const yHoverClass = hoverClass + " y-hover-line";
+    focus.append("line")
+        .attr("class", yHoverClass)
+        .attr("y1", 0)
+        .attr("y2", graphHeight);
+
+    focus.append("circle")
+        .attr("r", 6)
+        .style("fill", "#38B649");
+
+    const overlay_text = focus.append("text")
+        .attr("x", 10)
+        .attr("dy", ".31em")
+        .style("fill", "white");
+
+    const overlay = svg.append("rect")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .attr("class", overlayClass)
+        .attr("width", graphWidth)
+        .attr("height", graphHeight)
+        .on("mouseover", function() { focus.style("display", null); })
+        .on("mousemove", mouse_move)
+        .on("mouseout", mouse_out);
+
+    const bisectDate =  d3.bisector(function(d) { return d.date; }).left;
+
+    function mouse_move() {
+
+        const x0 = scales.x.invert(d3.mouse(this)[0]);
+        let  i = bisectDate(data, x0, 1);
+        let d;
+        if(i >= data.length) {
+            d = data[i-1];
+        } else {
+           const d0 = data[i - 1];
+           const d1 = data[i];
+           d = x0.getTime() - d0.date.getTime() > d1.date.getTime() - x0.getTime() ? d1 : d0;
+        }
+        let translate_x = margin.left + scales.x(d.date);
+        let translate_y = margin.top + scales.y(d.average);
+        focus.attr("transform", "translate(" + translate_x + "," + translate_y + ")");
+
+        overlay_text.selectAll("tspan").remove();
+        overlay_text.append("tspan")
+            .attr("x", 8)
+            .attr("dx", "0.2em")
+            .attr("dy", "0.6em")
+            .text("Date: " + d.date.getFullYear());
+        overlay_text.append("tspan")
+            .attr("x", 8 )
+            .attr("dx", "0.2em")
+            .attr("dy", "1.2em")
+            .text("Average: " + d.average.toFixed(2) + " " + yAxisLabel);
+
+        focus.select(".y-hover-line").attr("y2", graphHeight - scales.y(d.average));
+        const bbox = overlay_text.node().getBBox();
+        if(i > data.length * 0.65) {
+            translate_x -=  (bbox.width + 20);
+            translate_y += 4;
+            overlay_text.attr("transform", "translate("+ -(bbox.width + 20)+"," + 4 +")");
+        } else {
+            overlay_text.attr("transform", "translate(0,0)");
+        }
+        rect.attr("transform", "translate(" + (translate_x) + "," + translate_y + ")");
+        rect.style("display", null);
+        rect.attr("x", 4)
+            .attr("y", bbox.y - 4)
+            .attr("width", bbox.width + 10)
+            .attr("height", bbox.height + 10)
+            .style("fill", "#1B4557")
+            .style("fill-opacity", 0.9);
+    }
+
+    function mouse_out() {
+        focus.style("display", "none");
+        rect.style("fill-opacity", 0);
+    }
 
 };
 
