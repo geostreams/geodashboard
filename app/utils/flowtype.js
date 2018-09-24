@@ -249,4 +249,7 @@ type eventOnMap = {
 }
 export type InputEventMap = InputEventMap & eventOnMap;
 
+type SensorIDsType = Array<number>;
+export type SensorIDsList = SensorIDsType[];
+
 //type Dispatch = (action: Action | Promise<Action>) => Promise;

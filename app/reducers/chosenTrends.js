@@ -130,11 +130,11 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
 
             let temp_analysis_object = [];
 
-            action.sensors_trends.map(sensor => {
-                let temp_sensor = action.sensorsToFilter.filter((x) => x.id === sensor.id)[0];
-                temp_sensor['trends'] = sensor.data;
-                temp_sensor['trend_start_time'] = sensor.trend_start_time;
-                temp_sensor['trend_end_time'] = sensor.trend_end_time;
+            action.sensors_trends.map(sensor_trend => {
+                let temp_sensor = sensor_trend.sensor;
+                temp_sensor['trends'] = sensor_trend.data;
+                temp_sensor['trend_start_time'] = sensor_trend.trend_start_time;
+                temp_sensor['trend_end_time'] = sensor_trend.trend_end_time;
                 temp_analysis_object = temp_analysis_object.concat(temp_sensor);
             });
 
@@ -152,7 +152,7 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
                 sensor_season: 'all',
                 sensor_region: state.region
             });
-            
+
         case ADD_CHOOSE_TRENDS:
 
             let temp_sensor_object = [];
@@ -189,14 +189,14 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
             let temp_regions_object = [];
             let temp_trends_regions = Object.assign([], state.trends_regions);
             temp_trends_regions.map(region_sensor =>{
-                    let region = action.regions_trends.filter((x) => x.region_id === region_sensor.name);
-                    if(region.length >0 ){
-                        region_sensor['region_trends'] = region[0];
-                    } else {
-                        // this is add because of the old API
-                        region_sensor['region_trends'] = "no data";
-                    }
-                    temp_regions_object = temp_regions_object.concat(region_sensor);
+                let region = action.regions_trends.filter((x) => x.region_id === region_sensor.name);
+                if(region.length >0 ){
+                    region_sensor['region_trends'] = region[0];
+                } else {
+                    // this is add because of the old API
+                    region_sensor['region_trends'] = "no data";
+                }
+                temp_regions_object = temp_regions_object.concat(region_sensor);
             });
 
 
@@ -490,8 +490,11 @@ function filterTrendsSensors(state:ChosenTrendsState, view_type:string) {
                 }
                 return;
         }
+
     });
+
     return trends_sensors;
+
 }
 
 function clearDetails(state) {

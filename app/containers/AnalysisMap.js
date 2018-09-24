@@ -13,11 +13,13 @@ const mapStateToProps = (state) => {
         threshold_value: state.chosenTrends.threshold,
         trendSensors: state.chosenTrends.trends_sensors,
         selectedRegion: state.chosenTrends.region,
-        selectedParameter: state.chosenTrends.parameter
+        selectedParameter: state.chosenTrends.parameter,
+        parameters: state.parameters.parameters
     }
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
+
     return {
         onSelectShapeLocationTrend: (selectedPointsLocations) => {
             dispatch(addCustomTrendLocationsFilter(selectedPointsLocations));

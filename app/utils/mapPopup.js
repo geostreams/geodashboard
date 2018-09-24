@@ -129,7 +129,7 @@ export function popupTrends(feature: ol.Feature, styles){
             trends +
         '</table>';
     let paramsLength = 0;
-    if (sensorInfo.parameters.length > 0) {
+    if (sensorInfo.parameters && sensorInfo.parameters.length > 0) {
         paramsLength = sensorInfo.parameters.length;
     }
 

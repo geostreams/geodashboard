@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1119](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1119)
 - Endpoint for trends by stations using v3 instead of Clowder
   [GEOD-1134](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1134)
+- Endpoint for Exploratory Analysis by stations using v3 instead of Clowder
+  [GEOD-1140](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1140)
 
 ### Fixed
 - Missing scroll bar on Explore Page

@@ -58,7 +58,8 @@ export function sensorsToFeatures(sensors: Sensors, parameters: Parameters): Arr
 }
 
 export function sensorsToFeaturesTrendPage(
-    sensors: Sensors, parameter: string, trends_parameter_lake_regions: Array, parameters:Parameters): Array<ol.Feature> {
+    sensors: Sensors, parameter: string, trends_parameter_lake_regions: Array,
+    parameters:Parameters): Array<ol.Feature> {
 
     let features = Array();
 
@@ -240,8 +241,9 @@ export function sensorsToFeaturesTrendPage(
     return features;
 }
 
-export function sensorsToFeaturesTrendRegionPage(sensors: Sensors, parameter: string, season: string,
-                             trends_parameter_lake_regions: Array, parameters: Parameter): Array<ol.Feature> {
+export function sensorsToFeaturesTrendRegionPage(
+    sensors: Sensors, parameter: string, season: string,
+    trends_parameter_lake_regions: Array, parameters: Parameter): Array<ol.Feature> {
 
     let features = Array();
 
@@ -419,8 +421,10 @@ export function sensorsToFeaturesTrendRegionPage(sensors: Sensors, parameter: st
     return features;
 }
 
-export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: string, threshold: string, parameters: Parameters): Array<ol.Feature> {
+export function sensorsToFeaturesAnalysisPage(
+    sensors: Sensors, parameter: string, threshold: string, parameters: Parameters): Array<ol.Feature> {
     let features = Array();
+    const the_parameter = parameters.find(x => x.name === parameter);
     sensors.map((sensor) => {
 
         if (sensor.name !== 'ALL') {
@@ -447,23 +451,23 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
                     ]
 
                 } else {
-                    if (sensor.trends[parameter + "_percentage_change"] > 0 &&
-                        sensor.trends[parameter + "_last_average"] >= threshold) {
+                    if (sensor.trends["percentage_change"] > 0 &&
+                        sensor.trends["last_average"] >= threshold) {
 
                         trend_type = "overThresholdUp";
 
-                    } else if (sensor.trends[parameter + "_percentage_change"] > 0 &&
-                        sensor.trends[parameter + "_last_average"] < threshold) {
+                    } else if (sensor.trends["percentage_change"] > 0 &&
+                        sensor.trends["last_average"] < threshold) {
 
                         trend_type = "trendUp";
 
-                    } else if (sensor.trends[parameter + "_percentage_change"] < 0 &&
-                        sensor.trends[parameter + "_last_average"] < threshold) {
+                    } else if (sensor.trends["percentage_change"] < 0 &&
+                        sensor.trends["last_average"] < threshold) {
 
                         trend_type = "trendDown";
 
-                    } else if (sensor.trends[parameter + "_percentage_change"] < 0 &&
-                        sensor.trends[parameter + "_last_average"] > threshold) {
+                    } else if (sensor.trends["percentage_change"] < 0 &&
+                        sensor.trends["last_average"] > threshold) {
 
                         trend_type = "overThresholdDown";
 
@@ -473,11 +477,11 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
 
                     trend_values = [
                         threshold,
-                        (Number(sensor.trends[parameter + "_total_average"]).toFixed(2) + " mg/L"),
-                        (Number(sensor.trends[parameter + "_interval_average"]).toFixed(2) + " mg/L"),
-                        (Number(sensor.trends[parameter + "_last_average"]).toFixed(2) + " mg/L"),
+                        (Number(sensor.trends["total_average"]).toFixed(2) + " mg/L"),
+                        (Number(sensor.trends["interval_average"]).toFixed(2) + " mg/L"),
+                        (Number(sensor.trends["last_average"]).toFixed(2) + " mg/L"),
                         (new Date(sensor["trend_end_time"]).toLocaleDateString()),
-                        (Number(sensor.trends[parameter + "_percentage_change"]).toFixed(2) + " %")
+                        (Number(sensor.trends["percentage_change"]).toFixed(2) + " %")
                     ]
 
                 }
@@ -532,14 +536,7 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
                 }));
             }
 
-            let sensor_parameters = [];
-            sensor.parameters.filter(x => x !== null).map(y => {
-                    const parameter = parameters.find(x => x.name === y);
-                    if (parameter !== undefined && parameter.title !== undefined) {
-                        sensor_parameters.push(parameter.title);
-                    }
-                }
-            );
+            const parameter_title = the_parameter !== undefined ? the_parameter.title : '' ;
 
             feature.attributes = {
                 "dataSource": getSourceName(sensor.properties.type),
@@ -549,7 +546,6 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
                 "longitude": sensor.geometry.coordinates[0],
                 "location": sensor.properties.region,
                 "name": sensor.name,
-                "parameters": sensor_parameters,
                 "color": getColor(sensor.properties.type.id),
                 "trend_color": getTrendColor(trend_type),
                 "trend_type": trend_type,
@@ -557,6 +553,8 @@ export function sensorsToFeaturesAnalysisPage(sensors: Sensors, parameter: strin
                 "display_trends": true,
                 "trends_detail": true,
                 "region": getCustomTrendsRegion(sensor.properties.region),
+                "parameter": parameter_title,
+                "url_parameter": parameter
             };
 
             feature.setId(sensor.properties.popupContent);

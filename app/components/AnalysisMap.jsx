@@ -144,7 +144,7 @@ class AnalysisMap extends Component {
         this.state.areaPolygonSource.addFeatures(region_features);
 
         features = sensorsToFeaturesAnalysisPage(
-            map_items, this.props.selectedParameter, threshold);
+            map_items, this.props.selectedParameter, threshold, this.props.parameters);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
@@ -169,7 +169,7 @@ class AnalysisMap extends Component {
         map_items = this.props.sensors;
 
         let features = sensorsToFeaturesAnalysisPage(
-            map_items, this.props.selectedParameter, threshold);
+            map_items, this.props.selectedParameter, threshold, this.props.parameters);
 
         let vectorSource = new ol.source.Vector({
             features: features

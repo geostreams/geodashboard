@@ -1,7 +1,7 @@
 // @flow
 
-import type { Sensors, Dispatch, GetState, Parameters } from "../utils/flowtype";
-import {getTrendsSources, getWaterYearStatus} from "../utils/getConfig";
+import type { Sensors, Dispatch, GetState, SensorIDsList } from "../utils/flowtype";
+import {getTrendsSources} from "../utils/getConfig";
 
 export const SWITCH_BACKEND = 'SWITCH_BACKEND';
 export const switchBackend = (selected: string, title: string, subtitle: string) => {
@@ -125,14 +125,14 @@ export function addSearchParameter(parameter: Array<string>) {
 
 // This Action is utilized by the Exploratory Analysis Page
 export const ADD_CHOOSE_ANALYSIS = 'ADD_CHOOSE_ANALYSIS';
-export function fetchAnalysis(parameter: string, total_year: number, interval: number) {
+export function fetchAnalysis(parameter: string, baseline: number, rolling: number) {
     return (dispatch: Dispatch, getState: GetState) => {
-        // For each sensor, get the start/end day for selected parameter from clowder API (the api is same as the one
-        // used for detail page, thus it should be quick). then get the trends result from the /datapoints/trends api.
         const state = getState();
-        const api = getApi(getState).api;
+        const api = getApi(getState).v3;
 
-        const trends_endpoint = api + '/api/geostreams/datapoints/trends?binning=year';
+        let trends_endpoint = api + "/api/cache/analysis?parameter=" + parameter +
+            "&baseline_years=" + baseline + "&rolling_years=" + rolling;
+
         let sensorsToFilter;
         if (state.chosenTrends.trends_sensors.length > 0) {
             sensorsToFilter = state.chosenTrends.trends_sensors;
@@ -153,97 +153,42 @@ export function fetchAnalysis(parameter: string, total_year: number, interval: n
 
         let temp_object = [];
 
-        let results = sensorsToFilter.map(sensor => {
+        sensorsToFilter.map(sensor => {
+            trends_endpoint += "&sensor_id=" + sensor.id
+        });
 
-            let start_time = new Date(sensor.min_start_time);
-            let end_time = new Date(sensor.max_end_time);
-
-            if (getWaterYearStatus() === true) {
-                // Use Water Year
-                if (start_time.getMonth() <= 9) {
-                    start_time = new Date(start_time.getFullYear(), 9, 1, 0, 0, 0);
-                } else {
-                    start_time = new Date((start_time.getFullYear() + 1), 9, 1, 0, 0, 0);
-                }
-                if (end_time.getMonth() >= 8) {
-                    end_time = new Date(end_time.getFullYear(), 8, 30, 23, 59, 59);
-                } else {
-                    end_time = new Date((end_time.getFullYear() - 1), 8, 30, 23, 59, 59);
-                }
-            }
-
-            let json_data;
-
-            const end_year: number = end_time.getFullYear();
-            const window_start: Date = new Date(end_time);
-            window_start.setFullYear(end_year - interval);
-
-            let start: Date = new Date(end_time);
-            if (total_year === 0) {
-                start = start_time;
-            } else {
-                start.setFullYear(end_year - total_year);
-            }
-
-            let trends_endpoint_args =
-                trends_endpoint +
-                "&sensor_id=" + sensor.id +
-                "&attributes=" + parameter +
-                "&window_start=" + window_start.toISOString() +
-                "&window_end=" + end_time.toISOString() +
-                "&since=" + start.toISOString() +
-                "&until=" + end_time.toISOString();
-
-            const result = fetch(trends_endpoint_args).then(response => {
-                const json = response.json();
-                return json;
-            }).then(json => {
-                if (json && json.length > 0) {
-                    let trend_start = new Date(json[0].start_time);
-                    let trend_end = new Date(json[0].end_time);
-                    let time_frame_trends_days = Math.floor((trend_end - trend_start) / (1000 * 60 * 60 * 24));
-                    if (time_frame_trends_days >= (total_year * 365) - 180 && json.length >= 1) {
-                        json_data = json[0].properties;
+        fetch(trends_endpoint).then(response => {
+            const json = response.json();
+            return json;
+        }).then(json => {
+            if(json && Object.keys(json).length > 0) {
+                let json_data;
+                json["trends"].map(trend_sensor => {
+                    if(trend_sensor.diff >= rolling) {
+                        json_data = trend_sensor.properties;
                     } else {
                         json_data = null;
                     }
                     temp_object = temp_object.concat({
-                        id: sensor.id,
                         data: json_data,
-                        trend_start_time: start_time,
-                        trend_end_time: end_time
+                        trend_start_time: trend_sensor.first_year,
+                        trend_end_time: trend_sensor.last_time,
+                        sensor: trend_sensor.sensor
                     })
-                } else {
-                    temp_object = temp_object.concat({
-                        id: sensor.id,
-                        data: null,
-                        trend_start_time: null,
-                        trend_end_time: null
-                    });
-                }
-            }).catch(function (error) {
-                console.log(error);
-                console.log(trends_endpoint_args);
-                temp_object = temp_object.concat({
-                    id: sensor.id,
-                    data: null,
-                    trend_start_time: null,
-                    trend_end_time: null
-                });
-            });
-            return result;
+                })
+            }
+            return (dispatch({
+                type: ADD_CHOOSE_ANALYSIS,
+                sensors_trends: temp_object,
+                parameter,
+                sensorsToFilter
 
+            }))
+        }).catch(function (error) {
+            console.log(error);
+            console.log(trends_endpoint);
         });
 
-        Promise.all(results).then(s => {
-                return (dispatch({
-                    type: ADD_CHOOSE_ANALYSIS,
-                    sensors_trends: temp_object,
-                    parameter,
-                    sensorsToFilter
-                }))
-            }
-        );
     }
 }
 
@@ -257,7 +202,6 @@ export function fetchTrends(parameter: string, total_year: number, interval: num
         const api = getApi(getState).v3;
 
         const season = season_input;
-
 
         let trends_endpoint = api + '/api/cache/trends?parameter='+ parameter + "&season=" + season;
         const trends_sources = getTrendsSources();
@@ -307,10 +251,10 @@ export function fetchTrends(parameter: string, total_year: number, interval: num
 
     }
 }
+
 function getApi(getState: GetState) {
     const state = getState();
     return {api: state.backends.selected + '/clowder', v3: state.backends.selected + '/geostreams'};
-
 }
 
 export const ADD_REGION_TRENDS = 'ADD_REGION_TRENDS';
@@ -590,12 +534,12 @@ export function fetchParameters() {
                 })
 
             ).then( json => {
-                    let state = getState();
-                    dispatch({
-                        type: RECEIVE_MULTI_PARAMETERS,
-                        parameters: state.parameters,
-                        multi_parameter_map: state.parameters.multi_parameter_map
-                    })
+                let state = getState();
+                dispatch({
+                    type: RECEIVE_MULTI_PARAMETERS,
+                    parameters: state.parameters,
+                    multi_parameter_map: state.parameters.multi_parameter_map
+                })
             })
             .catch((error) => {
                 console.log('An ERROR occurred! ' + error);
