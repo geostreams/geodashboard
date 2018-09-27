@@ -74,7 +74,7 @@ export function sensorsToFeaturesTrendPage(
     trends_lake_regions_config.map(p => trends_lake_regions = p.regions.split(','));
     sensors.map((sensor) => {
 
-        if (sensor.name !== 'ALL') {
+        if (sensor.name && sensor.name !== 'ALL') {
 
             let feature = new ol.Feature({
                 geometry: new ol.geom.Point(

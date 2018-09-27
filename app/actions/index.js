@@ -292,7 +292,7 @@ export function fetchRegionDetailTrends(parameter: string, season: string, regio
         // For each region sensor for the Chart on the Trends Detail Page,
         // use the parameter, geocode, and season to get the Trends.
         const state = getState();
-        const trends_region_detail_endpoint = getApi(getState).v3 + "/api/trends/region/detail";
+        const trends_region_detail_endpoint = getApi(getState).v3 + "/api/trends/region/detail/";
         const regionsToFilter = state.chosenTrends.trends_regions.filter(r => r.properties.region.toUpperCase() === region.toUpperCase());
 
         let temp_object = [];
