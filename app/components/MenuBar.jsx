@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link, hashHistory} from 'react-router';
+import {Link} from 'react-router';
 import styles from '../styles/menuBar.css';
 import {
     Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
@@ -9,28 +9,10 @@ import {
     getApplicationOptions, getIEAlertMenuBarShow, getIEAlertHeader, getIEVersionEdge,
     getIEVersionEleven, getIEVersionsBeforeEleven, getMobileSizeMax, getMobileExplorePath
 } from "../utils/getConfig";
+import MenuDropdown from "./MenuDropdown";
+
 
 class MenuBar extends Component {
-    state: {
-        openMenu: boolean
-    };
-
-    constructor(props: Object) {
-        super(props);
-        this.state = {
-            openMenu: false
-        };
-        this.toggleTrendMenu = this.toggleTrendMenu.bind(this);
-        this.onClickMenuItem = this.onClickMenuItem.bind(this);
-    }
-
-    toggleTrendMenu(openMenuValue: boolean) {
-        this.setState({openMenu: openMenuValue});
-    };
-
-    onClickMenuItem(route: String) {
-        hashHistory.push(route);
-    }
 
     render() {
         let logo;
@@ -38,17 +20,17 @@ class MenuBar extends Component {
             logo = <div className={styles.header_image}>
                 <img src={require("../../theme/logo.png")} />
             </div>;
-        } catch(e) {
-
-        }
+        } catch(e) {}
 
         const applicationOptions = getApplicationOptions();
 
         const pageLinks = [];
         applicationOptions.pages.map( page => {
-            if(page.url) {
+            if (page.url) {
                 // If Explore Page and Mobile View Active, then replace V2 with V3 in the Menu Bar Link
-                if(page.url.includes('explore') && page.url.includes('geodashboard') && screen.width <= getMobileSizeMax()) {
+                if (page.url.includes('explore') && page.url.includes('geodashboard')
+                    && screen.width <= getMobileSizeMax()
+                ) {
                     page.url = getMobileExplorePath();
                 }
                 pageLinks.push(
@@ -56,30 +38,9 @@ class MenuBar extends Component {
                         <Link href={page.url}>{page.name}</Link>
                     </li>
                 );
-            } else if(page.children){
-
-                const menuItems = page.children.map(item =>
-                    <MenuItem role="menuitem" key={item.name} onClick={() => this.onClickMenuItem(item.url)}>
-                        <span className={styles.menu_list_item}>{item.name}</span>
-                    </MenuItem>
-                );
-                pageLinks.push(
-                    <li key={page.name} className={this.props.selected === page.name.toLowerCase() ? styles.active: ''}>
-                        <span className={styles.navigation_item ? styles.active: ''}
-                              onClick={() => this.toggleTrendMenu(true)}
-                        >
-                            {page.name}<Icon className={styles.buttonTrends} name="arrow_drop_down"/>
-                        </span>
-                        <MenuAnchor className={styles.inline}>
-                            <Menu className={styles.menu_style}
-                                  open={this.state.openMenu}
-                                  onClose={() => this.toggleTrendMenu(false)}
-                            >
-                                {menuItems}
-                            </Menu>
-                        </MenuAnchor>
-                    </li>
-                )
+            } else if (page.children){
+                let childPageLinks = <MenuDropdown pageName={page.name} pageChildren={page.children}/>;
+                pageLinks.push(childPageLinks);
             }
         });
 
@@ -122,7 +83,6 @@ class MenuBar extends Component {
                         <ul className={styles.navbar} id="navigation">
                             {pageLinks}
                         </ul>
-
                     </div>
                 </div>
             </header>
