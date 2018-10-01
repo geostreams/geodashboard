@@ -140,3 +140,40 @@
     fill: #E05869;
     stroke: #E05869;
 }
+
+.filterBackground {
+    background: #E6ECF1;
+    margin-right: 0px;
+}
+
+.filterTitle{
+    color: #1B4557;
+    opacity: 0.5;
+    margin-top: 11px;
+}
+
+.filterPadding{
+    padding-top: 11px;
+}
+
+.hoverLine {
+    stroke: #38B649;
+    stroke-width: 2px;
+    stroke-dasharray: 3,3;
+}
+
+.tooltip {
+    position: absolute;
+    width: 108px;
+    height: 39px;
+    padding: 2px;
+    font: 10px sans-serif;
+    background-color: #1B4557;
+    pointer-events: none;
+    color: white;
+}
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}

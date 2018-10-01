@@ -42,6 +42,9 @@ class Line extends Component {
             rectClass: styles.rect,
             medianClass: styles.median_line,
             outlierClass: styles.outlier,
+            hoverClass: styles.hoverLine,
+            overlayClass: styles.overlay,
+            tooltipClass: styles.tooltip,
             use_sensor_extent: getTimeSeriesSensorExtent(),
             selectedStartDate: this.props.selectedStartDate,
             selectedEndDate: this.props.selectedEndDate,
@@ -51,6 +54,7 @@ class Line extends Component {
             domain: this.props.domain,
             yAxisLabel: this.props.yAxisLabel,
             title: this.props.title,
+            startAtZero:this.props.startAtZero
         }
     }
     componentWillUnmount() {
