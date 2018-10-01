@@ -1,6 +1,6 @@
 {
   "name": "geodashboard-v3",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "description": "Prototype of new Geodashboard using React.js to visualize data from Geostreaming API available in Clowder.",
   "main": "main.jsx",
   "scripts": {
