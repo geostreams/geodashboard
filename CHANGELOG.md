@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1126](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1126)
 - Added graph options in the detail page for starting graph at 0 or changing the x extent.
   [GEOD-1120](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1120)
+- Added About Page child options utilizing new Menu Bar Component
+  [GEOD-1143](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1143)
 
 ### Changed
 - Changed the Explore Page Pills to be larger and have more descriptive text

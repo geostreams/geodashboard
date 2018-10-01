@@ -11,7 +11,6 @@ import TrendsDetail from '../pages/TrendsDetail';
 import About from '../pages/About';
 import RouteMismatch from '../pages/RouteMismatch';
 import 'material-components-web/dist/material-components-web.min.css';
-import {getApplicationBackends} from '../utils/getConfig';
 import type {MapProps} from "../utils/flowtype";
 import {
     Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon
@@ -117,7 +116,8 @@ class App extends Component {
                 {popup_alert_content}
             </div>
         )
+
     }
 }
 
-export default App
+export default App;
