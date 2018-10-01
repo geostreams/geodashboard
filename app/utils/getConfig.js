@@ -431,6 +431,21 @@ export function getChartLineChoice() {
     return getValue;
 }
 
+export function getStartAtZeroChoice() {
+    let getValue = false;
+    if(window.configruntime.gd3.zero_start_choice) {
+        getValue = window.configruntime.gd3.zero_start_choice;
+    }
+    return getValue;
+}
+
+export function getUseSameTimescaleChoice(){
+    let getValue = false;
+    if(window.configruntime.gd3.same_timescale_choice) {
+        getValue = window.configruntime.gd3.same_timescale_choice;
+    }
+    return getValue;
+}
 export function getDownloadButtonPath() {
     let getValue = '/geostreams/datapoints/download?';
     if (window.configruntime.gd3.download_button_path) {

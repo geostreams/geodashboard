@@ -212,7 +212,12 @@ h1, h2, h3, h5, h6, p, ul {
 }
 
 .detail_title {
+    color: white;
     margin-left: 50px;
+}
+
+.detail_header {
+    padding: 14px 50px 18px;
 }
 
 .clusterChoiceText {
@@ -249,4 +254,15 @@ h1, h2, h3, h5, h6, p, ul {
     cursor: pointer;
     margin-left: 2em;
     float: right;
+}
+
+.close_detail {
+    cursor: pointer;
+    float: right;
+    color: white;
+    margin-right:20px;
+}
+
+.close_detail i {
+    color: white;
 }

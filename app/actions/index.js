@@ -506,10 +506,10 @@ export function updateAvailableSensors(idx: number) {
         const state2 = getState();
         const selected_filters = state2.searchFilters.selected;
         const selected_search = state2.selectedSearch;
-        const multi_parameters = state2.parameters.multi_parameter_map;
+        const multi_parameter_map = state2.parameters.multi_parameter_map;
         dispatch({
             type: UPDATE_AVAILABLE_SENSORS,
-            multi_parameters,
+            multi_parameter_map,
             selected_filters,
             selected_search
         })

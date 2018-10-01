@@ -1,4 +1,3 @@
-import {getTimeSeriesZeroStart} from "../../utils/getConfig";
 
 const D3BoxAndWhisker = {};
 const d3 = require('d3');
@@ -26,22 +25,20 @@ D3BoxAndWhisker.destroy = () =>  {};
 // Source: https://bl.ocks.org/mbostock/4061502
 D3BoxAndWhisker._drawPoints = function(el, state) {
     let {data, width, height, lineClass, rectClass, circleClass, centerClass, outlierClass,
-        medianClass, boxClass} = state;
+        medianClass, boxClass, startAtZero} = state;
 
     const margin = {top: 30, right: 20, bottom: 50, left: 10};
 
     width = width - margin.left - margin.right;
     height = height - margin.top - margin.bottom + 3;
 
-    const totalWidth = width + margin.left + margin.right;
-    const totalHeight = height + margin.top + margin.bottom;
     // Method A
     data = data.sort(d3.ascending);
     let svg = d3.select(el).selectAll('svg');
     svg.selectAll("*").remove();
     let g = svg.append("g").attr("transform", "translate(50,30)");
     let n = data.length;
-    const min = getTimeSeriesZeroStart()? 0 : data[0];
+    const min = startAtZero ? 0 : data[0];
     const max = data[n-1];
     const whiskers = iqr(1.5);
     let domain = null;

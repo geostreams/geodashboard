@@ -53,7 +53,10 @@ class LineChart extends Component {
                                    parameterSources={this.props.parameterSources}
                                    displayLines={this.props.displayLines}
                                    binType={this.props.binType}
-                                   id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}/></Row>)
+                                   id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}
+                                   startAtZero={this.props.startAtZero}
+                                   sameTimeScale={this.props.sameTimeScale}
+                            /></Row>)
                     }
                 } else {
                     charts.push(<Row key={parameter_id}>

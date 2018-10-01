@@ -89,9 +89,12 @@ export const gd3 = {
 
     // Make all time series have the same time frame
     time_series_sensor_extent: true,
+    // Allow users to choose if all the graphs have the same x-axis or match the data.
+    same_timescale_choice: true,
     // If true, time series y axis start at 0. If false the y axis starts at the minimum value for the function
     time_series_zero_start: false,
-
+    // Allow users to choose if the graphs y axis start at 0 or the minimum value in the data
+    zero_start_choice: true,
     // Detail Graph Lines ****
     // Detail Graph Display Lines Default Value
     // - 'true' === display lines by default

@@ -49,7 +49,9 @@ class Chart extends Component {
 
             boxAndWhiskers.push(
                 <BoxAndWhiskers key={title}
-                               data={BAWValues}/>
+                                data={BAWValues}
+                                startAtZero={this.props.startAtZero}
+                />
             );
         }
 
@@ -73,6 +75,8 @@ class Chart extends Component {
                                   displayLines={this.props.displayLines}
                                   title={title}
                                   sources={sources}
+                                  startAtZero={this.props.startAtZero}
+                                  sameTimeScale={this.props.sameTimeScale}
                             />
                         </div>
                     </div>

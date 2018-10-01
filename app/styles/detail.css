@@ -41,7 +41,7 @@
     float: right;
 }
 
-.season_label {
+.season_margin {
     margin-left: 50px;
     margin-right: 20px;
 }
@@ -107,6 +107,8 @@
 
 .detailDownloadButtonPosition {
     margin-top: 1em;
+    margin-right: 10%;
+    float: right;
 }
 
 .detailDownloadButton {

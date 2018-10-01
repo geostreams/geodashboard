@@ -49,18 +49,16 @@ class DateSlider extends Component {
         return (
 
             <div>
-            <span className={styles.start}>{minDate.format("MM/DD/YYYY")}</span>
+            <span className={styles.start}>{selectedStartDate.format("MM/DD/YYYY")}</span>
             <div className={styles.dateWrapper} >
             <Range min={0} max={maxValue}
                    defaultValue={[selected_start, selected_end]}
                    allowCross={false}
                    tipFormatter={value => this.popupDateValue(value)}
                    onAfterChange={this.onSliderChange}
-
             />
             </div>
-            <span className={styles.end}>{maxDate.format("MM/DD/YYYY")}</span> <br/>
-            Selected: {selectedStartDate.format("MM/DD/YYYY")} - {selectedEndDate.format("MM/DD/YYYY")}
+            <span className={styles.end}>{selectedEndDate.format("MM/DD/YYYY")}</span> <br/>
         </div>
         );
     }

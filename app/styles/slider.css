@@ -1,7 +1,6 @@
 .dateWrapper{
-    width: 450px;
+    width: 60%;
     display: inline-block;
-    margin-top: 20px;
 }
 
 .yearWrapper{
@@ -13,9 +12,11 @@
 .start {
     display: inline-block;
     margin-right: 20px;
+    margin-bottom: 10px;
 }
 
 .end {
     display: inline-block;
     margin-left: 20px;
 }
+

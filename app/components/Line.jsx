@@ -45,7 +45,7 @@ class Line extends Component {
             hoverClass: styles.hoverLine,
             overlayClass: styles.overlay,
             tooltipClass: styles.tooltip,
-            use_sensor_extent: getTimeSeriesSensorExtent(),
+            use_sensor_extent: this.props.sameTimeScale,
             selectedStartDate: this.props.selectedStartDate,
             selectedEndDate: this.props.selectedEndDate,
             sources: this.props.sources,

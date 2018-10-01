@@ -13,3 +13,23 @@
 {
     background-color: #a4addf;
 }
+.rc-slider-rail {
+    background-color: rgba(0,0,0,0.26);
+}
+
+.rc-slider-track {
+    background-color: #3F51B5;
+}
+
+.rc-slider-handle {
+    border-color: #3F51B5;
+}
+
+.mdc-tab--active {
+    background-color: #E6ECF1;
+    color: #1B4557;
+}
+
+.mdc-tab-bar {
+    margin-left: 50px;
+}

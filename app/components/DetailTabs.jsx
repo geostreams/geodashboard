@@ -16,7 +16,7 @@ class DetailTabs extends Component {
             });
         }
         let pageTabs = (
-            <div className={styles.tabBackground}>
+            <div>
                 <Tabbar key='detail_tabs'>
                     {tabs}
                 </Tabbar>

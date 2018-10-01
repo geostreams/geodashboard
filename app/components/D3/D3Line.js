@@ -1,5 +1,4 @@
 import {boxQuartiles, iqr}  from "./D3BoxAndWhiskers";
-import {getTimeSeriesZeroStart, getTimeSeriesSensorExtent} from "../../utils/getConfig";
 
 const D3Line = {};
 const d3 = require('d3');
@@ -35,7 +34,7 @@ D3Line._scales = function (el, data, state){
     const x = d3.scaleTime()
         .range([0, width]);
 
-    if(getTimeSeriesSensorExtent()) {
+    if(state.use_sensor_extent) {
         //Use as extent the full sensor range
         x.domain([state.selectedStartDate, state.selectedEndDate]);
     } else {
@@ -45,7 +44,7 @@ D3Line._scales = function (el, data, state){
 
     const y = d3.scaleLinear()
         .range([height, 0]);
-    if(getTimeSeriesZeroStart()) {
+    if(state.startAtZero) {
         y.domain([0, d3.max(data, function(d){return d.average;})]);
     } else {
         y.domain([d3.min(data, function(d){return d.average;}),
@@ -57,12 +56,12 @@ D3Line._scales = function (el, data, state){
 };
 
 D3Line._drawPoints = function(el, state) {
-    const {class_name_line, class_name_dots, yAxisLabel, width, height, title,  sources,
+    const {class_name_line, class_name_dots, yAxisLabel, width, height, sources,
     boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines, startAtZero,
     hoverClass, overlayClass, tooltipClass } = state;
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
-    let {data} = state;
+    let {data, title} = state;
     const svg = d3.select(el).selectAll('svg');
     // The next 4 lines clean up previously existing graphs
     let g = svg.selectAll('.d3-line-charts');
@@ -100,7 +99,7 @@ D3Line._drawPoints = function(el, state) {
 
     let domain = null;
     averages = averages.sort(d3.ascending);
-    const min = getTimeSeriesZeroStart() ? 0 : averages[0];
+    const min = startAtZero ? 0 : averages[0];
     const max = averages[averages.length-1];
     const quartileData = averages.quartiles = boxQuartiles(averages);
     const box = g.selectAll("rect.box")
@@ -193,7 +192,10 @@ D3Line._drawPoints = function(el, state) {
         .attr("cx", function(d) {return scales.x(d.date)})
         .attr("cy", function(d) { return scales.y(d.average)})
         .attr("r", 2);
-
+    let parsed_title = title;
+    if (title.length > 35) {
+        parsed_title = title.substring(0, 35) + "..."
+    }
     // Add title and sources
     svg.append("text")
         .attr("x", margin.left)
@@ -201,7 +203,8 @@ D3Line._drawPoints = function(el, state) {
         .attr("text-anchor", "left")
         .style("font-size", "16px")
         .style("text-decoration", "bold")
-        .text(title);
+        .text(parsed_title)
+        .append("svg:title").text(title);
 
     // Adding sources in the top right
     let sourceLabel = svg.append("text")

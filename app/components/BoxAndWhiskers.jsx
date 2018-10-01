@@ -35,6 +35,7 @@ class BoxAndWhiskers extends Component {
             outlierClass: styles.outlier,
             medianClass: styles.median_line,
             data: this.props.data,
+            startAtZero:this.props.startAtZero
         }
     }
 

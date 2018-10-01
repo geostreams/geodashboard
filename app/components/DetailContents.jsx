@@ -8,8 +8,9 @@ import styles from '../styles/detail.css';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import {Checkbox, FormField, Icon} from 'react-mdc-web';
 import {
-    getMobileSizeMax, getDetailPageSeparateInfoText, getDetailPageCombinedInfoText,
-    getDetailPageBAWInfoText, getChartLineDefault, getChartLineChoice
+    getMobileSizeMax, getDetailPageSeparateInfoText, getDetailPageCombinedInfoText, getTimeSeriesZeroStart,
+    getDetailPageBAWInfoText, getChartLineDefault, getChartLineChoice, getStartAtZeroChoice, getUseSameTimescaleChoice,
+    getTimeSeriesSensorExtent
 } from '../utils/getConfig';
 import Select from './material/Select';
 import DateSlider from "./DateSlider";
@@ -29,7 +30,10 @@ class DetailContents extends Component {
             showSeasonFilter: false,
             selectedSeason: "",
             displayLines: getChartLineDefault(),
-            binType: "year",
+            startAtZero: getTimeSeriesZeroStart(),
+            sameTimeScale: getTimeSeriesSensorExtent(),
+            selectAllDates: true,
+            binType: "year"
         };
         this.closeParameterDialog = this.closeParameterDialog.bind(this);
         this.openParameterDialog = this.openParameterDialog.bind(this);
@@ -41,6 +45,9 @@ class DetailContents extends Component {
         this.onChangeSeason = this.onChangeSeason.bind(this);
         this.displayChartLines = this.displayChartLines.bind(this);
         this.updateBinningType = this.updateBinningType.bind(this);
+        this.startAtZero = this.startAtZero.bind(this);
+        this.sameTimeScale = this.sameTimeScale.bind(this);
+        this.selectAllDates = this.selectAllDates.bind(this);
     }
 
     componentWillMount() {
@@ -101,7 +108,21 @@ class DetailContents extends Component {
 
     onSliderChange(value) {
         this.setState({selectedStartDate: value[0], selectedEndDate: value[1]});
+        if (value[0].getTime() !== new Date(this.props.sensor.min_start_time).getTime() ||
+            value[1].getTime() !== new Date(this.props.sensor.max_end_time).getTime()) {
+            this.setState({selectAllDates: false});
+        }
+        if (value[0].getTime() === new Date(this.props.sensor.min_start_time).getTime() &&
+            value[1].getTime() === new Date(this.props.sensor.max_end_time).getTime()) {
+            this.setState({selectAllDates: true});
+        }
         this.updateBinningType(value[0], value[1]);
+    }
+
+    selectAllDates() {
+        this.setState({selectedStartDate: new Date(this.props.sensor.min_start_time),
+            selectedEndDate: new Date(this.props.sensor.max_end_time),
+            selectAllDates: true})
     }
 
     closeParameterDialog() {
@@ -133,13 +154,17 @@ class DetailContents extends Component {
     }
 
     displayChartLines() {
-        const checkbox = document.getElementById('displayLines');
-        if (checkbox.checked === true) {
-            this.setState({displayLines: true});
-        } else {
-            this.setState({displayLines: false});
-        }
+        this.setState({displayLines: !this.state.displayLines})
     };
+
+    startAtZero() {
+        this.setState({startAtZero: !this.state.startAtZero})
+    }
+
+    sameTimeScale() {
+        this.setState({sameTimeScale: !this.state.sameTimeScale})
+    }
+
 
     render() {
 
@@ -187,26 +212,82 @@ class DetailContents extends Component {
                 let season_filter;
                 if(this.state.showSeasonFilter) {
                     // Setup the filter for region. Do more stuff
-                    season_filter = (<div>
-                        <span className={styles.season_label}> Season </span>
-                        <Select value={this.props.season} onChange={this.onChangeSeason} >
+                    season_filter = (<div className={styles.filterPadding}>
+                        <span className={[styles.filterTitle, styles.season_margin].join(" ")}> Season </span><br/>
+                        <Select className={styles.season_margin} value={this.props.season} onChange={this.onChangeSeason} >
                             <option value="spring" key="spring"> Spring </option>
                             <option value="summer" key="summer"> Summer </option>
                         </Select>
                     </div>);
                 }
 
+                let displayLineCheckbox;
+                if (getChartLineChoice()) {
+                    displayLineCheckbox =
+                        <FormField id="displayLines" key="displayLines">
+                            <Checkbox onChange={this.displayChartLines}
+                                      value="displayLines" key="displayLines" name="displayLines" id="displayLines"
+                                      checked={this.state.displayLines}
+                            />
+                            <label>Display Graph Lines</label>
+                        </FormField>;
+                }
+                let startAtZeroCheckbox;
+                if(getStartAtZeroChoice()) {
+                    startAtZeroCheckbox = <FormField id="startAtZero" key="startAtZero">
+                            <Checkbox onChange={this.startAtZero}
+                                      value="startAtZero" key="startAtZero" name="startAtZero" id="startAtZero"
+                                      checked={this.state.startAtZero}
+                            />
+                            <label>Start Data at Zero</label>
+                    </FormField>;
+                }
+                let useSameTimescaleCheckbox;
+                if(getUseSameTimescaleChoice()) {
+                    useSameTimescaleCheckbox =
+                        <FormField id="sameTimescale" key="sameTimescale">
+                            <Checkbox onChange={this.sameTimeScale}
+                                      value="sameTimescale" key="sameTimescale" name="sameTimescale" id="sameTimescale"
+                                      checked={this.state.sameTimeScale}
+                            />
+                            <label>Use Same Timescale</label>
+                        </FormField>;
+                }
+
+                let graphOptions = (
+                    <Col md={3} className={styles.filterPadding}>
+                        <span className={styles.filterTitle}> Graph Options </span><br/>
+                        <Row>
+                            {displayLineCheckbox}
+                            {startAtZeroCheckbox}
+                            {useSameTimescaleCheckbox}
+                        </Row>
+                    </Col>
+                )
+
                 filters = (
-                    <Row key="detail_filters" around="xs">
-                        <Col md={3}>
+                    <Row key="detail_filters" around="xs" className={styles.filterBackground}>
+                        <Col md={2}>
                             {season_filter}
                         </Col>
-                        <Col md={7}>
+                        <Col md={5}>
+                            <div className={styles.filterTitle}> Date Range </div>
+                           < FormField id="selectAllDates" key="selectAllDates">
+                            <Checkbox onChange={this.selectAllDates}
+                                      value="selectAllDates" key="selectAllDates" name="selectAllDates" id="selectAllDates"
+                                      checked={this.state.selectAllDates}
+                            />
+                            <label>Select All Dates</label>
+                        </FormField>
+                            <br/>
                             <DateSlider start={minDate} end={maxDate}
                                         selectedStart={selected_start} selectedEnd={selected_end}
                                         onSliderChange={this.onSliderChange}
                             />
                         </Col>
+                        {graphOptions}
+
+
                         <Col md={2}>
                             <DetailPageDownload
                                 selected_parameters={this.state.selected_parameters}
@@ -233,6 +314,9 @@ class DetailContents extends Component {
                                    selected_parameters={this.state.selected_parameters}
                                    displayLines={this.state.displayLines}
                                    binType={this.state.binType}
+                                   startAtZero={this.state.startAtZero}
+                                   sameTimeScale={this.state.sameTimeScale}
+
                 />;
             } else if(chart_type === "stacked_line") {
                 graph = <StackedLineChart sensorName={sensor.name} sensor={sensor}
@@ -255,21 +339,11 @@ class DetailContents extends Component {
             }
         }
 
-        let displayLinesChoice = <div> </div>;
-        if (getChartLineChoice() === true) {
-            displayLinesChoice =
-                <FormField id="displayLines" key="displayLines">
-                    <Checkbox onChange={this.displayChartLines}
-                              value="displayLines" key="displayLines" name="displayLines" id="displayLines"
-                              checked={this.state.displayLines}
-                    />
-                    <label>Display Graph Lines</label>
-                </FormField>;
-        }
-
         return (
+            <div>
+            {filters}
             <Grid fluid>
-                {filters}
+
                 <Row key="detail_contents" around="xs">
                     <Col md={3}>
                         <Row key="parameter_title" className={styles.parameters_list} >
@@ -297,15 +371,13 @@ class DetailContents extends Component {
                             </Col>
                             {box_and_whiskers_header}
                         </Row>
-                        <Row>
-                            {displayLinesChoice}
-                        </Row>
                         <Row className={styles.parameters_chart_positioning}>
                             {graph}
                         </Row>
                     </Col>
                 </Row>
             </Grid>
+            </div>
         );
 
     }

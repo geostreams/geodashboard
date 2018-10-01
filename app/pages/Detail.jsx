@@ -5,9 +5,10 @@ import Menu from '../containers/MenuBar';
 import DetailTabs from '../components/DetailTabs';
 import Spinner from '../components/Spinner';
 import DetailContents from '../containers/DetailContents';
-import {getMobileSizeMax, getSourceName, getMobileExplorePath} from "../utils/getConfig";
+import {getMobileSizeMax, getSourceName, getMobileExplorePath, getColor} from "../utils/getConfig";
 import { resetDetailPage } from '../actions';
 import type { Dispatch } from '../utils/flowtype'
+import { Row, Col } from 'react-flexbox-grid';
 import styles from '../styles/main.css';
 import {Icon} from 'react-mdc-web';
 
@@ -100,9 +101,23 @@ class Detail extends Component {
                     href={getMobileExplorePath()}>Explore Mobile</Link><Icon name="chevron_right"/> {sensor.name}
                 </h1>);
             } else {
-                title = (<h1 className={styles.detail_title}>
-                    <Link  href={"/#explore/all"}> <Icon name="arrow_back"/></Link>
-                    {source_name} <Icon name="chevron_right"/> {sensor.properties.popupContent}</h1>);
+                const background_color = getColor(sensor.properties.type.id);
+                title = (<h1 style={{backgroundColor: background_color}} >
+
+                   <Row>
+                       <Col md={11} className={styles.detail_header} >
+                           <span className={styles.detail_title}>
+                           {sensor.properties.popupContent} -  {source_name}
+                           </span>
+
+                       </Col>
+                        <Col md={1} className={styles.detail_header} >
+                            <span className={styles.close_detail}>
+                            <Link  href={"/#explore/all"}> <Icon name="close"/></Link>
+                            </span>
+                        </Col>
+                   </Row>
+                    </h1>);
             }
 
 
@@ -112,7 +127,7 @@ class Detail extends Component {
                 <Menu selected='explore'/>
                 {title}
                 {display_tabs}
-                <div className={styles.content}>
+                <div>
                     <DetailContents sensor={this.state.sensor}
                                     category_parameters={this.state.category_mappings[selected_category]["parameters"]}
                                     chart_type = {this.state.category_mappings[selected_category]["type"]}/>
