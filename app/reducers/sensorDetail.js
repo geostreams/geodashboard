@@ -72,7 +72,7 @@ function collect_data(data){
 
     let output = [];
     for(let key in data.properties){
-        output[key] = groupBy(data.properties[key], 'label', 'average', getProcessedProperty());
+        output[key] = groupBy(data.properties[key], 'date', 'average', getProcessedProperty());
     }
     return output;
 }

@@ -52,7 +52,7 @@ class ChartMultiLine extends Component {
                     sensor_data = sensor_data.filter(p => p.label.includes(selectedSeason))
                 }
                 sensor_data.map(function(d) {
-                    const datapoint_date = that.props.filterBySeason ? new Date(d.label.substring(0, 4)): new Date(d.label);
+                    const datapoint_date = new Date(d.date);
                     if(datapoint_date.getTime() > that.props.selectedStartDate.getTime() &&
                         datapoint_date.getTime() < that.props.selectedEndDate.getTime()) {
 
