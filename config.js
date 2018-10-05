@@ -1075,36 +1075,6 @@ export const gd3 = {
         }
     ],
 
-    // Exploratory Analysis Page Only
-    trends_analysis_baseline: [
-        {
-            "id": "17",
-            "value": 17,
-            "title": "17 Years"
-        },
-        {
-            "id": "30",
-            "value": 30,
-            "title": "30 Years"
-        }
-    ],
-
-    // Exploratory Analysis Page Only
-    trends_analysis_rolling: [
-        {
-            "id": "5",
-            "value": 5,
-            "title": "5 Years"
-        },
-        {
-            "id": "17",
-            "value": 17,
-            "title": "17 Years"
-        }
-    ],
-
-    // Exploratory Analysis Page Only
-    trends_analysis_water_year: false,
     // **********
 
     // These variables are for Map settings

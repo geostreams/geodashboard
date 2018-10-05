@@ -310,18 +310,6 @@ export function getIEAlertMenuBarShow() {
     return getValue;
 }
 
-export function getTrendsPageBaseline() {
-    return window.configruntime.gd3.trends_analysis_baseline;
-}
-
-export function getTrendsPageRolling() {
-    return window.configruntime.gd3.trends_analysis_rolling;
-}
-
-export function getWaterYearStatus() {
-    return window.configruntime.gd3.trends_analysis_water_year;
-}
-
 export function getShowDetailTabs() {
     let getValue = '';
     if (window.configruntime.gd3.show_detail_tabs) {
@@ -481,4 +469,3 @@ export function getExploreCategoriesOpen() {
     }
     return exploreCategoriesOpen;
 }
-

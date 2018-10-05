@@ -210,8 +210,8 @@ export type TrendsThresholdChoice = boolean;
 export type TrendsPageSensorsState = Sensors;
 export type TrendsPageRegionsState = TrendsRegions;
 export type TrendsViewType = string;
-export type TrendsBaselineTotalYear = string;
-export type TrendsRollingInterval = string;
+export type TrendsBaselineTotalYear = number;
+export type TrendsRollingInterval = number;
 
 export type ChosenTrendsState = {
     region: TrendsRegion,

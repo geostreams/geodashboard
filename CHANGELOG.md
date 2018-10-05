@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+- General Exploratory Analysis Page Updates
+  [GEOD-1149](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1149)
 
 ### Fixed
 

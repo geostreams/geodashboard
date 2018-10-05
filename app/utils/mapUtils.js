@@ -424,10 +424,10 @@ export function sensorsToFeaturesTrendRegionPage(
 export function sensorsToFeaturesAnalysisPage(
     sensors: Sensors, parameter: string, threshold: string, parameters: Parameters): Array<ol.Feature> {
     let features = Array();
-    const the_parameter = parameters.find(x => x.name === parameter);
+
     sensors.map((sensor) => {
 
-        if (sensor.name !== 'ALL') {
+        if (sensor.name && sensor.name !== 'ALL') {
 
             let feature = new ol.Feature({
                 geometry: new ol.geom.Point(
@@ -475,11 +475,13 @@ export function sensorsToFeaturesAnalysisPage(
                         trend_type = "noTrend";
                     }
 
+                    const the_parameter = parameters.find(x => x.name === parameter);
+                    const units = the_parameter.unit;
+
                     trend_values = [
-                        threshold,
-                        (Number(sensor.trends["total_average"]).toFixed(2) + " mg/L"),
-                        (Number(sensor.trends["interval_average"]).toFixed(2) + " mg/L"),
-                        (Number(sensor.trends["last_average"]).toFixed(2) + " mg/L"),
+                        (Number(sensor.trends["total_average"]).toFixed(2) + ' ' + units),
+                        (Number(sensor.trends["interval_average"]).toFixed(2) + ' ' + units),
+                        (Number(sensor.trends["last_average"]).toFixed(2) + ' ' + units),
                         (new Date(sensor["trend_end_time"]).toLocaleDateString()),
                         (Number(sensor.trends["percentage_change"]).toFixed(2) + " %")
                     ]
@@ -536,7 +538,16 @@ export function sensorsToFeaturesAnalysisPage(
                 }));
             }
 
-            const parameter_title = the_parameter !== undefined ? the_parameter.title : '' ;
+            let sensor_parameters = [];
+            if (sensor.parameters && (sensor.parameters.length > 0)) {
+                sensor.parameters.filter(x => x !== null).map(y => {
+                        const parameter = parameters.find(x => x.name === y);
+                        if (parameter !== undefined && parameter.title !== undefined) {
+                            sensor_parameters.push(parameter.title);
+                        }
+                    }
+                );
+            }
 
             feature.attributes = {
                 "dataSource": getSourceName(sensor.properties.type),
@@ -546,6 +557,7 @@ export function sensorsToFeaturesAnalysisPage(
                 "longitude": sensor.geometry.coordinates[0],
                 "location": sensor.properties.region,
                 "name": sensor.name,
+                "parameters": sensor_parameters,
                 "color": getColor(sensor.properties.type.id),
                 "trend_color": getTrendColor(trend_type),
                 "trend_type": trend_type,
@@ -553,8 +565,6 @@ export function sensorsToFeaturesAnalysisPage(
                 "display_trends": true,
                 "trends_detail": true,
                 "region": getCustomTrendsRegion(sensor.properties.region),
-                "parameter": parameter_title,
-                "url_parameter": parameter
             };
 
             feature.setId(sensor.properties.popupContent);

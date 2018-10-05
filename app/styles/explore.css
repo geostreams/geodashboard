@@ -46,6 +46,10 @@ nav {
     width: 30em !important;
 }
 
+div > span > aside > nav {
+    height: calc(100vh - 8.4em) !important;
+}
+
 div > span > aside {
     width: 20em !important;
 }

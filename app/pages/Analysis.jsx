@@ -11,10 +11,7 @@ import {
     Content, List, Cell, Grid, Textfield, Button
 } from 'react-mdc-web';
 import Map from '../containers/AnalysisMap';
-import {
-    getTrendSettings, getTrendRegions, getTrendsAnalysisDefaultValues,
-    getTrendsPageBaseline, getTrendsPageRolling
-} from '../utils/getConfig';
+import {getTrendSettings, getTrendRegions, getTrendsAnalysisDefaultValues} from '../utils/getConfig';
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsThresholds from '../containers/TrendsThresholds';
 import TrendsRegions from '../containers/TrendsRegions';
@@ -31,8 +28,6 @@ class Analysis extends Component {
         let trendsPageSettings = getTrendSettings();
         let trendsPageDefaults = getTrendsAnalysisDefaultValues();
         let trendsPageRegions = getTrendRegions();
-        let trendsPageBaseline = getTrendsPageBaseline();
-        let trendsPageRolling = getTrendsPageRolling();
 
         let trendsThresholdChoice = true;
         let trendsPageViewType = 'by-analysis';
@@ -60,8 +55,6 @@ class Analysis extends Component {
                                 <List className={analysisStyles.liststyle}>
                                     <TrendsCalculationSettings
                                         trends_defaults={trendsPageDefaults}
-                                        trends_baseline={trendsPageBaseline}
-                                        trends_rolling={trendsPageRolling}
                                     />
                                     <TrendsThresholds
                                         trends_thresholds={trendsPageSettings}
