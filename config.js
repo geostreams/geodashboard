@@ -805,8 +805,8 @@ export const gd3 = {
     trend_settings: [
         {
             "parameter": {
-                "id": "nitrate-as-n-mgl",
-                "title": "Nitrate as N"
+                "id": "discharge-ft3s",
+                "title": "Discharge"
             },
             "thresholds": [
                 {
@@ -828,8 +828,8 @@ export const gd3 = {
         },
         {
             "parameter": {
-                "id": "pH",
-                "title": "Water Acidity"
+                "id": "dissolved-oxygen-mgl",
+                "title": "Dissolved Oxygen"
             },
             "thresholds": [
                 {
@@ -851,8 +851,77 @@ export const gd3 = {
         },
         {
             "parameter": {
-                "id": "load-Mg",
-                "title": "Nitrate Load"
+                "id": "nitrate-nitrite-as-n-mgl",
+                "title": "Nitrate and Nitrite as N"
+            },
+            "thresholds": [
+                {
+                    "title": "Standard07",
+                    "region": "Region07",
+                    "value": 0.6
+                },
+                {
+                    "title": "Standard08",
+                    "region": "Region08",
+                    "value": 1.5
+                },
+                {
+                    "title": "Standard09",
+                    "region": "Region09",
+                    "value": 2.0
+                }
+            ]
+        },
+        {
+            "parameter": {
+                "id": "phosphorus-insitu-orthophosphate-as-p-mgl",
+                "title": "Phosphorous in Situ Orthophosphate as P"
+            },
+            "thresholds": [
+                {
+                    "title": "Standard01",
+                    "region": "Region01",
+                    "value": 3.1
+                },
+                {
+                    "title": "Standard02",
+                    "region": "Region02",
+                    "value": 1.1
+                },
+                {
+                    "title": "Standard03",
+                    "region": "Region03",
+                    "value": 2.5
+                }
+            ]
+        },
+        {
+            "parameter": {
+                "id": "turbidity-fnu",
+                "title": "Turbidity"
+            },
+            "thresholds": [
+                {
+                    "title": "Standard04",
+                    "region": "Region04",
+                    "value": 6.3
+                },
+                {
+                    "title": "Standard05",
+                    "region": "Region05",
+                    "value": 7
+                },
+                {
+                    "title": "Standard06",
+                    "region": "Region06",
+                    "value": 7.2
+                }
+            ]
+        },
+        {
+            "parameter": {
+                "id": "water-temperature-c",
+                "title": "Water Temperature"
             },
             "thresholds": [
                 {

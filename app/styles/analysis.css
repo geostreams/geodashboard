@@ -28,7 +28,7 @@
 }
 
 .liststyle {
-    width: 24em;
+    width: 25em;
     margin: 0em 0.1em 3em 0.1em;
     float: left;
     height: calc(100vh - 30em);
@@ -112,9 +112,9 @@
 
 .parametersCardStyle {
     max-height: 16em;
-    overflow-y: auto;
-    overflow-x: auto;
-    width: 21.2em;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+    width: 24em;
     margin: 1em 0em 0.5em 1em;
     padding: 0.2em 0.2em 0.2em 0em !important;
     top: 7.3em;

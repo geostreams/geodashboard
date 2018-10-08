@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1149](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1149)
 
 ### Fixed
+- Exploratory Analysis API GET Commands and Interface Behavior
+  [GEOD-1152](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1152)
 
 ## [3.0.0-alpha.4] - 2018-10-01
 

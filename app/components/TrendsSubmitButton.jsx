@@ -46,7 +46,7 @@ class TrendsSubmitButton extends Component {
         }
 
         let submit_button;
-        if (this.props.chosenParameter === '' ||
+        if (this.props.chosenRegion === '' || this.props.chosenParameter === '' ||
             this.props.baselinePeriod === '' || this.props.rollingPeriod === '' ||
             isNaN(this.props.baselinePeriod) || isNaN(this.props.rollingPeriod) ||
             this.props.thresholdChooseValue === 'none' ||

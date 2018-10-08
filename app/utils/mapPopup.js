@@ -118,8 +118,7 @@ export function popupTrends(feature: ol.Feature, styles){
         trendsRight = '' +
             '<tr><td><strong>Baseline Avg: </strong>' + trendValues[0] + '</td></tr>' +
             '<tr><td><strong>Rolling Avg: </strong>' + trendValues[1] + '</td></tr>' +
-            '<tr><td><strong>Latest Value: </strong>' + trendValues[2] + '</td></tr>' +
-            '<tr><td><strong>Latest Time: </strong>' + trendValues[3] + '</td></tr>';
+            '<tr><td><strong>Latest Value: </strong>' + trendValues[2] + '</td></tr>'
     }
 
     let trends = trendsLeft + trendsRight;

@@ -140,7 +140,9 @@ export function fetchAnalysis(parameter: string, baseline: number, rolling: numb
             sensorsToFilter = state.sensors.data;
         }
 
-        let number_to_filter = (sensorsToFilter.length);
+        const filteredByParam = sensorsToFilter.filter(r => r.parameters.includes(parameter));
+
+        let number_to_filter = (filteredByParam.length);
 
         dispatch({
             type: ADD_ANALYSIS_COUNT,
@@ -151,43 +153,72 @@ export function fetchAnalysis(parameter: string, baseline: number, rolling: numb
             type: RESET_TRENDS_SENSORS
         });
 
+        let sensor_id_array = [];
+        filteredByParam.map(sensor => {
+            sensor_id_array.push("&sensor_id=" + sensor.id);
+        });
+        sensor_id_array = sensor_id_array.sort();
+
         let temp_object = [];
+        let temp_sensors_array = [];
+        const max_sensors_length = 100;
+        let return_object = [];
+        let api_array = [];
 
-        sensorsToFilter.map(sensor => {
-            trends_endpoint += "&sensor_id=" + sensor.id
-        });
+        for (let i = 0; i <= number_to_filter; i += max_sensors_length) {
+            trends_endpoint = api + "/api/cache/analysis?parameter=" + parameter +
+                "&baseline_years=" + baseline + "&rolling_years=" + rolling;
 
-        fetch(trends_endpoint).then(response => {
-            const json = response.json();
-            return json;
-        }).then(json => {
-            if(json && Object.keys(json).length > 0) {
-                let json_data;
-                json["trends"].map(trend_sensor => {
-                    if(trend_sensor.diff >= rolling) {
-                        json_data = trend_sensor.properties;
-                    } else {
-                        json_data = null;
-                    }
-                    temp_object = temp_object.concat({
-                        data: json_data,
-                        trend_start_time: trend_sensor.first_year,
-                        trend_end_time: trend_sensor.last_time,
-                        sensor: trend_sensor.sensor
+            temp_sensors_array = [];
+
+            let slice_to_val = i + max_sensors_length;
+            temp_sensors_array = (sensor_id_array.slice(i, slice_to_val));
+
+            trends_endpoint += temp_sensors_array.join('');
+
+            api_array.push(trends_endpoint);
+        }
+
+        let results = api_array.map(api_endpoint => {
+            let result = fetch(api_endpoint).then(response => {
+                const json = response.json();
+                return json;
+            }).then(json => {
+                if (json && Object.keys(json).length > 0) {
+                    let json_data;
+                    json["trends"].map(trend_sensor => {
+                        if (trend_sensor.diff >= baseline) {
+                            json_data = trend_sensor.properties;
+                        } else {
+                            json_data = null;
+                        }
+                        temp_object = temp_object.concat({
+                            data: json_data,
+                            trend_start_time: trend_sensor.first_year,
+                            trend_end_time: trend_sensor.last_time,
+                            sensor: trend_sensor.sensor
+                        });
+                        return_object.concat(temp_object);
                     })
-                })
-            }
-            return (dispatch({
-                type: ADD_CHOOSE_ANALYSIS,
-                sensors_trends: temp_object,
-                parameter,
-                sensorsToFilter
+                }
 
-            }))
-        }).catch(function (error) {
-            console.log(error);
-            console.log(trends_endpoint);
+            }).catch(function (error) {
+                console.log(error);
+                console.log(api_endpoint);
+            });
+            return result;
         });
+
+        Promise.all(results).then(s => {
+                return (dispatch({
+                    type: ADD_CHOOSE_ANALYSIS,
+                    sensors_trends: temp_object,
+                    parameter,
+                    sensorsToFilter
+
+                }))
+            }
+        );
 
     }
 }
@@ -814,7 +845,6 @@ export function setTrendsTimeframes() {
 export const UPDATE_TRENDS_SENSORS = 'UPDATE_TRENDS_SENSORS';
 export function updateTrendsSensors(view_type: string) {
     return (dispatch: Dispatch) => {
-        dispatch(setTrendsTimeframes());
         dispatch({
             type: UPDATE_TRENDS_SENSORS,
             view_type
