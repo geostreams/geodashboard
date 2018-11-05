@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import {hashHistory} from 'react-router';
 import styles from '../styles/menuBar.css';
-import {
-    Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
-    Button, MenuItem, Menu, MenuAnchor, Icon
-} from 'react-mdc-web';
+import {MenuItem, Menu, MenuAnchor, Icon, Tab} from 'react-mdc-web';
 
 
 class MenuDropdown extends Component {
@@ -39,16 +36,16 @@ class MenuDropdown extends Component {
                 <span className={styles.menu_list_item}>{item.name}</span>
             </MenuItem>
         );
+
         return (
-            <li key={this.props.pageName}
-                className={this.props.selected === this.props.pageName.toLowerCase() ? styles.active : ''}
-            >
-                        <span className={styles.navigation_item ? styles.active : ''}
-                              onClick={() => this.toggleTrendMenu(true)}
-                        >
-                            {this.props.pageName}
-                            <Icon className={styles.buttonTrends} name="arrow_drop_down"/>
-                        </span>
+            <div>
+                <Tab key={this.props.pageName}
+                     active={this.props.selected === this.props.pageName.toLowerCase()}
+                     onClick={() => this.toggleTrendMenu(true)}
+                >
+                    {this.props.pageName}
+                    <Icon className={styles.buttonTrends} name="arrow_drop_down"/>
+                </Tab>
                 <MenuAnchor className={styles.inline}>
                     <Menu className={styles.menu_style}
                           open={this.state.openMenu}
@@ -57,7 +54,7 @@ class MenuDropdown extends Component {
                         {menuItems}
                     </Menu>
                 </MenuAnchor>
-            </li>
+            </div>
         );
 
     }

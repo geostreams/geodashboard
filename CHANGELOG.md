@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - General Exploratory Analysis Page Updates
   [GEOD-1149](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1149)
+- Updated the appearance of the Menu Bar in the Page Header
+  [GEOD-1138](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1138)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior

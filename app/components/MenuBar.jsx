@@ -1,10 +1,6 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
 import styles from '../styles/menuBar.css';
-import {
-    Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
-    Button, MenuItem, Menu, MenuAnchor, Icon
-} from 'react-mdc-web';
+import {Tabbar, Tab} from 'react-mdc-web';
 import {
     getApplicationOptions, getIEAlertMenuBarShow, getIEAlertHeader, getIEVersionEdge,
     getIEVersionEleven, getIEVersionsBeforeEleven, getMobileSizeMax, getMobileExplorePath
@@ -17,9 +13,10 @@ class MenuBar extends Component {
     render() {
         let logo;
         try {
-            logo = <div className={styles.header_image}>
-                <img src={require("../../theme/logo.png")} />
-            </div>;
+            logo =
+                <div>
+                    <img className={styles.header_image} src={require("../../theme/logo.png")} />
+                </div>;
         } catch(e) {}
 
         const applicationOptions = getApplicationOptions();
@@ -34,12 +31,12 @@ class MenuBar extends Component {
                     page.url = getMobileExplorePath();
                 }
                 pageLinks.push(
-                    <li key={page.name} className={this.props.selected === page.name.toLowerCase() ? styles.active: ''}>
-                        <Link href={page.url}>{page.name}</Link>
-                    </li>
+                    <Tab href={page.url} key={page.name} active={this.props.selected === page.name.toLowerCase()}>
+                        {page.name}
+                    </Tab>
                 );
             } else if (page.children){
-                let childPageLinks = <MenuDropdown pageName={page.name} pageChildren={page.children}/>;
+                let childPageLinks = <MenuDropdown key={page.name} pageName={page.name} pageChildren={page.children}/>;
                 pageLinks.push(childPageLinks);
             }
         });
@@ -80,9 +77,9 @@ class MenuBar extends Component {
                             {ie_error_text}
                             <hr className={styles.header_hr} />
                         </div>
-                        <ul className={styles.navbar} id="navigation">
+                        <Tabbar className={styles.navbar} id="navigation">
                             {pageLinks}
-                        </ul>
+                        </Tabbar>
                     </div>
                 </div>
             </header>

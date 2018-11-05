@@ -117,7 +117,7 @@ class ExploreLayersItems extends Component {
 
             this.props.layersVisibility.filter(layer => layer.layerGroup === group).map(layerInGroup => {
                 layersInformation =
-                    <ExploreLayersDetails
+                    <ExploreLayersDetails key={layerInGroup.title}
                         availableLayer={layerInGroup}
                         layersVisibility={this.props.layersVisibility}
                         selectLayers={this.selectLayers}

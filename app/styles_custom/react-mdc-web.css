@@ -13,6 +13,7 @@
 {
     background-color: #a4addf;
 }
+
 .rc-slider-rail {
     background-color: rgba(0,0,0,0.26);
 }
@@ -25,11 +26,33 @@
     border-color: #3F51B5;
 }
 
+.mdc-tab:hover {
+    background-color: #D3D3D3;
+    color: #385D71;
+}
+
 .mdc-tab--active {
-    background-color: #E6ECF1;
-    color: #1B4557;
+    background-color: #385D71;
+    color:  #FFFFFF;
+}
+
+.mdc-tab--active:hover {
+    background-color: #385D71;
+    color: #FFFFFF;
 }
 
 .mdc-tab-bar {
     margin-left: 50px;
+}
+
+.mdc-tab:hover > div > a {
+    text-decoration: none !important;
+    color: #385D71;
+}
+
+.mdc-tab > div > a,
+.mdc-tab--active > div > a,
+.mdc-tab--active:hover > div > a {
+    text-decoration: none !important;
+    color:  #FFFFFF;
 }
