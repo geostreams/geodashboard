@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
 import {
     Button, Card, CardTitle, CardSubtitle, CardHeader, CardText,
@@ -98,10 +97,21 @@ class ExploreCustomItemsTab extends Component {
                     >
                         {this.props.item.title}
                         <Icon className={"material-icons " + exploreStyles.accordionIcon}
-                              name={this.state.accordion_icon ? 'expand_less' : 'expand_more'}
+                              name={this.state.accordion_icon ? 'expand_more' : 'chevron_right'}
                         />
                     </ListHeader>
                     {list_cards}
+                </ListGroup>
+            );
+
+        } else {
+
+            return_list = (
+                <ListGroup className={exploreStyles.listWidthStyle}>
+                    <ListHeader className={exploreStyles.listHeaderStyle}>
+                        {this.props.item.title}
+                    </ListHeader>
+                    <Card className={exploreStyles.exploreCard}><CardText>None Available</CardText></Card>
                 </ListGroup>
             );
 

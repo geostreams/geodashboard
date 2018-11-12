@@ -82,7 +82,7 @@ class ExploreAccordionSections extends Component {
                             <span className={exploreStyles.regionCount}>
                                 ({source_data.length})
                                 <Icon className={"material-icons " + exploreStyles.accordionIcon}
-                                      name={this.state.inner_accordion_icon ? 'expand_less' : 'expand_more'}
+                                      name={this.state.inner_accordion_icon ? 'expand_more' : 'chevron_right'}
                                 />
                             </span>
                         </div>

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Hide and Display Sources on the Explore Page
+  [GEOD-1157](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1157)
 
 ### Changed
 - General Exploratory Analysis Page Updates

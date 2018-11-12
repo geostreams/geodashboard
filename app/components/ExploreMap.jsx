@@ -4,6 +4,7 @@
 
 import React, {Component} from 'react';
 import ol from 'openlayers';
+
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
@@ -21,6 +22,7 @@ class ExploreMap extends Component {
         expandedClusterLayer: ol.layer.Vector,
         expandedCluster: boolean
     };
+
     constructor(props: Object) {
         super(props);
         this.state = {
@@ -39,7 +41,8 @@ class ExploreMap extends Component {
         theMap.addLayer(multiLineLayer);
 
         this.setState({
-            expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true})
+            expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true
+        })
     };
 
     removeSpiderfiedClusterLayers = (theMap: ol.Map) => {
@@ -100,6 +103,10 @@ class ExploreMap extends Component {
         }
     };
 
+    popupHandleHelperClose = (overlay: ol.Overlay) => {
+        overlay.setPosition(undefined);
+    };
+
     mapDidUpdate = (theMap: ol.Map) => {
 
         let exploreLayers = [];
@@ -143,7 +150,7 @@ class ExploreMap extends Component {
 
         }
 
-        if(exploreLayers.length > 0){
+        if (exploreLayers.length > 0) {
 
             let all_map_layers = theMap.getLayers().getArray().slice();
             all_map_layers.map(map_layer => {
@@ -175,12 +182,12 @@ class ExploreMap extends Component {
         });
 
         if (features.length > 0) {
-            if (!this.state.expandedCluster && keep_map_view === false){
+            if (!this.state.expandedCluster && keep_map_view === false) {
                 theMap.getView().fit(tmpvectorSource.getExtent(), theMap.getSize());
             }
         }
 
-        if (that.props.showPopup) {
+        if (that.props.showPopup === true) {
             let featuresAtPixel = tmpvectorSource.getFeatures().find(function (feature) {
                 return feature.attributes.name === that.props.popupSensorname;
             });
@@ -194,11 +201,18 @@ class ExploreMap extends Component {
             //     that.removeSpiderfiedClusterLayers(that.state.map);
             // }
             // that.displayOverlappingMarkers(featuresAtPixel, that.state.map, that);
+        } else {
+            const overlayClose = theMap.getOverlayById("marker");
+            that.popupHandleHelperClose(overlayClose);
         }
 
     };
 
-    getFeature(){
+    mapDidMount = () => {
+        this.props.resetDetailPageSelection();
+    };
+
+    getFeature() {
         let sensors = this.props.sensors;
 
         if (screen.width <= getMobileSizeMax()) {
@@ -278,7 +292,7 @@ class ExploreMap extends Component {
                     style = (new ol.style.Style({
                         image: new ol.style.Icon({
                             anchor: [0.5, 1],
-                            src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( iconSvg ),
+                            src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg),
                             scale: scale_value
                         })
                     }));
@@ -290,7 +304,7 @@ class ExploreMap extends Component {
         });
     };
 
-    onChangeZoom = (theMap: ol.map) =>{
+    onChangeZoom = (theMap: ol.map) => {
         const that = this;
         removePopup(theMap);
         if (that.state.expandedCluster) {
@@ -306,6 +320,7 @@ class ExploreMap extends Component {
                           onMapSingleClick={this.popupHandler}
                           onMapChangeResolution={this.onChangeZoom}
                           mapDidUpdate={this.mapDidUpdate}
+                          mapDidMount={this.mapDidMount}
                           disableClusters={this.props.disable_clusters}
                 />
             </div>
