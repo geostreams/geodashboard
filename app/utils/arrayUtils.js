@@ -1,7 +1,7 @@
 export function inArray(array1, array2) {
-    if(array1.length > 0 && array2.length > 0) {
-        for(let i = 0; i < array1.length; i++) {
-            if(array2.indexOf(array1[i]) > -1) {
+    if (array1.length > 0 && array2.length > 0) {
+        for (let i = 0; i < array1.length; i++) {
+            if (array2.indexOf(array1[i]) > -1) {
                 return true;
             }
         }
@@ -11,16 +11,16 @@ export function inArray(array1, array2) {
 
 export function intersectArrays(array1, array2) {
     let t;
-    if(array2.length > array1.length) {
-        t=array2, array2=array1, array1 = t; //Swap array's so 1 is shorter than2
+    if (array2.length > array1.length) {
+        t = array2, array2 = array1, array1 = t; //Swap array's so 1 is shorter than2
     }
-    return array1.filter(function(e) {
+    return array1.filter(function (e) {
         return array2.indexOf(e) > -1
     });
 }
 
 export function sortByLabel(list) {
-    list.sort(function(a, b) {
+    list.sort(function (a, b) {
         const labelA = a.label.toUpperCase();
         const labelB = b.label.toUpperCase();
         if (labelA < labelB) {
@@ -35,22 +35,28 @@ export function sortByLabel(list) {
 }
 
 function sortWithOrder(order, key, list) {
-    list.sort(function(a, b){
-        const idxA = key === null ? order[a.toUpperCase()] : order[a[key].toUpperCase()];
-        const idxB = key === null ? order[b.toUpperCase()] : order[b[key].toUpperCase()];
-        if(idxA < idxB) {
+    list.sort(function (a, b) {
+        let idxA = key === null ? order[a.toUpperCase()] : order[a[key].toUpperCase()];
+        let idxB = key === null ? order[b.toUpperCase()] : order[b[key].toUpperCase()];
+
+        // Handle missing values in the list
+        idxA = idxA === undefined ? 9999 : idxA;
+        idxB = idxB === undefined ? 9999 : idxB;
+
+        if (idxA < idxB) {
             return -1;
         }
-        if(idxA > idxB) {
+        if (idxA > idxB) {
             return 1;
         }
+
         return 0
     });
     return list
 }
 
 export function sortBySource(list, order) {
-    if(Object.keys(order).length > 0) {
+    if (Object.keys(order).length > 0) {
         list = sortWithOrder(order, "id", list);
     } else {
         list = sortByLabel(list);
@@ -59,7 +65,7 @@ export function sortBySource(list, order) {
 }
 
 export function sortByRegion(list, order) {
-    if(Object.keys(order).length > 0) {
+    if (Object.keys(order).length > 0) {
         list = sortWithOrder(order, null, list);
     } else {
         list.sort();
@@ -75,15 +81,15 @@ export function sortByLake(list, order) {
 // Point in Polygon. same function from geodashboard
 // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html#Listing the Vertices
 
-export function pnpoly (x,y,coords) {
-    let vert = [ [0,0] ];
+export function pnpoly(x, y, coords) {
+    let vert = [[0, 0]];
 
     for (let i = 0; i < coords.length; i++) {
         for (let j = 0; j < coords[i].length; j++) {
             vert.push(coords[i][j])
         }
         vert.push(coords[i][0]);
-        vert.push([0,0])
+        vert.push([0, 0])
     }
 
     let inside = false;
@@ -109,10 +115,10 @@ export function serialize(obj: Object): string {
     return str.join("&");
 }
 
-export function sortSitesNumerically (source_data) {
+export function sortSitesNumerically(source_data) {
     // If the Name is a Number, then sort numerically instead of alphabetically
     if (source_data.length > 0 && !isNaN(source_data[0].name)) {
-        source_data.sort(function(x, y){
+        source_data.sort(function (x, y) {
             return x.name - y.name;
         });
     }
