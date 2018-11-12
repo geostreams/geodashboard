@@ -65,6 +65,7 @@ function receiveSensors(api: string, json: Sensors) {
         dispatch(updateAvailableFilters());
         dispatch(setTrendsSensors());
         dispatch(setAvailableLayers());
+        dispatch(initializeExploreDataSources());
     }
 }
 
@@ -937,4 +938,53 @@ export function setLayerOpacity(opacity: Array<string>) {
         type: SET_LAYER_OPACITY,
         opacity
     };
+}
+
+export const INITIALIZE_EXPLORE_DATASOURCES = 'INITIALIZE_EXPLORE_DATASOURCES';
+export function initializeExploreDataSources() {
+    return (dispatch: Dispatch, getState: GetState) => {
+        const state = getState();
+        const explore_filtering = state.exploreFiltering;
+        const sensors = state.sensors.data;
+        dispatch({
+            type: INITIALIZE_EXPLORE_DATASOURCES,
+            explore_filtering,
+            sensors
+        })
+    }
+}
+
+export const UPDATE_EXPLORE_DATASOURCE = 'UPDATE_EXPLORE_DATASOURCE';
+export function updateExploreDataSource(data_sources: Array<string>) {
+    return (dispatch: Dispatch) => {
+        dispatch({
+            type: UPDATE_EXPLORE_DATASOURCE,
+            data_sources
+        });
+        dispatch(updateExploreSensors());
+    }
+}
+
+export const UPDATE_EXPLORE_SENSORS = 'UPDATE_EXPLORE_SENSORS';
+export function updateExploreSensors() {
+    return (dispatch: Dispatch, getState: GetState) => {
+        const state = getState();
+        const explore_filtering = state.exploreFiltering;
+        dispatch({
+            type: UPDATE_EXPLORE_SENSORS,
+            explore_filtering
+        })
+    }
+}
+
+export const RESET_EXPLORE_SENSORS = 'RESET_EXPLORE_SENSORS';
+export function resetExploreSensors() {
+    return (dispatch: Dispatch, getState: GetState) => {
+        const state = getState();
+        const reset_sensors = state.sensors.data;
+        dispatch({
+            type: RESET_EXPLORE_SENSORS,
+            reset_sensors
+        })
+    }
 }

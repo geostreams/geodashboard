@@ -63,7 +63,7 @@ class DialogWrapper extends Component {
                     </DialogBody>
                 </Dialog>
                 <a onClick={this.openDialog} title={this.props.title}>
-                    <Icon className={styles.open_button_style} name="info"/>
+                    <Icon className={styles.open_button_style} name="info_outline"/>
                 </a>
             </span>
         );

@@ -130,6 +130,10 @@ class BasicMap extends Component {
     }
 
     componentDidMount() {
+        if (this.props.mapDidMount) {
+            this.props.mapDidMount(this.state.map, this.state.customLocationFilterVectorExtent);
+        }
+
         const clusterSource = new ol.source.Cluster({
             projection: "EPSG:3857",
             distance: getClustersDistance(),

@@ -87,7 +87,7 @@ class Explore extends Component {
                     getExploreSections().map(item => {
                         exploreCustomSections.push(
                             <ExploreCustomItemsTab
-                                key={item.title} data={this.props.data} sources={sources} item={item}
+                                key={item.title} data={this.props.explore_data} sources={sources} item={item}
                             />
                         );
                     });
@@ -96,7 +96,7 @@ class Explore extends Component {
                     this.props.parameterCategories.map(category => {
                         exploreCategories.push(
                             <ExploreCategoriesTab
-                                key={category.title} data={this.props.data} sources={sources}
+                                key={category.title} data={this.props.explore_data} sources={sources}
                                 parameterCategory={category} parameterMappings={this.props.parameterMappings}
                                 parameters={this.props.parameters}
                             />
@@ -108,7 +108,7 @@ class Explore extends Component {
                                         onClick={() => {this.clickedCategoriesAccordion()}}>
                                 Categories
                                 <Icon className={"material-icons " + exploreStyles.accordionIcon}
-                                      name={this.state.categories_accordion_icon ? 'expand_less' : 'expand_more'}
+                                      name={this.state.categories_accordion_icon ? 'expand_more' : 'chevron_right'}
                                 />
                             </ListHeader>
                             <div className={this.state.categories_accordion_icon ?
@@ -230,7 +230,8 @@ const mapStateToProps = (state) => {
         regions: state.sensors.regions,
         parameters: state.parameters.parameters,
         parameterCategories: state.parameters.categories,
-        parameterMappings: state.parameters.mappings
+        parameterMappings: state.parameters.mappings,
+        explore_data: state.sensors.explore_sensors,
     }
 };
 

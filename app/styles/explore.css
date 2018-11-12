@@ -244,7 +244,16 @@ img[src=""] {
 }
 
 .exploreSourcesIcon {
+    min-width: 25%;
+    background-color: #D3D3D3;
+}
+
+.exploreSourcesCountAndIcon {
+    width: 25%;
+    margin: auto -4.8em 0.2em 0;
+    z-index: 4;
     float: right;
+    cursor: pointer;
 }
 
 .listWidthStyle {
@@ -267,7 +276,41 @@ img[src=""] {
 }
 
 .exploreTitleCard {
-    font-size: larger !important;
+    display: flex;
+    font-size: large !important;
+}
+
+.exploreTitleLeft {
+    min-width: 20%;
+    text-align: center;
+}
+
+.exploreTitleRight {
+    width: 80%;
     background-color: #D3D3D3;
     padding: 1em;
+    margin: auto;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.exploreSourcesSelectionIcon {
+    position: relative;
+    top: calc(50% - 0.5em);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: xx-large;
+}
+
+div > span > aside > nav {
+    height: calc(100vh - 8.4em) !important;
+}
+
+.sourceItemsStyleOpen {
+    display: block;
+}
+
+.sourceItemsStyleClosed {
+    display: none;
 }

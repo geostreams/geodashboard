@@ -1,9 +1,11 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react'
 import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
-import {
-    Button, Card, CardTitle, CardHeader, CardText, Fab, Icon, List, ListHeader, ListGroup
-} from 'react-mdc-web';
+import {Button, Icon, List, ListHeader, ListGroup} from 'react-mdc-web';
 import {
     getMobileSourceNames, getMobileSizeMax, getMobileDetailPath, getRegionToTitleMap,
     getMobileFilterSensors, getSourceInfo, getShowSourceInfoBoxes, getExploreSourcesOpen
@@ -11,19 +13,26 @@ import {
 import DialogWrapper from '../components/DialogWrapper';
 import ExploreAccordionSections from '../containers/ExploreAccordionSections';
 import {sortSitesNumerically} from '../utils/arrayUtils';
+import ExploreSourceGroup from '../containers/ExploreSourceGroup';
 
 
 class ExploreSourcesTab extends Component {
-    constructor(props) {
+    state: {
+        accordion_icon: boolean,
+        source_icon: boolean,
+    };
+
+    constructor(props: Object) {
         super(props);
         this.state = {
             accordion_icon: getExploreSourcesOpen(),
+            source_icon: true,
         };
-        (this:any).clickSensor = this.clickSensor.bind(this);
-        (this:any).clickedSourcesAccordion = this.clickedSourcesAccordion.bind(this);
+        (this: any).clickSensor = this.clickSensor.bind(this);
+        (this: any).clickedSourcesAccordion = this.clickedSourcesAccordion.bind(this);
     }
 
-    clickSensor(id, name, coordinates, e) {
+    clickSensor(id: string, name: string, coordinates: Array<number>) {
         this.props.selectSensor(id, name, coordinates.slice(0, 2));
     };
 
@@ -91,68 +100,49 @@ class ExploreSourcesTab extends Component {
 
             } else {
 
-                if (this.state.accordion_icon) {
+                sites_count = 0;
+                let sourceInfo = getSourceInfo(source.id);
+                if (getShowSourceInfoBoxes() && sourceInfo !== undefined) {
+                    dialogContents = <DialogWrapper title={source.label} body={sourceInfo}/>;
+                } else {
+                    dialogContents = '';
+                }
 
-                    sites_count = 0;
-                    let sourceInfo = getSourceInfo(source.id);
-                    if (getShowSourceInfoBoxes() && sourceInfo !== undefined) {
-                        dialogContents = <DialogWrapper title={source.label} body={sourceInfo}/>;
-                    } else {
-                        dialogContents = '';
+                let regionToTitleMap = getRegionToTitleMap();
+
+                this.props.regions.map(region => {
+
+                    let tooltip_val = regionToTitleMap[region];
+                    if (tooltip_val === undefined) {
+                        tooltip_val = region;
+                    }
+                    let key_val = region + 'Sources';
+                    let section_label = region;
+
+                    let source_data = this.props.data.filter(data =>
+                        data.properties.type.id === source.id &&
+                        data.properties.region === region);
+
+                    // If the Name is a Number, then sort numerically instead of alphabetically
+                    source_data = sortSitesNumerically(source_data);
+                    sites_count = sites_count + source_data.length;
+                    if (source_data.length > 0) {
+                        contents.push(
+                            <ExploreAccordionSections
+                                sourceData={source_data} tooltipVal={tooltip_val} id={key_val}
+                                key={key_val} sectionLabel={section_label} sourceId={source.id}
+                            />
+                        )
                     }
 
-                    let regionToTitleMap = getRegionToTitleMap();
-
-                    this.props.regions.map(region => {
-
-                        let tooltip_val = regionToTitleMap[region];
-                        if (tooltip_val === undefined) {
-                            tooltip_val = region;
-                        }
-                        let key_val = region + 'Sources';
-                        let section_label = region;
-
-                        let source_data = this.props.data.filter(data =>
-                            data.properties.type.id === source.id &&
-                            data.properties.region === region);
-
-                        // If the Name is a Number, then sort numerically instead of alphabetically
-                        source_data = sortSitesNumerically(source_data);
-                        sites_count = sites_count + source_data.length;
-                        if (source_data.length > 0) {
-                            contents.push(
-                                <ExploreAccordionSections
-                                    sourceData={source_data} tooltipVal={tooltip_val} id={key_val}
-                                    key={key_val} sectionLabel={section_label} sourceId={source.id}
-                                />
-                            )
-                        }
-
-                    });
-
-                }
+                });
 
             }
 
             if (contents.length > 0) {
 
-                source_card = (
-                    <Card id={source.id} className={exploreStyles.exploreCard} key={source.id}>
-                        <CardHeader>
-                            <span className={exploreStyles.exploreSourcesIcon}>
-                                {dialogContents}
-                            </span>
-                            <CardTitle className={exploreStyles.exploreTitleCard}>
-                                <div>{source.label} ({sites_count})</div>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardText>
-                            <div key={this.id}>
-                                {contents}
-                            </div>
-                        </CardText>
-                    </Card>
-                );
+                source_card = <ExploreSourceGroup sites_count={sites_count} source={source} contents={contents}
+                                                  dialog_contents={dialogContents}/>;
 
                 if (screen.width > getMobileSizeMax()) {
                     source_card_group.push(
@@ -175,11 +165,13 @@ class ExploreSourcesTab extends Component {
             sourcesSection = (
                 <ListGroup className={exploreStyles.listWidthStyle}>
                     <ListHeader className={exploreStyles.listHeaderStyle}
-                                onClick={() => {this.clickedSourcesAccordion()}}
+                                onClick={() => {
+                                    this.clickedSourcesAccordion()
+                                }}
                     >
                         Explore Sources
                         <Icon className={"material-icons " + exploreStyles.accordionIcon}
-                              name={this.state.accordion_icon ? 'expand_less' : 'expand_more'}
+                              name={this.state.accordion_icon ? 'expand_more' : 'chevron_right'}
                         />
                     </ListHeader>
                     {source_card_group}
