@@ -24,8 +24,12 @@ class TrendDetailRight extends Component {
                 let trend = that.props.trends_regions.find(function(element) {
                     return element !== undefined && element.name === that.props.trends_region_id;
                 });
-                if( trend !== undefined && Object.keys(trend.trends_detail).length > 0) {
+                if( trend !== undefined && Object.keys(trend.trends_detail).length > 2) {
                     resolve(trend.trends_detail);
+                }
+                let show_spinner = that.props.show_spinner;
+                if(!show_spinner) {
+                    resolve([]);
                 }
 
             }, 3000);
@@ -63,24 +67,33 @@ class TrendDetailRight extends Component {
         const maxYear = Math.max.apply(null, years);
         const start_year = this.state.selectedStartYear === 0 ? minYear: this.state.selectedStartYear;
         const end_year = this.state.selectedEndYear === 0 ? maxYear : this.state.selectedEndYear;
+        let contents = <div></div>;
+        if(parameter) {
+
+            contents =
+                <div>
+                    <YearSlider start_year={minYear} end_year={maxYear}
+                                selectedStartYear = {start_year}
+                                selectedEndYear = {end_year}
+                                onSliderChange = {this.onSliderChange}/>
+                <TrendsGraph
+                trends_settings={this.props.trends_settings}
+                trends_region_id={this.props.trends_region_id}
+                trends_parameter={this.props.trends_parameter}
+                title={parameter.title}
+                units={parameter.unit}
+                trends_season={this.props.trends_season}
+                start_year={start_year}
+                end_year={end_year}
+                trends_regions={this.props.trends_regions}
+            />
+                </div>
+        }
         return (
             <div>
-                <YearSlider start_year={minYear} end_year={maxYear}
-                            selectedStartYear = {start_year}
-                            selectedEndYear = {end_year}
-                            onSliderChange = {this.onSliderChange}/>
-                <TrendsGraph
-                    trends_settings={this.props.trends_settings}
-                    trends_region_id={this.props.trends_region_id}
-                    trends_parameter={this.props.trends_parameter}
-                    title={parameter.title}
-                    units={parameter.unit}
-                    trends_season={this.props.trends_season}
-                    start_year={start_year}
-                    end_year={end_year}
-                    trends_regions={this.props.trends_regions}
-                />
+                {contents}
             </div>
+
         );
     }
 

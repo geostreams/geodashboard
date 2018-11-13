@@ -290,6 +290,7 @@ function getApi(getState: GetState) {
 }
 
 export const ADD_REGION_TRENDS = 'ADD_REGION_TRENDS';
+export const FAILED_RETRIEVING_REGION_TRENDS = 'FAILED_RETRIEVING_REGION_TRENDS';
 export function fetchRegionTrends(parameter: string, season: string) {
     return (dispatch: Dispatch, getState: GetState) => {
 
@@ -313,6 +314,11 @@ export function fetchRegionTrends(parameter: string, season: string) {
             }).catch(function (error) {
                 console.log(error);
                 console.log("Error retrieving trends by region: " + trends_region_endpoint);
+                dispatch({
+                    type: FAILED_RETRIEVING_REGION_TRENDS,
+                    parameter,
+                    season
+                })
             });
         return result;
     }
