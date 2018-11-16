@@ -111,6 +111,11 @@ export const gd3 = {
     // Property Name that contains the PROCESSED property name
     raw_processed_property: '',
 
+    // Detail Page Allow Season Bins
+    detail_season_bins: true,
+    // If Allow Season Bins, for which Sources?
+    detail_season_bins_sources: ['epa'],
+
     // Layers for the Explore Page
     exploreLayers: [],
 

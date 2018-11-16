@@ -2,9 +2,9 @@
  * @flow
  */
 
-import type { PropertiesType } from './flowtype';
+import type {PropertiesType} from './flowtype';
 
-export function getSourceName(source:PropertiesType):string {
+export function getSourceName(source: PropertiesType): string {
     const sourceName = window.configruntime.gd3.sourcename;
     return sourceName[source.id] !== undefined ? sourceName[source.id] : source.title;
 }
@@ -13,7 +13,7 @@ export function getSourceOrder() {
     return window.configruntime.gd3.source_order;
 }
 
-export function getSourceInfo(id:string) {
+export function getSourceInfo(id: string) {
     const sourceInfo = window.configruntime.gd3.source_information;
     return sourceInfo[id];
 }
@@ -38,7 +38,7 @@ export function getMobileExplorePath() {
     return window.configruntime.gd3.mobile_explore_path;
 }
 
-export function getCustomLocation(location:string):Object {
+export function getCustomLocation(location: string): Object {
     const additional_location = window.configruntime.gd3.additional_locations;
 
     return additional_location.find(
@@ -47,7 +47,7 @@ export function getCustomLocation(location:string):Object {
         });
 }
 
-export function getLakesOrdering(key:string){
+export function getLakesOrdering(key: string) {
     const additional_locations = window.configruntime.gd3.additional_locations;
     let order = {};
     additional_locations.map(location => {
@@ -57,25 +57,25 @@ export function getLakesOrdering(key:string){
     return order;
 }
 
-export function getRegionToTitleMap(){
+export function getRegionToTitleMap() {
     const additional_locations = window.configruntime.gd3.additional_locations;
     let map = {};
     additional_locations.map(location => {
-        if(Object.keys(map).indexOf(location.properties.region.toUpperCase()) < 0)
+        if (Object.keys(map).indexOf(location.properties.region.toUpperCase()) < 0)
             map[location.properties.region.toUpperCase()] = location.properties.title;
     });
 
     return map;
 }
 
-export function getLocationName(location:string):string {
+export function getLocationName(location: string): string {
     // old code, keep this for other geodashboard
     //const named_locations = window.configruntime.gd3.named_locations;
     //if( named_locations[location] !== undefined)
     //    return named_locations[location]
     const custom_location = getCustomLocation(location);
 
-    if( custom_location)
+    if (custom_location)
         return custom_location.properties.title;
     return location;
 }
@@ -105,7 +105,7 @@ export function getTrendsPageTimeframes() {
     return window.configruntime.gd3.trends_page_timeframes;
 }
 
-export function getCustomTrendsRegion(region:string):string {
+export function getCustomTrendsRegion(region: string): string {
     let custom_trends_region = '';
     let trendsPageRegions = getTrendsRegionsSettings();
 
@@ -134,7 +134,7 @@ export function getTrendRegions() {
         .concat(window.configruntime.gd3.additional_locations);
 }
 
-export function getCustomTrendRegion(region:string):Object {
+export function getCustomTrendRegion(region: string): Object {
     const trendsPageRegions = getTrendRegions();
 
     return trendsPageRegions.find(
@@ -175,7 +175,7 @@ export function getErrorText() {
 
 export function getLayersDetails() {
     let layersDetails = [];
-    if (window.configruntime.gd3.exploreLayers){
+    if (window.configruntime.gd3.exploreLayers) {
         layersDetails = window.configruntime.gd3.exploreLayers;
     }
     return layersDetails;
@@ -184,7 +184,7 @@ export function getLayersDetails() {
 export function getAvailableLayers() {
     let available_layers = [];
 
-    getLayersDetails().map(function(p) {
+    getLayersDetails().map(function (p) {
         // Check if blank for HTML
         if (p.legendImage.length === 0) {
             p.legendImage = "";
@@ -346,7 +346,7 @@ export function getRawProcessedInfoText() {
     let getValue = [];
     if (window.configruntime.gd3.detail_page_raw_processed) {
         let listValues = window.configruntime.gd3.detail_page_raw_processed;
-        listValues.map(function(value) {
+        listValues.map(function (value) {
             getValue.push({
                 'listText': value.listText,
             })
@@ -397,7 +397,7 @@ export function clustersChoiceOption() {
 
 export function getTimeSeriesSensorExtent() {
     let time_series_sensor_extent = false;
-    if(window.configruntime.gd3.time_series_sensor_extent) {
+    if (window.configruntime.gd3.time_series_sensor_extent) {
         time_series_sensor_extent = true;
     }
     return time_series_sensor_extent;
@@ -421,19 +421,20 @@ export function getChartLineChoice() {
 
 export function getStartAtZeroChoice() {
     let getValue = false;
-    if(window.configruntime.gd3.zero_start_choice) {
+    if (window.configruntime.gd3.zero_start_choice) {
         getValue = window.configruntime.gd3.zero_start_choice;
     }
     return getValue;
 }
 
-export function getUseSameTimescaleChoice(){
+export function getUseSameTimescaleChoice() {
     let getValue = false;
-    if(window.configruntime.gd3.same_timescale_choice) {
+    if (window.configruntime.gd3.same_timescale_choice) {
         getValue = window.configruntime.gd3.same_timescale_choice;
     }
     return getValue;
 }
+
 export function getDownloadButtonPath() {
     let getValue = '/geostreams/datapoints/download?';
     if (window.configruntime.gd3.download_button_path) {
@@ -448,7 +449,7 @@ export function getTimeSeriesZeroStart() {
 
 export function getExploreSections() {
     let exploreSections = [];
-    if (window.configruntime.gd3.additional_explore_accordion_sections){
+    if (window.configruntime.gd3.additional_explore_accordion_sections) {
         exploreSections = window.configruntime.gd3.additional_explore_accordion_sections;
     }
     return exploreSections;
@@ -456,7 +457,7 @@ export function getExploreSections() {
 
 export function getExploreSourcesOpen() {
     let exploreSourcesOpen = false;
-    if (window.configruntime.gd3.sources_explore_accordion_open){
+    if (window.configruntime.gd3.sources_explore_accordion_open) {
         exploreSourcesOpen = window.configruntime.gd3.sources_explore_accordion_open;
     }
     return exploreSourcesOpen;
@@ -464,8 +465,27 @@ export function getExploreSourcesOpen() {
 
 export function getExploreCategoriesOpen() {
     let exploreCategoriesOpen = false;
-    if (window.configruntime.gd3.categories_accordion_section_display){
+    if (window.configruntime.gd3.categories_accordion_section_display) {
         exploreCategoriesOpen = window.configruntime.gd3.categories_accordion_section_display;
     }
     return exploreCategoriesOpen;
+}
+
+export function detailSeasonBins() {
+    let useSeasonBins = false;
+    if (window.configruntime.gd3.detail_season_bins) {
+        useSeasonBins = window.configruntime.gd3.detail_season_bins;
+    }
+    return useSeasonBins;
+}
+
+export function detailSeasonBinsSources() {
+    let seasonBinsSources = [];
+    if (window.configruntime.gd3.detail_season_bins_sources) {
+        seasonBinsSources = window.configruntime.gd3.detail_season_bins_sources;
+        seasonBinsSources = seasonBinsSources.map(lowercase_val => {
+            return lowercase_val.toLowerCase();
+        })
+    }
+    return seasonBinsSources;
 }
