@@ -16,7 +16,7 @@ export const gd3 = {
             subtitle: ""},
         {url: "http://141.142.211.37", label: "IMLCZO NEBULA", title: "IMLCZO",
             subtitle: ""},
-        {url:"http://localhost:9000", label:"TEST", title:"TEST", subtitle:"TEST"}
+        {url:"http://localhost:9000", label:"Localhost", title:"Localhost", subtitle:"Localhost"}
     ],
 
     // Menu Bar Information
@@ -1118,3 +1118,5 @@ export const gd3 = {
     clustersChoiceOption: false,
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
+// Keep the next new line at the end of the file
+

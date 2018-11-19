@@ -1,16 +1,22 @@
-Geodashboard v3 - 
-==================================
+# Geodashboard V3
 
-**Work in Progress** - See [V2](https://opensource.ncsa.illinois.edu/bitbucket/projects/GEOD/repos/geodashboard) for a feature complete version.
+Part of the [Geostreaming Data Framework](https://geodashboard.ncsa.illinois.edu/). Web frontend to explore, search and
+visualize data stored in the Geostreaming Web Service.
 
-Uses react.js, redux, webpack, babel, react-router, openlayers 3.
+Built on react.js, redux, webpack, babel, react-router, openlayers 3.
+
+## How to Build
 
 Requirements: [Node.js](https://nodejs.org) and [Yarn](https://yarnpkg.com).
 
-Install dependencies: `yarn install` or `npm install`
+Install dependencies: `yarn install` (or `npm install`)
 
-Develop: `yarn start` or `npm start`
+Develop: `yarn start` (or `npm start`)
 
-Build: `yarn run build` or `npm run build`
+Build: `yarn run build` (or `npm run build`)
 
-Test for flow: `yarn run flow` or `npm run-script flow`
+Test for flow: `yarn run flow` (or `npm run-script flow`)
+
+Once built you can create a docker image by running (change tag name as appropriate): 
+
+```docker build -t geodashboard/glm:3.0-alpha .```
