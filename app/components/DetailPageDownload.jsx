@@ -19,7 +19,6 @@ class DetailPageDownload extends Component {
         let downloadApi = this.props.api + getDownloadButtonPath();
         downloadApi += ("sensor_id=" + this.props.sensor_id + '&');
 
-        // refer to https://opensource.ncsa.illinois.edu/bitbucket/projects/CATS/repos/clowder/browse/app/api/Geostreams.scala#665
         let params = {};
         params["format"] = type;
 

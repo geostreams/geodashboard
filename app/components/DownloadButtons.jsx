@@ -42,7 +42,6 @@ class DownloadButtons extends Component {
 
         let downloadApi = this.props.api + getDownloadButtonPath();
 
-        // refer to https://opensource.ncsa.illinois.edu/bitbucket/projects/CATS/repos/clowder/browse/app/api/Geostreams.scala#665
         let params = {};
         params["format"] = type;
         if(this.props.selectedFilters.indexOf("time") > -1) {

@@ -162,7 +162,7 @@ export function getApplicationOptions() {
 }
 
 export function getApplicationBackends() {
-    return window.configruntime.gd3.clowder_endpoints;
+    return window.configruntime.gd3.geostreaming_endpoints;
 }
 
 export function getApplicationWebsite() {

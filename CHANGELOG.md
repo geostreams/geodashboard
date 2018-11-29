@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1157](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1157)
 - Restrict usage of the Seasons Bin via a config item and specified Sources
   [GEOD-1163](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1163)
+- Updated configuration endpoints to include /geostreams and removing Clowder from configuration
+  [GEOD-1167](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1167)
 
 ### Changed
 - General Exploratory Analysis Page Updates
