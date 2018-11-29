@@ -6,7 +6,7 @@ import ChartMobile from './ChartMobile';
 import Spinner from './Spinner';
 import {getMobileSizeMax, getShowRawProcessed} from "../utils/getConfig";
 import {getIntervalValue} from "../utils/graphUtils";
-import mainStyles from '../styles/main.css'
+import mainStyles from '../styles/main.css';
 
 class LineChart extends Component {
 

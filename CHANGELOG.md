@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1163](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1163)
 - Updated configuration endpoints to include /geostreams and removing Clowder from configuration
   [GEOD-1167](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1167)
+- Stacked bar graph visualization using d3
+  [GEOD-1155](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1155)
 
 ### Changed
 - General Exploratory Analysis Page Updates

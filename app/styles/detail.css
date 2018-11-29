@@ -175,6 +175,18 @@
     color: white;
 }
 
+.bar_tooltip {
+    position: absolute;
+    text-align: left;
+    padding: 2px;
+    font-size: 12px;
+    background: #1B4557;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    color: white;
+}
+
 .overlay {
     fill: none;
     pointer-events: all;

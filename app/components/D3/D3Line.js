@@ -1,16 +1,16 @@
 import {boxQuartiles, iqr}  from "./D3BoxAndWhiskers";
 
 const D3Line = {};
-const d3 = require('d3');
+const d3 = require("d3");
 
 const margin =  {top: 30, right: 20, bottom: 50, left: 50};
 
 D3Line.create = function(el, props, state) {
 
-    let svg = d3.select(el).append('svg')
-        .attr('class', 'd3')
-        .attr('width', props.width )
-        .attr('height', props.height);
+    let svg = d3.select(el).append("svg")
+        .attr("class", "d3")
+        .attr("width", props.width )
+        .attr("height", props.height);
 
     this.update(el, state);
 };
@@ -62,9 +62,9 @@ D3Line._drawPoints = function(el, state) {
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
     let {data, title} = state;
-    const svg = d3.select(el).selectAll('svg');
+    const svg = d3.select(el).selectAll("svg");
     // The next 4 lines clean up previously existing graphs
-    let g = svg.selectAll('.d3-line-charts');
+    let g = svg.selectAll(".d3-line-charts");
     let g_dots = svg.selectAll(".d3-dots");
     g.remove();
     g_dots.remove();
@@ -72,14 +72,15 @@ D3Line._drawPoints = function(el, state) {
     d3.selectAll(tooltipClass).remove();
     svg.selectAll(".focus").remove();
     svg.selectAll("rect").remove();
+    
     // This creates a placeholder for the graph
-    g = svg.append('g')
-        .attr('class', 'd3-line-charts')
+    g = svg.append("g")
+        .attr("class", "d3-line-charts")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
-    g_dots = svg.append('g')
-        .attr('class', 'd3-dots')
+    g_dots = svg.append("g")
+        .attr("class", "d3-dots")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
@@ -166,8 +167,7 @@ D3Line._drawPoints = function(el, state) {
         .attr("fill", "#000")
         .attr("transform", "translate("+ ((graphWidth)/2) + "," +
            28 + ")")
-        .attr("text-anchor", "end")
-        .text("Date");
+        .attr("text-anchor", "end");
 
     // Creates the vertical axis and adds the label
     g.append("g")

@@ -4,6 +4,7 @@ import MiniMap from '../components/MiniMap';
 import DetailParameterList from './DetailParameterList';
 import LineChart from './LineChart';
 import StackedLineChart from './StackedLineChart';
+import StackedBarChart from './StackedBarChart';
 import styles from '../styles/detail.css';
 import {Grid, Row, Col} from 'react-flexbox-grid';
 import {Checkbox, FormField, Icon} from 'react-mdc-web';
@@ -348,6 +349,19 @@ class DetailContents extends Component {
                 parameter_dialog_contents = getDetailPageCombinedInfoText();
                 max_parameters = 3;
 
+            } else if(chart_type === "stacked_bar") {
+                graph = <StackedBarChart sensorName={sensor.name} sensor={sensor}
+                                         sensorData={this.props.sensorData}
+                                         selectedStartDate={selected_start}
+                                         selectedEndDate={selected_end}
+                                         filterBySeason={this.state.showSeasonFilter}
+                                         selectedSeason={this.state.selectedSeason}
+                                         category_parameters={this.props.category_parameters}
+                                         selected_parameters={this.state.selected_parameters}
+                                         loadSensor={this.props.loadSensor}
+
+                />;
+                box_and_whiskers_header = "";
             } else {
                 graph = <div> Coming Soon</div>
             }
