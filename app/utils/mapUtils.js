@@ -37,6 +37,12 @@ export function sensorsToFeatures(sensors: Sensors, parameters: Parameters): Arr
                 }
             }
         );
+
+        let onlineStatusVal = 'none';
+        if (sensor.properties.online_status) {
+            onlineStatusVal = sensor.properties.online_status;
+        }
+
         feature.attributes = {
             "name": sensor.name,
             "dataSource": getSourceName(sensor.properties.type),
@@ -47,7 +53,8 @@ export function sensorsToFeatures(sensors: Sensors, parameters: Parameters): Arr
             "location": sensor.properties.region,
             "parameters": sensor_parameters,
             "color": getColor(sensor.properties.type.id),
-            "type": "single"
+            "type": "single",
+            "onlineStatus": onlineStatusVal
         };
 
         feature.setId(sensor.properties.popupContent);

@@ -489,3 +489,11 @@ export function detailSeasonBinsSources() {
     }
     return seasonBinsSources;
 }
+
+export function displayOnlineStatus() {
+    let getValue = false;
+    if (window.configruntime.gd3.display_online_status) {
+        getValue = window.configruntime.gd3.display_online_status;
+    }
+    return getValue;
+}

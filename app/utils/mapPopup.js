@@ -1,13 +1,12 @@
+import {getApplicationWebsite, getColor, getMobileSizeMax, getMobileDetailPath, displayOnlineStatus} from './getConfig';
 
-import {getApplicationWebsite, getColor, getMobileSizeMax, getMobileDetailPath} from './getConfig';
-
-export function popupHeader(feature: ol.Feature, styles){
+export function popupHeader(feature: ol.Feature, styles, online=false){
     let id = feature.getId().toUpperCase();
     let sensorInfo = feature.attributes;
 
     let dataSourceValue = (sensorInfo.dataSource);
-    let dataSource = '<tr><td width="35%"><strong>Data Source: </strong></td>'.concat('<td width="65%">', dataSourceValue,
-        ' Monitoring Site</td></tr>');
+    let dataSource = '<tr><td width="35%"><strong>Data Source: </strong></td>'.concat('<td width="65%">',
+        dataSourceValue, ' Monitoring Site</td></tr>');
 
     let startTime = new Date(sensorInfo.minStartTime).toLocaleDateString();
     let endTime = new Date(sensorInfo.maxEndTime).toLocaleDateString();
@@ -36,11 +35,19 @@ export function popupHeader(feature: ol.Feature, styles){
     let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
         sourceColor + ';">' + id + '</h2>';
 
+    let onlineStatus = '';
+    if (displayOnlineStatus() === true && online === true && sensorInfo.onlineStatus !== 'none') {
+        let onlineStatusVal = sensorInfo.onlineStatus.charAt(0).toUpperCase() + sensorInfo.onlineStatus.slice(1);
+        onlineStatus = '<tr><td width="35%"><strong>Online Status: </strong></td>'.concat('<td width="65%">',
+            onlineStatusVal, '</td></tr>');
+    }
+
     let bodyText =
         '<table class=' + styles.popup_table + '>' +
             dataSource +
             timePeriod +
             latlong +
+            onlineStatus +
         '</table>' +
         '<div class=' + styles.greyborder + '></div>';
 

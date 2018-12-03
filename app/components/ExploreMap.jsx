@@ -12,7 +12,7 @@ import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
 import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup';
 import BasicMap from './BasicMap';
 import type {InputEventMap} from '../utils/flowtype';
-import {getMobileFilterSensors, getMobileSizeMax, getMobileSourceNames} from '../utils/getConfig';
+import {getMobileFilterSensors, getMobileSizeMax, getMobileSourceNames, displayOnlineStatus} from '../utils/getConfig';
 
 
 class ExploreMap extends Component {
@@ -94,7 +94,7 @@ class ExploreMap extends Component {
         const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
 
-            let popupText = popupHeader(feature, styles) + popupParameters(feature, styles);
+            let popupText = popupHeader(feature, styles, true) + popupParameters(feature, styles);
 
             if (content) {
                 content.innerHTML = popupText;
@@ -275,9 +275,19 @@ class ExploreMap extends Component {
                     });
                 } else {
                     let featureColor = feature.getProperties().features[0].attributes.color;
+                    let outlineColor = "black";
+                    if (displayOnlineStatus() === true) {
+                        if (feature.getProperties().features[0].attributes.onlineStatus === 'online') {
+                            outlineColor = "green";
+                        }
+                        if (feature.getProperties().features[0].attributes.onlineStatus === 'offline') {
+                            outlineColor = "red";
+                        }
+                    }
+
                     let iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
                         + '<g class="marker-g">'
-                        + '<path d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke="black" stroke-width="1" fill="white" />'
+                        + '<path d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke="' + outlineColor + '" stroke-width="1" fill="white" />'
                         + '	<ellipse cx="7.5" cy="8.5" rx="4.5" ry="5.5" class="map-pin-color" style="fill:' +
                         featureColor + '"/>'
                         + '<path class="mouseCapture" d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke-width="1" opacity="0"/>'

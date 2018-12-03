@@ -115,6 +115,9 @@ export const gd3 = {
     // If Allow Season Bins, for which Sources?
     detail_season_bins_sources: ['epa'],
 
+    // Display Online/Offline Information on the Explore Page
+    display_online_status: false,
+
     // Layers for the Explore Page
     exploreLayers: [],
 
@@ -207,7 +210,16 @@ export const gd3 = {
         "ps": "#cc2128",
         "ss": "#4d6363",
         "usgs": "#39B54A",
-        "wqp": "#F28E1E"
+        "wqp": "#F28E1E",
+        "greon": "#BDBFA6",
+        "gac": "#8c1ace",
+        "illinois-epa": "#d89b0d",
+        "iwqis": "#31CFC1",
+        "metc": "#D2E11D",
+        "sierra-club": "#9C2C1A",
+        "tennessee": "#d80d50",
+        "usgs-sg": "#228e31",
+        "umrr-ltrm": "#5F99C1",
     },
 
     // Explore Page Accordion Source Section Initial Open Status

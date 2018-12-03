@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1167](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1167)
 - Stacked bar graph visualization using d3
   [GEOD-1155](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1155)
+- Added online/offline status indicators for sensors in the explore page left navigation and map
+  [GEOD-1165](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1165)
 
 ### Changed
 - General Exploratory Analysis Page Updates

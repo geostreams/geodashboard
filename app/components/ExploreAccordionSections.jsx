@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import exploreStyles from '../styles/explore.css';
 import {Button, Card, CardTitle, CardSubtitle, CardHeader, CardText, Fab, Icon} from 'react-mdc-web';
-import {getColor} from '../utils/getConfig';
+import {getColor, displayOnlineStatus} from '../utils/getConfig';
 import ol from 'openlayers';
 
 
@@ -32,6 +32,30 @@ class ExploreAccordionSections extends Component {
 
         source_data.map(data => {
 
+            let trim_length = 6;
+            let longer_name = '';
+
+            // Online and Offline Stations if option present on the Sensor
+            let borderStyle = 'none';
+            let statusColor = 'white';
+            if (displayOnlineStatus() === true) {
+                if (data.properties.online_status === "online") {
+                    borderStyle = 'solid 0.3em';
+                    statusColor = 'green';
+                    trim_length = 5;
+                }
+
+                if (data.properties.online_status === "offline") {
+                    borderStyle = 'dashed';
+                    statusColor = 'red';
+                    trim_length = 5;
+                }
+            }
+
+            if (data.name.length >= trim_length) {
+                longer_name = '...';
+            }
+
             let lonLatPoint = [data.geometry.coordinates[0], data.geometry.coordinates[1]];
             let webMercatorPoint = ol.proj.fromLonLat(lonLatPoint);
 
@@ -41,19 +65,16 @@ class ExploreAccordionSections extends Component {
                 color = color + '80';
             }
 
-            let longer_name = '';
-            if (data.name.length >= 6) {
-                longer_name = '...';
-            }
             let help_text = data.properties.name;
             if(data.properties.name !== data.properties.popupContent) {
                 help_text += " - " + data.properties.popupContent;
             }
-            let button_label = data.properties.name.substring(0, 6).trim().replace("-", "_").replace(" ", "_");
+            let button_label = data.properties.name.substring(0, trim_length).trim().replace("-", "_").replace(" ", "_");
             if (this.state.inner_accordion_icon) {
                 item_pills.push(
                     <Button key={data.id} className={exploreStyles.exploreButton}
-                            style={{backgroundColor: color}} id={data.id} title={help_text}
+                            style={{backgroundColor: color, border: borderStyle, borderColor: statusColor}}
+                            id={data.id} title={help_text}
                             onClick={() => {
                                 this.clickSensor(data.id, data.name, webMercatorPoint)
                             }}>
