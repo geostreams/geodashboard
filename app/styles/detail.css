@@ -10,6 +10,11 @@
     margin-left: 0.5em;
 }
 
+.parameters_chart_subheading {
+    padding-left: 2em;
+    font-weight: bold;
+}
+
 .noData {
     font-size: 200%;
     padding: 1em 2em;

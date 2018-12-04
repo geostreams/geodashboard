@@ -35,16 +35,16 @@ class Chart extends Component {
             }
 
             sensor_data.map(function(d) {
-                    const bin_date = new Date(d.date);
-                    if(bin_date.getTime() > that.props.selectedStartDate.getTime() &&
+                const bin_date = new Date(d.date);
+                if(bin_date.getTime() > that.props.selectedStartDate.getTime() &&
                     bin_date.getTime() < that.props.selectedEndDate.getTime()) {
-                        values.push({date: bin_date, average: d.average});
-                        BAWValues.push(d.average);
-                    }
+                    values.push({date: bin_date, average: d.average});
+                    BAWValues.push(d.average);
+                }
 
             });
             if(values.length === 0) {
-                return (<div></div>);
+                return (<div> </div>);
             }
 
             boxAndWhiskers.push(

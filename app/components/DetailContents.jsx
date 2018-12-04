@@ -191,6 +191,7 @@ class DetailContents extends Component {
         let {sensor, chart_type} = this.props;
         let graph = {};
         let filters;
+
         // Set up the variables for the slider
         const minDate = new Date(sensor.min_start_time);
         const maxDate = new Date(sensor.max_end_time);
@@ -257,7 +258,7 @@ class DetailContents extends Component {
                     </FormField>;
                 }
                 let useSameTimescaleCheckbox;
-                if (getUseSameTimescaleChoice()) {
+                if (getUseSameTimescaleChoice() && chart_type !== "stacked_line") {
                     useSameTimescaleCheckbox =
                         <FormField id="sameTimescale" key="sameTimescale">
                             <Checkbox onChange={this.sameTimeScale}
@@ -277,7 +278,7 @@ class DetailContents extends Component {
                             {useSameTimescaleCheckbox}
                         </Row>
                     </Col>
-                )
+                );
 
                 filters = (
                     <Row key="detail_filters" around="xs" className={styles.filterBackground}>
@@ -336,15 +337,18 @@ class DetailContents extends Component {
             } else if (chart_type === "stacked_line") {
                 graph = <StackedLineChart sensorName={sensor.name} sensor={sensor}
                                           sensorData={this.props.sensorData}
+                                          parameterSources={this.props.parameterSources}
                                           selectedStartDate={selected_start}
                                           selectedEndDate={selected_end}
-                                          num_years={num_years}
                                           filterBySeason={this.state.showSeasonFilter}
                                           selectedSeason={this.state.selectedSeason}
+                                          num_years={num_years}
                                           loadSensor={this.props.loadSensor}
                                           category_parameters={this.props.category_parameters}
                                           selected_parameters={this.state.selected_parameters}
                                           displayLines={this.state.displayLines}
+                                          binType={this.state.binType}
+                                          startAtZero={this.state.startAtZero}
                 />;
                 parameter_dialog_contents = getDetailPageCombinedInfoText();
                 max_parameters = 3;
@@ -371,7 +375,6 @@ class DetailContents extends Component {
             <div>
                 {filters}
                 <Grid fluid>
-
                     <Row key="detail_contents" around="xs">
                         <Col md={3}>
                             <Row key="parameter_title" className={styles.parameters_list}>
