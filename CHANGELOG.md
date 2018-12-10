@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1138](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1138)
 - Migrate Detail Page Combined Graphs to D3
   [GEOD-1166](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1166)
+- Search Page Filter by Shape resets points before drawing a new shape
+  [GEOD-1164](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1164)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior

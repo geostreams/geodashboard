@@ -221,16 +221,9 @@ class BasicMap extends Component {
         const drawClearButton = this.drawClearButton;
         let drawElement = this.ol_drawclearcontrol;
 
-        let handleDrawClearButton = function () {
-            theMap.getInteractions().forEach(function (e) {
-                if (e instanceof ol.interaction.Draw) {
-                    theMap.removeInteraction(e);
-                }
-            });
+        let resetDrawPoints = function () {
 
             customLocationFilterLayer.getSource().clear();
-
-            selectPoints = [];
 
             // Create empty array for points
             let selectPointsLocations = [];
@@ -254,11 +247,67 @@ class BasicMap extends Component {
 
         };
 
+        let drawEndSharedSteps = function (e) {
+
+            customLocationFilterLayer.getSource().clear();
+            selectItems.setActive(true);
+
+            theMap.getInteractions().forEach(function (e) {
+                if (e instanceof ol.interaction.Draw) {
+                    theMap.removeInteraction(e);
+                }
+            });
+
+            // Get the shape geometry
+            let drawExtent = e.feature.getGeometry();
+            that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
+
+            // Get all the features in the layer
+            let featuresInLayer = clusters.getSource().getFeatures();
+
+            // Check each feature
+            let loopFeatureExtent;
+            for (let j = 0; j < featuresInLayer.length; j++) {
+                loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
+                // Only select the features within the shape
+                if (drawExtent.intersectsExtent(loopFeatureExtent)) {
+                    selectPoints.push(featuresInLayer[j]);
+                }
+            }
+
+            let selectPointsLocations = [];
+
+            if (selectPoints.length > 0) {
+                for (let i = 0; i < selectPoints.length; i++) {
+                    let selectPointFeatures = selectPoints[i].get('features');
+                    for (let j = 0; j < selectPointFeatures.length; j++) {
+                        let featureName = selectPointFeatures[j].attributes.name;
+                        if (!selectPointsLocations.includes(featureName.toString())) {
+                            selectPointsLocations.push(featureName);
+                        }
+                    }
+                }
+            }
+
+            return [drawExtent, selectPointsLocations];
+
+        };
+
+        let handleDrawClearButton = function () {
+            theMap.getInteractions().forEach(function (e) {
+                if (e instanceof ol.interaction.Draw) {
+                    theMap.removeInteraction(e);
+                }
+            });
+
+            resetDrawPoints();
+
+        };
+
         if (drawElement && drawClearButton) {
 
             drawClearButton.addEventListener('click', handleDrawClearButton, false);
             drawClearButton.addEventListener('touchstart', handleDrawClearButton, false);
-
 
             drawElement.className += ' ol-unselectable ol-control';
             drawElement.appendChild(drawClearButton);
@@ -266,6 +315,7 @@ class BasicMap extends Component {
             drawClearControl = new ol.control.Control({
                 element: drawElement,
             });
+
         }
 
         // Add Draw Square Button
@@ -281,6 +331,8 @@ class BasicMap extends Component {
                 geometryFunction: ol.interaction.Draw.createRegularPolygon(4),
             });
 
+            resetDrawPoints();
+
             theMap.addInteraction(drawSquare);
 
             drawSquare.on('drawstart', function () {
@@ -289,45 +341,8 @@ class BasicMap extends Component {
             });
 
             drawSquare.on('drawend', function (e) {
-                customLocationFilterLayer.getSource().clear();
-                selectItems.setActive(true);
-
-                theMap.getInteractions().forEach(function (e) {
-                    if (e instanceof ol.interaction.Draw) {
-                        theMap.removeInteraction(e);
-                    }
-                });
-
-                // Get the shape geometry
-                let drawExtent = e.feature.getGeometry();
-                that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
-
-                // Get all the features in the layer
-                let featuresInLayer = clusters.getSource().getFeatures();
-
-                // Check each feature
-                let loopFeatureExtent;
-                for (let j = 0; j < featuresInLayer.length; j++) {
-                    loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
-                    // Only select the features within the shape
-                    if (drawExtent.intersectsExtent(loopFeatureExtent)) {
-                        selectPoints.push(featuresInLayer[j]);
-                    }
-                }
-
-                let selectPointsLocations = [];
-
-                if (selectPoints.length > 0) {
-                    for (let i = 0; i < selectPoints.length; i++) {
-                        let selectPointFeatures = selectPoints[i].get('features');
-                        for (let j = 0; j < selectPointFeatures.length; j++) {
-                            let featureName = selectPointFeatures[j].attributes.name;
-                            if (!selectPointsLocations.includes(featureName.toString())) {
-                                selectPointsLocations.push(featureName);
-                            }
-                        }
-                    }
-                }
+                let drawExtent = drawEndSharedSteps(e)[0];
+                let selectPointsLocations = drawEndSharedSteps(e)[1];
 
                 // Get the shape coordinates
                 let drawCoordinates = drawExtent.getCoordinates();
@@ -361,6 +376,8 @@ class BasicMap extends Component {
                 source: customLocationFilterVector,
             });
 
+            resetDrawPoints();
+
             theMap.addInteraction(drawCircle);
 
             drawCircle.on('drawstart', function () {
@@ -369,45 +386,8 @@ class BasicMap extends Component {
             });
 
             drawCircle.on('drawend', function (e) {
-                customLocationFilterLayer.getSource().clear();
-                selectItems.setActive(true);
-
-                theMap.getInteractions().forEach(function (e) {
-                    if (e instanceof ol.interaction.Draw) {
-                        theMap.removeInteraction(e);
-                    }
-                });
-
-                // Get the shape geometry
-                let drawExtent = e.feature.getGeometry();
-                that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
-
-                // Get all the features in the layer
-                let featuresInLayer = clusters.getSource().getFeatures();
-
-                // Check each feature
-                let loopFeatureExtent;
-                for (let j = 0; j < featuresInLayer.length; j++) {
-                    loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
-                    // Only select the features within the shape
-                    if (drawExtent.intersectsExtent(loopFeatureExtent)) {
-                        selectPoints.push(featuresInLayer[j]);
-                    }
-                }
-
-                let selectPointsLocations = [];
-
-                if (selectPoints.length > 0) {
-                    for (let i = 0; i < selectPoints.length; i++) {
-                        let selectPointFeatures = selectPoints[i].get('features');
-                        for (let j = 0; j < selectPointFeatures.length; j++) {
-                            let featureName = selectPointFeatures[j].attributes.name;
-                            if (!selectPointsLocations.includes(featureName.toString())) {
-                                selectPointsLocations.push(featureName);
-                            }
-                        }
-                    }
-                }
+                let drawExtent = drawEndSharedSteps(e)[0];
+                let selectPointsLocations = drawEndSharedSteps(e)[1];
 
                 // Get the shape coordinates
                 // (1) Get the Units for the Map Projection
@@ -448,6 +428,8 @@ class BasicMap extends Component {
                 source: customLocationFilterVector,
             });
 
+            resetDrawPoints();
+
             theMap.addInteraction(drawCustom);
 
             drawCustom.on('drawstart', function () {
@@ -456,45 +438,8 @@ class BasicMap extends Component {
             });
 
             drawCustom.on('drawend', function (e) {
-                customLocationFilterLayer.getSource().clear();
-                selectItems.setActive(true);
-
-                theMap.getInteractions().forEach(function (e) {
-                    if (e instanceof ol.interaction.Draw) {
-                        theMap.removeInteraction(e);
-                    }
-                });
-
-                // Get the shape geometry
-                let drawExtent = e.feature.getGeometry();
-                that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
-
-                // Get all the features in the layer
-                let featuresInLayer = clusters.getSource().getFeatures();
-
-                // Check each feature
-                let loopFeatureExtent;
-                for (let j = 0; j < featuresInLayer.length; j++) {
-                    loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
-                    // Only select the features within the shape
-                    if (drawExtent.intersectsExtent(loopFeatureExtent)) {
-                        selectPoints.push(featuresInLayer[j]);
-                    }
-                }
-
-                let selectPointsLocations = [];
-
-                if (selectPoints.length > 0) {
-                    for (let i = 0; i < selectPoints.length; i++) {
-                        let selectPointFeatures = selectPoints[i].get('features');
-                        for (let j = 0; j < selectPointFeatures.length; j++) {
-                            let featureName = selectPointFeatures[j].attributes.name;
-                            if (!selectPointsLocations.includes(featureName.toString())) {
-                                selectPointsLocations.push(featureName);
-                            }
-                        }
-                    }
-                }
+                let drawExtent = drawEndSharedSteps(e)[0];
+                let selectPointsLocations = drawEndSharedSteps(e)[1];
 
                 // Get the shape coordinates
                 let drawCoordinates = drawExtent.getCoordinates();
