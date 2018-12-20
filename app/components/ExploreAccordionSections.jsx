@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import exploreStyles from '../styles/explore.css';
 import {Button, Card, CardTitle, CardSubtitle, CardHeader, CardText, Fab, Icon} from 'react-mdc-web';
 import {getColor, displayOnlineStatus} from '../utils/getConfig';
+import {applyColors} from '../utils/colorUtils';
 import ol from 'openlayers';
 
 
@@ -59,10 +60,11 @@ class ExploreAccordionSections extends Component {
             let lonLatPoint = [data.geometry.coordinates[0], data.geometry.coordinates[1]];
             let webMercatorPoint = ol.proj.fromLonLat(lonLatPoint);
 
+            //change colors of pills according to state
             let color = getColor(data.properties.type.id);
+
             if (this.props.selectedSensorID !== data.id) {
-                // Add opacity to the HEX color (50%)
-                color = color + '80';
+                color = applyColors(["000000", color], [0.03,0.1]);
             }
 
             let help_text = data.properties.name;
@@ -90,9 +92,7 @@ class ExploreAccordionSections extends Component {
         });
 
             let color = getColor(this.props.sourceId);
-            // Add opacity to the HEX color (75%)
-            color = color + 'BF';
-
+            color = applyColors(["000000", color], [0.05,0.2]);
             contents.push(
                 <div key={this.props.id}>
                     <div onClick={() => {this.clickedInnerAccordion()}}>
@@ -118,5 +118,7 @@ class ExploreAccordionSections extends Component {
 
     }
 }
+
+
 
 export default ExploreAccordionSections;

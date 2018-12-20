@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1166](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1166)
 - Search Page Filter by Shape resets points before drawing a new shape
   [GEOD-1164](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1164)
+- Changed styling for explore page navigation
+  [GEOD-1168](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1168)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior
