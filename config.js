@@ -129,6 +129,9 @@ export const gd3 = {
     mobile_detail_path: '/#detail/location/',
     mobile_explore_path: '/#explore/all/',
 
+    // Max Number of Parameters to display in the Map Popups (default is 10)
+    max_display_params: 10,
+
     // Error Text if the API does not return on the Welcome Page
     error_text: "An Error Occurred - Please Select Again",
 

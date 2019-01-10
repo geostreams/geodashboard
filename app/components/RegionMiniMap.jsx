@@ -92,7 +92,9 @@ class RegionMiniMap extends Component {
                             <div style={{display: "none"}}>
                                 <div id="marker" title="Marker" className="marker"> </div>
                                 <div id="popup" className={styles.regionPopup}>
-                                    <a href="#" id="popup-closer" className={styles.regionPopupCloser}> </a>
+                                    <a href="#" id="popup-closer" className={styles.regionPopupCloser}>
+                                        <Icon name="close" />
+                                    </a>
                                     <div id="popup-content"> </div>
                                 </div>
                             </div>

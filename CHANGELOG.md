@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1164](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1164)
 - Changed styling for explore page navigation
   [GEOD-1168](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1168)
+- Updated Popup Styling per design specifications
+  [GEOD-1169](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1169)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior
