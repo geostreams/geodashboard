@@ -61,7 +61,7 @@ div > span > aside {
 .exploreCard {
     width: 24em;
     margin-top: 0;
-    margin-bottom: 0.5em;
+    margin-bottom: -1em;
 }
 
 @media screen and (max-device-width: 840px) {
@@ -245,7 +245,7 @@ img[src=""] {
 
 .exploreSourcesIcon {
     min-width: 25%;
-    background-color: #D3D3D3;
+    background-color: #E6ECF1;
 }
 
 .exploreSourcesCountAndIcon {
@@ -287,7 +287,7 @@ img[src=""] {
 
 .exploreTitleRight {
     width: 80%;
-    background-color: #D3D3D3;
+    background-color: #E6ECF1;
     padding: 1em;
     margin: auto;
     cursor: pointer;
