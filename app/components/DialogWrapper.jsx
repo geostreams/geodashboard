@@ -28,12 +28,16 @@ class DialogWrapper extends Component {
     render() {
 
         let body_text = "";
+        let qaqc_text = "";
         let moreinfo_text = "";
         let moreinfo_link = "";
 
         if (this.props.body !== undefined) {
             if (this.props.body.description !== undefined) {
                 body_text = this.props.body.description;
+            }
+            if (this.props.body.qaqc !== undefined) {
+                qaqc_text = this.props.body.qaqc;
             }
             if (this.props.body.more_info !== undefined) {
                 moreinfo_text = this.props.body.more_info;
@@ -55,7 +59,7 @@ class DialogWrapper extends Component {
                     </DialogHeader>
                     <DialogBody>
                         <Body1>
-                            {body_text}
+                            {body_text}<br/>{qaqc_text}
                         </Body1>
                         <Body2>
                             <Link href={moreinfo_link}>{moreinfo_text}</Link>
