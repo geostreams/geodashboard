@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1168](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1168)
 - Updated Popup Styling per design specifications
   [GEOD-1169](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1169)
+- Updated Styling for Explore Page Accordion Headers
+  [GEOD-1170](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1170)
 - Display "No Data Available" When Detail Page Graph is Empty
   [GEOD-1180](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1180)
 
