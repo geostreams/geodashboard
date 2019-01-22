@@ -131,11 +131,15 @@ class DetailContents extends Component {
     }
 
     selectAllDates() {
+        let startDate = new Date(this.props.sensor.min_start_time);
+        let endDate = new Date(this.props.sensor.max_end_time);
+
         this.setState({
-            selectedStartDate: new Date(this.props.sensor.min_start_time),
-            selectedEndDate: new Date(this.props.sensor.max_end_time),
+            selectedStartDate: startDate,
+            selectedEndDate: endDate,
             selectAllDates: true
-        })
+        });
+        this.updateBinningType(startDate, endDate);
     }
 
     closeParameterDialog() {
@@ -353,7 +357,7 @@ class DetailContents extends Component {
                 parameter_dialog_contents = getDetailPageCombinedInfoText();
                 max_parameters = 3;
 
-            } else if(chart_type === "stacked_bar") {
+            } else if (chart_type === "stacked_bar") {
                 graph = <StackedBarChart sensorName={sensor.name} sensor={sensor}
                                          sensorData={this.props.sensorData}
                                          selectedStartDate={selected_start}
