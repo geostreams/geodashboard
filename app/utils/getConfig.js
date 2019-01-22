@@ -497,3 +497,11 @@ export function displayOnlineStatus() {
     }
     return getValue;
 }
+
+export function maxDisplayParams() {
+    let maxValue = 10;
+    if (window.configruntime.gd3.max_display_params) {
+        maxValue = window.configruntime.gd3.max_display_params;
+    }
+    return maxValue;
+}

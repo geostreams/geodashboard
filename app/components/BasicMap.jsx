@@ -67,7 +67,9 @@ class BasicMap extends Component {
                 <div style={{display: 'none'}}>
                     <div id="marker" title="Marker" className="marker"> </div>
                     <div id="popup" className={styles.olPopup}>
-                        <a href="#" id="popup-closer" className={styles.olPopupCloser}> </a>
+                        <a href="#" id="popup-closer" className={styles.olPopupCloser}>
+                            <Icon name="close" />
+                        </a>
                         <div id="popup-content"> </div>
                     </div>
 
