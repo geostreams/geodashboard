@@ -163,6 +163,7 @@ export const gd3 = {
     source_information: {
         "epa": {
             "description": "This is descriptive Text for the EPA source.",
+            "qaqc": "This is text about QA/QC.",
             "more_info": "More Information"
         },
         "glfmsp": {

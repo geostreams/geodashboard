@@ -91,26 +91,26 @@ class ExploreAccordionSections extends Component {
 
         });
 
-            let color = getColor(this.props.sourceId);
-            color = applyColors(["000000", color], [0.05,0.2]);
-            contents.push(
-                <div key={this.props.id}>
-                    <div onClick={() => {this.clickedInnerAccordion()}}>
-                        <div style={{backgroundColor: color}}>
+        let color = getColor(this.props.sourceId);
+        color = applyColors(["000000", color], [0.05,0.2]);
+        contents.push(
+            <div key={this.props.id}>
+                <div onClick={() => {this.clickedInnerAccordion()}}>
+                    <div style={{backgroundColor: color}}>
                             <span data-tooltip={this.props.tooltipVal} className={exploreStyles.regionLabel}>
                                 {this.props.sectionLabel}
                             </span>
-                            <span className={exploreStyles.regionCount}>
+                        <span className={exploreStyles.regionCount}>
                                 ({source_data.length})
                                 <Icon className={"material-icons " + exploreStyles.accordionIcon}
                                       name={this.state.inner_accordion_icon ? 'expand_more' : 'chevron_right'}
                                 />
                             </span>
-                        </div>
                     </div>
-                    <div className={exploreStyles.sectionPills}>{item_pills}</div>
                 </div>
-            );
+                <div className={exploreStyles.sectionPills}>{item_pills}</div>
+            </div>
+        );
 
         return (
             <div>{contents}</div>
