@@ -59,7 +59,7 @@ class ExploreSourceGroup extends Component {
         let source_contents = this.props.contents;
 
         let source_card = (
-            <Card id={this.props.source.id} className={exploreStyles.exploreCard} key={this.props.source.id}>
+            <div id={this.props.source.id} className={exploreStyles.exploreCard} key={this.props.source.id}>
                 <CardHeader>
                     <CardTitle>
                         <div className={exploreStyles.exploreTitleCard}>
@@ -99,7 +99,7 @@ class ExploreSourceGroup extends Component {
                         {source_contents}
                     </div>
                 </CardText>
-            </Card>
+            </div>
         );
 
         return (

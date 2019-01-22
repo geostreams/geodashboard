@@ -87,7 +87,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1139](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1139)
 - Fixed overlapping points on detail page graph with different seasons on the same year
   [GEOD-1144](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1144)
-
+- Updated the explore page
+  [GEOD-1181](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1181)
 ## [3.0.0-alpha.3] - 2018-06-29
 **Important - Need to have database with parameters setup before release in all projects**
 
