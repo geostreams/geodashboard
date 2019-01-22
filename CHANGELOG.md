@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1152](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1152)
 - Explore Page Sources display order
   [GEOD-1150](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1150)
+- Region details page not loading
+  [GEOD-1158](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1158)
 
 ## [3.0.0-alpha.4] - 2018-10-01
 

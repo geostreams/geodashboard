@@ -22,6 +22,10 @@
     background-color: #3F51B5;
 }
 
+.rc-slider-dot-active {
+    border-color: #3F51B5;
+}
+
 .rc-slider-handle {
     border-color: #3F51B5;
 }
