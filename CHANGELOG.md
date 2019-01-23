@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1169](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1169)
 - Display "No Data Available" When Detail Page Graph is Empty
   [GEOD-1180](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1180)
+- Migrate Detail Page QAQC Graphs to D3
+  [GEOD-1178](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1178)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior
