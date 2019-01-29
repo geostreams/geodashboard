@@ -7,7 +7,7 @@ import ol from 'openlayers';
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
-import {getCustomTrendRegion, getTrendColor, getMapTileURLSetting} from '../utils/getConfig';
+import {getCustomTrendRegion, getTrendColor, getMapTileURLSetting, maxZoom} from '../utils/getConfig';
 import {sensorsToFeaturesAnalysisPage, getAttribution, getControls} from '../utils/mapUtils';
 import {popupHeader, popupTrends} from '../utils/mapPopup';
 import {drawHelper, centerHelper} from '../utils/mapDraw';
@@ -25,7 +25,7 @@ class AnalysisMap extends Component {
             clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector}),
             areaPolygonSource: new ol.source.Vector,
             currentZoom: 5.5,
-            maxZoom: 12,
+            maxZoom: maxZoom(),
             openMenu: false,
             // create a fake map to avoid checking map.isdefined every time for flow.
             map: new ol.Map({

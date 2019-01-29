@@ -505,3 +505,11 @@ export function maxDisplayParams() {
     }
     return maxValue;
 }
+
+export function maxZoom() {
+    let maxValue = 12;
+    if (window.configruntime.gd3.mapMaxZoom) {
+        maxValue = window.configruntime.gd3.mapMaxZoom;
+    }
+    return maxValue;
+}

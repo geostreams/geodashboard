@@ -10,7 +10,7 @@ import trendsStyles from '../styles/trends.css';
 import {
     Dialog, DialogBody, DialogHeader, DialogTitle, List, ListItem, Icon
 } from 'react-mdc-web';
-import {getTrendColor, getCustomLocation, getMapTileURLSetting,} from '../utils/getConfig';
+import {getTrendColor, getCustomLocation, getMapTileURLSetting, maxZoom} from '../utils/getConfig';
 import {
     sensorsToFeaturesTrendPage, aboutPopupMenu, getAttribution, getControls
 } from '../utils/mapUtils';
@@ -30,7 +30,7 @@ class TrendsMap extends Component {
             clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector}),
             areaPolygonSource: new ol.source.Vector,
             currentZoom: 5.5,
-            maxZoom: 12,
+            maxZoom: maxZoom(),
             // create a fake map to avoid checking map.isdefined every time for flow.
             map: new ol.Map({
                 view: new ol.View({

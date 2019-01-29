@@ -1175,5 +1175,6 @@ export const gd3 = {
     mapMiniAttributionsCollapsible: true,
     mapClustersDistance: 1,
     clustersChoiceOption: false,
+    mapMaxZoom: 16,
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
