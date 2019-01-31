@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1165](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1165)
 - Add option for QA/QC text line in the Info Box on the Explore Page
   [GLGVO-498](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-498)
+- Added Footer file if wanted for projects
+  [GEOD-1187](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1187)
 
 ### Changed
 - General Exploratory Analysis Page Updates
