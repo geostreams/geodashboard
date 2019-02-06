@@ -83,7 +83,9 @@ class ExploreSourceGroup extends Component {
                                 ({this.props.sites_count})
 
                             </span>
-                            <span className={exploreStyles.exploreSourcesIcon}>
+                            <span className={exploreStyles.exploreSourcesIcon}
+                                  onClick={() => {this.clickedSourcesAccordion()}}
+                            >
                                 {this.props.dialog_contents}
                                 <Icon className={"material-icons " + exploreStyles.groupAccordionIcon}
                                       name={this.state.accordion_icon ? 'expand_more' : 'chevron_right'}

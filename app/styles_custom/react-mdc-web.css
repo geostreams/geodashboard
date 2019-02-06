@@ -45,6 +45,10 @@
     color: #FFFFFF;
 }
 
+.mdc-tab:after {
+    content: none !important;
+}
+
 .mdc-tab-bar {
     margin-left: 50px;
 }
