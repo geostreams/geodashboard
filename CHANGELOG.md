@@ -49,6 +49,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1150](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1150)
 - Region details page not loading
   [GEOD-1158](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1158)
+- Needed a scrollbar for the Permalink if the popup is large
+  [GEOD-1195](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1195)  
 
 ## [3.0.0-alpha.4] - 2018-10-01
 
