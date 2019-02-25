@@ -165,7 +165,7 @@ img[src=""] {
     margin-left: -0.5em;
 }
 
-.regionCount{
+.regionCount {
     float: right;
     margin-top: 0.6em;
 }
@@ -244,6 +244,7 @@ img[src=""] {
     position: relative;
     bottom: 0;
     right: 0;
+    cursor: pointer;
 }
 
 .groupAccordionIcon {
@@ -251,12 +252,14 @@ img[src=""] {
     position: absolute;
     bottom: 0;
     right: 0;
+    cursor: pointer;
 }
 
 .exploreSourcesIcon {
     min-width: 25%;
     background-color: #E6ECF1;
     position: relative;
+    cursor: pointer;
 }
 
 .exploreSourcesCountAndIcon {
