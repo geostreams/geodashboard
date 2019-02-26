@@ -231,8 +231,8 @@ class DetailContents extends Component {
                 if (this.state.showSeasonFilter) {
                     // Setup the filter for region. Do more stuff
                     season_filter = (<div className={styles.filterPadding}>
-                        <span className={[styles.filterTitle, styles.season_margin].join(" ")}> Season </span><br/>
-                        <Select className={styles.season_margin} value={this.props.season}
+                        <span className={[styles.filterTitle, styles.season_margin_title].join(" ")}> Season </span><br/>
+                        <Select className={styles.season_margin_select} value={this.props.season}
                                 onChange={this.onChangeSeason}>
                             <option value="spring" key="spring"> Spring</option>
                             <option value="summer" key="summer"> Summer</option>
@@ -276,7 +276,7 @@ class DetailContents extends Component {
                 let graphOptions = (
                     <Col md={3} className={styles.filterPadding}>
                         <span className={styles.filterTitle}> Graph Options </span><br/>
-                        <Row>
+                        <Row className={styles.filterMargin}>
                             {displayLineCheckbox}
                             {startAtZeroCheckbox}
                             {useSameTimescaleCheckbox}
@@ -291,7 +291,7 @@ class DetailContents extends Component {
                         </Col>
                         <Col md={5}>
                             <div className={styles.filterTitle}> Date Range</div>
-                            < FormField id="selectAllDates" key="selectAllDates">
+                            <FormField id="selectAllDates" key="selectAllDates">
                                 <Checkbox onChange={this.selectAllDates}
                                           value="selectAllDates" key="selectAllDates" name="selectAllDates"
                                           id="selectAllDates"
@@ -300,15 +300,16 @@ class DetailContents extends Component {
                                 <label>Select All Dates</label>
                             </FormField>
                             <br/>
-                            <DateSlider start={minDate} end={maxDate}
-                                        selectedStart={selected_start} selectedEnd={selected_end}
-                                        onSliderChange={this.onSliderChange}
-                            />
+                            <div className={styles.leftMargin}>
+                                <DateSlider start={minDate} end={maxDate}
+                                            selectedStart={selected_start} selectedEnd={selected_end}
+                                            onSliderChange={this.onSliderChange}
+                                />
+                            </div>
                         </Col>
                         {graphOptions}
 
-
-                        <Col md={2}>
+                        <Col md={1}>
                             <DetailPageDownload
                                 selected_parameters={this.state.selected_parameters}
                                 sensor_id={sensor.id}

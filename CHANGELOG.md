@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1165](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1165)
 - Add option for QA/QC text line in the Info Box on the Explore Page
   [GLGVO-498](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-498)
+- Added Footer file if wanted for projects
+  [GEOD-1187](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1187)
 
 ### Changed
 - General Exploratory Analysis Page Updates
@@ -33,8 +35,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1168](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1168)
 - Updated Popup Styling per design specifications
   [GEOD-1169](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1169)
+- Updated Styling for Explore Page Accordion Headers
+  [GEOD-1170](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1170)
 - Display "No Data Available" When Detail Page Graph is Empty
   [GEOD-1180](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1180)
+- Max Zoom for Maps is a Configuration Item
+  [GEOD-1185](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1185)
 - Migrate Detail Page QAQC Graphs to D3
   [GEOD-1178](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1178)
 
@@ -45,6 +51,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1150](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1150)
 - Region details page not loading
   [GEOD-1158](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1158)
+- Needed a scrollbar for the Permalink if the popup is large
+  [GEOD-1195](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1195)
 
 ## [3.0.0-alpha.4] - 2018-10-01
 

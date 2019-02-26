@@ -17,7 +17,7 @@ require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import type {MapProps, BasicMapState} from '../utils/flowtype';
-import {getMapTileURLSetting, getClustersDistance} from '../utils/getConfig';
+import {getMapTileURLSetting, getClustersDistance, maxZoom} from '../utils/getConfig';
 import {clusteringOptions, getAttribution, getControls} from '../utils/mapUtils';
 
 
@@ -42,7 +42,7 @@ class BasicMap extends Component {
             clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector()}),
             customLocationFilterVectorExtent: [],
             currentZoom: 5.5,
-            maxZoom: 12,
+            maxZoom: maxZoom(),
             // create a fake map to avoid checking map.isdefined every time for flow.
             map: new ol.Map({
                 view: new ol.View({

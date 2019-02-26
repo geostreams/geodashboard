@@ -165,7 +165,7 @@ img[src=""] {
     margin-left: -0.5em;
 }
 
-.regionCount{
+.regionCount {
     float: right;
     margin-top: 0.6em;
 }
@@ -241,16 +241,30 @@ img[src=""] {
 
 .accordionIcon {
     float: right;
+    position: relative;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+.groupAccordionIcon {
+    float: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
 }
 
 .exploreSourcesIcon {
     min-width: 25%;
     background-color: #E6ECF1;
+    position: relative;
+    cursor: pointer;
 }
 
 .exploreSourcesCountAndIcon {
     width: 25%;
-    margin: auto -4.8em 0.2em 0;
+    margin: 1em -4.8em 0.2em 0;
     z-index: 4;
     float: right;
     cursor: pointer;
@@ -277,7 +291,7 @@ img[src=""] {
 
 .exploreTitleCard {
     display: flex;
-    font-size: large !important;
+    font-size: 15px !important;
 }
 
 .exploreTitleLeft {

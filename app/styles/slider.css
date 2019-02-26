@@ -1,9 +1,9 @@
-.dateWrapper{
-    width: 60%;
+.dateWrapper {
+    width: 50%;
     display: inline-block;
 }
 
-.yearWrapper{
+.yearWrapper {
     width: 730px;
     display: inline-block;
     margin-top: 20px;
@@ -19,4 +19,3 @@
     display: inline-block;
     margin-left: 20px;
 }
-

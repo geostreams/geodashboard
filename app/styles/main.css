@@ -213,11 +213,13 @@ h1, h2, h3, h5, h6, p, ul {
 
 .detail_title {
     color: white;
-    margin-left: 50px;
+    display: inline-block;
+    padding-left: 2.5em;
+    text-indent: -1em;
 }
 
 .detail_header {
-    padding: 14px 50px 18px;
+    padding: 0.2em;
 }
 
 .clusterChoiceText {
@@ -252,7 +254,7 @@ h1, h2, h3, h5, h6, p, ul {
 
 .open_button_style {
     cursor: pointer;
-    margin: 0.2em 0.2em 0 2em;
+    margin: 0.2em 0.2em 0 1.5em;
     float: right;
 }
 

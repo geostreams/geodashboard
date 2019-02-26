@@ -81,12 +81,15 @@ class ExploreSourceGroup extends Component {
                                   onClick={() => {this.clickedSourcesAccordion()}}
                             >
                                 ({this.props.sites_count})
-                                <Icon className={"material-icons " + exploreStyles.accordionIcon}
+
+                            </span>
+                            <span className={exploreStyles.exploreSourcesIcon}
+                                  onClick={() => {this.clickedSourcesAccordion()}}
+                            >
+                                {this.props.dialog_contents}
+                                <Icon className={"material-icons " + exploreStyles.groupAccordionIcon}
                                       name={this.state.accordion_icon ? 'expand_more' : 'chevron_right'}
                                 />
-                            </span>
-                            <span className={exploreStyles.exploreSourcesIcon}>
-                                {this.props.dialog_contents}
                             </span>
                         </div>
                     </CardTitle>

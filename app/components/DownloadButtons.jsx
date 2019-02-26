@@ -139,7 +139,7 @@ class DownloadButtons extends Component {
                     <DialogHeader>
                         <DialogTitle>Permalink</DialogTitle>
                     </DialogHeader>
-                    <DialogBody>
+                    <DialogBody scrollable={true}>
                         <a href={this.state.link}/> {this.state.link}
                     </DialogBody>
                     <DialogFooter>
