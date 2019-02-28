@@ -35,6 +35,7 @@
     min-width: 28em;
     font-size: 80%;
     cursor: default;
+    z-index: 1;
 }
 
 .olPopup:after, .olPopup:before {

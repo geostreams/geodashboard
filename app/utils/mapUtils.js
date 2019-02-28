@@ -66,7 +66,7 @@ export function sensorsToFeatures(sensors: Sensors, parameters: Parameters): Arr
 
 export function sensorsToFeaturesTrendPage(
     sensors: Sensors, parameter: string, trends_parameter_lake_regions: Array,
-    parameters:Parameters): Array<ol.Feature> {
+    parameters: Parameters): Array<ol.Feature> {
 
     let features = Array();
 
@@ -79,6 +79,7 @@ export function sensorsToFeaturesTrendPage(
     //This is the regions within the lakes
     let trends_lake_regions = [];
     trends_lake_regions_config.map(p => trends_lake_regions = p.regions.split(','));
+    let the_parameter = '';
     sensors.map((sensor) => {
 
         if (sensor.name && sensor.name !== 'ALL') {
@@ -150,7 +151,7 @@ export function sensorsToFeaturesTrendPage(
                             trend_type = "noTrend";
                         }
                     }
-                    const the_parameter = parameters.find(x => x.name === parameter);
+                    the_parameter = parameters.find(x => x.name === parameter);
                     const units = the_parameter.unit;
 
                     trend_values = [
@@ -238,6 +239,7 @@ export function sensorsToFeaturesTrendPage(
                 "display_trends": true,
                 "trends_detail": true,
                 "region": getCustomTrendsRegion(sensor.properties.region),
+                "trend_parameter": the_parameter.title
             };
 
             feature.setId(sensor.properties.popupContent);
@@ -339,7 +341,7 @@ export function sensorsToFeaturesTrendRegionPage(
                 }
 
 
-                const units = the_parameter !== undefined ? the_parameter.unit: '';
+                const units = the_parameter !== undefined ? the_parameter.unit : '';
                 let percentage_change =
                     (Number(ten_years_average) - Number(total_average))
                     / Number(total_average) * 100;
@@ -400,7 +402,7 @@ export function sensorsToFeaturesTrendRegionPage(
                     })
                 }));
             }
-            const parameter_title = the_parameter !== undefined ? the_parameter.title : '' ;
+            const parameter_title = the_parameter !== undefined ? the_parameter.title : '';
 
             feature.attributes = {
                 "dataSource": getSourceName(sensor.properties.type),
