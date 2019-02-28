@@ -254,7 +254,7 @@ h1, h2, h3, h5, h6, p, ul {
 
 .open_button_style {
     cursor: pointer;
-    margin: 0.2em 0.2em 0 1.5em;
+    margin-left: 1em;
     float: right;
 }
 

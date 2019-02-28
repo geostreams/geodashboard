@@ -54,6 +54,10 @@ div > span > aside {
     width: 20em !important;
 }
 
+span > span > aside {
+    z-index: 10 !important;
+}
+
 .layersDrawerClass {
     visibility: hidden;
 }
