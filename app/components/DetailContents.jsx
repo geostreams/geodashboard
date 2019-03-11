@@ -9,9 +9,9 @@ import styles from '../styles/detail.css';
 import {Grid, Row, Col} from 'react-flexbox-grid';
 import {Checkbox, FormField, Icon} from 'react-mdc-web';
 import {
-    getMobileSizeMax, getDetailPageSeparateInfoText, getDetailPageCombinedInfoText, getTimeSeriesZeroStart,
+    getMobileSizeMax, getDetailPageCombinedInfoText, getTimeSeriesZeroStart,
     getDetailPageBAWInfoText, getChartLineDefault, getChartLineChoice, getStartAtZeroChoice,
-    getUseSameTimescaleChoice, getTimeSeriesSensorExtent
+    getUseSameTimescaleChoice, getTimeSeriesSensorExtent, getSourceInfo, getSourceName
 } from '../utils/getConfig';
 import Select from './material/Select';
 import DateSlider from "./DateSlider";
@@ -185,11 +185,11 @@ class DetailContents extends Component {
 
     render() {
 
-        const parameter_dialog_title = "Selected Parameters";
         const box_and_whisker_title = "Box and Whisker Plots ";
-
-        let parameter_dialog_contents = getDetailPageSeparateInfoText();
         const box_and_whisker_contents = getDetailPageBAWInfoText();
+
+        let parameter_dialog_title = getSourceName(this.props.sensor.properties.type);
+        let parameter_dialog_contents = getSourceInfo(this.props.sensor.properties.type.id);
         let max_parameters = 0;
         let mini_map_object, box_and_whiskers_header;
         let {sensor, chart_type} = this.props;

@@ -148,13 +148,23 @@ export const gd3 = {
 
     // Source IDs and their Display Names
     sourcename: {
-        "epa": "Water Quality Data",
+        "epa": "EPA Pollutant Loading",
         "glfmsp": "Great Lakes Fish Monitoring and Surveillance Program",
         "heidelberg": "Heidelberg University",
         "iadn": "Integrated Atmospheric Deposition Network",
         "lec": "Lake Erie Committee Forage Task Group",
+        "greon": "Great Rivers Ecological Observation Network",
+        "gac": "Gustavus Adolphus College",
+        "illinois-epa": "IEPA Ambient Water Quality Monitoring Network",
+        "iwqis": "Iowa Water Quality Information System",
+        "metc": "Metropolitan Council",
+        "noaa": "National Oceanic and Atmospheric Administration",
+        "sierra-club": "Fox River Study Group",
+        "tennessee": "Tennessee",
         "usgs": "United States Geological Survey",
-        "noaa": "National Oceanic and Atmospheric Administration"
+        "usgs-sg": "United States Geological Survey (Supergauge)",
+        "umrr-ltrm": "Upper Mississippi River Restoration",
+        "wqp": "Water Quality Portal",
     },
 
     // Show Info Boxes on the Explore Page
@@ -162,29 +172,114 @@ export const gd3 = {
     // For Source Info Boxes on the Explore Page
     source_information: {
         "epa": {
-            "description": "This is descriptive Text for the EPA source.",
-            "qaqc": "This is text about QA/QC.",
-            "more_info": "More Information"
+            "description": "These locations contain data related to EPA Pollutant Loading.",
+            "more_info": "Click here for more information about EPA Pollutant Loading",
+            "link" : "https://cfpub.epa.gov/dmr/"
         },
         "glfmsp": {
             "more_info": "Click here for more information",
             "link": "http://localhost:8080"
         },
-        "heidelberg" : {},
-        "iadn": {
+        "greon": {
             "description":
-                "This is descriptive Text for the IADN source, " +
-                "and it is multiline.",
+                "The GREON℠ program seeks to establish a network of real-time water quality monitoring platforms " +
+                "on great rivers around the world. NGRREC℠ partnered with YSI Inc. to design and launch a monitoring " +
+                "buoy capable of real-time, continuous collection of water quality and phytoplankton data. The first " +
+                "YSI PISCES (Pontoon for In-situ Characterization of Environmental Systems) buoy launched in May 2013 " +
+                "on the Upper Mississippi River System, but the program aims to expand to deploy platforms across the " +
+                "globe on other international great river systems.",
+            "qaqc": "Note: This data is not QA/QC.",
+            "more_info": "More information about GREON",
+            "link": "http://www.ngrrec.org/GREON/"
         },
-        "usgs": {
-            "more_info": "Click here for more information",
-            "link": "http://localhost:8080"
+        "gac": {
+            "description": "Spreadsheet data from 2016"
+        },
+        "heidelberg" : {},
+        "illinois-epa": {
+            "description":
+                "These locations contain data related to the IEPA Ambient Water Quality Monitoring Network.",
+            "more_info": "Click here for more information about the IEPA Ambient Water Quality Monitoring Network (AWQMN)",
+            "link": "http://www.epa.illinois.gov/topics/water-quality/monitoring/river-and-stream/"
+        },
+        "iwqis": {
+            "description":
+                "The IWQIS allows access to real-time water-quality data and information such as nitrate, pH, and " +
+                "dissolved oxygen concentrations, discharge rates, and temperature.",
+            "color": "#31CFC1",
+            "more_info": "Click here for more information about IWQIS",
+            "link" : "http://iwqis.iowawis.org/"
+        },
+        "metc": {
+            "description":
+                "These locations contain data related to the " +
+                "Metropolitan Council Environmental Information Management Systems.",
+            "more_info": "Click here for more information about the Metropolitan Council",
+            "link" : "https://eims.metc.state.mn.us/"
         },
         "noaa": {
-            "description": "This is descriptive Text for the NOAA source.",
-            "more_info": "Click here for more information",
-            "link": "http://localhost:8080"
-        }
+            "description":
+                "NOAA's National Data Buoy Center (NDBC) collects wind, wave, and other marine data. The data are " +
+                "collected from NDBC moored buoys and from C-MAN (Coastal-Marine Automated Network) stations located " +
+                "on piers, offshore towers, lighthouses, and beaches. Parameters reported by both buoys and C-MAN " +
+                "stations include air temperature and pressure, wind speed and direction, wind gust, and sea surface " +
+                "temperature. The buoys (and a few C-MAN stations located on offshore towers) also report wave data, " +
+                "usually including wave height, wave period, and wave spectra. We've chosen to focus on buoys on the " +
+                "Mississippi River that are equipped with continuous water quality sensors for this website.",
+            "more_info": "For more information and for access to all NOAA buoy data.",
+            "link" : "http://www.nodc.noaa.gov/"
+        },
+        "sierra-club": {
+            "description":  "These locations contain data related to the Fox River Study Group.",
+            "more_info": "Click here for more information about the Fox River Study Group",
+            "link" : "http://foxriverstudygroup.org/"
+        },
+        "tennessee": {
+            "description": "These locations contain data related to Tennessee."
+        },
+        "usgs": {
+            "description":
+                "The USGS investigates the occurrence, quantity, quality, distribution, and movement of surface and " +
+                "underground waters and disseminates the data to the public, State and local governments, public and " +
+                "private utilities, and other Federal agencies involved with managing our water resources. U.S. " +
+                "Geological Survey conducts long-term monitoring of lakes and rivers nationwide. They have gauges " +
+                "throughout many rivers in the Mississippi River basin. We've chosen to focus on gauges on the " +
+                "Mississippi River and its tributaries that are equipped with continuous nitrate sensors for this website.",
+            "more_info": "For more information and for access to all USGS water quantity and quality data.",
+            "link" : "http://waterdata.usgs.gov/nwis"
+        },
+        "usgs-sg": {
+            "description":
+                "The USGS investigates the occurrence, quantity, quality, distribution, and movement of surface and " +
+                "underground waters and disseminates the data to the public, State and local governments, public and " +
+                "private utilities, and other Federal agencies involved with managing our water resources. U.S. " +
+                "Geological Survey conducts long-term monitoring of lakes and rivers nationwide. They have gauges " +
+                "throughout many rivers in the Mississippi River basin. We've chosen to focus on gauges on the " +
+                "Mississippi River and its tributaries that are equipped with continuous nitrate sensors for this website.",
+            "more_info": "For more information and for access to all USGS water quantity and quality data.",
+            "link" : "http://waterdata.usgs.gov/nwis"
+        },
+        "umrr-ltrm": {
+            "description":
+                "The UMRR LTRM water quality sampling design focuses on a subset of limnological variables related " +
+                "to habitat quality and ecosystem function that includes physicochemical features, suspended sediment, " +
+                "and major plant nutrients known to be significant to aquatic habitat in this system. We've chosen to " +
+                "focus on long term nitrate data sets available on the Mississippi River for this website.",
+            "more_info": "Click here for more information and for access to all original UMRR LTRM data.",
+            "link" : "http://www.umesc.usgs.gov/data_library/water_quality/water1_query.shtml"
+        },
+        "wqp": {
+            "description":
+                "The Water Quality Portal (WQP) is a cooperative service sponsored by the United States Geological " +
+                "Survey (USGS), the Environmental Protection Agency (EPA) and the National Water Quality Monitoring " +
+                "Council (NWQMC) that integrates publicly available water quality data from the USGS National Water " +
+                "Information System (NWIS) the EPA STOrage and RETrieval (STORET) Data Warehouse, and the USDA ARS " +
+                "Sustaining The Earth’s Watersheds - Agricultural Research Database System (STEWARDS). We've chosen " +
+                "to focus on available Water Quality Portal long term (5 years) nitrate data sets available on the " +
+                "Mississippi River and its tributaries for this website.",
+            "more_info": "Click here for more information and for access to all WQP data.",
+            "link" : "http://waterqualitydata.us/"
+        },
     },
 
     source_order: {
