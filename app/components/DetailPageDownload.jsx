@@ -25,7 +25,7 @@ class DetailPageDownload extends Component {
         if (this.props.selected_parameters.length > 0) {
             let parametersToSearch = Object.assign([], this.props.selected_parameters);
             const multiParameters =
-                intersectArrays(Object.keys(window.configruntime.gd3.multi_parameter_map), this.props.selected_parameters);
+                intersectArrays(Object.keys(this.props.multi_param_map), this.props.selected_parameters);
             multiParameters.map((parameter) =>
                 window.configruntime.gd3.multi_parameter_map[parameter].map((alternate) => {
                     parametersToSearch.push(alternate);
@@ -37,11 +37,10 @@ class DetailPageDownload extends Component {
         params["until"] = this.props.selected_end_date.toISOString().slice(0, 10);
 
         let link = serialize(params);
-        console.log(link);
         return downloadApi + link;
     }
 
-    onDownload(type: string)  {
+    onDownload(type: string) {
         let link = this.buildLink(type);
         window.open(link);
     }
@@ -54,10 +53,12 @@ class DetailPageDownload extends Component {
 
         return (
             <div className={styles.detailDownloadButtonPosition}>
-                <Button className={disabled === false ? styles.detailDownloadButton: ''}
+                <Button className={disabled === false ? styles.detailDownloadButton : ''}
                         onClick={this.onDownload.bind(this, "csv")}
                         raised disabled={disabled}>
-                    <span className={disabled === false ? styles.detailDownloadButtonText: ''}>Download</span>
+                    <span className={disabled === false ? styles.detailDownloadButtonText : ''}>
+                        Download
+                    </span>
                 </Button>
             </div>
         );
@@ -69,7 +70,8 @@ DetailPageDownload.propTypes = {
     selected_parameters: PropTypes.array,
     id: PropTypes.number,
     selected_start_date: PropTypes.instanceOf(Date),
-    selected_end_date: PropTypes.instanceOf(Date)
+    selected_end_date: PropTypes.instanceOf(Date),
+    multi_param_map: PropTypes.Object
 };
 
 export default DetailPageDownload;

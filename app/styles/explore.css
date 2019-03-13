@@ -64,20 +64,8 @@ span > span > aside {
 
 .exploreCard {
     width: 24em;
-    margin-top: 0;
+    margin-top: -2em;
     margin-bottom: -1em;
-}
-
-@media screen and (max-device-width: 840px) {
-    .layersButton {
-        visibility: hidden;
-    }
-
-    .exploreCard {
-        width: 100% !important;
-        margin-left: 0.5em !important;
-    }
-
 }
 
 .checkboxWidth {
@@ -115,6 +103,7 @@ span > span > aside {
     padding: 0.5em;
     color: #ffffff !important;
     cursor: pointer;
+    margin-bottom: 1.3em !important;
 }
 
 .listHeadlineStyle {
@@ -331,4 +320,27 @@ div > span > aside > nav {
 
 .sourceItemsStyleClosed {
     display: none;
+}
+
+@media screen and (max-device-width: 840px) {
+    .layersButton {
+        visibility: hidden;
+    }
+
+    .exploreCard {
+        width: 100% !important;
+        margin-left: 0.5em !important;
+    }
+
+    .exploreSourcesCountAndIcon {
+        background-color: #E6ECF1;
+        padding: 1em;
+        margin: 0 -4.8em 0 0;
+        cursor: pointer;
+        z-index: 5;
+    }
+
+    .exploreTitleCard, .groupAccordionIcon {
+        font-size: xx-large !important;
+    }
 }

@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-498](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-498)
 - Added Footer file if wanted for projects
   [GEOD-1187](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1187)
+- Add option for Explore Page Data Sources to Start Closed
+  [GEOD-1186](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1186)
 
 ### Changed
 - General Exploratory Analysis Page Updates
@@ -41,6 +43,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1180](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1180)
 - Max Zoom for Maps is a Configuration Item
   [GEOD-1185](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1185)
+- Migrate Detail Page QAQC Graphs to D3
+  [GEOD-1178](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1178)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior
@@ -55,6 +59,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1189](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1189)
 - Detail Page Info Boxes
   [GEOD-1197](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1197)
+- D3 Graph Popups Do Not Update Date for Bins
+  [GEOD-1205](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1205)
+- Detail Page would not refresh properly if the URL changed
+  [GEOD-1179](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1179)
+- Detail Page Download Button is Not Always Functional
+  [GEOD-1191](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1191)
+- Correct the Trends Station Popup to use the same terms as the Trends Region Popup
+  [GEOD-1193](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1193)
+- D3 Graph Popups Do Not Update Date for Bins
+  [GEOD-1205](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1205)
 
 ## [3.0.0-alpha.4] - 2018-10-01
 

@@ -2,7 +2,7 @@ import {
     getApplicationWebsite, getColor, getMobileSizeMax, getMobileDetailPath, displayOnlineStatus, maxDisplayParams
 } from './getConfig';
 
-export function popupHeader(feature: ol.Feature, styles, online=false){
+export function popupHeader(feature: ol.Feature, styles, online = false) {
     let id = feature.getId().toUpperCase();
     let sensorInfo = feature.attributes;
 
@@ -56,7 +56,7 @@ export function popupHeader(feature: ol.Feature, styles, online=false){
     return headerText + bodyText;
 }
 
-export function popupParameters(feature: ol.Feature, styles){
+export function popupParameters(feature: ol.Feature, styles) {
 
     let application_sensors_website = getApplicationWebsite();
     let detail_link = application_sensors_website + '#detail/location/';
@@ -85,14 +85,14 @@ export function popupParameters(feature: ol.Feature, styles){
             } else {
                 paramsAlt = paramsAlt +
                     '<tr><td width="30%" align="right"> </td>'.concat(
-                    '<td width="70%">', paramsName + paramsUnit, '</td></tr>');
+                        '<td width="70%">', paramsName + paramsUnit, '</td></tr>');
             }
         }
     } else {
         paramsAlt =
             '<tr><td width="30%" align="right" class=' + styles.table_title + '>' +
             '<strong class=' + styles.table_title + '>Parameters </strong>' +
-            '<i class="material-icons ' + styles.params_icon + '">warning </i>'+ '</td>' +
+            '<i class="material-icons ' + styles.params_icon + '">warning </i>' + '</td>' +
             '<td width="70%">' + 'There are too many parameters to display here. </td></tr>' +
             '<tr><td width="30%" align="right"> </td>' + '<td width="70%"> ' +
             '<a href=" ' + detail_link + sensorInfo.name + '/separate/" >View Data</a> ' +
@@ -104,9 +104,9 @@ export function popupParameters(feature: ol.Feature, styles){
             paramsAlt +
         '</table>';
 
-    let bodyText = '<div class=' + styles.paramsborder + '>' + params + '</div>' ;
+    let bodyText = '<div class=' + styles.paramsborder + '>' + params + '</div>';
 
-    if(paramsLength > 0) {
+    if (paramsLength > 0) {
         bodyText += '<a href=" ' + detail_link + sensorInfo.name + '/separate/" class=' +
             styles.viewdetail + ' >View Data</a>';
     }
@@ -114,7 +114,7 @@ export function popupParameters(feature: ol.Feature, styles){
     return bodyText;
 }
 
-export function popupTrends(feature: ol.Feature, styles){
+export function popupAnalysis(feature: ol.Feature, styles) {
 
     let application_sensors_website = getApplicationWebsite();
     let sensorInfo = feature.attributes;
@@ -167,8 +167,8 @@ export function popupTrends(feature: ol.Feature, styles){
         paramsLength = sensorInfo.parameters.length;
     }
 
-    if(paramsLength > 0 && sensorInfo.trends_detail){
-        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/'+
+    if (paramsLength > 0 && sensorInfo.trends_detail) {
+        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/' +
             sensorInfo.name + '/separate/" class=' +
             styles.viewsitedetail + ' >View Data for the ' + sensorInfo.name + ' Site </a>';
     }
@@ -177,15 +177,72 @@ export function popupTrends(feature: ol.Feature, styles){
 
 }
 
-export function removePopup(theMap){
-    const closer = document.getElementById('popup-closer');
-    if (closer) {
-        theMap.getOverlayById("marker").setPosition(undefined);
-        closer.blur();
+export function popupTrends(feature: ol.Feature, styles) {
+
+    let application_sensors_website = getApplicationWebsite();
+    let sensorInfo = feature.attributes;
+    let sensorTrends = sensorInfo.trend_type;
+    let trendColor = sensorInfo.trend_color;
+    let trendValues = sensorInfo.trend_values;
+    let parameter = sensorInfo.trend_parameter;
+    let trendsLeft = '';
+    let trendsRight = '';
+
+    if (sensorTrends === "noTrend" || sensorTrends === "") {
+
+        let leftText = " ";
+        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+            trendColor + '; border-color: ' + trendColor + ';">' + leftText + '</p></td></tr>';
+
+        let rightText = "Not enough data to display";
+        trendsRight = '' +
+            '<tr><td><strong>' + rightText + ' </strong></td></tr>';
+
+    } else {
+
+        if (sensorTrends === 'trendUp' || sensorTrends === 'overThresholdUp') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.upArrow + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + '; ">' + trendValues[4] + '</p></td></tr>';
+        } else if (sensorTrends === 'trendDown' || sensorTrends === 'overThresholdDown') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.downArrow + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+        } else if (sensorTrends === 'noTrend') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+        } else {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+        }
+
+        trendsRight = '' +
+            '<tr><td><strong>Parameter: </strong>' + parameter + '</td></tr>' +
+            '<tr><td><strong>Total Avg: </strong>' + trendValues[0] + '</td></tr>' +
+            '<tr><td><strong>Ten Year Avg: </strong>' + trendValues[1] + '</td></tr>' +
+            '<tr><td><strong>Latest Avg: </strong>' + trendValues[2] + '</td></tr>';
     }
+
+    let trends = trendsLeft + trendsRight;
+
+    let bodyText =
+        '<table class=' + styles.tablestyle + '> ' +
+            trends +
+        '</table>';
+    let paramsLength = 0;
+    if (sensorInfo.parameters && sensorInfo.parameters.length > 0) {
+        paramsLength = sensorInfo.parameters.length;
+    }
+
+    if (paramsLength > 0 && sensorInfo.trends_detail) {
+        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/' +
+            sensorInfo.name + '/separate/" class=' +
+            styles.viewsitedetail + ' >View Data for the ' + sensorInfo.name + ' Site </a>';
+    }
+
+    return bodyText;
+
 }
 
-export function popupRegion(feature: ol.Feature, styles){
+export function popupRegion(feature: ol.Feature, styles) {
 
     let id = feature.getId().toUpperCase();
     let sensorInfo = feature.attributes;
@@ -244,11 +301,19 @@ export function popupRegion(feature: ol.Feature, styles){
             trends +
         '</table>';
 
-    if(sensorInfo.trend_type !== 'noTrend'  && sensorInfo.trend_type !== "") {
-        regionText += '<a href="#/trendsdetail/region/'+ sensorInfo.location +
-            '/'+ sensorInfo.url_parameter + '/'+ sensorInfo.season + '" class=' +
+    if (sensorInfo.trend_type !== 'noTrend' && sensorInfo.trend_type !== "") {
+        regionText += '<a href="#/trendsdetail/region/' + sensorInfo.location +
+            '/' + sensorInfo.url_parameter + '/' + sensorInfo.season + '" class=' +
             styles.viewdetail + '>View Data for the ' + sensorInfo.region + ' Region </a>';
 
     }
     return headerText + regionText;
+}
+
+export function removePopup(theMap) {
+    const closer = document.getElementById('popup-closer');
+    if (closer) {
+        theMap.getOverlayById("marker").setPosition(undefined);
+        closer.blur();
+    }
 }

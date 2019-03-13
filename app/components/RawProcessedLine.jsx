@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import D3Line from './D3/D3Line';
+import D3RawProcessedLine from './D3/D3RawProcessedLine';
 import PropTypes from 'prop-types';
 import styles from '../styles/detail.css';
 
-
-class Line extends Component {
+class RawProcessedLine extends Component {
 
     static propTypes = {
         data: PropTypes.array,
+        pointData: PropTypes.array,
         domain: PropTypes.object,
         selectedStartDate: PropTypes.instanceOf(Date),
         selectedEndDate: PropTypes.instanceOf(Date),
@@ -19,7 +19,7 @@ class Line extends Component {
     componentDidMount() {
         // D3 Code to create the chart
         const el = this._rootNode;
-        D3Line.create(el, {
+        D3RawProcessedLine.create(el, {
             width: 500,
             height: 400
         }, this.getLineState());
@@ -27,7 +27,7 @@ class Line extends Component {
 
     componentDidUpdate() {
         let el = this._rootNode;
-        D3Line.update(el, this.getLineState());
+        D3RawProcessedLine.update(el, this.getLineState());
     }
 
     getLineState() {
@@ -44,22 +44,21 @@ class Line extends Component {
             hoverClass: styles.hoverLine,
             overlayClass: styles.overlay,
             tooltipClass: styles.tooltip,
-            use_sensor_extent: this.props.sameTimeScale,
             selectedStartDate: this.props.selectedStartDate,
             selectedEndDate: this.props.selectedEndDate,
             sources: this.props.sources,
             displayLines: this.props.displayLines,
             data: this.props.data,
+            pointData: this.props.pointData,
             domain: this.props.domain,
             yAxisLabel: this.props.yAxisLabel,
             title: this.props.title,
-            startAtZero: this.props.startAtZero,
-            binType: this.props.binType
+            startAtZero: this.props.startAtZero
         }
     }
 
     componentWillUnmount() {
-        D3Line.destroy(this._rootNode);
+        D3RawProcessedLine.destroy(this._rootNode);
     }
 
     _setRef(componentNode) {
@@ -72,4 +71,4 @@ class Line extends Component {
 
 }
 
-export default Line;
+export default RawProcessedLine;

@@ -78,6 +78,7 @@ class Chart extends Component {
                       sources={sources}
                       startAtZero={this.props.startAtZero}
                       sameTimeScale={this.props.sameTimeScale}
+                      binType={this.props.binType}
                 />
             );
         }
