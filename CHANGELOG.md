@@ -57,12 +57,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1195](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1195)
 - Correct Layering of Items on the Page when Dialogs are Utilized
   [GEOD-1189](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1189)
+- D3 Graph Popups Do Not Update Date for Bins
+  [GEOD-1205](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1205)
 - Detail Page would not refresh properly if the URL changed
   [GEOD-1179](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1179)
 - Detail Page Download Button is Not Always Functional
   [GEOD-1191](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1191)
 - Correct the Trends Station Popup to use the same terms as the Trends Region Popup
   [GEOD-1193](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1193)
+- D3 Graph Popups Do Not Update Date for Bins
+  [GEOD-1205](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1205)
 
 ## [3.0.0-alpha.4] - 2018-10-01
 
