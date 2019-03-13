@@ -60,7 +60,7 @@ export const gd3 = {
     },
 
     // Paths for Downloads
-    download_button_path: '/geostreams/datapoints/download?',
+    download_button_path: '/datapoints/download?',
 
     // This variable is used to determine the location for links to the Detail Page
     application_website: "/",
