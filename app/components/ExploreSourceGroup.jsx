@@ -5,7 +5,7 @@
 import React, {Component} from 'react'
 import exploreStyles from '../styles/explore.css';
 import {Card, CardTitle, CardHeader, CardText, Icon} from 'react-mdc-web';
-import {getColor} from '../utils/getConfig';
+import {getColor, startExploreSourcesOpened} from '../utils/getConfig';
 
 
 class ExploreSourceGroup extends Component {
@@ -17,7 +17,7 @@ class ExploreSourceGroup extends Component {
     constructor(props: Object) {
         super(props);
         this.state = {
-            accordion_icon: true,
+            accordion_icon: startExploreSourcesOpened(),
             source_group_icon: true,
         };
         (this: any).clickedSourceGroup = this.clickedSourceGroup.bind(this);
@@ -73,18 +73,24 @@ class ExploreSourceGroup extends Component {
                                 />
                             </div>
                             <div className={exploreStyles.exploreTitleRight}
-                                 onClick={() => {this.clickedSourcesAccordion()}}
+                                 onClick={() => {
+                                     this.clickedSourcesAccordion()
+                                 }}
                             >
                                 {this.props.source.label}
                             </div>
                             <span className={exploreStyles.exploreSourcesCountAndIcon}
-                                  onClick={() => {this.clickedSourcesAccordion()}}
+                                  onClick={() => {
+                                      this.clickedSourcesAccordion()
+                                  }}
                             >
                                 ({this.props.sites_count})
 
                             </span>
                             <span className={exploreStyles.exploreSourcesIcon}
-                                  onClick={() => {this.clickedSourcesAccordion()}}
+                                  onClick={() => {
+                                      this.clickedSourcesAccordion()
+                                  }}
                             >
                                 {this.props.dialog_contents}
                                 <Icon className={"material-icons " + exploreStyles.groupAccordionIcon}

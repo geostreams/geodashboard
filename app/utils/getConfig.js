@@ -513,3 +513,11 @@ export function maxZoom() {
     }
     return maxValue;
 }
+
+export function startExploreSourcesOpened() {
+    let getValue = false;
+    if (window.configruntime.gd3.start_explore_each_source_open) {
+        getValue = window.configruntime.gd3.start_explore_each_source_open;
+    }
+    return getValue;
+}

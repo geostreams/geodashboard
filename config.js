@@ -230,6 +230,10 @@ export const gd3 = {
     // true === open, false === closed
     sources_explore_accordion_open: true,
 
+    // Explore Page Sources Child Sections Initial Open Status
+    // true === open, false === closed
+    start_explore_each_source_open: false,
+
     // Explore Page Additional Accordion Sections
     additional_explore_accordion_sections: [],
 
