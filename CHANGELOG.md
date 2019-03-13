@@ -41,6 +41,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1180](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1180)
 - Max Zoom for Maps is a Configuration Item
   [GEOD-1185](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1185)
+- Migrate Detail Page QAQC Graphs to D3
+  [GEOD-1178](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1178)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior
