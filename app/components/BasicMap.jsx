@@ -13,12 +13,14 @@
 
 import React, {Component} from 'react';
 import ol from 'openlayers';
+
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import type {MapProps, BasicMapState} from '../utils/flowtype';
 import {getMapTileURLSetting, getClustersDistance, maxZoom} from '../utils/getConfig';
 import {clusteringOptions, getAttribution, getControls} from '../utils/mapUtils';
+import {removePopup} from '../utils/mapPopup';
 
 
 class BasicMap extends Component {
@@ -68,52 +70,72 @@ class BasicMap extends Component {
                     <div id="marker" title="Marker" className="marker"> </div>
                     <div id="popup" className={styles.olPopup}>
                         <a href="#" id="popup-closer" className={styles.olPopupCloser}>
-                            <Icon name="close" />
+                            <Icon name="close"/>
                         </a>
                         <div id="popup-content"> </div>
                     </div>
 
                     <div id="ol-centercontrol" className={styles.olCenterButton}
-                         ref={(div) => { this.ol_centercontrol = div; }}>
+                         ref={(div) => {
+                             this.ol_centercontrol = div;
+                         }}>
                     </div>
                     <button id="centerButton" title="Click to Center the Map"
-                            ref={(button) => { this.centerButton = button; }}>
+                            ref={(button) => {
+                                this.centerButton = button;
+                            }}>
                         <Icon name="gps_fixed"/>
                     </button>
 
                     <div id="ol-drawcirclecontrol"
                          className={styles.olDrawCircleButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawcirclecontrol = div; }}>
+                         ref={(div) => {
+                             this.ol_drawcirclecontrol = div;
+                         }}>
                     </div>
                     <button id="drawCircleButton" title="Click to Draw a Circle"
-                            ref={(button) => { this.drawCircleButton = button; }}>
+                            ref={(button) => {
+                                this.drawCircleButton = button;
+                            }}>
                         <Icon name="panorama_fish_eye"/>
                     </button>
 
                     <div id="ol-drawsquarecontrol"
                          className={styles.olDrawSquareButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawsquarecontrol = div; }}>
+                         ref={(div) => {
+                             this.ol_drawsquarecontrol = div;
+                         }}>
                     </div>
                     <button id="drawSquareButton" title="Click to Draw a Square"
-                            ref={(button) => { this.drawSquareButton = button; }}>
+                            ref={(button) => {
+                                this.drawSquareButton = button;
+                            }}>
                         <Icon name="crop_square"/>
                     </button>
 
                     <div id="ol-drawcustomcontrol"
                          className={styles.olDrawCustomButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawcustomcontrol = div; }}>
+                         ref={(div) => {
+                             this.ol_drawcustomcontrol = div;
+                         }}>
                     </div>
                     <button id="drawCustomButton" title="Click to Draw a Custom Shape"
-                            ref={(button) => { this.drawCustomButton = button; }}>
+                            ref={(button) => {
+                                this.drawCustomButton = button;
+                            }}>
                         <Icon name="star_border"/>
                     </button>
 
                     <div id="ol-drawclearcontrol"
                          className={styles.olDrawClearButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawclearcontrol = div; }}>
+                         ref={(div) => {
+                             this.ol_drawclearcontrol = div;
+                         }}>
                     </div>
                     <button id="drawClearButton" title="Click to Reset Drawing Selection"
-                            ref={(button) => { this.drawClearButton = button; }}>
+                            ref={(button) => {
+                                this.drawClearButton = button;
+                            }}>
                         <Icon name="clear"/>
                     </button>
                 </div>
@@ -125,6 +147,7 @@ class BasicMap extends Component {
     componentDidUpdate() {
         this.props.mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
         clusteringOptions(this.state.map, this.props.disableClusters);
+
         this.state.clusterSource.clear();
         this.state.clusterSource.addFeatures(this.props.features);
         this.state.vectorSource.clear();
@@ -175,14 +198,6 @@ class BasicMap extends Component {
             }
         });
 
-        if (closer) {
-            closer.onclick = function () {
-                overlay.setPosition(undefined);
-                closer.blur();
-                return false;
-            };
-        }
-
         let view = new ol.View({
             projection: 'EPSG:3857',
             center: ol.proj.fromLonLat(this.state.center),
@@ -194,6 +209,16 @@ class BasicMap extends Component {
         let theMap;
 
         const that = this;
+
+        if (closer) {
+            closer.onclick = function () {
+                that.props.onMapSingleClick(theMap);
+                removePopup(theMap);
+                view.fit(that.state.vectorSource.getExtent(), that.state.map.getSize());
+                return false;
+            };
+        }
+
         let centerControl;
 
         const centerButton = this.centerButton;

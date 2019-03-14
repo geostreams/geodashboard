@@ -521,3 +521,11 @@ export function startExploreSourcesOpened() {
     }
     return getValue;
 }
+
+export function getMapPopupZoom() {
+    let getValue = 10;
+    if (window.configruntime.gd3.mapPopupZoomMax) {
+        getValue = window.configruntime.gd3.mapPopupZoomMax;
+    }
+    return getValue;
+}

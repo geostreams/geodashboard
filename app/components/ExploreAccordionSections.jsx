@@ -12,8 +12,8 @@ class ExploreAccordionSections extends Component {
         this.state = {
             inner_accordion_icon: false,
         };
-        (this:any).clickSensor = this.clickSensor.bind(this);
-        (this:any).clickedInnerAccordion = this.clickedInnerAccordion.bind(this);
+        (this: any).clickSensor = this.clickSensor.bind(this);
+        (this: any).clickedInnerAccordion = this.clickedInnerAccordion.bind(this);
     }
 
     clickedInnerAccordion() {
@@ -64,15 +64,17 @@ class ExploreAccordionSections extends Component {
             let color = getColor(data.properties.type.id);
 
             if (this.props.selectedSensorID !== data.id) {
-                color = applyColors(["000000", color], [0.03,0.1]);
+                color = applyColors(["000000", color], [0.03, 0.1]);
             }
 
             let help_text = data.properties.name;
-            if(data.properties.name !== data.properties.popupContent) {
+            if (data.properties.name !== data.properties.popupContent) {
                 help_text += " - " + data.properties.popupContent;
             }
             let button_label = data.properties.name.substring(0, trim_length).trim().replace("-", "_").replace(" ", "_");
             if (this.state.inner_accordion_icon) {
+                // Move Popup slightly to the North when clicking the Accordion Icons
+                webMercatorPoint[1] = webMercatorPoint[1] + 20000;
                 item_pills.push(
                     <Button key={data.id} className={exploreStyles.exploreButton}
                             style={{backgroundColor: color, border: borderStyle, borderColor: statusColor}}
@@ -92,10 +94,12 @@ class ExploreAccordionSections extends Component {
         });
 
         let color = getColor(this.props.sourceId);
-        color = applyColors(["000000", color], [0.05,0.2]);
+        color = applyColors(["000000", color], [0.05, 0.2]);
         contents.push(
             <div key={this.props.id}>
-                <div onClick={() => {this.clickedInnerAccordion()}}>
+                <div onClick={() => {
+                    this.clickedInnerAccordion()
+                }}>
                     <div style={{backgroundColor: color}}>
                             <span data-tooltip={this.props.tooltipVal} className={exploreStyles.regionLabel}>
                                 {this.props.sectionLabel}
@@ -118,7 +122,5 @@ class ExploreAccordionSections extends Component {
 
     }
 }
-
-
 
 export default ExploreAccordionSections;

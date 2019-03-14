@@ -73,6 +73,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1193](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1193)
 - D3 Graph Popups Do Not Update Date for Bins
   [GEOD-1205](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1205)
+- Explore Page Popup Boxes Map Issues Corrected
+  [GEOD-1199](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1199)
 
 ## [3.0.0-alpha.4] - 2018-10-01
 
