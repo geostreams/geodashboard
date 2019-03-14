@@ -1,8 +1,9 @@
 import {connect} from "react-redux";
 import DetailContentsComponent from "../components/DetailContents";
-import {fetchSensorMobile, fetchSensor } from "../actions";
-import { getMobileSizeMax} from '../utils/getConfig';
+import {fetchSensorMobile, fetchSensor} from "../actions";
+import {getMobileFilterSensors, getMobileSizeMax} from '../utils/getConfig';
 import type {Dispatch} from "../utils/flowtype";
+
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -14,11 +15,11 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         loadSensor: (id, name, use_season, binType, selectedStartDate, selectedEndDate) => {
-            if(screen.width <= getMobileSizeMax()) {
+            if (screen.width <= getMobileSizeMax() && getMobileFilterSensors() === true) {
                 dispatch(fetchSensorMobile(name))
             } else {
-                if(use_season) {
-                    dispatch(fetchSensor( name, 'season', selectedStartDate, selectedEndDate))
+                if (use_season) {
+                    dispatch(fetchSensor(name, 'season', selectedStartDate, selectedEndDate))
                 } else {
                     dispatch(fetchSensor(name, binType, selectedStartDate, selectedEndDate))
                 }

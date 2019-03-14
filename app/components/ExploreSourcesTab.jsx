@@ -69,11 +69,22 @@ class ExploreSourcesTab extends Component {
                         .filter(data => this.props.userStations.includes(data.properties.type.location));
                 }
                 if (getMobileFilterSensors() === true) {
+                    // Date Today
+                    let dateToday = new Date();
+                    dateToday.setDate(dateToday.getDate());
+                    dateToday = dateToday.toJSON();
+
+                    // Date Two Weeks Ago
                     let twoWeeksAgo = new Date();
                     twoWeeksAgo.setDate((twoWeeksAgo.getDate() - 14));
                     twoWeeksAgo = twoWeeksAgo.toJSON();
-                    mobile_data = mobile_data.filter(data => (data.max_end_time) >= twoWeeksAgo);
+
+                    // Filter the Data
+                    mobile_data = mobile_data
+                        .filter(data => (data.max_end_time) >= twoWeeksAgo)
+                        .filter(data => (data.max_end_time) <= dateToday);
                 }
+
                 if (mobile_data.length === 0) {
                     contents.push(
                         <span key="no_data">
@@ -142,8 +153,7 @@ class ExploreSourcesTab extends Component {
             if (contents.length > 0) {
 
                 source_card = <ExploreSourceGroup sites_count={sites_count} source={source} contents={contents}
-                                                  dialog_contents={dialogContents}/>;
-
+                                                  dialog_contents={dialogContents} key={source.id}/>;
                 if (screen.width > getMobileSizeMax()) {
                     source_card_group.push(
                         <List className={this.state.accordion_icon ?

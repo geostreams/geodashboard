@@ -635,15 +635,15 @@ export function fetchSensor(name: string, bin: string, start_date: Date, end_dat
         const state = getState();
         const endpoints = getApi(getState);
         let dateFilter = "";
-        if(typeof start_date !== 'undefined') {
+        if (typeof start_date !== 'undefined') {
             dateFilter += "?since=" + start_date.toISOString();
-            if(typeof end_date !== 'undefined')
+            if (typeof end_date !== 'undefined')
             {
                 dateFilter += "&until=" + end_date.toISOString();
             }
         }
 
-        //get sensor id from the name
+        // Get sensor id from the name
         if (state.sensors.length > 0) {
             const sensor = state.sensors.data.find(x => x.name === name).id;
             dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
@@ -671,29 +671,38 @@ export function fetchSensor(name: string, bin: string, start_date: Date, end_dat
 export function fetchSensorMobile(name: string) {
     return (dispatch: any, getState: GetState) => {
         const state = getState();
-        const api = getApi(getState).api;
+        const endpoints = getApi(getState);
 
+        // Date Today
+        let dateToday = new Date();
+        dateToday.setDate(dateToday.getDate());
+        dateToday = dateToday.toJSON();
+
+        // Date Two Weeks Ago
         let twoWeeksAgo = new Date();
         twoWeeksAgo.setDate((twoWeeksAgo.getDate() - 14));
         twoWeeksAgo = twoWeeksAgo.toJSON();
-        const dateFilter = "?since=" + twoWeeksAgo.toString();
 
-        //get sensor id from the name
+        // Assemble the dateFilter
+        let dateFilter = "";
+        dateFilter = "?since=" + twoWeeksAgo.toString();
+        dateFilter += "&until=" + dateToday.toString();
+
+        // Get sensor id from the name
         if (state.sensors.length > 0) {
             const sensor = state.sensors.data.find(x => x.name === name).id;
             dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-            dispatch(fetchSensorHelp(api, sensor.id, "day", dateFilter));
+            dispatch(fetchSensorHelp(endpoints.api, sensor.id, 'day', dateFilter));
 
         } else {
-            const endpointsensors = api + '/api/sensors';
-
+            const endpointsensors = endpoints.api + '/api/sensors';
             let result = fetch(endpointsensors)
                 .then(response => response.json())
                 .then(json => {
-                    const sensor = json.find(x => x.name === name);
+                    const sensor = json.sensors.find(x => x.name === name);
                     console.log(sensor.id);
                     dispatch(updateDetail(sensor.id, sensor.name, sensor.geometry.coordinates.slice(0, 2)));
-                    return fetch(getApi(getState).api + '/api/cache/day/' + sensor.id + dateFilter)
+                    return fetch(endpoints.api  + '/api/cache/' + 'day' + '/' + sensor.id + dateFilter)
                 });
             result
                 .then(response => response.json())
