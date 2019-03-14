@@ -15,7 +15,7 @@
     background: -ms-linear-gradient(top, #6396b2, white 100%);
     background: -o-linear-gradient(top, #6396b2, white 100%);
     background: linear-gradient(to bottom, #054455, #467A9E);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColor=rgb(99,150,178), endColorstr=#FFFFFF, GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColor=rgb(99, 150, 178), endColorstr=#FFFFFF, GradientType=0);
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#6396B2', endColorstr='#FFFFFF', GradientType=0)";
     text-align: center;
 }
@@ -44,7 +44,7 @@
     position: relative;
 }
 
-.header_title_text{
+.header_title_text {
     font-family: 'Cabin', sans-serif;
     font-size: 38px;
     line-height: 40px;
@@ -100,29 +100,11 @@
     font-weight: bold;
 }
 
-@media screen and (max-device-width: 840px) {
-    .navigation_item {
-        font-size: 120% !important;
-    }
-
-    .menu_list_item {
-        font-size: 150% !important;
-    }
-
-    .header_banner {
-        width: 1000px;
-    }
-
-    .header_subtitle {
-        width: auto;
-    }
-}
-
 .menu_style {
     z-index: 10 !important;
 }
 
-.menu_anchor_style{
+.menu_anchor_style {
     position: absolute !important;
     right: 20em !important;
     top: 2em !important;
@@ -156,4 +138,31 @@
     padding: 0.5em;
     color: #FFFFFF;
     font-weight: bold;
+}
+
+@media screen and (max-device-width: 840px) {
+    .navigation_item {
+        font-size: 120% !important;
+    }
+
+    .menu_list_item {
+        font-size: 150% !important;
+    }
+
+    .header_banner {
+        width: 1000px;
+    }
+
+    .header_subtitle {
+        width: auto;
+    }
+
+    .navbar > a, .navbar > div > a {
+        font-size: 150% !important;
+        padding: 0.42em;
+    }
+
+    .header_banner {
+        height: 134px;
+    }
 }

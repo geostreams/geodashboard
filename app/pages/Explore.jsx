@@ -156,7 +156,7 @@ class Explore extends Component {
         let mobilePageTabs = '';
         if (screen.width <= getMobileSizeMax()) {
             let mapDisabled = false;
-            if (navigator.userAgent.toLowerCase().indexOf('mobile/') > -1 && getChromeDisabled() === true) {
+            if (navigator.userAgent.toLowerCase().indexOf('android') > -1 && getChromeDisabled() === true) {
                 mapDisabled = true;
                 mapViewText = (
                     <span className={exploreStyles.tabTextStyleDisabled}>

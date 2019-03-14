@@ -45,6 +45,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1185](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1185)
 - Migrate Detail Page QAQC Graphs to D3
   [GEOD-1178](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1178)
+- Adjusted Mobile Settings for the Menu Bar
+  [GEOD-1036](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1036)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior
