@@ -10,11 +10,13 @@ import {
 import {getCustomLocation, getDownloadButtonPath} from '../utils/getConfig';
 import {intersectArrays, serialize} from '../utils/arrayUtils';
 import styles from '../styles/downloadButton.css';
+import stylesMain from '../styles/main.css';
 
 
 type DownloadStateType = {
     isOpen: boolean,
     link: string,
+    alertIsOpen: boolean
 };
 
 class DownloadButtons extends Component {
@@ -25,8 +27,14 @@ class DownloadButtons extends Component {
         this.state = {
             isOpen: false,
             link: "",
+            alertIsOpen: false
         };
+        (this: any).handleCloseAlert = this.handleCloseAlert.bind(this);
     }
+
+    handleCloseAlert() {
+        this.setState({alertIsOpen: false})
+    };
 
     // handle Permalink panel
     handleOpenPermalink = () => {
@@ -44,11 +52,11 @@ class DownloadButtons extends Component {
 
         let params = {};
         params["format"] = type;
-        if(this.props.selectedFilters.indexOf("time") > -1) {
-            if(this.props.selectedStartDate !== null && this.props.selectedStartDate !== "") {
+        if (this.props.selectedFilters.indexOf("time") > -1) {
+            if (this.props.selectedStartDate !== null && this.props.selectedStartDate !== "") {
                 params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
                 // Having until without since doesn't make much sense.
-                if(this.props.selectedEndDate !== null && this.props.selectedEndDate !== ""){
+                if (this.props.selectedEndDate !== null && this.props.selectedEndDate !== "") {
                     params["until"] = this.props.selectedEndDate.toISOString().slice(0, 10);
                 }
             }
@@ -109,22 +117,55 @@ class DownloadButtons extends Component {
         return downloadApi + link;
     };
 
-    onDownload = (type: string) => {
-        let link = this.buildLink(type);
-        window.open(link);
-    };
+    onDownload(type: string) {
+        try {
+            let link = this.buildLink(type);
+            window.open(link);
+        } catch (e) {
+            this.setState({alertIsOpen: true});
+        }
+    }
 
     render() {
 
         let numSensors = this.props.availableSensors.length;
         let disabled = true;
-        if(
-            ( this.props.selectedParameters.length > 0 || this.props.selectedDataSources.length > 0
-            || this.props.selectedLocation !== null ||
-            (this.props.selectedStartDate !== null && this.props.selectedStartDate !== "") ) &&
+        if (
+            (this.props.selectedParameters.length > 0 || this.props.selectedDataSources.length > 0
+                || this.props.selectedLocation !== null ||
+                (this.props.selectedStartDate !== null && this.props.selectedStartDate !== "")) &&
             numSensors !== 0
         ) {
             disabled = false;
+        }
+
+        let popup_alert_content = '';
+        if (this.state.alertIsOpen === true) {
+            popup_alert_content = (
+                <Dialog
+                    open={this.state.alertIsOpen}
+                    onClose={this.handleCloseAlert}
+                >
+                    <DialogHeader className={stylesMain.alertHeader}>
+                        <DialogTitle>
+                            <span className={stylesMain.alertHeaderText}>DOWNLOAD ERROR</span>
+                        </DialogTitle>
+                        <Icon className={stylesMain.alertHeaderIcon} name="warning"/>
+                    </DialogHeader>
+                    <DialogBody>
+                        <span className={stylesMain.alertBodyText}>
+                            An ERROR occurred with Download - Please try again!
+                        </span>
+                    </DialogBody>
+                    <DialogFooter>
+                        <Button className={stylesMain.alertButton}
+                                onClick={this.handleCloseAlert}
+                        >
+                            Close
+                        </Button>
+                    </DialogFooter>
+                </Dialog>
+            );
         }
 
         // don't use a-href download for Download as CSV/JSON, otherwise buildLink
@@ -132,6 +173,7 @@ class DownloadButtons extends Component {
         return (
             <div className={styles.bottomSection}>
 
+                {popup_alert_content}
                 <Dialog
                     open={this.state.isOpen}
                     onClose={this.handleClosePermalink}
@@ -153,7 +195,8 @@ class DownloadButtons extends Component {
                     Download
                 </Button>
 
-                <Button className={styles.buttonPermalink} raised disabled={disabled} onClick={this.handleOpenPermalink}>
+                <Button className={styles.buttonPermalink} raised disabled={disabled}
+                        onClick={this.handleOpenPermalink}>
                     Permalink
                 </Button>
 

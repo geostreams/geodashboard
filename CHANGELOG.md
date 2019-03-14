@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1187](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1187)
 - Add option for Explore Page Data Sources to Start Closed
   [GEOD-1186](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1186)
+- Download Alert Pop Up for Errors
+  [GLGVO-519](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-519)
 
 ### Changed
 - General Exploratory Analysis Page Updates

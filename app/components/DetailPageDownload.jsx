@@ -4,16 +4,31 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Button} from 'react-mdc-web';
+import {
+    Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon
+} from 'react-mdc-web';
 import {getDownloadButtonPath} from '../utils/getConfig';
 import {intersectArrays, serialize} from '../utils/arrayUtils';
 import styles from '../styles/detail.css';
+import stylesMain from '../styles/main.css';
 
 
 class DetailPageDownload extends Component {
+    state: {
+        displayErrorMessage: boolean
+    };
+
     constructor(props: Object) {
         super(props);
+        this.state = {
+            displayErrorMessage: false
+        };
+        (this: any).handleCloseAlert = this.handleCloseAlert.bind(this);
     }
+
+    handleCloseAlert() {
+        this.setState({displayErrorMessage: false})
+    };
 
     buildLink(type: string): string {
         let downloadApi = this.props.api + getDownloadButtonPath();
@@ -41,8 +56,12 @@ class DetailPageDownload extends Component {
     }
 
     onDownload(type: string) {
-        let link = this.buildLink(type);
-        window.open(link);
+        try {
+            let link = this.buildLink(type);
+            window.open(link);
+        } catch (e) {
+            this.setState({displayErrorMessage: true});
+        }
     }
 
     render() {
@@ -51,8 +70,38 @@ class DetailPageDownload extends Component {
             disabled = false;
         }
 
+        let popup_alert_content = '';
+        if (this.state.displayErrorMessage === true) {
+            popup_alert_content = (
+                <Dialog
+                    open={this.state.displayErrorMessage}
+                    onClose={this.handleCloseAlert}
+                >
+                    <DialogHeader className={stylesMain.alertHeader}>
+                        <DialogTitle>
+                            <span className={stylesMain.alertHeaderText}>DOWNLOAD ERROR</span>
+                        </DialogTitle>
+                        <Icon className={stylesMain.alertHeaderIcon} name="warning"/>
+                    </DialogHeader>
+                    <DialogBody>
+                        <span className={stylesMain.alertBodyText}>
+                            An ERROR occurred with Download - Please try again!
+                        </span>
+                    </DialogBody>
+                    <DialogFooter>
+                        <Button className={stylesMain.alertButton}
+                                onClick={this.handleCloseAlert}
+                        >
+                            Close
+                        </Button>
+                    </DialogFooter>
+                </Dialog>
+            );
+        }
+
         return (
             <div className={styles.detailDownloadButtonPosition}>
+                {popup_alert_content}
                 <Button className={disabled === false ? styles.detailDownloadButton : ''}
                         onClick={this.onDownload.bind(this, "csv")}
                         raised disabled={disabled}>
