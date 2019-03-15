@@ -8,13 +8,35 @@ import Map from '../containers/TrendsRegionMap';
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsSeasons from '../containers/TrendsSeasons';
 import Spinner from '../components/Spinner';
-import {Grid, Cell, Content, List, Card, CardHeader, CardTitle, CardText} from 'react-mdc-web';
+import {
+    Grid, Cell, Content, List, Card, CardHeader, CardTitle, CardText, Tabbar, Tab
+} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
 import {connect} from 'react-redux';
-import { getTrendsPageSettings, getTrendsPageSeasons, getTrendsDefaultValues } from '../utils/getConfig';
+import {
+    getTrendsPageSettings, getTrendsPageSeasons, getTrendsDefaultValues, getMobileSizeMax
+} from '../utils/getConfig';
+import {generateMobilePageTabs} from "../utils/mobileUtils";
+
 
 class TrendsRegion extends Component {
+
+    constructor(props: Object) {
+        super(props);
+        this.state = {
+            viewSelection: "list-view"
+        };
+        (this: any).clickedViewSelection = this.clickedViewSelection.bind(this);
+    }
+
+    state: {
+        viewSelection: string
+    };
+
+    clickedViewSelection(value: string) {
+        this.setState({viewSelection: value});
+    }
 
     render() {
 
@@ -50,12 +72,26 @@ class TrendsRegion extends Component {
             );
         }
 
+        let mapObject = '';
+        if (screen.width > getMobileSizeMax() || this.state.viewSelection === 'map-view') {
+            mapObject = <Map display_draw='False'
+                             trends_settings={trendsPageSettings}
+            />;
+        }
+
+        // Setup Mobile View Tabs
+        let mobilePageTabs = '';
+        if (screen.width <= getMobileSizeMax()) {
+            mobilePageTabs = generateMobilePageTabs("Map View", this.state.viewSelection, this.clickedViewSelection);
+        }
+
         return (
 
             <div>
                 {loading_spinner}
                 <Menu selected='trends'/>
                 <Content>
+                    {mobilePageTabs}
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>
                             <Cell col={3}>
@@ -77,10 +113,7 @@ class TrendsRegion extends Component {
                             </Cell>
                             <Cell col={9}>
                                 <div className={styles.rightMap}>
-                                    <Map
-                                        display_draw='False'
-                                        trends_settings={trendsPageSettings}
-                                    />
+                                    {mapObject}
                                 </div>
                             </Cell>
                         </Grid>

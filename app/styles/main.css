@@ -59,7 +59,12 @@ h1, h2, h3, h5, h6, p, ul {
         font-weight: bold !important;
     }
 
-    h2, h3, h4, text, select, section, p {
+    section {
+        font-size: xx-large !important;
+        line-height: 120% !important;
+    }
+
+    h2, h3, h4, select, text, p {
         font-size: xx-large !important;
     }
 

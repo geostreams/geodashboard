@@ -337,10 +337,23 @@ div > span > aside > nav {
         padding: 1em;
         margin: 0 -4.8em 0 0;
         cursor: pointer;
-        z-index: 5;
+        z-index: 3;
+        width: auto;
     }
 
-    .exploreTitleCard, .groupAccordionIcon {
+    .exploreTitleCard {
         font-size: xx-large !important;
+    }
+
+    .exploreSourcesSelectionIcon, .accordionIcon, .groupAccordionIcon {
+        font-size: 2em;
+    }
+
+    .leftColumnExplore {
+        margin-top: 1em;
+    }
+
+    .exploreTitleRight {
+        z-index: 3;
     }
 }

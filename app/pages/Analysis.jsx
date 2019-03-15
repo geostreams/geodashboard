@@ -8,10 +8,12 @@ import styles from '../styles/main.css';
 import analysisStyles from '../styles/analysis.css';
 import {
     Card, CardHeader, CardActions, CardTitle, CardSubtitle, CardText,
-    Content, List, Cell, Grid, Textfield, Button
+    Content, List, Cell, Grid, Textfield, Button, Tab, Tabbar
 } from 'react-mdc-web';
 import Map from '../containers/AnalysisMap';
-import {getTrendSettings, getTrendRegions, getTrendsAnalysisDefaultValues} from '../utils/getConfig';
+import {
+    getTrendSettings, getTrendRegions, getTrendsAnalysisDefaultValues, getMobileSizeMax
+} from '../utils/getConfig';
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsThresholds from '../containers/TrendsThresholds';
 import TrendsRegions from '../containers/TrendsRegions';
@@ -19,9 +21,27 @@ import Spinner from '../components/Spinner';
 import TrendsCalculationSettings from '../containers/TrendsCalculationSettings';
 import TrendsSubmitButton from '../containers/TrendsSubmitButton';
 import {connect} from "react-redux";
+import {generateMobilePageTabs} from "../utils/mobileUtils";
 
 
 class Analysis extends Component {
+
+    constructor(props: Object) {
+        super(props);
+        this.state = {
+            viewSelection: "list-view"
+        };
+        (this: any).clickedViewSelection = this.clickedViewSelection.bind(this);
+
+    }
+
+    state: {
+        viewSelection: string
+    };
+
+    clickedViewSelection(value: string) {
+        this.setState({viewSelection: value});
+    }
 
     render() {
 
@@ -37,11 +57,26 @@ class Analysis extends Component {
             loading_spinner = (<Spinner/>);
         }
 
+        let mapObject = '';
+        if (screen.width > getMobileSizeMax() || this.state.viewSelection === 'map-view') {
+            mapObject = <Map display_trends='True'
+                             display_draw='True'
+                             chosen_region='all'
+            />;
+        }
+
+        // Setup Mobile View Tabs
+        let mobilePageTabs = '';
+        if (screen.width <= getMobileSizeMax()) {
+            mobilePageTabs = generateMobilePageTabs("Map View", this.state.viewSelection, this.clickedViewSelection);
+        }
+
         return (
             <div>
                 {loading_spinner}
                 <Menu selected="analysis"/>
                 <Content>
+                    {mobilePageTabs}
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>
                             <Cell col={3}>
@@ -77,10 +112,7 @@ class Analysis extends Component {
                             <Cell col={9}>
                                 <div className={styles.rightMap}>
                                     <Card>
-                                        <Map display_trends='True'
-                                             display_draw='True'
-                                             chosen_region='all'
-                                        />
+                                        {mapObject}
                                     </Card>
                                 </div>
                             </Cell>

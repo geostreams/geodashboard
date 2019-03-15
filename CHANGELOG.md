@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1186](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1186)
 - Download Alert Pop Up for Errors
   [GLGVO-519](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-519)
+- Add option for Explore Page Data Sources to Start Closed
+  [GEOD-1186](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1186)
 
 ### Changed
 - General Exploratory Analysis Page Updates
@@ -49,6 +51,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1178](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1178)
 - Adjusted Mobile Settings for the Menu Bar
   [GEOD-1036](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1036)
+- Adjusted Mobile Settings for the List vs Map Tabs
+  [GEOD-1037](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1037)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior
