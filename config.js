@@ -65,6 +65,9 @@ export const gd3 = {
     // This variable is used to determine the location for links to the Detail Page
     application_website: "/",
 
+    // Home Page Carousel file names - Should be located in /geodashboard-v3/theme folder
+    home_page_carousel_images: [],
+
     // Should Tabs to select multi-parameter graphs be displayed on the Detail Page
     show_detail_tabs: true,
 

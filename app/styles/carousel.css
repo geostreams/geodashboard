@@ -1,0 +1,67 @@
+/* Main Carousel Div */
+
+.carouselContainer {
+    max-width: 50%;
+    position: relative;
+    margin: auto;
+    padding: 1em;
+}
+
+/*********************/
+
+/* Buttons and Icons that manually change the Carousel Images */
+
+.navButtons {
+    text-align: initial;
+}
+
+.navIcons {
+    text-align: center;
+    cursor: pointer;
+    margin: 0.1em;
+}
+
+.backButton, .forwardButton {
+    position: absolute !important;
+    top: 50%;
+    margin-top: -3em;
+    background-color: white !important;
+    color: black !important;
+}
+
+.backButton {
+    left: 0;
+}
+
+.forwardButton {
+    right: 0;
+}
+
+/**************************************************************/
+
+/* Style for the Images displayed in the Carousel */
+
+.imageTransition {
+    animation: imageTransition 3s ease-in-out alternate;
+}
+
+@keyframes imageTransition {
+    0%, 100% {
+        opacity: .8;
+    }
+    40%, 60% {
+        opacity: 1;
+    }
+}
+
+.carouselImages {
+    display: none;
+}
+
+.imageSize {
+    height: 20em;
+    width: 30em;
+    object-fit: contain;
+}
+
+/**************************************************/

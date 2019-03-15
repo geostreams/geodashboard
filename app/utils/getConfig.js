@@ -522,6 +522,14 @@ export function startExploreSourcesOpened() {
     return getValue;
 }
 
+export function getCarouselImageNames() {
+    let nameList = '';
+    if (window.configruntime.gd3.home_page_carousel_images) {
+        nameList = window.configruntime.gd3.home_page_carousel_images;
+    }
+    return nameList;
+}
+
 export function getMapPopupZoom() {
     let getValue = 10;
     if (window.configruntime.gd3.mapPopupZoomMax) {
