@@ -8,7 +8,8 @@ import type {Dispatch} from "../utils/flowtype";
 const mapStateToProps = (state, ownProps) => {
     return {
         sensorData: state.sensorDetail.datapoints,
-        parameterSources: state.sensorDetail.sources
+        parameterSources: state.sensorDetail.sources,
+        sensorID: state.sensorDetail.id
     }
 };
 

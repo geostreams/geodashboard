@@ -66,16 +66,6 @@ class Detail extends Component {
 
     render() {
 
-        // This checks if the URL has changed and, if so, refreshes the page
-        // so as to force the Components on the page to update as needed.
-        // Without this, as React does not natively detect the change in URL
-        // at the Component level, the page will not refresh appropriately.
-        window.onhashchange = function () {
-            if (window.location.href.indexOf("detail/location") > -1) {
-                window.location.reload();
-            }
-        };
-
         if (Object.keys(this.state.category_mappings).length === 0) {
             let contents;
             if (this.props.parameters.failed) {

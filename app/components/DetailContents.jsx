@@ -59,6 +59,19 @@ class DetailContents extends Component {
         this.updateBinningType(this.state.selectedStartDate, this.state.selectedEndDate);
     }
 
+    componentDidUpdate(newProps, oldState) {
+        if (oldState.sensorID !== newProps.sensorID) {
+            let that = this;
+            window.onhashchange = function () {
+                if (window.location.href.indexOf("detail/location") > -1) {
+                    that.props.loadSensor(that.props.sensor.id, that.props.sensor.name, that.state.showSeasonFilter, that.state.binType,
+                        that.props.selectedStartDate, that.props.selectedEndDate);
+                    that.selectAllDates();
+                }
+            };
+        }
+    }
+
     componentWillReceiveProps(newProps) {
         this.updateParametersAndSeason(newProps);
     }
@@ -84,9 +97,9 @@ class DetailContents extends Component {
             const all_parameters = newProps.category_parameters.map(parameter => {
                 return parameter.name
             });
-            this.setState({selected_parameters: all_parameters})
+            this.setState({selected_parameters: all_parameters});
         } else {
-            this.setState({selected_parameters: []})
+            this.setState({selected_parameters: []});
         }
     }
 
@@ -113,7 +126,7 @@ class DetailContents extends Component {
         if (this.state.binType !== binType) {
             this.props.loadSensor(this.props.sensor.id, this.props.sensor.name, this.state.showSeasonFilter, binType,
                 start_date, end_date);
-            this.setState({binType: binType})
+            this.setState({binType: binType});
         }
     }
 
@@ -137,7 +150,7 @@ class DetailContents extends Component {
         this.setState({
             selectedStartDate: startDate,
             selectedEndDate: endDate,
-            selectAllDates: true
+            selectAllDates: true,
         });
         this.updateBinningType(startDate, endDate);
     }
@@ -231,7 +244,10 @@ class DetailContents extends Component {
                 if (this.state.showSeasonFilter) {
                     // Setup the filter for region. Do more stuff
                     season_filter = (<div className={styles.filterPadding}>
-                        <span className={[styles.filterTitle, styles.season_margin_title].join(" ")}> Season </span><br/>
+                        <span className={[styles.filterTitle, styles.season_margin_title].join(" ")}>
+                            Season
+                        </span>
+                        <br/>
                         <Select className={styles.season_margin_select} value={this.props.season}
                                 onChange={this.onChangeSeason}>
                             <option value="spring" key="spring"> Spring</option>

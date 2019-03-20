@@ -81,6 +81,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1205](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1205)
 - Explore Page Popup Boxes Map Issues Corrected
   [GEOD-1199](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1199)
+- Ensure the Chart Component updates appropriately on the Detail Page
+  [GEOD-1217](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1217)
 
 ## [3.0.0-alpha.4] - 2018-10-01
 
