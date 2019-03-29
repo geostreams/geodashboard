@@ -103,7 +103,13 @@ class ExploreMap extends Component {
             if (content) {
                 content.innerHTML = popupText;
             }
-            overlay.setPosition(coordinate);
+
+            // Use Sensor Coordinates
+            let sensorInfo = feature.attributes;
+            let lonLatPoint = [sensorInfo.longitude, sensorInfo.latitude];
+            let webMercatorPoint = ol.proj.fromLonLat(lonLatPoint);
+
+            overlay.setPosition(webMercatorPoint);
         }
     };
 

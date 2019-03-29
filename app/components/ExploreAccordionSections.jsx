@@ -73,7 +73,9 @@ class ExploreAccordionSections extends Component {
             }
             let button_label = data.properties.name.substring(0, trim_length).trim().replace("-", "_").replace(" ", "_");
             if (this.state.inner_accordion_icon) {
-                // Move Popup slightly to the North when clicking the Accordion Icons
+
+                // Move Popup slightly when clicking the Accordion Icons
+                webMercatorPoint[0] = webMercatorPoint[0] + 1500;
                 webMercatorPoint[1] = webMercatorPoint[1] + 20000;
                 item_pills.push(
                     <Button key={data.id} className={exploreStyles.exploreButton}
