@@ -1,3 +1,5 @@
+import {removeItalicsFromParams} from "../../utils/configUtils";
+
 const D3LineNoData = {};
 const d3 = require("d3");
 
@@ -107,6 +109,7 @@ D3LineNoData._drawPoints = function (el, state) {
         .attr("text-anchor", "end")
         .text(yAxisLabel);
 
+    title = removeItalicsFromParams(title);
     let parsed_title = title;
     if (title.length > 35) {
         parsed_title = title.substring(0, 35) + "..."

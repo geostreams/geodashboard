@@ -1098,7 +1098,7 @@ export const gd3 = {
         {
             "parameter": {
                 "id": "chlorophyll-a-glenda",
-                "title": "Chlorophyll a (ug/L)",
+                "title": "Chlorophyll <i>a</i> (ug/L)",
                 "lake_regions": false
             }
         },

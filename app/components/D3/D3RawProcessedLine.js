@@ -1,3 +1,5 @@
+import {removeItalicsFromParams} from "../../utils/configUtils";
+
 const D3Line = {};
 const d3 = require('d3');
 
@@ -164,7 +166,7 @@ D3Line._drawPoints = function (el, state) {
             return scales.y(d.average);
         })
         .attr("r", 2);
-
+    title = removeItalicsFromParams(title);
     let parsed_title = title;
     if (title.length > 35) {
         parsed_title = title.substring(0, 35) + "..."

@@ -9,13 +9,14 @@ import {
     Radio, RadioGroup, Card, CardHeader, CardTitle, CardSubtitle, CardActions
 } from 'react-mdc-web';
 import type {InputEvent} from '../utils/flowtype';
+import {handleParamsWithItalics} from "../utils/configUtils";
 
 
 class TrendsParameters extends Component {
 
     constructor(props: Object) {
         super(props);
-        (this:any).handleParameterChange = this.handleParameterChange.bind(this);
+        (this: any).handleParameterChange = this.handleParameterChange.bind(this);
     }
 
     handleParameterChange(event: InputEvent) {
@@ -32,13 +33,16 @@ class TrendsParameters extends Component {
         let trendsPageParametersMap = [];
         let title = "Select Parameter";
         let subtitle = window.configruntime.gd3.parameter_subtitle;
+        let parameter_label_array = [];
 
         if (trendsPageSettings) {
             trendsPageSettings.map(p => {
-                trendsPageParametersMap.push(
-                    <Radio id={p.parameter.id} value={p.parameter.id}
-                           key={p.parameter.id}> {p.parameter.title} </Radio>
-                )}
+                    parameter_label_array = handleParamsWithItalics(p.parameter.title);
+                    trendsPageParametersMap.push(
+                        <Radio id={p.parameter.id} value={p.parameter.id}
+                               key={p.parameter.id}> {parameter_label_array}</Radio>
+                    )
+                }
             )
         }
 

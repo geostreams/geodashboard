@@ -1,3 +1,5 @@
+import {removeItalicsFromParams} from "../../utils/configUtils";
+
 const D3StackedBar = {};
 
 const d3 = require("d3");
@@ -42,8 +44,8 @@ D3StackedBar._scales = function(el, data, state) {
 };
 
 D3StackedBar._drawBars = function(el, state) {
-    const {width, height, selectedStartDate, selectedEndDate, yAxisLabel, title, scaleNames, tooltipClass, season} = state;
-    let {data} = state;
+    const {width, height, yAxisLabel, scaleNames, tooltipClass, season} = state;
+    let {data, title} = state;
     const svg = d3.select(el).selectAll("svg");
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
@@ -135,6 +137,7 @@ D3StackedBar._drawBars = function(el, state) {
         .attr("dy", ".35em")
         .text(function (d) { return d; });
 
+    title = removeItalicsFromParams(title);
     let parsed_title = title;
     if (title.length > 35) {
         parsed_title = title.substring(0, 35) + "..."

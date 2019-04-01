@@ -5,6 +5,7 @@ import BoxAndWhisker from '../components/BoxAndWhisker';
 import styles from '../styles/detail.css';
 import mainStyles from '../styles/main.css';
 import StackedLine from "./StackedLine";
+import {handleParamsWithItalics} from "../utils/configUtils";
 
 
 class ChartStackedLine extends Component {
@@ -52,7 +53,8 @@ class ChartStackedLine extends Component {
                         BAWValues.push(d.average);
                     }
                 });
-                param_name = parameter.title;
+
+                param_name = handleParamsWithItalics(parameter.title);
                 param_color = colorsRange[params.indexOf(p)];
 
                 loopValues = loopValues.sort(function (a, b) {

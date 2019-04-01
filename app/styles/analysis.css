@@ -120,4 +120,5 @@
     top: 7.3em;
     z-index: 100;
     background-color: #ffffff;
+    display: inline-block !important;
 }
