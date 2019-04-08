@@ -127,6 +127,7 @@
 .navbar > div > div {
     left: -8em;
     top: 2.3em;
+    z-index: 9999;
 }
 
 .navbar > div {

@@ -85,6 +85,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1199](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1199)
 - Ensure the Chart Component updates appropriately on the Detail Page
   [GEOD-1217](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1217)
+- Provide more time for the API to return data on the Trends Region Detail Page
+  [GEOD-1194](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1194)
 
 ## [3.0.0-alpha.4] - 2018-10-01
 

@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import TrendsDetailRightComponent from "../components/TrendsDetailRight";
-import {fetchRegionDetailTrends} from "../actions";
+import {fetchRegionDetailTrends, fetchRegionTrends} from "../actions";
 import type {Dispatch} from "../utils/flowtype";
 
 
@@ -16,7 +16,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch:Dispatch) => {
     return {
         fetchRegionDetailTrends: (parameter, season, region) => {
-            dispatch(fetchRegionDetailTrends(parameter, season, region))
+            dispatch(fetchRegionTrends(parameter, season));
+            dispatch(fetchRegionDetailTrends(parameter, season, region));
         }
     }
 };

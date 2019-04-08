@@ -145,11 +145,20 @@ h1, h2, h3, h5, h6, p, ul {
     font-weight: bold;
 }
 
+.loading_text {
+    position: absolute;
+    left: 50%;
+    font-size: 20px;
+    transform: translate(-50%, -50%);
+    margin: 35vh auto;
+    display: inline-block;
+}
+
 .loading_spinner {
     border-radius: 50%;
     width: 10em;
     height: 10em;
-    border: 1em dashed #29ABE2;
+    border: 1em inset #29ABE2;
     -webkit-animation: spinner 4s linear infinite;
     -moz-animation: spinner 4s linear infinite;
     animation: spinner 4s linear infinite;
@@ -169,18 +178,30 @@ h1, h2, h3, h5, h6, p, ul {
 }
 
 @-webkit-keyframes spinner {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @-moz-keyframes spinner {
-    from { -moz-transform: rotate(0deg); }
-    to { -moz-transform: rotate(360deg); }
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
 }
 
 @keyframes spinner {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .alertHeader {
@@ -267,7 +288,7 @@ h1, h2, h3, h5, h6, p, ul {
     cursor: pointer;
     float: right;
     color: white;
-    margin-right:20px;
+    margin-right: 20px;
 }
 
 .close_detail i {

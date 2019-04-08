@@ -368,7 +368,7 @@ export function fetchRegionDetailTrends(parameter: string, season: string, regio
                 }))
             }
         );
-        dispatch(fetchRegionTrends(parameter, season));
+
     }
 
 }

@@ -9,9 +9,9 @@ const d3 = require('d3');
 
 class TrendsGraph extends Component {
 
-	state: {
-		loading: boolean
-	};
+    state: {
+        loading: boolean
+    };
 
     constructor(props: Object) {
         super(props);
@@ -20,7 +20,7 @@ class TrendsGraph extends Component {
         }
     }
 
-	render() {
+    render() {
 
         let that = this;
         const {trends_settings, start_year, end_year, title, units} = this.props;
@@ -38,20 +38,20 @@ class TrendsGraph extends Component {
             );
             let trends_deviation = {};
 
-	        trend.trends_deviation.map( d =>
-	            trends_deviation = Object.assign({}, trends_deviation, d)
-	        );
-	        // Add Values
-	        let parseDate = d3.timeParse("%Y");
-	        Object.keys(trends_detail).forEach(function(key) {
-	            if(parseInt(key) >= parseInt(start_year) && parseInt(key) <= parseInt(end_year)) {
-		            dataRaw.push({
-			            "x": parseDate(key),
-			            "y": parseFloat(trends_detail[key]),
-			            "d": parseFloat(trends_deviation[key])
-		            })
-	            }
-	        });
+            trend.trends_deviation.map( d =>
+                trends_deviation = Object.assign({}, trends_deviation, d)
+            );
+            // Add Values
+            let parseDate = d3.timeParse("%Y");
+            Object.keys(trends_detail).forEach(function(key) {
+                if(parseInt(key) >= parseInt(start_year) && parseInt(key) <= parseInt(end_year)) {
+                    dataRaw.push({
+                        "x": parseDate(key),
+                        "y": parseFloat(trends_detail[key]),
+                        "d": parseFloat(trends_deviation[key])
+                    })
+                }
+            });
 
             dataRaw.sort(function (a, b) {
                 return Number(a.x) - Number(b.x);
@@ -73,6 +73,7 @@ class TrendsGraph extends Component {
         )
 
     }
+
 }
 
 export default TrendsGraph;
