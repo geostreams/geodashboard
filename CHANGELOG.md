@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1186](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1186)
 - Added Handling for Italics in Parameter Names
   [GEOD-897](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-897)
+- Version number to the home page and about page.
 
 ### Changed
 - General Exploratory Analysis Page Updates
