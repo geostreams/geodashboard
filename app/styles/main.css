@@ -146,12 +146,19 @@ h1, h2, h3, h5, h6, p, ul {
 }
 
 .loading_text {
+    margin: 25vh auto;
+    padding: 3.5em 0 0 1em;
+    left: 42.55%;
     position: absolute;
-    left: 50%;
-    font-size: 20px;
-    transform: translate(-50%, -50%);
-    margin: 35vh auto;
-    display: inline-block;
+    width: 10em;
+    height: 10em;
+    color: #29ABE2;
+    border: 1em inset #29ABE2;
+    border-radius: 50%;
+}
+
+.loading_text_background {
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .loading_spinner {
@@ -164,6 +171,8 @@ h1, h2, h3, h5, h6, p, ul {
     animation: spinner 4s linear infinite;
     margin: 25vh auto;
     z-index: 1000;
+    position: absolute;
+    left: 42.55%;
 }
 
 .make_modal {
