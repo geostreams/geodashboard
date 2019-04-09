@@ -537,3 +537,11 @@ export function getMapPopupZoom() {
     }
     return getValue;
 }
+
+export function getLoadingTimeLimit() {
+    let getValue = 100000;
+    if (window.configruntime.gd3.load_time_limit) {
+        getValue = window.configruntime.gd3.load_time_limit;
+    }
+    return getValue;
+}

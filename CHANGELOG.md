@@ -59,6 +59,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1037](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1037)
 - Move Popup slightly when opening, whether from map click or accordion selection
   [GEOD-1219](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1219)
+- Updated the behavior of the Spinner as utilized on the Trends Region Detail Page
+  [GEOD-1220](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1220)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior

@@ -923,6 +923,9 @@ export const gd3 = {
         },
     ],
 
+    // Trends Region Load Time Limit in Milliseconds
+    load_time_limit: 100000,
+
     // Exploratory Analysis Page Only
     trend_settings: [
         {

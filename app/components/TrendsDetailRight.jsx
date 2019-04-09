@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import TrendsGraph from '../components/TrendsGraph';
 import Spinner from './Spinner';
 import YearSlider from './YearSlider';
+import {getLoadingTimeLimit} from '../utils/getConfig';
 
 
 class TrendDetailRight extends Component {
@@ -30,7 +31,10 @@ class TrendDetailRight extends Component {
                     let trend = that.props.trends_regions.find(function (element) {
                         return element !== undefined && element.name === that.props.trends_region_id;
                     });
-                    if (trend !== undefined && Object.keys(trend.trends_detail).length > 2) {
+                    if (
+                        trend !== undefined && Object.keys(trend.trends_detail).length > 2 ||
+                        setInterval_time >= getLoadingTimeLimit()
+                    ) {
                         clearInterval(x);
                         resolve(trend.trends_detail);
                         let show_spinner = that.props.show_spinner;
