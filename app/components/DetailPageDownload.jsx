@@ -120,7 +120,7 @@ DetailPageDownload.propTypes = {
     id: PropTypes.number,
     selected_start_date: PropTypes.instanceOf(Date),
     selected_end_date: PropTypes.instanceOf(Date),
-    multi_param_map: PropTypes.Object
+    multi_param_map: PropTypes.object
 };
 
 export default DetailPageDownload;

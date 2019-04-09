@@ -1,4 +1,5 @@
 import {boxQuartiles, iqr} from "./D3BoxAndWhiskers";
+import {removeItalicsFromParams} from "../../utils/configUtils";
 
 const D3Line = {};
 const d3 = require("d3");
@@ -72,6 +73,7 @@ D3Line._drawPoints = function (el, state) {
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
     let {data, title} = state;
+    title = removeItalicsFromParams(title);
     const svg = d3.select(el).selectAll("svg");
     // The next 4 lines clean up previously existing graphs
     let g = svg.selectAll(".d3-line-charts");
