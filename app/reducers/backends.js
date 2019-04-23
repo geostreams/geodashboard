@@ -18,10 +18,10 @@ const backends = (state:backendsState = defaultState, action:BackendAction) => {
     switch(action.type) {
         case 'ADD_ENDPOINTS':
             return Object.assign({}, state, {
-                endpoints: window.configruntime.gd3.clowder_endpoints,
-                selected: window.configruntime.gd3.clowder_endpoints[0].url,
-                title: window.configruntime.gd3.clowder_endpoints[0].title,
-                subtitle: window.configruntime.gd3.clowder_endpoints[0].subtitle,
+                endpoints: window.configruntime.gd3.geostreaming_endpoints,
+                selected: window.configruntime.gd3.geostreaming_endpoints[0].url,
+                title: window.configruntime.gd3.geostreaming_endpoints[0].title,
+                subtitle: window.configruntime.gd3.geostreaming_endpoints[0].subtitle,
                 error: false
             });
         case 'SWITCH_BACKEND':

@@ -107,7 +107,6 @@
 }
 
 .viewsitedetail {
-    color: white;
     text-align: center;
     display: block;
     padding-top: 0.5em;
@@ -162,16 +161,16 @@
 .regionPopupCloser {
     text-decoration: none;
     position: absolute;
-    top: 2px;
+    top: 9px;
     right: 8px;
-}
-
-.regionPopupCloser:after {
-    content: "✖";
     color: #ffffff;
 }
 
-.locations_text_style{
+.regionPopupCloser:after {
+    color: #ffffff;
+}
+
+.locations_text_style {
     float: left;
 }
 

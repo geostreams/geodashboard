@@ -15,12 +15,13 @@ import {
 } from 'react-mdc-web';
 import type {InputEvent} from '../utils/flowtype';
 import Select from './material/Select';
+import {handleParamsWithItalics} from '../utils/configUtils';
+
 
 class FilterList extends Component {
 
     constructor(props: Object) {
         super(props);
-
     }
 
     selectAll = (event: InputEvent) => {
@@ -80,11 +81,13 @@ class FilterList extends Component {
                 showButtons = hideShowContents;
                 break;
             case "parameters":
-                divContents = this.props.parameters.map(p =>
-                    <UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute} label={p.label}
-                                   key={p.id}/>
-                );
-                cardsubtitle = this.props.selectedParameters.map( p =>
+                divContents = this.props.parameters.map(p => {
+                    let parameter_label_array = handleParamsWithItalics(p.label);
+                    return (<UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute}
+                                           label={parameter_label_array}
+                                           key={p.id}/>);
+                });
+                cardsubtitle = this.props.selectedParameters.map(p =>
                     this.props.parameters.find(item => item.id === p).label
                 ).join(", ");
                 showButtons = hideShowContents;
@@ -187,14 +190,15 @@ class FilterList extends Component {
                     <br/>
                 </CardHeader>
             );
-        // if this filter is closed
+            // if this filter is closed
         } else {
             cardsubtitle = cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 0 ? cardsubtitle : "No selection";
             cardhead = (
                 <CardHeader>
                     <CardTitle
                         className={mainStyles.title_card}>{this.props.attribute.replace("data_sources", "data source")}
-                        <a className={styles.close_button_collapsed_card} onClick={this.props.onClickRemove} data-idx={idx}>
+                        <a className={styles.close_button_collapsed_card} onClick={this.props.onClickRemove}
+                           data-idx={idx}>
                             <Icon className={styles.closeIcon} name='close'/>
                         </a>
                     </CardTitle>
@@ -214,7 +218,7 @@ class FilterList extends Component {
         } else {
             // if the filter is closed, display an open icon
             cardMedia =
-                <a id={this.props.attribute} className={styles.edit_filter_button} onClick={this.props.onExpand} >
+                <a id={this.props.attribute} className={styles.edit_filter_button} onClick={this.props.onExpand}>
                     <Icon name='keyboard_arrow_down'/>
                 </a>
         }

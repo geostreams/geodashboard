@@ -11,21 +11,30 @@ import {
     Card, CardHeader, CardTitle, CardSubtitle, CardActions, CardText
 } from 'react-mdc-web';
 import {getMobileSizeMax} from '../utils/getConfig';
-import Select from './material/Select';
 
 
 class TrendsCalculationSettings extends Component {
 
     state: {
         baselinePeriod: number,
+        baselineMin: number,
+        baselineMax: number,
+
         rollingPeriod: number,
+        rollingMin: number,
+        rollingMax: number
     };
 
     constructor(props: Object) {
         super(props);
         this.state = {
-            baselinePeriod: Number(''),
-            rollingPeriod: Number(''),
+            baselinePeriod: 30,
+            baselineMin: 0,
+            baselineMax: 30,
+
+            rollingPeriod: 17,
+            rollingMin: 0,
+            rollingMax: 30,
         };
         (this:any).handleBaselineChange = this.handleBaselineChange.bind(this);
         (this:any).handleRollingChange = this.handleRollingChange.bind(this);
@@ -33,6 +42,12 @@ class TrendsCalculationSettings extends Component {
 
     handleBaselineChange(event: Object) {
         let value = event.target.value;
+        if (value < this.state.baselineMin) {
+            value = this.state.baselineMin
+        }
+        if (value > this.state.baselineMax) {
+            value = this.state.baselineMax
+        }
         value = parseInt(value);
         this.setState({baselinePeriod: value});
         this.props.onSelectTrendsCalcBaselineSetting(value);
@@ -40,6 +55,12 @@ class TrendsCalculationSettings extends Component {
 
     handleRollingChange(event: Object) {
         let value = event.target.value;
+        if (value < this.state.rollingMin) {
+            value = this.state.rollingMin
+        }
+        if (value > this.state.rollingMax) {
+            value = this.state.rollingMax
+        }
         value = parseInt(value);
         this.setState({rollingPeriod: value});
         this.props.onSelectTrendsCalcRollingSetting(value);
@@ -52,35 +73,6 @@ class TrendsCalculationSettings extends Component {
             spacer = (<div><br/><br/></div>);
         }
 
-        let trendsBaselineSettings = this.props.trends_baseline;
-        let trendsBaseline = [<option value={'none'} key={0}>Baseline (yr)</option>];
-        let trendsBaselineValue = [];
-        let baseline = '';
-        let trendsRollingSettings = this.props.trends_rolling;
-        let trendsRollingValue = [];
-        let trendsRolling = [<option value={'none'} key={0}>Rolling (yr)</option>];
-        let rolling = '';
-        
-        for (let i = 0; i < trendsBaselineSettings.length; i++) {
-            baseline = trendsBaselineSettings[i];
-            trendsBaselineValue = (
-                <option value={baseline.value} key={baseline.value} id={baseline.id}>
-                    {baseline.title} 
-                </option>
-            );
-            trendsBaseline = trendsBaseline.concat(trendsBaselineValue);
-        }
-
-        for (let i = 0; i < trendsRollingSettings.length; i++) {
-            rolling = trendsRollingSettings[i];
-            trendsRollingValue = (
-                <option value={rolling.value} key={rolling.value} id={rolling.id}>
-                    {rolling.title}
-                </option>
-            );
-            trendsRolling = trendsRolling.concat(trendsRollingValue);
-        }
-        
         return (
             <Card className={trendsStyles.cardMargin} key="calculate">
                 <CardHeader>
@@ -91,20 +83,27 @@ class TrendsCalculationSettings extends Component {
                 <CardText>
                     <Grid>
                         <Cell col={6}>
-                            <Select className={trendsStyles.select}
-                                    value={this.state.baselinePeriod.toString()}
-                                    onChange={this.handleBaselineChange}
-                            >
-                                {trendsBaseline}
-                            </Select>
+                            <Textfield
+                                floatingLabel="Baseline (yr)"
+                                type="number"
+                                min={this.state.baselineMin} max={this.state.baselineMax}
+                                className={trendsStyles.textField}
+                                value={this.state.baselinePeriod}
+                                onChange={this.handleBaselineChange}
+                                helptext="Must be a Number"
+                            />
                         </Cell>
+
                         <Cell col={6}>
-                            <Select className={trendsStyles.select}
-                                    value={this.state.rollingPeriod.toString()}
-                                    onChange={this.handleRollingChange}
-                            >
-                                {trendsRolling}
-                            </Select>
+                            <Textfield
+                                floatingLabel="Rolling (yr)"
+                                type="number"
+                                min={this.state.rollingMin} max={this.state.rollingMax}
+                                className={trendsStyles.textField}
+                                value={this.state.rollingPeriod}
+                                onChange={this.handleRollingChange}
+                                helptext="Must be a Number"
+                            />
                         </Cell>
                     </Grid>
                 </CardText>

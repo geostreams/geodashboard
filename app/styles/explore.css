@@ -46,8 +46,16 @@ nav {
     width: 30em !important;
 }
 
+div > span > aside > nav {
+    height: calc(100vh - 8.4em) !important;
+}
+
 div > span > aside {
     width: 20em !important;
+}
+
+span > span > aside {
+    z-index: 10 !important;
 }
 
 .layersDrawerClass {
@@ -56,20 +64,8 @@ div > span > aside {
 
 .exploreCard {
     width: 24em;
-    margin-top: 0;
-    margin-bottom: 0.5em;
-}
-
-@media screen and (max-device-width: 840px) {
-    .layersButton {
-        visibility: hidden;
-    }
-
-    .exploreCard {
-        width: 100% !important;
-        margin-left: 0.5em !important;
-    }
-
+    margin-top: -2em;
+    margin-bottom: -1em;
 }
 
 .checkboxWidth {
@@ -107,6 +103,7 @@ div > span > aside {
     padding: 0.5em;
     color: #ffffff !important;
     cursor: pointer;
+    margin-bottom: 1.3em !important;
 }
 
 .listHeadlineStyle {
@@ -161,7 +158,7 @@ img[src=""] {
     margin-left: -0.5em;
 }
 
-.regionCount{
+.regionCount {
     float: right;
     margin-top: 0.6em;
 }
@@ -237,10 +234,33 @@ img[src=""] {
 
 .accordionIcon {
     float: right;
+    position: relative;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+.groupAccordionIcon {
+    float: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
 }
 
 .exploreSourcesIcon {
+    min-width: 25%;
+    background-color: #E6ECF1;
+    position: relative;
+    cursor: pointer;
+}
+
+.exploreSourcesCountAndIcon {
+    width: 25%;
+    margin: 1em -4.8em 0.2em 0;
+    z-index: 4;
     float: right;
+    cursor: pointer;
 }
 
 .listWidthStyle {
@@ -263,7 +283,77 @@ img[src=""] {
 }
 
 .exploreTitleCard {
-    font-size: larger !important;
-    background-color: #D3D3D3;
+    display: flex;
+    font-size: 15px !important;
+}
+
+.exploreTitleLeft {
+    min-width: 20%;
+    text-align: center;
+}
+
+.exploreTitleRight {
+    width: 80%;
+    background-color: #E6ECF1;
     padding: 1em;
+    margin: auto;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.exploreSourcesSelectionIcon {
+    position: relative;
+    top: calc(50% - 0.5em);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: xx-large;
+}
+
+div > span > aside > nav {
+    height: calc(100vh - 8.4em) !important;
+}
+
+.sourceItemsStyleOpen {
+    display: block;
+}
+
+.sourceItemsStyleClosed {
+    display: none;
+}
+
+@media screen and (max-device-width: 840px) {
+    .layersButton {
+        visibility: hidden;
+    }
+
+    .exploreCard {
+        width: 100% !important;
+        margin-left: 0.5em !important;
+    }
+
+    .exploreSourcesCountAndIcon {
+        background-color: #E6ECF1;
+        padding: 1em;
+        margin: 0 -4.8em 0 0;
+        cursor: pointer;
+        z-index: 3;
+        width: auto;
+    }
+
+    .exploreTitleCard {
+        font-size: xx-large !important;
+    }
+
+    .exploreSourcesSelectionIcon, .accordionIcon, .groupAccordionIcon {
+        font-size: 2em;
+    }
+
+    .leftColumnExplore {
+        margin-top: 1em;
+    }
+
+    .exploreTitleRight {
+        z-index: 3;
+    }
 }

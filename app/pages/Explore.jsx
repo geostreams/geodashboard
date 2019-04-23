@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import Menu from '../containers/MenuBar';
 import Map from '../containers/ExploreMap';
@@ -5,16 +9,19 @@ import ExploreSourcesTab from '../components/ExploreSourcesTab';
 import ExploreCustomItemsTab from '../components/ExploreCustomItemsTab';
 import ExploreCategoriesTab from '../components/ExploreCategoriesTab';
 import ExploreLayers from '../components/ExploreLayers';
-import {Cell, Content, Grid, Icon, List, ListHeader, ListGroup, Tabbar, Tab} from 'react-mdc-web';
+import {
+    Cell, Content, Grid, Icon, List, ListHeader, ListGroup, Tabbar, Tab
+} from 'react-mdc-web';
 import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
 import {connect} from 'react-redux';
 import {
-    getMobileSourceNames, getMobileSizeMax, getLayersDetails, getExploreCategoriesOpen,
-    getChromeDisabled, clustersChoiceOption, getExploreSections
+    getMobileSourceNames, getMobileSizeMax, getLayersDetails,
+    getExploreCategoriesOpen, clustersChoiceOption, getExploreSections
 } from '../utils/getConfig';
 import MapToggleClusters from "../components/MapToggleClusters";
 import Spinner from "../components/Spinner";
+import {generateMobilePageTabs} from "../utils/mobileUtils";
 
 
 class Explore extends Component {
@@ -58,6 +65,7 @@ class Explore extends Component {
         let exploreCategoriesSections = [];
         let sources;
         let mobile_sourcenames = getMobileSourceNames();
+
         if (screen.width <= getMobileSizeMax() && mobile_sourcenames.toUpperCase() !== 'ALL') {
             sources = this.props.sources
                 .filter(data => mobile_sourcenames.toUpperCase().includes((data.id).toString().toUpperCase()))
@@ -87,7 +95,7 @@ class Explore extends Component {
                     getExploreSections().map(item => {
                         exploreCustomSections.push(
                             <ExploreCustomItemsTab
-                                key={item.title} data={this.props.data} sources={sources} item={item}
+                                key={item.title} data={this.props.explore_data} sources={sources} item={item}
                             />
                         );
                     });
@@ -96,7 +104,7 @@ class Explore extends Component {
                     this.props.parameterCategories.map(category => {
                         exploreCategories.push(
                             <ExploreCategoriesTab
-                                key={category.title} data={this.props.data} sources={sources}
+                                key={category.title} data={this.props.explore_data} sources={sources}
                                 parameterCategory={category} parameterMappings={this.props.parameterMappings}
                                 parameters={this.props.parameters}
                             />
@@ -108,7 +116,7 @@ class Explore extends Component {
                                         onClick={() => {this.clickedCategoriesAccordion()}}>
                                 Categories
                                 <Icon className={"material-icons " + exploreStyles.accordionIcon}
-                                      name={this.state.categories_accordion_icon ? 'expand_less' : 'expand_more'}
+                                      name={this.state.categories_accordion_icon ? 'expand_more' : 'chevron_right'}
                                 />
                             </ListHeader>
                             <div className={this.state.categories_accordion_icon ?
@@ -152,41 +160,10 @@ class Explore extends Component {
                 />;
         }
 
-        let mapViewText = (<span className={exploreStyles.tabTextStyle}>Map View</span>);
+        // Setup Mobile View Tabs
         let mobilePageTabs = '';
         if (screen.width <= getMobileSizeMax()) {
-            let mapDisabled = false;
-            if (navigator.userAgent.toLowerCase().indexOf('mobile/') > -1 && getChromeDisabled() === true) {
-                mapDisabled = true;
-                mapViewText = (
-                    <span className={exploreStyles.tabTextStyleDisabled}>
-                        Map View (Unavailable with Chrome for Mobile)
-                    </span>
-                );
-            }
-
-            mobilePageTabs = (
-                <div className={exploreStyles.tabBackground}>
-                    <Tabbar key='mobile_tabs'>
-                        <Tab active={this.state.viewSelection === "list-view"}
-                             key='list-view' value="list-view"
-                             onClick={() => {this.clickedViewSelection("list-view")}}
-                        >
-                            <span className={exploreStyles.tabTextStyle}>List View</span>
-                        </Tab>
-                        <Tab active={this.state.viewSelection === "map-view"}
-                             key='map-view' value="map-view"
-                             onClick={() => {
-                                 if (mapDisabled === false) {
-                                     this.clickedViewSelection("map-view")
-                                 }
-                             }}
-                        >
-                            {mapViewText}
-                        </Tab>
-                    </Tabbar>
-                </div>
-            );
+            mobilePageTabs = generateMobilePageTabs("Map View", this.state.viewSelection, this.clickedViewSelection);
         }
 
         let page_content = (
@@ -230,7 +207,8 @@ const mapStateToProps = (state) => {
         regions: state.sensors.regions,
         parameters: state.parameters.parameters,
         parameterCategories: state.parameters.categories,
-        parameterMappings: state.parameters.mappings
+        parameterMappings: state.parameters.mappings,
+        explore_data: state.sensors.explore_sensors,
     }
 };
 

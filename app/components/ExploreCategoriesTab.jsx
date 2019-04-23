@@ -110,7 +110,7 @@ class ExploreCategoriesTab extends Component {
                     >
                         {label}
                         <Icon className={"material-icons " + exploreStyles.accordionIcon}
-                              name={this.state.accordion_icon ? 'expand_less' : 'expand_more'}
+                              name={this.state.accordion_icon ? 'expand_more' : 'chevron_right'}
                         />
                     </ListHeader>
                     {list_cards}

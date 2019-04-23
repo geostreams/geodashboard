@@ -58,10 +58,10 @@ describe('<Search />', () => {
     beforeEach(()=>{
         store = mockStore(initialStore);
         store.dispatch(addEndpoints());
-        store.dispatch(fetchSensors("https://seagrant-dev.ncsa.illinois.edu/clowder"));
-        store.dispatch(addFilter("locations"))
+        store.dispatch(fetchSensors("https://seagrant-dev.ncsa.illinois.edu/geostreams"));
+        store.dispatch(addFilter("locations"));
         wrapper = mount(<Provider store={store}><Search /></Provider>);
-    })
+    });
 
     it('renders without exploding', () =>
     {
@@ -72,4 +72,4 @@ describe('<Search />', () => {
     })
 
 
-})
+});

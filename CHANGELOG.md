@@ -4,13 +4,93 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.0.0-beta.2]
 
 ### Added
+- Hide and Display Sources on the Explore Page
+  [GEOD-1157](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1157)
+- Restrict usage of the Seasons Bin via a config item and specified Sources
+  [GEOD-1163](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1163)
+- Updated configuration endpoints to include /geostreams and removing Clowder from configuration
+  [GEOD-1167](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1167)
+- Stacked bar graph visualization using d3
+  [GEOD-1155](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1155)
+- Added online/offline status indicators for sensors in the explore page left navigation and map
+  [GEOD-1165](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1165)
+- Add option for QA/QC text line in the Info Box on the Explore Page
+  [GLGVO-498](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-498)
+- Added Footer file if wanted for projects
+  [GEOD-1187](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1187)
+- Add option for Explore Page Data Sources to Start Closed
+  [GEOD-1186](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1186)
+- Download Alert Pop Up for Errors
+  [GLGVO-519](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-519)
+- Add option for a Carousel of Images to be displayed on a page
+  [GEOD-1188](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1188)
+- Add option for Explore Page Data Sources to Start Closed
+  [GEOD-1186](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1186)
+- Added Handling for Italics in Parameter Names
+  [GEOD-897](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-897)
 
 ### Changed
+- General Exploratory Analysis Page Updates
+  [GEOD-1149](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1149)
+- Updated the appearance of the Menu Bar in the Page Header
+  [GEOD-1138](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1138)
+- Migrate Detail Page Combined Graphs to D3
+  [GEOD-1166](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1166)
+- Search Page Filter by Shape resets points before drawing a new shape
+  [GEOD-1164](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1164)
+- Changed styling for explore page navigation
+  [GEOD-1168](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1168)
+- Updated Popup Styling per design specifications
+  [GEOD-1169](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1169)
+- Updated Styling for Explore Page Accordion Headers
+  [GEOD-1170](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1170)
+- Display "No Data Available" When Detail Page Graph is Empty
+  [GEOD-1180](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1180)
+- Max Zoom for Maps is a Configuration Item
+  [GEOD-1185](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1185)
+- Migrate Detail Page QAQC Graphs to D3
+  [GEOD-1178](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1178)
+- Adjusted Mobile Settings for the Menu Bar
+  [GEOD-1036](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1036)
+- Adjusted Mobile Settings for the List vs Map Tabs
+  [GEOD-1037](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1037)
+- Move Popup slightly when opening, whether from map click or accordion selection
+  [GEOD-1219](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1219)
+- Updated the behavior of the Spinner as utilized on the Trends Region Detail Page
+  [GEOD-1220](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1220)
 
 ### Fixed
+- Exploratory Analysis API GET Commands and Interface Behavior
+  [GEOD-1152](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1152)
+- Explore Page Sources display order
+  [GEOD-1150](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1150)
+- Region details page not loading
+  [GEOD-1158](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1158)
+- Needed a scrollbar for the Permalink if the popup is large
+  [GEOD-1195](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1195)
+- Correct Layering of Items on the Page when Dialogs are Utilized
+  [GEOD-1189](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1189)
+- Detail Page Info Boxes
+  [GEOD-1197](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1197)
+- D3 Graph Popups Do Not Update Date for Bins
+  [GEOD-1205](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1205)
+- Detail Page would not refresh properly if the URL changed
+  [GEOD-1179](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1179)
+- Detail Page Download Button is Not Always Functional
+  [GEOD-1191](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1191)
+- Correct the Trends Station Popup to use the same terms as the Trends Region Popup
+  [GEOD-1193](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1193)
+- D3 Graph Popups Do Not Update Date for Bins
+  [GEOD-1205](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1205)
+- Explore Page Popup Boxes Map Issues Corrected
+  [GEOD-1199](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1199)
+- Ensure the Chart Component updates appropriately on the Detail Page
+  [GEOD-1217](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1217)
+- Provide more time for the API to return data on the Trends Region Detail Page
+  [GEOD-1194](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1194)
 
 ## [3.0.0-alpha.4] - 2018-10-01
 
@@ -59,7 +139,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1139](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1139)
 - Fixed overlapping points on detail page graph with different seasons on the same year
   [GEOD-1144](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1144)
-
+- Updated the explore page
+  [GEOD-1181](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1181)
 ## [3.0.0-alpha.3] - 2018-06-29
 **Important - Need to have database with parameters setup before release in all projects**
 

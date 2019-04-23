@@ -4,6 +4,7 @@
 
 import React, {Component} from 'react';
 import ol from 'openlayers';
+
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
@@ -22,8 +23,9 @@ class SearchMap extends Component {
         expandedClusterLayer: ol.layer.Vector,
         expandedCluster: boolean,
         areaPolygonSource: ol.source.Vector,
-        customLocationFilterVectorExtent: Array <number>
+        customLocationFilterVectorExtent: Array<number>
     };
+
     constructor(props: Object) {
         super(props);
         this.state = {
@@ -37,7 +39,7 @@ class SearchMap extends Component {
     }
 
     selectShapeLocation = (selectPointsLocations: Array<string>, drawExtent: Array<number>) => {
-            this.props.onSelectShapeLocation(selectPointsLocations, drawExtent);
+        this.props.onSelectShapeLocation(selectPointsLocations, drawExtent);
     };
 
     displayOverlappingMarkers = (featuresAtPixel: ol.features, theMap: ol.Map) => {
@@ -48,7 +50,8 @@ class SearchMap extends Component {
         theMap.addLayer(multiLineLayer);
 
         this.setState({
-            expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true})
+            expandedClusterLayer: newFeaturesLayer, multiLineLayer: multiLineLayer, expandedCluster: true
+        })
     };
 
     removeSpiderfiedClusterLayers = (theMap: ol.Map) => {
@@ -59,7 +62,7 @@ class SearchMap extends Component {
     popupHandler = (theMap: ol.Map, e: InputEventMap) => {
         const that = this;
         const overlay = theMap.getOverlayById("marker");
-
+        if (typeof e !== 'undefined') {
             let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
                 return featureChange;
             });
@@ -95,6 +98,7 @@ class SearchMap extends Component {
             if (closeClusters && that.state.expandedCluster) {
                 that.removeSpiderfiedClusterLayers(theMap);
             }
+        }
     };
 
     popupHandleHelper = (feature: ol.Feature, coordinate: number[], overlay: ol.Overlay) => {
@@ -140,9 +144,9 @@ class SearchMap extends Component {
                     theMap.getView().fit(tmpVectorSource.getExtent(), theMap.getSize());
                 }
             }
-            // If the User selected a predefined location, zoom to the features
+        // If the User selected a predefined location, zoom to the features
         } else if (features.length > 0) {
-            if (!this.state.expandedCluster){
+            if (!this.state.expandedCluster) {
                 let tmpvectorSource = new ol.source.Vector({
                     features: features
                 });
@@ -153,7 +157,7 @@ class SearchMap extends Component {
     };
 
     getFeature = () => {
-        if(this.props.updateSensors){
+        if (this.props.updateSensors) {
             return sensorsToFeatures(this.props.updateSensors, this.props.parameters);
         } else {
             return sensorsToFeatures(this.props.sensors, this.props.parameters);
@@ -214,7 +218,7 @@ class SearchMap extends Component {
                     style = (new ol.style.Style({
                         image: new ol.style.Icon({
                             anchor: [0.5, 1],
-                            src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( iconSvg ),
+                            src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg),
                             scale: scale_value
                         })
                     }));
@@ -263,7 +267,6 @@ class SearchMap extends Component {
     }
 
     render() {
-
         return (
             <div>
                 <BasicMap features={this.getFeature()}

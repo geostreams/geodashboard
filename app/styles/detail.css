@@ -10,6 +10,11 @@
     margin-left: 0.5em;
 }
 
+.parameters_chart_subheading {
+    padding-left: 2em;
+    font-weight: bold;
+}
+
 .noData {
     font-size: 200%;
     padding: 1em 2em;
@@ -41,9 +46,13 @@
     float: right;
 }
 
-.season_margin {
-    margin-left: 50px;
-    margin-right: 20px;
+.season_margin_title {
+    margin-left: 3em;
+    margin-right: 1em;
+}
+
+.season_margin_select {
+    margin: 0.3em 1em 0 4em;
 }
 
 .card_margins {
@@ -85,11 +94,11 @@
     padding: 0.5em 0;
 }
 
-.positionChart{
+.positionChart {
     margin-left: 2em;
 }
 
-.graph_line{
+.graph_line {
     fill: none;
     stroke: #38B649;
     stroke-width: 2px;
@@ -127,7 +136,7 @@
 }
 
 .median_line {
-    stroke-dasharray: 3,3;
+    stroke-dasharray: 3, 3;
 }
 
 .rect {
@@ -135,7 +144,7 @@
 }
 
 .center {
-    stroke-dasharray: 3,3;
+    stroke-dasharray: 3, 3;
 }
 
 .outlier {
@@ -148,20 +157,24 @@
     margin-right: 0px;
 }
 
-.filterTitle{
+.filterTitle {
     color: #1B4557;
     opacity: 0.5;
     margin-top: 11px;
 }
 
-.filterPadding{
+.filterPadding {
     padding-top: 11px;
+}
+
+.filterMargin {
+    margin-left: 0.1em !important;
 }
 
 .hoverLine {
     stroke: #38B649;
     stroke-width: 2px;
-    stroke-dasharray: 3,3;
+    stroke-dasharray: 3, 3;
 }
 
 .tooltip {
@@ -175,7 +188,23 @@
     color: white;
 }
 
+.bar_tooltip {
+    position: absolute;
+    text-align: left;
+    padding: 2px;
+    font-size: 12px;
+    background: #1B4557;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    color: white;
+}
+
 .overlay {
     fill: none;
     pointer-events: all;
+}
+
+.leftMargin {
+    margin-left: 0.6em !important;
 }

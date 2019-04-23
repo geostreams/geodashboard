@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import D3Line from './D3/D3Line';
 import PropTypes from 'prop-types';
-import {getTimeSeriesSensorExtent} from '../utils/getConfig.js'
 import styles from '../styles/detail.css';
+
 
 class Line extends Component {
 
@@ -18,21 +18,20 @@ class Line extends Component {
 
     componentDidMount() {
         // D3 Code to create the chart
-        const el =  this._rootNode;
+        const el = this._rootNode;
         D3Line.create(el, {
             width: 500,
             height: 400
         }, this.getLineState());
-
     }
 
     componentDidUpdate() {
-        let el =  this._rootNode;
+        let el = this._rootNode;
         D3Line.update(el, this.getLineState());
     }
 
     getLineState() {
-        return{
+        return {
             width: 500,
             height: 400,
             class_name_line: styles.graph_line,
@@ -54,9 +53,11 @@ class Line extends Component {
             domain: this.props.domain,
             yAxisLabel: this.props.yAxisLabel,
             title: this.props.title,
-            startAtZero:this.props.startAtZero
+            startAtZero: this.props.startAtZero,
+            binType: this.props.binType
         }
     }
+
     componentWillUnmount() {
         D3Line.destroy(this._rootNode);
     }
@@ -66,8 +67,9 @@ class Line extends Component {
     }
 
     render() {
-        return (<div className="line-container" ref={this._setRef.bind(this)} />)
+        return (<div className="line-container" ref={this._setRef.bind(this)}/>)
     }
+
 }
 
 export default Line;

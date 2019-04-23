@@ -54,7 +54,7 @@ class App extends Component {
         console.log('App did mount');
         const { loadSensors } = this.props;
         // dispatch is synchronous by default,
-        loadSensors(window.configruntime.gd3.clowder_endpoints[0].url);
+        loadSensors(window.configruntime.gd3.geostreaming_endpoints[0].url);
     }
 
     componentDidMount () {

@@ -1,18 +1,20 @@
+import {
+    getApplicationWebsite, getColor, getMobileSizeMax, getMobileDetailPath, displayOnlineStatus, maxDisplayParams
+} from './getConfig';
 
-import {getApplicationWebsite, getColor, getMobileSizeMax, getMobileDetailPath} from './getConfig';
-
-export function popupHeader(feature: ol.Feature, styles){
+export function popupHeader(feature: ol.Feature, styles, online = false) {
     let id = feature.getId().toUpperCase();
     let sensorInfo = feature.attributes;
 
     let dataSourceValue = (sensorInfo.dataSource);
-    let dataSource = '<tr><td width="35%"><strong>Data Source: </strong></td>'.concat('<td width="65%">', dataSourceValue,
-        ' Monitoring Site</td></tr>');
+    let dataSource = '<tr><td width="30%" align="right" class=' + styles.table_title + '>' +
+        '<strong>Data Source </strong></td>'.concat(
+            '<td width="70%">', dataSourceValue, ' Monitoring Site</td></tr>');
 
     let startTime = new Date(sensorInfo.minStartTime).toLocaleDateString();
     let endTime = new Date(sensorInfo.maxEndTime).toLocaleDateString();
-    let timePeriod = '<tr><td><strong>Time Period: </strong></td>'.concat('<td>', startTime, ' - ',
-        endTime, '</td></tr>');
+    let timePeriod = '<tr><td width="30%" align="right"><strong>Time Period </strong></td>'.concat(
+        '<td>', startTime, ' - ', endTime, '</td></tr>');
 
     let latitude = Number(sensorInfo.latitude).toPrecision(5).toString();
     if (latitude.includes("-")) {
@@ -28,58 +30,91 @@ export function popupHeader(feature: ol.Feature, styles){
     } else {
         longitude = longitude.concat('&degE');
     }
-    let latlong = '<tr><td><strong>Lat, Long: </strong></td>'.concat('<td>', latitude, ', ',
-        longitude, '</td></tr>');
+    let latlong = '<tr><td width="30%" align="right"><strong>Lat, Long </strong></td>'.concat(
+        '<td>', latitude, ', ', longitude, '</td></tr>');
 
     let sourceColor = sensorInfo.color;
 
     let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
         sourceColor + ';">' + id + '</h2>';
 
+    let onlineStatus = '';
+    if (displayOnlineStatus() === true && online === true && sensorInfo.onlineStatus !== 'none') {
+        let onlineStatusVal = sensorInfo.onlineStatus.charAt(0).toUpperCase() + sensorInfo.onlineStatus.slice(1);
+        onlineStatus = '<tr><td width="30%" align="right"><strong>Online Status </strong></td>'.concat(
+            '<td width="70%">', onlineStatusVal, '</td></tr>');
+    }
+
     let bodyText =
-        '<table class=' + styles.popup_table + '>' +
+        '<table class=' + styles.popup_table + '> ' +
             dataSource +
             timePeriod +
             latlong +
-        '</table>' +
-        '<div class=' + styles.greyborder + '></div>';
+            onlineStatus +
+        '</table>';
 
     return headerText + bodyText;
 }
 
-export function popupParameters(feature: ol.Feature, styles){
+export function popupParameters(feature: ol.Feature, styles) {
 
     let application_sensors_website = getApplicationWebsite();
-
+    let detail_link = application_sensors_website + '#detail/location/';
+    if (screen.width <= getMobileSizeMax()) {
+        detail_link = getMobileDetailPath();
+    }
     let sensorInfo = feature.attributes;
-    let sourceColor = sensorInfo.color;
 
     let paramsLength = (sensorInfo.parameters).length;
     let paramsOrig = (sensorInfo.parameters);
     let paramsAlt = '';
-    for (let i = 0; i < paramsLength; i++) {
-        paramsAlt = paramsAlt + '<li>' + paramsOrig[i] + '</li>';
-    }
-    let params = '<ul>'.concat(paramsAlt, '</ul>');
-
-    let bodyText =
-        '<h3 class=' + styles.header3style + '>' + 'Parameters (' + paramsLength + '): </h3>' +
-        '<div class=' + styles.paramsborder + '>' + params + '</div>' ;
-
-    if(paramsLength > 0) {
-        let detail_link = application_sensors_website + '#detail/location/';
-        if (screen.width <= getMobileSizeMax()) {
-            detail_link = getMobileDetailPath();
+    if (paramsLength <= maxDisplayParams()) {
+        for (let i = 0; i < paramsLength; i++) {
+            let paramsParts = paramsOrig[i].split('(', 2);
+            let paramsName = paramsParts[0];
+            let paramsUnit = '';
+            if (paramsOrig[i].indexOf('(') >= 0) {
+                paramsUnit = '<span class=' + styles.params_unit + '>' +
+                    paramsOrig[i].substring(paramsOrig[i].indexOf('(')) + ' </span>';
+            }
+            if (i === 0) {
+                paramsAlt =
+                    '<tr><td width="30%" align="right" class=' + styles.table_title + '>' +
+                    '<strong>Parameters (' + paramsLength + ') </strong></td>' +
+                    '<td width="70%"> ' + paramsName + paramsUnit + ' </td></tr>';
+            } else {
+                paramsAlt = paramsAlt +
+                    '<tr><td width="30%" align="right"> </td>'.concat(
+                        '<td width="70%">', paramsName + paramsUnit, '</td></tr>');
+            }
         }
-        bodyText += '<a href=" ' + detail_link + sensorInfo.name +
-            '/separate/" class=' + styles.viewdetail + ' style="background-color: ' +
-            sourceColor + ';">View detail</a>';
+    } else {
+        paramsAlt =
+            '<tr><td width="30%" align="right" class=' + styles.table_title + '>' +
+            '<strong class=' + styles.table_title + '>Parameters </strong>' +
+            '<i class="material-icons ' + styles.params_icon + '">warning </i>' + '</td>' +
+            '<td width="70%">' + 'There are too many parameters to display here. </td></tr>' +
+            '<tr><td width="30%" align="right"> </td>' + '<td width="70%"> ' +
+            '<a href=" ' + detail_link + sensorInfo.name + '/separate/" >View Data</a> ' +
+            'to see a full list of parameters for this site.' + ' </td></tr>';
+    }
+
+    let params =
+        '<table class=' + styles.params_table + '> ' +
+            paramsAlt +
+        '</table>';
+
+    let bodyText = '<div class=' + styles.paramsborder + '>' + params + '</div>';
+
+    if (paramsLength > 0) {
+        bodyText += '<a href=" ' + detail_link + sensorInfo.name + '/separate/" class=' +
+            styles.viewdetail + ' >View Data</a>';
     }
 
     return bodyText;
 }
 
-export function popupTrends(feature: ol.Feature, styles){
+export function popupAnalysis(feature: ol.Feature, styles) {
 
     let application_sensors_website = getApplicationWebsite();
     let sensorInfo = feature.attributes;
@@ -97,7 +132,7 @@ export function popupTrends(feature: ol.Feature, styles){
 
         let rightText = "Not enough data to display";
         trendsRight = '' +
-            '<tr><td><strong>' + rightText + '</strong></td></tr>';
+            '<tr><td><strong>' + rightText + ' </strong></td></tr>';
 
     } else {
 
@@ -118,14 +153,13 @@ export function popupTrends(feature: ol.Feature, styles){
         trendsRight = '' +
             '<tr><td><strong>Baseline Avg: </strong>' + trendValues[0] + '</td></tr>' +
             '<tr><td><strong>Rolling Avg: </strong>' + trendValues[1] + '</td></tr>' +
-            '<tr><td><strong>Latest Value: </strong>' + trendValues[2] + '</td></tr>' +
-            '<tr><td><strong>Latest Time: </strong>' + trendValues[3] + '</td></tr>';
+            '<tr><td><strong>Latest Value: </strong>' + trendValues[2] + '</td></tr>'
     }
 
     let trends = trendsLeft + trendsRight;
 
     let bodyText =
-        '<table class=' + styles.tablestyle + '>' +
+        '<table class=' + styles.tablestyle + '> ' +
             trends +
         '</table>';
     let paramsLength = 0;
@@ -133,26 +167,82 @@ export function popupTrends(feature: ol.Feature, styles){
         paramsLength = sensorInfo.parameters.length;
     }
 
-    let sourceColor = sensorInfo.color;
-    if(paramsLength > 0 && sensorInfo.trends_detail){
-        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/'+
-            sensorInfo.name + '/separate/" class=' + styles.viewsitedetail + ' style="background-color: ' +
-            sourceColor + ';">View Details for the ' + sensorInfo.name + ' Site </a>';
+    if (paramsLength > 0 && sensorInfo.trends_detail) {
+        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/' +
+            sensorInfo.name + '/separate/" class=' +
+            styles.viewsitedetail + ' >View Data for the ' + sensorInfo.name + ' Site </a>';
     }
 
     return bodyText;
 
 }
 
-export function removePopup(theMap){
-    const closer = document.getElementById('popup-closer');
-    if (closer) {
-        theMap.getOverlayById("marker").setPosition(undefined);
-        closer.blur();
+export function popupTrends(feature: ol.Feature, styles) {
+
+    let application_sensors_website = getApplicationWebsite();
+    let sensorInfo = feature.attributes;
+    let sensorTrends = sensorInfo.trend_type;
+    let trendColor = sensorInfo.trend_color;
+    let trendValues = sensorInfo.trend_values;
+    let parameter = sensorInfo.trend_parameter;
+    let trendsLeft = '';
+    let trendsRight = '';
+
+    if (sensorTrends === "noTrend" || sensorTrends === "") {
+
+        let leftText = " ";
+        trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+            trendColor + '; border-color: ' + trendColor + ';">' + leftText + '</p></td></tr>';
+
+        let rightText = "Not enough data to display";
+        trendsRight = '' +
+            '<tr><td><strong>' + rightText + ' </strong></td></tr>';
+
+    } else {
+
+        if (sensorTrends === 'trendUp' || sensorTrends === 'overThresholdUp') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.upArrow + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + '; ">' + trendValues[4] + '</p></td></tr>';
+        } else if (sensorTrends === 'trendDown' || sensorTrends === 'overThresholdDown') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.downArrow + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+        } else if (sensorTrends === 'noTrend') {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+        } else {
+            trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
+                trendColor + '; border-color: ' + trendColor + ';">' + trendValues[4] + '</p></td></tr>';
+        }
+
+        trendsRight = '' +
+            '<tr><td><strong>Parameter: </strong>' + parameter + '</td></tr>' +
+            '<tr><td><strong>Total Avg: </strong>' + trendValues[0] + '</td></tr>' +
+            '<tr><td><strong>Ten Year Avg: </strong>' + trendValues[1] + '</td></tr>' +
+            '<tr><td><strong>Latest Avg: </strong>' + trendValues[2] + '</td></tr>';
     }
+
+    let trends = trendsLeft + trendsRight;
+
+    let bodyText =
+        '<table class=' + styles.tablestyle + '> ' +
+            trends +
+        '</table>';
+    let paramsLength = 0;
+    if (sensorInfo.parameters && sensorInfo.parameters.length > 0) {
+        paramsLength = sensorInfo.parameters.length;
+    }
+
+    if (paramsLength > 0 && sensorInfo.trends_detail) {
+        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/' +
+            sensorInfo.name + '/separate/" class=' +
+            styles.viewsitedetail + ' >View Data for the ' + sensorInfo.name + ' Site </a>';
+    }
+
+    return bodyText;
+
 }
 
-export function popupRegion(feature: ol.Feature, styles){
+export function popupRegion(feature: ol.Feature, styles) {
 
     let id = feature.getId().toUpperCase();
     let sensorInfo = feature.attributes;
@@ -165,8 +255,6 @@ export function popupRegion(feature: ol.Feature, styles){
 
     let headerText = '<h2 class=' + styles.header2style + ' style="background-color: ' +
         sourceColor + ';">' + id + '</h2>';
-
-    let bodyText = '<div class=' + styles.greyborder + '></div>';
 
     let trendsLeft = '<tr><td rowspan="5"><p class=' + styles.noValue + ' style="background: ' +
         trendColor + '; border-color: ' + trendColor + ';"></p></td></tr>';
@@ -209,17 +297,23 @@ export function popupRegion(feature: ol.Feature, styles){
     let trends = trendsLeft + trendsRight;
 
     let regionText =
-        '<table class=' + styles.tablestyle + '>' +
+        '<table class=' + styles.tablestyle + '> ' +
             trends +
-        '</table>' +
-        '<div class=' + styles.greyborder + '></div>';
+        '</table>';
 
-    if(sensorInfo.trend_type !== 'noTrend'  && sensorInfo.trend_type !== "") {
-        regionText += '<a href="#/trendsdetail/region/'+ sensorInfo.location +
-            '/'+ sensorInfo.url_parameter + '/'+ sensorInfo.season +
-            '" class=' + styles.viewdetail +
-            ' style="background-color: ' + sourceColor + ';">View Details for the ' +
-            sensorInfo.region + ' Region </a>';
+    if (sensorInfo.trend_type !== 'noTrend' && sensorInfo.trend_type !== "") {
+        regionText += '<a href="#/trendsdetail/region/' + sensorInfo.location +
+            '/' + sensorInfo.url_parameter + '/' + sensorInfo.season + '" class=' +
+            styles.viewdetail + '>View Data for the ' + sensorInfo.region + ' Region </a>';
+
     }
-    return headerText + bodyText + regionText;
+    return headerText + regionText;
+}
+
+export function removePopup(theMap) {
+    const closer = document.getElementById('popup-closer');
+    if (closer) {
+        theMap.getOverlayById("marker").setPosition(undefined);
+        closer.blur();
+    }
 }

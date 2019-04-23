@@ -10,7 +10,7 @@ import {
     SELECT_ANALYSIS_REGION, SELECT_TRENDS_REGION, SELECT_TRENDS_CALC_ROLLING_SETTING,
     SELECT_ANALYSIS_PARAMETER, SELECT_TRENDS_PARAMETER, SELECT_TRENDS_SEASON,
     SELECT_TRENDS_THRESHOLD, SELECT_TRENDS_VIEW_TYPE, SET_TRENDS_TIMEFRAMES,
-    SET_REGIONS_SENSORS, SET_TRENDS_SENSORS, UPDATE_TRENDS_SENSORS
+    SET_REGIONS_SENSORS, SET_TRENDS_SENSORS, UPDATE_TRENDS_SENSORS, FAILED_RETRIEVING_REGION_TRENDS
 } from '../actions';
 import {
     getTrendsPageTimeframes, getTrendsRegionsSettings, getTrendSettings,
@@ -64,8 +64,8 @@ const defaultState = {
     sensors: [],
     trends_sensors: [],
     trends_regions: [],
-    baseline_total_year: '',
-    rolling_interval: '',
+    baseline_total_year: 30,
+    rolling_interval: 17,
     view_type: '',
     number_to_filter: 0,
     draw_available_sensors:[],
@@ -182,6 +182,13 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
                 sensor_parameter: sensor_param,
                 sensor_season: action.season,
                 sensor_region: state.region
+            });
+
+        case FAILED_RETRIEVING_REGION_TRENDS:
+            return Object.assign({}, state, {
+                show_spinner: false,
+                region_parameter: action.parameter,
+                region_season: action.season
             });
 
         case ADD_REGION_TRENDS:
@@ -366,8 +373,8 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
                 sensors: [],
                 trends_sensors: [],
                 trends_regions: [],
-                baseline_totalyear: '',
-                rolling_interval: '',
+                baseline_total_year: 30,
+                rolling_interval: 17,
                 view_type: 'by-sensors',
                 number_to_filter: 0,
                 draw_available_sensors:[],

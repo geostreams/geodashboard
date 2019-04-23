@@ -41,13 +41,15 @@ const sensorDetail = (state:backendsState = defaultState, action) => {
     }
 };
 
-function groupBy(array, col, value, processed) {
+function groupBy(array, col,  col2, col3, value, processed) {
     let r = [], o = {};
     let copy_array = array;
     array.forEach(function (a) {
         if (!o[a[col]]) {
             o[a[col]] = {};
             o[a[col]][col] = a[col];
+            o[a[col]][col2] = a[col2];
+            o[a[col]][col3] = a[col3];
             o[a[col]][processed] = a[processed];
 
             const same_year_values = copy_array.filter(x => x[col] === a[col]);
@@ -72,7 +74,7 @@ function collect_data(data){
 
     let output = [];
     for(let key in data.properties){
-        output[key] = groupBy(data.properties[key], 'date', 'average', getProcessedProperty());
+        output[key] = groupBy(data.properties[key], 'date', 'label', 'data', 'average', getProcessedProperty());
     }
     return output;
 }

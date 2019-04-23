@@ -82,9 +82,9 @@ export type Location = {
 
 //TODO: this is not fully checked now, ref: http://redux.js.org/docs/basics/DataFlow.html
 export type backendsState = {
-      endpoints: Array<endpoint>,
-      selected: string
-    };
+    endpoints: Array<endpoint>,
+    selected: string
+};
 
 export type parameterState = {
     parameters: Parameters
@@ -105,6 +105,10 @@ export type selectedSearchState = {
     }
 };
 
+export type exploreFilteringState = {
+    data_sources: DatasourceParameter,
+}
+
 export type sensorsState = {
     sensors: Sensors,
     available_sensors: Sensors,
@@ -115,6 +119,7 @@ export type sensorsState = {
     data: Sensors,
     draw_available_sensors: Sensors,
     shape_coordinates: Array<number>,
+    explore_sensors: Sensors
 };
 
 export type trendsSensorsState = {
@@ -210,8 +215,8 @@ export type TrendsThresholdChoice = boolean;
 export type TrendsPageSensorsState = Sensors;
 export type TrendsPageRegionsState = TrendsRegions;
 export type TrendsViewType = string;
-export type TrendsBaselineTotalYear = string;
-export type TrendsRollingInterval = string;
+export type TrendsBaselineTotalYear = number;
+export type TrendsRollingInterval = number;
 
 export type ChosenTrendsState = {
     region: TrendsRegion,

@@ -4,6 +4,7 @@
         width: calc(100vw - 1em) !important;
         cursor: pointer;
     }
+
     .olPopup {
         font-size: x-large !important;
     }
@@ -27,15 +28,16 @@
 .olPopup {
     position: absolute;
     background-color: white;
-    -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-    border-radius: 30px;
-    bottom: 12px;
-    left: -50px;
-    min-width: 22em;
+    -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    bottom: 28px;
+    left: -48px;
+    min-width: 28em;
     font-size: 80%;
     cursor: default;
+    z-index: 1;
 }
+
 .olPopup:after, .olPopup:before {
     border: solid transparent;
     content: " ";
@@ -44,25 +46,29 @@
     position: absolute;
     pointer-events: none;
 }
+
 .olPopup:after {
     border-top-color: white;
     border-width: 10px;
     left: 48px;
     margin-left: -10px;
 }
+
 .olPopup:before {
     border-width: 11px;
     left: 48px;
     margin-left: -11px;
 }
+
 .olPopupCloser {
     text-decoration: none;
     position: absolute;
-    top: 2px;
+    top: 9px;
     right: 8px;
+    color: #ffffff;
 }
+
 .olPopupCloser:after {
-    content: "✖";
     color: #ffffff;
 }
 
@@ -80,7 +86,7 @@
     top: 8.15em;
 }
 
-.olDrawCustomButton  {
+.olDrawCustomButton {
     top: 9.95em;
 }
 
@@ -91,28 +97,26 @@
 .olSharedDrawStyles {
     left: .5em;
     border-radius: 0.15em;
-    visibility:hidden;
+    visibility: hidden;
 }
 
 .popup_table {
     margin: auto;
     border-collapse: separate;
     border-spacing: 0.4em;
-    width: 100%;
+    min-width: 28.1em;
     padding-left: 0.5em;
+    background-color: #dcdcdc;
 }
 
 .header2style {
-    text-align: center;
     color: #ffffff;
     padding: 0.5em;
-    border-radius: 0.5em 0.5em 0em 0em;
-    font-weight: lighter;
+    font-weight: normal;
 }
 
 .header3style {
     padding: 0.2em 0.2em 0.2em 1em;
-    background-color: #dcdcdc;
 }
 
 .greyborder {
@@ -121,9 +125,7 @@
 }
 
 .paramsborder {
-    padding-left: 2.5em;
     margin-bottom: 0.5em;
-    max-height: 6em;
     overflow-y: auto;
     line-height: 1.5em;
 }
@@ -139,6 +141,7 @@
     height: 3.5em;
     border-radius: 0% 0% 10% 10%;
 }
+
 .upArrow:before {
     content: '';
     border-width: 0em 2.4em 2.2em 2.5em;
@@ -163,6 +166,7 @@
     height: 3.5em;
     border-radius: 10% 10% 0% 0%;
 }
+
 .downArrow:before {
     content: '';
     border-width: 2.2em 2.5em 0em 2.4em;
@@ -194,10 +198,16 @@
 
 .trends_legend_text {
     width: 13em;
-    padding: .5em;
+    padding: 0.5em;
     background: #FFFFFF;
     border: 0.2em solid #F5F5F5;
     border-radius: 5%;
+}
+
+@media screen and (max-device-width: 840px) {
+    .trends_legend_text {
+        font-size: x-large;
+    }
 }
 
 .upArrowLegend {
@@ -224,26 +234,24 @@
 }
 
 .viewdetail {
-    color: white;
-    text-align:center;
-    display:block;
+    text-align: center;
+    display: block;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
-    border-radius: 0em 0em  0.5em 0.5em;
-    font-weight: lighter;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .viewsitedetail {
-    color: white;
-    text-align:center;
-    display:block;
+    text-align: center;
+    display: block;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
-    font-weight: lighter;
+    font-weight: bold;
 }
 
 @media screen and (max-device-width: 840px) {
-    .popup_table, .paramsborder, .viewdetail, .viewsitedetail {
+    .popup_table, .paramsborder, .viewdetail, .viewsitedetail, .params_table {
         font-size: xx-large !important;
     }
 
@@ -254,4 +262,29 @@
     .olPopup {
         min-width: 30em !important;
     }
+}
+
+.params_table {
+    margin: auto;
+    border-collapse: separate;
+    border-spacing: 0.4em;
+    min-width: 28em;
+    padding-left: 0.5em;
+    line-height: 1.2em;
+}
+
+.params_unit {
+    color: #808080;
+}
+
+.table_title {
+    vertical-align: top !important;
+}
+
+.params_icon {
+    color: #FF0000;
+}
+
+.tablestyle {
+    padding-left: 4em;
 }

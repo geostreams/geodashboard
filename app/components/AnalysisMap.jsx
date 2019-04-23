@@ -4,17 +4,19 @@
 
 import React, {Component} from 'react';
 import ol from 'openlayers';
+
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
-import {getCustomTrendRegion, getTrendColor, getMapTileURLSetting} from '../utils/getConfig';
+import {getCustomTrendRegion, getTrendColor, getMapTileURLSetting, maxZoom} from '../utils/getConfig';
 import {sensorsToFeaturesAnalysisPage, getAttribution, getControls} from '../utils/mapUtils';
-import {popupHeader, popupTrends} from '../utils/mapPopup';
+import {popupHeader, popupAnalysis} from '../utils/mapPopup';
 import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
 
 
 class AnalysisMap extends Component {
+
     state: TrendsMapState;
 
     constructor(props: MapProps) {
@@ -25,7 +27,7 @@ class AnalysisMap extends Component {
             clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector}),
             areaPolygonSource: new ol.source.Vector,
             currentZoom: 5.5,
-            maxZoom: 12,
+            maxZoom: maxZoom(),
             openMenu: false,
             // create a fake map to avoid checking map.isdefined every time for flow.
             map: new ol.Map({
@@ -57,7 +59,9 @@ class AnalysisMap extends Component {
 
                     <div id="marker" title="Marker" className="marker"> </div>
                     <div id="popup" className={styles.olPopup}>
-                        <a href="#" id="popup-closer" className={styles.olPopupCloser}> </a>
+                        <a href="#" id="popup-closer" className={styles.olPopupCloser}>
+                            <Icon name="close"/>
+                        </a>
                         <div id="popup-content"> </div>
                     </div>
 
@@ -91,7 +95,7 @@ class AnalysisMap extends Component {
 
     }
 
-    selectShapeLocation(event:Array<string>) {
+    selectShapeLocation(event: Array<string>) {
 
         this.props.onSelectShapeLocationTrend(event);
 
@@ -101,7 +105,7 @@ class AnalysisMap extends Component {
         const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
 
-            let popupText = popupHeader(feature, styles) + popupTrends(feature, styles);
+            let popupText = popupHeader(feature, styles) + popupAnalysis(feature, styles);
 
             if (content) {
                 content.innerHTML = popupText;
@@ -301,7 +305,7 @@ class AnalysisMap extends Component {
 
             let handleDrawClearButton = function () {
                 theMap.getInteractions().forEach(function (e) {
-                    if(e instanceof ol.interaction.Draw) {
+                    if (e instanceof ol.interaction.Draw) {
                         theMap.removeInteraction(e);
                     }
                 });
@@ -360,7 +364,7 @@ class AnalysisMap extends Component {
 
                 theMap.addInteraction(drawSquare);
 
-                drawSquare.on ('drawstart',function() {
+                drawSquare.on('drawstart', function () {
                     selectItems.setActive(false);
                     selectPoints = [];
                 });
@@ -370,7 +374,7 @@ class AnalysisMap extends Component {
                     selectItems.setActive(true);
 
                     theMap.getInteractions().forEach(function (e) {
-                        if(e instanceof ol.interaction.Draw) {
+                        if (e instanceof ol.interaction.Draw) {
                             theMap.removeInteraction(e);
                         }
                     });
@@ -399,9 +403,9 @@ class AnalysisMap extends Component {
                     if (selectPoints.length > 0) {
                         for (let i = 0; i < selectPoints.length; i++) {
                             let selectPointFeatures = selectPoints[i].get('features');
-                            for(let j = 0; j < selectPointFeatures.length; j++) {
+                            for (let j = 0; j < selectPointFeatures.length; j++) {
                                 let featureName = selectPointFeatures[j].attributes.name;
-                                if(!selectPointsLocations.includes(featureName.toString())) {
+                                if (!selectPointsLocations.includes(featureName.toString())) {
                                     selectPointsLocations.push(featureName);
                                 }
                             }
@@ -447,7 +451,7 @@ class AnalysisMap extends Component {
 
                 theMap.addInteraction(drawCircle);
 
-                drawCircle.on ('drawstart',function() {
+                drawCircle.on('drawstart', function () {
                     selectItems.setActive(false);
                     selectPoints = [];
                 });
@@ -457,7 +461,7 @@ class AnalysisMap extends Component {
                     selectItems.setActive(true);
 
                     theMap.getInteractions().forEach(function (e) {
-                        if(e instanceof ol.interaction.Draw) {
+                        if (e instanceof ol.interaction.Draw) {
                             theMap.removeInteraction(e);
                         }
                     });
@@ -486,9 +490,9 @@ class AnalysisMap extends Component {
                     if (selectPoints.length > 0) {
                         for (let i = 0; i < selectPoints.length; i++) {
                             let selectPointFeatures = selectPoints[i].get('features');
-                            for(let j = 0; j < selectPointFeatures.length; j++) {
+                            for (let j = 0; j < selectPointFeatures.length; j++) {
                                 let featureName = selectPointFeatures[j].attributes.name;
-                                if(!selectPointsLocations.includes(featureName.toString())) {
+                                if (!selectPointsLocations.includes(featureName.toString())) {
                                     selectPointsLocations.push(featureName);
                                 }
                             }
@@ -534,7 +538,7 @@ class AnalysisMap extends Component {
 
                 theMap.addInteraction(drawCustom);
 
-                drawCustom.on ('drawstart',function() {
+                drawCustom.on('drawstart', function () {
                     selectItems.setActive(false);
                     selectPoints = [];
                 });
@@ -544,7 +548,7 @@ class AnalysisMap extends Component {
                     selectItems.setActive(true);
 
                     theMap.getInteractions().forEach(function (e) {
-                        if(e instanceof ol.interaction.Draw) {
+                        if (e instanceof ol.interaction.Draw) {
                             theMap.removeInteraction(e);
                         }
                     });
@@ -573,9 +577,9 @@ class AnalysisMap extends Component {
                     if (selectPoints.length > 0) {
                         for (let i = 0; i < selectPoints.length; i++) {
                             let selectPointFeatures = selectPoints[i].get('features');
-                            for(let j = 0; j < selectPointFeatures.length; j++) {
+                            for (let j = 0; j < selectPointFeatures.length; j++) {
                                 let featureName = selectPointFeatures[j].attributes.name;
-                                if(!selectPointsLocations.includes(featureName.toString())) {
+                                if (!selectPointsLocations.includes(featureName.toString())) {
                                     selectPointsLocations.push(featureName);
                                 }
                             }
@@ -674,10 +678,10 @@ class AnalysisMap extends Component {
             trends_legend_var.innerHTML =
                 (
                     '<div class=' + styles.trends_legend_text + '>' +
-                        trendUpArrow + ' - Trending Up <br/>' +
-                        trendDownArrow + ' - Trending Down <br/>' +
-                        noTrendArrow + ' - No Data Available <br/>' +
-                        overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/>' +
+                    trendUpArrow + ' - Trending Up <br/>' +
+                    trendDownArrow + ' - Trending Down <br/>' +
+                    noTrendArrow + ' - No Data Available <br/>' +
+                    overThresholdUpArrow + overThresholdDownArrow + ' - Over Threshold  <br/>' +
                     '</div>'
                 );
         }

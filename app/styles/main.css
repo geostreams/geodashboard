@@ -59,7 +59,12 @@ h1, h2, h3, h5, h6, p, ul {
         font-weight: bold !important;
     }
 
-    h2, h3, h4, text, select, section, p {
+    section {
+        font-size: xx-large !important;
+        line-height: 120% !important;
+    }
+
+    h2, h3, h4, select, text, p {
         font-size: xx-large !important;
     }
 
@@ -140,16 +145,34 @@ h1, h2, h3, h5, h6, p, ul {
     font-weight: bold;
 }
 
+.loading_text {
+    margin: 25vh auto;
+    padding: 3.5em 0 0 1em;
+    left: 42.55%;
+    position: absolute;
+    width: 10em;
+    height: 10em;
+    color: #29ABE2;
+    border: 1em inset #29ABE2;
+    border-radius: 50%;
+}
+
+.loading_text_background {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
 .loading_spinner {
     border-radius: 50%;
     width: 10em;
     height: 10em;
-    border: 1em dashed #29ABE2;
+    border: 1em inset #29ABE2;
     -webkit-animation: spinner 4s linear infinite;
     -moz-animation: spinner 4s linear infinite;
     animation: spinner 4s linear infinite;
     margin: 25vh auto;
     z-index: 1000;
+    position: absolute;
+    left: 42.55%;
 }
 
 .make_modal {
@@ -164,18 +187,30 @@ h1, h2, h3, h5, h6, p, ul {
 }
 
 @-webkit-keyframes spinner {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @-moz-keyframes spinner {
-    from { -moz-transform: rotate(0deg); }
-    to { -moz-transform: rotate(360deg); }
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
 }
 
 @keyframes spinner {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .alertHeader {
@@ -213,11 +248,13 @@ h1, h2, h3, h5, h6, p, ul {
 
 .detail_title {
     color: white;
-    margin-left: 50px;
+    display: inline-block;
+    padding-left: 2.5em;
+    text-indent: -1em;
 }
 
 .detail_header {
-    padding: 14px 50px 18px;
+    padding: 0.2em;
 }
 
 .clusterChoiceText {
@@ -252,7 +289,7 @@ h1, h2, h3, h5, h6, p, ul {
 
 .open_button_style {
     cursor: pointer;
-    margin-left: 2em;
+    margin-left: 1em;
     float: right;
 }
 
@@ -260,7 +297,7 @@ h1, h2, h3, h5, h6, p, ul {
     cursor: pointer;
     float: right;
     color: white;
-    margin-right:20px;
+    margin-right: 20px;
 }
 
 .close_detail i {

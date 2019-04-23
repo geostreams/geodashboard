@@ -13,12 +13,14 @@
 
 import React, {Component} from 'react';
 import ol from 'openlayers';
+
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import type {MapProps, BasicMapState} from '../utils/flowtype';
-import {getMapTileURLSetting, getClustersDistance} from '../utils/getConfig';
+import {getMapTileURLSetting, getClustersDistance, maxZoom} from '../utils/getConfig';
 import {clusteringOptions, getAttribution, getControls} from '../utils/mapUtils';
+import {removePopup} from '../utils/mapPopup';
 
 
 class BasicMap extends Component {
@@ -42,7 +44,7 @@ class BasicMap extends Component {
             clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector()}),
             customLocationFilterVectorExtent: [],
             currentZoom: 5.5,
-            maxZoom: 12,
+            maxZoom: maxZoom(),
             // create a fake map to avoid checking map.isdefined every time for flow.
             map: new ol.Map({
                 view: new ol.View({
@@ -67,51 +69,73 @@ class BasicMap extends Component {
                 <div style={{display: 'none'}}>
                     <div id="marker" title="Marker" className="marker"> </div>
                     <div id="popup" className={styles.olPopup}>
-                        <a href="#" id="popup-closer" className={styles.olPopupCloser}> </a>
+                        <a href="#" id="popup-closer" className={styles.olPopupCloser}>
+                            <Icon name="close"/>
+                        </a>
                         <div id="popup-content"> </div>
                     </div>
 
                     <div id="ol-centercontrol" className={styles.olCenterButton}
-                         ref={(div) => { this.ol_centercontrol = div; }}>
+                         ref={(div) => {
+                             this.ol_centercontrol = div;
+                         }}>
                     </div>
                     <button id="centerButton" title="Click to Center the Map"
-                            ref={(button) => { this.centerButton = button; }}>
+                            ref={(button) => {
+                                this.centerButton = button;
+                            }}>
                         <Icon name="gps_fixed"/>
                     </button>
 
                     <div id="ol-drawcirclecontrol"
                          className={styles.olDrawCircleButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawcirclecontrol = div; }}>
+                         ref={(div) => {
+                             this.ol_drawcirclecontrol = div;
+                         }}>
                     </div>
                     <button id="drawCircleButton" title="Click to Draw a Circle"
-                            ref={(button) => { this.drawCircleButton = button; }}>
+                            ref={(button) => {
+                                this.drawCircleButton = button;
+                            }}>
                         <Icon name="panorama_fish_eye"/>
                     </button>
 
                     <div id="ol-drawsquarecontrol"
                          className={styles.olDrawSquareButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawsquarecontrol = div; }}>
+                         ref={(div) => {
+                             this.ol_drawsquarecontrol = div;
+                         }}>
                     </div>
                     <button id="drawSquareButton" title="Click to Draw a Square"
-                            ref={(button) => { this.drawSquareButton = button; }}>
+                            ref={(button) => {
+                                this.drawSquareButton = button;
+                            }}>
                         <Icon name="crop_square"/>
                     </button>
 
                     <div id="ol-drawcustomcontrol"
                          className={styles.olDrawCustomButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawcustomcontrol = div; }}>
+                         ref={(div) => {
+                             this.ol_drawcustomcontrol = div;
+                         }}>
                     </div>
                     <button id="drawCustomButton" title="Click to Draw a Custom Shape"
-                            ref={(button) => { this.drawCustomButton = button; }}>
+                            ref={(button) => {
+                                this.drawCustomButton = button;
+                            }}>
                         <Icon name="star_border"/>
                     </button>
 
                     <div id="ol-drawclearcontrol"
                          className={styles.olDrawClearButton + ' ' + styles.olSharedDrawStyles + ' drawing_buttons'}
-                         ref={(div) => { this.ol_drawclearcontrol = div; }}>
+                         ref={(div) => {
+                             this.ol_drawclearcontrol = div;
+                         }}>
                     </div>
                     <button id="drawClearButton" title="Click to Reset Drawing Selection"
-                            ref={(button) => { this.drawClearButton = button; }}>
+                            ref={(button) => {
+                                this.drawClearButton = button;
+                            }}>
                         <Icon name="clear"/>
                     </button>
                 </div>
@@ -123,6 +147,7 @@ class BasicMap extends Component {
     componentDidUpdate() {
         this.props.mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
         clusteringOptions(this.state.map, this.props.disableClusters);
+
         this.state.clusterSource.clear();
         this.state.clusterSource.addFeatures(this.props.features);
         this.state.vectorSource.clear();
@@ -130,6 +155,10 @@ class BasicMap extends Component {
     }
 
     componentDidMount() {
+        if (this.props.mapDidMount) {
+            this.props.mapDidMount(this.state.map, this.state.customLocationFilterVectorExtent);
+        }
+
         const clusterSource = new ol.source.Cluster({
             projection: "EPSG:3857",
             distance: getClustersDistance(),
@@ -169,14 +198,6 @@ class BasicMap extends Component {
             }
         });
 
-        if (closer) {
-            closer.onclick = function () {
-                overlay.setPosition(undefined);
-                closer.blur();
-                return false;
-            };
-        }
-
         let view = new ol.View({
             projection: 'EPSG:3857',
             center: ol.proj.fromLonLat(this.state.center),
@@ -188,6 +209,16 @@ class BasicMap extends Component {
         let theMap;
 
         const that = this;
+
+        if (closer) {
+            closer.onclick = function () {
+                that.props.onMapSingleClick(theMap);
+                removePopup(theMap);
+                view.fit(that.state.vectorSource.getExtent(), that.state.map.getSize());
+                return false;
+            };
+        }
+
         let centerControl;
 
         const centerButton = this.centerButton;
@@ -217,16 +248,9 @@ class BasicMap extends Component {
         const drawClearButton = this.drawClearButton;
         let drawElement = this.ol_drawclearcontrol;
 
-        let handleDrawClearButton = function () {
-            theMap.getInteractions().forEach(function (e) {
-                if (e instanceof ol.interaction.Draw) {
-                    theMap.removeInteraction(e);
-                }
-            });
+        let resetDrawPoints = function () {
 
             customLocationFilterLayer.getSource().clear();
-
-            selectPoints = [];
 
             // Create empty array for points
             let selectPointsLocations = [];
@@ -250,11 +274,67 @@ class BasicMap extends Component {
 
         };
 
+        let drawEndSharedSteps = function (e) {
+
+            customLocationFilterLayer.getSource().clear();
+            selectItems.setActive(true);
+
+            theMap.getInteractions().forEach(function (e) {
+                if (e instanceof ol.interaction.Draw) {
+                    theMap.removeInteraction(e);
+                }
+            });
+
+            // Get the shape geometry
+            let drawExtent = e.feature.getGeometry();
+            that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
+
+            // Get all the features in the layer
+            let featuresInLayer = clusters.getSource().getFeatures();
+
+            // Check each feature
+            let loopFeatureExtent;
+            for (let j = 0; j < featuresInLayer.length; j++) {
+                loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
+                // Only select the features within the shape
+                if (drawExtent.intersectsExtent(loopFeatureExtent)) {
+                    selectPoints.push(featuresInLayer[j]);
+                }
+            }
+
+            let selectPointsLocations = [];
+
+            if (selectPoints.length > 0) {
+                for (let i = 0; i < selectPoints.length; i++) {
+                    let selectPointFeatures = selectPoints[i].get('features');
+                    for (let j = 0; j < selectPointFeatures.length; j++) {
+                        let featureName = selectPointFeatures[j].attributes.name;
+                        if (!selectPointsLocations.includes(featureName.toString())) {
+                            selectPointsLocations.push(featureName);
+                        }
+                    }
+                }
+            }
+
+            return [drawExtent, selectPointsLocations];
+
+        };
+
+        let handleDrawClearButton = function () {
+            theMap.getInteractions().forEach(function (e) {
+                if (e instanceof ol.interaction.Draw) {
+                    theMap.removeInteraction(e);
+                }
+            });
+
+            resetDrawPoints();
+
+        };
+
         if (drawElement && drawClearButton) {
 
             drawClearButton.addEventListener('click', handleDrawClearButton, false);
             drawClearButton.addEventListener('touchstart', handleDrawClearButton, false);
-
 
             drawElement.className += ' ol-unselectable ol-control';
             drawElement.appendChild(drawClearButton);
@@ -262,6 +342,7 @@ class BasicMap extends Component {
             drawClearControl = new ol.control.Control({
                 element: drawElement,
             });
+
         }
 
         // Add Draw Square Button
@@ -277,6 +358,8 @@ class BasicMap extends Component {
                 geometryFunction: ol.interaction.Draw.createRegularPolygon(4),
             });
 
+            resetDrawPoints();
+
             theMap.addInteraction(drawSquare);
 
             drawSquare.on('drawstart', function () {
@@ -285,45 +368,8 @@ class BasicMap extends Component {
             });
 
             drawSquare.on('drawend', function (e) {
-                customLocationFilterLayer.getSource().clear();
-                selectItems.setActive(true);
-
-                theMap.getInteractions().forEach(function (e) {
-                    if (e instanceof ol.interaction.Draw) {
-                        theMap.removeInteraction(e);
-                    }
-                });
-
-                // Get the shape geometry
-                let drawExtent = e.feature.getGeometry();
-                that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
-
-                // Get all the features in the layer
-                let featuresInLayer = clusters.getSource().getFeatures();
-
-                // Check each feature
-                let loopFeatureExtent;
-                for (let j = 0; j < featuresInLayer.length; j++) {
-                    loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
-                    // Only select the features within the shape
-                    if (drawExtent.intersectsExtent(loopFeatureExtent)) {
-                        selectPoints.push(featuresInLayer[j]);
-                    }
-                }
-
-                let selectPointsLocations = [];
-
-                if (selectPoints.length > 0) {
-                    for (let i = 0; i < selectPoints.length; i++) {
-                        let selectPointFeatures = selectPoints[i].get('features');
-                        for (let j = 0; j < selectPointFeatures.length; j++) {
-                            let featureName = selectPointFeatures[j].attributes.name;
-                            if (!selectPointsLocations.includes(featureName.toString())) {
-                                selectPointsLocations.push(featureName);
-                            }
-                        }
-                    }
-                }
+                let drawExtent = drawEndSharedSteps(e)[0];
+                let selectPointsLocations = drawEndSharedSteps(e)[1];
 
                 // Get the shape coordinates
                 let drawCoordinates = drawExtent.getCoordinates();
@@ -357,6 +403,8 @@ class BasicMap extends Component {
                 source: customLocationFilterVector,
             });
 
+            resetDrawPoints();
+
             theMap.addInteraction(drawCircle);
 
             drawCircle.on('drawstart', function () {
@@ -365,45 +413,8 @@ class BasicMap extends Component {
             });
 
             drawCircle.on('drawend', function (e) {
-                customLocationFilterLayer.getSource().clear();
-                selectItems.setActive(true);
-
-                theMap.getInteractions().forEach(function (e) {
-                    if (e instanceof ol.interaction.Draw) {
-                        theMap.removeInteraction(e);
-                    }
-                });
-
-                // Get the shape geometry
-                let drawExtent = e.feature.getGeometry();
-                that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
-
-                // Get all the features in the layer
-                let featuresInLayer = clusters.getSource().getFeatures();
-
-                // Check each feature
-                let loopFeatureExtent;
-                for (let j = 0; j < featuresInLayer.length; j++) {
-                    loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
-                    // Only select the features within the shape
-                    if (drawExtent.intersectsExtent(loopFeatureExtent)) {
-                        selectPoints.push(featuresInLayer[j]);
-                    }
-                }
-
-                let selectPointsLocations = [];
-
-                if (selectPoints.length > 0) {
-                    for (let i = 0; i < selectPoints.length; i++) {
-                        let selectPointFeatures = selectPoints[i].get('features');
-                        for (let j = 0; j < selectPointFeatures.length; j++) {
-                            let featureName = selectPointFeatures[j].attributes.name;
-                            if (!selectPointsLocations.includes(featureName.toString())) {
-                                selectPointsLocations.push(featureName);
-                            }
-                        }
-                    }
-                }
+                let drawExtent = drawEndSharedSteps(e)[0];
+                let selectPointsLocations = drawEndSharedSteps(e)[1];
 
                 // Get the shape coordinates
                 // (1) Get the Units for the Map Projection
@@ -444,6 +455,8 @@ class BasicMap extends Component {
                 source: customLocationFilterVector,
             });
 
+            resetDrawPoints();
+
             theMap.addInteraction(drawCustom);
 
             drawCustom.on('drawstart', function () {
@@ -452,45 +465,8 @@ class BasicMap extends Component {
             });
 
             drawCustom.on('drawend', function (e) {
-                customLocationFilterLayer.getSource().clear();
-                selectItems.setActive(true);
-
-                theMap.getInteractions().forEach(function (e) {
-                    if (e instanceof ol.interaction.Draw) {
-                        theMap.removeInteraction(e);
-                    }
-                });
-
-                // Get the shape geometry
-                let drawExtent = e.feature.getGeometry();
-                that.setState({customLocationFilterVectorExtent: drawExtent.getExtent()});
-
-                // Get all the features in the layer
-                let featuresInLayer = clusters.getSource().getFeatures();
-
-                // Check each feature
-                let loopFeatureExtent;
-                for (let j = 0; j < featuresInLayer.length; j++) {
-                    loopFeatureExtent = featuresInLayer[j].getGeometry().getExtent();
-                    // Only select the features within the shape
-                    if (drawExtent.intersectsExtent(loopFeatureExtent)) {
-                        selectPoints.push(featuresInLayer[j]);
-                    }
-                }
-
-                let selectPointsLocations = [];
-
-                if (selectPoints.length > 0) {
-                    for (let i = 0; i < selectPoints.length; i++) {
-                        let selectPointFeatures = selectPoints[i].get('features');
-                        for (let j = 0; j < selectPointFeatures.length; j++) {
-                            let featureName = selectPointFeatures[j].attributes.name;
-                            if (!selectPointsLocations.includes(featureName.toString())) {
-                                selectPointsLocations.push(featureName);
-                            }
-                        }
-                    }
-                }
+                let drawExtent = drawEndSharedSteps(e)[0];
+                let selectPointsLocations = drawEndSharedSteps(e)[1];
 
                 // Get the shape coordinates
                 let drawCoordinates = drawExtent.getCoordinates();

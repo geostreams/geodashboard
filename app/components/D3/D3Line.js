@@ -1,16 +1,17 @@
-import {boxQuartiles, iqr}  from "./D3BoxAndWhiskers";
+import {boxQuartiles, iqr} from "./D3BoxAndWhiskers";
+import {removeItalicsFromParams} from "../../utils/configUtils";
 
 const D3Line = {};
-const d3 = require('d3');
+const d3 = require("d3");
 
-const margin =  {top: 30, right: 20, bottom: 50, left: 50};
+const margin = {top: 30, right: 20, bottom: 50, left: 50};
 
-D3Line.create = function(el, props, state) {
+D3Line.create = function (el, props, state) {
 
-    let svg = d3.select(el).append('svg')
-        .attr('class', 'd3')
-        .attr('width', props.width )
-        .attr('height', props.height);
+    let svg = d3.select(el).append("svg")
+        .attr("class", "d3")
+        .attr("width", props.width)
+        .attr("height", props.height);
 
     this.update(el, state);
 };
@@ -23,8 +24,8 @@ D3Line.destroy = () => {
 
 };
 
-D3Line._scales = function (el, data, state){
-    if(!data) {
+D3Line._scales = function (el, data, state) {
+    if (!data) {
         return null;
     }
 
@@ -34,37 +35,48 @@ D3Line._scales = function (el, data, state){
     const x = d3.scaleTime()
         .range([0, width]);
 
-    if(state.use_sensor_extent) {
+    if (state.use_sensor_extent) {
         //Use as extent the full sensor range
         x.domain([state.selectedStartDate, state.selectedEndDate]);
     } else {
         // Use as extent the parameter data
-        x.domain(d3.extent(data, function(d) {return d.date;}));
+        x.domain(d3.extent(data, function (d) {
+            return d.date;
+        }));
     }
 
     const y = d3.scaleLinear()
         .range([height, 0]);
-    if(state.startAtZero) {
-        y.domain([0, d3.max(data, function(d){return d.average;})]);
+    if (state.startAtZero) {
+        y.domain([0, d3.max(data, function (d) {
+            return d.average;
+        })]);
     } else {
-        y.domain([d3.min(data, function(d){return d.average;}),
-             d3.max(data, function(d){return d.average;})]);
+        y.domain([d3.min(data, function (d) {
+            return d.average;
+        }),
+            d3.max(data, function (d) {
+                return d.average;
+            })]);
     }
 
     return {x: x, y: y};
 
 };
 
-D3Line._drawPoints = function(el, state) {
-    const {class_name_line, class_name_dots, yAxisLabel, width, height, sources,
-    boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines, startAtZero,
-    hoverClass, overlayClass, tooltipClass } = state;
+D3Line._drawPoints = function (el, state) {
+    const {
+        class_name_line, class_name_dots, yAxisLabel, width, height, sources,
+        boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines, startAtZero,
+        hoverClass, overlayClass, tooltipClass, binType
+    } = state;
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
     let {data, title} = state;
-    const svg = d3.select(el).selectAll('svg');
+    title = removeItalicsFromParams(title);
+    const svg = d3.select(el).selectAll("svg");
     // The next 4 lines clean up previously existing graphs
-    let g = svg.selectAll('.d3-line-charts');
+    let g = svg.selectAll(".d3-line-charts");
     let g_dots = svg.selectAll(".d3-dots");
     g.remove();
     g_dots.remove();
@@ -72,25 +84,27 @@ D3Line._drawPoints = function(el, state) {
     d3.selectAll(tooltipClass).remove();
     svg.selectAll(".focus").remove();
     svg.selectAll("rect").remove();
+
     // This creates a placeholder for the graph
-    g = svg.append('g')
-        .attr('class', 'd3-line-charts')
+    g = svg.append("g")
+        .attr("class", "d3-line-charts")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
-    g_dots = svg.append('g')
-        .attr('class', 'd3-dots')
+    g_dots = svg.append("g")
+        .attr("class", "d3-dots")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
     // Set up data
     const parseTime = d3.timeParse("%d-%b-%y");
     let averages = [];
+
     function sortByDateAscending(a, b) {
         return a.date - b.date;
     }
 
-    data.forEach(function(d){
+    data.forEach(function (d) {
         d.average = +d.average;
         averages.push(d.average);
     });
@@ -100,7 +114,7 @@ D3Line._drawPoints = function(el, state) {
     let domain = null;
     averages = averages.sort(d3.ascending);
     const min = startAtZero ? 0 : averages[0];
-    const max = averages[averages.length-1];
+    const max = averages[averages.length - 1];
     const quartileData = averages.quartiles = boxQuartiles(averages);
     const box = g.selectAll("rect.box")
         .data([quartileData]);
@@ -109,15 +123,19 @@ D3Line._drawPoints = function(el, state) {
     box.enter().append("rect")
         .attr("class", boxClasses)
         .attr("x", 0)
-        .attr("y", function(d) {return scales.y(d[2]);})
+        .attr("y", function (d) {
+            return scales.y(d[2]);
+        })
         .attr("width", graphWidth)
-        .attr("height", function(d) {return scales.y(d[0]) - scales.y(d[2])});
+        .attr("height", function (d) {
+            return scales.y(d[0]) - scales.y(d[2])
+        });
 
     // Draw Median Line
     const medianLine = g.selectAll("line.median")
         .data([quartileData[1]]);
 
-    const medianClasses = "median " + medianClass+ " " + lineClass;
+    const medianClasses = "median " + medianClass + " " + lineClass;
     medianLine.enter().append("line")
         .attr("class", medianClasses)
         .attr("x1", 0)
@@ -130,7 +148,9 @@ D3Line._drawPoints = function(el, state) {
     // Compute whiskers. Must return exactly 2 elements, or null.
     const whiskerIndices = whiskers && whiskers.call(this, averages);
 
-    const whiskerData = whiskerIndices && whiskerIndices.map(function(i) {return averages[i]});
+    const whiskerData = whiskerIndices && whiskerIndices.map(function (i) {
+        return averages[i]
+    });
 
     // Add Whiskers
     const whisker = g.selectAll("line.whisker")
@@ -145,11 +165,15 @@ D3Line._drawPoints = function(el, state) {
         .attr("y2", scales.y)
         .style("opacity", 1);
 
-    if(displayLines) {
+    if (displayLines) {
         // This is the function that creates the line based on the input. It is used in the next step
         const value_line = d3.line()
-            .x(function(d) { return scales.x(d.date);})
-            .y(function(d) { return scales.y(d.average);});
+            .x(function (d) {
+                return scales.x(d.date);
+            })
+            .y(function (d) {
+                return scales.y(d.average);
+            });
 
         // This creates and adds the data to the path svg element and creates the line graph
         g.append("path")
@@ -164,10 +188,9 @@ D3Line._drawPoints = function(el, state) {
         .call(d3.axisBottom(scales.x))
         .append("text")
         .attr("fill", "#000")
-        .attr("transform", "translate("+ ((graphWidth)/2) + "," +
-           28 + ")")
-        .attr("text-anchor", "end")
-        .text("Date");
+        .attr("transform", "translate(" + ((graphWidth) / 2) + "," +
+            28 + ")")
+        .attr("text-anchor", "end");
 
     // Creates the vertical axis and adds the label
     g.append("g")
@@ -185,12 +208,20 @@ D3Line._drawPoints = function(el, state) {
     g_dots.selectAll(".dot")
         .data(data)
         .enter().append("circle")
-        .attr("class", function(d) {
-            if(d.average > whiskerData[1] || d.average < whiskerData[0]) {return outlierClass; }
-            else {return class_name_dots; }
+        .attr("class", function (d) {
+            if (d.average > whiskerData[1] || d.average < whiskerData[0]) {
+                return outlierClass;
+            }
+            else {
+                return class_name_dots;
+            }
         })
-        .attr("cx", function(d) {return scales.x(d.date)})
-        .attr("cy", function(d) { return scales.y(d.average)})
+        .attr("cx", function (d) {
+            return scales.x(d.date)
+        })
+        .attr("cy", function (d) {
+            return scales.y(d.average)
+        })
         .attr("r", 2);
     let parsed_title = title;
     if (title.length > 35) {
@@ -199,7 +230,7 @@ D3Line._drawPoints = function(el, state) {
     // Add title and sources
     svg.append("text")
         .attr("x", margin.left)
-        .attr("y", margin.top/2)
+        .attr("y", margin.top / 2)
         .attr("text-anchor", "left")
         .style("font-size", "16px")
         .style("text-decoration", "bold")
@@ -209,18 +240,28 @@ D3Line._drawPoints = function(el, state) {
     // Adding sources in the top right
     let sourceLabel = svg.append("text")
         .attr("x", width - margin.right)
-         .attr("y", margin.top/2)
-         .style("text-anchor", "end")
-         .text("Sources: ");
+        .attr("y", margin.top / 2)
+        .style("text-anchor", "end")
+        .text("Sources: ");
 
-    let sourceLabelIndex = sourceLabel.selectAll(".graphs-sourceLabelIndex").data(sources, function(d) { return(d); });
+    let sourceLabelIndex = sourceLabel.selectAll(".graphs-sourceLabelIndex").data(sources, function (d) {
+        return (d);
+    });
     sourceLabelIndex.enter()
         .append("a")
-        .attr("xlink:href", function(d) { return d; })
+        .attr("xlink:href", function (d) {
+            return d;
+        })
         .attr("target", "clowder")
         .attr("class", "graphs-sourceLabelIndex")
         .style("cursor", "pointer")
-        .text(function(d, i) { if (d === "...") { return d; } else { return "[" + (i + 1) + "]"; } })
+        .text(function (d, i) {
+            if (d === "...") {
+                return d;
+            } else {
+                return "[" + (i + 1) + "]";
+            }
+        })
         .append("title")
         .text("Original data source");
     sourceLabelIndex.exit().remove();
@@ -251,48 +292,77 @@ D3Line._drawPoints = function(el, state) {
         .attr("class", overlayClass)
         .attr("width", graphWidth)
         .attr("height", graphHeight)
-        .on("mouseover", function() { focus.style("display", null); })
+        .on("mouseover", function () {
+            focus.style("display", null);
+        })
         .on("mousemove", mouse_move)
         .on("mouseout", mouse_out);
 
-    const bisectDate =  d3.bisector(function(d) { return d.date; }).left;
+    const bisectDate = d3.bisector(function (d) {
+        return d.date;
+    }).left;
 
     function mouse_move() {
 
         const x0 = scales.x.invert(d3.mouse(this)[0]);
-        let  i = bisectDate(data, x0, 1);
+        let i = bisectDate(data, x0, 1);
         let d;
-        if(i >= data.length) {
-            d = data[i-1];
+        if (i >= data.length) {
+            d = data[i - 1];
         } else {
-           const d0 = data[i - 1];
-           const d1 = data[i];
-           d = x0.getTime() - d0.date.getTime() > d1.date.getTime() - x0.getTime() ? d1 : d0;
+            const d0 = data[i - 1];
+            const d1 = data[i];
+            d = x0.getTime() - d0.date.getTime() > d1.date.getTime() - x0.getTime() ? d1 : d0;
         }
         let translate_x = margin.left + scales.x(d.date);
         let translate_y = margin.top + scales.y(d.average);
         focus.attr("transform", "translate(" + translate_x + "," + translate_y + ")");
+
+        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+
+        let date_text = "Date: " + d.date.getFullYear();
+        if (binType === 'month') {
+            date_text = "Date: " + months[d.date.getMonth()] + " " + d.date.getFullYear();
+        }
+        if (binType === 'day') {
+            date_text = "Date: " + d.date.toLocaleDateString();
+        }
 
         overlay_text.selectAll("tspan").remove();
         overlay_text.append("tspan")
             .attr("x", 8)
             .attr("dx", "0.2em")
             .attr("dy", "0.6em")
-            .text("Date: " + d.date.getFullYear());
+            .text(date_text);
         overlay_text.append("tspan")
-            .attr("x", 8 )
+            .attr("x", 8)
             .attr("dx", "0.2em")
             .attr("dy", "1.2em")
             .text("Average: " + d.average.toFixed(2) + " " + yAxisLabel);
 
         focus.select(".y-hover-line").attr("y2", graphHeight - scales.y(d.average));
+
         const bbox = overlay_text.node().getBBox();
-        if(i > data.length * 0.65) {
-            translate_x -=  (bbox.width + 20);
-            translate_y += 4;
-            overlay_text.attr("transform", "translate("+ -(bbox.width + 20)+"," + 4 +")");
+        if (state.use_sensor_extent === true) {
+            let midDateSensor = new Date((state.selectedStartDate.getTime() + state.selectedEndDate.getTime()) / 2);
+            if (x0 >= midDateSensor) {
+                translate_x -= (bbox.width + 20);
+                translate_y += 4;
+                overlay_text.attr("transform", "translate(" + -(bbox.width + 20) + "," + 4 + ")");
+            } else {
+                overlay_text.attr("transform", "translate(0,0)");
+            }
         } else {
-            overlay_text.attr("transform", "translate(0,0)");
+            let midDateParams = new Date((data[0].date.getTime() + data[data.length - 1].date.getTime()) / 2);
+            if (x0 >= midDateParams) {
+                translate_x -= (bbox.width + 20);
+                translate_y += 4;
+                overlay_text.attr("transform", "translate(" + -(bbox.width + 20) + "," + 4 + ")");
+            } else {
+                overlay_text.attr("transform", "translate(0,0)");
+            }
         }
         rect.attr("transform", "translate(" + (translate_x) + "," + translate_y + ")");
         rect.style("display", null);

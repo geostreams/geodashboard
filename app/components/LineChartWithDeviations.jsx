@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { Xaxis, Yaxis, Chart, Svg } from 'react-d3-core';
+import React, {Component} from 'react';
+import {Xaxis, Yaxis, Chart, Svg} from 'react-d3-core';
+
 const d3 = require('d3');
 
 
@@ -7,7 +8,7 @@ class LineChartWithDeviations extends Component {
 
     constructor(props: Object) {
         super(props);
-        this.state={
+        this.state = {
             xline: d3.scaleLinear(),
             yline: d3.scaleLinear()
         };
@@ -31,27 +32,35 @@ class LineChartWithDeviations extends Component {
         } = props;
         let xRange = [0, width - margins.left - margins.right];
         let yRange = [height - margins.top - margins.bottom, 0];
-        let xDomain = d3.extent(chartData, function(d){ return d.x ; });
-        let yMax = d3.extent(chartData, function(d){ return d.y + d.d; })[1];
-        let yMin = d3.extent(chartData, function(d){ return d.y - d.d; })[0];
+        let xDomain = d3.extent(chartData, function (d) {
+            return d.x;
+        });
+        let yMax = d3.extent(chartData, function (d) {
+            return d.y + d.d;
+        })[1];
+        let yMin = d3.extent(chartData, function (d) {
+            return d.y - d.d;
+        })[0];
         let yDomain = [yMin, yMax];
         this.setState({xRange, xDomain, yRange, yDomain});
-        this.setState({xline : d3.scaleLinear().domain(xDomain).range(xRange)});
-        this.setState({yline : d3.scaleLinear().domain(yDomain).range(yRange)});
-        this.setState({barLength: 0.3*(xRange[1]/chartData.length)});
+        this.setState({xline: d3.scaleLinear().domain(xDomain).range(xRange)});
+        this.setState({yline: d3.scaleLinear().domain(yDomain).range(yRange)});
+        this.setState({barLength: 0.3 * (xRange[1] / chartData.length)});
         let that = this;
 
         d3.select(this.refs.svgContainer).on('mousemove', function mouseMoveHandler() {
             // console.log(d3.mouse(this));
-            let bisectDate = d3.bisector(function(d) { return d.x; }).left;
-            let x0 = that.state.xline.invert(d3.mouse(this)[0]- margins.left),
+            let bisectDate = d3.bisector(function (d) {
+                return d.x;
+            }).left;
+            let x0 = that.state.xline.invert(d3.mouse(this)[0] - margins.left),
                 i = bisectDate(chartData, x0, 1) - 1,
                 d0 = chartData[i - 1],
                 d1 = chartData[i];
             // for debug
             // console.log(i)
             let d = (d1 !== undefined || x0 - d0.x > d1.x - x0) ? d1 : d0;
-            if(d) {
+            if (d) {
                 that.setState({dFocus: d});
                 that.setState({xFocus: that.state.xline(d.x)});
                 that.setState({yFocus: that.state.yline(d.y)});
@@ -62,7 +71,7 @@ class LineChartWithDeviations extends Component {
                     .attr("width", bbox.width + (padding * 2))
                     .attr("height", bbox.height + (padding * 2));
                 //use i as flop condition instead of svg width.
-                if(i> chartData.length * 0.65){
+                if (i > chartData.length * 0.65) {
                     that.setState({xFocusText: that.state.xline(d.x) - bbox.width - that.state.barLength});
                 } else {
                     that.setState({xFocusText: that.state.xline(d.x) + that.state.barLength});
@@ -72,7 +81,7 @@ class LineChartWithDeviations extends Component {
         });
 
         d3.select(this.refs.svgContainer).on('mouseleave', function mouseOutHandler() {
-            that.setState({dFocus: undefined, xFocus: undefined, yFocus: undefined });
+            that.setState({dFocus: undefined, xFocus: undefined, yFocus: undefined});
         })
     }
 
@@ -89,16 +98,20 @@ class LineChartWithDeviations extends Component {
         )
     }
 
-    _setAxes (data) {
+    _setAxes(data) {
         let that = this;
         let line = d3.line()
-            .x(function(d) { return that.state.xline(d.x); })
-            .y(function(d) { return that.state.yline(d.y); });
+            .x(function (d) {
+                return that.state.xline(d.x);
+            })
+            .y(function (d) {
+                return that.state.yline(d.y);
+            });
         return line(data);
     }
 
-    _setDeviations (x, center, dev) {
-        let devData= [{"x": x, "y": center + dev}, {"x": x, "y": center - dev}];
+    _setDeviations(x, center, dev) {
+        let devData = [{"x": x, "y": center + dev}, {"x": x, "y": center - dev}];
         return this._setAxes(devData)
     }
 
@@ -134,9 +147,9 @@ class LineChartWithDeviations extends Component {
                                     strokeWidth="2"
                                     fill="black"
                                     cx={that.state.xline(line.x)}
-                                    cy={that.state.yline(line.y )}
+                                    cy={that.state.yline(line.y)}
                                     r={3}
-                                    />
+                                />
                             </g>
                         )
                     })
@@ -147,7 +160,7 @@ class LineChartWithDeviations extends Component {
 
     _mkFocus() {
         const {xFocus, xFocusText, yFocus, dFocus, barLength} = this.state;
-        return(
+        return (
             dFocus ?
                 <g>
                     <circle
@@ -163,10 +176,12 @@ class LineChartWithDeviations extends Component {
                           fill="rgb(29, 133, 172)"
                           stroke="rgb(29, 133, 172)"
                     />
-                    <text x={xFocusText } y={yFocus + barLength + 10 } fill="white">
-                        <tspan x={xFocusText } dx="0.2em" dy=".6em">{this.props.xLabel + ": " + dFocus.x.getFullYear()}</tspan>
-                        <tspan x={xFocusText } dx="0.2em" dy="1.2em">{this.props.yLabel + ": " + dFocus.y.toFixed(2)}</tspan>
-                        <tspan x={xFocusText } dx="0.2em" dy="1.2em">{ "Deviation: " + dFocus.d.toFixed(2)}</tspan>
+                    <text x={xFocusText} y={yFocus + barLength + 10} fill="white">
+                        <tspan x={xFocusText} dx="0.2em"
+                               dy=".6em">{this.props.xLabel + ": " + dFocus.x.getFullYear()}</tspan>
+                        <tspan x={xFocusText} dx="0.2em"
+                               dy="1.2em">{this.props.yLabel + ": " + dFocus.y.toFixed(2)}</tspan>
+                        <tspan x={xFocusText} dx="0.2em" dy="1.2em">{"Deviation: " + dFocus.d.toFixed(2)}</tspan>
                     </text>
                 </g> : null
         )
@@ -175,11 +190,11 @@ class LineChartWithDeviations extends Component {
     render() {
         const {chartData, width, margins, height, id} = this.props;
 
-        let x = function(d) {
+        let x = function (d) {
             return d.x;
         };
 
-        let y = function(d) {
+        let y = function (d) {
             return d.y;
         };
 
@@ -191,18 +206,18 @@ class LineChartWithDeviations extends Component {
         let t = `translate(${margins.left}, ${margins.top})`;
 
         let tX = `translate(0, ${height - margins.top})`;
-        return(
+        return (
             <div style={divStyle}>
                 <svg
-                    height = {height}
-                    width = '100%'
-                    id = {id}
-                    ref = "svgContainer"
+                    height={height}
+                    width='100%'
+                    id={id}
+                    ref="svgContainer"
                 >
                     <g
-                        transform = {t}
-                        height = {height}
-                        width = '100%'
+                        transform={t}
+                        height={height}
+                        width='100%'
                     >
                         <g id="line">
                             {this._mkLine()}
@@ -231,23 +246,24 @@ class LineChartWithDeviations extends Component {
                         <Xaxis
                             id="Xaxis"
                             {...this.props}
-                            xDomain= {this.state.xDomain}
-                            xRange = {this.state.xRange}
-                            x= {x}
+                            xDomain={this.state.xDomain}
+                            xRange={this.state.xRange}
+                            x={x}
                         />
                         <Yaxis
                             id="Yaxis"
                             {...this.props}
-                            y= {y}
-                            yDomain= {this.state.yDomain}
-                            yRange = {this.state.yRange}
-                            yAxisClassName = 'y-axis'
+                            y={y}
+                            yDomain={this.state.yDomain}
+                            yRange={this.state.yRange}
+                            yAxisClassName='y-axis'
                         />
                     </g>
                 </svg>
             </div>
         )
     }
+
 }
 
 export default LineChartWithDeviations;

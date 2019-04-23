@@ -14,7 +14,7 @@ import {
     List, ListItem, Icon
 } from 'react-mdc-web';
 import styles from '../styles/regionMiniMap.css';
-import {getTrendColor, getCustomLocation, getMapTileURLSetting,} from '../utils/getConfig';
+import {getTrendColor, getCustomLocation, getMapTileURLSetting, maxZoom} from '../utils/getConfig';
 import {popupHelperTrendDetailPage, sensorsToFeaturesTrendDetailPage,
     getAttribution, getMiniControls} from '../utils/mapUtils';
 import {drawHelper} from '../utils/mapDraw';
@@ -34,7 +34,7 @@ class RegionMiniMap extends Component {
             clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector}),
             areaPolygonSource: new ol.source.Vector,
             currentZoom: 5.5,
-            maxZoom: 12,
+            maxZoom: maxZoom(),
             // create a fake map to avoid checking map.isdefined every time for flow.
             map: new ol.Map({
                 view: new ol.View({
@@ -92,7 +92,9 @@ class RegionMiniMap extends Component {
                             <div style={{display: "none"}}>
                                 <div id="marker" title="Marker" className="marker"> </div>
                                 <div id="popup" className={styles.regionPopup}>
-                                    <a href="#" id="popup-closer" className={styles.regionPopupCloser}> </a>
+                                    <a href="#" id="popup-closer" className={styles.regionPopupCloser}>
+                                        <Icon name="close" />
+                                    </a>
                                     <div id="popup-content"> </div>
                                 </div>
                             </div>
