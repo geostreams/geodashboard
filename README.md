@@ -19,4 +19,4 @@ Test for flow: `yarn run flow` (or `npm run-script flow`)
 
 Once built you can create a docker image by running (change tag name as appropriate): 
 
-```docker build -t geodashboard/glm:3.0-alpha .```
+```docker build -t geostreams/geodashboard:3.0-beta .```
