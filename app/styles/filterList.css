@@ -1,12 +1,12 @@
-.root { 
-	display: inline-block;
-	width: 300px;
-	height: 500px;
-	border: 1px black solid;
-	margin: 50px;
-	padding: 10px;
-	background: white;
-	overflow: auto;
+.root {
+    display: inline-block;
+    width: 300px;
+    height: 500px;
+    border: 1px black solid;
+    margin: 50px;
+    padding: 10px;
+    background: white;
+    overflow: auto;
 }
 
 .select {
@@ -21,16 +21,16 @@
 }
 
 .semi-square {
-   -webkit-border-radius: 5px;
-   -moz-border-radius: 5px;
-   border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .styled-select.slate select {
-   border: 1px solid #ccc;
-   font-size: 16px;
-   height: 34px;
-   width: 268px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    height: 34px;
+    width: 268px;
 }
 
 .listspacing {
@@ -44,14 +44,13 @@
     float: right;
     width: 1em;
     cursor: pointer;
-    padding-left: 0.33em;
 }
 
 .close_button_open_card {
     float: right;
     width: 1.5em;
     cursor: pointer;
-    padding-top: 0.5em;
+    padding-left: 0.33em;
 }
 
 .right {
@@ -64,20 +63,37 @@
     float: left;
     width: 15em;
 }
+
 .closeIcon {
-   color: red;
+    color: red;
 }
 
-@media screen and (max-device-width: 840px) {
-    .filter_card {
-        width: 100% !important;
-        margin-left: 0.5em !important;
-    }
+.descriptiveIconBefore {
+    float: left;
+    margin-right: 0.2em;
+    margin-top: 0.2em;
+}
+
+.descriptiveIconChoice {
+    float: left;
+    margin-right: 0.2em;
+}
+
+.descriptiveIconChoiceInvert {
+    float: left;
+    margin-right: 0.2em;
+    color: #FFFFFF;
+    background: #000000;
+    border-radius: 100%;
+}
+
+.subtitleSpacing {
+    padding: 0.2em 0.6em 0;
 }
 
 .filter_card {
     width: 20em;
-    margin: 1em 0em 0em 0em;
+    margin: 1em 0 0 0;
     padding: 0.5em 1em 1em 1em;
     text-align: left;
     display: inline-block;
@@ -98,9 +114,9 @@
     margin-bottom: 1em;
 }
 
-.radio{
+.radio {
     line-height: 1em;
-    padding: 0em 1em 0em 1em;
+    padding: 0 1em 0 1em;
 }
 
 hr.divider_style {
@@ -111,4 +127,51 @@ hr.divider_style {
 .edit_filter_button {
     cursor: pointer;
     margin: auto;
+}
+
+@media screen and (max-device-width: 840px) {
+    .filter_card {
+        width: 100% !important;
+        margin-left: 0.5em !important;
+    }
+
+    .closeIcon {
+        font-size: larger;
+    }
+
+    .descriptiveIconBefore {
+        font-size: larger;
+        margin-top: 0;
+    }
+
+    .descriptiveIconChoice {
+        font-size: larger;
+    }
+
+    .descriptiveIconChoiceInvert {
+        font-size: larger;
+    }
+
+    section > div > input {
+        font-size: larger;
+    }
+
+    section > h2 {
+        line-height: unset !important;
+    }
+
+    .close_button_open_card, .close_button_collapsed_card {
+        float: right;
+        width: 1em;
+        cursor: pointer;
+        padding-left: 0 !important;
+    }
+
+    .close_button_open_card {
+        font-size: larger;
+    }
+
+    a.edit_filter_button > i {
+        font-size: xx-large !important;
+    }
 }

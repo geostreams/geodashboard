@@ -52,6 +52,8 @@ class FilterList extends Component {
     render() {
         let divContents;
         let showButtons;
+        // Default Icon
+        let descriptiveIconComponent = <Icon className={styles.descriptiveIconChoice} name="bookmark"/>;
         let isAllSelected: boolean = false;
         if (this.props.attribute === "data_sources") {
             isAllSelected = this.props.selectedDataSources.length === this.props.sources.length
@@ -71,6 +73,7 @@ class FilterList extends Component {
         let cardsubtitle;
         switch (this.props.attribute) {
             case 'data_sources':
+                descriptiveIconComponent = <Icon className={styles.descriptiveIconChoice} name="group_work"/>;
                 divContents = this.props.sources.map(p =>
                     <UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute} label={p.label}
                                    key={p.id}/>
@@ -81,6 +84,7 @@ class FilterList extends Component {
                 showButtons = hideShowContents;
                 break;
             case "parameters":
+                descriptiveIconComponent = <Icon className={styles.descriptiveIconChoice} name="description"/>;
                 divContents = this.props.parameters.map(p => {
                     let parameter_label_array = handleParamsWithItalics(p.label);
                     return (<UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute}
@@ -93,11 +97,14 @@ class FilterList extends Component {
                 showButtons = hideShowContents;
                 break;
             case "time":
+                // To match the style of the other three Icons, this Icon needs to be displayed inverted
+                descriptiveIconComponent = <Icon className={styles.descriptiveIconChoiceInvert} name="access_time"/>;
                 //the UI of date picker
                 divContents = <TimeFilter filterId={this.props.idx}/>;
                 cardsubtitle = this.props.selectDate;
                 break;
             case "locations":
+                descriptiveIconComponent = <Icon className={styles.descriptiveIconChoice} name="location_on"/>;
                 let locationList;
                 let drawRadio;
                 let drawRadioGroup;
@@ -179,6 +186,7 @@ class FilterList extends Component {
             cardhead = (
                 <CardHeader>
                     <div className={styles.left}>
+                        <Icon className={styles.descriptiveIconBefore} name="label"/>
                         <Select value={this.props.attribute} onChange={this.props.onChangeSelection}
                                 dataIdx={idx}>
                             {options}
@@ -192,18 +200,22 @@ class FilterList extends Component {
             );
             // if this filter is closed
         } else {
-            cardsubtitle = cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 0 ? cardsubtitle : "No selection";
+            // Display selected values if they exist, or "No Selection" otherwise
+            cardsubtitle =
+                cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 1 ?
+                    cardsubtitle : "No selection";
             cardsubtitle = handleParamsWithItalics(cardsubtitle);
             cardhead = (
                 <CardHeader>
-                    <CardTitle
-                        className={mainStyles.title_card}>{this.props.attribute.replace("data_sources", "data source")}
+                    <CardTitle className={mainStyles.title_card}>
+                        {this.props.attribute.replace("data_sources", "data source")}
+                        {descriptiveIconComponent}
                         <a className={styles.close_button_collapsed_card} onClick={this.props.onClickRemove}
                            data-idx={idx}>
                             <Icon className={styles.closeIcon} name='close'/>
                         </a>
                     </CardTitle>
-                    <CardSubtitle> {cardsubtitle} </CardSubtitle>
+                    <CardSubtitle className={styles.subtitleSpacing}> {cardsubtitle} </CardSubtitle>
                 </CardHeader>
             )
         }
