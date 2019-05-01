@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1221](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1221)
 - When a User closes a Popup, the Map no longer zooms all the way back out
   [GLGVO-526](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-526)
+- When a User clicks a Cluster, either expand the Cluster or zoom in and reset the Clusters
+  [GLGVO-525](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-525)
 
 ## [3.0.0-beta.2]
 

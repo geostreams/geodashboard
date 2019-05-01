@@ -1280,6 +1280,7 @@ export const gd3 = {
     mapMiniAttributionsCollapsible: true,
     mapClustersDistance: 1,
     clustersChoiceOption: false,
+    clustersExpandMaxNumberFeatures: 10,
     mapMaxZoom: 16,
     mapPopupZoomMax: 10,
 }

@@ -9,11 +9,12 @@ require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
-import {popupHeader, popupParameters, removePopup} from '../utils/mapPopup';
+import {popupHeader, popupParameters} from '../utils/mapPopup';
 import BasicMap from './BasicMap';
 import type {InputEventMap} from '../utils/flowtype';
 import {
-    getMobileFilterSensors, getMobileSizeMax, getMobileSourceNames, displayOnlineStatus, getMapPopupZoom
+    getMobileFilterSensors, getMobileSizeMax, getMobileSourceNames,
+    displayOnlineStatus, getMapPopupZoom, maxZoom, clustersExpandMaxNumberFeatures
 } from '../utils/getConfig';
 
 
@@ -66,22 +67,32 @@ class ExploreMap extends Component {
                 // Case when a feature is expanded
                 that.popupHandleHelper(featuresAtPixel, e.coordinate, overlay);
                 closeClusters = false;
-            } else if (featuresAtPixel && featuresAtPixel.get('features') !== undefined && featuresAtPixel.get('features').length === 1) {
+            } else if (
+                featuresAtPixel && featuresAtPixel.get('features') !== undefined &&
+                featuresAtPixel.get('features').length === 1
+            ) {
                 // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
                 const feature = featuresAtPixel.get('features')[0];
                 that.popupHandleHelper(feature, e.coordinate, overlay);
-            } else if (featuresAtPixel && featuresAtPixel.get('features') !== undefined && featuresAtPixel.get('features').length > 1) {
+            } else if (
+                featuresAtPixel && featuresAtPixel.get('features') !== undefined &&
+                featuresAtPixel.get('features').length > 1
+            ) {
                 // Case when a clustered was click. If it has more than 4 features and is in a zoom level lower than maxZoom, zoom in
-                // if(featuresAtPixel.get('features').length > 4 && theMap.getView().getZoom() < that.state.maxZoom) {
-                //     theMap.getView().setZoom(theMap.getView().getZoom() + 1);
-                //     theMap.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
-                // } else {
-                if (that.state.expandedCluster) {
+                if (
+                    featuresAtPixel.get('features').length > clustersExpandMaxNumberFeatures() &&
+                    theMap.getView().getZoom() < maxZoom()
+                ) {
+                    theMap.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
+                    theMap.getView().animate({
+                        zoom: theMap.getView().getZoom() + 1,
+                        duration: 500
+                    });
+                } else {
                     that.removeSpiderfiedClusterLayers(theMap);
+                    that.displayOverlappingMarkers(featuresAtPixel, theMap, that);
                 }
-                that.displayOverlappingMarkers(featuresAtPixel, theMap, that);
                 closeClusters = false;
-                // }
             }
             if (closeClusters && that.state.expandedCluster) {
                 that.removeSpiderfiedClusterLayers(theMap);
@@ -296,7 +307,8 @@ class ExploreMap extends Component {
                         }
                     }
 
-                    let iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
+                    let iconSvg =
+                        '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
                         + '<g class="marker-g">'
                         + '<path d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke="' + outlineColor + '" stroke-width="1" fill="white" />'
                         + '	<ellipse cx="7.5" cy="8.5" rx="4.5" ry="5.5" class="map-pin-color" style="fill:' + featureColor + '"/>'

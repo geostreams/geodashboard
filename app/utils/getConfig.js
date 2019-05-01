@@ -545,3 +545,11 @@ export function getLoadingTimeLimit() {
     }
     return getValue;
 }
+
+export function clustersExpandMaxNumberFeatures() {
+    let getValue = 20;
+    if (window.configruntime.gd3.clustersExpandMaxNumberFeatures) {
+        getValue = window.configruntime.gd3.clustersExpandMaxNumberFeatures;
+    }
+    return getValue;
+}
