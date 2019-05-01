@@ -517,6 +517,10 @@ class BasicMap extends Component {
             that.props.onMapSingleClick(theMap, e);
         });
 
+        theMap.on('pointerdrag', function (e) {
+            removePopup(theMap);
+        });
+
         if (this.props.customLayers) {
             this.props.customLayers.map(l => theMap.addLayer(l));
         }

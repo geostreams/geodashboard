@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-526](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-526)
 - When a User clicks a Cluster, either expand the Cluster or zoom in and reset the Clusters
   [GLGVO-525](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-525)
+- Sensor Popups are removed if the Map is Panned by the User
+  [GLGVO-524](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-524)
 
 ## [3.0.0-beta.2]
 

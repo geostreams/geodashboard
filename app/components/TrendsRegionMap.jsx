@@ -336,6 +336,10 @@ class TrendsRegionMap extends Component {
             }
         });
 
+        theMap.on('pointerdrag', function (e) {
+            removePopup(theMap);
+        });
+
         const trends_legend_var = document.getElementById('trends_legend');
 
         const noTrendArrow = '<p class=' + styles.noValueLegend + ' style="background: ' +

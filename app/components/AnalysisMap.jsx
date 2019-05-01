@@ -10,7 +10,7 @@ import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import {getCustomTrendRegion, getTrendColor, getMapTileURLSetting, maxZoom} from '../utils/getConfig';
 import {sensorsToFeaturesAnalysisPage, getAttribution, getControls} from '../utils/mapUtils';
-import {popupHeader, popupAnalysis} from '../utils/mapPopup';
+import {popupHeader, popupAnalysis, removePopup} from '../utils/mapPopup';
 import {drawHelper, centerHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
 
@@ -654,6 +654,10 @@ class AnalysisMap extends Component {
                     closer.blur();
                 }
             }
+        });
+
+        theMap.on('pointerdrag', function (e) {
+            removePopup(theMap);
         });
 
         const trends_legend_var = document.getElementById('trends_legend');
