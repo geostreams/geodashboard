@@ -200,6 +200,10 @@ class ExploreMap extends Component {
                 return feature.attributes.name === that.props.popupSensorname;
             });
             const overlay = theMap.getOverlayById("marker");
+            if (featuresAtPixel === undefined) {
+                console.log("ERROR with popupHandleHelper: " +
+                    "featuresAtPixel is " + featuresAtPixel + " for " + that.props.popupSensorname);
+            }
             that.popupHandleHelper(featuresAtPixel, that.props.popupCoordinates, overlay, theMap);
 
             //TODO: Need to update the global state. This is causing an infinite loop.
