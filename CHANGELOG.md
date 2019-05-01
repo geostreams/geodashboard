@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Log error whe sensor is properly defined and we open map popup.
   [GEOD-1215](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1215)
+- Correct Missing popups on Trends Detail Graph Page Load, and correct Italics throughout
+  [GEOD-1221](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1221)
 
 ## [3.0.0-beta.2]
 

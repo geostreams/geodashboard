@@ -49,10 +49,10 @@ D3LineNoData._scales = function (el, data) {
 };
 
 D3LineNoData._drawPoints = function (el, state) {
-    const {yAxisLabel, width, height} = state;
+    const {width, height} = state;
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
-    let {data, title} = state;
+    let {data, title, yAxisLabel} = state;
     const svg = d3.select(el).selectAll("svg");
     // The next 4 lines clean up previously existing graphs
     let g = svg.selectAll(".d3-line-charts");
@@ -107,7 +107,7 @@ D3LineNoData._drawPoints = function (el, state) {
         .attr("dy", "-4em")
         .attr("dx", "-15em")
         .attr("text-anchor", "end")
-        .text(yAxisLabel);
+        .text(removeItalicsFromParams(yAxisLabel));
 
     title = removeItalicsFromParams(title);
     let parsed_title = title;

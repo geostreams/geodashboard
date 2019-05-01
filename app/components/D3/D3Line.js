@@ -71,13 +71,13 @@ D3Line._scales = function (el, data, state) {
 
 D3Line._drawPoints = function (el, state) {
     const {
-        class_name_line, class_name_dots, yAxisLabel, width, height, sources,
+        class_name_line, class_name_dots, width, height, sources,
         boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines, startAtZero,
         hoverClass, overlayClass, tooltipClass, binType
     } = state;
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
-    let {data, title} = state;
+    let {data, title, yAxisLabel} = state;
     title = removeItalicsFromParams(title);
     const svg = d3.select(el).selectAll("svg");
     // The next 4 lines clean up previously existing graphs
@@ -207,7 +207,7 @@ D3Line._drawPoints = function (el, state) {
         .attr("dy", "-4em")
         .attr("dx", "-15em")
         .attr("text-anchor", "end")
-        .text(yAxisLabel);
+        .text(removeItalicsFromParams(yAxisLabel));
 
     // Adds the dots
     g_dots.selectAll(".dot")
@@ -346,7 +346,7 @@ D3Line._drawPoints = function (el, state) {
             .attr("x", 8)
             .attr("dx", "0.2em")
             .attr("dy", "1.2em")
-            .text("Average: " + d.average.toFixed(2) + " " + yAxisLabel);
+            .text("Average: " + d.average.toFixed(2) + " " + removeItalicsFromParams(yAxisLabel));
 
         focus.select(".y-hover-line").attr("y2", graphHeight - scales.y(d.average));
 

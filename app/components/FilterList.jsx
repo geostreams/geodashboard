@@ -193,6 +193,7 @@ class FilterList extends Component {
             // if this filter is closed
         } else {
             cardsubtitle = cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 0 ? cardsubtitle : "No selection";
+            cardsubtitle = handleParamsWithItalics(cardsubtitle);
             cardhead = (
                 <CardHeader>
                     <CardTitle

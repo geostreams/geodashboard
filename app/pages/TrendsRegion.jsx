@@ -18,6 +18,7 @@ import {
     getTrendsPageSettings, getTrendsPageSeasons, getTrendsDefaultValues, getMobileSizeMax
 } from '../utils/getConfig';
 import {generateMobilePageTabs} from "../utils/mobileUtils";
+import {handleParamsWithItalics} from '../utils/configUtils';
 
 
 class TrendsRegion extends Component {
@@ -66,7 +67,8 @@ class TrendsRegion extends Component {
                         Season: <span className={trendsStyles.capitalize_word}>
                                                 {this.props.region_season}</span> <br/>
                         Parameter: <span className={trendsStyles.capitalize_word}>
-                                                {this.props.region_parameter.slice(0, -7)}</span> <br/>
+                                                {handleParamsWithItalics(this.props.region_parameter.slice(0, -7))}
+                                                </span> <br/>
                     </CardText>
                 </Card>
             );

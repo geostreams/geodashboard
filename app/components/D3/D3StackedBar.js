@@ -44,8 +44,8 @@ D3StackedBar._scales = function(el, data, state) {
 };
 
 D3StackedBar._drawBars = function(el, state) {
-    const {width, height, yAxisLabel, scaleNames, tooltipClass, season} = state;
-    let {data, title} = state;
+    const {width, height, scaleNames, tooltipClass, season} = state;
+    let {data, title, yAxisLabel} = state;
     const svg = d3.select(el).selectAll("svg");
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
@@ -114,7 +114,7 @@ D3StackedBar._drawBars = function(el, state) {
         .attr("dy", "-6em")
         .attr("dx", "-15em")
         .attr("text-anchor", "end")
-        .text(yAxisLabel);
+        .text(removeItalicsFromParams(yAxisLabel));
 
     // Adding Legend
     const legend = svg.selectAll(".legend")
@@ -164,7 +164,8 @@ D3StackedBar._drawBars = function(el, state) {
             let text = "<b> Date</b>: " + parsed_season + " " + selected_year + "<br/>";
             for (let key in d.data.data) {
                 if(d.data.hasOwnProperty(key)) {
-                    text += "<b>" + key + "</b>: " + d.data.data[key].toFixed(2) + " (" + yAxisLabel + ") Avg. <br/>";
+                    text += "<b>" + key + "</b>: " + d.data.data[key].toFixed(2) + " (" +
+                        removeItalicsFromParams(yAxisLabel) + ") Avg. <br/>";
                 }
             }
             tooltip.html(text)

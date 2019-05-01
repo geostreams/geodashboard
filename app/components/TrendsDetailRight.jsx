@@ -25,6 +25,7 @@ class TrendDetailRight extends Component {
         );
         const that = this;
         let setInterval_time = 3000;
+
         return (
             new Promise((resolve) => {
                 let x = setInterval(() => {
@@ -62,6 +63,8 @@ class TrendDetailRight extends Component {
                 loading: false,
                 data: data,
             });
+            let value = [this.state.selectedStartYear, this.state.selectedEndYear];
+            this.onSliderChange(value)
         });
     }
 
@@ -98,11 +101,11 @@ class TrendDetailRight extends Component {
         this.state.data.map(k => {
             Object.keys(k).map(l => years.push(parseInt(l)));
         });
-        let parameter = this.props.parameters.find(x => x.name === this.props.trends_parameter);
         let minYear = Math.min.apply(null, years);
         let maxYear = Math.max.apply(null, years);
         let start_year = this.state.selectedStartYear === 0 ? minYear : this.state.selectedStartYear;
         let end_year = this.state.selectedEndYear === 0 ? maxYear : this.state.selectedEndYear;
+        let parameter = this.props.parameters.find(x => x.name === this.props.trends_parameter);
 
         let contents = <div> ERROR! Please Try Again! </div>;
 
@@ -112,7 +115,8 @@ class TrendDetailRight extends Component {
                     <YearSlider start_year={minYear} end_year={maxYear}
                                 selectedStartYear={start_year}
                                 selectedEndYear={end_year}
-                                onSliderChange={this.onSliderChange}/>
+                                onSliderChange={this.onSliderChange}
+                    />
                     <TrendsGraph
                         trends_settings={this.props.trends_settings}
                         trends_region_id={this.props.trends_region_id}
