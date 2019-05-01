@@ -100,13 +100,13 @@
 
 .graph_line {
     fill: none;
-    stroke: #38B649;
+    stroke: #56B4E9;
     stroke-width: 2px;
 }
 
 .graph_dot {
-    fill: #38B649;
-    stroke: #38B649;
+    fill: #0072B2;
+    stroke: #0072B2;
 }
 
 .detailDownloadButtonText {
@@ -148,13 +148,13 @@
 }
 
 .outlier {
-    fill: #E05869;
-    stroke: #E05869;
+    fill: #D55E00;
+    stroke: #D55E00;
 }
 
 .filterBackground {
     background: #E6ECF1;
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 .filterTitle {
@@ -172,7 +172,7 @@
 }
 
 .hoverLine {
-    stroke: #38B649;
+    stroke: #009E73;
     stroke-width: 2px;
     stroke-dasharray: 3, 3;
 }
@@ -194,7 +194,7 @@
     padding: 2px;
     font-size: 12px;
     background: #1B4557;
-    border: 0px;
+    border: 0;
     border-radius: 8px;
     pointer-events: none;
     color: white;
