@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Added Icons to help visually distinguish the various sections of the Search Page
+  [GEOD-913](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-913)
 
 ### Changed
 - Adjust the graphs so dots do not collide with the top and bottom edges
