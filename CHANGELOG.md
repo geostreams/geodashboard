@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1215](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1215)
 - Correct Missing popups on Trends Detail Graph Page Load, and correct Italics throughout
   [GEOD-1221](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1221)
+- When a User closes a Popup, the Map no longer zooms all the way back out
+  [GLGVO-526](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-526)
 
 ## [3.0.0-beta.2]
 

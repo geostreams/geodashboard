@@ -210,11 +210,13 @@ class BasicMap extends Component {
 
         const that = this;
 
+        // If the User clicks the closing 'X' Button in Popups opened from the
+        // - Map Points: The view WILL NOT reset and recenter
+        // - Accordions: The view WILL reset and recenter
         if (closer) {
             closer.onclick = function () {
                 that.props.onMapSingleClick(theMap);
                 removePopup(theMap);
-                view.fit(that.state.vectorSource.getExtent(), that.state.map.getSize());
                 return false;
             };
         }
