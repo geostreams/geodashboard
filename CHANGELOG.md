@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1135](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1135)
 - D3 Graph Improvements for Color Blindness
   [GEOD-1130](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1130)
+- Props in the Map Files is now Defined on import instead of using the full path throughout
+  [GEOD-1031](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1031)
 
 ### Fixed
 - Log error whe sensor is properly defined and we open map popup.

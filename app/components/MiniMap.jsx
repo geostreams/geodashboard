@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ol from 'openlayers';
+
 require("openlayers/css/ol.css");
 import {getColor, getMapTileURLSetting} from '../utils/getConfig';
 import {getAttribution, getMiniControls} from '../utils/mapUtils';
@@ -13,26 +14,29 @@ class MiniMap extends Component {
     render() {
         return (
             <div>
-                <div id='map' className="map" style={{"height":"200px", "width":"100%"}}> </div>
+                <div id='map' className="map" style={{"height": "200px", "width": "100%"}}> </div>
                 <div style={{display: "none"}}>
-                    <a className="overlay" id="vienna" target="_blank" href="http://en.wikipedia.org/wiki/Vienna">Vienna</a>
+                    <a className="overlay" id="vienna" target="_blank"
+                       href="http://en.wikipedia.org/wiki/Vienna">Vienna</a>
                     <div id="marker" title="Marker" className="marker"> </div>
                 </div>
             </div>);
     }
 
-    getColor(source:string):string {
+    getColor(source: string): string {
         let sourcecolor = window.configruntime.gd3.sourcecolor;
         return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
     }
 
     componentDidMount() {
 
+        let {center, sensor} = this.props;
+
         let feature = new ol.Feature({
-            geometry: new ol.geom.Point(this.props.center).transform('EPSG:4326', 'EPSG:3857')
+            geometry: new ol.geom.Point(center).transform('EPSG:4326', 'EPSG:3857')
         });
 
-        let featureColor = getColor(this.props.sensor.properties.type.id);
+        let featureColor = getColor(sensor.properties.type.id);
         let iconSvg = '<svg width="15" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg">'
             + '<g class="marker-g">'
             + '<path d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke="black" stroke-width="1" fill="white" />'
@@ -45,7 +49,7 @@ class MiniMap extends Component {
         feature.setStyle(new ol.style.Style({
             image: new ol.style.Icon({
                 anchor: [0.5, 1],
-                src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( iconSvg ),
+                src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg),
                 scale: 1.0
             })
         }));
@@ -73,7 +77,7 @@ class MiniMap extends Component {
             layers: layers,
             view: new ol.View({
                 projection: 'EPSG:3857',
-                center: ol.proj.fromLonLat(this.props.center),
+                center: ol.proj.fromLonLat(center),
                 zoom: 5
             }),
             controls: getMiniControls()

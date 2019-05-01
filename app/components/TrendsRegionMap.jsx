@@ -4,6 +4,7 @@
 
 import React, {Component} from 'react';
 import ol from 'openlayers';
+
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import trendsStyles from '../styles/trends.css';
@@ -46,10 +47,10 @@ class TrendsRegionMap extends Component {
             }),
             openAboutButton: false
         };
-        (this:any).handleInfoIcon = this.handleInfoIcon.bind(this);
+        (this: any).handleInfoIcon = this.handleInfoIcon.bind(this);
     }
 
-    handleInfoIcon (button_status: boolean) {
+    handleInfoIcon(button_status: boolean) {
         this.setState({
             openAboutButton: button_status
         });
@@ -68,17 +69,21 @@ class TrendsRegionMap extends Component {
                     <div id="marker" title="Marker" className="marker"> </div>
                     <div id="popup" className={styles.olPopup}>
                         <a href="#" id="popup-closer" className={styles.olPopupCloser}>
-                            <Icon name="close" />
+                            <Icon name="close"/>
                         </a>
                         <div id="popup-content"> </div>
                     </div>
                 </div>
                 <Dialog open={Boolean(this.state.openAboutButton)}
-                        onClose={()=>{this.setState({openAboutButton:false})}}>
-                    <DialogHeader >
+                        onClose={() => {
+                            this.setState({openAboutButton: false})
+                        }}>
+                    <DialogHeader>
                         <DialogTitle>About This Data</DialogTitle>
                         <a className={trendsStyles.close_button_style}
-                           onClick={()=>{this.setState({openAboutButton: false})}}>
+                           onClick={() => {
+                               this.setState({openAboutButton: false})
+                           }}>
                             <Icon name="close"/>
                         </a>
                     </DialogHeader>
@@ -111,6 +116,8 @@ class TrendsRegionMap extends Component {
 
     componentDidUpdate() {
 
+        let {trendRegions, trendAllRegions, trends_settings, selectedSeason, parameters, selectedParameter} = this.props;
+
         aboutPopupMenu();
 
         let features;
@@ -123,19 +130,14 @@ class TrendsRegionMap extends Component {
 
         drawHelper(copyOfMap, true, that);
 
-        let map_items;
         let area;
         let feature = new ol.Feature();
         let region_features = [];
 
-        map_items = this.props.trendRegions;
-
         // This is for the Region Outlines for all Regions at once
-        let trendsPageRegions = this.props.trendAllRegions;
-
-        for (let i = 0; i < trendsPageRegions.length; i++) {
-            if (trendsPageRegions[i] !== 'ALL' && trendsPageRegions[i] !== 'er') {
-                area = getCustomLocation(trendsPageRegions[i].toLowerCase());
+        for (let i = 0; i < trendAllRegions.length; i++) {
+            if (trendAllRegions[i] !== 'ALL' && trendAllRegions[i] !== 'er') {
+                area = getCustomLocation(trendAllRegions[i].toLowerCase());
                 if (area && area.geometry) {
                     feature = new ol.Feature({
                         geometry: new ol.geom.Polygon(area.geometry.coordinates).transform('EPSG:4326', 'EPSG:3857')
@@ -149,7 +151,6 @@ class TrendsRegionMap extends Component {
         this.state.areaPolygonSource.addFeatures(region_features);
 
         let trends_parameter_lake_regions = [];
-        let trends_settings = this.props.trends_settings;
         trends_settings.map(p => {
             if (p.parameter.lake_regions === true) {
                 trends_parameter_lake_regions.push(p.parameter.id);
@@ -157,8 +158,7 @@ class TrendsRegionMap extends Component {
         });
 
         features = sensorsToFeaturesTrendRegionPage(
-            map_items, this.props.selectedParameter, this.props.selectedSeason, trends_parameter_lake_regions,
-            this.props.parameters);
+            trendRegions, selectedParameter, selectedSeason, trends_parameter_lake_regions, parameters);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
@@ -172,10 +172,9 @@ class TrendsRegionMap extends Component {
 
     componentDidMount() {
 
-        let map_items = this.props.trendRegions;
+        let {trendRegions, trends_settings, selectedSeason, parameters, selectedParameter} = this.props;
 
         let trends_parameter_lake_regions = [];
-        let trends_settings = this.props.trends_settings;
         trends_settings.map(p => {
             if (p.parameter.lake_regions === true) {
                 trends_parameter_lake_regions.push(p.parameter.id);
@@ -183,8 +182,7 @@ class TrendsRegionMap extends Component {
         });
 
         let features = sensorsToFeaturesTrendRegionPage(
-            map_items, this.props.selectedParameter, this.props.selectedSeason, trends_parameter_lake_regions,
-            this.props.parameters);
+            trendRegions, selectedParameter, selectedSeason, trends_parameter_lake_regions, parameters);
 
         let vectorSource = new ol.source.Vector({
             features: features
@@ -324,7 +322,7 @@ class TrendsRegionMap extends Component {
                 return featureChange;
             });
             if (featuresAtPixel && featuresAtPixel.get('features')
-                    !== undefined && featuresAtPixel.get('features').length === 1) {
+                !== undefined && featuresAtPixel.get('features').length === 1) {
                 const feature = featuresAtPixel.get('features')[0];
                 that.popupHandler(feature, e.coordinate);
             } else {

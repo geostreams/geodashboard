@@ -96,9 +96,7 @@ class AnalysisMap extends Component {
     }
 
     selectShapeLocation(event: Array<string>) {
-
         this.props.onSelectShapeLocationTrend(event);
-
     }
 
     popupHandler(feature: ol.Feature, coordinate: number[]) {
@@ -113,25 +111,21 @@ class AnalysisMap extends Component {
             let overlay = this.state.map.getOverlayById("marker");
             overlay.setPosition(coordinate);
         }
-
     }
 
     componentDidUpdate() {
+
+        let {threshold_value, trendSensors, parameters, selectedParameter} = this.props;
+
         let features;
-
         let copyOfMap = this.state.map;
-
         let that = this;
 
         drawHelper(copyOfMap, true, that.selectShapeLocation.bind(this), that.props.drawn_sensors);
 
-        let map_items;
         let area;
-        let threshold = this.props.threshold_value;
         let feature = new ol.Feature();
         let region_features = [];
-
-        map_items = this.props.trendSensors;
 
         // This is for the Region Outlines for one Region at a time
         if (that.props.selectedRegion !== 'all' && that.props.selectedRegion !== 'draw') {
@@ -147,8 +141,7 @@ class AnalysisMap extends Component {
         this.state.areaPolygonSource.clear();
         this.state.areaPolygonSource.addFeatures(region_features);
 
-        features = sensorsToFeaturesAnalysisPage(
-            map_items, this.props.selectedParameter, threshold, this.props.parameters);
+        features = sensorsToFeaturesAnalysisPage(trendSensors, selectedParameter, threshold_value, parameters);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
@@ -167,13 +160,10 @@ class AnalysisMap extends Component {
 
     componentDidMount() {
 
-        let map_items;
-        let threshold = this.props.threshold_value;
-
-        map_items = this.props.sensors;
+        let {threshold, sensors, parameters, selectedParameter} = this.props;
 
         let features = sensorsToFeaturesAnalysisPage(
-            map_items, this.props.selectedParameter, threshold, this.props.parameters);
+            sensors, selectedParameter, threshold, parameters);
 
         let vectorSource = new ol.source.Vector({
             features: features

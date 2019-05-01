@@ -5,6 +5,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ol from 'openlayers';
+
 require("openlayers/css/ol.css");
 import trendsStyles from '../styles/trends.css';
 import mainStyles from '../styles/main.css';
@@ -15,11 +16,12 @@ import {
 } from 'react-mdc-web';
 import styles from '../styles/regionMiniMap.css';
 import {getTrendColor, getCustomLocation, getMapTileURLSetting, maxZoom} from '../utils/getConfig';
-import {popupHelperTrendDetailPage, sensorsToFeaturesTrendDetailPage,
-    getAttribution, getMiniControls} from '../utils/mapUtils';
+import {
+    popupHelperTrendDetailPage, sensorsToFeaturesTrendDetailPage, getAttribution, getMiniControls
+} from '../utils/mapUtils';
 import {drawHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
-import { matchRegionTrends} from '../utils/trendsUtils';
+import {matchRegionTrends} from '../utils/trendsUtils';
 
 
 class RegionMiniMap extends Component {
@@ -50,10 +52,10 @@ class RegionMiniMap extends Component {
             }),
             openAboutButton: false
         };
-        (this:any).handleInfoIcon = this.handleInfoIcon.bind(this);
+        (this: any).handleInfoIcon = this.handleInfoIcon.bind(this);
     }
 
-    handleInfoIcon (button_status: boolean) {
+    handleInfoIcon(button_status: boolean) {
         this.setState({
             openAboutButton: button_status
         });
@@ -63,14 +65,18 @@ class RegionMiniMap extends Component {
 
         let return_item;
 
-        return_item=(
+        return_item = (
             <div>
                 <Dialog open={Boolean(this.state.openAboutButton)}
-                        onClose={()=>{this.setState({openAboutButton:false})}}>
-                    <DialogHeader >
+                        onClose={() => {
+                            this.setState({openAboutButton: false})
+                        }}>
+                    <DialogHeader>
                         <DialogTitle>Monitoring Stations</DialogTitle>
                         <a className={trendsStyles.close_button_style}
-                           onClick={()=>{this.setState({openAboutButton: false})}}>
+                           onClick={() => {
+                               this.setState({openAboutButton: false})
+                           }}>
                             <Icon name="close"/>
                         </a>
                     </DialogHeader>
@@ -93,7 +99,7 @@ class RegionMiniMap extends Component {
                                 <div id="marker" title="Marker" className="marker"> </div>
                                 <div id="popup" className={styles.regionPopup}>
                                     <a href="#" id="popup-closer" className={styles.regionPopupCloser}>
-                                        <Icon name="close" />
+                                        <Icon name="close"/>
                                     </a>
                                     <div id="popup-content"> </div>
                                 </div>
@@ -110,6 +116,8 @@ class RegionMiniMap extends Component {
 
     stationsPopupMenu(features: ol.Feature) {
 
+        let {trends_region_title} = this.props;
+
         let icon_content = document.getElementById('stations-content');
         let sensorID = '';
         let popupText = '<ul class=' + styles.list_style + '>';
@@ -117,7 +125,7 @@ class RegionMiniMap extends Component {
         if (features) {
             features.map(s => {
                     sensorID = s.getId().toUpperCase();
-                    if (sensorID !== this.props.trends_region_title.toUpperCase()) {
+                    if (sensorID !== trends_region_title.toUpperCase()) {
                         popupText += ('<li>' + sensorID + '</li>');
                     }
                 }
@@ -152,7 +160,9 @@ class RegionMiniMap extends Component {
 
     componentDidUpdate() {
 
-        let trends_region_page = this.props.trends_region.toLowerCase();
+        let {trends_region, allSensors, parameter, selectedParameter} = this.props;
+
+        let trends_region_page = trends_region.toLowerCase();
         let features;
         let copyOfMap = this.state.map;
         let that = this;
@@ -164,7 +174,7 @@ class RegionMiniMap extends Component {
         let feature = new ol.Feature();
         let region_features = [];
 
-        map_items = this.props.allSensors;
+        map_items = allSensors;
 
         // This is for the Region Outlines for one Region at a time
         area = getCustomLocation(trends_region_page);
@@ -180,19 +190,19 @@ class RegionMiniMap extends Component {
         let regionalSensors = [];
 
         map_items.map(m => {
-            if (matchRegionTrends(this.props.trends_region, m)) {
+            if (matchRegionTrends(trends_region, m)) {
                 regionalSensors.push(m);
             }
         });
 
         let region_parameter;
-        if (this.props.parameter !== '') {
-            region_parameter = this.props.selectedParameter;
+        if (parameter !== '') {
+            region_parameter = selectedParameter;
         } else {
-            region_parameter = this.props.parameter;
+            region_parameter = parameter;
         }
 
-        features = sensorsToFeaturesTrendDetailPage(regionalSensors, region_parameter, this.props.trends_region);
+        features = sensorsToFeaturesTrendDetailPage(regionalSensors, region_parameter, trends_region);
 
         this.state.vectorSource.clear();
         this.state.vectorSource.addFeatures(features);
@@ -207,12 +217,14 @@ class RegionMiniMap extends Component {
 
     componentDidMount() {
 
+        let {trends_region, allSensors, selectedParameter} = this.props;
+
         let map_items;
 
-        map_items = this.props.allSensors;
+        map_items = allSensors;
 
         let features = sensorsToFeaturesTrendDetailPage(
-            map_items, this.props.selectedParameter, this.props.trends_region);
+            map_items, selectedParameter, trends_region);
 
         const clusterSource = new ol.source.Cluster({
             distance: 1,
@@ -251,7 +263,7 @@ class RegionMiniMap extends Component {
         const closer = document.getElementById('popup-closer');
 
         let theMap;
-        if(container) {
+        if (container) {
             let overlay = new ol.Overlay({
                 id: "marker",
                 element: container,

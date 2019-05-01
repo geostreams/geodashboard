@@ -54,6 +54,7 @@ class ExploreMap extends Component {
     };
 
     popupHandler = (theMap: ol.Map, e: InputEventMap) => {
+        let {resetDetailPageSelection} = this.props;
         const that = this;
         const overlay = theMap.getOverlayById("marker");
         if (typeof e !== 'undefined') {
@@ -98,7 +99,7 @@ class ExploreMap extends Component {
                 that.removeSpiderfiedClusterLayers(theMap);
             }
         }
-        this.props.resetDetailPageSelection();
+        resetDetailPageSelection();
     };
 
     popupHandleHelper = (feature: ol.Feature, coordinate: number[], overlay: ol.Overlay, theMap: ol.Map) => {
@@ -126,20 +127,22 @@ class ExploreMap extends Component {
 
     mapDidUpdate = (theMap: ol.Map) => {
 
+        let {exploreLayersDetails, layersVisibility} = this.props;
+
         let exploreLayers = [];
         let keep_map_view = false;
 
-        if (this.props.exploreLayersDetails) {
+        if (exploreLayersDetails) {
 
-            this.props.exploreLayersDetails.map(layerDetails => {
+            exploreLayersDetails.map(layerDetails => {
 
-                if (this.props.layersVisibility) {
+                if (layersVisibility) {
 
-                    let index = this.props.layersVisibility.findIndex(
+                    let index = layersVisibility.findIndex(
                         layer_visibility => layer_visibility.title === layerDetails.title
                     );
 
-                    if (index > -1 && this.props.layersVisibility[index].visibility === true) {
+                    if (index > -1 && layersVisibility[index].visibility === true) {
                         exploreLayers.push(
                             new ol.layer.Image({
                                 source: new ol.source.ImageWMS({
@@ -147,12 +150,12 @@ class ExploreMap extends Component {
                                     params: {'LAYERS': layerDetails.id},
                                 }),
                                 name: layerDetails.title,
-                                opacity: this.props.layersVisibility[index].opacity,
+                                opacity: layersVisibility[index].opacity,
                                 visible: true
                             })
                         )
                     }
-                    else if (index > -1 && this.props.layersVisibility[index].visibility === false) {
+                    else if (index > -1 && layersVisibility[index].visibility === false) {
                         exploreLayers.push(
                             new ol.layer.Image({
                                 name: layerDetails.title,
@@ -231,11 +234,12 @@ class ExploreMap extends Component {
     };
 
     mapDidMount = () => {
-        this.props.resetDetailPageSelection();
+        let {resetDetailPageSelection} = this.props;
+        resetDetailPageSelection();
     };
 
     getFeature() {
-        let sensors = this.props.sensors;
+        let {sensors, userStations, parameters} = this.props;
 
         if (screen.width <= getMobileSizeMax()) {
             let mobile_sourcenames = getMobileSourceNames().toUpperCase();
@@ -245,9 +249,9 @@ class ExploreMap extends Component {
                     .filter(data => mobile_sourcenames
                         .includes((data.properties.type.title).toString().toUpperCase()));
             }
-            if (this.props.userStations !== 'all') {
+            if (userStations !== 'all') {
                 mobile_data = mobile_data
-                    .filter(data => this.props.userStations.includes(data.properties.type.location));
+                    .filter(data => userStations.includes(data.properties.type.location));
             }
             if (getMobileFilterSensors() === true) {
                 let twoWeeksAgo = new Date();
@@ -258,7 +262,7 @@ class ExploreMap extends Component {
             sensors = mobile_data;
         }
 
-        return sensorsToFeatures(sensors, this.props.parameters);
+        return sensorsToFeatures(sensors, parameters);
     };
 
     getCluster = (clusterSource: ol.source.Cluster) => {
@@ -344,6 +348,8 @@ class ExploreMap extends Component {
     };
 
     render() {
+        let {disable_clusters} = this.props;
+
         return (
             <div>
                 <BasicMap features={this.getFeature()}
@@ -352,7 +358,7 @@ class ExploreMap extends Component {
                           onMapChangeResolution={this.onChangeZoom}
                           mapDidUpdate={this.mapDidUpdate}
                           mapDidMount={this.mapDidMount}
-                          disableClusters={this.props.disable_clusters}
+                          disableClusters={disable_clusters}
                 />
             </div>
         );

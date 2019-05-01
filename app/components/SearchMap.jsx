@@ -39,7 +39,8 @@ class SearchMap extends Component {
     }
 
     selectShapeLocation = (selectPointsLocations: Array<string>, drawExtent: Array<number>) => {
-        this.props.onSelectShapeLocation(selectPointsLocations, drawExtent);
+        let {onSelectShapeLocation} = this.props;
+        onSelectShapeLocation(selectPointsLocations, drawExtent);
     };
 
     displayOverlappingMarkers = (featuresAtPixel: ol.features, theMap: ol.Map) => {
@@ -116,9 +117,11 @@ class SearchMap extends Component {
 
     mapDidUpdate = (theMap: ol.Map, customLocationFilterVectorExtent: Array<number>) => {
 
-        drawHelper(theMap, false, this.selectShapeLocation.bind(this), this.props.drawn_sensors);
+        let {drawn_sensors, selectedLocation, shapeCoordinates} = this.props;
 
-        const area = getCustomLocation(this.props.selectedLocation);
+        drawHelper(theMap, false, this.selectShapeLocation.bind(this), drawn_sensors);
+
+        const area = getCustomLocation(selectedLocation);
         let feature = new ol.Feature();
         if (area && area.geometry) {
             feature = new ol.Feature({
@@ -132,19 +135,19 @@ class SearchMap extends Component {
         let features = this.getFeature();
         // If the User drew a custom location, zoom to the shape
         if (customLocationFilterVectorExtent.length > 0 &&
-            this.props.selectedLocation === 'Custom Location') {
+            selectedLocation === 'Custom Location') {
             if (!this.state.expandedCluster) {
-                if (this.props.shapeCoordinates.length > 0) {
+                if (shapeCoordinates.length > 0) {
                     theMap.getView().fit(customLocationFilterVectorExtent, theMap.getSize());
                 }
-                if (this.props.drawn_sensors.length === 0) {
+                if (drawn_sensors.length === 0) {
                     let tmpVectorSource = new ol.source.Vector({
                         features: features
                     });
                     theMap.getView().fit(tmpVectorSource.getExtent(), theMap.getSize());
                 }
             }
-        // If the User selected a predefined location, zoom to the features
+            // If the User selected a predefined location, zoom to the features
         } else if (features.length > 0) {
             if (!this.state.expandedCluster) {
                 let tmpvectorSource = new ol.source.Vector({
@@ -157,10 +160,12 @@ class SearchMap extends Component {
     };
 
     getFeature = () => {
-        if (this.props.updateSensors) {
-            return sensorsToFeatures(this.props.updateSensors, this.props.parameters);
+        let {updateSensors, parameters, sensors} = this.props;
+
+        if (updateSensors) {
+            return sensorsToFeatures(updateSensors, parameters);
         } else {
-            return sensorsToFeatures(this.props.sensors, this.props.parameters);
+            return sensorsToFeatures(sensors, parameters);
         }
 
     };
@@ -267,6 +272,8 @@ class SearchMap extends Component {
     }
 
     render() {
+        let {disable_clusters} = this.props;
+
         return (
             <div>
                 <BasicMap features={this.getFeature()}
@@ -276,7 +283,7 @@ class SearchMap extends Component {
                           onMapSingleClick={this.popupHandler}
                           onMapChangeResolution={this.onChangeZoom}
                           mapDidUpdate={this.mapDidUpdate}
-                          disableClusters={this.props.disable_clusters}
+                          disableClusters={disable_clusters}
                 />
             </div>
 

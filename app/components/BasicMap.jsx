@@ -145,18 +145,20 @@ class BasicMap extends Component {
     }
 
     componentDidUpdate() {
-        this.props.mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
-        clusteringOptions(this.state.map, this.props.disableClusters);
+        let {features, disableClusters, mapDidUpdate} = this.props;
+        mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
+        clusteringOptions(this.state.map, disableClusters);
 
         this.state.clusterSource.clear();
-        this.state.clusterSource.addFeatures(this.props.features);
+        this.state.clusterSource.addFeatures(features);
         this.state.vectorSource.clear();
-        this.state.vectorSource.addFeatures(this.props.features);
+        this.state.vectorSource.addFeatures(features);
     }
 
     componentDidMount() {
-        if (this.props.mapDidMount) {
-            this.props.mapDidMount(this.state.map, this.state.customLocationFilterVectorExtent);
+        let {getCluster, mapDidMount, customLayers} = this.props;
+        if (mapDidMount) {
+            mapDidMount(this.state.map, this.state.customLocationFilterVectorExtent);
         }
 
         const clusterSource = new ol.source.Cluster({
@@ -166,7 +168,7 @@ class BasicMap extends Component {
         });
         this.setState({clusterSource: clusterSource});
 
-        let clusters = this.props.getCluster(clusterSource);
+        let clusters = getCluster(clusterSource);
         clusters.setZIndex(1);
 
         let customLocationFilterVector = new ol.source.Vector();
@@ -521,8 +523,8 @@ class BasicMap extends Component {
             removePopup(theMap);
         });
 
-        if (this.props.customLayers) {
-            this.props.customLayers.map(l => theMap.addLayer(l));
+        if (customLayers) {
+            customLayers.map(l => theMap.addLayer(l));
         }
 
         this.setState({map: theMap});
