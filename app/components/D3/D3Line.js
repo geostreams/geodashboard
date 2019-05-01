@@ -7,7 +7,6 @@ const d3 = require("d3");
 const margin = {top: 30, right: 20, bottom: 50, left: 50};
 
 D3Line.create = function (el, props, state) {
-
     let svg = d3.select(el).append("svg")
         .attr("class", "d3")
         .attr("width", props.width)
@@ -72,19 +71,21 @@ D3Line._scales = function (el, data, state) {
 D3Line._drawPoints = function (el, state) {
     const {
         class_name_line, class_name_dots, width, height, sources,
-        boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines, startAtZero,
-        hoverClass, overlayClass, tooltipClass, binType
+        boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines,
+        startAtZero, hoverClass, overlayClass, tooltipClass, binType
     } = state;
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
     let {data, title, yAxisLabel} = state;
     title = removeItalicsFromParams(title);
     const svg = d3.select(el).selectAll("svg");
+
     // The next 4 lines clean up previously existing graphs
     let g = svg.selectAll(".d3-line-charts");
     let g_dots = svg.selectAll(".d3-dots");
     g.remove();
     g_dots.remove();
+
     svg.selectAll("text").remove();
     d3.selectAll(tooltipClass).remove();
     svg.selectAll(".focus").remove();
@@ -192,9 +193,8 @@ D3Line._drawPoints = function (el, state) {
         .attr("transform", "translate(0," + (graphHeight + 3) + ")")
         .call(d3.axisBottom(scales.x))
         .append("text")
-        .attr("fill", "#000")
-        .attr("transform", "translate(" + ((graphWidth) / 2) + "," +
-            28 + ")")
+        .attr("fill", "#000000")
+        .attr("transform", "translate(" + ((graphWidth) / 2) + "," + 28 + ")")
         .attr("text-anchor", "end");
 
     // Creates the vertical axis and adds the label
@@ -233,6 +233,7 @@ D3Line._drawPoints = function (el, state) {
     if (title.length > 35) {
         parsed_title = title.substring(0, 35) + "..."
     }
+
     // Add title and sources
     svg.append("text")
         .attr("x", margin.left)
@@ -286,7 +287,7 @@ D3Line._drawPoints = function (el, state) {
 
     focus.append("circle")
         .attr("r", 6)
-        .style("fill", "#38B649");
+        .style("fill", "#009E73");
 
     const overlay_text = focus.append("text")
         .attr("x", 10)
@@ -309,6 +310,8 @@ D3Line._drawPoints = function (el, state) {
     }).left;
 
     function mouse_move() {
+        d3.select(this).attr("r", 6);
+        focus.style("display", null);
 
         const x0 = scales.x.invert(d3.mouse(this)[0]);
         let i = bisectDate(data, x0, 1);
@@ -381,6 +384,7 @@ D3Line._drawPoints = function (el, state) {
     }
 
     function mouse_out() {
+        d3.select(this).attr("r", 2);
         focus.style("display", "none");
         rect.style("fill-opacity", 0);
     }

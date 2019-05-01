@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Adjust the graphs so dots do not collide with the top and bottom edges
   [GEOD-1135](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1135)
+- D3 Graph Improvements for Color Blindness
+  [GEOD-1130](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1130)
 
 ### Fixed
 - Log error whe sensor is properly defined and we open map popup.
