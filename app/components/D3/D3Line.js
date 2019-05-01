@@ -16,7 +16,7 @@ D3Line.create = function (el, props, state) {
     this.update(el, state);
 };
 
-D3Line.update = function (el, state, configuration, chart) {
+D3Line.update = function (el, state) {
     this._drawPoints(el, state);
 };
 
@@ -45,19 +45,24 @@ D3Line._scales = function (el, data, state) {
         }));
     }
 
+    let y_extent = d3.extent(data, function (d) {
+        return d.average;
+    });
+    let y_range = y_extent[1] - y_extent[0];
+
     const y = d3.scaleLinear()
         .range([height, 0]);
     if (state.startAtZero) {
-        y.domain([0, d3.max(data, function (d) {
+        y.domain([0 - (y_extent[1] * 0.02), d3.max(data, function (d) {
             return d.average;
-        })]);
+        }) + (y_extent[1] * 0.02)]);
     } else {
         y.domain([d3.min(data, function (d) {
             return d.average;
-        }),
+        }) - (y_range * 0.02),
             d3.max(data, function (d) {
                 return d.average;
-            })]);
+            }) + (y_range * 0.02)]);
     }
 
     return {x: x, y: y};
@@ -223,6 +228,7 @@ D3Line._drawPoints = function (el, state) {
             return scales.y(d.average)
         })
         .attr("r", 2);
+
     let parsed_title = title;
     if (title.length > 35) {
         parsed_title = title.substring(0, 35) + "..."

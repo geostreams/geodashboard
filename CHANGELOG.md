@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+### Changed
+- Adjust the graphs so dots do not collide with the top and bottom edges
+  [GEOD-1135](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1135)
+
+### Fixed
+
 ## [3.0.0-beta.2]
 
 ### Added
