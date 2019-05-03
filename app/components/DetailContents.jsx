@@ -56,7 +56,21 @@ class DetailContents extends Component {
 
     componentWillMount() {
         this.updateParametersAndSeason(this.props);
-        this.updateBinningType(this.state.selectedStartDate, this.state.selectedEndDate);
+
+        // Use URL Dates if they exist
+        let initial_start = this.state.selectedStartDate;
+        let initial_end = this.state.selectedEndDate;
+        if (this.props.start_date) {
+            this.setState({selectAllDates: false});
+            initial_start = this.props.start_date;
+        }
+        if (this.props.end_date) {
+            this.setState({selectAllDates: false});
+            initial_end = this.props.end_date;
+        }
+
+        this.updateBinningType(new Date(initial_start), new Date(initial_end));
+        this.onSliderChange([new Date(initial_start), new Date(initial_end)]);
     }
 
     componentDidUpdate(newProps, oldState) {
@@ -64,8 +78,8 @@ class DetailContents extends Component {
             let that = this;
             window.onhashchange = function () {
                 if (window.location.href.indexOf("detail/location") > -1) {
-                    that.props.loadSensor(that.props.sensor.id, that.props.sensor.name, that.state.showSeasonFilter, that.state.binType,
-                        that.props.selectedStartDate, that.props.selectedEndDate);
+                    that.props.loadSensor(that.props.sensor.id, that.props.sensor.name, that.state.showSeasonFilter,
+                        that.state.binType, that.props.selectedStartDate, that.props.selectedEndDate);
                     that.selectAllDates();
                 }
             };
@@ -97,7 +111,25 @@ class DetailContents extends Component {
             const all_parameters = newProps.category_parameters.map(parameter => {
                 return parameter.name
             });
-            this.setState({selected_parameters: all_parameters});
+            // Use URL values if they exist, but preserve working changes as well
+            if (this.props.parameters_list && this.props.parameters_list.length >= 1) {
+                if (
+                    this.state.selected_parameters !== this.props.parameters_list &&
+                    this.state.selected_parameters.length !== 0
+                ) {
+                    this.setState({selected_parameters: this.state.selected_parameters});
+                } else {
+                    this.setState({selected_parameters: this.props.parameters_list.split(",")});
+                }
+            } else {
+                // Remove Params from the URL if the provided list is not proper
+                let index_params = location.hash.indexOf('/params=');
+                if (index_params > -1) {
+                    window.history.pushState('', '', location.hash.slice(0, index_params));
+                }
+
+                this.setState({selected_parameters: all_parameters});
+            }
         } else {
             this.setState({selected_parameters: []});
         }
@@ -132,13 +164,39 @@ class DetailContents extends Component {
 
     onSliderChange(value) {
         this.setState({selectedStartDate: value[0], selectedEndDate: value[1]});
+
+        // URL Date Index if it Exists
+        let index_dates = location.hash.indexOf('/start=');
+
         if (value[0].getTime() !== new Date(this.props.sensor.min_start_time).getTime() ||
             value[1].getTime() !== new Date(this.props.sensor.max_end_time).getTime()) {
             this.setState({selectAllDates: false});
+
+            // Update URL Dates
+            let update_hash = location.hash;
+            if (index_dates > -1) {
+                update_hash = location.hash.slice(0, index_dates);
+            }
+            let current_href = location.href;
+            let time_part =
+                '/start=' + value[0].toISOString().split('T')[0] +
+                '/end=' + value[1].toISOString().split('T')[0];
+            if (current_href.slice(-1) === '/') {
+                time_part =
+                    'start=' + value[0].toISOString().split('T')[0] +
+                    '/end=' + value[1].toISOString().split('T')[0];
+            }
+            update_hash = update_hash + time_part;
+            window.history.pushState('', '', update_hash);
         }
         if (value[0].getTime() === new Date(this.props.sensor.min_start_time).getTime() &&
             value[1].getTime() === new Date(this.props.sensor.max_end_time).getTime()) {
             this.setState({selectAllDates: true});
+
+            // Remove URL Dates if the full range is selected
+            if (index_dates > -1) {
+                window.history.pushState('', '', location.hash.slice(0, index_dates));
+            }
         }
         this.updateBinningType(value[0], value[1]);
     }
@@ -153,6 +211,12 @@ class DetailContents extends Component {
             selectAllDates: true,
         });
         this.updateBinningType(startDate, endDate);
+
+        // Remove Dates from the URL if they exist
+        let index_dates = location.hash.indexOf('/start=');
+        if (index_dates > -1) {
+            window.history.pushState('', '', location.hash.slice(0, index_dates));
+        }
     }
 
     closeParameterDialog() {
@@ -181,6 +245,40 @@ class DetailContents extends Component {
         }
 
         this.setState({selected_parameters: new_parameters.sort()});
+
+        // Update the URL with the Selected Parameters, and preserve Dates if they exist
+        let current_href = location.href;
+        let index_params = location.hash.indexOf('/params=');
+        let index_dates = location.hash.indexOf('/start=');
+        let location_hash_dates = '';
+        let location_hash_params = '';
+        if (index_params > -1) {
+            location_hash_params = location.hash.slice(0, index_params);
+        }
+        if (index_dates > -1) {
+            location_hash_dates = location.hash.slice(index_dates);
+        }
+        let location_hash_reset = location.hash;
+        if (new_parameters.sort().length > 0) {
+            let params_part = '/params=' + new_parameters.sort();
+            // Sometimes the URL ends in a slash, and sometimes it does not.
+            // We need to account for this when updating the URL.
+            if (current_href.slice(-1) === '/') {
+                params_part = 'params=' + new_parameters.sort();
+            }
+            if (index_params > -1) {
+                location_hash_reset = location.hash.slice(0, index_params);
+                window.history.pushState('', '', location_hash_reset + params_part + location_hash_dates);
+            } else if (index_dates > -1) {
+                location_hash_reset = location.hash.slice(0, index_dates);
+                window.history.pushState('', '', location_hash_reset + params_part + location_hash_dates);
+            } else {
+                location_hash_reset = location.hash;
+                window.history.pushState('', '', location_hash_reset + params_part + location_hash_dates);
+            }
+        } else {
+            window.history.pushState('', '', location_hash_params + location_hash_dates);
+        }
     }
 
     displayChartLines() {

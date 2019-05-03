@@ -125,15 +125,38 @@ class Detail extends Component {
             }
 
         }
+
+        // Ensure the URL Parameters data is good data
+        let not_found = false;
+        let params_list = '';
+        // Get the list of all available Parameters
+        let all_parameters = this.state.category_mappings[selected_category]["parameters"].map(parameter => {
+            return parameter.name
+        });
+        // Check if all the URL Params provided exist
+        if (this.props.params.parameters_list) {
+            not_found = this.props.params.parameters_list.split(',')
+                .some(r => all_parameters.indexOf(r) === -1);
+        }
+        // Use the URL Params if they all exist
+        if (not_found === false) {
+            params_list = this.props.params.parameters_list;
+        }
+
         let page_content = (
             <div>
                 <Menu selected='explore'/>
                 {title}
                 {display_tabs}
                 <div>
-                    <DetailContents sensor={this.state.sensor}
-                                    category_parameters={this.state.category_mappings[selected_category]["parameters"]}
-                                    chart_type={this.state.category_mappings[selected_category]["type"]}/>
+                    <DetailContents
+                        parameters_list={params_list}
+                        start_date={this.props.params.start_date}
+                        end_date={this.props.params.end_date}
+                        sensor={this.state.sensor}
+                        category_parameters={this.state.category_mappings[selected_category]["parameters"]}
+                        chart_type={this.state.category_mappings[selected_category]["type"]}
+                    />
                 </div>
             </div>
         );

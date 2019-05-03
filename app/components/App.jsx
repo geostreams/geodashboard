@@ -21,11 +21,14 @@ import {
 } from "../utils/getConfig";
 import styles from '../styles/main.css';
 
+
 const routes = (
     <Route component={App}>
         <Route path="/" component={Home}/>
         <Route path="/explore/:stations" component={Explore}/>
-        <Route path="/detail/location/:name/:category" component={Detail}/>
+        <Route
+            path="/detail/location/:name/:category(/params=(:parameters_list))(/start=(:start_date))(/end=(:end_date))"
+            component={Detail}/>
         <Route path="/search" component={Search}/>
         <Route path="/trendsstations" component={TrendsStation}/>
         <Route path="/trendsregions" component={TrendsRegion}/>
@@ -43,7 +46,7 @@ class App extends Component {
         this.state = {
             isOpen: false
         };
-        (this:any).handleCloseAlert = this.handleCloseAlert.bind(this);
+        (this: any).handleCloseAlert = this.handleCloseAlert.bind(this);
     }
 
     handleCloseAlert() {
@@ -52,18 +55,18 @@ class App extends Component {
 
     componentWillMount() {
         console.log('App did mount');
-        const { loadSensors } = this.props;
+        const {loadSensors} = this.props;
         // dispatch is synchronous by default,
         loadSensors(window.configruntime.gd3.geostreaming_endpoints[0].url);
     }
 
-    componentDidMount () {
+    componentDidMount() {
 
         // If enabled, and the Browser is IE or Edge, alert the User
         if (getIEAlertShow() === true) {
             let navUserAgent = navigator.userAgent.toLowerCase();
             let isIE = 'false';
-            if (navUserAgent.indexOf('msie') !== -1){
+            if (navUserAgent.indexOf('msie') !== -1) {
                 isIE = parseInt(navUserAgent.split('msie')[1]).toString();
                 if (getIEVersionsBeforeEleven().indexOf(isIE) !== -1) {
                     this.setState({isOpen: true});
@@ -118,6 +121,7 @@ class App extends Component {
         )
 
     }
+
 }
 
 export default App;
