@@ -34,6 +34,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Explore Map Zoom Issues with Layers Corrected
   [GEOD-1216](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1216)
 
+## [3.0.0-beta.3] - 2019-04-09
+
+### Added
+- Added Handling for Italics in Parameter Names.
+  [GEOD-897](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-897)
+- Version number to the home page and about page.
+
+### Changed
+- New spinner.
+  [GEOD-1220](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1220)
+- Move Popup slightly when opening, whether from map click or accordion selection
+  [GEOD-1219](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1219)
+
+### Fixed
+- Fixed racing condition Trends Region Detail Page.
+  [GEOD-1194](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1194)
+- Ensure the Chart Component updates appropriately on the Detail Page
+  [GEOD-1217](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1217)
+
 ## [3.0.0-beta.2]
 
 ### Added
@@ -59,8 +78,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1188](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1188)
 - Add option for Explore Page Data Sources to Start Closed
   [GEOD-1186](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1186)
-- Added Handling for Italics in Parameter Names
-  [GEOD-897](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-897)
 
 ### Changed
 - General Exploratory Analysis Page Updates
@@ -87,10 +104,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1036](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1036)
 - Adjusted Mobile Settings for the List vs Map Tabs
   [GEOD-1037](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1037)
-- Move Popup slightly when opening, whether from map click or accordion selection
-  [GEOD-1219](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1219)
-- Updated the behavior of the Spinner as utilized on the Trends Region Detail Page
-  [GEOD-1220](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1220)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior
@@ -117,10 +130,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1205](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1205)
 - Explore Page Popup Boxes Map Issues Corrected
   [GEOD-1199](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1199)
-- Ensure the Chart Component updates appropriately on the Detail Page
-  [GEOD-1217](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1217)
-- Provide more time for the API to return data on the Trends Region Detail Page
-  [GEOD-1194](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1194)
 
 ## [3.0.0-alpha.4] - 2018-10-01
 
