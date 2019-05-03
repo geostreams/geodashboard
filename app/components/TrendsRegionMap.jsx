@@ -60,18 +60,18 @@ class TrendsRegionMap extends Component {
 
         return (
             <div>
-                <div id='map' className={styles.root}> </div>
-                <div id="trends_legend" className={styles.trends_legend}> </div>
+                <div id='map' className={styles.root}></div>
+                <div id="trends_legend" className={styles.trends_legend}></div>
                 <div id="search" style={{position: 'absolute', bottom: '10px', left: '25em', padding: '5px'}}>
                     <button id="centerButton"><Icon name="gps_fixed"/></button>
                 </div>
                 <div style={{display: "none"}}>
-                    <div id="marker" title="Marker" className="marker"> </div>
+                    <div id="marker" title="Marker" className="marker"></div>
                     <div id="popup" className={styles.olPopup}>
                         <a href="#" id="popup-closer" className={styles.olPopupCloser}>
                             <Icon name="close"/>
                         </a>
-                        <div id="popup-content"> </div>
+                        <div id="popup-content"></div>
                     </div>
                 </div>
                 <Dialog open={Boolean(this.state.openAboutButton)}

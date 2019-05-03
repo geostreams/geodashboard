@@ -1,5 +1,10 @@
-import { connect } from 'react-redux'
-import MenuBarComponent from '../components/MenuBar'
+/*
+ * @flow
+ */
+
+
+import {connect} from 'react-redux';
+import MenuBarComponent from '../components/MenuBar';
 
 const mapStateToProps = (state) => {
     return {

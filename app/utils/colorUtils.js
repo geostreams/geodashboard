@@ -1,10 +1,14 @@
+/*
+ * @flow
+ */
+
 /**
  * Blend two colors using rgba to rgb conversion
  * @param colors - An array of colors to combine
  * @param opacity - An array of opacity (alpha values) to apply to each corresponding color
  * @returns {string} The rgba representation of the combination of the colors
  */
-export function applyColors(colors, opacity) {
+export function applyColors(colors: Array<string>, opacity: Array<number>) {
 
     //look at https://coderwall.com/p/z8uxzw/javascript-color-blender, alpha composting, and
     //http://marcodiiga.github.io/rgba-to-rgb-conversion
@@ -33,7 +37,7 @@ export function applyColors(colors, opacity) {
  * @param rgba_color
  * @returns array representation of rgb
  */
-export function rgbaToRgb(rgb_background, rgba_color){
+export function rgbaToRgb(rgb_background: Array<number>, rgba_color: Array<number>) {
     let alpha = rgba_color[3];
     return (
         [
@@ -49,11 +53,11 @@ export function rgbaToRgb(rgb_background, rgba_color){
  * @param alpha - Opacity value
  * @returns array representation of rgba
  */
-export function hexToRgba(color, alpha){
+export function hexToRgba(color: string, alpha: number) {
     let bigint = parseInt(color, 16);
     const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8 ) & 255;
+    const g = (bigint >> 8) & 255;
     const b = bigint & 255;
 
-    return [r,g,b,alpha];
+    return [r, g, b, alpha];
 }

@@ -2,12 +2,12 @@
  * @flow
  */
 
-import { SET_AVAILABLE_LAYERS, UPDATE_LAYER, SET_LAYER_OPACITY } from '../actions';
-import { getAvailableLayers } from '../utils/getConfig';
-import type { exploreLayersState } from '../utils/flowtype';
+import {SET_AVAILABLE_LAYERS, UPDATE_LAYER, SET_LAYER_OPACITY} from '../actions';
+import {getAvailableLayers} from '../utils/getConfig';
+import type {exploreLayersState} from '../utils/flowtype';
 
 type layersAction = {|
-    type:'SET_AVAILABLE_LAYERS' | 'UPDATE_LAYER' | 'SET_LAYER_OPACITY',
+    type: 'SET_AVAILABLE_LAYERS' | 'UPDATE_LAYER' | 'SET_LAYER_OPACITY',
     name: string, layer: string, opacity: string
 |};
 
@@ -15,8 +15,8 @@ const defaultState = {
     layers_visibility: [],
 };
 
-const exploreLayers = (state:exploreLayersState = defaultState, action:layersAction) => {
-    switch(action.type) {
+const exploreLayers = (state: exploreLayersState = defaultState, action: layersAction) => {
+    switch (action.type) {
 
         case SET_AVAILABLE_LAYERS:
             let available_layers = getAvailableLayers();

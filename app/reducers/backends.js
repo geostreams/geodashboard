@@ -2,9 +2,9 @@
  * @flow
  */
 
-import type { backendsState } from '../utils/flowtype';
+import type {backendsState} from '../utils/flowtype';
 
-type BackendAction = {| type:'SWITCH_BACKEND', selected:string, title: string, subtitle: string |};
+type BackendAction = {| type: 'SWITCH_BACKEND', selected: string, title: string, subtitle: string |};
 
 const defaultState = {
     endpoints: [],
@@ -14,8 +14,8 @@ const defaultState = {
     error: false
 };
 
-const backends = (state:backendsState = defaultState, action:BackendAction) => {
-    switch(action.type) {
+const backends = (state: backendsState = defaultState, action: BackendAction) => {
+    switch (action.type) {
         case 'ADD_ENDPOINTS':
             return Object.assign({}, state, {
                 endpoints: window.configruntime.gd3.geostreaming_endpoints,
@@ -40,4 +40,4 @@ const backends = (state:backendsState = defaultState, action:BackendAction) => {
     }
 };
 
-export default backends
+export default backends;

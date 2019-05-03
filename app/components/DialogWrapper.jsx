@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from "react";
 import {
     Body1, Body2, Dialog, DialogBody, DialogHeader, DialogTitle, Icon
@@ -8,14 +12,18 @@ import {Link} from 'react-router';
 
 class DialogWrapper extends Component {
 
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
         this.state = {
             openDialog: false
         };
-        this.closeDialog = this.closeDialog.bind(this);
-        this.openDialog = this.openDialog.bind(this);
+        (this: any).closeDialog = this.closeDialog.bind(this);
+        (this: any).openDialog = this.openDialog.bind(this);
     }
+
+    state: {
+        openDialog: boolean
+    };
 
     closeDialog() {
         this.setState({openDialog: false})

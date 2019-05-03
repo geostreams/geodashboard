@@ -9,7 +9,7 @@ import {sortSitesNumerically} from '../utils/arrayUtils';
 
 
 class ExploreCustomItemsTab extends Component {
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
         this.state = {
             accordion_icon: false,

@@ -1,11 +1,15 @@
-import React, { Component } from 'react';
+/*
+ * @flow
+ */
+
+import React, {Component} from 'react';
 import {ListDivider} from 'react-mdc-web';
 import Boxplot from 'react-boxplot';
 import computeBoxplotStats from 'react-boxplot/dist/stats';
 import styles from "../styles/detail.css";
 
 class BoxAndWhisker extends Component {
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
     }
 
@@ -23,12 +27,12 @@ class BoxAndWhisker extends Component {
                 <span style={{'color': paramColor}}>{paramName}</span>
                 <br/><br/>
                 <Boxplot
-                    width={ 300 }
-                    height={ 20 }
+                    width={300}
+                    height={20}
                     orientation="horizontal"
-                    min={ Math.floor(minimum) }
-                    max={ Math.ceil(maximum) }
-                    stats={ stats }
+                    min={Math.floor(minimum)}
+                    max={Math.ceil(maximum)}
+                    stats={stats}
                 />
                 <br/><br/>
                 <p className={styles.float_item_right}>

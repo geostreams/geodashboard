@@ -1,8 +1,11 @@
-// @flow
-import { connect } from 'react-redux'
-import AppComponent from '../components/App'
-import { fetchSensors, addEndpoints } from '../actions/index'
-import type { Dispatch } from '../utils/flowtype'
+/*
+ * @flow
+ */
+
+import {connect} from 'react-redux';
+import AppComponent from '../components/App';
+import {fetchSensors, addEndpoints} from '../actions/index';
+import type {Dispatch} from '../utils/flowtype';
 
 const mapStateToProps = (state) => {
     return {
@@ -10,7 +13,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch:Dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         loadSensors: (selected) => {
             dispatch(addEndpoints())
@@ -21,4 +24,4 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
 
 const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent);
 
-export default App
+export default App;

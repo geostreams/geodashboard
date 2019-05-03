@@ -13,8 +13,8 @@ class ExploreLayers extends Component {
     constructor(props: Object) {
         super(props);
 
-        (this:any).openLayersDrawer = this.openLayersDrawer.bind(this);
-        (this:any).closeLayersDrawer = this.closeLayersDrawer.bind(this);
+        (this: any).openLayersDrawer = this.openLayersDrawer.bind(this);
+        (this: any).closeLayersDrawer = this.closeLayersDrawer.bind(this);
     }
 
     openLayersDrawer() {

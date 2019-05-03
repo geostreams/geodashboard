@@ -36,8 +36,8 @@ class TrendsCalculationSettings extends Component {
             rollingMin: 0,
             rollingMax: 30,
         };
-        (this:any).handleBaselineChange = this.handleBaselineChange.bind(this);
-        (this:any).handleRollingChange = this.handleRollingChange.bind(this);
+        (this: any).handleBaselineChange = this.handleBaselineChange.bind(this);
+        (this: any).handleRollingChange = this.handleRollingChange.bind(this);
     }
 
     handleBaselineChange(event: Object) {

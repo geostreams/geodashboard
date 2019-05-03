@@ -1,13 +1,16 @@
 /*
  * @flow
  */
+
 import {
-    ADD_SEARCH_DATASOURCE, ADD_SEARCH_PARAMETER, ADD_SEARCH_LOCATION, UPDATE_AVAILABLE_FILTERS,
-    ADD_START_DATE, ADD_END_DATE, RECEIVE_SENSORS
-} from '../actions'
-import {collectSources, collectLocations, collectParameters, collectDates} from './sensors'
-import type {selectedSearchState, Sensors, DatasourceParameter, Location, Parameters} from '../utils/flowtype'
-import {intersectArrays} from '../utils/arrayUtils'
+    ADD_SEARCH_DATASOURCE, ADD_SEARCH_PARAMETER, ADD_SEARCH_LOCATION,
+    UPDATE_AVAILABLE_FILTERS, ADD_START_DATE, ADD_END_DATE, RECEIVE_SENSORS
+} from '../actions';
+import {collectSources, collectLocations, collectParameters, collectDates} from './sensors';
+import type {
+    selectedSearchState, Sensors, DatasourceParameter, Location, Parameters
+} from '../utils/flowtype';
+import {intersectArrays} from '../utils/arrayUtils';
 
 type SelectedSearchAction = {|
     type: string, sensors: Sensors, data_sources: DatasourceParameter,
@@ -165,4 +168,4 @@ function updateAvailable(sensors, selected_filters, allFilters, searchParameters
 
 }
 
-export default selectedSearch
+export default selectedSearch;

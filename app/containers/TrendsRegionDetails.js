@@ -2,7 +2,7 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrendsRegionDetailsComponent from '../components/TrendsRegionDetails';
 
 const mapStateToProps = (state) => {

@@ -17,7 +17,8 @@ import {
 import styles from '../styles/regionMiniMap.css';
 import {getTrendColor, getCustomLocation, getMapTileURLSetting, maxZoom} from '../utils/getConfig';
 import {
-    popupHelperTrendDetailPage, sensorsToFeaturesTrendDetailPage, getAttribution, getMiniControls
+    popupHelperTrendDetailPage, sensorsToFeaturesTrendDetailPage,
+    getAttribution, getMiniControls
 } from '../utils/mapUtils';
 import {drawHelper} from '../utils/mapDraw';
 import type {MapProps, TrendsMapState} from '../utils/flowtype';
@@ -64,7 +65,6 @@ class RegionMiniMap extends Component {
     render() {
 
         let return_item;
-
         return_item = (
             <div>
                 <Dialog open={Boolean(this.state.openAboutButton)}

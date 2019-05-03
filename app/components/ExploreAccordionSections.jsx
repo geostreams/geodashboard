@@ -7,7 +7,7 @@ import ol from 'openlayers';
 
 
 class ExploreAccordionSections extends Component {
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
         this.state = {
             inner_accordion_icon: false,

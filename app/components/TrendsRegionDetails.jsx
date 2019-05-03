@@ -2,14 +2,13 @@
  * @flow
  */
 
-
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
 import mainStyles from '../styles/main.css';
 import {Card, CardHeader, CardTitle, CardText} from 'react-mdc-web';
 import {sensorsToFeaturesTrendRegionPage} from '../utils/mapUtils';
-import { getTrendsPageSettings } from '../utils/getConfig';
+import {getTrendsPageSettings} from '../utils/getConfig';
 
 
 class TrendsRegionDetails extends Component {

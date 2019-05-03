@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import {Router, Route, hashHistory} from 'react-router';
 import Search from '../pages/Search';
@@ -23,6 +27,7 @@ import styles from '../styles/main.css';
 
 
 const routes = (
+    // $FlowFixMe
     <Route component={App}>
         <Route path="/" component={Home}/>
         <Route path="/explore/:stations" component={Explore}/>
@@ -48,6 +53,10 @@ class App extends Component {
         };
         (this: any).handleCloseAlert = this.handleCloseAlert.bind(this);
     }
+
+    state: {
+        isOpen: boolean
+    };
 
     handleCloseAlert() {
         this.setState({isOpen: false})

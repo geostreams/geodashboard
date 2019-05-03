@@ -1,23 +1,27 @@
-import React, { Component } from 'react';
+/*
+ * @flow
+ */
+
+import React, {Component} from 'react';
 import rd3 from 'react-d3';
-import { Row, Col } from 'react-flexbox-grid';
+import {Row, Col} from 'react-flexbox-grid';
 import {Card, CardHeader, CardTitle} from 'react-mdc-web';
 import styles from '../styles/detail.css';
 let LineChart = rd3.LineChart;
 
 class ChartMobile extends Component {
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
     }
 
     render() {
 
         let values = [];
-        const {title, units}  = this.props;
+        const {title, units} = this.props;
 
         let unitIndex = -1;
         // Getting the datapoints for parameter: this.props.param
-        if(this.props.sensorData[this.props.param]) {
+        if (this.props.sensorData[this.props.param]) {
             this.props.sensorData[this.props.param].map(
                 d => {
                     let makeValueX;
@@ -29,7 +33,7 @@ class ChartMobile extends Component {
 
         let subtitleText = '';
 
-        if(values.length === 0 ){
+        if (values.length === 0) {
             values.push({x: 0, y: 0});
             subtitleText = (
                 <div className={styles.noData}>No Data to Display for {title}</div>
@@ -44,7 +48,8 @@ class ChartMobile extends Component {
 
         let lineChartObject;
 
-        if(values.length > 0 && subtitleText.length < 1){
+        // $FlowFixMe
+        if (values.length > 0 && subtitleText.length < 1) {
             lineChartObject = (
                 <Row>
                     <Col md={10} className={styles.positionChart}>

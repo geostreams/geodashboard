@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import {hashHistory} from 'react-router';
 import styles from '../styles/menuBar.css';
@@ -15,15 +19,15 @@ class MenuDropdown extends Component {
         this.state = {
             openMenu: false
         };
-        this.toggleTrendMenu = this.toggleTrendMenu.bind(this);
-        MenuDropdown.onClickMenuItem = MenuDropdown.onClickMenuItem.bind(this);
+        (this: any).toggleTrendMenu = this.toggleTrendMenu.bind(this);
+        (this: any).onClickMenuItem = this.onClickMenuItem.bind(this);
     }
 
     toggleTrendMenu(openMenuValue: boolean) {
         this.setState({openMenu: openMenuValue});
     };
 
-    static onClickMenuItem(route: String) {
+    onClickMenuItem(route: String) {
         hashHistory.push(route);
     }
 
@@ -31,7 +35,7 @@ class MenuDropdown extends Component {
 
         const menuItems = this.props.pageChildren.map(item =>
             <MenuItem role="menuitem" key={item.name}
-                      onClick={() => MenuDropdown.onClickMenuItem(item.url)}
+                      onClick={() => this.onClickMenuItem(item.url)}
             >
                 <span className={styles.menu_list_item}>{item.name}</span>
             </MenuItem>

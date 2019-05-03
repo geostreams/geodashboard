@@ -2,7 +2,7 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import DownloadButtonsComponent from '../components/DownloadButtons';
 
 const mapStateToProps = (state) => {

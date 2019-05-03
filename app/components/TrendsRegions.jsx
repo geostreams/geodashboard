@@ -15,7 +15,7 @@ class TrendsRegions extends Component {
 
     constructor(props: Object) {
         super(props);
-        (this:any).handleRegionChange = this.handleRegionChange.bind(this);
+        (this: any).handleRegionChange = this.handleRegionChange.bind(this);
     }
 
     handleRegionChange(event: InputEvent) {
@@ -31,8 +31,8 @@ class TrendsRegions extends Component {
             trendsPageSettings.map(r => {
                 if (r.properties.id.toString().toUpperCase() !== 'ER') {
                     trendsPageRegionsMap.push(
-                    <Radio id={r.properties.id} value={r.properties.id}
-                           key={r.properties.id}> {r.properties.title}</Radio>
+                        <Radio id={r.properties.id} value={r.properties.id}
+                               key={r.properties.id}> {r.properties.title}</Radio>
                     )
                 }
             });

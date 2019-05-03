@@ -86,6 +86,11 @@ export type backendsState = {
     selected: string
 };
 
+export type sensorDetailState = {
+    id: null,
+    datapoints: []
+}
+
 export type parameterState = {
     parameters: Parameters
 }

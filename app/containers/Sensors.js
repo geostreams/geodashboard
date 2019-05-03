@@ -1,5 +1,9 @@
-import { connect } from 'react-redux'
-import SensorsComponent from '../components/Sensors'
+/*
+ * @flow
+ */
+
+import {connect} from 'react-redux';
+import SensorsComponent from '../components/Sensors';
 
 const mapStateToProps = (state) => {
     return {
@@ -9,4 +13,4 @@ const mapStateToProps = (state) => {
 
 const Sensors = connect(mapStateToProps)(SensorsComponent);
 
-export default Sensors
+export default Sensors;

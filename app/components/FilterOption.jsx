@@ -1,13 +1,17 @@
-import React, {Component} from 'react'
-import styles from '../styles/filterOption.css'
+/*
+ * @flow
+ */
+
+import React, {Component} from 'react';
+import styles from '../styles/filterOption.css';
 import {Checkbox, FormField, label} from 'react-mdc-web';
 
 class FilterOption extends Component {
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
     }
 
-    handleChange(event) {
+    handleChange(event: Object) {
         const selectedParameters = Object.assign([], this.props.selectedParameters);
         const selectedDataSources = Object.assign([], this.props.selectedDataSources);
         this.props.onOptionChange(event, selectedParameters, selectedDataSources);
@@ -16,8 +20,7 @@ class FilterOption extends Component {
     render() {
         let checkedVar = (this.props.name === "data_sources" &&
             this.props.selectedDataSources.indexOf(this.props.id) > -1) ||
-            (this.props.name === "parameters" &&
-            this.props.selectedParameters.indexOf(this.props.id) > -1);
+            (this.props.name === "parameters" && this.props.selectedParameters.indexOf(this.props.id) > -1);
 
         return (
             <div className={styles.col}>
@@ -33,4 +36,4 @@ class FilterOption extends Component {
     }
 }
 
-export default FilterOption
+export default FilterOption;

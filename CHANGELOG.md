@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1031](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1031)
 - Added Parameters and Dates to the URL for the Detail Page
   [GEOD-1173](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1173)
+- Updated Flow throughout
+  [GEOD-1060](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1060)
 
 ### Fixed
 - Log error whe sensor is properly defined and we open map popup.

@@ -1,10 +1,13 @@
 /*
  * @flow
  */
-import { connect } from 'react-redux'
-import { addStartDate, addEndDate } from '../actions'
-import TimeFilterComponent from '../components/TimeFilter'
-import type { Dispatch } from '../utils/flowtype'
+
+
+import {connect} from 'react-redux';
+import {addStartDate, addEndDate} from '../actions';
+import TimeFilterComponent from '../components/TimeFilter';
+import type {Dispatch} from '../utils/flowtype';
+
 
 const mapStateToProps = (state) => {
     return {
@@ -15,7 +18,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch:Dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         onDateChange: (event, date, isStart) => {
             if (isStart) {
@@ -29,4 +32,4 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
 
 const TimeFilter = connect(mapStateToProps, mapDispatchToProps)(TimeFilterComponent);
 
-export default TimeFilter
+export default TimeFilter;

@@ -2,10 +2,8 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrendsGraphComponent from '../components/TrendsGraph';
-import type { Dispatch } from '../utils/flowtype';
-import { fetchRegionDetailTrends } from '../actions/index';
 
 
 const mapStateToProps = (state) => {
@@ -16,4 +14,4 @@ const mapStateToProps = (state) => {
 
 const TrendsGraph = connect(mapStateToProps)(TrendsGraphComponent);
 
-export default TrendsGraph
+export default TrendsGraph;

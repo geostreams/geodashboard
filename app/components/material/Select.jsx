@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
@@ -13,6 +17,7 @@ class Select extends PureComponent {
         dataIdx: PropTypes.number
 
     };
+
     constructor(props: Object) {
         super(props);
     }
@@ -20,13 +25,13 @@ class Select extends PureComponent {
     render() {
 
         const classNames = "mdc-select " + this.props.className;
-        return(
+        return (
             <select id={this.props.value}
                     value={this.props.value}
                     className={classNames}
                     onChange={this.props.onChange.bind(this)}
                     data-idx={this.props.dataIdx}
-                    disabled={this.props.disabled} >
+                    disabled={this.props.disabled}>
                 {this.props.children}
             </select>
         )

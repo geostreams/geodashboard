@@ -1,3 +1,5 @@
+/* No Flow due to D3 Items */
+
 import React, {Component} from 'react';
 import D3StackedLine from './D3/D3StackedLine';
 import PropTypes from 'prop-types';

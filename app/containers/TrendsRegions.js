@@ -2,10 +2,10 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrendsRegionsComponent from '../components/TrendsRegions';
-import { selectTrendsRegion, selectAnalysisRegion } from '../actions';
-import type { Dispatch } from '../utils/flowtype';
+import {selectTrendsRegion, selectAnalysisRegion} from '../actions';
+import type {Dispatch} from '../utils/flowtype';
 
 
 const mapStateToProps = (state) => {
@@ -16,7 +16,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSelectTrendsRegion:(region, view_type) => {
+        onSelectTrendsRegion: (region, view_type) => {
             if (view_type === 'by-analysis') {
                 dispatch(selectAnalysisRegion(region, view_type));
             }

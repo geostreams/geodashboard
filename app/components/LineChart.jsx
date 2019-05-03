@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from "react";
 import {Row} from 'react-flexbox-grid';
 import Chart from './Chart';

@@ -1,15 +1,23 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react'
 import FilterList from '../containers/FilterList'
 import {Fab, Icon, Button} from 'react-mdc-web';
 import styles from '../styles/filterSelection.css'
 
 class FilterSelection extends Component {
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
         this.state = {
             selectedValue: 0
         };
     }
+
+    state: {
+        selectedValue: number
+    };
 
     handleClickAddFilter() {
         let notUsedFilters = [];
@@ -26,7 +34,7 @@ class FilterSelection extends Component {
 
     }
 
-    handleChange(event) {
+    handleChange(event: Object) {
         const idx = event.target.dataset.idx; //Idx of the selected filter
         const value = event.target.options[event.target.selectedIndex].value;
         console.log(value, " was selected");
@@ -48,7 +56,7 @@ class FilterSelection extends Component {
         this.props.onChangeFilter(newSelected, idx);
     }
 
-    handleClickRemoveFilter(event) {
+    handleClickRemoveFilter(event: Object) {
         const idx = event.target.parentElement.dataset.idx;
         const value = this.props.selectedFilters[idx];
 
@@ -86,7 +94,7 @@ class FilterSelection extends Component {
         }
     }
 
-    handleExpand(event) {
+    handleExpand(event: Object) {
         // leave this line for debugging
         //console.log(event.target.parentElement.parentElement);
         if (!isNaN(parseInt(event.target.dataset.filterid))) {

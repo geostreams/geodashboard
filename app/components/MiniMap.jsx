@@ -1,9 +1,15 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import ol from 'openlayers';
 
 require("openlayers/css/ol.css");
 import {getColor, getMapTileURLSetting, mapMiniMinZoom} from '../utils/getConfig';
 import {getAttribution, getMiniControls} from '../utils/mapUtils';
+import type {MapProps} from '../utils/flowtype';
+
 
 class MiniMap extends Component {
 
@@ -85,6 +91,7 @@ class MiniMap extends Component {
         });
 
     }
+
 }
 
 export default MiniMap;

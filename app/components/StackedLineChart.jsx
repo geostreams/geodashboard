@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from "react";
 import ChartStackedLine from './ChartStackedLine';
 import Spinner from './Spinner';
@@ -12,19 +16,19 @@ class StackedLineChart extends Component {
     }
 
     render() {
-        if(Object.keys(this.props.sensorData).length === 0) {
+        if (Object.keys(this.props.sensorData).length === 0) {
             return (
                 <Spinner/>
             )
         }
         const {sensor, selected_parameters, num_years, sensorData} = this.props;
         let charts = [];
-        if(sensor) {
+        if (sensor) {
             let interval_val = 5;
             if (num_years <= 5) {
                 interval_val = 1;
             }
-            if(selected_parameters.length > 0) {
+            if (selected_parameters.length > 0) {
                 charts.push(<Row key='multi-line-chart' className={mainStyles.fullWidth}>
                     <ChartStackedLine
                         interval_val={interval_val}
@@ -48,7 +52,7 @@ class StackedLineChart extends Component {
 
         return (
             <Row className={mainStyles.fullWidth}>
-            {charts}
+                {charts}
             </Row>
         );
     }

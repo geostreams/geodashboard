@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component, PropTypes} from 'react';
 import exploreStyles from '../styles/explore.css';
 import {Checkbox, FormField} from 'react-mdc-web';

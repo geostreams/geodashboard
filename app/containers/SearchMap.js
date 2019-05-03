@@ -1,10 +1,11 @@
 /*
  * @flow
  */
-import { connect } from 'react-redux';
+
+import {connect} from 'react-redux';
 import SearchMapComponent from '../components/SearchMap';
-import { addCustomLocationFilter } from '../actions';
-import type { Dispatch } from '../utils/flowtype';
+import {addCustomLocationFilter} from '../actions';
+import type {Dispatch} from '../utils/flowtype';
 
 const mapStateToProps = (state) => {
     return {

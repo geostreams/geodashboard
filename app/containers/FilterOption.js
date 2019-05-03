@@ -2,10 +2,10 @@
  * @flow
  */
 
-import { connect } from 'react-redux'
-import { addSearchParameter, addSearchDataSource } from '../actions'
-import FilterOptionComponent from '../components/FilterOption'
-import type { Dispatch } from '../utils/flowtype'
+import {connect} from 'react-redux';
+import {addSearchParameter, addSearchDataSource} from '../actions';
+import FilterOptionComponent from '../components/FilterOption';
+import type {Dispatch} from '../utils/flowtype';
 
 const mapStateToProps = (state) => {
     return {
@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch:Dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         onOptionChange: (event, selectedParameters, selectedDataSources) => {
 
@@ -31,13 +31,13 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
 
             } else {
                 if (event.target.name === "parameters") {
-                    const idx:number = selectedParameters.indexOf(value);
+                    const idx: number = selectedParameters.indexOf(value);
                     if (idx > -1) {
                         selectedParameters.splice(idx, 1);
                         dispatch(addSearchParameter(selectedParameters));
                     }
                 } else if (event.target.name === "data_sources") {
-                    const idx:number = selectedDataSources.indexOf(value);
+                    const idx: number = selectedDataSources.indexOf(value);
                     if (idx > -1) {
                         selectedDataSources.splice(idx, 1);
                         dispatch(addSearchDataSource(selectedDataSources));

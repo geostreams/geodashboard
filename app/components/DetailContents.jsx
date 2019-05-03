@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import DialogWrapper from './DialogWrapper';
 import MiniMap from '../components/MiniMap';
@@ -23,7 +27,7 @@ let moment = require('moment');
 
 class DetailContents extends Component {
 
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
         this.state = {
             openParameterDialog: false,
@@ -39,20 +43,35 @@ class DetailContents extends Component {
             selectAllDates: true,
             binType: "year"
         };
-        this.closeParameterDialog = this.closeParameterDialog.bind(this);
-        this.openParameterDialog = this.openParameterDialog.bind(this);
-        this.openBoxAndWhiskerDialog = this.openBoxAndWhiskerDialog.bind(this);
-        this.closeBoxAndWhiskerDialog = this.closeBoxAndWhiskerDialog.bind(this);
-        this.handleSelectedParameter = this.handleSelectedParameter.bind(this);
-        this.updateParametersAndSeason = this.updateParametersAndSeason.bind(this);
-        this.onSliderChange = this.onSliderChange.bind(this);
-        this.onChangeSeason = this.onChangeSeason.bind(this);
-        this.displayChartLines = this.displayChartLines.bind(this);
-        this.updateBinningType = this.updateBinningType.bind(this);
-        this.startAtZero = this.startAtZero.bind(this);
-        this.sameTimeScale = this.sameTimeScale.bind(this);
-        this.selectAllDates = this.selectAllDates.bind(this);
+        (this: any).closeParameterDialog = this.closeParameterDialog.bind(this);
+        (this: any).openParameterDialog = this.openParameterDialog.bind(this);
+        (this: any).openBoxAndWhiskerDialog = this.openBoxAndWhiskerDialog.bind(this);
+        (this: any).closeBoxAndWhiskerDialog = this.closeBoxAndWhiskerDialog.bind(this);
+        (this: any).handleSelectedParameter = this.handleSelectedParameter.bind(this);
+        (this: any).updateParametersAndSeason = this.updateParametersAndSeason.bind(this);
+        (this: any).onSliderChange = this.onSliderChange.bind(this);
+        (this: any).onChangeSeason = this.onChangeSeason.bind(this);
+        (this: any).displayChartLines = this.displayChartLines.bind(this);
+        (this: any).updateBinningType = this.updateBinningType.bind(this);
+        (this: any).startAtZero = this.startAtZero.bind(this);
+        (this: any).sameTimeScale = this.sameTimeScale.bind(this);
+        (this: any).selectAllDates = this.selectAllDates.bind(this);
     }
+
+    state: {
+        openParameterDialog: boolean,
+        openBoxAndWhiskerDialog: boolean,
+        selected_parameters: [],
+        selectedStartDate: Object,
+        selectedEndDate: Object,
+        showSeasonFilter: boolean,
+        selectedSeason: string,
+        displayLines: boolean,
+        startAtZero: boolean,
+        sameTimeScale: boolean,
+        selectAllDates: boolean,
+        binType: string
+    };
 
     componentWillMount() {
         this.updateParametersAndSeason(this.props);
@@ -68,12 +87,13 @@ class DetailContents extends Component {
             this.setState({selectAllDates: false});
             initial_end = this.props.end_date;
         }
-
+        // $FlowFixMe
         this.updateBinningType(new Date(initial_start), new Date(initial_end));
+        // $FlowFixMe
         this.onSliderChange([new Date(initial_start), new Date(initial_end)]);
     }
 
-    componentDidUpdate(newProps, oldState) {
+    componentDidUpdate(newProps: Object, oldState: Object) {
         if (oldState.sensorID !== newProps.sensorID) {
             let that = this;
             window.onhashchange = function () {
@@ -86,18 +106,18 @@ class DetailContents extends Component {
         }
     }
 
-    componentWillReceiveProps(newProps) {
+    componentWillReceiveProps(newProps: Object) {
         this.updateParametersAndSeason(newProps);
     }
 
-    onChangeSeason(event) {
+    onChangeSeason(event: Object) {
         if (this.state.showSeasonFilter) {
             const value = event.target.options[event.target.selectedIndex].value;
             this.setState({selectedSeason: value});
         }
     }
 
-    updateParametersAndSeason(newProps) {
+    updateParametersAndSeason(newProps: Object) {
         const {sensor} = newProps;
         let use_season = detailSeasonBins();
         if (
@@ -148,7 +168,7 @@ class DetailContents extends Component {
         return binType;
     }
 
-    updateBinningType(start_date, end_date) {
+    updateBinningType(start_date: Date, end_date: Date) {
         let start_moment = moment(start_date);
         let end_moment = moment(end_date);
         let diff_days = end_moment.diff(start_moment, 'days');
@@ -162,7 +182,7 @@ class DetailContents extends Component {
         }
     }
 
-    onSliderChange(value) {
+    onSliderChange(value: Array<Date>) {
         this.setState({selectedStartDate: value[0], selectedEndDate: value[1]});
 
         // URL Date Index if it Exists
@@ -235,7 +255,8 @@ class DetailContents extends Component {
         this.setState({openBoxAndWhiskerDialog: true})
     }
 
-    handleSelectedParameter(parameter) {
+    handleSelectedParameter(parameter: string) {
+        // $FlowFixMe
         let new_parameters = Object.assign([], this.state.selected_parameters);
         const idx = this.state.selected_parameters.indexOf(parameter);
         if (idx === -1) {

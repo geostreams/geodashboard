@@ -2,10 +2,10 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import ExploreAccordionSectionsComponent from '../components/ExploreAccordionSections';
-import { selectSensorDetail } from '../actions';
-import type { Dispatch } from '../utils/flowtype';
+import {selectSensorDetail} from '../actions';
+import type {Dispatch} from '../utils/flowtype';
 
 
 const mapStateToProps = (state) => {

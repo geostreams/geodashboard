@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import {combineReducers} from 'redux';
 import backends from './backends';
 import sensors from './sensors';
@@ -22,4 +26,4 @@ const geodashboardApp = combineReducers({
     parameters
 });
 
-export default geodashboardApp
+export default geodashboardApp;

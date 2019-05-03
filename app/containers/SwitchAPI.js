@@ -2,10 +2,10 @@
  * @flow
  */
 
-import { connect } from 'react-redux'
-import { switchBackend, fetchSensors } from '../actions'
-import SwitchAPIComponent from '../components/SwitchAPI'
-import type { Dispatch } from '../utils/flowtype'
+import {connect} from 'react-redux';
+import {switchBackend, fetchSensors} from '../actions';
+import SwitchAPIComponent from '../components/SwitchAPI';
+import type {Dispatch} from '../utils/flowtype';
 
 
 const mapStateToProps = (state) => {
@@ -16,9 +16,9 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch:Dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onBackendChange: (selected:string, title:string, subtitle:string) => {
+        onBackendChange: (selected: string, title: string, subtitle: string) => {
             dispatch(switchBackend(selected, title, subtitle));
             dispatch(fetchSensors(selected))
         }
@@ -27,4 +27,4 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
 
 const SwitchAPI = connect(mapStateToProps, mapDispatchToProps)(SwitchAPIComponent);
 
-export default SwitchAPI
+export default SwitchAPI;

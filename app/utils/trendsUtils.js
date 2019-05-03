@@ -4,7 +4,7 @@
 
 import {getTrendsRegionsSettings, getTrendRegions,} from '../utils/getConfig';
 import {pnpoly} from '../utils/arrayUtils';
-import type { Sensors, TrendsRegions } from '../utils/flowtype';
+import type {Sensors, TrendsRegions} from '../utils/flowtype';
 
 export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegions: Array<string>) {
     // Update each Region item
@@ -43,9 +43,19 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
                     popupContent: trendsPageRegionsSettings[i].properties.title.toString(),
                 },
                 type: "Feature",
-                region_trends: [],
-                trends_detail: [],
-                trends_deviation: []
+                region_trends: {
+                    lastaverage: 0,
+                    tenyearsaverage: 0,
+                    totalaverage: 0
+                },
+                trends_detail: {
+                    id: i,
+                    value: 0
+                },
+                trends_deviation: {
+                    id: i,
+                    value: 0
+                }
             };
 
         }
@@ -56,7 +66,7 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
 
 }
 
-export function filterPresetTrendLocation(region:string, origSensors: Sensors) {
+export function filterPresetTrendLocation(region: string, origSensors: Sensors) {
     let original_sensors = origSensors;
     let region_sensors = [];
 
@@ -69,7 +79,7 @@ export function filterPresetTrendLocation(region:string, origSensors: Sensors) {
     return region_sensors;
 }
 
-export function filterCustomTrendLocation(selectedPointsLocations:Array<string>, state: Object) {
+export function filterCustomTrendLocation(selectedPointsLocations: Array<string>, state: Object) {
     let original_sensors: Sensors = state.sensors;
     let filteredSensors = [];
 
@@ -88,7 +98,7 @@ export function filterCustomTrendLocation(selectedPointsLocations:Array<string>,
     return filteredSensors;
 }
 
-export function matchRegionTrends(selectedRegion:string, sensor: Object) {
+export function matchRegionTrends(selectedRegion: string, sensor: Object) {
 
     if (selectedRegion.toUpperCase() === sensor.properties.region.toUpperCase())
         return true;
@@ -106,14 +116,14 @@ export function matchRegionTrends(selectedRegion:string, sensor: Object) {
 
 }
 
-export function matchRegionAnalysis(selectedRegion:string, sensor: Object) {
+export function matchRegionAnalysis(selectedRegion: string, sensor: Object) {
 
     if (selectedRegion.toUpperCase() === sensor.properties.region) {
         return true;
     }
 
     let the_analysis_regions = getTrendRegions();
-    let customLocation = [];
+    let customLocation = {};
 
     if (the_analysis_regions) {
         the_analysis_regions.map(r => {
@@ -157,7 +167,7 @@ export function handleThresholdChangeNoChoice(
     for (let i = 0; i < trendsPageSettings.length; i++) {
         trendsCheckParameter = trendsPageSettings[i].parameter.id;
         if (trendsCheckParameter === parameter) {
-            trendsPageSettings[i].thresholds.map( t => {
+            trendsPageSettings[i].thresholds.map(t => {
                 if (t.region.toLowerCase() === region) {
                     trendsPageThreshold = t.value;
                 }
@@ -168,7 +178,7 @@ export function handleThresholdChangeNoChoice(
     return trendsPageThreshold;
 }
 
-export function getRegionalThreshold(selectedRegion:string, sensor: Object, parameter: string) {
+export function getRegionalThreshold(selectedRegion: string, sensor: Object, parameter: string) {
 
     function findRegion(location) {
         return location.properties.id === selectedRegion.toLowerCase();

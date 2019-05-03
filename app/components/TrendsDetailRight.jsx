@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from "react";
 import TrendsGraph from '../components/TrendsGraph';
 import Spinner from './Spinner';
@@ -7,7 +11,7 @@ import {getLoadingTimeLimit} from '../utils/getConfig';
 
 class TrendDetailRight extends Component {
 
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
         this.state = {
             selectedStartYear: 0,
@@ -16,8 +20,16 @@ class TrendDetailRight extends Component {
             data: {},
             loading_time: 0
         };
-        this.onSliderChange = this.onSliderChange.bind(this);
+        (this: any).onSliderChange = this.onSliderChange.bind(this);
     }
+
+    state: {
+        selectedStartYear: number,
+        selectedEndYear: number,
+        loading: boolean,
+        data: any,
+        loading_time: number
+    };
 
     loadDetailData() {
         this.props.fetchRegionDetailTrends(
@@ -64,6 +76,7 @@ class TrendDetailRight extends Component {
                 data: data,
             });
             let value = [this.state.selectedStartYear, this.state.selectedEndYear];
+            // $FlowFixMe
             this.onSliderChange(value)
         });
     }
@@ -84,7 +97,7 @@ class TrendDetailRight extends Component {
         };
     }
 
-    onSliderChange(value) {
+    onSliderChange(value: Object) {
         this.setState({selectedStartYear: value[0], selectedEndYear: value[1]})
     }
 

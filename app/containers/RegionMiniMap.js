@@ -2,7 +2,8 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+
+import {connect} from 'react-redux';
 import RegionMiniMapComponent from '../components/RegionMiniMap';
 
 const mapStateToProps = (state) => {

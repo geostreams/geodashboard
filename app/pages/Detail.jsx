@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Link} from 'react-router';
@@ -18,12 +22,19 @@ class Detail extends Component {
         super(props);
         this.state = {
             category_mappings: {},
-            sensor: [],
+            sensor: {},
             isPageReady: false,
             showError: false
         };
-        this.setUpCategoryMappings = this.setUpCategoryMappings.bind(this);
+        (this: any).setUpCategoryMappings = this.setUpCategoryMappings.bind(this);
     }
+
+    state: {
+        category_mappings: Object,
+        sensor: Object,
+        isPageReady: boolean,
+        showError: boolean
+    };
 
     componentWillMount() {
         this.setUpCategoryMappings(this.props);

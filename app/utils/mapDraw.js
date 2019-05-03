@@ -1,6 +1,10 @@
+/*
+ * @flow
+ */
+
 import ol from 'openlayers';
 
-export function drawHelper(copyOfMap, display_trends){
+export function drawHelper(copyOfMap: ol.Map, display_trends: boolean){
 
     let add_button = document.getElementById('addButton');
     if (add_button) {
@@ -143,7 +147,7 @@ export function drawHelper(copyOfMap, display_trends){
 }
 
 //TODO: this should be removed when all maps are using BasicMap
-export function centerHelper(view, vectorSource, theMap){
+export function centerHelper(view: ol.View, vectorSource: ol.Source, theMap: ol.Map){
     const centerButton = document.getElementById('centerButton');
     let handleCenterButton = function () {
         console.log(vectorSource);

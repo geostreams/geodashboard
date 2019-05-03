@@ -1,6 +1,11 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import styles from '../styles/detailTabs.css';
 import {Tabbar, Tab} from 'react-mdc-web';
+
 
 class DetailTabs extends Component {
     render() {
@@ -8,11 +13,12 @@ class DetailTabs extends Component {
         let tabs;
         const that = this;
         // TODO: If there is nothing, select the first tab
-        if(this.props.categories && Object.keys(this.props.categories).length > 0 ) {
+        if (this.props.categories && Object.keys(this.props.categories).length > 0) {
             tabs = Object.keys(this.props.categories).map(category => {
-                return ( <Tab active={that.props.selected === category} key={category} href={detail_link + '/' + category}>
-                    <span className={styles.tabTextStyle}>{category}</span>
-                </Tab>)
+                return (
+                    <Tab active={that.props.selected === category} key={category} href={detail_link + '/' + category}>
+                        <span className={styles.tabTextStyle}>{category}</span>
+                    </Tab>)
             });
         }
         let pageTabs = (

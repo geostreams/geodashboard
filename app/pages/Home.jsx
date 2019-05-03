@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import Menu from '../containers/MenuBar';
 import styles from '../styles/main.css';

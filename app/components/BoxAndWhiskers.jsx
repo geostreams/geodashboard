@@ -1,3 +1,5 @@
+/* No Flow due to D3 Items */
+
 import React, {Component} from "react";
 import D3BoxAndWhiskers from './D3/D3BoxAndWhiskers';
 import PropTypes from 'prop-types';

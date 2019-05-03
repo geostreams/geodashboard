@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import styles from '../styles/menuBar.css';
 import {Tabbar, Tab} from 'react-mdc-web';
@@ -13,16 +17,14 @@ class MenuBar extends Component {
     render() {
         let logo;
         try {
-            logo =
-                <div>
-                    <img className={styles.header_image} src={require("../../theme/logo.png")} />
-                </div>;
-        } catch(e) {}
+            // $FlowFixMe
+            logo = <div> <img className={styles.header_image} src={require("../../theme/logo.png")}/> </div>;
+        } catch (e) {}
 
         const applicationOptions = getApplicationOptions();
 
         const pageLinks = [];
-        applicationOptions.pages.map( page => {
+        applicationOptions.pages.map(page => {
             if (page.url) {
                 // If Explore Page and Mobile View Active, then replace V2 with V3 in the Menu Bar Link
                 if (page.url.includes('explore') && page.url.includes('geodashboard')
@@ -35,7 +37,7 @@ class MenuBar extends Component {
                         {page.name}
                     </Tab>
                 );
-            } else if (page.children){
+            } else if (page.children) {
                 let childPageLinks = <MenuDropdown key={page.name} pageName={page.name} pageChildren={page.children}/>;
                 pageLinks.push(childPageLinks);
             }
@@ -45,7 +47,7 @@ class MenuBar extends Component {
         if (getIEAlertMenuBarShow() === true) {
             let navUserAgent = navigator.userAgent.toLowerCase();
             let isIE = 'false';
-            if (navUserAgent.indexOf('msie') !== -1){
+            if (navUserAgent.indexOf('msie') !== -1) {
                 isIE = parseInt(navUserAgent.split('msie')[1]).toString();
                 if (getIEVersionsBeforeEleven().indexOf(isIE) !== -1) {
                     ie_error_text = <span className={styles.header_alert}>{getIEAlertHeader()}</span>
@@ -62,7 +64,7 @@ class MenuBar extends Component {
         return (
             <header>
                 <div className={styles.header_background}>
-                    <div className={styles.header_banner} >
+                    <div className={styles.header_banner}>
                         {logo}
                         <div className={styles.header_title}>
                             <p id="header-title-text" className={styles.header_title_text}>
@@ -75,7 +77,7 @@ class MenuBar extends Component {
                         </div>
                         <div className={styles.header_hr_div}>
                             {ie_error_text}
-                            <hr className={styles.header_hr} />
+                            <hr className={styles.header_hr}/>
                         </div>
                         <Tabbar className={styles.navbar} id="navigation">
                             {pageLinks}

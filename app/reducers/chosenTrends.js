@@ -194,6 +194,7 @@ const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrend
         case ADD_REGION_TRENDS:
 
             let temp_regions_object = [];
+            // $FlowFixMe
             let temp_trends_regions = Object.assign([], state.trends_regions);
             temp_trends_regions.map(region_sensor =>{
                 let region = action.regions_trends.filter((x) => x.region_id === region_sensor.name);

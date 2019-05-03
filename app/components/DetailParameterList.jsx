@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from "react";
 import {Checkbox, FormField, label} from 'react-mdc-web';
 import {handleParamsWithItalics} from "../utils/configUtils";
@@ -5,10 +9,12 @@ import {handleParamsWithItalics} from "../utils/configUtils";
 
 class DetailParameterList extends Component {
 
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
         this.state = {};
     }
+
+    state: {};
 
     render() {
         let parameter_list = [];

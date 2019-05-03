@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from "react";
 import styles from '../styles/slider.css';
 import 'rc-slider/assets/index.css';
@@ -6,14 +10,16 @@ let moment = require('moment');
 
 class DateSlider extends Component {
 
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
         this.state = {};
-        this.onSliderChange = this.onSliderChange.bind(this);
-        this.popupDateValue = this.popupDateValue.bind(this);
+        (this: any).onSliderChange = this.onSliderChange.bind(this);
+        (this: any).popupDateValue = this.popupDateValue.bind(this);
     }
 
-    onSliderChange(values) {
+    state: {};
+
+    onSliderChange(values: Array<mixed>) {
         // Use moment to get the date after x days, but send the date objects to the parent component.
         let start_moment = moment(this.props.start);
         let selected_start = start_moment.add(values[0], 'days').toDate();
@@ -25,7 +31,7 @@ class DateSlider extends Component {
         this.props.onSliderChange([selected_start, selected_end]);
     }
 
-    popupDateValue(value) {
+    popupDateValue(value: Array<mixed>) {
         let minDate = moment(this.props.start);
         return minDate.add(value, 'days').format("MM/DD/YYYY");
     }
@@ -49,17 +55,17 @@ class DateSlider extends Component {
         return (
 
             <div>
-            <span className={styles.start}>{selectedStartDate.format("MM/DD/YYYY")}</span>
-            <div className={styles.dateWrapper} >
-            <Range min={0} max={maxValue}
-                   defaultValue={[selected_start, selected_end]}
-                   allowCross={false}
-                   tipFormatter={value => this.popupDateValue(value)}
-                   onAfterChange={this.onSliderChange}
-            />
+                <span className={styles.start}>{selectedStartDate.format("MM/DD/YYYY")}</span>
+                <div className={styles.dateWrapper}>
+                    <Range min={0} max={maxValue}
+                           defaultValue={[selected_start, selected_end]}
+                           allowCross={false}
+                           tipFormatter={value => this.popupDateValue(value)}
+                           onAfterChange={this.onSliderChange}
+                    />
+                </div>
+                <span className={styles.end}>{selectedEndDate.format("MM/DD/YYYY")}</span> <br/>
             </div>
-            <span className={styles.end}>{selectedEndDate.format("MM/DD/YYYY")}</span> <br/>
-        </div>
         );
     }
 

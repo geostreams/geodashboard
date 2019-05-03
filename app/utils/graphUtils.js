@@ -1,3 +1,8 @@
+/*
+ * @flow
+ */
+
+
 // These calculations determine the X-Axis interval for the graphs
 export function getIntervalValue(num_years: number) {
     let interval_val = 5;

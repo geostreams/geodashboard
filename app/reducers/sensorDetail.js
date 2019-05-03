@@ -1,12 +1,21 @@
+/*
+ * @flow
+ */
+
 import {
     SELECT_SENSOR, RECEIVE_SENSOR, UPDATE_DETAIL, CLEAN_DETAIL
 } from '../actions';
 import {getProcessedProperty} from '../utils/getConfig';
+import type {sensorDetailState} from '../utils/flowtype';
 
-const defaultState = {id: null, datapoints: []};
 
-const sensorDetail = (state:backendsState = defaultState, action) => {
-    switch(action.type) {
+const defaultState = {
+    id: null,
+    datapoints: []
+};
+
+const sensorDetail = (state: sensorDetailState = defaultState, action: any) => {
+    switch (action.type) {
         case SELECT_SENSOR:
             return Object.assign({}, state, {
                 id: action.id,
@@ -41,7 +50,7 @@ const sensorDetail = (state:backendsState = defaultState, action) => {
     }
 };
 
-function groupBy(array, col,  col2, col3, value, processed) {
+function groupBy(array, col, col2, col3, value, processed) {
     let r = [], o = {};
     let copy_array = array;
     array.forEach(function (a) {
@@ -55,40 +64,40 @@ function groupBy(array, col,  col2, col3, value, processed) {
             const same_year_values = copy_array.filter(x => x[col] === a[col]);
             let count = 0;
             let values = 0;
-            same_year_values.forEach(function(x) {
+            same_year_values.forEach(function (x) {
                 count += x.count;
                 values += x.count * x.average;
             });
-            o[a[col]][value] = values/count;
+            o[a[col]][value] = values / count;
             r.push(o[a[col]]);
         }
     });
     return r;
 }
 
-function collect_data(data){
+function collect_data(data) {
     // Handle no return from API
-    if (data.length <=0) {
+    if (data.length <= 0) {
         return [];
     }
 
     let output = [];
-    for(let key in data.properties){
+    for (let key: any in data.properties) {
         output[key] = groupBy(data.properties[key], 'date', 'label', 'data', 'average', getProcessedProperty());
     }
     return output;
 }
 
-function  collect_sources(data) {
+function collect_sources(data) {
     let output = [];
-    for (let key in data.properties) {
-        let sources =[];
-        data.properties[key].forEach( x => {
-           x.sources.forEach(source => {
-               if(sources.indexOf(source) === -1) {
-                   sources.push(source);
-               }
-           })
+    for (let key: any in data.properties) {
+        let sources = [];
+        data.properties[key].forEach(x => {
+            x.sources.forEach(source => {
+                if (sources.indexOf(source) === -1) {
+                    sources.push(source);
+                }
+            })
         });
         output[key] = sources;
     }

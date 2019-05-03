@@ -155,7 +155,7 @@ function filterCustomLocation(state: sensorsState, selectedPointsLocations: Arra
 }
 
 export function collectParameters(sensorsData: Sensors, parameters: Parameters, multi_parameter_map: { [string]: Array<string> }): MapWithLabels {
-    let params: MapWithLabels = [];
+    let params = [];
     const alternateParameters = getAlternateParameters(multi_parameter_map);
     sensorsData.map(s => {
         s.parameters.map(p => {
@@ -200,6 +200,7 @@ export function collectRegions(sensorsData: Sensors) {
         if (region === null) {
             console.log(`Found sensor ${s.id} with null region`)
         } else if (found.length === 0) {
+            // $FlowFixMe
             regions.push(region);
         }
 
@@ -209,7 +210,7 @@ export function collectRegions(sensorsData: Sensors) {
 }
 
 export function collectSources(sensorsData: Sensors): MapWithLabels {
-    let sources: MapWithLabels = [];
+    let sources = [];
     sensorsData.map(s => {
         let source = s.properties.type;
         // check if source exists already
@@ -247,7 +248,7 @@ export function collectDates(sensorsData: Sensors): CollectDate {
 }
 
 export function collectLocations(sensorsData: Sensors): MapWithLabels {
-    const locations: MapWithLabels = [];
+    let locations = [];
     const additional_location = window.configruntime.gd3.additional_locations;
 
     sensorsData.map(s => {
@@ -266,7 +267,7 @@ export function collectLocations(sensorsData: Sensors): MapWithLabels {
         additional_location.map(customLocation => {
                 if (!locations.find(function (e) {
                     return e.id === customLocation.properties.id
-                }) && pnpoly(s.geometry.coordinates[1], s.geometry.coordinates[0],
+                }) && pnpoly(Number(s.geometry.coordinates[1]), Number(s.geometry.coordinates[0]),
                     customLocation.geometry.coordinates)) {
                     locations.push({'id': customLocation.properties.id, 'label': customLocation.properties.title})
                 }
@@ -414,7 +415,7 @@ function matchLocation(selectedLocation: string, sensor: Sensor) {
     const customLocation = window.configruntime.gd3.additional_locations.find(findLocation);
     if (!customLocation)
         return false;
-    return pnpoly(sensor.geometry.coordinates[1], sensor.geometry.coordinates[0], customLocation.geometry.coordinates)
+    return pnpoly(Number(sensor.geometry.coordinates[1]), Number(sensor.geometry.coordinates[0]), customLocation.geometry.coordinates)
 }
 
 export default sensors;

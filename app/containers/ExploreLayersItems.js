@@ -2,10 +2,10 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import ExploreLayersItemsComponent from '../components/ExploreLayersItems';
-import { updateLayer, setLayerOpacity } from '../actions';
-import type { Dispatch } from '../utils/flowtype';
+import {updateLayer, setLayerOpacity} from '../actions';
+import type {Dispatch} from '../utils/flowtype';
 
 const mapStateToProps = (state) => {
     return {

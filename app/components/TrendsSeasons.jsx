@@ -24,7 +24,7 @@ class TrendsSeasons extends Component {
         this.state = {
             chosenSeason: this.props.trends_defaults[1].value
         };
-        (this:any).handleSeasonChange = this.handleSeasonChange.bind(this);
+        (this: any).handleSeasonChange = this.handleSeasonChange.bind(this);
     }
 
     handleSeasonChange(event: InputEvent) {
@@ -46,7 +46,7 @@ class TrendsSeasons extends Component {
         trendsPageSeasons = trendsPageSeasons.concat(trendsPageSeasonsMap);
         if (trendsPageSeasonsMap.length === 0) {
             trendsPageSeasons = [<Radio id="9998" value="9998" key="9998"
-                                           disabled={true}> None Available </Radio>];
+                                        disabled={true}> None Available </Radio>];
         }
 
         return (

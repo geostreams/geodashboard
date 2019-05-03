@@ -1,8 +1,14 @@
+/*
+ * @flow
+ */
+
+import ol from 'openlayers';
+
 import {
     getApplicationWebsite, getColor, getMobileSizeMax, getMobileDetailPath, displayOnlineStatus, maxDisplayParams
 } from './getConfig';
 
-export function popupHeader(feature: ol.Feature, styles, online = false) {
+export function popupHeader(feature: ol.Feature, styles: Object, online: boolean = false) {
     let id = feature.getId().toUpperCase();
     let sensorInfo = feature.attributes;
 
@@ -56,7 +62,7 @@ export function popupHeader(feature: ol.Feature, styles, online = false) {
     return headerText + bodyText;
 }
 
-export function popupParameters(feature: ol.Feature, styles) {
+export function popupParameters(feature: ol.Feature, styles: Object) {
 
     let application_sensors_website = getApplicationWebsite();
     let detail_link = application_sensors_website + '#detail/location/';
@@ -114,7 +120,7 @@ export function popupParameters(feature: ol.Feature, styles) {
     return bodyText;
 }
 
-export function popupAnalysis(feature: ol.Feature, styles) {
+export function popupAnalysis(feature: ol.Feature, styles: Object) {
 
     let application_sensors_website = getApplicationWebsite();
     let sensorInfo = feature.attributes;
@@ -177,7 +183,7 @@ export function popupAnalysis(feature: ol.Feature, styles) {
 
 }
 
-export function popupTrends(feature: ol.Feature, styles) {
+export function popupTrends(feature: ol.Feature, styles: Object) {
 
     let application_sensors_website = getApplicationWebsite();
     let sensorInfo = feature.attributes;
@@ -242,7 +248,7 @@ export function popupTrends(feature: ol.Feature, styles) {
 
 }
 
-export function popupRegion(feature: ol.Feature, styles) {
+export function popupRegion(feature: ol.Feature, styles: Object) {
 
     let id = feature.getId().toUpperCase();
     let sensorInfo = feature.attributes;
@@ -310,7 +316,7 @@ export function popupRegion(feature: ol.Feature, styles) {
     return headerText + regionText;
 }
 
-export function removePopup(theMap) {
+export function removePopup(theMap: ol.Map) {
     const closer = document.getElementById('popup-closer');
     if (closer) {
         theMap.getOverlayById("marker").setPosition(undefined);

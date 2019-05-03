@@ -2,10 +2,10 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrendsParametersComponent from '../components/TrendsParameters';
-import { selectTrendsParameter, selectAnalysisParameter } from '../actions';
-import type { Dispatch } from '../utils/flowtype';
+import {selectTrendsParameter, selectAnalysisParameter} from '../actions';
+import type {Dispatch} from '../utils/flowtype';
 
 
 const mapStateToProps = (state) => {
@@ -16,7 +16,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSelectTrendsParameter:(parameter, threshold_choice, view_type) => {
+        onSelectTrendsParameter: (parameter, threshold_choice, view_type) => {
             if (view_type === 'by-analysis') {
                 dispatch(selectAnalysisParameter(parameter, threshold_choice, view_type));
             }

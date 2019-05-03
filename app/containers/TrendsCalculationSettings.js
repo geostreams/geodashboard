@@ -2,10 +2,10 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrendsCalculationSettingsComponent from '../components/TrendsCalculationSettings';
-import { selectTrendsCalcBaselineSetting, selectTrendsCalcRollingSetting } from '../actions';
-import type { Dispatch } from '../utils/flowtype';
+import {selectTrendsCalcBaselineSetting, selectTrendsCalcRollingSetting} from '../actions';
+import type {Dispatch} from '../utils/flowtype';
 
 
 const mapStateToProps = (state) => {
@@ -17,10 +17,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSelectTrendsCalcBaselineSetting:(baseline_total_year) => {
+        onSelectTrendsCalcBaselineSetting: (baseline_total_year) => {
             dispatch(selectTrendsCalcBaselineSetting(baseline_total_year));
         },
-        onSelectTrendsCalcRollingSetting:(rolling_interval) => {
+        onSelectTrendsCalcRollingSetting: (rolling_interval) => {
             dispatch(selectTrendsCalcRollingSetting(rolling_interval));
         }
     }

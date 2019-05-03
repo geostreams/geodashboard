@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import ol from 'openlayers';
 import {
     getSourceName, getCustomTrendsRegion,
@@ -6,6 +10,7 @@ import {
     getMobileSizeMax, getMobileSourceNames, getClustersDistance
 } from './getConfig';
 import {matchRegionTrends, getRegionalThreshold} from '../utils/trendsUtils';
+import type {Parameters, Parameter, Sensors} from '../utils/flowtype';
 
 
 export function sensorsToFeatures(sensors: Sensors, parameters: Parameters): Array<ol.Feature> {
@@ -65,8 +70,8 @@ export function sensorsToFeatures(sensors: Sensors, parameters: Parameters): Arr
 }
 
 export function sensorsToFeaturesTrendPage(
-    sensors: Sensors, parameter: string, trends_parameter_lake_regions: Array,
-    parameters: Parameters): Array<ol.Feature> {
+    sensors: Sensors, parameter: string, trends_parameter_lake_regions: Array<string>,
+    parameters: Array<any>): Array<ol.Feature> {
 
     let features = Array();
 
@@ -80,7 +85,11 @@ export function sensorsToFeaturesTrendPage(
     let trends_lake_regions = [];
     trends_lake_regions_config.map(p => trends_lake_regions = p.regions.split(','));
     let the_parameter = '';
-    sensors.map((sensor) => {
+    sensors.map((sensor: any) => {
+
+        the_parameter = parameters.find(x => x.name === parameter);
+        const units = the_parameter !== undefined ? the_parameter.unit : '';
+        const param_title = the_parameter !== undefined ? the_parameter.title : '';
 
         if (sensor.name && sensor.name !== 'ALL') {
 
@@ -151,8 +160,9 @@ export function sensorsToFeaturesTrendPage(
                             trend_type = "noTrend";
                         }
                     }
-                    the_parameter = parameters.find(x => x.name === parameter);
-                    const units = the_parameter.unit;
+                    // the_parameter = parameters.find(x => x.name === parameter);
+                    // const units = the_parameter !== undefined ? the_parameter.unit : '';
+                    // const param_title = the_parameter !== undefined ? the_parameter.title : '';
 
                     trend_values = [
                         (Number(sensor.trends["total_average"]).toFixed(2) + ' ' + units),
@@ -239,7 +249,7 @@ export function sensorsToFeaturesTrendPage(
                 "display_trends": true,
                 "trends_detail": true,
                 "region": getCustomTrendsRegion(sensor.properties.region),
-                "trend_parameter": the_parameter.title
+                "trend_parameter": param_title
             };
 
             feature.setId(sensor.properties.popupContent);
@@ -252,7 +262,7 @@ export function sensorsToFeaturesTrendPage(
 
 export function sensorsToFeaturesTrendRegionPage(
     sensors: Sensors, parameter: string, season: string,
-    trends_parameter_lake_regions: Array, parameters: Parameter): Array<ol.Feature> {
+    trends_parameter_lake_regions: Array<string>, parameters: Array<Object>): Array<ol.Feature> {
 
     let features = Array();
 
@@ -266,7 +276,7 @@ export function sensorsToFeaturesTrendRegionPage(
     let trends_lake_regions = [];
     trends_lake_regions_config.map(p => trends_lake_regions = p.regions.split(','));
     const the_parameter = parameters.find(x => x.name === parameter);
-    sensors.map((sensor) => {
+    sensors.map((sensor: any) => {
 
         if (sensor.name !== 'ALL') {
 
@@ -281,7 +291,6 @@ export function sensorsToFeaturesTrendRegionPage(
             let threshold = 'n/a';
 
             if (sensor.hasOwnProperty("region_trends")) {
-
                 let ten_years_average = sensor.region_trends["tenyearsaverage"];
                 let total_average = sensor.region_trends["totalaverage"];
                 let last_average = sensor.region_trends["lastaverage"];
@@ -434,7 +443,7 @@ export function sensorsToFeaturesAnalysisPage(
     sensors: Sensors, parameter: string, threshold: string, parameters: Parameters): Array<ol.Feature> {
     let features = Array();
 
-    sensors.map((sensor) => {
+    sensors.map((sensor: any) => {
 
         if (sensor.name && sensor.name !== 'ALL') {
 
@@ -485,7 +494,7 @@ export function sensorsToFeaturesAnalysisPage(
                     }
 
                     const the_parameter = parameters.find(x => x.name === parameter);
-                    const units = the_parameter.unit;
+                    const units = the_parameter !== undefined ? the_parameter.unit : '';
 
                     trend_values = [
                         (Number(sensor.trends["total_average"]).toFixed(2) + ' ' + units),
@@ -584,7 +593,7 @@ export function sensorsToFeaturesAnalysisPage(
     return features;
 }
 
-export function popupHelperTrendDetailPage(feature: ol.Feature, styles) {
+export function popupHelperTrendDetailPage(feature: ol.Feature, styles: any) {
 
     let id = feature.getId().toUpperCase();
     let sourceColor = feature.attributes.color;
@@ -623,7 +632,7 @@ export function sensorsToFeaturesTrendDetailPage(
 
 }
 
-export function generatePointsCircle(count: number, centerPixel) {
+export function generatePointsCircle(count: number, centerPixel: Array<number>) {
     // Generate points within a circle where the markers will be displayed.
     let separation = 20;
     if (screen.width <= getMobileSizeMax()) {
@@ -645,7 +654,7 @@ export function generatePointsCircle(count: number, centerPixel) {
     return res;
 }
 
-export function getMultiLineLayer(featuresAtPixel: ol.features, theMap) {
+export function getMultiLineLayer(featuresAtPixel: ol.features, theMap: ol.Map) {
     // Expand features if they are not expanded
     const feature0 = featuresAtPixel.get('features')[0];
     const geometry = feature0.getGeometry();
@@ -769,7 +778,7 @@ export function getMiniControls() {
     })
 }
 
-export function clusteringOptions(theMap, disable_clusters) {
+export function clusteringOptions(theMap: ol.Map, disable_clusters: boolean) {
     let clusterDistance = disable_clusters ? 0 : getClustersDistance();
     let all_map_layers = theMap.getLayers().getArray().slice();
     all_map_layers.map(map_layer => {

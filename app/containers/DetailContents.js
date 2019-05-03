@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import {connect} from "react-redux";
 import DetailContentsComponent from "../components/DetailContents";
 import {fetchSensorMobile, fetchSensor} from "../actions";

@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import {Row, Col} from 'react-flexbox-grid';
 import {
@@ -11,12 +15,16 @@ import LineNoData from './LineNoData';
 
 
 class Chart extends Component {
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
         this.state = {
             openInfoButton: false
         };
     }
+
+    state: {
+        openInfoButton: boolean
+    };
 
     render() {
 

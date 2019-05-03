@@ -1,4 +1,8 @@
-export function inArray(array1, array2) {
+/*
+ * @flow
+ */
+
+export function inArray(array1: Array<string>, array2: Array<string>) {
     if (array1.length > 0 && array2.length > 0) {
         for (let i = 0; i < array1.length; i++) {
             if (array2.indexOf(array1[i]) > -1) {
@@ -9,7 +13,7 @@ export function inArray(array1, array2) {
     return false;
 }
 
-export function intersectArrays(array1, array2) {
+export function intersectArrays(array1: any, array2: any) {
     let t;
     if (array2.length > array1.length) {
         t = array2, array2 = array1, array1 = t; //Swap array's so 1 is shorter than2
@@ -19,7 +23,7 @@ export function intersectArrays(array1, array2) {
     });
 }
 
-export function sortByLabel(list) {
+export function sortByLabel(list: any) {
     list.sort(function (a, b) {
         const labelA = a.label.toUpperCase();
         const labelB = b.label.toUpperCase();
@@ -55,7 +59,7 @@ function sortWithOrder(order, key, list) {
     return list
 }
 
-export function sortBySource(list, order) {
+export function sortBySource(list: any, order: any) {
     if (Object.keys(order).length > 0) {
         list = sortWithOrder(order, "id", list);
     } else {
@@ -64,7 +68,7 @@ export function sortBySource(list, order) {
     return list;
 }
 
-export function sortByRegion(list, order) {
+export function sortByRegion(list: Array<Object>, order: Object) {
     if (Object.keys(order).length > 0) {
         list = sortWithOrder(order, null, list);
     } else {
@@ -74,14 +78,14 @@ export function sortByRegion(list, order) {
 
 }
 
-export function sortByLake(list, order) {
+export function sortByLake(list: any, order: any) {
     return sortWithOrder(order, "label", list);
 }
 
 // Point in Polygon. same function from geodashboard
 // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html#Listing the Vertices
 
-export function pnpoly(x, y, coords) {
+export function pnpoly(x: any, y: number, coords: Object) {
     let vert = [[0, 0]];
 
     for (let i = 0; i < coords.length; i++) {
@@ -115,7 +119,7 @@ export function serialize(obj: Object): string {
     return str.join("&");
 }
 
-export function sortSitesNumerically(source_data) {
+export function sortSitesNumerically(source_data: Object) {
     // If the Name is a Number, then sort numerically instead of alphabetically
     if (source_data.length > 0 && !isNaN(source_data[0].name)) {
         source_data.sort(function (x, y) {

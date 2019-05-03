@@ -2,11 +2,13 @@
  * @flow
  */
 
-import { connect } from 'react-redux'
-import FilterSelectionComponent from '../components/FilterSelection'
-import { addSearchParameter, addSearchDataSource, addStartDate, addEndDate,
-    addSearchLocation, addFilter, deleteFilter, changeFilter } from '../actions'
-import type { Dispatch } from '../utils/flowtype'
+import {connect} from 'react-redux';
+import FilterSelectionComponent from '../components/FilterSelection';
+import {
+    addSearchParameter, addSearchDataSource, addStartDate, addEndDate,
+    addSearchLocation, addFilter, deleteFilter, changeFilter
+} from '../actions';
+import type {Dispatch} from '../utils/flowtype';
 
 const mapStateToProps = (state) => {
     return {
@@ -15,14 +17,14 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch:Dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         onClearFilter: (clearSelectedParameters, clearSelectedDataSources) => {
-            if(clearSelectedParameters) {
+            if (clearSelectedParameters) {
                 const selectedParameters = [];
                 dispatch(addSearchParameter(selectedParameters));
             }
-            if(clearSelectedDataSources) {
+            if (clearSelectedDataSources) {
                 const selectedDataSources = [];
                 dispatch(addSearchDataSource(selectedDataSources));
             }
@@ -32,7 +34,7 @@ const mapDispatchToProps = (dispatch:Dispatch) => {
             dispatch(addStartDate(null));
             dispatch(addEndDate(null));
         },
-        onClearLocation:() =>{
+        onClearLocation: () => {
             dispatch(addSearchLocation(null));
         },
         onAddFilter: (selectedFilter) => {

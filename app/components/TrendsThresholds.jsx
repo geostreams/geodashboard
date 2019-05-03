@@ -28,7 +28,7 @@ class TrendsThresholds extends Component {
             thresholdMin: this.props.trends_defaults[4].value,
             thresholdMax: this.props.trends_defaults[5].value
         };
-        (this:any).handleThresholdChooseValue = this.handleThresholdChooseValue.bind(this);
+        (this: any).handleThresholdChooseValue = this.handleThresholdChooseValue.bind(this);
     }
 
     handleThresholdChooseValue(event: Object) {

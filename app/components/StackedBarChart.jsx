@@ -1,3 +1,8 @@
+/*
+ * @flow
+ */
+
+
 import React, {Component} from 'react';
 import Spinner from './Spinner';
 import StackedBar from './StackedBar';
@@ -12,21 +17,23 @@ class StackedBarChart extends Component {
     }
 
     render() {
-        if(Object.keys(this.props.sensorData).length === 0) {
+        if (Object.keys(this.props.sensorData).length === 0) {
             return (
                 <Spinner/>
             )
         }
-        const {sensor, sensorData, selected_parameters, num_years, category_parameters, filterBySeason,
-        selectedSeason, selectedStartDate, selectedEndDate} = this.props;
-        let charts=[];
+        const {
+            sensor, sensorData, selected_parameters, num_years, category_parameters, filterBySeason,
+            selectedSeason, selectedStartDate, selectedEndDate
+        } = this.props;
+        let charts = [];
 
-        if(sensor) {
+        if (sensor) {
             selected_parameters.map(parameter_id => {
                 const parameter = category_parameters.find(x => x.name === parameter_id);
-                let sensor_data =  sensorData[parameter_id];
-                let values=[];
-                if(sensor_data !== undefined) {
+                let sensor_data = sensorData[parameter_id];
+                let values = [];
+                if (sensor_data !== undefined) {
 
                     let selected_season;
                     if (filterBySeason) {

@@ -2,10 +2,10 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrendsThresholdsComponent from '../components/TrendsThresholds';
-import { selectTrendsThreshold } from '../actions';
-import type { Dispatch } from '../utils/flowtype';
+import {selectTrendsThreshold} from '../actions';
+import type {Dispatch} from '../utils/flowtype';
 
 const mapStateToProps = (state) => {
     return {
@@ -16,7 +16,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSelectTrendsThreshold:(threshold) => {
+        onSelectTrendsThreshold: (threshold) => {
             dispatch(selectTrendsThreshold(threshold));
         }
     }

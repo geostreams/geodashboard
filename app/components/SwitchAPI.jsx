@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import styles from '../styles/main.css';
 import Select from './material/Select';
@@ -5,11 +9,11 @@ import {getErrorText} from '../utils/getConfig';
 
 class SwitchAPI extends Component {
 
-	handleChange = (e) => {
+    handleChange = (e: Object) => {
         const index = e.target.selectedIndex;
-		this.props.onBackendChange(this.props.endpoints[index].url, this.props.endpoints[index].title,
-			this.props.endpoints[index].subtitle);
-	};
+        this.props.onBackendChange(this.props.endpoints[index].url, this.props.endpoints[index].title,
+            this.props.endpoints[index].subtitle);
+    };
 
     render() {
 
@@ -32,4 +36,4 @@ class SwitchAPI extends Component {
     }
 }
 
-export default SwitchAPI
+export default SwitchAPI;

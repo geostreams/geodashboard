@@ -68,32 +68,32 @@ class SearchMap extends Component {
                 return featureChange;
             });
 
-            // If a cluster is expanded we want to close it, unless there was a click in one of the features that is expanded
-            let closeClusters = true;
-            if (featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type === "single"))) {
-                // Case when a feature is expanded
-                that.popupHandleHelper(featuresAtPixel, e.coordinate, overlay);
-                closeClusters = false;
-            } else if (featuresAtPixel && featuresAtPixel.get('features') !== undefined && featuresAtPixel.get('features').length === 1) {
-                // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
-                const feature = featuresAtPixel.get('features')[0];
-                that.popupHandleHelper(feature, e.coordinate, overlay);
-            } else if (featuresAtPixel && featuresAtPixel.get('features') !== undefined && featuresAtPixel.get('features').length > 1) {
-                // Case when a clustered was click. If it has more than 4 features and is in a zoom level lower than maxZoom, zoom in
-                // if(featuresAtPixel.get('features').length > 4 && theMap.getView().getZoom() < that.state.maxZoom) {
-                //     theMap.getView().setZoom(theMap.getView().getZoom() + 1);
-                //     theMap.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
-                // } else {
-                if (that.state.expandedCluster) {
-                    that.removeSpiderfiedClusterLayers(theMap);
-                }
-                that.displayOverlappingMarkers(featuresAtPixel, theMap, that);
-                closeClusters = false;
+        // If a cluster is expanded we want to close it, unless there was a click in one of the features that is expanded
+        let closeClusters = true;
+        if (featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type === "single"))) {
+            // Case when a feature is expanded
+            that.popupHandleHelper(featuresAtPixel, e.coordinate, overlay);
+            closeClusters = false;
+        } else if (featuresAtPixel && featuresAtPixel.get('features') !== undefined && featuresAtPixel.get('features').length === 1) {
+            // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
+            const feature = featuresAtPixel.get('features')[0];
+            that.popupHandleHelper(feature, e.coordinate, overlay);
+        } else if (featuresAtPixel && featuresAtPixel.get('features') !== undefined && featuresAtPixel.get('features').length > 1) {
+            // Case when a clustered was click. If it has more than 4 features and is in a zoom level lower than maxZoom, zoom in
+            // if(featuresAtPixel.get('features').length > 4 && theMap.getView().getZoom() < that.state.maxZoom) {
+            //     theMap.getView().setZoom(theMap.getView().getZoom() + 1);
+            //     theMap.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
+            // } else {
+            if (that.state.expandedCluster) {
+                that.removeSpiderfiedClusterLayers(theMap);
+            }
+            that.displayOverlappingMarkers(featuresAtPixel, theMap, that);
+            closeClusters = false;
 
-                // }
+            // }
 
-            } else {
-                removePopup(theMap)
+        } else {
+            removePopup(theMap)
 
             }
             if (closeClusters && that.state.expandedCluster) {

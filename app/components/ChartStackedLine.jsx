@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import React, {Component} from 'react';
 import {Subheading2} from 'react-mdc-web';
 import {Row, Col} from 'react-flexbox-grid';
@@ -9,12 +13,16 @@ import {handleParamsWithItalics} from "../utils/configUtils";
 
 
 class ChartStackedLine extends Component {
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
         this.state = {
             openInfoButton: false
         };
     }
+
+    state: {
+        openInfoButton: boolean
+    };
 
     render() {
 
@@ -73,7 +81,7 @@ class ChartStackedLine extends Component {
                                    paramValues={BAWValues}
                                    paramColor={param_color}/>
                 );
-                title_param_name = param_name + ' | ';
+                title_param_name = param_name.toString() + ' | ';
                 chartTitle = chartTitle
                     .concat(<span key={param_name} style={{'color': param_color}}>{param_name}</span>)
                     .concat(" | ");

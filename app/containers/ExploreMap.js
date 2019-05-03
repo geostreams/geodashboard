@@ -2,7 +2,7 @@
  * @flow
  */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import ExploreMapComponent from '../components/ExploreMap';
 import type {Dispatch} from "../utils/flowtype";
 import {resetDetailPage, resetExploreSensors, initializeExploreDataSources} from "../actions";
@@ -17,7 +17,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch:Dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         resetDetailPageSelection: () => {
             dispatch(resetDetailPage());

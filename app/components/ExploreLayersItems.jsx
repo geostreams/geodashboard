@@ -12,9 +12,9 @@ class ExploreLayersItems extends Component {
 
     constructor(props: Object) {
         super(props);
-        (this:any).selectLayers = this.selectLayers.bind(this);
-        (this:any).handleOpacityChange = this.handleOpacityChange.bind(this);
-        (this:any).selectGroupLayers = this.selectGroupLayers.bind(this);
+        (this: any).selectLayers = this.selectLayers.bind(this);
+        (this: any).handleOpacityChange = this.handleOpacityChange.bind(this);
+        (this: any).selectGroupLayers = this.selectGroupLayers.bind(this);
     }
 
     selectLayers(event: InputEvent) {
@@ -27,7 +27,7 @@ class ExploreLayersItems extends Component {
         let index = this.props.layersVisibility.findIndex(
             (selectedLayer => selectedLayer.title === name));
 
-        if (checked){
+        if (checked) {
             if (index > -1) {
                 layersVisibility[index].visibility = true;
             } else {
@@ -118,10 +118,10 @@ class ExploreLayersItems extends Component {
             this.props.layersVisibility.filter(layer => layer.layerGroup === group).map(layerInGroup => {
                 layersInformation =
                     <ExploreLayersDetails key={layerInGroup.title}
-                        availableLayer={layerInGroup}
-                        layersVisibility={this.props.layersVisibility}
-                        selectLayers={this.selectLayers}
-                        handleOpacityChange={this.handleOpacityChange}
+                                          availableLayer={layerInGroup}
+                                          layersVisibility={this.props.layersVisibility}
+                                          selectLayers={this.selectLayers}
+                                          handleOpacityChange={this.handleOpacityChange}
                     />;
                 layersInGroup.push(layersInformation);
             });

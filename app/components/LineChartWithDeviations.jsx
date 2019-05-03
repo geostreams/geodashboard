@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
-import {Xaxis, Yaxis, Chart, Svg} from 'react-d3-core';
+/* No Flow due to D3 Items */
 
+import React, { Component } from 'react';
+import { Xaxis, Yaxis, Chart, Svg } from 'react-d3-core';
 const d3 = require('d3');
 
 

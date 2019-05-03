@@ -19,7 +19,7 @@ class TrendsSubmitButton extends Component {
         this.state = {
             showResults: false
         };
-        (this:any).handleClickAnalysis = this.handleClickAnalysis.bind(this);
+        (this: any).handleClickAnalysis = this.handleClickAnalysis.bind(this);
     }
 
     handleClickAnalysis() {
@@ -51,8 +51,7 @@ class TrendsSubmitButton extends Component {
             isNaN(this.props.baselinePeriod) || isNaN(this.props.rollingPeriod) ||
             this.props.thresholdChooseValue === 'none' ||
             this.props.thresholdChooseValue === undefined ||
-            isNaN(this.props.thresholdChooseValue) )
-        {
+            isNaN(this.props.thresholdChooseValue)) {
             submit_button =
                 (<Button disabled raised className={trendsStyles.submitButtonStyle}
                          onClick={this.handleClickAnalysis}> Apply Settings </Button>);
