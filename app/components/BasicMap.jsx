@@ -18,7 +18,7 @@ require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web';
 import type {MapProps, BasicMapState} from '../utils/flowtype';
-import {getMapTileURLSetting, getClustersDistance, maxZoom} from '../utils/getConfig';
+import {getMapTileURLSetting, getClustersDistance, maxZoom, minZoom, mapCenter} from '../utils/getConfig';
 import {clusteringOptions, getAttribution, getControls} from '../utils/mapUtils';
 import {removePopup} from '../utils/mapPopup';
 
@@ -39,7 +39,7 @@ class BasicMap extends Component {
     constructor(props: MapProps) {
         super(props);
         this.state = {
-            center: [-84.44799549, 38.9203417],
+            center: mapCenter(),
             vectorSource: new ol.source.Vector(),
             clusterSource: new ol.source.Cluster({distance: 1, source: new ol.source.Vector()}),
             customLocationFilterVectorExtent: [],
@@ -204,7 +204,7 @@ class BasicMap extends Component {
             projection: 'EPSG:3857',
             center: ol.proj.fromLonLat(this.state.center),
             zoom: this.state.currentZoom,
-            minZoom: 5.5,
+            minZoom: minZoom(),
             maxZoom: this.state.maxZoom
         });
 

@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-525](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-525)
 - Sensor Popups are removed if the Map is Panned by the User
   [GLGVO-524](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-524)
+- Explore Map Zoom Issues with Layers Corrected
+  [GEOD-1216](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1216)
 
 ## [3.0.0-beta.2]
 

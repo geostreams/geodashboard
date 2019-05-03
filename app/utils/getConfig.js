@@ -514,6 +514,30 @@ export function maxZoom() {
     return maxValue;
 }
 
+export function minZoom() {
+    let minValue = 5.5;
+    if (window.configruntime.gd3.mapMinZoom) {
+        minValue = window.configruntime.gd3.mapMinZoom;
+    }
+    return minValue;
+}
+
+export function mapMiniMinZoom() {
+    let mapMiniMinZoom = 3;
+    if (window.configruntime.gd3.mapMiniMinZoom) {
+        mapMiniMinZoom = window.configruntime.gd3.mapMiniMinZoom;
+    }
+    return mapMiniMinZoom;
+}
+
+export function mapCenter() {
+    let mapCenterValue = [-84.44799549, 38.9203417];
+    if (window.configruntime.gd3.mapCenterValue) {
+        mapCenterValue = window.configruntime.gd3.mapCenterValue;
+    }
+    return mapCenterValue;
+}
+
 export function startExploreSourcesOpened() {
     let getValue = false;
     if (window.configruntime.gd3.start_explore_each_source_open) {

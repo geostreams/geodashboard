@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ol from 'openlayers';
 
 require("openlayers/css/ol.css");
-import {getColor, getMapTileURLSetting} from '../utils/getConfig';
+import {getColor, getMapTileURLSetting, mapMiniMinZoom} from '../utils/getConfig';
 import {getAttribution, getMiniControls} from '../utils/mapUtils';
 
 class MiniMap extends Component {
@@ -77,11 +77,13 @@ class MiniMap extends Component {
             layers: layers,
             view: new ol.View({
                 projection: 'EPSG:3857',
-                center: ol.proj.fromLonLat(center),
-                zoom: 5
+                center: ol.proj.fromLonLat(this.props.center),
+                zoom: 5,
+                minZoom: mapMiniMinZoom()
             }),
             controls: getMiniControls()
         });
+
     }
 }
 
