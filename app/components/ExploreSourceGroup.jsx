@@ -4,7 +4,7 @@
 
 import React, {Component} from 'react'
 import exploreStyles from '../styles/explore.css';
-import {Card, CardTitle, CardHeader, CardText, Icon} from 'react-mdc-web';
+import {Card, CardTitle, CardHeader, CardText, Icon} from 'react-mdc-web/lib';
 import {getColor, startExploreSourcesOpened} from '../utils/getConfig';
 
 

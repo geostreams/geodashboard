@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import {Row, Col} from 'react-flexbox-grid';
 import {
     Card, CardHeader, CardTitle, CardText, CardMedia, Icon
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import styles from "../styles/detail.css";
 import mainStyles from '../styles/main.css'
 import BoxAndWhiskers from '../components/BoxAndWhiskers';

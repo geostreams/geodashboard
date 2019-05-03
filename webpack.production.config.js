@@ -1,10 +1,10 @@
-var webpack = require("webpack");
-var HtmlWebpackPlugin = require("html-webpack-plugin");
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var path = require("path");
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require("path");
 
 module.exports = {
-  entry: "./main.jsx",
+  entry: ["./main.jsx"],
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js"
@@ -13,50 +13,62 @@ module.exports = {
     './config': "config"
   },
   resolve: {
-    extensions: ["", ".js", ".jsx"]
+    extensions: ["*", ".js", ".jsx"]
   },
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.json$/,
-        loader: "json"
-      },
-      {
-        test: /\.jsx?$/,
+        test: /\.(js|jsx?)$/,
+        // test: /\.m?js$/,
         exclude: /node_modules/,
-        loader: 'babel'
-
+        use: {
+          loader: 'babel-loader'
+        }
       },
       {
-          test: /\.css$/,
-          include:  [/node_modules/, /styles_custom/],
-          loader: 'style-loader!css-loader'
+        test: /\.css$/,
+        include: [/node_modules/, /styles_custom/],
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.css$/,
         exclude: [/node_modules/, /styles_custom/],
-        loader: 'style-loader!css-loader?modules'
+        use: ['style-loader', 'css-loader?modules']
       },
-      { test: /\.(png|jpg)$/,
-        loader: 'url-loader?limit=8192'
+      {
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192
+            }
+          }
+        ]
       }
     ]
   },
-  postcss: [
-    require('autoprefixer')
-  ],
+  resolve: {
+    extensions: ['*', '.js', '.jsx']
+  },
   plugins: [
     new webpack.DefinePlugin({
       VERSION: JSON.stringify("0.1-prod"),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin(),
-    new HtmlWebpackPlugin({title: 'Geodashboard', hash: true, template: 'public/index.html'}),
+    new HtmlWebpackPlugin({
+      title: 'Geodashboard',
+      template: './public/index.html',
+      inject: true,
+      hash: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: false
+      }
+    }),
     new CopyWebpackPlugin([{
         from: 'config.js',
         transform: function(content, absoluteFrom) {
-            // return content.replace("export const ", "window.config.");
             return content.toString().replace("export const gd3 = ", "window.config = {\n    gd3:") + "}"
         }
     }])

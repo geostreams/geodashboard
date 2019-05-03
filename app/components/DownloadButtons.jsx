@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
     Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon, Menu, MenuItem, MenuAnchor
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import {getCustomLocation, getDownloadButtonPath} from '../utils/getConfig';
 import {intersectArrays, serialize} from '../utils/arrayUtils';
 import styles from '../styles/downloadButton.css';

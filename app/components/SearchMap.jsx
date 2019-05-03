@@ -7,7 +7,7 @@ import ol from 'openlayers';
 
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
-import {Icon} from 'react-mdc-web';
+import {Icon} from 'react-mdc-web/lib';
 import {getCustomLocation, getMobileSizeMax} from '../utils/getConfig';
 import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
 import {drawHelper} from '../utils/mapDraw';

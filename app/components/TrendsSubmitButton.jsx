@@ -5,7 +5,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
-import {Button} from 'react-mdc-web';
+import {Button} from 'react-mdc-web/lib';
 
 
 class TrendsSubmitButton extends Component {

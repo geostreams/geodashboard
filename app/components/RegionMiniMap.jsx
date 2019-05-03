@@ -13,7 +13,7 @@ import {
     Card, CardHeader, CardTitle, CardMedia,
     Dialog, DialogBody, DialogHeader, DialogTitle,
     List, ListItem, Icon
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import styles from '../styles/regionMiniMap.css';
 import {getTrendColor, getCustomLocation, getMapTileURLSetting, maxZoom} from '../utils/getConfig';
 import {

@@ -5,7 +5,7 @@
 import React, {Component} from 'react'
 import styles from '../styles/main.css';
 import exploreStyles from '../styles/explore.css';
-import {Button, Icon, List, ListHeader, ListGroup} from 'react-mdc-web';
+import {Button, Icon, List, ListHeader, ListGroup} from 'react-mdc-web/lib';
 import {
     getMobileSourceNames, getMobileSizeMax, getMobileDetailPath, getRegionToTitleMap,
     getMobileFilterSensors, getSourceInfo, getShowSourceInfoBoxes, getExploreSourcesOpen

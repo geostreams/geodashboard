@@ -13,7 +13,7 @@ import FilterSelection from '../containers/FilterSelection';
 import {
     Card, CardText, CardMedia, Cell, Checkbox, Content,
     FormField, Grid, List, Radio, RadioGroup, Tab, Tabbar
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import {clustersChoiceOption, getMobileSizeMax} from '../utils/getConfig';
 import MapToggleClusters from "../components/MapToggleClusters";
 import {generateMobilePageTabs} from '../utils/mobileUtils';

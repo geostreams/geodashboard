@@ -4,8 +4,8 @@
 
 import React, {Component} from 'react';
 import rd3 from 'react-d3';
-import {Row, Col} from 'react-flexbox-grid';
-import {Card, CardHeader, CardTitle} from 'react-mdc-web';
+import { Row, Col } from 'react-flexbox-grid';
+import {Card, CardHeader, CardTitle} from 'react-mdc-web/lib';
 import styles from '../styles/detail.css';
 let LineChart = rd3.LineChart;
 

@@ -1,4 +1,4 @@
-import "babel-polyfill";
+import "@babel/polyfill";
 import 'isomorphic-fetch';
 import React from 'react';
 import {render} from 'react-dom';
@@ -12,7 +12,10 @@ import configureStore from './app/store/configureStore';
 // https://opensource.ncsa.illinois.edu/bitbucket/projects/GEOD/repos/geodashboard-v3/pull-requests/33/overview
 // set sendfile in nginx.conf as off to forbid browser cache config.js
 
-const config = require('./config')
+const config = require('./config.js')
+
+// import {gd3} from './config.js';
+
 window.configruntime = config
 
 console.log("Running App version " + VERSION)

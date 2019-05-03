@@ -7,7 +7,7 @@ import ol from 'openlayers';
 
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
-import {Icon} from 'react-mdc-web';
+import {Icon} from 'react-mdc-web/lib';
 import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
 import {popupHeader, popupParameters} from '../utils/mapPopup';
 import BasicMap from './BasicMap';

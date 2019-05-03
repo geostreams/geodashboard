@@ -10,7 +10,7 @@ import styles from '../styles/map.css';
 import trendsStyles from '../styles/trends.css';
 import {
     Dialog, DialogBody, DialogHeader, DialogTitle, List, ListItem, Icon
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import {getTrendColor, getCustomLocation, getMapTileURLSetting, maxZoom} from '../utils/getConfig';
 import {
     sensorsToFeaturesTrendPage, aboutPopupMenu, getAttribution, getControls

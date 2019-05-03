@@ -7,7 +7,7 @@ import exploreStyles from '../styles/explore.css';
 import ExploreLayersItems from '../containers/ExploreLayersItems';
 import {
     Button, Drawer, DrawerContent, DrawerHeaderContent, DrawerSpacer, Icon
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 
 class ExploreLayers extends Component {
     constructor(props: Object) {

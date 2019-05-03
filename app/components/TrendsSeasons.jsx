@@ -9,7 +9,7 @@ import mainStyles from '../styles/main.css';
 import {
     Radio, RadioGroup, Button,
     Card, CardHeader, CardTitle, CardSubtitle, CardActions
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import type {InputEvent} from '../utils/flowtype';
 
 

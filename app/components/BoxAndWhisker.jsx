@@ -2,8 +2,8 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {ListDivider} from 'react-mdc-web';
+import React, { Component } from 'react';
+import {ListDivider} from 'react-mdc-web/lib';
 import Boxplot from 'react-boxplot';
 import computeBoxplotStats from 'react-boxplot/dist/stats';
 import styles from "../styles/detail.css";

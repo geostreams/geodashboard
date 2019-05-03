@@ -12,7 +12,7 @@ import {getLocationName, getMobileSizeMax} from '../utils/getConfig';
 import {
     Button, Icon, Checkbox, FormField, label, RadioGroup, Radio,
     Card, CardHeader, CardTitle, CardSubtitle, CardText, CardMedia
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import type {InputEvent} from '../utils/flowtype';
 import Select from './material/Select';
 import {handleParamsWithItalics} from '../utils/configUtils';

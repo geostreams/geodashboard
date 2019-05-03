@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from "react";
-import {Checkbox, FormField, label} from 'react-mdc-web';
+import {Checkbox, FormField, label} from 'react-mdc-web/lib';
 import {handleParamsWithItalics} from "../utils/configUtils";
 
 

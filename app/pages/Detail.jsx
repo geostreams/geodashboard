@@ -14,7 +14,7 @@ import {resetDetailPage} from '../actions';
 import type {Dispatch} from '../utils/flowtype'
 import {Row, Col} from 'react-flexbox-grid';
 import styles from '../styles/main.css';
-import {Icon} from 'react-mdc-web';
+import {Icon} from 'react-mdc-web/lib';
 
 
 class Detail extends Component {

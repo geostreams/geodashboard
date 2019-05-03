@@ -4,7 +4,7 @@
 
 import React, {Component} from "react";
 import styles from '../styles/carousel.css';
-import {Fab, Icon} from 'react-mdc-web';
+import {Fab, Icon} from 'react-mdc-web/lib';
 import {getCarouselImageNames} from '../utils/getConfig';
 
 

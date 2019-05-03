@@ -9,7 +9,7 @@ import analysisStyles from '../styles/analysis.css';
 import {
     Card, CardHeader, CardActions, CardTitle, CardSubtitle, CardText,
     Content, List, Cell, Grid, Textfield, Button, Tab, Tabbar
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import Map from '../containers/AnalysisMap';
 import {
     getTrendSettings, getTrendRegions, getTrendsAnalysisDefaultValues, getMobileSizeMax

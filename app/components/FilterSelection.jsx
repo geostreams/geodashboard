@@ -4,7 +4,7 @@
 
 import React, {Component} from 'react'
 import FilterList from '../containers/FilterList'
-import {Fab, Icon, Button} from 'react-mdc-web';
+import {Fab, Icon, Button} from 'react-mdc-web/lib';
 import styles from '../styles/filterSelection.css'
 
 class FilterSelection extends Component {

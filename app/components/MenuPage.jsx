@@ -6,9 +6,9 @@ import React, {Component} from 'react';
 import {browserHistory, Link} from 'react-router';
 import styles from '../styles/menuPage.css';
 import {
-    Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
-    Button, MenuItem, Menu, MenuAnchor
-} from 'react-mdc-web';
+	Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
+	Button, MenuItem, Menu, MenuAnchor
+} from 'react-mdc-web/lib';
 import {getApplicationOptions} from '../utils/getConfig';
 
 

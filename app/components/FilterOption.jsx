@@ -2,9 +2,9 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import styles from '../styles/filterOption.css';
-import {Checkbox, FormField, label} from 'react-mdc-web';
+import React, {Component} from 'react'
+import styles from '../styles/filterOption.css'
+import {Checkbox, FormField, label} from 'react-mdc-web/lib';
 
 class FilterOption extends Component {
     constructor(props: Object) {

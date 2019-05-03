@@ -3,7 +3,7 @@ import exploreStyles from '../styles/explore.css';
 import {
     Button, Card, CardTitle, CardSubtitle, CardHeader, CardText, Title,
     Icon, List, ListHeader, ListGroup
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import ExploreAccordionSections from '../containers/ExploreAccordionSections';
 import {sortSitesNumerically} from '../utils/arrayUtils';
 

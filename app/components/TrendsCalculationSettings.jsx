@@ -9,7 +9,7 @@ import mainStyles from '../styles/main.css';
 import {
     Textfield, Cell, Grid,
     Card, CardHeader, CardTitle, CardSubtitle, CardActions, CardText
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import {getMobileSizeMax} from '../utils/getConfig';
 
 

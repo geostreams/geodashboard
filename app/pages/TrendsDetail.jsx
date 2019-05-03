@@ -7,7 +7,7 @@ import Menu from '../containers/MenuBar';
 import RegionMiniMap from '../containers/RegionMiniMap';
 import TrendsRegionDetails from '../containers/TrendsRegionDetails';
 import TrendsDetailRight from '../containers/TrendsDetailRight';
-import {Grid, Cell, Content, List, Card, CardTitle} from 'react-mdc-web';
+import {Grid, Cell, Content, List, Card, CardTitle} from 'react-mdc-web/lib';
 import styles from '../styles/main.css';
 import trendsStyles from '../styles/trends.css';
 import { getCustomTrendsRegion, getTrendsPageSettings } from '../utils/getConfig';

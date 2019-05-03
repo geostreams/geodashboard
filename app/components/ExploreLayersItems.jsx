@@ -4,7 +4,7 @@
 
 import React, {Component, PropTypes} from 'react';
 import exploreStyles from '../styles/explore.css';
-import {Checkbox, FormField} from 'react-mdc-web';
+import {Checkbox, FormField} from 'react-mdc-web/lib';
 import type {InputEvent} from '../utils/flowtype';
 import ExploreLayersDetails from "../components/ExploreLayersDetails";
 

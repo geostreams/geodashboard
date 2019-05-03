@@ -16,7 +16,7 @@ import ol from 'openlayers';
 
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
-import {Icon} from 'react-mdc-web';
+import {Icon} from 'react-mdc-web/lib';
 import type {MapProps, BasicMapState} from '../utils/flowtype';
 import {getMapTileURLSetting, getClustersDistance, maxZoom, minZoom, mapCenter} from '../utils/getConfig';
 import {clusteringOptions, getAttribution, getControls} from '../utils/mapUtils';

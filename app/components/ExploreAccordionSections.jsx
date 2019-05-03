@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import exploreStyles from '../styles/explore.css';
-import {Button, Card, CardTitle, CardSubtitle, CardHeader, CardText, Fab, Icon} from 'react-mdc-web';
+import {Button, Card, CardTitle, CardSubtitle, CardHeader, CardText, Fab, Icon} from 'react-mdc-web/lib';
 import {getColor, displayOnlineStatus} from '../utils/getConfig';
 import {applyColors} from '../utils/colorUtils';
 import ol from 'openlayers';

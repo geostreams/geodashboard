@@ -4,7 +4,7 @@
 
 import React, {Component} from 'react';
 import styles from '../styles/menuBar.css';
-import {Tabbar, Tab} from 'react-mdc-web';
+import {Tabbar, Tab} from 'react-mdc-web/lib';
 import {
     getApplicationOptions, getIEAlertMenuBarShow, getIEAlertHeader, getIEVersionEdge,
     getIEVersionEleven, getIEVersionsBeforeEleven, getMobileSizeMax, getMobileExplorePath

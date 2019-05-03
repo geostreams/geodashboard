@@ -11,7 +11,7 @@ import StackedLineChart from './StackedLineChart';
 import StackedBarChart from './StackedBarChart';
 import styles from '../styles/detail.css';
 import {Grid, Row, Col} from 'react-flexbox-grid';
-import {Checkbox, FormField, Icon} from 'react-mdc-web';
+import {Checkbox, FormField, Icon} from 'react-mdc-web/lib';
 import {
     getMobileSizeMax, getDetailPageCombinedInfoText, getTimeSeriesZeroStart,
     getDetailPageBAWInfoText, getChartLineDefault, getChartLineChoice, getStartAtZeroChoice,

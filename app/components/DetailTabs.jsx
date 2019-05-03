@@ -4,7 +4,7 @@
 
 import React, {Component} from 'react';
 import styles from '../styles/detailTabs.css';
-import {Tabbar, Tab} from 'react-mdc-web';
+import {Tabbar, Tab} from 'react-mdc-web/lib';
 
 
 class DetailTabs extends Component {

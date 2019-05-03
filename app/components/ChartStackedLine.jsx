@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import {Subheading2} from 'react-mdc-web';
+import {Subheading2} from 'react-mdc-web/lib';
 import {Row, Col} from 'react-flexbox-grid';
 import BoxAndWhisker from '../components/BoxAndWhisker';
 import styles from '../styles/detail.css';

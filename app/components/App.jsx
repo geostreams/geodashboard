@@ -18,7 +18,7 @@ import 'material-components-web/dist/material-components-web.min.css';
 import type {MapProps} from "../utils/flowtype";
 import {
     Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon
-} from 'react-mdc-web';
+} from 'react-mdc-web/lib';
 import {
     getIEAlertBoxTitle, getIEAlertBoxBody, getIEAlertButtonText, getIEAlertShow,
     getIEVersionsBeforeEleven, getIEVersionEleven, getIEVersionEdge
