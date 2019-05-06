@@ -1,6 +1,6 @@
 {
   "name": "geodashboard-v3",
-  "version": "3.0.0-beta.3",
+  "version": "3.0.0-beta.4",
   "description": "Geodashboard using React.js to visualize data from Geostreaming API.",
   "main": "main.jsx",
   "private": true,
