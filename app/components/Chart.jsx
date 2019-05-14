@@ -4,13 +4,10 @@
 
 import React, {Component} from 'react';
 import {Row, Col} from 'react-flexbox-grid';
-import {
-    Card, CardHeader, CardTitle, CardText, CardMedia, Icon
-} from 'react-mdc-web/lib';
 import styles from "../styles/detail.css";
 import mainStyles from '../styles/main.css'
 import BoxAndWhiskers from '../components/BoxAndWhiskers';
-import Line from './Line';
+import LinePlot from './LinePlot';
 import LineNoData from './LineNoData';
 
 
@@ -77,7 +74,7 @@ class Chart extends Component {
             );
         } else {
             chartData = (
-                <Line data={values}
+                <LinePlot data={values}
                       selectedStartDate={this.props.selectedStartDate}
                       selectedEndDate={this.props.selectedEndDate}
                       yAxisLabel={units}
@@ -93,14 +90,14 @@ class Chart extends Component {
 
         return (
             <Row className={mainStyles.fullWidth}>
-                <Col md={8}>
+                <Col md={10}>
                     <div className={styles.layout_style}>
                         <div className={styles.float_item_left}>
                             {chartData}
                         </div>
                     </div>
                 </Col>
-                <Col md={4} className={styles.float_item_left}>
+                <Col md={2} className={styles.float_item_left}>
                     {boxAndWhiskers}
                 </Col>
             </Row>

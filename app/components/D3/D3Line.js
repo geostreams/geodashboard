@@ -80,6 +80,8 @@ D3Line._drawPoints = function (el, state) {
     title = removeItalicsFromParams(title);
     const svg = d3.select(el).selectAll("svg");
 
+    svg.attr("width", state.width)
+
     // The next 4 lines clean up previously existing graphs
     let g = svg.selectAll(".d3-line-charts");
     let g_dots = svg.selectAll(".d3-dots");

@@ -4,9 +4,19 @@ import React, {Component} from 'react';
 import D3Line from './D3/D3Line';
 import PropTypes from 'prop-types';
 import styles from '../styles/detail.css';
+import ReactDOM from 'react-dom';
 
 
-class Line extends Component {
+class LinePlot extends Component {
+
+    constructor (props, context) {
+        super(props, context);
+        this.state = {
+            width: 200,
+            height: 400
+        };
+        this.measure = this.measure.bind(this);
+    }
 
     static propTypes = {
         data: PropTypes.array,
@@ -16,25 +26,44 @@ class Line extends Component {
         sources: PropTypes.array,
         yAxisLabel: PropTypes.string,
         title: PropTypes.string
-    };
-
-    componentDidMount() {
-        // D3 Code to create the chart
-        const el = this._rootNode;
-        D3Line.create(el, {
-            width: 500,
-            height: 400
-        }, this.getLineState());
     }
 
-    componentDidUpdate() {
-        let el = this._rootNode;
+    measure () {
+        let rect = this.container.getBoundingClientRect();
+        if(this.state.width !== rect.width){
+            this.setState({
+                width: rect.width
+            });
+        }
+    }
+
+    componentDidMount (){
+        const el = ReactDOM.findDOMNode(this);
+        D3Line.create(el, {
+            width: el.clientWidth,
+            height: 400
+        }, this.getLineState());
+        this.measure();
+    }
+
+    componentDidUpdate (){
+        this.measure();
+        const el = ReactDOM.findDOMNode(this);
         D3Line.update(el, this.getLineState());
     }
 
+    componentWillMount () {
+        window.addEventListener('resize', this.measure, false);
+    }
+
+    componentWillUnmount () {
+        window.removeEventListener('resize', this.measure, false);
+    }
+
     getLineState() {
+        const el = ReactDOM.findDOMNode(this);
         return {
-            width: 500,
+            width: el.clientWidth,
             height: 400,
             class_name_line: styles.graph_line,
             class_name_dots: styles.graph_dot,
@@ -60,18 +89,11 @@ class Line extends Component {
         }
     }
 
-    componentWillUnmount() {
-        D3Line.destroy(this._rootNode);
-    }
-
-    _setRef(componentNode) {
-        this._rootNode = componentNode;
-    }
-
     render() {
-        return (<div className="line-container" ref={this._setRef.bind(this)}/>)
+        return (
+            <div className="line-container" ref={(container)=>{this.container = container}} style={{width: "100%"}}/>
+                )
     }
-
 }
 
-export default Line;
+export default LinePlot;

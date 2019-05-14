@@ -6,7 +6,12 @@
     margin-top: 2em;
 }
 
+.line-container {
+    width: 100%;
+}
+
 .parameters_chart_positioning {
+    width: 100%;
     margin-left: 0.5em;
 }
 
@@ -69,6 +74,7 @@
 }
 
 .float_item_left {
+    width: 100%;
     float: left;
 }
 
@@ -207,4 +213,11 @@
 
 .leftMargin {
     margin-left: 0.6em !important;
+}
+
+.box-container {
+    display: block;
+    margin: auto;
+    align: center;
+    text-align: center
 }

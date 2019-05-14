@@ -348,15 +348,13 @@ class DetailContents extends Component {
                     </Row>
                 );
                 box_and_whiskers_header = (
-                    <Col md={4}>
-                        <h3>Box and Whiskers
-                            <DialogWrapper title={box_and_whisker_title}
-                                           body={box_and_whisker_contents}
-                                           isOpen={this.openBoxAndWhiskerDialog}
-                                           closeDialog={this.closeBoxAndWhiskerDialog}
-                            />
-                        </h3>
-                    </Col>
+                    <h3>Box and Whiskers
+                        <DialogWrapper title={box_and_whisker_title}
+                                       body={box_and_whisker_contents}
+                                       isOpen={this.openBoxAndWhiskerDialog}
+                                       closeDialog={this.closeBoxAndWhiskerDialog}
+                        />
+                    </h3>
                 );
 
                 let season_filter;
@@ -535,12 +533,14 @@ class DetailContents extends Component {
                             </Row>
                             {mini_map_object}
                         </Col>
-                        <Col md={8}>
+                        <Col md={9}>
                             <Row key="paramChartTitle" className={styles.parameters_chart_title}>
-                                <Col md={8}>
+                                <Col md={10}>
                                     <h3>Parameter Charts</h3>
                                 </Col>
-                                {box_and_whiskers_header}
+                                <Col md={2}>
+                                    {box_and_whiskers_header}
+                                </Col>
                             </Row>
                             <Row className={styles.parameters_chart_positioning}>
                                 {graph}

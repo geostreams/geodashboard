@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Added
+- Line plot fills the parent container.
+  [GEOD-1230](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1230)
+
 ## [3.0.0-beta.4] - 2019-05-06
 
 ### Added
