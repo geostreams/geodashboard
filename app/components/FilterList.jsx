@@ -183,10 +183,26 @@ class FilterList extends Component {
         let cardhead;
         // if this filter is open
         if (this.props.idx === this.props.selectedId) {
+            // Default Icon
+            let icon_value = <Icon className={styles.descriptiveIconBefore} name='label'/>;
+            // Case Icons
+            if (this.props.attribute === "data_sources") {
+                icon_value = <Icon className={styles.descriptiveIconChoice} name="group_work"/>;
+            }
+            if (this.props.attribute === "parameters") {
+                icon_value = <Icon className={styles.descriptiveIconChoice} name="description"/>;
+            }
+            if (this.props.attribute === "time") {
+                icon_value = <Icon className={styles.descriptiveIconChoiceInvert} name="access_time"/>;
+            }
+            if (this.props.attribute === "locations") {
+                icon_value = <Icon className={styles.descriptiveIconChoice} name="location_on"/>;
+            }
+
             cardhead = (
                 <CardHeader>
                     <div className={styles.left}>
-                        <Icon className={styles.descriptiveIconBefore} name="label"/>
+                        {icon_value}
                         <Select value={this.props.attribute} onChange={this.props.onChangeSelection}
                                 dataIdx={idx}>
                             {options}
