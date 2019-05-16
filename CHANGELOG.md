@@ -4,15 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.0.0-beta.5] - 2019-05-16
 
 ### Added
-- Line plot fills the parent container.
-  [GEOD-1230](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1230)
 - Added the option for Layers on the Analysis Page Map
   [GEOD-1225](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1225)
 
 ### Changed
+- Line plot fills the parent container.
+  [GEOD-1230](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1230)
 - The Search Page Filter Icons reflect the dropdown selection
   [GEOD-1224](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1224)
 - Display the Detail Page binning type above the Date Slider
