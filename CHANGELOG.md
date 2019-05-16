@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Line plot fills the parent container.
   [GEOD-1230](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1230)
+- Added the option for Layers on the Analysis Page Map
+  [GEOD-1225](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1225)
 
 ## [3.0.0-beta.4] - 2019-05-06
 

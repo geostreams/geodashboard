@@ -124,6 +124,9 @@ export const gd3 = {
     // Layers for the Explore Page
     exploreLayers: [],
 
+    // Layers for the Analysis Page
+    analysisLayers: [],
+
     // For Mobile Explore and Detail Pages
     mobile_sourcename: "all",
     mobile_size_max: 840,

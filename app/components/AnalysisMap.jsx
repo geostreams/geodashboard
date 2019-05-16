@@ -8,7 +8,10 @@ import ol from 'openlayers';
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
 import {Icon} from 'react-mdc-web/lib';
-import {getCustomTrendRegion, getTrendColor, getMapTileURLSetting, maxZoom} from '../utils/getConfig';
+import {
+    getCustomTrendRegion, getTrendColor, getMapTileURLSetting, maxZoom,
+    getAnalysisLayersDetails, getAnalysisAvailableLayers
+} from '../utils/getConfig';
 import {sensorsToFeaturesAnalysisPage, getAttribution, getControls} from '../utils/mapUtils';
 import {popupHeader, popupAnalysis, removePopup} from '../utils/mapPopup';
 import {drawHelper, centerHelper} from '../utils/mapDraw';
@@ -64,7 +67,6 @@ class AnalysisMap extends Component {
                         </a>
                         <div id="popup-content"> </div>
                     </div>
-
                     <div id="ol-drawcirclecontrol"
                          className={styles.olDrawCircleButton + ' ' +
                          styles.olSharedDrawStyles + ' drawing_buttons'}> </div>
@@ -705,6 +707,62 @@ class AnalysisMap extends Component {
         theMap.addLayer(areaPolygonLayer);
 
         centerHelper(view, vectorSource, theMap);
+
+        let analysisLayers = [];
+        let analysisLayersDetails = getAnalysisLayersDetails();
+        let layersVisibility = getAnalysisAvailableLayers();
+
+        if (analysisLayersDetails) {
+            analysisLayersDetails.map(layerDetails => {
+                if (layersVisibility) {
+                    let index = layersVisibility.findIndex(
+                        layer_visibility => layer_visibility.title === layerDetails.title
+                    );
+
+                    if (index > -1 && layersVisibility[index].visibility === true) {
+                        analysisLayers.push(
+                            new ol.layer.Image({
+                                source: new ol.source.ImageWMS({
+                                    url: layerDetails.wms,
+                                    params: {'LAYERS': layerDetails.id},
+                                }),
+                                name: layerDetails.title,
+                                opacity: layersVisibility[index].opacity,
+                                visible: true
+                            })
+                        )
+                    }
+                    else if (index > -1 && layersVisibility[index].visibility === false) {
+                        analysisLayers.push(
+                            new ol.layer.Image({
+                                name: layerDetails.title,
+                                visible: false
+                            })
+                        )
+                    }
+                }
+            });
+        }
+
+        if (analysisLayers.length > 0) {
+            let all_map_layers = this.state.map.getLayers().getArray().slice();
+            all_map_layers.map(map_layer => {
+                let layer_name = map_layer.get('name');
+                analysisLayers.map(analysis_layer_remove => {
+                    let analysis_layer_name = analysis_layer_remove.get('name');
+                    if (analysis_layer_name === layer_name) {
+                        theMap.removeLayer(map_layer);
+                    }
+                });
+            });
+
+            analysisLayers.map(analysis_layer_add => {
+                let analysis_layers_visibility = analysis_layer_add.get('visible');
+                if (analysis_layers_visibility === true) {
+                    theMap.addLayer(analysis_layer_add);
+                }
+            });
+        }
 
         this.setState(
             {

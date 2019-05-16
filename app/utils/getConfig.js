@@ -206,6 +206,28 @@ export function getAvailableLayers() {
     return available_layers;
 }
 
+export function getAnalysisLayersDetails() {
+    let layersDetails = [];
+    if (window.configruntime.gd3.analysisLayers) {
+        layersDetails = window.configruntime.gd3.analysisLayers;
+    }
+    return layersDetails;
+}
+
+export function getAnalysisAvailableLayers() {
+    let available_layers = [];
+
+    getAnalysisLayersDetails().map(function (p) {
+        available_layers.push({
+            'title': p.title,
+            'opacity': p.opacity,
+            'visibility': p.visibility,
+        })
+    });
+
+    return available_layers;
+}
+
 export function getMapTileURLSetting() {
     let mapTileURLSetting = '';
     if (window.configruntime.gd3.mapTileURL) {
