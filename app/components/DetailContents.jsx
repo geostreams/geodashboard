@@ -432,6 +432,9 @@ class DetailContents extends Component {
                                 />
                                 <label>Select All Dates</label>
                             </FormField>
+                            <span className={styles.binningText}>
+                                Binning: {this.state.binType.charAt(0).toUpperCase() + this.state.binType.slice(1)}
+                            </span>
                             <br/>
                             <div className={styles.leftMargin}>
                                 <DateSlider start={minDate} end={maxDate}

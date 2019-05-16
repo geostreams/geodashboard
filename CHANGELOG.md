@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - The Search Page Filter Icons reflect the dropdown selection
   [GEOD-1224](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1224)
+- Display the Detail Page binning type above the Date Slider
+  [GEOD-1228](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1228)
+- Map Popups always display Detail Page link, and the Detail Page will always load
+  [GEOD-1229](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1229)
 
 ## [3.0.0-beta.4] - 2019-05-06
 

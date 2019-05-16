@@ -76,21 +76,42 @@ class Detail extends Component {
     }
 
     render() {
-
         if (Object.keys(this.state.category_mappings).length === 0) {
             let contents;
             if (this.props.parameters.failed) {
                 contents = (
-                    <div className={[styles.error_text, styles.contentscenter].join(" ")}>Error retrieving parameter
-                        Configuration</div>)
+                    <span>
+                        <h1>{this.props.params.name}</h1>
+                        <div className={[styles.error_text, styles.contentscenter].join(" ")}>Error retrieving parameter
+                            Configuration</div>
+                    </span>)
             }
-            else {
-                contents = (<Spinner/>);
+            else if (this.props.selected_detail !== this.props.params.name) {
+                contents = (
+                    <span>
+                    <h1 style={{backgroundColor: 'grey'}}>
+                        <Row>
+                            <Col md={11} className={styles.detail_header}>
+                                <span className={styles.detail_title}>
+                                    {this.props.params.name}
+                                </span>
+                            </Col>
+                            <Col md={1} className={styles.detail_header}>
+                                <span className={styles.close_detail}>
+                                <Link href={"/#explore/all"}> <Icon name="close"/></Link>
+                                </span>
+                            </Col>
+                        </Row>
+                    </h1>
+                    <div className={[styles.error_text, styles.contentscenter].join(" ")}>No Parameters Available</div>
+                    </span>
+                );
+            } else {
+                contents = (<span><h1>{this.props.params.name}</h1><Spinner/></span>);
             }
             return (
                 <div>
                     <Menu selected='explore'/>
-                    <h1> {this.props.selected_detail}</h1>
                     {contents}
                 </div>
             )

@@ -73,7 +73,8 @@ export function popupParameters(feature: ol.Feature, styles: Object) {
 
     let paramsLength = (sensorInfo.parameters).length;
     let paramsOrig = (sensorInfo.parameters);
-    let paramsAlt = '';
+    let paramsAlt = '<tr><td width="30%" align="right"> </td>'.concat(
+        '<td width="70%">', 'No Parameters Available', '</td></tr>');
     if (paramsLength <= maxDisplayParams()) {
         for (let i = 0; i < paramsLength; i++) {
             let paramsParts = paramsOrig[i].split('(', 2);
@@ -112,12 +113,11 @@ export function popupParameters(feature: ol.Feature, styles: Object) {
 
     let bodyText = '<div class=' + styles.paramsborder + '>' + params + '</div>';
 
-    if (paramsLength > 0) {
-        bodyText += '<a href=" ' + detail_link + sensorInfo.name + '/separate/" class=' +
-            styles.viewdetail + ' >View Data</a>';
-    }
+    bodyText += '<a href=" ' + detail_link + sensorInfo.name + '/separate/" class=' +
+        styles.viewdetail + ' >View Data</a>';
 
     return bodyText;
+
 }
 
 export function popupAnalysis(feature: ol.Feature, styles: Object) {

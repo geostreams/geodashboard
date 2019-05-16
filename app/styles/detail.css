@@ -215,6 +215,18 @@
     margin-left: 0.6em !important;
 }
 
+.binningText {
+    float: right;
+    margin-top: 0.7em;
+    margin-right: 4.2em;
+    font-size: .875rem;
+    font-weight: 400;
+    letter-spacing: .04em;
+    line-height: 1.25rem;
+    color: rgba(0,0,0,.87);
+}
+
+
 .box-container {
     display: block;
     margin: auto;
