@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Added
+- Added the option for Layers on the Analysis Page Map
+  [GEOD-1225](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1225)
+
+### Changed
+
+### Fixed
+
 ## [3.0.0-beta.4] - 2019-05-06
 
 ### Added
