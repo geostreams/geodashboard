@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Map Popups always display Detail Page link, and the Detail Page will always load
   [GEOD-1229](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1229)
 
+### Fixed
+- Ensure the map pans correctly when switching Sensors on the Explore Page
+  [GEOD-1224](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1224)
+
 ## [3.0.0-beta.4] - 2019-05-06
 
 ### Added
