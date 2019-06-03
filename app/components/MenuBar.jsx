@@ -62,31 +62,30 @@ class MenuBar extends Component {
         }
 
         return (
-            <header>
-                <div className={styles.header_background}>
-                    <div className={styles.header_banner}>
-                        {logo}
-                        <div className={styles.header_title}>
-                            <p id="header-title-text" className={styles.header_title_text}>
-                                {this.props.header_title}
-                            </p>
-                        </div>
-                        <div className={styles.header_subtitle}>
-                            <p id="header-subtitle-text" className={styles.header_subtitle_text}>
-                                {this.props.subtitle} </p>
-                        </div>
-                        <div className={styles.header_hr_div}>
-                            {ie_error_text}
-                            <hr className={styles.header_hr}/>
-                        </div>
-                        <Tabbar className={styles.navbar} id="navigation">
-                            {pageLinks}
-                        </Tabbar>
+            <div className={styles.header_background}>
+                <div className={styles.header_banner}>
+                    {logo}
+                    <div className={styles.header_title}>
+                        <p id="header-title-text" className={styles.header_title_text}>
+                            {this.props.header_title}
+                        </p>
                     </div>
+                    <div className={styles.header_subtitle}>
+                        <p id="header-subtitle-text" className={styles.header_subtitle_text}>
+                            {this.props.subtitle} </p>
+                    </div>
+                    <div className={styles.header_hr_div}>
+                        {ie_error_text}
+                        <hr className={styles.header_hr}/>
+                    </div>
+                    <Tabbar className={styles.navbar} id="navigation">
+                        {pageLinks}
+                    </Tabbar>
                 </div>
-            </header>
+            </div>
         );
     }
 }
 
 export default MenuBar;
+

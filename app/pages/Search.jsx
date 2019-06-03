@@ -7,7 +7,6 @@ import styles from '../styles/main.css';
 import styleSearch from '../styles/search.css';
 import stylesMobile from '../styles/mobilePageTabs.css';
 import SearchMap from '../containers/SearchMap';
-import Menu from '../containers/MenuBar';
 import DownloadButtons from '../containers/DownloadButtons';
 import FilterSelection from '../containers/FilterSelection';
 import {
@@ -84,7 +83,6 @@ class Search extends Component {
 
         return (
             <div>
-                <Menu selected="search"/>
                 <Content>
                     {mobilePageTabs}
                     <div className={styles.bodymap}>

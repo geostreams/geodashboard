@@ -5,7 +5,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Link} from 'react-router';
-import Menu from '../containers/MenuBar';
 import DetailTabs from '../components/DetailTabs';
 import Spinner from '../components/Spinner';
 import DetailContents from '../containers/DetailContents';
@@ -111,7 +110,7 @@ class Detail extends Component {
             }
             return (
                 <div>
-                    <Menu selected='explore'/>
+                    <h1> {this.props.selected_detail}</h1>
                     {contents}
                 </div>
             )
@@ -177,7 +176,6 @@ class Detail extends Component {
 
         let page_content = (
             <div>
-                <Menu selected='explore'/>
                 {title}
                 {display_tabs}
                 <div>

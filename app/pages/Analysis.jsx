@@ -3,7 +3,6 @@
  */
 
 import React, {Component} from 'react';
-import Menu from '../containers/MenuBar';
 import styles from '../styles/main.css';
 import analysisStyles from '../styles/analysis.css';
 import {
@@ -74,7 +73,6 @@ class Analysis extends Component {
         return (
             <div>
                 {loading_spinner}
-                <Menu selected="analysis"/>
                 <Content>
                     {mobilePageTabs}
                     <div className={styles.body}>

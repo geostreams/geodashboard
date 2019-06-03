@@ -66,6 +66,11 @@ module.exports = {
         collapseWhitespace: false
       }
     }),
+    new CopyWebpackPlugin([
+      { from: './public/images', to: './images' },
+      { from: './public/styles', to: './styles' },
+      { from: './public/pages', to: './pages' },
+    ]),
     new CopyWebpackPlugin([{
         from: 'config.js',
         transform: function(content, absoluteFrom) {

@@ -3,7 +3,6 @@
  */
 
 import React, {Component} from 'react';
-import Menu from '../containers/MenuBar';
 import Map from '../containers/ExploreMap';
 import ExploreSourcesTab from '../components/ExploreSourcesTab';
 import ExploreCustomItemsTab from '../components/ExploreCustomItemsTab';
@@ -77,7 +76,6 @@ class Explore extends Component {
         if (sources.length === 0) {
             return (
                 <div>
-                    <Menu selected='explore'/>
                     <Spinner/>
                 </div>
             );
@@ -168,7 +166,6 @@ class Explore extends Component {
 
         let page_content = (
             <div>
-                <Menu selected='explore'/>
                 <Content>
                     {mobilePageTabs}
                     <div className={styles.bodymap}>

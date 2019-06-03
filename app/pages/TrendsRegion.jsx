@@ -3,7 +3,6 @@
  */
 
 import React, {Component} from 'react';
-import Menu from '../containers/MenuBar';
 import Map from '../containers/TrendsRegionMap';
 import TrendsParameters from '../containers/TrendsParameters';
 import TrendsSeasons from '../containers/TrendsSeasons';
@@ -91,7 +90,6 @@ class TrendsRegion extends Component {
 
             <div>
                 {loading_spinner}
-                <Menu selected='trends'/>
                 <Content>
                     {mobilePageTabs}
                     <div className={styles.body}>

@@ -3,7 +3,6 @@
  */
 
 import React, {Component} from 'react';
-import Menu from '../containers/MenuBar';
 import RegionMiniMap from '../containers/RegionMiniMap';
 import TrendsRegionDetails from '../containers/TrendsRegionDetails';
 import TrendsDetailRight from '../containers/TrendsDetailRight';
@@ -35,7 +34,6 @@ class TrendsDetail extends Component {
         const trendsRegionTitleLink =  " > " + getCustomTrendsRegion(this.props.params.region);
         return (
             <div>
-                <Menu selected='trends'/>
                 <Content>
                     <div className={styles.body}>
                         <Grid className={styles.noPadding}>

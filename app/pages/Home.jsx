@@ -3,7 +3,6 @@
  */
 
 import React, {Component} from 'react';
-import Menu from '../containers/MenuBar';
 import styles from '../styles/main.css';
 import SwitchBackend from '../containers/SwitchAPI';
 import Carousel from "../components/Carousel";
@@ -21,7 +20,6 @@ class Home extends Component {
 
         return (
             <div>
-                <Menu selected='home'/>
                 <div className={styles.contentcenter}>
                     {carousel}
                     <div><h3>Welcome to the Geodashboard!</h3></div>
