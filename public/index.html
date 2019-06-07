@@ -29,8 +29,10 @@
             $("li").click(function () {
                 $('#sidebar').find('a').removeClass('active');
             });
-            $(document).on('click', function (event) {
-                $(event.target).addClass('active');
+            $('#sidebar').on('click', function (event) {
+                if ($(event.target).is("a")) {
+                    $(event.target).addClass('active');
+                }
             });
         });
     </script>
