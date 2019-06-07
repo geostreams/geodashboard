@@ -24,7 +24,7 @@ class TrendsThresholds extends Component {
     constructor(props: Object) {
         super(props);
         this.state = {
-            chosenThreshold: Number(''),
+            chosenThreshold: Number(this.props.chosenThreshold) ? Number(this.props.chosenThreshold) : Number(''),
             thresholdMin: this.props.trends_defaults[4].value,
             thresholdMax: this.props.trends_defaults[5].value
         };

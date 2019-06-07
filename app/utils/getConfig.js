@@ -599,3 +599,45 @@ export function clustersExpandMaxNumberFeatures() {
     }
     return getValue;
 }
+
+export function getAnalysisSearchInfoDetails() {
+    let analysisSearchDetails = [];
+    if (window.configruntime.gd3.analysis_search_info) {
+        analysisSearchDetails = window.configruntime.gd3.analysis_search_info;
+    }
+    return analysisSearchDetails;
+}
+
+export function getAnalysisSearchInfo() {
+    let analysis_search = [];
+
+    getAnalysisSearchInfoDetails().map(function (p) {
+        analysis_search.push({
+            "id": p.id,
+            "title": p.title,
+            "parameter": p.parameter,
+            "baseline": p.baseline,
+            "rolling": p.rolling,
+            "threshold": p.threshold,
+            "region": p.region,
+        })
+    });
+
+    return analysis_search;
+}
+
+export function useAnalysisSearches() {
+    let getValue = false;
+    if (window.configruntime.gd3.use_analysis_searches) {
+        getValue = window.configruntime.gd3.use_analysis_searches;
+    }
+    return getValue;
+}
+
+export function getAnalysisSearchHeading(){
+    let getValue = 'Saved Searches: ';
+    if (window.configruntime.gd3.analysis_search_heading) {
+        getValue = window.configruntime.gd3.analysis_search_heading;
+    }
+    return getValue;
+}

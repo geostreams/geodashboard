@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1225](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1225)
 - Added static banners
   [GEOD-1203](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1203)
+- Added the option for searches to populate when clicking a button for the Analysis Page
+  [GLGVO-535](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-535)
 
 ### Changed
 - The Search Page Filter Icons reflect the dropdown selection

@@ -1001,3 +1001,15 @@ export function resetExploreSensors() {
         })
     }
 }
+
+export const ANALYSIS_SAVED_SEARCH = 'ANALYSIS_SAVED_SEARCH';
+export function analysisSavedSearch(
+    parameter: string, region: string, baseline_total_year: number, rolling_interval: number, threshold: number
+) {
+    return (dispatch: Dispatch) => {
+        dispatch({
+            type: ANALYSIS_SAVED_SEARCH,
+            parameter, region, baseline_total_year, rolling_interval, threshold
+        })
+    }
+}

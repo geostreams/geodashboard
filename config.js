@@ -127,6 +127,11 @@ export const gd3 = {
     // Layers for the Analysis Page
     analysisLayers: [],
 
+    // Analysis Saves Search Info
+    use_analysis_searches: false,
+    analysis_search_heading: "Saved Searches: ",
+    analysis_search_info: [],
+
     // For Mobile Explore and Detail Pages
     mobile_sourcename: "all",
     mobile_size_max: 840,
@@ -1292,4 +1297,3 @@ export const gd3 = {
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
 // Keep the next new line at the end of the file
-

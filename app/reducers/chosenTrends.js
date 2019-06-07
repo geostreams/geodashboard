@@ -10,7 +10,8 @@ import {
     SELECT_ANALYSIS_REGION, SELECT_TRENDS_REGION, SELECT_TRENDS_CALC_ROLLING_SETTING,
     SELECT_ANALYSIS_PARAMETER, SELECT_TRENDS_PARAMETER, SELECT_TRENDS_SEASON,
     SELECT_TRENDS_THRESHOLD, SELECT_TRENDS_VIEW_TYPE, SET_TRENDS_TIMEFRAMES,
-    SET_REGIONS_SENSORS, SET_TRENDS_SENSORS, UPDATE_TRENDS_SENSORS, FAILED_RETRIEVING_REGION_TRENDS
+    SET_REGIONS_SENSORS, SET_TRENDS_SENSORS, UPDATE_TRENDS_SENSORS, FAILED_RETRIEVING_REGION_TRENDS,
+    ANALYSIS_SAVED_SEARCH
 } from '../actions';
 import {
     getTrendsPageTimeframes, getTrendsRegionsSettings, getTrendSettings,
@@ -82,6 +83,15 @@ const defaultState = {
 const chosenTrends = (state:ChosenTrendsState = defaultState, action:ChosenTrendsAction) => {
 
     switch(action.type) {
+
+        case ANALYSIS_SAVED_SEARCH:
+            return Object.assign({}, state, {
+                parameter: action.parameter,
+                region: action.region,
+                baseline_total_year: action.baseline_total_year,
+                rolling_interval: action.rolling_interval,
+                threshold: action.threshold.toString()
+            });
 
         case SELECT_TRENDS_VIEW_TYPE:
             return Object.assign({}, state, {

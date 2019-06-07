@@ -11,7 +11,9 @@ import type {Dispatch} from '../utils/flowtype';
 const mapStateToProps = (state) => {
     return {
         chosenCalculationSetting: state.chosenTrends.threshold,
-        chosenParameter: state.chosenTrends.parameter
+        chosenParameter: state.chosenTrends.parameter,
+        chosenBaseline: state.chosenTrends.baseline_total_year,
+        chosenRolling: state.chosenTrends.rolling_interval
     }
 };
 

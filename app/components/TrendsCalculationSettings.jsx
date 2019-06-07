@@ -28,11 +28,11 @@ class TrendsCalculationSettings extends Component {
     constructor(props: Object) {
         super(props);
         this.state = {
-            baselinePeriod: 30,
+            baselinePeriod: this.props.chosenBaseline,
             baselineMin: 0,
             baselineMax: 30,
 
-            rollingPeriod: 17,
+            rollingPeriod: this.props.chosenRolling,
             rollingMin: 0,
             rollingMax: 30,
         };

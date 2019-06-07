@@ -8,6 +8,8 @@ import SwitchBackend from '../containers/SwitchAPI';
 import Carousel from "../components/Carousel";
 import {getCarouselImageNames} from '../utils/getConfig';
 import Footer from '../components/Footer';
+import {useAnalysisSearches} from '../utils/getConfig';
+import AnalysisSearches from "../components/AnalysisSearches";
 
 
 class Home extends Component {
@@ -18,12 +20,18 @@ class Home extends Component {
             carousel = <Carousel/>;
         }
 
+        let analysisSearches = '';
+        if (useAnalysisSearches() === true) {
+            analysisSearches = <AnalysisSearches/>;
+        }
+
         return (
             <div>
                 <div className={styles.contentcenter}>
                     {carousel}
                     <div><h3>Welcome to the Geodashboard!</h3></div>
                     <SwitchBackend/>
+                    {analysisSearches}
                 </div>
                 <Footer/>
             </div>
