@@ -178,13 +178,15 @@ class BasicMap extends Component {
             name: 'drawing_layer'
         });
 
-        let layers = [
-            new ol.layer.Tile({
+        let mapTiles = new ol.layer.Tile({
                 source: new ol.source.XYZ({
                     attributions: getAttribution(),
                     url: getMapTileURLSetting()
                 })
-            }),
+            });
+
+        let layers = [
+            mapTiles,
             clusters,
             customLocationFilterLayer
         ];
@@ -258,6 +260,12 @@ class BasicMap extends Component {
             overlays: [overlay],
             controls: getControls()
         });
+
+        let tmpvectorSource = new ol.source.Vector({
+            features: this.props.features
+        });
+        let vectorExtent = tmpvectorSource.getExtent();
+        theMap.getView().fit(vectorExtent, theMap.getSize());
 
         // The Map requires the interaction for the Draw Buttons
         let selectItems = new ol.interaction.Select({

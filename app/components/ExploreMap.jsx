@@ -7,7 +7,6 @@ import ol from 'openlayers';
 
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
-import {Icon} from 'react-mdc-web/lib';
 import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
 import {popupHeader, popupParameters} from '../utils/mapPopup';
 import BasicMap from './BasicMap';
@@ -130,7 +129,6 @@ class ExploreMap extends Component {
         let {exploreLayersDetails, layersVisibility} = this.props;
 
         let exploreLayers = [];
-        let keep_map_view = false;
 
         if (exploreLayersDetails) {
 
@@ -178,7 +176,6 @@ class ExploreMap extends Component {
                 exploreLayers.map(explore_layer_remove => {
                     let explore_layer_name = explore_layer_remove.get('name');
                     if (explore_layer_name === layer_name) {
-                        keep_map_view = true;
                         theMap.removeLayer(map_layer);
                     }
                 });
@@ -188,7 +185,6 @@ class ExploreMap extends Component {
                 let explore_layers_visibility = explore_layer_add.get('visible');
                 if (explore_layers_visibility === true) {
                     theMap.addLayer(explore_layer_add);
-                    keep_map_view = true;
                 }
             });
 
@@ -204,7 +200,7 @@ class ExploreMap extends Component {
         let vectorExtent = tmpvectorSource.getExtent();
 
         if (features.length > 0) {
-            if (!this.state.expandedCluster && keep_map_view === false) {
+            if (!this.state.expandedCluster) {
                 theMap.getView().fit(vectorExtent, theMap.getSize());
             }
         }

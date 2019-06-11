@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1228](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1228)
 - Map Popups always display Detail Page link, and the Detail Page will always load
   [GEOD-1229](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1229)
+- Zoom to the features when drawing map for the first time
+  [GEOD-1223](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1223)
 
 ## [3.0.0-beta.4] - 2019-05-06
 
