@@ -53,7 +53,9 @@ class ExploreMap extends Component {
     };
 
     popupHandler = (theMap: ol.Map, e: InputEventMap) => {
-        let {resetDetailPageSelection} = this.props;
+        // Remove Pill color fill if it exists
+        this.props.resetDetailPageSelection();
+
         const that = this;
         const overlay = theMap.getOverlayById("marker");
         if (typeof e !== 'undefined') {
@@ -65,7 +67,7 @@ class ExploreMap extends Component {
             let closeClusters = true;
             if (featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type === "single"))) {
                 // Case when a feature is expanded
-                that.popupHandleHelper(featuresAtPixel, e.coordinate, overlay);
+                that.popupHandleHelper(featuresAtPixel, e.coordinate, overlay, theMap);
                 closeClusters = false;
             } else if (
                 featuresAtPixel && featuresAtPixel.get('features') !== undefined &&
@@ -73,7 +75,7 @@ class ExploreMap extends Component {
             ) {
                 // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
                 const feature = featuresAtPixel.get('features')[0];
-                that.popupHandleHelper(feature, e.coordinate, overlay);
+                that.popupHandleHelper(feature, e.coordinate, overlay, theMap);
             } else if (
                 featuresAtPixel && featuresAtPixel.get('features') !== undefined &&
                 featuresAtPixel.get('features').length > 1
@@ -98,7 +100,6 @@ class ExploreMap extends Component {
                 that.removeSpiderfiedClusterLayers(theMap);
             }
         }
-        resetDetailPageSelection();
     };
 
     popupHandleHelper = (feature: ol.Feature, coordinate: number[], overlay: ol.Overlay, theMap: ol.Map) => {
@@ -115,12 +116,21 @@ class ExploreMap extends Component {
                 content.innerHTML = popupText;
             }
 
-            // Use Sensor Coordinates
+            // Use Sensor Coordinates for Popup location
             let sensorInfo = feature.attributes;
             let lonLatPoint = [sensorInfo.longitude, sensorInfo.latitude];
             let webMercatorPoint = ol.proj.fromLonLat(lonLatPoint);
-
             overlay.setPosition(webMercatorPoint);
+
+            // Position the Map slightly North to help ensure the entire Popup is visible on smaller screens,
+            // and to help the map pan to the selected location correctly
+            let centerCoordinates = feature.getGeometry().getCoordinates();
+            if (theMap.getView().getZoom() <= 7) {
+                centerCoordinates[1] = centerCoordinates[1] + 200000;
+            } else {
+                centerCoordinates[1] = centerCoordinates[1] + 25000;
+            }
+            theMap.getView().setCenter(centerCoordinates);
         }
     };
 

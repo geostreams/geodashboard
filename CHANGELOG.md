@@ -26,6 +26,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Zoom to the features when drawing map for the first time
   [GEOD-1223](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1223)
 
+### Fixed
+- Ensure the map pans correctly when switching Sensors on the Explore Page
+  [GEOD-1224](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1224)
+
 ## [3.0.0-beta.4] - 2019-05-06
 
 ### Added
