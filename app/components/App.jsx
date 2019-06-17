@@ -32,7 +32,7 @@ const routes = (
         <Route path="/" component={Home}/>
         <Route path="/explore/:stations" component={Explore}/>
         <Route
-            path="/detail/location/:name/:category(/params=(:parameters_list))(/start=(:start_date))(/end=(:end_date))"
+            path="/detail/location/:name/:category(?params=(:parameters_list))(&start=(:start_date))(&end=(:end_date))"
             component={Detail}/>
         <Route path="/search" component={Search}/>
         <Route path="/trendsstations" component={TrendsStation}/>

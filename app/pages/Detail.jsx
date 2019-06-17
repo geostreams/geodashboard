@@ -164,14 +164,40 @@ class Detail extends Component {
         let all_parameters = this.state.category_mappings[selected_category]["parameters"].map(parameter => {
             return parameter.name
         });
-        // Check if all the URL Params provided exist
-        if (this.props.params.parameters_list) {
-            not_found = this.props.params.parameters_list.split(',')
+
+        // Get Query String Data
+        let query_string = this.props.location.search;
+
+        // Check URL Query Items
+        let index_params = query_string.indexOf('?params=');
+        let index_amp = query_string.indexOf('&');
+        let params = '';
+        let start_date = '';
+        let end_date = '';
+
+        // Parameters from the URL
+        if (index_params > -1) {
+            if (index_amp === -1) {
+                params = query_string.slice(index_params, query_string.length).replace("?params=", "");
+            } else {
+                params = query_string.slice(index_params, index_amp).replace("?params=", "");
+            }
+        }
+
+        // Dates from the URL
+        if (index_amp > -1 && query_string.indexOf('&start') > -1 && query_string.indexOf('&end=') > -1) {
+            let index_end = query_string.indexOf('&end=');
+            start_date = query_string.slice(index_amp, index_end).replace("&start=", "");
+            end_date = query_string.slice(index_end, query_string.length).replace("&end=", "");
+        }
+
+        if (params.length > 0) {
+            not_found = params.split(',')
                 .some(r => all_parameters.indexOf(r) === -1);
         }
         // Use the URL Params if they all exist
         if (not_found === false) {
-            params_list = this.props.params.parameters_list;
+            params_list = params;
         }
 
         let page_content = (
@@ -181,8 +207,8 @@ class Detail extends Component {
                 <div>
                     <DetailContents
                         parameters_list={params_list}
-                        start_date={this.props.params.start_date}
-                        end_date={this.props.params.end_date}
+                        start_date={start_date}
+                        end_date={end_date}
                         sensor={this.state.sensor}
                         category_parameters={this.state.category_mappings[selected_category]["parameters"]}
                         chart_type={this.state.category_mappings[selected_category]["type"]}

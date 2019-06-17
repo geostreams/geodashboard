@@ -142,10 +142,12 @@ class DetailContents extends Component {
                     this.setState({selected_parameters: this.props.parameters_list.split(",")});
                 }
             } else {
-                // Remove Params from the URL if the provided list is not proper
-                let index_params = location.hash.indexOf('/params=');
-                if (index_params > -1) {
+                let index_params = location.hash.indexOf('?params=');
+                if (index_params < 1) {
+                    let location_hash_reset = location.hash;
+                    let params_part = '?params=' + all_parameters.sort();
                     window.history.pushState('', '', location.hash.slice(0, index_params));
+                    window.history.pushState('', '', location_hash_reset + params_part);
                 }
 
                 this.setState({selected_parameters: all_parameters});
@@ -186,33 +188,35 @@ class DetailContents extends Component {
         this.setState({selectedStartDate: value[0], selectedEndDate: value[1]});
 
         // URL Date Index if it Exists
-        let index_dates = location.hash.indexOf('/start=');
+        let index_dates = location.hash.indexOf('&');
+        let update_hash = location.hash;
 
         if (value[0].getTime() !== new Date(this.props.sensor.min_start_time).getTime() ||
             value[1].getTime() !== new Date(this.props.sensor.max_end_time).getTime()) {
             this.setState({selectAllDates: false});
 
             // Update URL Dates
-            let update_hash = location.hash;
             if (index_dates > -1) {
                 update_hash = location.hash.slice(0, index_dates);
             }
             let current_href = location.href;
             let time_part =
-                '/start=' + value[0].toISOString().split('T')[0] +
-                '/end=' + value[1].toISOString().split('T')[0];
+                '&start=' + value[0].toISOString().split('T')[0] +
+                '&end=' + value[1].toISOString().split('T')[0];
             if (current_href.slice(-1) === '/') {
                 time_part =
-                    'start=' + value[0].toISOString().split('T')[0] +
-                    '/end=' + value[1].toISOString().split('T')[0];
+                    '&start=' + value[0].toISOString().split('T')[0] +
+                    '&end=' + value[1].toISOString().split('T')[0];
             }
             update_hash = update_hash + time_part;
+            window.history.pushState('', '', update_hash);
+        } else {
+            update_hash = update_hash.slice(0, index_dates);
             window.history.pushState('', '', update_hash);
         }
         if (value[0].getTime() === new Date(this.props.sensor.min_start_time).getTime() &&
             value[1].getTime() === new Date(this.props.sensor.max_end_time).getTime()) {
             this.setState({selectAllDates: true});
-
             // Remove URL Dates if the full range is selected
             if (index_dates > -1) {
                 window.history.pushState('', '', location.hash.slice(0, index_dates));
@@ -233,7 +237,7 @@ class DetailContents extends Component {
         this.updateBinningType(startDate, endDate);
 
         // Remove Dates from the URL if they exist
-        let index_dates = location.hash.indexOf('/start=');
+        let index_dates = location.hash.indexOf('&start=');
         if (index_dates > -1) {
             window.history.pushState('', '', location.hash.slice(0, index_dates));
         }
@@ -269,8 +273,8 @@ class DetailContents extends Component {
 
         // Update the URL with the Selected Parameters, and preserve Dates if they exist
         let current_href = location.href;
-        let index_params = location.hash.indexOf('/params=');
-        let index_dates = location.hash.indexOf('/start=');
+        let index_params = location.hash.indexOf('?params=');
+        let index_dates = location.hash.indexOf('&start=');
         let location_hash_dates = '';
         let location_hash_params = '';
         if (index_params > -1) {
@@ -281,11 +285,11 @@ class DetailContents extends Component {
         }
         let location_hash_reset = location.hash;
         if (new_parameters.sort().length > 0) {
-            let params_part = '/params=' + new_parameters.sort();
+            let params_part = '?params=' + new_parameters.sort();
             // Sometimes the URL ends in a slash, and sometimes it does not.
             // We need to account for this when updating the URL.
             if (current_href.slice(-1) === '/') {
-                params_part = 'params=' + new_parameters.sort();
+                params_part = '?params=' + new_parameters.sort();
             }
             if (index_params > -1) {
                 location_hash_reset = location.hash.slice(0, index_params);
