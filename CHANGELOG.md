@@ -7,22 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [3.0.0] - 2019-06-24
 
 ### Added
-- Line plot fills the parent container.
-  [GEOD-1230](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1230)
-- Added the option for Layers on the Analysis Page Map
-  [GEOD-1225](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1225)
 - Added static banners
   [GEOD-1203](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1203)
 - Added the option for searches to populate when clicking a button for the Analysis Page
   [GLGVO-535](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-535)
 
 ### Changed
-- The Search Page Filter Icons reflect the dropdown selection
-  [GEOD-1224](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1224)
-- Display the Detail Page binning type above the Date Slider
-  [GEOD-1228](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1228)
-- Map Popups always display Detail Page link, and the Detail Page will always load
-  [GEOD-1229](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1229)
 - Zoom to the features when drawing map for the first time
   [GEOD-1223](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1223)
 - Use parameter notation for detail page URL parameters
@@ -31,6 +21,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Ensure the map pans correctly when switching Sensors on the Explore Page
   [GEOD-1224](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1224)
+
+## [3.0.0-beta.5] - 2019-05-16
+
+### Added
+- Added the option for Layers on the Analysis Page Map
+  [GEOD-1225](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1225)
+
+### Changed
+- Line plot fills the parent container.
+  [GEOD-1230](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1230)
+- The Search Page Filter Icons reflect the dropdown selection
+  [GEOD-1224](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1224)
+- Display the Detail Page binning type above the Date Slider
+  [GEOD-1228](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1228)
+- Map Popups always display Detail Page link, and the Detail Page will always load
+  [GEOD-1229](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1229)
 
 ## [3.0.0-beta.4] - 2019-05-06
 
