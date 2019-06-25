@@ -4,10 +4,12 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require("path");
 
 module.exports = {
-  entry: ["./main.jsx"],
+  entry: {
+    app: './main.jsx'
+  },
   output: {
     path: path.resolve(__dirname, "build"),
-    filename: "bundle.js"
+    filename: "[name].bundle.js"
   },
   externals: {
     './config': "config"
@@ -64,18 +66,14 @@ module.exports = {
       minify: {
         removeComments: true,
         collapseWhitespace: false
-      }
+      },
+      chunks: ['app'],
     }),
-    new CopyWebpackPlugin([
-      { from: './public/images', to: './images' },
-      { from: './public/styles', to: './styles' },
-      { from: './public/pages', to: './pages' },
-    ]),
     new CopyWebpackPlugin([{
-        from: 'config.js',
-        transform: function(content, absoluteFrom) {
-            return content.toString().replace("export const gd3 = ", "window.config = {\n    gd3:") + "}"
-        }
+      from: 'config.js',
+      transform: function(content, absoluteFrom) {
+        return content.toString().replace("export const gd3 = ", "window.config = {\n    gd3:") + "}"
+      }
     }])
   ],
 };

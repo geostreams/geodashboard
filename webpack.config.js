@@ -4,11 +4,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
-    entry: './main.jsx',
+    entry: {
+        app: './main.jsx',
+        settings: "./main.jsx"
+
+    },
     devtool: 'inline-source-map',
     output: {
         path: path.resolve(__dirname, "build"),
-        filename: "bundle.js"
+        filename: "[name].bundle.js"
     },
     module: {
         rules: [
@@ -60,11 +64,12 @@ module.exports = {
             minify: {
                 removeComments: true,
                 collapseWhitespace: false
-            }
+            },
+            filename: './index.html'
         })
     ],
     devServer: {
-    	contentBase: [path.join(__dirname, 'public')],
+        contentBase: [path.join(__dirname, 'public')],
         historyApiFallback: true,
         inline: true,
         hot: true

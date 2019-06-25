@@ -21,11 +21,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
+            let page = (window.location.href).toString().split("/#/")[1];
+            if (page === "welcome"){
+                $('#storyboard').show();
+            } else {
+                $('#storyboard').hide();
+            }
             $('ul > li a[href]').filter(function () {
                 let path = (window.location.href).toString().split("/#/")[1];
                 return $(this).attr('href') === "/#/" + path;
             }).addClass('active');
-
             $("li").click(function () {
                 $('#sidebar').find('a').removeClass('active');
             });
@@ -59,12 +64,10 @@
         </div>
         <div class="nav">
             <ul id="sidebar">
-                <li class="home"><a href="../pages/home.html">HOME</a></li>
                 <li class="welcome"><a href="/#/">WELCOME</a></li>
                 <li class="explore"><a href="/#/explore/all">EXPLORE</a></li>
                 <li class="download"><a href="/#/search">DOWNLOAD</a></li>
                 <li class="analysis"><a href="/#/analysis">ANALYSIS</a></li>
-                <li class="about"><a href="../pages/about.html">ABOUT</a></li>
             </ul>
         </div>
     </div>
