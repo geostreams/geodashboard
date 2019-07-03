@@ -19,7 +19,8 @@ export type Properties = {
     name: string;
     popupContent: string;
     region: string;
-    type: PropertiesType
+    type: PropertiesType;
+    online_status: string;
 };
 
 export type Sensor = {
@@ -107,7 +108,12 @@ export type selectedSearchState = {
     dates: {
         available: { start: Date, end: Date },
         selected: { start: ?Date, end: ?Date },
-    }
+    },
+    span: {
+        available: { start: Date, end: Date },
+        selected: { start: ?Date, end: ?Date },
+    },
+    online: {selected: null, available: []},
 };
 
 export type exploreFilteringState = {

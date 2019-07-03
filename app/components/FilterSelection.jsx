@@ -50,6 +50,12 @@ class FilterSelection extends Component {
         if (value === "locations" || this.props.selectedFilters[idx] === "locations") {
             this.props.onClearLocation();
         }
+        if (value === "span" || this.props.selectedFilters[idx] === "span") {
+            this.props.onClearSpan();
+        }
+        if (value === "online" || this.props.selectedFilters[idx] === "online") {
+            this.props.onClearOnline();
+        }
         let newSelected = Object.assign([], this.props.selectedFilters);
         newSelected = newSelected.splice(0, idx);
         newSelected.push(value);
@@ -72,6 +78,12 @@ class FilterSelection extends Component {
         }
         if (value === "locations" || this.props.selectedFilters[idx] === "locations") {
             this.props.onClearLocation();
+        }
+        if (value === "span" || this.props.selectedFilters[idx] === "span") {
+            this.props.onClearSpan();
+        }
+        if (value === "online" || this.props.selectedFilters[idx] === "online") {
+            this.props.onClearOnline();
         }
         let newSelected = Object.assign([], this.props.selectedFilters);
         newSelected.splice(idx, 1);
@@ -103,8 +115,12 @@ class FilterSelection extends Component {
             this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.id)});
         } else if (!isNaN(parseInt(event.target.parentElement.parentElement.parentElement.id))) {
             this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.parentElement.id)});
-        } else {
+        } else if (!isNaN(parseInt(event.target.parentElement.parentElement.parentElement.parentElement.id))) {
             this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.parentElement.parentElement.id)});
+        } else if (!isNaN(parseInt(event.target.parentElement.parentElement.parentElement.parentElement.parentElement.id))) {
+            this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.parentElement.parentElement.parentElement.id)});
+        } else {
+            this.setState({selectedValue: parseInt(event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)});
         }
     };
 
@@ -123,8 +139,9 @@ class FilterSelection extends Component {
         });
         let addButton;
         if (this.props.selectedFilters.length < this.props.filters.length) {
-            addButton = <Fab id="addButton" className={styles.add} onClick={this.handleClickAddFilter.bind(this)}
-            ><Icon name="add"/></Fab>
+            addButton = <Fab id="addButton" className={styles.add} onClick={this.handleClickAddFilter.bind(this)}>
+                <Icon name="add"/>
+            </Fab>
         }
         return (
             <div>
@@ -137,4 +154,4 @@ class FilterSelection extends Component {
     }
 }
 
-export default FilterSelection
+export default FilterSelection;

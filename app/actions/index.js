@@ -437,6 +437,55 @@ export function addSearchLocation(location: ? string) {
     }
 }
 
+export const ADD_SEARCH_ONLINE = 'ADD_SEARCH_ONLINE';
+export function addSearchOnline(online: ? string) {
+    return (dispatch: Dispatch, getState: GetState) => {
+        const state = getState();
+        const selected_filters = state.searchFilters.selected;
+        dispatch({
+            type: ADD_SEARCH_ONLINE,
+            online,
+            selected_filters
+        });
+        const idx = selected_filters.indexOf('online');
+        dispatch(updateAvailableSensors(idx));
+    }
+}
+
+export const ADD_SPAN_START = 'ADD_SPAN_START';
+export function addSpanStart(span: ?Date) {
+    return (dispatch: Dispatch, getState: GetState) => {
+        const state = getState();
+        const selected_filters = state.searchFilters.selected;
+        const availableSensors = state.sensors.available_sensors;
+        dispatch({
+            type: ADD_SPAN_START,
+            span,
+            selected_filters,
+            availableSensors
+        });
+        const idx = selected_filters.indexOf('span');
+        dispatch(updateAvailableSensors(idx));
+    }
+}
+
+export const ADD_SPAN_END = 'ADD_SPAN_END';
+export function addSpanEnd(span: ?Date) {
+    return (dispatch: Dispatch, getState: GetState) => {
+        const state = getState();
+        const selected_filters = state.searchFilters.selected;
+        const availableSensors = state.sensors.available_sensors;
+        dispatch({
+            type: ADD_SPAN_END,
+            span,
+            selected_filters,
+            availableSensors
+        });
+        const idx = selected_filters.indexOf('span');
+        dispatch(updateAvailableSensors(idx));
+    }
+}
+
 export const ADD_CUSTOM_LOCATION_FILTER = 'ADD_CUSTOM_LOCATION_FILTER';
 export function addCustomLocationFilter(selectedPointsLocations: Array<string>, shapeCoordinates: Array<number>) {
     return (dispatch: Dispatch) => {
@@ -1013,3 +1062,4 @@ export function analysisSavedSearch(
         })
     }
 }
+

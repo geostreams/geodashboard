@@ -247,6 +247,43 @@ export function collectDates(sensorsData: Sensors): CollectDate {
     return {'start': minDate, 'end': maxDate};
 }
 
+export function collectSpanDates(sensorsData: Sensors): CollectDate {
+    let minDate = new Date();
+    let maxDate = new Date("1983-01-01");
+
+    sensorsData.map(s => {
+        const sensorStartTime = new Date(s.min_start_time);
+        const sensorEndTime = new Date(s.max_end_time);
+        if (sensorStartTime.getTime() < minDate.getTime()) {
+            minDate = sensorStartTime;
+        }
+        if (sensorEndTime.getTime() > maxDate) {
+            maxDate = sensorEndTime;
+        }
+    });
+
+    return {'start': minDate, 'end': maxDate};
+}
+
+export function collectOnlineOffline(sensorsData: Sensors): MapWithLabels {
+    let status = [];
+    let onlineAvailable = false;
+
+    sensorsData.map(s => {
+        if (s.properties.online_status !== undefined && onlineAvailable === false) {
+            onlineAvailable = true;
+        }
+    });
+    if (onlineAvailable === true) {
+        status.push({'id': "online", 'label': "Online"});
+        status.push({'id': "offline", 'label': "Offline"});
+        status.push({'id': "none", 'label': "All Options"});
+    } else {
+        status.push({'id': "none", 'label': "All Options"});
+    }
+    return status;
+}
+
 export function collectLocations(sensorsData: Sensors): MapWithLabels {
     let locations = [];
     const additional_location = window.configruntime.gd3.additional_locations;
@@ -380,6 +417,40 @@ function filterAvailableSensors(state: sensorsState, selectedFilters: Array<stri
                 }
 
                 return;
+
+            case 'span':
+                if (selectedSearch.span.selected.start !== "" && selectedSearch.span.selected.end !== ""
+                    && selectedSearch.span.selected.start !== null && selectedSearch.span.selected.end !== null) {
+                    new_sensors = [];
+                    av_sensors.map((sensor) => {
+                        if (selectedSearch.span.selected.end <= new Date(sensor.max_end_time) &&
+                            selectedSearch.span.selected.start >= new Date(sensor.min_start_time)) {
+                            new_sensors.push(sensor);
+                        }
+                    });
+                    av_sensors = new_sensors;
+                }
+                return;
+
+            case 'online':
+                // This uses the radio button's value
+                if (selectedSearch.online.selected !== null) {
+                    new_sensors = [];
+                    if (selectedSearch.online.selected === "eitherOption" || selectedSearch.online.selected === "none") {
+                        new_sensors = av_sensors;
+                    } else {
+                        av_sensors.map((sensor => {
+                            if (sensor.properties.online_status !== undefined) {
+                                if (sensor.properties.online_status === selectedSearch.online.selected) {
+                                    new_sensors.push(sensor);
+                                }
+                            }
+                        }));
+                    }
+                    av_sensors = new_sensors;
+                }
+                return;
+
         }
 
     });

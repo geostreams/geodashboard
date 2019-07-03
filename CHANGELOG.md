@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-535](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-535)
 - Provide Dropdown Examples for the new MenuBar Setup
   [GEOD-1236](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1236)
+- Added New Search Page Filters
+  [GEOD-1234](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1234)
 
 ### Changed
 - The Search Page Filter Icons reflect the dropdown selection
