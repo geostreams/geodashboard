@@ -33,6 +33,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Ensure the map pans correctly when switching Sensors on the Explore Page
   [GEOD-1224](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1224)
+- Ensure Markers Always Appear on the Explore and Search Pages
+  [GEOD-1238](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1238)
+- Correct Console Error with OpenLayers View Fit on Component Update
+  [GEOD-1239](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1239)
 
 ## [3.0.0-beta.4] - 2019-05-06
 
