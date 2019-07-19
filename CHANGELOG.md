@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1223](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1223)
 - Use parameter notation for detail page URL parameters
   [GEOD-1222](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1222)
+- Update how features are presented on the Search Page Map
+  [GEOD-883](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-883)
 
 ### Fixed
 - Ensure the map pans correctly when switching Sensors on the Explore Page

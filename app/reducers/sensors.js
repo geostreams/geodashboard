@@ -35,6 +35,7 @@ const defaultState = {
     draw_available_sensors: [],
     shape_coordinates: [],
     explore_sensors: [],
+    search_sensors: []
 };
 
 const sensors = (state: sensorsState = defaultState, action: SensorAction) => {
@@ -53,6 +54,7 @@ const sensors = (state: sensorsState = defaultState, action: SensorAction) => {
                 available_sensors: action.sensors,
                 shape_coordinates: [],
                 explore_sensors: action.sensors,
+                search_sensors: showSensorsSearch(action.sensors),
             });
 
         case RECEIVE_MULTI_PARAMETERS:
@@ -63,18 +65,21 @@ const sensors = (state: sensorsState = defaultState, action: SensorAction) => {
 
         case UPDATE_AVAILABLE_SENSORS:
             let newSensors = filterAvailableSensors(state, action.selected_filters, action.selected_search, action.multi_parameter_map);
+            let showSensorsIDs = showSensorsSearch(newSensors);
             if (action.selected_search.locations.selected === 'Custom Location') {
                 shapeCoordinates = state.shape_coordinates;
                 return Object.assign({}, state, {
                     available_sensors: newSensors,
-                    shape_coordinates: shapeCoordinates
+                    shape_coordinates: shapeCoordinates,
+                    search_sensors: showSensorsIDs,
                 });
             } else {
                 shapeCoordinates = [];
                 return Object.assign({}, state, {
                     available_sensors: newSensors,
                     draw_available_sensors: [],
-                    shape_coordinates: shapeCoordinates
+                    shape_coordinates: shapeCoordinates,
+                    search_sensors: showSensorsIDs,
                 });
             }
 
@@ -115,7 +120,8 @@ const sensors = (state: sensorsState = defaultState, action: SensorAction) => {
                 available_sensors: [],
                 draw_available_sensors: [],
                 shape_coordinates: [],
-                explore_sensors: []
+                explore_sensors: [],
+                search_sensors: []
             });
 
         default:
@@ -278,6 +284,14 @@ export function collectLocations(sensorsData: Sensors): MapWithLabels {
     // sort
     const order = getLakesOrdering("title");
     return sortByLake(locations, order);
+}
+
+function showSensorsSearch(newSensors: Sensors) {
+    let search_sensors_ids = [];
+    newSensors.map((sensor) => {
+        search_sensors_ids.push(sensor.id);
+    });
+    return search_sensors_ids;
 }
 
 function filterAvailableSensors(state: sensorsState, selectedFilters: Array<string>, selectedSearch: Object, multi_parameter_map: Object) {

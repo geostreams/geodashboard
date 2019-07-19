@@ -128,7 +128,7 @@ class DownloadButtons extends Component {
 
     render() {
 
-        let numSensors = this.props.availableSensors.length;
+        let numSensors = this.props.showSensors.length;
         let disabled = true;
         if (
             (this.props.selectedParameters.length > 0 || this.props.selectedDataSources.length > 0
@@ -215,7 +215,7 @@ DownloadButtons.propTypes = {
     selectedEndDate: PropTypes.instanceOf(Date),
     selectedParameters: PropTypes.array,
     selectedFilters: PropTypes.array,
-    availableSensors: PropTypes.array,
+    showSensors: PropTypes.array,
     selectedLocation: PropTypes.string,
     drawShapeCoordinates: PropTypes.array,
     selectedDataSources: PropTypes.array
