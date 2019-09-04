@@ -19,17 +19,11 @@ class MiniMap extends Component {
 
     render() {
         return (
-            <div>
-                <div id='map' className="map" style={{"height": "200px", "width": "100%"}}> </div>
-                <div style={{display: "none"}}>
-                    <a className="overlay" id="vienna" target="_blank"
-                       href="http://en.wikipedia.org/wiki/Vienna">Vienna</a>
-                    <div id="marker" title="Marker" className="marker"> </div>
-                </div>
-            </div>);
+            <div id='miniMap' className="miniMap" style={{"height": "200px", "width": "100%"}}/>
+        );
     }
 
-    getColor(source: string): string {
+    static getColor(source: string): string {
         let sourcecolor = window.configruntime.gd3.sourcecolor;
         return sourcecolor[source] !== undefined ? sourcecolor[source] : '#17495B';
     }
@@ -78,8 +72,8 @@ class MiniMap extends Component {
             vectorLayer
         ];
 
-        let map = new ol.Map({
-            target: 'map',
+        new ol.Map({
+            target: 'miniMap',
             layers: layers,
             view: new ol.View({
                 projection: 'EPSG:3857',
