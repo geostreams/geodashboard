@@ -92,7 +92,7 @@
 }
 
 .filter_card {
-    width: 20em;
+    width: 22em;
     margin: 1em 0 0 0;
     padding: 0.5em 1em 1em 1em;
     text-align: left;
@@ -174,4 +174,13 @@ hr.divider_style {
     a.edit_filter_button > i {
         font-size: xx-large !important;
     }
+}
+
+.filterPills {
+    border: #FFFFFF;
+    margin: 0.2em;
+    padding: 0.2em;
+    border-radius: 0.5em;
+    background-color: #D4DCE7;
+    width: 10em;
 }
