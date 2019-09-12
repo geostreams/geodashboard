@@ -10,8 +10,7 @@ import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json';
 import {getLocationName, getMobileSizeMax} from '../utils/getConfig';
 import {
-    Button, Icon, Checkbox, FormField, label, RadioGroup, Radio,
-    Card, CardHeader, CardTitle, CardSubtitle, CardText, CardMedia
+    Body2, Card, CardHeader, CardTitle, CardSubtitle, CardText, Checkbox, FormField, Icon, RadioGroup, Radio
 } from 'react-mdc-web/lib';
 import type {InputEvent} from '../utils/flowtype';
 import Select from './material/Select';
@@ -70,7 +69,12 @@ class FilterList extends Component {
                 </FormField>
             </div>;
 
-        let cardsubtitle;
+        let cardsubtitle: Array<any> = [];
+        let value = '';
+        let trim_length = 15;
+        let longer_name = '';
+        let label = '';
+
         switch (this.props.attribute) {
             case 'data_sources':
                 descriptiveIconComponent = <Icon className={styles.descriptiveIconChoice} name="group_work"/>;
@@ -78,8 +82,19 @@ class FilterList extends Component {
                     <UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute} label={p.label}
                                    key={p.id}/>
                 );
-                cardsubtitle = this.props.sources.filter(
-                    x => this.props.selectedDataSources.indexOf(x.id) >= 0).map(x => x.label).join(", ");
+
+                this.props.sources.filter(x => this.props.selectedDataSources.indexOf(x.id) >= 0).map(x => {
+                    label = x.label;
+                    if (label.length >= trim_length) {
+                        longer_name = '...';
+                        label = x.label.substring(0, trim_length).trim();
+                    }
+                    value =
+                        <Body2 key={label} component="button" className={styles.filterPills}>
+                            {label}{longer_name}
+                        </Body2>;
+                    cardsubtitle.push(value);
+                });
 
                 showButtons = hideShowContents;
                 break;
@@ -91,9 +106,21 @@ class FilterList extends Component {
                                            label={parameter_label_array}
                                            key={p.id}/>);
                 });
-                cardsubtitle = this.props.selectedParameters.map(p =>
-                    this.props.parameters.find(item => item.id === p).label
-                ).join(", ");
+                this.props.selectedParameters.map(p => {
+                    let label =
+                        this.props.parameters.find(item => item.id === p).label.replace('<i>', '').replace('</i>', '');
+                    let hover_label = label;
+                    if (label.length >= trim_length) {
+                        longer_name = '...';
+                        label = label.substring(0, trim_length).trim();
+                    }
+                    value =
+                        <Body2 key={label} component="button" className={styles.filterPills} title={hover_label}>
+                            {label}{longer_name}
+                        </Body2>;
+                    cardsubtitle.push(value);
+
+                });
                 showButtons = hideShowContents;
                 break;
             case "time":
@@ -169,7 +196,7 @@ class FilterList extends Component {
                             </RadioGroup>
                         </div>
                     );
-                cardsubtitle = getLocationName(this.props.selectedLocation);
+                cardsubtitle.push(getLocationName(this.props.selectedLocation));
                 break;
             default:
         }
@@ -217,10 +244,9 @@ class FilterList extends Component {
             // if this filter is closed
         } else {
             // Display selected values if they exist, or "No Selection" otherwise
-            cardsubtitle =
-                cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 1 ?
-                    cardsubtitle : "No selection";
-            cardsubtitle = handleParamsWithItalics(cardsubtitle);
+            if (cardsubtitle === null || cardsubtitle === undefined || cardsubtitle.toString().length <= 1) {
+                cardsubtitle = ["No Selection"];
+            }
             cardhead = (
                 <CardHeader>
                     <CardTitle className={mainStyles.title_card}>

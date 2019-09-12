@@ -94,6 +94,7 @@ class DetailContents extends Component {
     }
 
     componentDidUpdate(newProps: Object, oldState: Object) {
+        // Make sure the correct Sensor information displays
         if (oldState.sensorID !== newProps.sensorID) {
             let that = this;
             window.onhashchange = function () {
@@ -103,6 +104,15 @@ class DetailContents extends Component {
                     that.selectAllDates();
                 }
             };
+        }
+
+        // Only show ONE miniMap item
+        let miniMapID = document.getElementById('miniMap');
+        if (miniMapID) {
+            let mapElements = miniMapID.getElementsByClassName('ol-viewport');
+            for (let i = 1; i < mapElements.length; i++) {
+                mapElements[i].style.display = 'none';
+            }
         }
     }
 
