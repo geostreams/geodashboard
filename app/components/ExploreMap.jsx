@@ -135,7 +135,7 @@ class ExploreMap extends Component {
     };
 
     mapDidUpdate = (theMap: ol.Map) => {
-
+        // console.log("theMap = " + theMap);
         let {exploreLayersDetails, layersVisibility} = this.props;
 
         let exploreLayers = [];
@@ -209,7 +209,7 @@ class ExploreMap extends Component {
 
         let vectorExtent = tmpvectorSource.getExtent();
 
-        if (features.length > 0) {
+        if (features.length > 0 && theMap.getSize() !== undefined) {
             if (!this.state.expandedCluster) {
                 theMap.getView().fit(vectorExtent, theMap.getSize());
             }

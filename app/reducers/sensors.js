@@ -214,13 +214,16 @@ export function collectSources(sensorsData: Sensors): MapWithLabels {
     sensorsData.map(s => {
         let source = s.properties.type;
         // check if source exists already
-        const found = sources.some(function (e: MapWithLabel) {
-            return e.id === source.id;
-        });
-        if (source === null)
-            console.log(`Found sensor ${s.id} with null data sources`);
-        else if (!found)
-            sources.push({'id': source.id, 'label': getSourceName(source) || ''});
+        if (source != null) {
+            const found = sources.some(function (e: MapWithLabel) {
+                return e.id === source.id;
+            });
+            if (!found) {
+                sources.push({'id': source.id, 'label': getSourceName(source) || ''});
+            }
+        } else {
+            console.log(`Found sensor ${s.id} with null data source`);
+        }
     });
     // sort
     const source_order = getSourceOrder();
