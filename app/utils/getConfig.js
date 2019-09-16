@@ -47,6 +47,15 @@ export function getCustomLocation(location: string): Object {
         });
 }
 
+export function getAreaLocations(location: string): Object {
+    const sensors_regions = window.configruntime.gd3.sensors_regions;
+
+    return sensors_regions.find(
+        function (custom_location) {
+            return custom_location.properties.id === location;
+        });
+}
+
 export function getLakesOrdering(key: string) {
     const additional_locations = window.configruntime.gd3.additional_locations;
     let order = {};
@@ -634,7 +643,7 @@ export function useAnalysisSearches() {
     return getValue;
 }
 
-export function getAnalysisSearchHeading(){
+export function getAnalysisSearchHeading() {
     let getValue = 'Saved Searches: ';
     if (window.configruntime.gd3.analysis_search_heading) {
         getValue = window.configruntime.gd3.analysis_search_heading;

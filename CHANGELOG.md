@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1236](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1236)
 - Added New Search Page Filters
   [GEOD-1234](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1234)
+- Highlight Regions associated with a chosen Sensor on the Explore Page
+  [GEOD-1069](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1069)
 
 ### Changed
 - The Search Page Filter Icons reflect the dropdown selection

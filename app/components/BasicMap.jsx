@@ -315,12 +315,15 @@ class BasicMap extends Component {
         });
 
         theMap.on('singleclick', function (e) {
+            // Always remove previous popup if it is open
+            removePopup(theMap);
             selectItems.setActive(false);
             that.props.onMapSingleClick(theMap, e);
         });
 
         theMap.on('pointerdrag', function (e) {
             removePopup(theMap);
+            that.props.onMapSingleClick(theMap, e, true);
         });
 
         if (customLayers) {
