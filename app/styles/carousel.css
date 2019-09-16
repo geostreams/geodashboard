@@ -4,7 +4,7 @@
     max-width: 50%;
     position: relative;
     margin: auto;
-    padding: 1em;
+    padding: 1em 0;
 }
 
 /*********************/
@@ -19,14 +19,16 @@
     text-align: center;
     cursor: pointer;
     margin: 0.1em;
+    color: grey;
 }
 
 .backButton, .forwardButton {
     position: absolute !important;
     top: 50%;
-    margin-top: -3em;
+    margin-top: -6em;
     background-color: white !important;
     color: black !important;
+    z-index: 9999;
 }
 
 .backButton {
@@ -35,6 +37,33 @@
 
 .forwardButton {
     right: 0;
+}
+
+/*********************/
+
+/* Captions style if Utilized */
+
+.captionStyle {
+    background-color: white;
+    font-size: 1.5em !important;
+    padding: 0 1em 1em 1em !important;
+    width: 20em !important;
+    height: 2.5em !important;
+    margin: auto !important;
+}
+
+.captionButtonStyle {
+    margin: auto !important;
+    color: #FFFFFF !important;
+}
+
+.captionIcon {
+    padding-top: 0.25em;
+    float: left;
+}
+
+.captionText {
+    float: left;
 }
 
 /**************************************************************/
@@ -46,10 +75,10 @@
 }
 
 @keyframes imageTransition {
-    0%, 100% {
+    0% {
         opacity: .8;
     }
-    40%, 60% {
+    20%, 100% {
         opacity: 1;
     }
 }

@@ -68,6 +68,9 @@ export const gd3 = {
     // Home Page Carousel file names - Should be located in /geodashboard-v3/theme folder
     home_page_carousel_images: [],
 
+    // Home Page Carousel Caption Information - Numbers correspond to the order of images above
+    home_page_carousel_captions : {},
+
     // Should Tabs to select multi-parameter graphs be displayed on the Detail Page
     show_detail_tabs: true,
 
@@ -1294,6 +1297,7 @@ export const gd3 = {
     mapMinZoom: 5.5,
     mapCenterValue: [-84.44799549, 38.9203417],
     mapPopupZoomMax: 10,
+
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
 // Keep the next new line at the end of the file

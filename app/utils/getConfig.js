@@ -576,6 +576,14 @@ export function getCarouselImageNames() {
     return nameList;
 }
 
+export function getCarouselImageCaptions() {
+    let captionList = '';
+    if (window.configruntime.gd3.home_page_carousel_captions) {
+        captionList = window.configruntime.gd3.home_page_carousel_captions;
+    }
+    return captionList;
+}
+
 export function getMapPopupZoom() {
     let getValue = 10;
     if (window.configruntime.gd3.mapPopupZoomMax) {
