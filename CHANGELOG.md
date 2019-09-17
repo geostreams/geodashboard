@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1236](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1236)
 - Added New Search Page Filters
   [GEOD-1234](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1234)
+- Count the Datapoints before allowing downloads to ensure there are not too many
+  [GEOD-915](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-915)
 - Highlight Regions associated with a chosen Sensor on the Explore Page
   [GEOD-1069](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1069)
 
@@ -35,6 +37,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1222](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1222)
 - Add pills surrounding on the collapsed Parameters and Sources
   [GEOD-917](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-917)
+- Update the Carousel to include optional Captions and Links
+  [GEOD-1247](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1247)
 
 ### Fixed
 - Ensure the map pans correctly when switching Sensors on the Explore Page

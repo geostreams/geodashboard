@@ -4,7 +4,7 @@
 
 import {
     RECEIVE_SENSORS, UPDATE_AVAILABLE_SENSORS, UPDATE_EXPLORE_SENSORS, RESET_EXPLORE_SENSORS,
-    ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS, RECEIVE_MULTI_PARAMETERS
+    ADD_CUSTOM_LOCATION_FILTER, CLEAR_SENSORS, RECEIVE_MULTI_PARAMETERS, COUNT_NUMBER_DATAPOINTS
 } from '../actions';
 import type {Sensor, Sensors, sensorsState, MapWithLabel, MapWithLabels, Parameters} from '../utils/flowtype';
 import {
@@ -22,6 +22,7 @@ type SensorAction = {|
     multi_parameter_map: { [string]: Array<string> },
     shape_coordinates: Array<number>,
     explore_filtering: Object,
+    number_datapoints: number
 |};
 
 const defaultState = {
@@ -52,13 +53,18 @@ const sensors = (state: sensorsState = defaultState, action: SensorAction) => {
                 locations: collectLocations(action.sensors),
                 available_sensors: action.sensors,
                 shape_coordinates: [],
-                explore_sensors: action.sensors,
+                explore_sensors: action.sensors
             });
 
         case RECEIVE_MULTI_PARAMETERS:
             const copy_sensors = state.sensors.slice(0);
             return Object.assign({}, state, {
                 parameters: collectParameters(copy_sensors, action.parameters, action.multi_parameter_map)
+            });
+
+        case COUNT_NUMBER_DATAPOINTS:
+            return Object.assign({}, state, {
+                number_datapoints: action.number_datapoints
             });
 
         case UPDATE_AVAILABLE_SENSORS:

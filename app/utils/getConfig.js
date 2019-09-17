@@ -474,6 +474,38 @@ export function getDownloadButtonPath() {
     return getValue;
 }
 
+export function getDownloadButtonPathCount() {
+    let getValue = '/geostreams/api/datapoints?';
+    if (window.configruntime.gd3.download_button_path_count) {
+        getValue = window.configruntime.gd3.download_button_path_count;
+    }
+    return getValue;
+}
+
+export function getDownloadMaxDatapointsAllowed() {
+    let getValue = 500;
+    if (window.configruntime.gd3.download_count_max_datapoints) {
+        getValue = window.configruntime.gd3.download_count_max_datapoints;
+    }
+    return getValue;
+}
+
+export function getGeneralDownloadErrorText() {
+    let getValue = 'An ERROR occurred with Download - Please try again!';
+    if (window.configruntime.gd3.general_error) {
+        getValue = window.configruntime.gd3.general_error;
+    }
+    return getValue;
+}
+
+export function getDatapointsDownloadErrorText() {
+    let getValue = 'Too Many Datapoints to Download - Please try again!';
+    if (window.configruntime.gd3.max_datapoints_error) {
+        getValue = window.configruntime.gd3.max_datapoints_error;
+    }
+    return getValue;
+}
+
 export function getTimeSeriesZeroStart() {
     return window.configruntime.gd3.time_series_zero_start;
 }
@@ -585,6 +617,14 @@ export function getCarouselImageNames() {
     return nameList;
 }
 
+export function getCarouselImageCaptions() {
+    let captionList = '';
+    if (window.configruntime.gd3.home_page_carousel_captions) {
+        captionList = window.configruntime.gd3.home_page_carousel_captions;
+    }
+    return captionList;
+}
+
 export function getMapPopupZoom() {
     let getValue = 10;
     if (window.configruntime.gd3.mapPopupZoomMax) {
@@ -597,6 +637,14 @@ export function getLoadingTimeLimit() {
     let getValue = 100000;
     if (window.configruntime.gd3.load_time_limit) {
         getValue = window.configruntime.gd3.load_time_limit;
+    }
+    return getValue;
+}
+
+export function getIntervalTime() {
+    let getValue = 3000;
+    if (window.configruntime.gd3.set_interval_time) {
+        getValue = window.configruntime.gd3.set_interval_time;
     }
     return getValue;
 }
