@@ -3,31 +3,49 @@
  */
 
 import React, {Component} from 'react';
+import {Link} from 'react-router';
 import {Row, Col} from 'react-flexbox-grid';
 import styles from "../styles/detail.css";
 import mainStyles from '../styles/main.css'
 import BoxAndWhiskers from '../components/BoxAndWhiskers';
 import LinePlot from './LinePlot';
 import LineNoData from './LineNoData';
+import {
+    Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon
+} from 'react-mdc-web/lib';
+import {removeCharsIDs} from '../utils/graphUtils';
 
 
 class Chart extends Component {
     constructor(props: Object) {
         super(props);
         this.state = {
+            displayDownload: false,
             openInfoButton: false
         };
+        (this: any).handleOpenDownload = this.handleOpenDownload.bind(this);
+        (this: any).handleCloseDownload = this.handleCloseDownload.bind(this);
     }
 
     state: {
+        displayDownload: boolean,
         openInfoButton: boolean
     };
+
+    handleCloseDownload() {
+        this.setState({displayDownload: !this.state.displayDownload});
+    };
+
+    handleOpenDownload() {
+        this.setState({displayDownload: !this.state.displayDownload});
+    }
 
     render() {
 
         let chartData = '';
         let BAWValues = [];
         let boxAndWhiskers = [];
+        let downloadDialog, downloadButton = '';
         const {units, title} = this.props;
         let values = [];
         let that = this;
@@ -75,16 +93,82 @@ class Chart extends Component {
         } else {
             chartData = (
                 <LinePlot data={values}
-                      selectedStartDate={this.props.selectedStartDate}
-                      selectedEndDate={this.props.selectedEndDate}
-                      yAxisLabel={units}
-                      displayLines={this.props.displayLines}
-                      title={title}
-                      sources={sources}
-                      startAtZero={this.props.startAtZero}
-                      sameTimeScale={this.props.sameTimeScale}
-                      binType={this.props.binType}
+                          selectedStartDate={this.props.selectedStartDate}
+                          selectedEndDate={this.props.selectedEndDate}
+                          yAxisLabel={units}
+                          displayLines={this.props.displayLines}
+                          title={title}
+                          sources={sources}
+                          startAtZero={this.props.startAtZero}
+                          sameTimeScale={this.props.sameTimeScale}
+                          binType={this.props.binType}
                 />
+            );
+            let buttonID = removeCharsIDs(title) + 'Download';
+            let buttonHTML: any = document.getElementById(buttonID);
+            let popupText = '';
+            if (buttonHTML !== null) {
+                if (buttonHTML.alt === undefined) {
+                    popupText = '<div>No Data Available</div>';
+                } else {
+                    popupText = '<div>' + buttonHTML.alt + '</div>';
+                }
+            }
+            let downloadFileName = buttonID + ".svg";
+
+            let dialogName = "displayDownload" + buttonID;
+
+            downloadButton = (
+                <Button dense className={styles.downloadGraphButtonDialog}
+                        key={dialogName} id={dialogName}
+                        onClick={() => {
+                            this.handleOpenDownload()
+                        }}
+                >
+                    <div className={styles.downloadIcon}><Icon name="get_app"/></div>
+                    <div className={styles.downloadText}>Download Chart</div>
+                </Button>
+            );
+
+            downloadDialog = (
+                <Dialog
+                    open={this.state.displayDownload}
+                    onClose={this.handleCloseDownload}
+                >
+                    <DialogHeader>
+                        <DialogTitle>DOWNLOAD CHART</DialogTitle>
+                    </DialogHeader>
+                    <DialogBody>Download {title} Chart</DialogBody>
+                    <DialogFooter>
+                        <Button onClick={this.handleCloseDownload}>
+                            Decline
+                        </Button>
+                        <Button>
+                            <Link className={styles.downloadGraphButton} id={buttonID}
+                                  download={downloadFileName} href="#"
+                                  onClick={() => {
+                                      let fileContent = popupText;
+                                      let downloadLinkId = buttonID;
+                                      let objUrl = null;
+                                      if (objUrl !== null) {
+                                          window.URL.revokeObjectURL(objUrl);
+                                      }
+                                      // The file data object for downloading
+                                      let data = new Blob([fileContent], {type: 'image/svg+xml'});
+                                      objUrl = window.URL.createObjectURL(data);
+                                      // Add the data to the download
+                                      let downloadLinkButton: any = document.getElementById(downloadLinkId);
+                                      if (downloadLinkButton) {
+                                          downloadLinkButton.href = objUrl;
+                                      }
+                                      this.handleCloseDownload();
+                                  }}
+                            >
+                                Download
+                            </Link>
+                        </Button>
+                    </DialogFooter>
+                </Dialog>
             );
         }
 
@@ -93,7 +177,9 @@ class Chart extends Component {
                 <Col md={10}>
                     <div className={styles.layout_style}>
                         <div className={styles.float_item_left}>
+                            {downloadButton}
                             {chartData}
+                            {downloadDialog}
                         </div>
                     </div>
                 </Col>

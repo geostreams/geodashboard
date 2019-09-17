@@ -134,8 +134,7 @@
     font: 10px sans-serif;
 }
 
-.line,
-.circle {
+.line, .circle {
     fill: #fff;
     stroke: #000;
     stroke-width: 1px;
@@ -223,13 +222,32 @@
     font-weight: 400;
     letter-spacing: .04em;
     line-height: 1.25rem;
-    color: rgba(0,0,0,.87);
+    color: rgba(0, 0, 0, .87);
 }
-
 
 .box-container {
     display: block;
     margin: auto;
     align: center;
     text-align: center
+}
+
+.downloadGraphButtonDialog {
+    float: right;
+    margin-bottom: -2em;
+}
+
+.downloadIcon {
+    padding-top: 0.5em;
+    float: left;
+}
+
+.downloadText {
+    float: left;
+}
+
+.downloadGraphButton {
+    float: right;
+    text-decoration: none;
+    color: #3f51b5;
 }

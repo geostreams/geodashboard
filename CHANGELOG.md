@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-915](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-915)
 - Highlight Regions associated with a chosen Sensor on the Explore Page
   [GEOD-1069](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1069)
+- Add Detail Page Buttons to allow for Saving Graphs
+  [GEOD-947](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-947)
 
 ### Changed
 - The Search Page Filter Icons reflect the dropdown selection

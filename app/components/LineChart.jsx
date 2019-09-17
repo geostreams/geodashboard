@@ -1,6 +1,6 @@
 /*
- * @flow
- */
+* @flow
+*/
 
 import React, {Component} from "react";
 import {Row} from 'react-flexbox-grid';
@@ -33,54 +33,56 @@ class LineChart extends Component {
 
             selected_parameters.map(parameter_id => {
                 const parameter = this.props.category_parameters.find(x => x.name === parameter_id);
-                if (screen.width > getMobileSizeMax()) {
-                    if (getShowRawProcessed() === true) {
-                        charts.push(<Row key={parameter_id}>
-                            <ChartRawProcessed interval_val={interval_val}
-                                               title={parameter.title}
-                                               units={parameter.unit}
-                                               selectedStartDate={this.props.selectedStartDate}
-                                               selectedEndDate={this.props.selectedEndDate}
-                                               filterBySeason={this.props.filterBySeason}
-                                               selectedSeason={this.props.selectedSeason}
-                                               category_parameters={this.props.category_parameters}
-                                               parameterSources={this.props.parameterSources}
-                                               displayLines={this.props.displayLines}
-                                               binType={this.props.binType}
-                                               id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}
-                                               startAtZero={this.props.startAtZero}
-                                               sameTimeScale={this.props.sameTimeScale}
-                            />
-                        </Row>)
+                if (parameter) {
+                    if (screen.width > getMobileSizeMax()) {
+                        if (getShowRawProcessed() === true) {
+                            charts.push(<Row key={parameter_id}>
+                                <ChartRawProcessed interval_val={interval_val}
+                                                   title={parameter.title}
+                                                   units={parameter.unit}
+                                                   selectedStartDate={this.props.selectedStartDate}
+                                                   selectedEndDate={this.props.selectedEndDate}
+                                                   filterBySeason={this.props.filterBySeason}
+                                                   selectedSeason={this.props.selectedSeason}
+                                                   category_parameters={this.props.category_parameters}
+                                                   parameterSources={this.props.parameterSources}
+                                                   displayLines={this.props.displayLines}
+                                                   binType={this.props.binType}
+                                                   id={sensor.name} param={parameter_id}
+                                                   sensorData={this.props.sensorData}
+                                                   startAtZero={this.props.startAtZero}
+                                                   sameTimeScale={this.props.sameTimeScale}
+                                />
+                            </Row>)
+                        } else {
+                            charts.push(<Row key={parameter_id} className={mainStyles.fullWidth}>
+                                <Chart interval_val={interval_val}
+                                       title={parameter.title}
+                                       units={parameter.unit}
+                                       selectedStartDate={this.props.selectedStartDate}
+                                       selectedEndDate={this.props.selectedEndDate}
+                                       filterBySeason={this.props.filterBySeason}
+                                       selectedSeason={this.props.selectedSeason}
+                                       category_parameters={this.props.category_parameters}
+                                       parameterSources={this.props.parameterSources}
+                                       displayLines={this.props.displayLines}
+                                       binType={this.props.binType}
+                                       id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}
+                                       startAtZero={this.props.startAtZero}
+                                       sameTimeScale={this.props.sameTimeScale}
+                                />
+                            </Row>)
+                        }
                     } else {
-                        charts.push(<Row key={parameter_id} className={mainStyles.fullWidth}>
-                            <Chart interval_val={interval_val}
-                                   title={parameter.title}
-                                   units={parameter.unit}
-                                   selectedStartDate={this.props.selectedStartDate}
-                                   selectedEndDate={this.props.selectedEndDate}
-                                   filterBySeason={this.props.filterBySeason}
-                                   selectedSeason={this.props.selectedSeason}
-                                   category_parameters={this.props.category_parameters}
-                                   parameterSources={this.props.parameterSources}
-                                   displayLines={this.props.displayLines}
-                                   binType={this.props.binType}
-                                   id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}
-                                   startAtZero={this.props.startAtZero}
-                                   sameTimeScale={this.props.sameTimeScale}
+                        charts.push(<Row key={parameter_id}>
+                            <ChartMobile interval_val={interval_val}
+                                         title={parameter.title}
+                                         id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}
                             />
                         </Row>)
                     }
-                } else {
-                    charts.push(<Row key={parameter_id}>
-                        <ChartMobile interval_val={interval_val}
-                                     title={parameter.title}
-                                     id={sensor.name} param={parameter_id} sensorData={this.props.sensorData}
-                        />
-                    </Row>)
                 }
-
-            })
+            });
 
         }
         return (
