@@ -11,7 +11,8 @@ type SearchFilterAction = {|
 |};
 
 const defaultState = {
-    filters: [{'id': 'locations'}, {'id': 'data_sources'}, {'id': 'parameters'}, {'id': 'time'}],
+    filters: [{'id': 'locations'}, {'id': 'data_sources'}, {'id': 'parameters'}, {'id': 'time'},
+        {'id': 'span'}, {'id': 'online'}],
     selected: []
 };
 

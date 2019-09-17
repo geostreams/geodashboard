@@ -6,7 +6,7 @@ import React, {Component} from "react";
 import TrendsGraph from '../components/TrendsGraph';
 import Spinner from './Spinner';
 import YearSlider from './YearSlider';
-import {getLoadingTimeLimit} from '../utils/getConfig';
+import {getLoadingTimeLimit, getIntervalTime} from '../utils/getConfig';
 
 
 class TrendDetailRight extends Component {
@@ -36,7 +36,7 @@ class TrendDetailRight extends Component {
             this.props.trends_parameter, this.props.trends_season, this.props.trends_region_id
         );
         const that = this;
-        let setInterval_time = 3000;
+        let setInterval_time = getIntervalTime();
 
         return (
             new Promise((resolve) => {

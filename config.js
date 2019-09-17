@@ -62,11 +62,29 @@ export const gd3 = {
     // Paths for Downloads
     download_button_path: '/datapoints/download?',
 
+    // Paths for Downloads Count
+    download_button_path_count: '/api/datapoints?',
+
+    // Max Number of Datapoints allowed to be downloaded at once
+    download_count_max_datapoints: 3000,
+
+    // Download Alert Text options
+    general_error: 'An error occurred with Download - Please try again!',
+    max_datapoints_error: 'Too Many Datapoints to Download - Please continue to filter down your query.',
+
+    // Interval Time in milliseconds for the Spinner to wait for change style to include text
+    set_interval_time: 3000,
+    // Load Time Limit in Milliseconds
+    load_time_limit: 100000,
+
     // This variable is used to determine the location for links to the Detail Page
     application_website: "/",
 
     // Home Page Carousel file names - Should be located in /geodashboard-v3/theme folder
     home_page_carousel_images: [],
+
+    // Home Page Carousel Caption Information - Numbers correspond to the order of images above
+    home_page_carousel_captions : {},
 
     // Should Tabs to select multi-parameter graphs be displayed on the Detail Page
     show_detail_tabs: true,
@@ -871,6 +889,9 @@ export const gd3 = {
         }
     ],
 
+    // This is used to define HUC areas on the map
+    sensors_regions: [],
+
     // These variables are for the Card Subtitles on the Trends and Exploratory Analysis Pages ****
     parameter_subtitle: '',
     season_subtitle: '',
@@ -930,9 +951,6 @@ export const gd3 = {
             }
         },
     ],
-
-    // Trends Region Load Time Limit in Milliseconds
-    load_time_limit: 100000,
 
     // Exploratory Analysis Page Only
     trend_settings: [
@@ -1294,6 +1312,7 @@ export const gd3 = {
     mapMinZoom: 5.5,
     mapCenterValue: [-84.44799549, 38.9203417],
     mapPopupZoomMax: 10,
+
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
 // Keep the next new line at the end of the file

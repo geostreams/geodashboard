@@ -5,18 +5,27 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
-    Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon, Menu, MenuItem, MenuAnchor
+    Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon
 } from 'react-mdc-web/lib';
-import {getCustomLocation, getDownloadButtonPath} from '../utils/getConfig';
+import {
+    getCustomLocation, getDownloadButtonPath, getDownloadButtonPathCount,
+    getLoadingTimeLimit, getDownloadMaxDatapointsAllowed, getIntervalTime,
+    getGeneralDownloadErrorText, getDatapointsDownloadErrorText
+} from '../utils/getConfig';
 import {intersectArrays, serialize} from '../utils/arrayUtils';
 import styles from '../styles/downloadButton.css';
 import stylesMain from '../styles/main.css';
+import Spinner from './Spinner';
 
 
 type DownloadStateType = {
     isOpen: boolean,
     link: string,
-    alertIsOpen: boolean
+    alertIsOpen: boolean,
+    numDatapoints: number,
+    loading: boolean,
+    loading_time: number,
+    error_text: string
 };
 
 class DownloadButtons extends Component {
@@ -27,7 +36,11 @@ class DownloadButtons extends Component {
         this.state = {
             isOpen: false,
             link: "",
-            alertIsOpen: false
+            alertIsOpen: false,
+            numDatapoints: this.props.numberPoints,
+            loading: false,
+            loading_time: 0,
+            error_text: ''
         };
         (this: any).handleCloseAlert = this.handleCloseAlert.bind(this);
     }
@@ -38,8 +51,27 @@ class DownloadButtons extends Component {
 
     // handle Permalink panel
     handleOpenPermalink = () => {
-        let link: string = this.buildLink("csv");
-        this.setState({isOpen: true, link: link});
+        this.setState({loading: true});
+        this.countDatapoints().then((numberDatapoints) => {
+            this.setState({
+                loading: false,
+                numDatapoints: Number(numberDatapoints)
+            });
+            if (this.state.numDatapoints <= getDownloadMaxDatapointsAllowed()) {
+                let link: string = this.buildLink("csv");
+                this.setState({
+                    alertIsOpen: false,
+                    isOpen: true,
+                    link: link,
+                });
+            } else {
+                this.setState({
+                    alertIsOpen: true,
+                    isOpen: false,
+                    error_text: getDatapointsDownloadErrorText()
+                });
+            }
+        });
     };
 
     handleClosePermalink = () => {
@@ -48,10 +80,15 @@ class DownloadButtons extends Component {
 
     buildLink = function (type: string): string {
 
-        let downloadApi = this.props.api + getDownloadButtonPath();
+        let downloadApi;
 
         let params = {};
-        params["format"] = type;
+        if (type !== 'None') {
+            params["format"] = type;
+            downloadApi = this.props.api + getDownloadButtonPath();
+        } else {
+            downloadApi = this.props.api + getDownloadButtonPathCount();
+        }
         if (this.props.selectedFilters.indexOf("time") > -1) {
             if (this.props.selectedStartDate !== null && this.props.selectedStartDate !== "") {
                 params["since"] = this.props.selectedStartDate.toISOString().slice(0, 10);
@@ -115,18 +152,79 @@ class DownloadButtons extends Component {
         console.log(link);
 
         return downloadApi + link;
+
     };
 
+    countDatapoints() {
+        let countLink = this.buildLink("None") + '&onlyCount=true';
+        this.props.onSelectDownload(countLink);
+
+        const that = this;
+        let setInterval_time = getIntervalTime();
+
+        return (
+            new Promise((resolve) => {
+                let x = setInterval(() => {
+                    if (
+                        that.props.numberPoints !== undefined ||
+                        setInterval_time >= getLoadingTimeLimit()
+                    ) {
+                        clearInterval(x);
+                        resolve(that.props.numberPoints);
+                        let show_spinner = that.props.show_spinner;
+                        if (!show_spinner) {
+                            resolve([]);
+                        }
+                        this.setState({
+                            loading_time: 0
+                        });
+                    } else {
+                        setInterval_time = setInterval_time + 1000;
+                        this.setState({
+                            loading_time: setInterval_time
+                        });
+                    }
+                }, setInterval_time);
+            })
+        );
+    }
+
     onDownload(type: string) {
-        try {
-            let link = this.buildLink(type);
-            window.open(link);
-        } catch (e) {
-            this.setState({alertIsOpen: true});
-        }
+        this.setState({loading: true});
+        this.countDatapoints().then((numberDatapoints) => {
+            this.setState({
+                loading: false,
+                numDatapoints: Number(numberDatapoints)
+            });
+            if (this.state.numDatapoints <= getDownloadMaxDatapointsAllowed()) {
+                // Download the CSV File
+                try {
+                    let link = this.buildLink(type);
+                    window.open(link);
+                } catch (e) {
+                    this.setState({
+                        alertIsOpen: true,
+                        error_text: getGeneralDownloadErrorText()
+                    });
+                }
+            } else {
+                this.setState({
+                    alertIsOpen: true,
+                    error_text: getDatapointsDownloadErrorText()
+                });
+            }
+        });
     }
 
     render() {
+
+        if (this.state.loading) {
+            return (
+                <div>
+                    <Spinner loading_time={this.state.loading_time}/>
+                </div>
+            );
+        }
 
         let numSensors = this.props.showSensors.length;
         let disabled = true;
@@ -154,7 +252,7 @@ class DownloadButtons extends Component {
                     </DialogHeader>
                     <DialogBody>
                         <span className={stylesMain.alertBodyText}>
-                            An ERROR occurred with Download - Please try again!
+                            {this.state.error_text}
                         </span>
                     </DialogBody>
                     <DialogFooter>
@@ -206,6 +304,7 @@ class DownloadButtons extends Component {
 
             </div>
         );
+
     }
 }
 
@@ -218,7 +317,8 @@ DownloadButtons.propTypes = {
     showSensors: PropTypes.array,
     selectedLocation: PropTypes.string,
     drawShapeCoordinates: PropTypes.array,
-    selectedDataSources: PropTypes.array
+    selectedDataSources: PropTypes.array,
+    numberPoints: PropTypes.number
 };
 
 export default DownloadButtons;

@@ -10,7 +10,8 @@ import {
     getMobileSizeMax, getMobileSourceNames, getClustersDistance
 } from './getConfig';
 import {matchRegionTrends, getRegionalThreshold} from '../utils/trendsUtils';
-import type {Parameters, Parameter, Sensors} from '../utils/flowtype';
+import type {Parameters, Sensors} from '../utils/flowtype';
+import {pnpoly} from "./arrayUtils";
 
 
 export function sensorsToFeatures(sensors: Sensors, parameters: Parameters): Array<ol.Feature> {
@@ -59,7 +60,8 @@ export function sensorsToFeatures(sensors: Sensors, parameters: Parameters): Arr
             "parameters": sensor_parameters,
             "color": getColor(sensor.properties.type.id),
             "type": "single",
-            "onlineStatus": onlineStatusVal
+            "onlineStatus": onlineStatusVal,
+            "id": sensor.id
         };
 
         feature.setId(sensor.properties.popupContent);
@@ -788,4 +790,19 @@ export function clusteringOptions(theMap: ol.Map, disable_clusters: boolean) {
             source.setDistance(clusterDistance);
         }
     });
+}
+
+export function matchMapArea(lonLatPoint: Array<number>) {
+    let sensorLocationValue = '';
+
+    window.configruntime.gd3.sensors_regions.map((location) => {
+        if (
+            pnpoly(Number(lonLatPoint[1]), Number(lonLatPoint[0]),
+                location.geometry.coordinates) === true
+        ) {
+            sensorLocationValue = location.properties.id;
+        }
+    });
+
+    return sensorLocationValue;
 }

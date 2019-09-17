@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-535](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-535)
 - Provide Dropdown Examples for the new MenuBar Setup
   [GEOD-1236](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1236)
+- Added New Search Page Filters
+  [GEOD-1234](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1234)
+- Count the Datapoints before allowing downloads to ensure there are not too many
+  [GEOD-915](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-915)
+- Highlight Regions associated with a chosen Sensor on the Explore Page
+  [GEOD-1069](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1069)
 
 ### Changed
 - The Search Page Filter Icons reflect the dropdown selection
@@ -31,6 +37,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1222](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1222)
 - Add pills surrounding on the collapsed Parameters and Sources
   [GEOD-917](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-917)
+- Update the Carousel to include optional Captions and Links
+  [GEOD-1247](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1247)
 - Update how features are presented on the Search Page Map
   [GEOD-883](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-883)
 

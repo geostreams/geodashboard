@@ -10,7 +10,8 @@ import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json';
 import {getLocationName, getMobileSizeMax} from '../utils/getConfig';
 import {
-    Body2, Card, CardHeader, CardTitle, CardSubtitle, CardText, Checkbox, FormField, Icon, RadioGroup, Radio
+    Body2, Card, CardHeader, CardTitle, CardSubtitle, CardText,
+    Checkbox, FormField, Icon, label, RadioGroup, Radio
 } from 'react-mdc-web/lib';
 import type {InputEvent} from '../utils/flowtype';
 import Select from './material/Select';
@@ -48,6 +49,10 @@ class FilterList extends Component {
         this.props.onSelectLocation(event);
     }
 
+    selectOnline(event: InputEvent) {
+        this.props.onSelectOnline(event);
+    }
+
     render() {
         let divContents;
         let showButtons;
@@ -69,6 +74,7 @@ class FilterList extends Component {
                 </FormField>
             </div>;
 
+        let subtitleMessage;
         let cardsubtitle: Array<any> = [];
         let value = '';
         let trim_length = 15;
@@ -127,7 +133,11 @@ class FilterList extends Component {
                 // To match the style of the other three Icons, this Icon needs to be displayed inverted
                 descriptiveIconComponent = <Icon className={styles.descriptiveIconChoiceInvert} name="access_time"/>;
                 //the UI of date picker
-                divContents = <TimeFilter filterId={this.props.idx}/>;
+                divContents =
+                    <TimeFilter
+                        filterId={this.props.idx}
+                        filterType={"time"}
+                    />;
                 cardsubtitle = this.props.selectDate;
                 break;
             case "locations":
@@ -198,6 +208,45 @@ class FilterList extends Component {
                     );
                 cardsubtitle.push(getLocationName(this.props.selectedLocation));
                 break;
+
+            case "span":
+                // To match the style of the other three Icons, this Icon needs to be displayed inverted
+                descriptiveIconComponent = <Icon className={styles.descriptiveIconChoice} name="timelapse"/>;
+                //the UI of date picker
+                divContents =
+                    <TimeFilter
+                        filterId={this.props.idx}
+                        filterType={"span"}
+                    />;
+                cardsubtitle = this.props.selectSpan;
+                subtitleMessage = <span><br/>(NOT reflected in Downloads)</span>;
+                break;
+
+            case "online":
+                descriptiveIconComponent = <Icon className={styles.descriptiveIconChoice} name="offline_bolt"/>;
+                let onlineList;
+
+                if (this.props.online) {
+                    // Add Online/Offline to the Radio Options
+                    onlineList = this.props.online.map(p =>
+                        [<Radio className={styles.radio} data-filterId={this.props.idx}
+                                value={p.id} key={p.id}> {p.label}</Radio>]);
+
+                } else {
+                    onlineList = <div> </div>;
+                }
+
+                divContents =
+                    (<div>
+                        <RadioGroup name="online" onChange={this.selectOnline.bind(this)}
+                                    value={this.props.selectedOnline}>
+                            {onlineList}
+                        </RadioGroup>
+                    </div>);
+                cardsubtitle = this.props.selectedOnline;
+                subtitleMessage = <span><br/>(NOT reflected in Downloads)</span>;
+                break;
+
             default:
         }
 
@@ -225,6 +274,12 @@ class FilterList extends Component {
             if (this.props.attribute === "locations") {
                 icon_value = <Icon className={styles.descriptiveIconChoice} name="location_on"/>;
             }
+            if (this.props.attribute === "online") {
+                icon_value = <Icon className={styles.descriptiveIconChoice} name="offline_bolt"/>;
+            }
+            if (this.props.attribute === "span") {
+                icon_value = <Icon className={styles.descriptiveIconChoice} name="timelapse"/>;
+            }
 
             cardhead = (
                 <CardHeader>
@@ -244,9 +299,16 @@ class FilterList extends Component {
             // if this filter is closed
         } else {
             // Display selected values if they exist, or "No Selection" otherwise
-            if (cardsubtitle === null || cardsubtitle === undefined || cardsubtitle.toString().length <= 1) {
-                cardsubtitle = ["No Selection"];
-            }
+            cardsubtitle =
+                cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 1 ?
+                    cardsubtitle : "No selection";
+            cardsubtitle = handleParamsWithItalics(cardsubtitle);
+
+            // Display a message if necessary
+            subtitleMessage =
+                subtitleMessage !== null && subtitleMessage !== undefined && subtitleMessage.toString().length > 1 ?
+                    subtitleMessage : "";
+
             cardhead = (
                 <CardHeader>
                     <CardTitle className={mainStyles.title_card}>
@@ -257,7 +319,7 @@ class FilterList extends Component {
                             <Icon className={styles.closeIcon} name='close'/>
                         </a>
                     </CardTitle>
-                    <CardSubtitle className={styles.subtitleSpacing}> {cardsubtitle} </CardSubtitle>
+                    <CardSubtitle className={styles.subtitleSpacing}> {cardsubtitle} {subtitleMessage} </CardSubtitle>
                 </CardHeader>
             )
         }

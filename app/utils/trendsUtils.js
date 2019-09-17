@@ -41,6 +41,7 @@ export function createRegionalTrends(trendsPageRegionsSettings: Object, allRegio
                     },
                     name: trendsCheckRegionsAll[i].toString(),
                     popupContent: trendsPageRegionsSettings[i].properties.title.toString(),
+                    online_status: "",
                 },
                 type: "Feature",
                 region_trends: {
@@ -196,4 +197,3 @@ export function getRegionalThreshold(selectedRegion: string, sensor: Object, par
     return false;
 
 }
-
