@@ -322,6 +322,27 @@ export function fetchRegionTrends(parameter: string, season: string) {
     }
 }
 
+export const COUNT_NUMBER_DATAPOINTS = 'COUNT_NUMBER_DATAPOINTS';
+export function countNumberPoints(countLink: string) {
+    return (dispatch: Dispatch) => {
+        const result = fetch(countLink).then(response => {
+            const json = response.json();
+            return json;
+        })
+            .then(json => {
+                if (json) {
+                    dispatch({
+                        type: COUNT_NUMBER_DATAPOINTS,
+                        number_datapoints: json.datapointsLength,
+                    })
+                }
+            }).catch((error) => {
+                console.log('An ERROR occurred! ' + error);
+            });
+        return result;
+    }
+}
+
 export const ADD_REGION_DETAIL_TRENDS = 'ADD_REGION_DETAIL_TRENDS';
 export function fetchRegionDetailTrends(parameter: string, season: string, region: string) {
     return (dispatch: Dispatch, getState: GetState) => {
@@ -600,7 +621,6 @@ export function updateAvailableSensors(idx: number) {
         })
     }
 }
-
 
 export const RECEIVE_PARAMETERS = "RECEIVE_PARAMETERS";
 export const RECEIVE_MULTI_PARAMETERS = "RECEIVE_MULTI_PARAMETERS";

@@ -62,6 +62,21 @@ export const gd3 = {
     // Paths for Downloads
     download_button_path: '/datapoints/download?',
 
+    // Paths for Downloads Count
+    download_button_path_count: '/api/datapoints?',
+
+    // Max Number of Datapoints allowed to be downloaded at once
+    download_count_max_datapoints: 3000,
+
+    // Download Alert Text options
+    general_error: 'An error occurred with Download - Please try again!',
+    max_datapoints_error: 'Too Many Datapoints to Download - Please continue to filter down your query.',
+
+    // Interval Time in milliseconds for the Spinner to wait for change style to include text
+    set_interval_time: 3000,
+    // Load Time Limit in Milliseconds
+    load_time_limit: 100000,
+
     // This variable is used to determine the location for links to the Detail Page
     application_website: "/",
 
@@ -933,9 +948,6 @@ export const gd3 = {
             }
         },
     ],
-
-    // Trends Region Load Time Limit in Milliseconds
-    load_time_limit: 100000,
 
     // Exploratory Analysis Page Only
     trend_settings: [
