@@ -41,6 +41,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-917](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-917)
 - Update the Carousel to include optional Captions and Links
   [GEOD-1247](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1247)
+- Optimize webpack config (common config. code splitting, css extraction)
+  [GLGVO-558](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-558)
+
 
 ### Fixed
 - Ensure the map pans correctly when switching Sensors on the Explore Page
