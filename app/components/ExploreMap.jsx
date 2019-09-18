@@ -246,7 +246,7 @@ class ExploreMap extends Component {
 
         let vectorExtent = tmpvectorSource.getExtent();
 
-        if (features.length > 0 && theMap.getSize() !== undefined) {
+        if (features.length > 0) {
             if (!this.state.expandedCluster) {
                 theMap.getView().fit(vectorExtent, theMap.getSize());
             }
