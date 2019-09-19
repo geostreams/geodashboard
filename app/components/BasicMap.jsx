@@ -147,8 +147,10 @@ class BasicMap extends Component {
 
     componentDidUpdate() {
         let {features, disableClusters, mapDidUpdate} = this.props;
-        mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
-        clusteringOptions(this.state.map, disableClusters);
+        if (this.state.map.getSize() !== undefined) {
+            mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
+            clusteringOptions(this.state.map, disableClusters);
+        }
 
         this.state.clusterSource.clear();
         this.state.clusterSource.addFeatures(features);
@@ -232,6 +234,7 @@ class BasicMap extends Component {
 
         let handleCenterButton = function () {
             view.fit(that.state.vectorSource.getExtent(), that.state.map.getSize());
+            removePopup(theMap);
         };
 
         if (centerButton && element) {

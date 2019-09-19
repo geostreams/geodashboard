@@ -31,40 +31,42 @@ class StackedBarChart extends Component {
         if (sensor) {
             selected_parameters.map(parameter_id => {
                 const parameter = category_parameters.find(x => x.name === parameter_id);
-                let sensor_data = sensorData[parameter_id];
-                let values = [];
-                if (sensor_data !== undefined) {
+                if (parameter) {
+                    let sensor_data = sensorData[parameter_id];
+                    let values = [];
+                    if (sensor_data !== undefined) {
 
-                    let selected_season;
-                    if (filterBySeason) {
+                        let selected_season;
+                        if (filterBySeason) {
 
-                        selected_season = selectedSeason.length > 0 ? this.props.selectedSeason : "spring";
-                        sensor_data = sensor_data.filter(p => p.label.includes(selected_season))
-
-                    }
-                    sensor_data.map(function (d) {
-                        const bin_date = new Date(d.date);
-                        if (bin_date.getTime() > selectedStartDate.getTime() &&
-                            bin_date.getTime() < selectedEndDate.getTime()) {
-                            values.push({date: bin_date, data: d.data});
+                            selected_season = selectedSeason.length > 0 ? this.props.selectedSeason : "spring";
+                            sensor_data = sensor_data.filter(p => p.label.includes(selected_season))
 
                         }
-                    });
-                    charts.push(
-                        <Row key={parameter_id} className={mainStyles.fullWidth}>
-                            <StackedBar
-                                title={parameter.title}
-                                yAxisLabel={parameter.unit}
-                                selectedStartDate={this.props.selectedStartDate}
-                                selectedEndDate={this.props.selectedEndDate}
-                                filterBySeason={this.props.filterBySeason}
-                                selectedSeason={selected_season}
-                                data={values}
-                                scale_colors={parameter.scale_colors}
-                                scale_names={parameter.scale_names}
-                            />
-                        </Row>
-                    )
+                        sensor_data.map(function (d) {
+                            const bin_date = new Date(d.date);
+                            if (bin_date.getTime() > selectedStartDate.getTime() &&
+                                bin_date.getTime() < selectedEndDate.getTime()) {
+                                values.push({date: bin_date, data: d.data});
+
+                            }
+                        });
+                        charts.push(
+                            <Row key={parameter_id} className={mainStyles.fullWidth}>
+                                <StackedBar
+                                    title={parameter.title}
+                                    yAxisLabel={parameter.unit}
+                                    selectedStartDate={this.props.selectedStartDate}
+                                    selectedEndDate={this.props.selectedEndDate}
+                                    filterBySeason={this.props.filterBySeason}
+                                    selectedSeason={selected_season}
+                                    data={values}
+                                    scale_colors={parameter.scale_colors}
+                                    scale_names={parameter.scale_names}
+                                />
+                            </Row>
+                        )
+                    }
                 }
             })
         }

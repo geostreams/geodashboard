@@ -135,7 +135,7 @@ class SearchMap extends Component {
         // If the User drew a custom location, zoom to the shape
         if (customLocationFilterVectorExtent.length > 0 &&
             selectedLocation === 'Custom Location') {
-            if (!this.state.expandedCluster && theMap.getSize() !== undefined) {
+            if (!this.state.expandedCluster) {
                 if (shapeCoordinates.length > 0) {
                     theMap.getView().fit(customLocationFilterVectorExtent, theMap.getSize());
                 }
@@ -147,7 +147,7 @@ class SearchMap extends Component {
                 }
             }
             // If the User selected a predefined location, zoom to the features
-        } else if (features.length > 0 && theMap.getSize() !== undefined) {
+        } else if (features.length > 0) {
             if (!this.state.expandedCluster) {
                 let tmpvectorSource = new ol.source.Vector({
                     features: features
