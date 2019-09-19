@@ -1312,7 +1312,6 @@ export const gd3 = {
     mapMinZoom: 5.5,
     mapCenterValue: [-84.44799549, 38.9203417],
     mapPopupZoomMax: 10,
-
 }
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
 // Keep the next new line at the end of the file
