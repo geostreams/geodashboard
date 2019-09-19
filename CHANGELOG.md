@@ -55,6 +55,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Make sure that sensor.properties.type is not null before trying to access it.
 - Correct Situation in which Detail Page Sometimes Displays Two Mini Maps
   [GEOD-1241](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1241)
+- Corrected popups appearance when clusters are present
+  [GEOD-933](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-933)
 
 ## [3.0.0-beta.4] - 2019-05-06
 
