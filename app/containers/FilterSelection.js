@@ -5,8 +5,8 @@
 import {connect} from 'react-redux';
 import FilterSelectionComponent from '../components/FilterSelection';
 import {
-    addSearchParameter, addSearchDataSource, addStartDate, addEndDate,
-    addSearchLocation, addFilter, deleteFilter, changeFilter
+    addSearchParameter, addSearchDataSource, addStartDate, addEndDate, addSearchOnline,
+    addSearchLocation, addFilter, deleteFilter, changeFilter, addSpanStart, addSpanEnd
 } from '../actions';
 import type {Dispatch} from '../utils/flowtype';
 
@@ -30,12 +30,18 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             }
         },
         onClearTime: () => {
-            //TODO: user the state of TimeFilter component
             dispatch(addStartDate(null));
             dispatch(addEndDate(null));
         },
         onClearLocation: () => {
             dispatch(addSearchLocation(null));
+        },
+        onClearSpan: () => {
+            dispatch(addSpanStart(null));
+            dispatch(addSpanEnd(null));
+        },
+        onClearOnline: () => {
+            dispatch(addSearchOnline(null));
         },
         onAddFilter: (selectedFilter) => {
             dispatch(addFilter(selectedFilter));

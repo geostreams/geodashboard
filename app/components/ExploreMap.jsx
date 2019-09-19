@@ -7,13 +7,13 @@ import ol from 'openlayers';
 
 require("openlayers/css/ol.css");
 import styles from '../styles/map.css';
-import {sensorsToFeatures, getMultiLineLayer} from '../utils/mapUtils';
+import {sensorsToFeatures, getMultiLineLayer, matchMapArea} from '../utils/mapUtils';
 import {popupHeader, popupParameters} from '../utils/mapPopup';
 import BasicMap from './BasicMap';
 import type {InputEventMap} from '../utils/flowtype';
 import {
-    getMobileFilterSensors, getMobileSizeMax, getMobileSourceNames,
-    displayOnlineStatus, getMapPopupZoom, maxZoom, clustersExpandMaxNumberFeatures
+    getMobileFilterSensors, getMobileSizeMax, getMobileSourceNames, displayOnlineStatus,
+    getMapPopupZoom, maxZoom, clustersExpandMaxNumberFeatures, getAreaLocations
 } from '../utils/getConfig';
 
 
@@ -22,7 +22,8 @@ class ExploreMap extends Component {
         multiLineLayer: ol.layer.Vector,
         multiLineString: ol.geom.MultiLineString,
         expandedClusterLayer: ol.layer.Vector,
-        expandedCluster: boolean
+        expandedCluster: boolean,
+        areaPolygonSource: ol.source.Vector
     };
 
     constructor(props: Object) {
@@ -32,8 +33,16 @@ class ExploreMap extends Component {
             multiLineString: new ol.geom.MultiLineString,
             expandedClusterLayer: new ol.layer.Vector,
             expandedCluster: false,
-        }
+            areaPolygonSource: ol.source.Vector
+        };
+        (this: any).clickSensor = this.clickSensor.bind(this);
     }
+
+    clickSensor(id: any, name: any, coordinates: any, e: any) {
+        if (this.props.popupSensorID !== id) {
+            this.props.selectSensor(id, name, coordinates.slice(0, 2));
+        }
+    };
 
     displayOverlappingMarkers = (featuresAtPixel: ol.features, theMap: ol.Map) => {
         const multiLineLayers = getMultiLineLayer(featuresAtPixel, theMap);
@@ -52,52 +61,61 @@ class ExploreMap extends Component {
         theMap.removeLayer(this.state.multiLineLayer);
     };
 
-    popupHandler = (theMap: ol.Map, e: InputEventMap) => {
-        // Remove Pill color fill if it exists
-        this.props.resetDetailPageSelection();
+    popupHandler = (theMap: ol.Map, e: InputEventMap, dragEvent: boolean = false) => {
+        let thisCopy = this;
+        // Ensure this is a only a click event and not a drag event
+        if (dragEvent === true) {
+            thisCopy.state.areaPolygonSource.clear();
+        } else {
+            // Remove Pill color fill if it exists
+            thisCopy.props.resetDetailPageSelection();
 
-        const that = this;
-        const overlay = theMap.getOverlayById("marker");
-        if (typeof e !== 'undefined') {
-            let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
-                return featureChange;
-            });
+            // Remove Area Polygon if it exists
+            thisCopy.state.areaPolygonSource.clear();
 
-            // If a cluster is expanded we want to close it, unless there was a click in one of the features that is expanded
-            let closeClusters = true;
-            if (featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type === "single"))) {
-                // Case when a feature is expanded
-                that.popupHandleHelper(featuresAtPixel, e.coordinate, overlay, theMap);
-                closeClusters = false;
-            } else if (
-                featuresAtPixel && featuresAtPixel.get('features') !== undefined &&
-                featuresAtPixel.get('features').length === 1
-            ) {
-                // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
-                const feature = featuresAtPixel.get('features')[0];
-                that.popupHandleHelper(feature, e.coordinate, overlay, theMap);
-            } else if (
-                featuresAtPixel && featuresAtPixel.get('features') !== undefined &&
-                featuresAtPixel.get('features').length > 1
-            ) {
-                // Case when a clustered was click. If it has more than 4 features and is in a zoom level lower than maxZoom, zoom in
-                if (
-                    featuresAtPixel.get('features').length > clustersExpandMaxNumberFeatures() &&
-                    theMap.getView().getZoom() < maxZoom()
+            const that = thisCopy;
+            const overlay = theMap.getOverlayById("marker");
+            if (typeof e !== 'undefined') {
+                let featuresAtPixel = theMap.forEachFeatureAtPixel(e.pixel, function (featureChange) {
+                    return featureChange;
+                });
+
+                // If a cluster is expanded we want to close it, unless there was a click in one of the features that is expanded
+                let closeClusters = true;
+                if (featuresAtPixel && ((featuresAtPixel.attributes && featuresAtPixel.attributes.type === "single"))) {
+                    // Case when a feature is expanded
+                    that.popupHandleHelper(featuresAtPixel, e.coordinate, overlay, theMap);
+                    closeClusters = false;
+                } else if (
+                    featuresAtPixel && featuresAtPixel.get('features') !== undefined &&
+                    featuresAtPixel.get('features').length === 1
                 ) {
-                    theMap.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
-                    theMap.getView().animate({
-                        zoom: theMap.getView().getZoom() + 1,
-                        duration: 500
-                    });
-                } else {
-                    that.removeSpiderfiedClusterLayers(theMap);
-                    that.displayOverlappingMarkers(featuresAtPixel, theMap, that);
+                    // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
+                    const feature = featuresAtPixel.get('features')[0];
+                    that.popupHandleHelper(feature, e.coordinate, overlay, theMap);
+                } else if (
+                    featuresAtPixel && featuresAtPixel.get('features') !== undefined &&
+                    featuresAtPixel.get('features').length > 1
+                ) {
+                    // Case when a clustered was click. If it has more than 4 features and is in a zoom level lower than maxZoom, zoom in
+                    if (
+                        featuresAtPixel.get('features').length > clustersExpandMaxNumberFeatures() &&
+                        theMap.getView().getZoom() < maxZoom()
+                    ) {
+                        theMap.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
+                        theMap.getView().animate({
+                            zoom: theMap.getView().getZoom() + 1,
+                            duration: 500
+                        });
+                    } else {
+                        that.removeSpiderfiedClusterLayers(theMap);
+                        that.displayOverlappingMarkers(featuresAtPixel, theMap, that);
+                    }
+                    closeClusters = false;
                 }
-                closeClusters = false;
-            }
-            if (closeClusters && that.state.expandedCluster) {
-                that.removeSpiderfiedClusterLayers(theMap);
+                if (closeClusters && that.state.expandedCluster) {
+                    that.removeSpiderfiedClusterLayers(theMap);
+                }
             }
         }
     };
@@ -106,8 +124,6 @@ class ExploreMap extends Component {
         const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
             if (theMap) {
-                theMap.getView().setZoom(Math.min((theMap.getView().getZoom() - 1), getMapPopupZoom()));
-                theMap.getView().setZoom(Math.min((theMap.getView().getZoom() + 1), getMapPopupZoom()));
                 theMap.getView().setCenter(feature.getGeometry().getCoordinates());
             }
             let popupText = popupHeader(feature, styles, true) + popupParameters(feature, styles);
@@ -131,11 +147,30 @@ class ExploreMap extends Component {
                 centerCoordinates[1] = centerCoordinates[1] + 25000;
             }
             theMap.getView().setCenter(centerCoordinates);
+
+            this.clickSensor(sensorInfo.id, sensorInfo.name, webMercatorPoint);
+
+            // Filter Areas for the Sensor
+            let AreaLocationID = matchMapArea(lonLatPoint);
+
+            // Area Information from the Configuration File
+            let area = getAreaLocations(AreaLocationID);
+
+            // Drawn Feature for the Map
+            let areaFeature = new ol.Feature();
+            if (area && area.geometry) {
+                areaFeature = new ol.Feature({
+                    geometry: new ol.geom.Polygon(area.geometry.coordinates).transform('EPSG:4326', 'EPSG:3857')
+                });
+            }
+
+            this.state.areaPolygonSource.clear();
+            this.state.areaPolygonSource.addFeatures([areaFeature]);
         }
     };
 
     mapDidUpdate = (theMap: ol.Map) => {
-
+        // console.log("theMap = " + theMap);
         let {exploreLayersDetails, layersVisibility} = this.props;
 
         let exploreLayers = [];
@@ -226,15 +261,13 @@ class ExploreMap extends Component {
             }
             that.popupHandleHelper(featuresAtPixel, that.props.popupCoordinates, overlay, theMap);
 
-            //TODO: Need to update the global state. This is causing an infinite loop.
-            // After calling the overlapping markers we need to clear out the this.props.coordinates through the global state
-            // if(that.state.expandedCluster) {
-            //     that.removeSpiderfiedClusterLayers(that.state.map);
-            // }
-            // that.displayOverlappingMarkers(featuresAtPixel, that.state.map, that);
-            // } else {
-            //     const overlayClose = theMap.getOverlayById("marker");
-            //     that.popupHandleHelperClose(overlayClose);
+            theMap.getView().animate({
+                zoom: theMap.getView().setZoom(maxZoom()),
+                duration: 500
+            });
+            let centerCoordinates = featuresAtPixel.getGeometry().getCoordinates();
+            centerCoordinates[1] = centerCoordinates[1] + 500;
+            theMap.getView().setCenter(centerCoordinates);
         }
 
     };
@@ -242,6 +275,35 @@ class ExploreMap extends Component {
     mapDidMount = () => {
         let {resetDetailPageSelection} = this.props;
         resetDetailPageSelection();
+    };
+
+    componentWillMount() {
+        let areaPolygonSource = new ol.source.Vector({
+            features: [
+                new ol.Feature({})
+            ]
+        });
+
+        this.setState({areaPolygonSource: areaPolygonSource});
+    }
+
+    getCustomLayers = () => {
+        let areaPolygonLayer = new ol.layer.Vector({
+            id: "areaPolygon",
+            source: this.state.areaPolygonSource,
+            style: [
+                new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(0, 152, 254, 1)',
+                        width: 2
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(254, 254, 254, 0.3)'
+                    })
+                })
+            ]
+        });
+        return [areaPolygonLayer];
     };
 
     getFeature() {
@@ -365,6 +427,7 @@ class ExploreMap extends Component {
                           mapDidUpdate={this.mapDidUpdate}
                           mapDidMount={this.mapDidMount}
                           disableClusters={disable_clusters}
+                          customLayers={this.getCustomLayers()}
                 />
             </div>
         );

@@ -69,18 +69,26 @@ D3Line._scales = function (el, data, state) {
 };
 
 D3Line._drawPoints = function (el, state) {
-    const {
-        class_name_line, class_name_dots, width, height, sources,
-        boxClass, rectClass, lineClass, medianClass, outlierClass, displayLines,
-        startAtZero, hoverClass, overlayClass, tooltipClass, binType
-    } = state;
+    const {width, height, sources, displayLines, startAtZero, binType, tooltipClass, overlayClass} = state;
     const graphWidth = width - margin.right - margin.left;
     const graphHeight = height - margin.top - margin.bottom;
     let {data, title, yAxisLabel} = state;
     title = removeItalicsFromParams(title);
     const svg = d3.select(el).selectAll("svg");
 
-    svg.attr("width", state.width)
+    const class_name_line = "fill: none; stroke: #56B4E9; stroke-width: 2px;";
+    const class_name_dots = "fill: #0072B2; stroke: #0072B2;";
+    const boxClass = "font: 10px sans-serif;";
+    const lineClass = "fill: #fff; stroke: #000; stroke-width: 1px;";
+    const rectClass = "fill: #DCEEF5;";
+    const medianClass = "stroke-dasharray: 3, 3;";
+    const outlierClass = "fill: #D55E00; stroke: #D55E00;";
+    const hoverClass = "stroke: #009E73; stroke-width: 2px; stroke-dasharray: 3, 3;";
+
+    if (state.width <= 0) {
+        return;
+    }
+    svg.attr("width", state.width);
 
     // The next 4 lines clean up previously existing graphs
     let g = svg.selectAll(".d3-line-charts");
@@ -127,9 +135,11 @@ D3Line._drawPoints = function (el, state) {
     const box = g.selectAll("rect.box")
         .data([quartileData]);
 
-    let boxClasses = "box " + boxClass + " " + rectClass;
+    let boxClasses = "box ";
     box.enter().append("rect")
         .attr("class", boxClasses)
+        .attr("style", boxClass)
+        .attr("style", rectClass)
         .attr("x", 0)
         .attr("y", function (d) {
             return scales.y(d[2]);
@@ -143,9 +153,11 @@ D3Line._drawPoints = function (el, state) {
     const medianLine = g.selectAll("line.median")
         .data([quartileData[1]]);
 
-    const medianClasses = "median " + medianClass + " " + lineClass;
+    const medianClasses = "median ";
     medianLine.enter().append("line")
         .attr("class", medianClasses)
+        .attr("style", medianClass)
+        .attr("style", lineClass)
         .attr("x1", 0)
         .attr("y1", scales.y)
         .attr("x2", graphWidth)
@@ -164,9 +176,10 @@ D3Line._drawPoints = function (el, state) {
     const whisker = g.selectAll("line.whisker")
         .data(whiskerData || []);
 
-    const whiskerClasses = "whisker " + lineClass;
+    const whiskerClasses = "whisker ";
     whisker.enter().insert("line")
         .attr("class", whiskerClasses)
+        .attr("style", lineClass)
         .attr("x1", 0)
         .attr("y1", scales.y)
         .attr("x2", graphWidth)
@@ -186,7 +199,7 @@ D3Line._drawPoints = function (el, state) {
         // This creates and adds the data to the path svg element and creates the line graph
         g.append("path")
             .data([data])
-            .attr("class", class_name_line)
+            .attr("style", class_name_line)
             .attr("d", value_line);
     }
 
@@ -215,7 +228,7 @@ D3Line._drawPoints = function (el, state) {
     g_dots.selectAll(".dot")
         .data(data)
         .enter().append("circle")
-        .attr("class", function (d) {
+        .attr("style", function (d) {
             if (d.average > whiskerData[1] || d.average < whiskerData[0]) {
                 return outlierClass;
             }
@@ -246,34 +259,36 @@ D3Line._drawPoints = function (el, state) {
         .text(parsed_title)
         .append("svg:title").text(title);
 
-    // Adding sources in the top right
-    let sourceLabel = svg.append("text")
-        .attr("x", width - margin.right)
-        .attr("y", margin.top / 2)
-        .style("text-anchor", "end")
-        .text("Sources: ");
+    // Adding sources in the top right if they exist
+    if (sources.length > 0) {
+        let sourceLabel = svg.append("text")
+            .attr("x", width - margin.right)
+            .attr("y", margin.top / 2)
+            .style("text-anchor", "end")
+            .text("Sources: ");
 
-    let sourceLabelIndex = sourceLabel.selectAll(".graphs-sourceLabelIndex").data(sources, function (d) {
-        return (d);
-    });
-    sourceLabelIndex.enter()
-        .append("a")
-        .attr("xlink:href", function (d) {
-            return d;
-        })
-        .attr("target", "clowder")
-        .attr("class", "graphs-sourceLabelIndex")
-        .style("cursor", "pointer")
-        .text(function (d, i) {
-            if (d === "...") {
+        let sourceLabelIndex = sourceLabel.selectAll(".graphs-sourceLabelIndex").data(sources, function (d) {
+            return (d);
+        });
+        sourceLabelIndex.enter()
+            .append("a")
+            .attr("xlink:href", function (d) {
                 return d;
-            } else {
-                return "[" + (i + 1) + "]";
-            }
-        })
-        .append("title")
-        .text("Original data source");
-    sourceLabelIndex.exit().remove();
+            })
+            .attr("target", "clowder")
+            .attr("class", "graphs-sourceLabelIndex")
+            .style("cursor", "pointer")
+            .text(function (d, i) {
+                if (d === "...") {
+                    return d;
+                } else {
+                    return "[" + (i + 1) + "]";
+                }
+            })
+            .append("title")
+            .text("Original data source");
+        sourceLabelIndex.exit().remove();
+    }
 
     const rect = svg.append("rect");
 
@@ -281,9 +296,10 @@ D3Line._drawPoints = function (el, state) {
         .attr("class", "focus")
         .style("display", "none");
 
-    const yHoverClass = hoverClass + " y-hover-line";
+    const yHoverClass = "y-hover-line";
     focus.append("line")
         .attr("class", yHoverClass)
+        .attr("style", hoverClass)
         .attr("y1", 0)
         .attr("y2", graphHeight);
 
@@ -299,6 +315,7 @@ D3Line._drawPoints = function (el, state) {
     const overlay = svg.append("rect")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .attr("class", overlayClass)
+        .attr("style", "fill: none;")
         .attr("width", graphWidth)
         .attr("height", graphHeight)
         .on("mouseover", function () {

@@ -2,29 +2,45 @@
  * @flow
  */
 
-
 import {connect} from 'react-redux';
-import {addStartDate, addEndDate} from '../actions';
+import {addStartDate, addEndDate, addSpanEnd, addSpanStart} from '../actions';
 import TimeFilterComponent from '../components/TimeFilter';
 import type {Dispatch} from '../utils/flowtype';
 
 
-const mapStateToProps = (state) => {
-    return {
-        selectedStartDate: state.selectedSearch.dates.selected.start,
-        selectedEndDate: state.selectedSearch.dates.selected.end,
-        availableStartDate: state.selectedSearch.dates.available.start,
-        availableEndDate: state.selectedSearch.dates.available.end
+const mapStateToProps = (state, ownProps) => {
+    if (ownProps.filterType === 'span') {
+        return {
+            selectedStartDate: state.selectedSearch.span.selected.start,
+            selectedEndDate: state.selectedSearch.span.selected.end,
+            availableStartDate: state.selectedSearch.span.available.start,
+            availableEndDate: state.selectedSearch.span.available.end
+        }
+    } else {
+        return {
+            selectedStartDate: state.selectedSearch.dates.selected.start,
+            selectedEndDate: state.selectedSearch.dates.selected.end,
+            availableStartDate: state.selectedSearch.dates.available.start,
+            availableEndDate: state.selectedSearch.dates.available.end,
+        }
     }
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch, ownProps) => {
     return {
         onDateChange: (event, date, isStart) => {
-            if (isStart) {
-                dispatch(addStartDate(date));
+            if (ownProps.filterType === 'span') {
+                if (isStart) {
+                    dispatch(addSpanStart(date));
+                } else {
+                    dispatch(addSpanEnd(date));
+                }
             } else {
-                dispatch(addEndDate(date));
+                if (isStart) {
+                    dispatch(addStartDate(date));
+                } else {
+                    dispatch(addEndDate(date));
+                }
             }
         }
     }

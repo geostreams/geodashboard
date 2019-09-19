@@ -11,7 +11,7 @@ import StackedLineChart from './StackedLineChart';
 import StackedBarChart from './StackedBarChart';
 import styles from '../styles/detail.css';
 import {Grid, Row, Col} from 'react-flexbox-grid';
-import {Checkbox, FormField, Icon} from 'react-mdc-web/lib';
+import {Checkbox, FormField} from 'react-mdc-web/lib';
 import {
     getMobileSizeMax, getDetailPageCombinedInfoText, getTimeSeriesZeroStart,
     getDetailPageBAWInfoText, getChartLineDefault, getChartLineChoice, getStartAtZeroChoice,
@@ -94,6 +94,7 @@ class DetailContents extends Component {
     }
 
     componentDidUpdate(newProps: Object, oldState: Object) {
+        // Make sure the correct Sensor information displays
         if (oldState.sensorID !== newProps.sensorID) {
             let that = this;
             window.onhashchange = function () {
@@ -103,6 +104,15 @@ class DetailContents extends Component {
                     that.selectAllDates();
                 }
             };
+        }
+
+        // Only show ONE miniMap item
+        let miniMapID = document.getElementById('miniMap');
+        if (miniMapID) {
+            let mapElements = miniMapID.getElementsByClassName('ol-viewport');
+            for (let i = 1; i < mapElements.length; i++) {
+                mapElements[i].style.display = 'none';
+            }
         }
     }
 
@@ -318,7 +328,6 @@ class DetailContents extends Component {
         this.setState({sameTimeScale: !this.state.sameTimeScale})
     }
 
-
     render() {
 
         const box_and_whisker_title = "Box and Whisker Plots ";
@@ -409,7 +418,6 @@ class DetailContents extends Component {
                             <label>Use Same Timescale</label>
                         </FormField>;
                 }
-
                 let graphOptions = (
                     <Col md={3} className={styles.filterPadding}>
                         <span className={styles.filterTitle}> Graph Options </span><br/>
@@ -477,7 +485,6 @@ class DetailContents extends Component {
                                    binType={this.state.binType}
                                    startAtZero={this.state.startAtZero}
                                    sameTimeScale={this.state.sameTimeScale}
-
                 />;
             } else if (chart_type === "stacked_line") {
                 graph = <StackedLineChart sensorName={sensor.name} sensor={sensor}

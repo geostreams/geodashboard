@@ -16,7 +16,8 @@
     "Indira Gutierrez",
     "Michelle Pitcel",
     "Diego Calderon",
-    "Yan Zhao"
+    "Yan Zhao",
+    "Kaveh Karimi"
   ],
   "license": "NCSA",
   "devDependencies": {
@@ -37,10 +38,12 @@
     "d3": "5.7.0",
     "enzyme": "^2.3.0",
     "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^4.2.0",
     "html-webpack-plugin": "^4.0.0-beta.5",
     "ignore-styles": "^5.0.1",
     "jsdom": "^9.12.0",
     "json-loader": "^0.5.4",
+    "mini-css-extract-plugin": "^0.8.0",
     "mocha": "^3.0.2",
     "postcss-loader": "^0.8.2",
     "prop-types": "15.5.8",
@@ -54,8 +57,10 @@
     "style-loader": "^0.13.2",
     "url-loader": "^0.5.9",
     "webpack": "^4.30.0",
+    "webpack-bundle-analyzer": "^3.5.0",
     "webpack-cli": "^3.3.1",
-    "webpack-dev-server": "^3.3.1"
+    "webpack-dev-server": "^3.3.1",
+    "webpack-merge": "^4.2.2"
   },
   "dependencies": {
     "es6-promise": "^4.2.6",

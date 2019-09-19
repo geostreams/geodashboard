@@ -21,3 +21,9 @@ export function getIntervalValue(num_years: number) {
 
     return interval_val;
 }
+
+export function removeCharsIDs(updateValue: string) {
+    // Remove the following characters and replace with nothing
+    // ("(", "") (")", "") ("/", "") (",", "") (" ", "") ("^", "")
+    return updateValue.replace(/[\s()^/, ]/g, "");
+}

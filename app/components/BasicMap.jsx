@@ -147,8 +147,10 @@ class BasicMap extends Component {
 
     componentDidUpdate() {
         let {features, disableClusters, mapDidUpdate} = this.props;
-        mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
-        clusteringOptions(this.state.map, disableClusters);
+        if (this.state.map.getSize() !== undefined) {
+            mapDidUpdate(this.state.map, this.state.customLocationFilterVectorExtent);
+            clusteringOptions(this.state.map, disableClusters);
+        }
 
         this.state.clusterSource.clear();
         this.state.clusterSource.addFeatures(features);
@@ -179,11 +181,11 @@ class BasicMap extends Component {
         });
 
         let mapTiles = new ol.layer.Tile({
-                source: new ol.source.XYZ({
-                    attributions: getAttribution(),
-                    url: getMapTileURLSetting()
-                })
-            });
+            source: new ol.source.XYZ({
+                attributions: getAttribution(),
+                url: getMapTileURLSetting()
+            })
+        });
 
         let layers = [
             mapTiles,
@@ -232,6 +234,7 @@ class BasicMap extends Component {
 
         let handleCenterButton = function () {
             view.fit(that.state.vectorSource.getExtent(), that.state.map.getSize());
+            removePopup(theMap);
         };
 
         if (centerButton && element) {
@@ -260,12 +263,6 @@ class BasicMap extends Component {
             overlays: [overlay],
             controls: getControls()
         });
-
-        let tmpvectorSource = new ol.source.Vector({
-            features: this.props.features
-        });
-        let vectorExtent = tmpvectorSource.getExtent();
-        theMap.getView().fit(vectorExtent, theMap.getSize());
 
         // The Map requires the interaction for the Draw Buttons
         let selectItems = new ol.interaction.Select({
@@ -321,12 +318,15 @@ class BasicMap extends Component {
         });
 
         theMap.on('singleclick', function (e) {
+            // Always remove previous popup if it is open
+            removePopup(theMap);
             selectItems.setActive(false);
             that.props.onMapSingleClick(theMap, e);
         });
 
         theMap.on('pointerdrag', function (e) {
             removePopup(theMap);
+            that.props.onMapSingleClick(theMap, e, true);
         });
 
         if (customLayers) {

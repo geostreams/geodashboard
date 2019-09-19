@@ -3,10 +3,12 @@
  */
 
 import {
-    ADD_SEARCH_DATASOURCE, ADD_SEARCH_PARAMETER, ADD_SEARCH_LOCATION,
+    ADD_SEARCH_DATASOURCE, ADD_SEARCH_PARAMETER, ADD_SEARCH_LOCATION, ADD_SEARCH_ONLINE, ADD_SPAN_START, ADD_SPAN_END,
     UPDATE_AVAILABLE_FILTERS, ADD_START_DATE, ADD_END_DATE, RECEIVE_SENSORS
 } from '../actions';
-import {collectSources, collectLocations, collectParameters, collectDates} from './sensors';
+import {
+    collectSources, collectLocations, collectParameters, collectDates, collectOnlineOffline, collectSpanDates
+} from './sensors';
 import type {
     selectedSearchState, Sensors, DatasourceParameter, Location, Parameters
 } from '../utils/flowtype';
@@ -16,7 +18,8 @@ type SelectedSearchAction = {|
     type: string, sensors: Sensors, data_sources: DatasourceParameter,
     parameters: DatasourceParameter, locations: Location, data_sources: Array<string>, parameter: Array<string>,
     location: ?string, date: ?Date, availableSensors: Sensors, selected_filters: Array<string>, allFilters: Array<Object>,
-    multi_parameter_map: { [string]: Array<string> }, searchParameters: Parameters
+    multi_parameter_map: { [string]: Array<string> }, searchParameters: Parameters,
+    span: ?Date, online: ?string
 |};
 
 const defaultState = {
@@ -26,7 +29,12 @@ const defaultState = {
     dates: {
         selected: {start: null, end: null},
         available: {start: new Date("1951-04-10"), end: new Date()}
-    }
+    },
+    span: {
+        selected: {start: null, end: null},
+        available: {start: new Date("1951-04-10"), end: new Date()}
+    },
+    online: {selected: null, available: []},
 };
 
 const selectedSearch = (state: selectedSearchState = defaultState, action: SelectedSearchAction) => {
@@ -81,6 +89,44 @@ const selectedSearch = (state: selectedSearchState = defaultState, action: Selec
             });
             return Object.assign({}, state, newStateED);
 
+        case ADD_SEARCH_ONLINE:
+            const tempStateO = Object.assign({}, state,
+                {online: {selected: action.online, available: state.online.available}});
+            const newStateO = updateSelected(action.selected_filters, tempStateO, 'online');
+            return Object.assign({}, state, newStateO);
+
+        case ADD_SPAN_START:
+            const availableSpanDatesS = collectSpanDates(action.availableSensors);
+            let newSpanStart = action.span;
+            if (newSpanStart !== "" && newSpanStart !== null && newSpanStart !== undefined) {
+                if (newSpanStart.getTime() < availableSpanDatesS.start.getTime()) {
+                    newSpanStart = availableSpanDatesS.start;
+                }
+            }
+            const newStateSpanSD = Object.assign({}, state, {
+                span: {
+                    selected: {start: newSpanStart, end: state.span.selected.end},
+                    available: {start: availableSpanDatesS.start, end: availableSpanDatesS.end}
+                }
+            });
+            return Object.assign({}, state, newStateSpanSD);
+
+        case ADD_SPAN_END:
+            const availableSpanDatesE = collectSpanDates(action.availableSensors);
+            let newSpanEnd = action.span;
+            if (newSpanEnd !== "" && newSpanEnd !== null && newSpanEnd !== undefined) {
+                if (newSpanEnd.getTime() > availableSpanDatesE.end.getTime()) {
+                    newSpanEnd = availableSpanDatesE.end;
+                }
+            }
+            const newStateSpanED = Object.assign({}, state, {
+                span: {
+                    selected: {start: state.span.selected.start, end: newSpanEnd},
+                    available: {start: availableSpanDatesE.start, end: availableSpanDatesE.end}
+                }
+            });
+            return Object.assign({}, state, newStateSpanED);
+            
         case UPDATE_AVAILABLE_FILTERS:
             const newFilters = updateAvailable(action.sensors, action.selected_filters, action.allFilters,
                 action.searchParameters, action.multi_parameter_map, state);
@@ -114,6 +160,9 @@ function updateSelected(selected_filters, state, type) {
                     return;
                 case 'locations':
                     newState = Object.assign({}, newState, {locations: {selected: null}});
+                    return;
+                case 'online':
+                    newState = Object.assign({}, newState, {online: {selected: null}});
             }
         })
     }
@@ -159,6 +208,23 @@ function updateAvailable(sensors, selected_filters, allFilters, searchParameters
                             available: {start: newAvailableDates.start, end: newAvailableDates.end}
                         }
                     });
+                    return;
+                case 'span':
+                    const newAvailableSpan = collectDates(sensors);
+                    let selectedSpan = state.span.selected;
+                    newState = Object.assign({}, {
+                        span: {
+                            selected: {start: selectedSpan.start, end: selectedSpan.end},
+                            available: {start: newAvailableSpan.start, end: newAvailableSpan.end}
+                        }
+                    });
+                    return;
+                case 'online':
+                    const newOnlineOfflineOptions = collectOnlineOffline(sensors);
+                    let onlineStatus = state.online.selected;
+                    onlineStatus = null;
+                    newState = Object.assign({}, newState,
+                        {online: {selected: onlineStatus, available: newOnlineOfflineOptions}});
                     return;
 
             }

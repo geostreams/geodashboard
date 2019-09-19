@@ -21,11 +21,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
+            let page = (window.location.href).toString().split("/#/")[1];
+            if (page === "welcome") {
+                $('#storyboard').show();
+            } else {
+                $('#storyboard').hide();
+            }
             $('ul > li a[href]').filter(function () {
                 let path = (window.location.href).toString().split("/#/")[1];
                 return $(this).attr('href') === "/#/" + path;
             }).addClass('active');
-
             $("li").click(function () {
                 $('#sidebar').find('a').removeClass('active');
             });
@@ -35,6 +40,27 @@
                 }
             });
         });
+
+        // Open the Dropdown
+        function toggleDropdown(elementID) {
+            document.getElementById(elementID).classList.toggle("showDropdown");
+        }
+
+        // Close the Dropdown when the User Clicks outside of an open Dropdown
+        window.onclick = function (e) {
+            if (!e.target.matches('.dropdownLink')) {
+                let dropdownItems = document.getElementsByClassName("showDropdown");
+                if (dropdownItems.length > 0) {
+                    if (dropdownItems[0].classList.contains('showDropdown')) {
+                        dropdownItems[0].classList.remove('showDropdown');
+                    }
+                }
+                let dropdownLink = document.getElementById("dropdownLink");
+                if (dropdownLink.classList.contains('active')) {
+                    dropdownLink.classList.remove('active');
+                }
+            }
+        };
     </script>
 </head>
 <body>
@@ -47,7 +73,11 @@
 <script type="text/javascript" src="config.js"></script>
 <header>
     <div class="header_banner">
-        <div><img class="header_image" src="images/logo.png"/></div>
+        <div>
+            <object class="header_image" data="images/logo.png" type="image/png">
+                <div></div>
+            </object>
+        </div>
         <div class="header_title">
             <p id="header-title-text" class="header_title_text">
                 Great Lakes to Gulf
@@ -59,12 +89,19 @@
         </div>
         <div class="nav">
             <ul id="sidebar">
-                <li class="home"><a href="../pages/home.html">HOME</a></li>
                 <li class="welcome"><a href="/#/">WELCOME</a></li>
                 <li class="explore"><a href="/#/explore/all">EXPLORE</a></li>
                 <li class="download"><a href="/#/search">DOWNLOAD</a></li>
+                <li class="dropdown">
+                    <a class="dropdownLink" id="dropdownLink" onclick="toggleDropdown('dropdownItemsTrends')">
+                        TRENDS&#9660;
+                    </a>
+                    <span class="dropdownList" id="dropdownItemsTrends">
+                        <a href="/#/trendsstations">TRENDS STATIONS</a>
+                        <a href="/#/trendsregions">TRENDS REGIONS</a>
+                    </span>
+                </li>
                 <li class="analysis"><a href="/#/analysis">ANALYSIS</a></li>
-                <li class="about"><a href="../pages/about.html">ABOUT</a></li>
             </ul>
         </div>
     </div>

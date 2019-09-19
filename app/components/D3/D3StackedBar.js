@@ -7,6 +7,9 @@ const d3 = require("d3");
 const margin =  {top: 30, right: 200, bottom: 50, left: 70};
 
 D3StackedBar.create = function(el, props, state) {
+    if (props.width <= 0 || props.height <= 0) {
+        return;
+    }
     let svg = d3.select(el).append("svg")
         .attr("class", "d3")
         .attr("width", props.width)
@@ -27,7 +30,12 @@ D3StackedBar._scales = function(el, data, state) {
     if(!data) {
         return null;
     }
-
+    if (el.offsetWidth <= 0) {
+        return;
+    }
+    if (el.offsetHeight <= 0) {
+        return;
+    }
     const width = el.offsetWidth - margin.left - margin.right;
     const height = el.offsetHeight - margin.top - margin.bottom;
 
@@ -45,6 +53,12 @@ D3StackedBar._scales = function(el, data, state) {
 
 D3StackedBar._drawBars = function(el, state) {
     const {width, height, scaleNames, tooltipClass, season} = state;
+    if (state.width <= 0) {
+        return;
+    }
+    if (state.height <= 0) {
+        return;
+    }
     let {data, title, yAxisLabel} = state;
     const svg = d3.select(el).selectAll("svg");
     const graphWidth = width - margin.right - margin.left;
@@ -62,7 +76,9 @@ D3StackedBar._drawBars = function(el, state) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     const scales = this._scales(el, data, state);
-
+    if (scales === undefined) {
+        return;
+    }
     function sortByDateAscending(a, b) {
         return a.date - b.date;
     }

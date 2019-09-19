@@ -11,16 +11,46 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1203](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1203)
 - Added the option for searches to populate when clicking a button for the Analysis Page
   [GLGVO-535](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-535)
+- Provide Dropdown Examples for the new MenuBar Setup
+  [GEOD-1236](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1236)
+- Added New Search Page Filters
+  [GEOD-1234](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1234)
+- Count the Datapoints before allowing downloads to ensure there are not too many
+  [GEOD-915](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-915)
+- Highlight Regions associated with a chosen Sensor on the Explore Page
+  [GEOD-1069](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1069)
+- Add Detail Page Buttons to allow for Saving Graphs
+  [GEOD-947](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-947)
 
 ### Changed
 - Zoom to the features when drawing map for the first time
   [GEOD-1223](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1223)
 - Use parameter notation for detail page URL parameters
   [GEOD-1222](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1222)
+- Add pills surrounding on the collapsed Parameters and Sources
+  [GEOD-917](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-917)
+- Update the Carousel to include optional Captions and Links
+  [GEOD-1247](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1247)
+- Update how features are presented on the Search Page Map
+  [GEOD-883](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-883)
+- Updated checks on the Map when loading on screen
+  [GEOD-1242](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1242)
+- Optimize webpack config (common config. code splitting, css extraction)
+  [GLGVO-558](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-558)
+
 
 ### Fixed
 - Ensure the map pans correctly when switching Sensors on the Explore Page
   [GEOD-1224](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1224)
+- Ensure Markers Always Appear on the Explore and Search Pages
+  [GEOD-1238](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1238)
+- Correct Console Error with OpenLayers View Fit on Component Update
+  [GEOD-1239](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1239)
+- Make sure that sensor.properties.type is not null before trying to access it.
+- Correct Situation in which Detail Page Sometimes Displays Two Mini Maps
+  [GEOD-1241](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1241)
+- Corrected popups appearance when clusters are present
+  [GEOD-933](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-933)
 
 ## [3.0.0-beta.5] - 2019-05-16
 
