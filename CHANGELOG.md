@@ -43,6 +43,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1247](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1247)
 - Updated checks on the Map when loading on screen
   [GEOD-1242](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1242)
+- Optimize webpack config (common config. code splitting, css extraction)
+  [GLGVO-558](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-558)
+
 
 ### Fixed
 - Ensure the map pans correctly when switching Sensors on the Explore Page
@@ -54,6 +57,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Make sure that sensor.properties.type is not null before trying to access it.
 - Correct Situation in which Detail Page Sometimes Displays Two Mini Maps
   [GEOD-1241](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1241)
+- Corrected popups appearance when clusters are present
+  [GEOD-933](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-933)
 
 ## [3.0.0-beta.4] - 2019-05-06
 

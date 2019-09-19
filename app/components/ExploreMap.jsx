@@ -124,8 +124,6 @@ class ExploreMap extends Component {
         const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
             if (theMap) {
-                theMap.getView().setZoom(Math.min((theMap.getView().getZoom() - 1), getMapPopupZoom()));
-                theMap.getView().setZoom(Math.min((theMap.getView().getZoom() + 1), getMapPopupZoom()));
                 theMap.getView().setCenter(feature.getGeometry().getCoordinates());
             }
             let popupText = popupHeader(feature, styles, true) + popupParameters(feature, styles);
@@ -263,15 +261,13 @@ class ExploreMap extends Component {
             }
             that.popupHandleHelper(featuresAtPixel, that.props.popupCoordinates, overlay, theMap);
 
-            //TODO: Need to update the global state. This is causing an infinite loop.
-            // After calling the overlapping markers we need to clear out the this.props.coordinates through the global state
-            // if(that.state.expandedCluster) {
-            //     that.removeSpiderfiedClusterLayers(that.state.map);
-            // }
-            // that.displayOverlappingMarkers(featuresAtPixel, that.state.map, that);
-            // } else {
-            //     const overlayClose = theMap.getOverlayById("marker");
-            //     that.popupHandleHelperClose(overlayClose);
+            theMap.getView().animate({
+                zoom: theMap.getView().setZoom(maxZoom()),
+                duration: 500
+            });
+            let centerCoordinates = featuresAtPixel.getGeometry().getCoordinates();
+            centerCoordinates[1] = centerCoordinates[1] + 500;
+            theMap.getView().setCenter(centerCoordinates);
         }
 
     };

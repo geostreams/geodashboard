@@ -234,6 +234,7 @@ class BasicMap extends Component {
 
         let handleCenterButton = function () {
             view.fit(that.state.vectorSource.getExtent(), that.state.map.getSize());
+            removePopup(theMap);
         };
 
         if (centerButton && element) {
