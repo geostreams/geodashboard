@@ -75,6 +75,10 @@ class Detail extends Component {
     }
 
     render() {
+
+        let urlArray =  window.location.href.split('#');
+        let linkVal = <Link href={urlArray[0].concat('#/explore/all')}> <Icon name="close"/></Link>;
+
         if (Object.keys(this.state.category_mappings).length === 0) {
             let contents;
             if (this.props.parameters.failed) {
@@ -97,7 +101,7 @@ class Detail extends Component {
                             </Col>
                             <Col md={1} className={styles.detail_header}>
                                 <span className={styles.close_detail}>
-                                <Link href={"/#explore/all"}> <Icon name="close"/></Link>
+                                    {linkVal}
                                 </span>
                             </Col>
                         </Row>
@@ -147,7 +151,7 @@ class Detail extends Component {
                             </Col>
                             <Col md={1} className={styles.detail_header}>
                                 <span className={styles.close_detail}>
-                                <Link href={"/#explore/all"}> <Icon name="close"/></Link>
+                                    {linkVal}
                                 </span>
                             </Col>
                         </Row>
