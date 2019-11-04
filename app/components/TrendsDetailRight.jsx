@@ -6,7 +6,7 @@ import React, {Component} from "react";
 import TrendsGraph from '../components/TrendsGraph';
 import Spinner from './Spinner';
 import YearSlider from './YearSlider';
-import {getLoadingTimeLimit, getIntervalTime} from '../utils/getConfig';
+import {intervalCounts} from '../utils/spinnerUtils';
 
 
 class TrendDetailRight extends Component {
@@ -32,39 +32,19 @@ class TrendDetailRight extends Component {
     };
 
     loadDetailData() {
+        const that = this;
         this.props.fetchRegionDetailTrends(
             this.props.trends_parameter, this.props.trends_season, this.props.trends_region_id
         );
-        const that = this;
-        let setInterval_time = getIntervalTime();
+
+        let checkVal = that.props.trends_regions.find(function (element) {
+            return element !== undefined && element.name === that.props.trends_region_id;
+        });
 
         return (
-            new Promise((resolve) => {
-                let x = setInterval(() => {
-                    let trend = that.props.trends_regions.find(function (element) {
-                        return element !== undefined && element.name === that.props.trends_region_id;
-                    });
-                    if (
-                        trend !== undefined && Object.keys(trend.trends_detail).length > 2 ||
-                        setInterval_time >= getLoadingTimeLimit()
-                    ) {
-                        clearInterval(x);
-                        resolve(trend.trends_detail);
-                        let show_spinner = that.props.show_spinner;
-                        if (!show_spinner) {
-                            resolve([]);
-                        }
-                        this.setState({
-                            loading_time: 0
-                        });
-                    } else {
-                        setInterval_time = setInterval_time + 1000;
-                        this.setState({
-                            loading_time: setInterval_time
-                        });
-                    }
-                }, setInterval_time);
-            })
+            intervalCounts(
+                checkVal, that.props.show_spinner, 'trends_detail'
+            )
         );
     }
 
@@ -77,7 +57,7 @@ class TrendDetailRight extends Component {
             });
             let value = [this.state.selectedStartYear, this.state.selectedEndYear];
             // $FlowFixMe
-            this.onSliderChange(value)
+            this.onSliderChange(value);
         });
     }
 
@@ -105,7 +85,7 @@ class TrendDetailRight extends Component {
         if (this.state.loading) {
             return (
                 <div>
-                    <Spinner loading_time={this.state.loading_time}/>
+                    <Spinner loading_time_text={true}/>
                 </div>
             );
         }

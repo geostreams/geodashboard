@@ -8,14 +8,14 @@ import {
     Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon
 } from 'react-mdc-web/lib';
 import {
-    getCustomLocation, getDownloadButtonPath, getDownloadButtonPathCount,
-    getLoadingTimeLimit, getDownloadMaxDatapointsAllowed, getIntervalTime,
+    getCustomLocation, getDownloadButtonPath, getDownloadButtonPathCount, getDownloadMaxDatapointsAllowed,
     getGeneralDownloadErrorText, getDatapointsDownloadErrorText
 } from '../utils/getConfig';
 import {intersectArrays, serialize} from '../utils/arrayUtils';
 import styles from '../styles/downloadButton.css';
 import stylesMain from '../styles/main.css';
 import Spinner from './Spinner';
+import {intervalCounts} from "../utils/spinnerUtils";
 
 
 type DownloadStateType = {
@@ -155,37 +155,22 @@ class DownloadButtons extends Component {
 
     };
 
+    componentDidUpdate(newProps: Object, oldState: Object) {
+        // Make sure the State updates appropriately
+        if (oldState.numDatapoints !== newProps.numberPoints) {
+            this.setState({numDatapoints: this.props.numberPoints});
+        }
+    }
+
     countDatapoints() {
+        const that = this;
         let countLink = this.buildLink("None") + '&onlyCount=true';
         this.props.onSelectDownload(countLink);
 
-        const that = this;
-        let setInterval_time = getIntervalTime();
-
         return (
-            new Promise((resolve) => {
-                let x = setInterval(() => {
-                    if (
-                        that.props.numberPoints !== undefined ||
-                        setInterval_time >= getLoadingTimeLimit()
-                    ) {
-                        clearInterval(x);
-                        resolve(that.props.numberPoints);
-                        let show_spinner = that.props.show_spinner;
-                        if (!show_spinner) {
-                            resolve([]);
-                        }
-                        this.setState({
-                            loading_time: 0
-                        });
-                    } else {
-                        setInterval_time = setInterval_time + 1000;
-                        this.setState({
-                            loading_time: setInterval_time
-                        });
-                    }
-                }, setInterval_time);
-            })
+            intervalCounts(
+                that.state.numDatapoints, that.props.show_spinner
+            )
         );
     }
 
@@ -221,7 +206,7 @@ class DownloadButtons extends Component {
         if (this.state.loading) {
             return (
                 <div>
-                    <Spinner loading_time={this.state.loading_time}/>
+                    <Spinner loading_time_text={true}/>
                 </div>
             );
         }
