@@ -71,6 +71,8 @@ export const gd3 = {
     // Download Alert Text options
     general_error: 'An error occurred with Download - Please try again!',
     max_datapoints_error: 'Too Many Datapoints to Download - Please continue to filter down your query.',
+    use_download_message_text: true,
+    download_message_text: 'Download will require Authentication to proceed.',
 
     // Interval Time in milliseconds for the Spinner to wait for change style to include text
     set_interval_time: 3000,

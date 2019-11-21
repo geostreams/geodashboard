@@ -506,6 +506,22 @@ export function getDatapointsDownloadErrorText() {
     return getValue;
 }
 
+export function getDownloadMessageText() {
+    let getValue = 'Download will require Authentication to proceed';
+    if (window.configruntime.gd3.download_message_text) {
+        getValue = window.configruntime.gd3.download_message_text;
+    }
+    return getValue;
+}
+
+export function getUseDownloadMessageText() {
+    let getValue = false;
+    if (window.configruntime.gd3.use_download_message_text === true) {
+        getValue = window.configruntime.gd3.use_download_message_text;
+    }
+    return getValue;
+}
+
 export function getTimeSeriesZeroStart() {
     return window.configruntime.gd3.time_series_zero_start;
 }

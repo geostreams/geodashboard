@@ -7,7 +7,9 @@ import PropTypes from 'prop-types';
 import {
     Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon
 } from 'react-mdc-web/lib';
-import {getDownloadButtonPath} from '../utils/getConfig';
+import {
+    getDownloadButtonPath, getDownloadMessageText, getUseDownloadMessageText
+} from '../utils/getConfig';
 import {intersectArrays, serialize} from '../utils/arrayUtils';
 import styles from '../styles/detail.css';
 import stylesMain from '../styles/main.css';
@@ -15,12 +17,14 @@ import stylesMain from '../styles/main.css';
 
 class DetailPageDownload extends Component {
     state: {
+        downloadIsOpen: boolean,
         displayErrorMessage: boolean
     };
 
     constructor(props: Object) {
         super(props);
         this.state = {
+            downloadIsOpen: false,
             displayErrorMessage: false
         };
         (this: any).handleCloseAlert = this.handleCloseAlert.bind(this);
@@ -55,7 +59,21 @@ class DetailPageDownload extends Component {
         return downloadApi + link;
     }
 
+    // handle Download panel
+    handleOpenDownload = () => {
+        this.setState({
+            downloadIsOpen: true
+        });
+    };
+
+    handleCloseDownload = () => {
+        this.setState({
+            downloadIsOpen: false
+        });
+    };
+
     onDownload(type: string) {
+        this.setState({downloadIsOpen: false});
         try {
             let link = this.buildLink(type);
             window.open(link);
@@ -99,16 +117,51 @@ class DetailPageDownload extends Component {
             );
         }
 
+        let downloadButtonValue = (
+            <Button raised disabled={disabled} className={styles.button}
+                    onClick={this.onDownload.bind(this, "csv")}
+            >
+                Download
+            </Button>
+        );
+
+        if (getUseDownloadMessageText() === true) {
+            downloadButtonValue = (
+                <Button raised disabled={disabled} className={styles.button}
+                        onClick={this.handleOpenDownload}
+                >
+                    Download
+                </Button>
+            )
+        }
+
         return (
             <div className={styles.detailDownloadButtonPosition}>
+
                 {popup_alert_content}
-                <Button className={disabled === false ? styles.detailDownloadButton : ''}
-                        onClick={this.onDownload.bind(this, "csv")}
-                        raised disabled={disabled}>
-                    <span className={disabled === false ? styles.detailDownloadButtonText : ''}>
-                        Download
-                    </span>
-                </Button>
+
+                <Dialog
+                    open={this.state.downloadIsOpen}
+                    onClose={this.handleCloseDownload}
+                >
+                    <DialogHeader>
+                        <DialogTitle>Download</DialogTitle>
+                    </DialogHeader>
+                    <DialogBody scrollable={false}>
+                        {getDownloadMessageText()}
+                    </DialogBody>
+                    <DialogFooter>
+                        <Button raised disabled={disabled} className={styles.button}
+                                onClick={this.onDownload.bind(this, "csv")}
+                        >
+                            Continue
+                        </Button>
+                        <Button onClick={this.handleCloseDownload}> Cancel </Button>
+                    </DialogFooter>
+                </Dialog>
+
+                {downloadButtonValue}
+
             </div>
         );
     }

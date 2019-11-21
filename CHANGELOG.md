@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## UNRELEASED
 
 ### Added
+- Add the ability to have a Download Button Dialog Box to provide explanatory text 
+  [GLGVO-527](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-527)
 
 ### Changed
 - Create Intervals as a Reusable Component

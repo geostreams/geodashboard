@@ -8,8 +8,9 @@ import {
     Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Icon
 } from 'react-mdc-web/lib';
 import {
-    getCustomLocation, getDownloadButtonPath, getDownloadButtonPathCount, getDownloadMaxDatapointsAllowed,
-    getGeneralDownloadErrorText, getDatapointsDownloadErrorText
+    getCustomLocation, getDownloadButtonPath, getDownloadButtonPathCount,
+    getDownloadMaxDatapointsAllowed, getGeneralDownloadErrorText,
+    getDatapointsDownloadErrorText, getDownloadMessageText, getUseDownloadMessageText
 } from '../utils/getConfig';
 import {intersectArrays, serialize} from '../utils/arrayUtils';
 import styles from '../styles/downloadButton.css';
@@ -19,7 +20,8 @@ import {intervalCounts} from "../utils/spinnerUtils";
 
 
 type DownloadStateType = {
-    isOpen: boolean,
+    permalinkIsOpen: boolean,
+    downloadIsOpen: boolean,
     link: string,
     alertIsOpen: boolean,
     numDatapoints: number,
@@ -34,7 +36,8 @@ class DownloadButtons extends Component {
     constructor(props: Object) {
         super(props);
         this.state = {
-            isOpen: false,
+            permalinkIsOpen: false,
+            downloadIsOpen: false,
             link: "",
             alertIsOpen: false,
             numDatapoints: this.props.numberPoints,
@@ -61,13 +64,15 @@ class DownloadButtons extends Component {
                 let link: string = this.buildLink("csv");
                 this.setState({
                     alertIsOpen: false,
-                    isOpen: true,
+                    permalinkIsOpen: true,
+                    downloadIsOpen: false,
                     link: link,
                 });
             } else {
                 this.setState({
                     alertIsOpen: true,
-                    isOpen: false,
+                    permalinkIsOpen: false,
+                    downloadIsOpen: false,
                     error_text: getDatapointsDownloadErrorText()
                 });
             }
@@ -75,7 +80,22 @@ class DownloadButtons extends Component {
     };
 
     handleClosePermalink = () => {
-        this.setState({isOpen: false});
+        this.setState({
+            permalinkIsOpen: false, downloadIsOpen: false
+        });
+    };
+
+    // handle Download panel
+    handleOpenDownload = () => {
+        this.setState({
+            permalinkIsOpen: false, downloadIsOpen: true
+        });
+    };
+
+    handleCloseDownload = () => {
+        this.setState({
+            permalinkIsOpen: false, downloadIsOpen: false
+        });
     };
 
     buildLink = function (type: string): string {
@@ -127,14 +147,14 @@ class DownloadButtons extends Component {
                     return [coordinate[1], coordinate[0], coordinate[2]]
                 }).join(",");
 
-            // For a Drawn Polygon
+                // For a Drawn Polygon
             } else if (draw_area.length > 1) {
 
                 params["geocode"] = draw_area[0].map(function (coordinate) {
                     return [coordinate[1], coordinate[0]]
                 }).join(",");
 
-            // For a Predefined Location
+                // For a Predefined Location
             } else {
 
                 const area = getCustomLocation(this.props.selectedLocation);
@@ -175,7 +195,7 @@ class DownloadButtons extends Component {
     }
 
     onDownload(type: string) {
-        this.setState({loading: true});
+        this.setState({downloadIsOpen: false, loading: true});
         this.countDatapoints().then((numberDatapoints) => {
             this.setState({
                 loading: false,
@@ -210,6 +230,7 @@ class DownloadButtons extends Component {
                 </div>
             );
         }
+
 
         let numSensors = this.props.showSensors.length;
         let disabled = true;
@@ -251,14 +272,33 @@ class DownloadButtons extends Component {
             );
         }
 
+        let downloadButtonValue = (
+            <Button raised disabled={disabled} className={styles.button}
+                    onClick={this.onDownload.bind(this, "csv")}
+            >
+                Download
+            </Button>
+        );
+
+        if (getUseDownloadMessageText() === true) {
+            downloadButtonValue = (
+                <Button raised disabled={disabled} className={styles.button}
+                        onClick={this.handleOpenDownload}
+                >
+                    Download
+                </Button>
+            )
+        }
+
         // don't use a-href download for Download as CSV/JSON, otherwise buildLink
         // will be executed as the page loading, instead of onClick
         return (
             <div className={styles.bottomSection}>
 
                 {popup_alert_content}
+
                 <Dialog
-                    open={this.state.isOpen}
+                    open={this.state.permalinkIsOpen}
                     onClose={this.handleClosePermalink}
                 >
                     <DialogHeader>
@@ -272,11 +312,27 @@ class DownloadButtons extends Component {
                     </DialogFooter>
                 </Dialog>
 
-                <Button raised disabled={disabled} className={styles.button}
-                        onClick={this.onDownload.bind(this, "csv")}
+                <Dialog
+                    open={this.state.downloadIsOpen}
+                    onClose={this.handleCloseDownload}
                 >
-                    Download
-                </Button>
+                    <DialogHeader>
+                        <DialogTitle>Download</DialogTitle>
+                    </DialogHeader>
+                    <DialogBody scrollable={false}>
+                        {getDownloadMessageText()}
+                    </DialogBody>
+                    <DialogFooter>
+                        <Button raised disabled={disabled} className={styles.button}
+                                onClick={this.onDownload.bind(this, "csv")}
+                        >
+                            Continue
+                        </Button>
+                        <Button onClick={this.handleCloseDownload}> Cancel </Button>
+                    </DialogFooter>
+                </Dialog>
+
+                {downloadButtonValue}
 
                 <Button className={styles.buttonPermalink} raised disabled={disabled}
                         onClick={this.handleOpenPermalink}>
