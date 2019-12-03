@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Click the 'x' in the top right corner of the Detail Page, the page returns to the Explore Page
   [GEOD-1274](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1274)
+- Bug Corrections for lack of displayed selections in the Search Filters
+  [GEOD-1288](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1288)
 
 ## [3.1.0] - 2019-09-19
 

@@ -83,6 +83,7 @@ class FilterList extends Component {
 
         switch (this.props.attribute) {
             case 'data_sources':
+                let keyValSources = 0;
                 descriptiveIconComponent = <Icon className={styles.descriptiveIconChoice} name="group_work"/>;
                 divContents = this.props.sources.map(p =>
                     <UpdateFilters id={p.id} filterId={this.props.idx} name={this.props.attribute} label={p.label}
@@ -96,15 +97,17 @@ class FilterList extends Component {
                         label = x.label.substring(0, trim_length).trim();
                     }
                     value =
-                        <Body2 key={label} component="button" className={styles.filterPills}>
+                        <Body2 key={keyValSources.toString()} component="button" className={styles.filterPills}>
                             {label}{longer_name}
                         </Body2>;
                     cardsubtitle.push(value);
+                    keyValSources++;
                 });
-
                 showButtons = hideShowContents;
                 break;
+
             case "parameters":
+                let keyValParams = 0;
                 descriptiveIconComponent = <Icon className={styles.descriptiveIconChoice} name="description"/>;
                 divContents = this.props.parameters.map(p => {
                     let parameter_label_array = handleParamsWithItalics(p.label);
@@ -121,14 +124,16 @@ class FilterList extends Component {
                         label = label.substring(0, trim_length).trim();
                     }
                     value =
-                        <Body2 key={label} component="button" className={styles.filterPills} title={hover_label}>
+                        <Body2 key={keyValParams.toString()} component="button" className={styles.filterPills}
+                               title={hover_label}>
                             {label}{longer_name}
                         </Body2>;
                     cardsubtitle.push(value);
-
+                    keyValParams++;
                 });
                 showButtons = hideShowContents;
                 break;
+
             case "time":
                 // To match the style of the other three Icons, this Icon needs to be displayed inverted
                 descriptiveIconComponent = <Icon className={styles.descriptiveIconChoiceInvert} name="access_time"/>;
@@ -140,6 +145,7 @@ class FilterList extends Component {
                     />;
                 cardsubtitle = this.props.selectDate;
                 break;
+
             case "locations":
                 descriptiveIconComponent = <Icon className={styles.descriptiveIconChoice} name="location_on"/>;
                 let locationList;
@@ -300,8 +306,8 @@ class FilterList extends Component {
         } else {
             // Display selected values if they exist, or "No Selection" otherwise
             cardsubtitle =
-                cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.length > 1 ?
-                    cardsubtitle : "No selection";
+                cardsubtitle !== null && cardsubtitle !== undefined && cardsubtitle.toString().length > 1 ?
+                    cardsubtitle : ["No selection"];
             cardsubtitle = handleParamsWithItalics(cardsubtitle);
 
             // Display a message if necessary
