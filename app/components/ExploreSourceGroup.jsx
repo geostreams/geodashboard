@@ -92,11 +92,11 @@ class ExploreSourceGroup extends Component {
                                       this.clickedSourcesAccordion()
                                   }}
                             >
-                                {this.props.dialog_contents}
                                 <Icon className={"material-icons " + exploreStyles.groupAccordionIcon}
                                       name={this.state.accordion_icon ? 'expand_more' : 'chevron_right'}
                                 />
                             </span>
+                            <span>{this.props.dialog_contents}</span>
                         </div>
                     </CardTitle>
                 </CardHeader>

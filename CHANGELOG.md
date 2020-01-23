@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1288](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1288)
 - Sources and Download links no longer overlap on time series graphs
   [GEOD-1286](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1286)
+- Corrected the behavior of the Info Icon and Boxes
+  [GEOD-1293](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1293)
 
 ## [3.1.0] - 2019-09-19
 
