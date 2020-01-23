@@ -111,8 +111,8 @@ D3LineNoData._drawPoints = function (el, state) {
 
     title = removeItalicsFromParams(title);
     let parsed_title = title;
-    if (title.length > 35) {
-        parsed_title = title.substring(0, 35) + "..."
+    if (title.length > 30) {
+        parsed_title = title.substring(0, 30) + "..."
     }
 
     // Add title and sources

@@ -245,8 +245,8 @@ D3Line._drawPoints = function (el, state) {
         .attr("r", 2);
 
     let parsed_title = title;
-    if (title.length > 35) {
-        parsed_title = title.substring(0, 35) + "..."
+    if (title.length > 30) {
+        parsed_title = title.substring(0, 30) + "..."
     }
 
     // Add title and sources
@@ -259,12 +259,12 @@ D3Line._drawPoints = function (el, state) {
         .text(parsed_title)
         .append("svg:title").text(title);
 
-    // Adding sources in the top right if they exist
+    // Adding sources in the top center if they exist
     if (sources.length > 0) {
         let sourceLabel = svg.append("text")
-            .attr("x", width - margin.right)
+            .attr("x", width / 2)
             .attr("y", margin.top / 2)
-            .style("text-anchor", "end")
+            .style("text-anchor", "start")
             .text("Sources: ");
 
         let sourceLabelIndex = sourceLabel.selectAll(".graphs-sourceLabelIndex").data(sources, function (d) {
