@@ -1,0 +1,39 @@
+.container {
+    background: lightblue;
+    display: table;
+    width: 100%;
+}
+
+input[type=button] {
+    vertical-align: middle;
+    display: block;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.button-wrapper {
+    background: darkorange;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+@media screen and (max-device-width: 840px) {
+    .add {
+        margin-top: 1em !important;
+        margin-left: 50% !important;
+        --mdc-theme-secondary: #ff4081;
+        --mdc-theme-secondary-light: #ff87b0;
+        --mdc-theme-secondary-dark: #f80054;
+    }
+}
+
+.add {
+    margin: 1em 1em 1em 10em;
+    --mdc-theme-secondary: #ff4081;
+    --mdc-theme-secondary-light: #ff87b0;
+    --mdc-theme-secondary-dark: #f80054;
+}
+
+.inline {
+    display: inline-block;
+}

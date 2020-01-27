@@ -1,0 +1,33 @@
+@media screen and (max-device-width: 840px) {
+    .list {
+        width: 100vw !important;
+        margin: auto !important;
+        height: calc(100vh - 18em) !important;
+        overflow-y: scroll !important;
+        float: none !important;
+    }
+
+    .bottomSection {
+        margin-left: auto !important;
+        padding: 0.5em 0em 0.5em 1em !important;
+        width: 100vw !important;
+        background-color: #fff !important;
+    }
+}
+
+.list {
+    width: 25em;
+    margin: 4em 0 3em 1em;
+    float: left;
+    height: calc(100vh - 8.5em);
+    overflow-y: auto;
+}
+
+.bottomSection {
+    margin-left: auto;
+    padding: 0.5em 0em 0.5em 1em;
+    width: 24em;
+    bottom: 0;
+    position: absolute;
+    background-color: #fff;
+}

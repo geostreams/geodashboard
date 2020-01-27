@@ -1,0 +1,10 @@
+{
+    "packages": [
+        "gd-core__old",
+        "gd-gltg__old",
+        "gd-core",
+        "gd-geostreaming",
+        "gd-gltg"
+    ],
+    "version": "3.2.0"
+}

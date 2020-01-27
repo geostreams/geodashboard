@@ -1,0 +1,70 @@
+.mdc-radio__outer-circle {
+    border: 2px solid rgba(0,0,0,.54);
+}
+
+:root {
+    --mdc-theme-secondary: #3f51b5;
+    --mdc-theme-secondary-light: #a4addf;
+    --mdc-theme-secondary-dark: #6f7dcd;
+}
+
+.mdc-checkbox:after, .mdc-checkbox:before,
+.mdc-radio:after, .mdc-radio:before
+{
+    background-color: #a4addf;
+}
+
+.rc-slider-rail {
+    background-color: rgba(0,0,0,0.26);
+}
+
+.rc-slider-track {
+    background-color: #3F51B5;
+}
+
+.rc-slider-dot-active {
+    border-color: #3F51B5;
+}
+
+.rc-slider-handle {
+    border-color: #3F51B5;
+}
+
+.mdc-tab:hover {
+    background-color: #D3D3D3;
+    color: #385D71;
+}
+
+.mdc-tab--active {
+    background-color: #385D71;
+    color:  #FFFFFF;
+}
+
+.mdc-tab--active:hover {
+    background-color: #385D71;
+    color: #FFFFFF;
+}
+
+.mdc-tab:after {
+    content: none !important;
+}
+
+.mdc-tab-bar {
+    margin-left: 50px;
+}
+
+.mdc-tab:hover > div > a {
+    text-decoration: none !important;
+    color: #385D71;
+}
+
+.mdc-tab > div > a,
+.mdc-tab--active > div > a,
+.mdc-tab--active:hover > div > a {
+    text-decoration: none !important;
+    color:  #FFFFFF;
+}
+
+.layer-switcher {
+    top: 0.5em !important;
+}

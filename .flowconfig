@@ -1,7 +1,18 @@
 [ignore]
+.*/gd-template/.*
+.*/gd-core__old/.*
+.*/gd-gltg__old/.*
 
 [include]
 
 [libs]
 
+[lints]
+
 [options]
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.json
+module.file_ext=.geojson
+
+[strict]

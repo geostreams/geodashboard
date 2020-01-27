@@ -1,0 +1,19 @@
+{
+  "name": "gd-gltg",
+  "version": "3.2.0",
+  "description": "",
+  "main": "src/index.jsx",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.config.dev.js --color",
+    "build": "webpack --config webpack.config.prod.js"
+  },
+  "author": "NCSA",
+  "license": "ISC",
+  "dependencies": {
+    "gd-core__old": "file:../gd-core__old",
+    "gd-gltg__old": "file:../gd-gltg__old",
+    "gd-core": "file:../gd-core",
+    "gd-geostreaming": "file:../gd-geostreaming",
+    "material-components-web": "0.26.0"
+  }
+}

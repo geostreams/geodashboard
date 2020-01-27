@@ -1,0 +1,28 @@
+.footerWrapper {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    min-height: 2em;
+    background: #D4DCE7;
+    padding: 1em;
+    /*margin-top: 1em;*/
+    text-align: center;
+}
+
+.footerImagesParent {
+    text-align: center;
+}
+
+.footerTextParent {
+    text-align: center;
+}
+
+.footerTextParagraph {
+    width: 60%;
+    color: 	#808080;
+    display: inline-block;
+}
+
+.footerImagesItem {
+    margin: 1em;
+}

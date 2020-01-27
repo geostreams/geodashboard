@@ -1,0 +1,3 @@
+[submodule "gd-gltg/src/containers/DataStories/pages"]
+	path = gd-gltg/src/containers/DataStories/pages
+	url = ssh://git@opensource.ncsa.illinois.edu:7999/geod/geodashboard-datastories.git
