@@ -1,5 +1,5 @@
 {
-  "name": "gd-gltg__old",
+  "name": "@geodashboard/gd-gltg__old",
   "version": "3.2.0",
   "description": "Geodashboard using React.js to visualize data from Geostreaming API.",
   "main": "main.jsx",

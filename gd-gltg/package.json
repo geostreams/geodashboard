@@ -1,5 +1,5 @@
 {
-  "name": "gd-gltg",
+  "name": "@geodashboard/gd-gltg",
   "version": "3.2.0",
   "description": "",
   "main": "src/index.jsx",

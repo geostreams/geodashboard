@@ -1,5 +1,5 @@
 {
-  "name": "geodashboard",
+  "name": "@geodashboard/geodashboard",
   "version": "3.2.0",
   "description": "",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "scripts": {
     "start": "lerna run start --stream --scope",
     "build": "lerna run build --stream --scope",
+    "publish": "lerna publish",
     "test": "lerna run test --stream --scope",
     "postinstall": "lerna exec -- npm install && lerna link",
     "lint": "eslint -c .eslintrc ./",
