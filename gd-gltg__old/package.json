@@ -3,7 +3,6 @@
   "version": "3.2.0",
   "description": "Geodashboard using React.js to visualize data from Geostreaming API.",
   "main": "main.jsx",
-  "private": true,
   "scripts": {
     "test": "mocha --require ignore-styles --require isomorphic-fetch -w --compilers js:babel-core/register app/setup.js app/**/*.spec.js",
     "start": "webpack-dev-server --open --mode development --progress --colors",

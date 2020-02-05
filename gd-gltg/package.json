@@ -8,7 +8,6 @@
     "build": "webpack --config webpack.config.prod.js"
   },
   "author": "NCSA",
-  "license": "ISC",
   "dependencies": {
     "gd-core": "file:../gd-core",
     "gd-core__old": "file:../gd-core__old",
