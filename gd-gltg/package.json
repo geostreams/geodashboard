@@ -10,10 +10,10 @@
   "author": "NCSA",
   "license": "ISC",
   "dependencies": {
-    "gd-core__old": "file:../gd-core__old",
-    "gd-gltg__old": "file:../gd-gltg__old",
     "gd-core": "file:../gd-core",
+    "gd-core__old": "file:../gd-core__old",
     "gd-geostreaming": "file:../gd-geostreaming",
+    "gd-gltg__old": "file:../gd-gltg__old",
     "material-components-web": "0.26.0"
   }
 }

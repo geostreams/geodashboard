@@ -1,6 +1,6 @@
 {
   "name": "gd-gltg__old",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Geodashboard using React.js to visualize data from Geostreaming API.",
   "main": "main.jsx",
   "private": true,
@@ -40,8 +40,8 @@
     "sinon": "^1.17.4"
   },
   "dependencies": {
-    "gd-core__old": "file:../gd-core__old",
     "es6-promise": "^4.2.6",
+    "gd-core__old": "file:../gd-core__old",
     "isomorphic-fetch": "^2.2.1",
     "moment": "2.24.0",
     "ol3-layerswitcher": "git+https://github.com/walkermatt/ol3-layerswitcher.git#master",
