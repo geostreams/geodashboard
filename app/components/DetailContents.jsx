@@ -171,7 +171,7 @@ class DetailContents extends Component {
         let binType = "day";
         if (diff_years > 10) {
             binType = "year";
-        } else if (diff_years > 2 && diff_years <= 10) {
+        } else if (diff_years >= 2 && diff_years <= 10) {
             binType = "month";
         } else if (diff_days > 3 && diff_days <= 14) {
             binType = "hour";
