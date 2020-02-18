@@ -289,8 +289,8 @@ h1, h2, h3, h5, h6, p, ul {
 
 .open_button_style {
     cursor: pointer;
-    margin-left: 1em;
-    float: right;
+    margin-left: -1em;
+    position: relative;
 }
 
 .close_detail {

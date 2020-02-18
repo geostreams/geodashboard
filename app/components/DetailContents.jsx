@@ -362,11 +362,13 @@ class DetailContents extends Component {
                 );
                 box_and_whiskers_header = (
                     <h3>Box and Whiskers
-                        <DialogWrapper title={box_and_whisker_title}
+                        <span className={styles.position_icon}>
+                            <DialogWrapper title={box_and_whisker_title}
                                        body={box_and_whisker_contents}
                                        isOpen={this.openBoxAndWhiskerDialog}
                                        closeDialog={this.closeBoxAndWhiskerDialog}
-                        />
+                            />
+                        </span>
                     </h3>
                 );
 
@@ -531,11 +533,13 @@ class DetailContents extends Component {
                         <Col md={3}>
                             <Row key="parameter_title" className={styles.parameters_list}>
                                 <h3>Selected Parameters
-                                    <DialogWrapper title={parameter_dialog_title}
+                                    <span className={styles.position_icon}>
+                                        <DialogWrapper title={parameter_dialog_title}
                                                    body={parameter_dialog_contents}
                                                    isOpen={this.openParameterDialog}
                                                    closeDialog={this.closeParameterDialog}
-                                    />
+                                        />
+                                    </span>
                                 </h3>
                             </Row>
                             <Row key="parameter_list" className={styles.parameters_list}>
