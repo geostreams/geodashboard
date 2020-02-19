@@ -183,7 +183,7 @@ class Chart extends Component {
                         </div>
                     </div>
                 </Col>
-                <Col md={2} className={styles.float_item_left}>
+                <Col md={2} className={styles.float_item_left_baw}>
                     {boxAndWhiskers}
                 </Col>
             </Row>

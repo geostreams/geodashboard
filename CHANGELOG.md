@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1248](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1248)
 - Adjusted when Bins changes to Months in the Detail Page Graphs
   [GEOD-1303](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1303)
+- Updated the font size and spacing in the Detail Page charts
+  [GEOD-1294](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1294)
 
 ### Fixed
 - Click the 'x' in the top right corner of the Detail Page, the page returns to the Explore Page

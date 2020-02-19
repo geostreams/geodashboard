@@ -138,17 +138,27 @@ D3Line._drawPoints = function (el, state) {
     // Creates the horizontal axis and adds the label.
     g.append("g")
         .attr("transform", "translate(0," + (graphHeight + 3) + ")")
-        .call(d3.axisBottom(scales.x));
+        .style("font-size", "12")
+        .call(d3.axisBottom(scales.x).tickFormat(
+            function(date_value){
+                if (d3.timeYear(date_value) < date_value) {
+                    return d3.timeFormat('%b')(date_value);
+                } else {
+                    return d3.timeFormat('%Y')(date_value);
+                }
+            })
+        );
 
     // Creates the vertical axis and adds the label
     g.append("g")
         .call(d3.axisLeft(scales.y))
+        .style("font-size", "12")
         .append("text")
         .attr("fill", "#000")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
-        .attr("dy", "-4em")
-        .attr("dx", "-15em")
+        .attr("dy", "-3.9em")
+        .attr("dx", "-13em")
         .attr("text-anchor", "end")
         .text(removeItalicsFromParams(yAxisLabel));
 

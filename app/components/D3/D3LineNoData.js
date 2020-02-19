@@ -90,6 +90,7 @@ D3LineNoData._drawPoints = function (el, state) {
     // Creates the horizontal axis and adds the label.
     g.append("g")
         .attr("transform", "translate(0," + (graphHeight + 3) + ")")
+        .style("font-size", "12")
         .call(d3.axisBottom(scales.x))
         .append("text")
         .attr("fill", "#000")
@@ -99,13 +100,14 @@ D3LineNoData._drawPoints = function (el, state) {
 
     // Creates the vertical axis and adds the label
     g.append("g")
+        .style("font-size", "12")
         .call(d3.axisLeft(scales.y))
         .append("text")
         .attr("fill", "#000")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
-        .attr("dy", "-4em")
-        .attr("dx", "-15em")
+        .attr("dy", "-3em")
+        .attr("dx", "-13em")
         .attr("text-anchor", "end")
         .text(removeItalicsFromParams(yAxisLabel));
 

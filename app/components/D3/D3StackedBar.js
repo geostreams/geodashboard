@@ -114,6 +114,7 @@ D3StackedBar._drawBars = function(el, state) {
     g.append("g")
         .attr("transform", "translate(0," + (graphHeight + 3) + ")")
         .call(d3.axisBottom(scales.x))
+        .style("font-size", "12")
         .append("text")
         .attr("fill", "#000")
         .attr("transform", "translate("+ ((graphWidth)/2) + "," +
@@ -123,12 +124,13 @@ D3StackedBar._drawBars = function(el, state) {
     // Creates the vertical axis and adds the label
     g.append("g")
         .call(d3.axisLeft(scales.y))
+        .style("font-size", "12")
         .append("text")
         .attr("fill", "#000")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
-        .attr("dy", "-6em")
-        .attr("dx", "-15em")
+        .attr("dy", "-5.5em")
+        .attr("dx", "-12em")
         .attr("text-anchor", "end")
         .text(removeItalicsFromParams(yAxisLabel));
 
