@@ -436,8 +436,8 @@ class DetailContents extends Component {
                         <Col md={2}>
                             {season_filter}
                         </Col>
-                        <Col md={5}>
-                            <div className={styles.filterTitle}> Date Range</div>
+                        <Col md={4}>
+                            <div className={styles.filterTitle}>Date Range</div>
                             <FormField id="selectAllDates" key="selectAllDates">
                                 <Checkbox onChange={this.selectAllDates}
                                           value="selectAllDates" key="selectAllDates" name="selectAllDates"
@@ -446,9 +446,6 @@ class DetailContents extends Component {
                                 />
                                 <label>Select All Dates</label>
                             </FormField>
-                            <span className={styles.binningText}>
-                                Binning: {this.state.binType.charAt(0).toUpperCase() + this.state.binType.slice(1)}
-                            </span>
                             <br/>
                             <div className={styles.leftMargin}>
                                 <DateSlider start={minDate} end={maxDate}
@@ -457,6 +454,13 @@ class DetailContents extends Component {
                                 />
                             </div>
                         </Col>
+                        <Col md={1}>
+                            <div className={styles.filterTitle}>Binning</div>
+                            <div className={styles.binningText}>
+                                {this.state.binType.charAt(0).toUpperCase() + this.state.binType.slice(1)}
+                            </div>
+                        </Col>
+
                         {graphOptions}
 
                         <Col md={1}>

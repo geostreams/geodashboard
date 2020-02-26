@@ -221,9 +221,8 @@
 }
 
 .binningText {
-    float: right;
     margin-top: 0.7em;
-    margin-right: 4.2em;
+    margin-left: 0.6em !important;
     font-size: .875rem;
     font-weight: 400;
     letter-spacing: .04em;
