@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## UNRELEASED
+## [3.2.0] - 2020-02-26
 
 ### Added
 - Add the ability to have a Download Button Dialog Box to provide explanatory text 
@@ -17,7 +17,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1303](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1303)
 - Binning description in the selection Menu Bar now appears as its own section in the row
   [GEOD-1248](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1248)
-  
 - Updated the font size and spacing in the Detail Page charts
   [GEOD-1294](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1294)
 
