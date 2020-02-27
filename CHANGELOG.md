@@ -5,7 +5,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.2.0] - 2020-02-26
-
 ### Added
 - Add the ability to have a Download Button Dialog Box to provide explanatory text 
   [GLGVO-527](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-527)
@@ -31,7 +30,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1293](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1293)
 
 ## [3.1.0] - 2019-09-19
-
 ### Added
 - Provide Dropdown Examples for the new MenuBar Setup
   [GEOD-1236](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1236)
