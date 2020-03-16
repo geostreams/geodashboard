@@ -42,13 +42,13 @@ class DialogWrapper extends Component {
 
         if (this.props.body !== undefined) {
             if (this.props.body.description !== undefined) {
-                body_text = this.props.body.description;
+                body_text = this.props.body.description.replace(/<[^>]*>?/gm, '');
             }
             if (this.props.body.qaqc !== undefined) {
-                qaqc_text = this.props.body.qaqc;
+                qaqc_text = this.props.body.qaqc.replace(/<[^>]*>?/gm, '');
             }
             if (this.props.body.more_info !== undefined) {
-                moreinfo_text = this.props.body.more_info;
+                moreinfo_text = this.props.body.more_info.replace(/<[^>]*>?/gm, '');
             }
             if (this.props.body.link !== undefined) {
                 moreinfo_link = this.props.body.link;
@@ -70,7 +70,7 @@ class DialogWrapper extends Component {
                             {body_text}<br/>{qaqc_text}
                         </Body1>
                         <Body2>
-                            <Link href={moreinfo_link}>{moreinfo_text}</Link>
+                            <Link target="_blank" href={moreinfo_link}>{moreinfo_text}</Link>
                         </Body2>
                     </DialogBody>
                 </Dialog>

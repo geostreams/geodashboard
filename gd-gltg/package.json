@@ -1,7 +1,6 @@
 {
-  "name": "@geodashboard/gd-gltg",
-  "version": "3.2.0",
-  "description": "",
+  "name": "gd-gltg",
+  "version": "3.3.0",
   "main": "src/index.jsx",
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.dev.js --color",

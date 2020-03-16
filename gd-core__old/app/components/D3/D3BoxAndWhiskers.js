@@ -128,6 +128,7 @@ D3BoxAndWhisker._drawPoints = function (el, state) {
 
     const outlierClasses = "circle " + outlierClass;
     outlier.enter().insert("circle", "text")
+        .style("font-size", "12")
         .attr("class", outlierClasses)
         .attr("r", 2)
         .attr("cx", boxWidth / 2)
@@ -144,6 +145,7 @@ D3BoxAndWhisker._drawPoints = function (el, state) {
         .data(quartileData);
 
     boxTick.enter().append("text")
+        .style("font-size", "12")
         .attr("class", boxClass)
         .attr("dy", ".3em")
         .attr("dx", function (d, i) {
@@ -160,11 +162,11 @@ D3BoxAndWhisker._drawPoints = function (el, state) {
 
     // Add Whisker ticks. These are handled separately from the box
     // ticks because they may or may not exist
-
     const whiskerTick = g.selectAll("text.whisker")
         .data(whiskerData || []);
 
     whiskerTick.enter().append("text")
+        .style("font-size", "12")
         .attr("class", "whisker")
         .attr("dy", ".3em")
         .attr("dx", 6)
