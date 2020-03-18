@@ -7,16 +7,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## UNRELEASED
 
 ### Added
+- Add the ability to have a Download Button Dialog Box to provide explanatory text 
+  [GLGVO-527](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-527)
 - Add lerna for package management
   [GLGVO-558](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-588)
 
 ### Changed
 - Create Intervals as a Reusable Component
   [GEOD-1248](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1248)
+- Adjusted when Bins changes to Months in the Detail Page Graphs
+  [GEOD-1303](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1303)
+- Binning description in the selection Menu Bar now appears as its own section in the row
+  [GEOD-1248](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1248)
+  
+- Updated the font size and spacing in the Detail Page charts
+  [GEOD-1294](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1294)
 
 ### Fixed
 - Click the 'x' in the top right corner of the Detail Page, the page returns to the Explore Page
   [GEOD-1274](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1274)
+- Bug Corrections for lack of displayed selections in the Search Filters
+  [GEOD-1288](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1288)
+- Sources and Download links no longer overlap on time series graphs
+  [GEOD-1286](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1286)
+- Corrected the behavior of the Info Icon and Boxes
+  [GEOD-1293](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1293)
 
 ## [3.1.0] - 2019-09-19
 
@@ -31,22 +46,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1069](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1069)
 - Add Detail Page Buttons to allow for Saving Graphs
   [GEOD-947](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-947)
-- Added New Search Page Location Filters
-  [GLGVO-545](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-545)
-- Added Bar chart for dashboard
-  [GLGVO-545](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-545)
-- Added Content for the Home Page
-  [GLGVO-1244](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-1244)
-- Added average of sites to dashboard data
-  [GEOD-1251](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1251)
-- Added Illinois drainage polygons and data
-  [GLGVO-554](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-554)
-- Added Info Buttons to Boundary and Nutrient Tabs
-  [GLGVO-547](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-547)
-- Added layer control to the map
-  [GLGVO-561](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-561)
-- Added animation to bar chart
-  [GEOD-1264](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1264)
 
 ### Changed
 - Add pills surrounding on the collapsed Parameters and Sources
@@ -59,16 +58,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1242](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1242)
 - Optimize webpack config (common config. code splitting, css extraction)
   [GLGVO-558](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-558)
-- Styling updates for the Dashboard Homepage
-  [GEOD-1245](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1245)
-- Update the Map Cursor style for areas that can be clicked only
-  [GEOD-1250](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1250)
-- Optimize how GeoJSON files are loaded
-  [GLGVO-559](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-559)
-- Various Changes to Landing Page Layout
-  [GLGVO-562](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-562)
-- Change Background Map to Terrain on Landing Page Dashboard
-  [GEOD-1253](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1253)
 
 ### Fixed
 - Ensure Markers Always Appear on the Explore and Search Pages
@@ -80,16 +69,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1241](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1241)
 - Corrected popups appearance when clusters are present
   [GEOD-933](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-933)
-- Update geodashboard appearance settings
-  [GLGVO-1246](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-1246)
-- Fixed the Dashboard slider to always visible
-  [GEOD-1258](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1258)
-- Corrected Issue on Dashboard with Year Selection After Merging
-  [GEOD-1259](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1259)
-- Ensure the map centers on the polygons we are displaying at the landing page. Added boostrap nav baar.
-  [GEOD-1237](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1237)
-- Corrected Flow Errors
-  [GEOD-1268](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1268)
 
 ## [3.0.0] - 2019-06-24
 
@@ -229,14 +208,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1036](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1036)
 - Adjusted Mobile Settings for the List vs Map Tabs
   [GEOD-1037](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1037)
-- Update Label for USGS Supergauges to be USGS Super Gage Network
-  [GLGVO-442](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-442)
 
 ### Fixed
 - Exploratory Analysis API GET Commands and Interface Behavior
   [GEOD-1152](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1152)
-- Update URLs for Layers
-  [GLGVO-464](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-464)
 - Explore Page Sources display order
   [GEOD-1150](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1150)
 - Region details page not loading
