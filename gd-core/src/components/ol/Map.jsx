@@ -10,6 +10,8 @@ import ClusterSource from 'ol/source/Cluster'
 import AnimatedClusterLayer from 'ol-ext/layer/AnimatedCluster'
 import SelectClusterInteraction from 'ol-ext/interaction/SelectCluster'
 
+import Popup from './Popup'
+
 type Props = {
     children: React.Node;
     id: string;
@@ -23,7 +25,8 @@ type Props = {
     layers: Array<Layer>;
     layerSwitcherOptions: {};
     updateMap: Function;
-    updatePopup: Function;
+    popupContent: Function | React.Node;
+    showPopupAt: ?[number, number];   // Coordinate to show the popup at. If value is null, it closes the popup.
     events: {[k: string]: Function};
 }
 
@@ -38,6 +41,8 @@ class Map extends React.Component<Props> {
 
     mapContainer: { current: null | HTMLDivElement } = React.createRef()
 
+    popupContainer: HTMLDivElement
+
     static defaultProps = {
         children: null,
         id: '',
@@ -51,7 +56,6 @@ class Map extends React.Component<Props> {
         layers: [],
         layerSwitcherOptions: null,
         updateMap: null,
-        updatePopup: null,
         events: null
     }
 
@@ -66,7 +70,7 @@ class Map extends React.Component<Props> {
             layers,
             layerSwitcherOptions,
             updateMap,
-            updatePopup,
+            showPopupAt,
             events
         } = this.props
 
@@ -76,6 +80,12 @@ class Map extends React.Component<Props> {
                 duration: 250
             }
         })
+
+        if (showPopupAt) {
+            this.openPopup(showPopupAt)
+        } else {
+            this.closePopup()
+        }
 
         this.map = new OLMap({
             target: this.mapContainer.current || this.fallbackContainer.current,
@@ -107,11 +117,22 @@ class Map extends React.Component<Props> {
             updateMap(this.map)
         }
 
-        if (updatePopup) {
-            updatePopup(this.popupOverlay)
-        }
-
         this.forceUpdate()
+    }
+
+    componentDidUpdate(prevProps: $ReadOnly<Props>) {
+        if (this.popupContainer) {
+            if (!this.popupOverlay.getElement()) {
+                this.popupOverlay.setElement(this.popupContainer)
+            }
+            if (prevProps.showPopupAt !== this.props.showPopupAt) {
+                if (this.props.showPopupAt) {
+                    this.openPopup(this.props.showPopupAt)
+                } else {
+                    this.closePopup()
+                }
+            }
+        }
     }
 
     addClusterLayer = ({
@@ -186,8 +207,20 @@ class Map extends React.Component<Props> {
         })
     }
 
+    updatePopupContainer = (el: HTMLDivElement) => {
+        this.popupContainer = el
+    }
+
+    openPopup = (coordinate: [number, number]) => {
+        this.popupOverlay.setPosition(coordinate)
+    }
+
+    closePopup = () => {
+        this.popupOverlay.setPosition(undefined)
+    }
+
     render() {
-        const { children, id, className } = this.props
+        const { children, id, className, popupContent } = this.props
 
         const data = {
             map: this.map
@@ -202,6 +235,11 @@ class Map extends React.Component<Props> {
                 <MapContext.Provider value={data}>
                     {this.renderChildren(children)}
                 </MapContext.Provider>
+                <Popup
+                    content={popupContent}
+                    setRef={this.updatePopupContainer}
+                    handleClose={this.closePopup}
+                />
             </div>
         )
     }

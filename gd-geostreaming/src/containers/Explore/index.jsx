@@ -1,9 +1,8 @@
 // @flow
-import React from 'react'
+import * as React from 'react'
 import { renderToString } from 'react-dom/server'
 import { connect } from 'react-redux'
-import { Grid, Paper, withStyles } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
+import { Grid, withStyles } from '@material-ui/core'
 import MarkerIcon from '@material-ui/icons/Room'
 import { scaleLinear } from 'd3'
 import Feature from 'ol/Feature'
@@ -21,7 +20,7 @@ import ClusterControl from 'gd-core/src/components/ol/ClusterControl'
 import SVGIcon from 'gd-core/src/components/SVGIcon'
 import { values } from 'gd-core/src/utils/array'
 
-import type { Feature as FeatureType, Map as MapType, MapBrowserEventType, Overlay as OverlayType } from 'ol'
+import type { Feature as FeatureType, Map as MapType, MapBrowserEventType } from 'ol'
 import type { Layer as LayerType } from 'ol/layer'
 import type { Source as OLSourceType } from 'ol/source'
 
@@ -75,13 +74,6 @@ const styles = (theme) => ({
             color: theme.palette.primary.contrastText,
             backgroundColor: theme.palette.primary.main
         }
-    },
-    popupClose: {
-        position: 'absolute',
-        top: 5,
-        right: 5,
-        zIndex: 1000,
-        cursor: 'pointer'
     }
 })
 
@@ -91,7 +83,6 @@ type Props = {
         sidebar: string;
         sensorDetail: string;
         clusterControl: string;
-        popupClose: string;
     };
     sensors: SensorType[];
     sources: SourceType[];
@@ -104,6 +95,8 @@ type State = {
     hasData: boolean;
     enableCluster: boolean;
     selectedFeatureIdx: number;
+    showPopupAt: ?[number, number];
+    popupContent: ?React.Node;
     showSensorDetail: boolean;
 }
 
@@ -113,8 +106,6 @@ class Explore extends React.Component<Props, State> {
     layers: {
         [key: string]: LayerType
     }
-
-    popupOverlay: OverlayType
 
     mapStyles: {
         [key: string]: Style
@@ -129,10 +120,6 @@ class Explore extends React.Component<Props, State> {
     clusterSource: OLSourceType
 
     clusterControl: Control
-
-    popupOverlay: OverlayType
-
-    popupContainer: { current: null | HTMLDivElement } = React.createRef()
 
     data: {
         [sourceId: string]: {
@@ -150,6 +137,8 @@ class Explore extends React.Component<Props, State> {
             hasData: false,
             enableCluster: true,
             selectedFeatureIdx: -1,  // -1 indicates no feature is selected
+            showPopupAt: null,
+            popupContent: null,
             showSensorDetail: false
         }
 
@@ -233,7 +222,7 @@ class Explore extends React.Component<Props, State> {
     initComponent = () => {
         this.prepareData()
         this.addClusters()
-        this.setState({ hasData: true })  // TODO remove the last two attributes
+        this.setState({ hasData: true })
     }
 
     prepareData = () => {
@@ -416,7 +405,7 @@ class Explore extends React.Component<Props, State> {
             // Case when a feature is expanded
         } else if (featuresAtPixel && featuresAtPixel.get('features') && featuresAtPixel.get('features').length === 1) {
             // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
-            this.handlePopupOpen(featuresAtPixel.get('features')[0])
+            this.handlePopupOpen(featuresAtPixel.get('features')[0], event.coordinate)
         } else if (featuresAtPixel && featuresAtPixel.get('features') && featuresAtPixel.get('features').length > 1) {
             // Zoom in the clicked cluster it has more than `clusterExpandCountThreshold` features
             // and is in a zoom level lower than `clusterExpandZoomThreshold`
@@ -428,20 +417,24 @@ class Explore extends React.Component<Props, State> {
     }
 
     handlePopupClose = () => {
-        this.popupOverlay.setPosition(undefined)
         this.map.getView().setZoom(INIT_ZOOM)
         this.map.getView().setCenter(INIT_CENTER)
         this.setState({
             selectedFeatureIdx: -1,
-            showSensorDetail: false
+            showSensorDetail: false,
+            showPopupAt: null
         })
     }
 
-    handlePopupOpen = (feature: FeatureType | number) => {
+    handlePopupOpen = (feature: FeatureType | number, coordinate: [number, number]) => {
         const f = typeof feature === 'number' ? this.features[feature] : feature
         this.map.getView().fit(f.getGeometry().getExtent())
-        this.popupOverlay.setPosition(f.getGeometry().getCoordinates())
-        this.setState({ selectedFeatureIdx: f.get('idx') })
+        const selectedFeatureIdx = f.get('idx')
+        this.setState({
+            selectedFeatureIdx,
+            showPopupAt: coordinate,
+            popupContent: this.getPopupContent(selectedFeatureIdx)
+        })
         // const properties = f.get('properties')
         // const attributes = {
         //     name: f.get('name'),
@@ -459,9 +452,17 @@ class Explore extends React.Component<Props, State> {
         // }
     }
 
+    getPopupContent = (selectedFeatureIdx: number) => {
+        return <SensorPopup
+            sensor={this.props.sensors[selectedFeatureIdx]}
+            parameters={this.props.parameters}
+            handleDetailClick={() => this.setState({ showSensorDetail: true })}
+        />
+    }
+
     render() {
         const { classes, sources } = this.props
-        const { hasData } = this.state
+        const { hasData, showPopupAt, popupContent } = this.state
         return (
             <>
                 <Map
@@ -471,10 +472,8 @@ class Explore extends React.Component<Props, State> {
                     controls={[this.clusterControl]}
                     layers={Object.values(this.layers)}
                     updateMap={(map) => { this.map = map }}
-                    updatePopup={(popupOverlay) => {
-                        popupOverlay.setElement(this.popupContainer.current)
-                        this.popupOverlay = popupOverlay
-                    }}
+                    showPopupAt={showPopupAt}
+                    popupContent={popupContent}
                     events={{
                         click: this.handleMapClick
                     }}
@@ -522,21 +521,6 @@ class Explore extends React.Component<Props, State> {
                             }
                         }
                     />
-
-                    <Paper ref={this.popupContainer} elevation={0} square>
-                        <CloseIcon
-                            className={classes.popupClose}
-                            fontSize="small"
-                            onClick={this.handlePopupClose}
-                        />
-                        {this.state.selectedFeatureIdx > -1 ?
-                            <SensorPopup
-                                sensor={this.props.sensors[this.state.selectedFeatureIdx]}
-                                parameters={this.props.parameters}
-                                handleDetailClick={() => this.setState({ showSensorDetail: true })}
-                            /> :
-                            null}
-                    </Paper>
                 </Map>
 
                 {this.state.showSensorDetail ?

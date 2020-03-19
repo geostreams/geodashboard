@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import { format } from 'd3'
 import {
     Box,
     Dialog,
@@ -10,12 +11,15 @@ import {
     Grid,
     IconButton,
     InputBase,
-    NativeSelect, Paper,
+    NativeSelect,
     Typography,
     withStyles
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import InfoIcon from '@material-ui/icons/Info'
+import DownTrendIcon from '@material-ui/icons/ArrowDropDown'
+import UpTrendIcon from '@material-ui/icons/ArrowDropUp'
+import FlatTrendIcon from '@material-ui/icons/FiberManualRecord'
 import { createEmpty as createEmptyExtent, extend as extentExtent } from 'ol/extent'
 import GeoJSON from 'ol/format/GeoJSON'
 import GroupLayer from 'ol/layer/Group'
@@ -28,18 +32,19 @@ import VectorSource from 'ol/source/Vector'
 import XYZ from 'ol/source/XYZ'
 import { Map } from 'gd-core/src/components/ol'
 import { entries } from 'gd-core/src/utils/array'
+import { SLRSlope } from 'gd-core/src/utils/math'
 
 import type {
     Feature as FeatureType,
     Map as MapType,
-    Overlay as OverlayType,
     MapBrowserEventType
 } from 'ol'
 import type { Layer as LayerType } from 'ol/layer'
 
-import Sidebar from './Sidebar'
-
+import data from '../../data/data.json'
 import { HEADERS_HEIGHT } from '../Layout/Header'
+
+import Sidebar from './Sidebar'
 import {
     ACTION_BAR_HEIGHT,
     BOUNDARIES,
@@ -93,54 +98,50 @@ const styles = (theme) => ({
         width: '100%',
         height: '100%'
     },
-    popup: {
-        width: 200,
-        padding: theme.spacing(1)
-    },
-    popupClose: {
-        position: 'absolute',
-        top: 5,
-        right: 5,
-        zIndex: 1000,
-        cursor: 'pointer'
+    trendIcon: {
+        'fontSize': 18,
+        '&.red': {
+            color: '#ff0000'
+        },
+        '&.blue': {
+            color: '#1e90ff'
+        },
+        '&.black': {
+            color: '#000'
+        }
     }
 })
 
 type Props = {
     classes: {
-        main: string,
-        mainContainer: string,
-        sidebar: string,
-        actionBar: string,
-        formControl: string,
-        formLabel: string,
-        selectButton: string,
-        fillContainer: string,
-        popup: string,
-        popupClose: string
+        main: string;
+        mainContainer: string;
+        sidebar: string;
+        actionBar: string;
+        formControl: string;
+        formLabel: string;
+        selectButton: string;
+        fillContainer: string;
+        trendIcon: string;
     }
 }
 
 type State = {
-    boundary: string,
-    featureId: string,
-    year: number,
-    nutrient: string,
-    showDialog: boolean,
+    boundary: string;
+    featureId: string;
+    year: number;
+    nutrient: string;
+    popupContent: ?React.Node;
+    showPopupAt: ?[number, number];
+    showDialog: boolean;
     dialogContent: {
-        title: string,
-        description: string | React.Node
-    }
+        title: string;
+        description: string | React.Node;
+    };
 }
 
 class Home extends React.Component<Props, State> {
     map: MapType
-
-    popupOverlay: OverlayType
-
-    popupContainer: { current: null | HTMLDivElement } = React.createRef()
-
-    popupContent: { current: null | HTMLDivElement } = React.createRef()
 
     layers: {
         [key: string]: LayerType
@@ -156,6 +157,8 @@ class Home extends React.Component<Props, State> {
             featureId: 'Overall summary',
             year: 2017,
             nutrient: 'Nitrogen',
+            popupContent: null,
+            showPopupAt: null,
             showDialog: false,
             dialogContent: {}
         }
@@ -309,15 +312,7 @@ class Home extends React.Component<Props, State> {
 
         const feature = event.map.forEachFeatureAtPixel(event.pixel, (f) => f)
 
-        const popupContentEl = this.popupContent.current
-        if (feature && popupContentEl) {
-            this.popupOverlay.setPosition(event.coordinate)
-            popupContentEl.innerHTML = feature.get('Name') || feature.get('Station_ID')
-        } else {
-            this.popupOverlay.setPosition(undefined)
-        }
-
-        if (feature && (this.state.boundary !== 'drainage' || feature.get('interactive'))) {
+        if (feature) {
             const selectedFeature = feature.get('interactive') ?
                 // A site marker is clicked
                 this.layers.drainage
@@ -327,57 +322,109 @@ class Home extends React.Component<Props, State> {
                     .find((element) => element.get('Station_ID') === feature.get('Station_ID')) :
                 feature
 
-            const { nutrient, year } = this.state
-            if (previousFeatureId !== 'Overall summary' && previousFeature) {
-                previousFeature.setStyle(
-                    getFeatureStyle(
-                        previousFeature,
+            const popupState = {
+                showPopupAt: event.coordinate,
+                popupContent: this.getPopupContent(selectedFeature)
+            }
+
+            if (this.state.boundary !== 'drainage' || feature.get('interactive')) {
+                const { nutrient, year } = this.state
+                if (previousFeatureId !== 'Overall summary' && previousFeature) {
+                    previousFeature.setStyle(
+                        getFeatureStyle(
+                            previousFeature,
+                            null,
+                            nutrient,
+                            year,
+                            false
+                        )
+                    )
+                }
+
+                const featureId = selectedFeature.get('Name') || selectedFeature.get('Station_ID')
+                if (featureId !== previousFeatureId) {
+                    // Feature is selected
+                    selectedFeature.setStyle(getFeatureStyle(
+                        selectedFeature,
                         null,
                         nutrient,
                         year,
-                        false
+                        true
+                    ))
+                    this.setState(
+                        { featureId, ...popupState },
+                        () => { this.selectedFeature = selectedFeature }
                     )
-                )
-            }
-
-            const featureId = selectedFeature.get('Name') || selectedFeature.get('Station_ID')
-            if (featureId !== previousFeatureId) {
-                // Feature is selected
-                selectedFeature.setStyle(getFeatureStyle(
-                    selectedFeature,
-                    null,
-                    nutrient,
-                    year,
-                    true
-                ))
-                this.setState(
-                    { featureId },
-                    () => {
-                        this.selectedFeature = selectedFeature
-                    }
-                )
+                } else {
+                    // Feature is deselected
+                    this.setState(
+                        { featureId: 'Overall summary', ...popupState },
+                        () => { this.selectedFeature = null }
+                    )
+                }
             } else {
-                // Feature is deselected
-                this.setState(
-                    { featureId: 'Overall summary' },
-                    () => {
-                        this.selectedFeature = null
-                    }
-                )
+                this.setState(popupState)
             }
+        } else {
+            this.setState(
+                {
+                    showPopupAt: null,
+                    popupContent: null
+                }
+            )
         }
     }
 
-    getPopupContent = (e) => {
-        const feature = e.map.forEachFeatureAtPixel(e.pixel, (f) => f)
-        if (feature) {
-            return `<span>${feature.get('Name') || feature.get('Station_ID')} </span>`
-        }
-        return null
+    getNutrientTrend = (nutrient: string, featureName: string): number => {
+        const x = []
+        const y = []
+        Object.entries(data[nutrient][featureName]).forEach(([year, value]) => {
+            x.push(parseInt(year, 10))
+            y.push(parseFloat(value))
+        })
+        return SLRSlope(x, y) || 0
     }
 
-    handlePopupClose = () => {
-        this.popupOverlay.setPosition(undefined)
+    getPopupContent = (feature: FeatureType) => {
+        const classes = this.props.classes
+        const featureName = feature.get('Name') || feature.get('Station_ID')
+        const { contributing_waterways, cumulative_acres } = feature.getProperties()
+
+        const nitrogenTrend = this.getNutrientTrend('Nitrogen', featureName)
+        const phosphorusTrend = this.getNutrientTrend('Phosphorus', featureName)
+
+        return (
+            <Typography variant="caption">
+                <span><b>{featureName}</b></span>
+                <br />
+                <span>{format(',')(contributing_waterways)} Contributing Waterways</span>
+                <br />
+                <span>{format(',')(cumulative_acres)} Cumulative Acres</span>
+                {[['Nitrogen', nitrogenTrend], ['Phosphorus', phosphorusTrend]].map(([nutrient, trend]) => {
+                    let Icon
+                    let color
+                    if (trend > 0) {
+                        Icon = UpTrendIcon
+                        color = 'red'
+                    } else if (trend < 0) {
+                        Icon = DownTrendIcon
+                        color = 'blue'
+                    } else {
+                        Icon = FlatTrendIcon
+                        color = 'black'
+                    }
+                    return (
+                        <>
+                            <br />
+                            <span>
+                                {nutrient} Trend
+                                <Icon className={`${classes.trendIcon} ${color}`} />
+                            </span>
+                        </>
+                    )
+                })}
+            </Typography>
+        )
     }
 
     render() {
@@ -387,6 +434,8 @@ class Home extends React.Component<Props, State> {
             featureId,
             nutrient,
             year,
+            showPopupAt,
+            popupContent,
             showDialog,
             dialogContent
         } = this.state
@@ -397,12 +446,9 @@ class Home extends React.Component<Props, State> {
                 center={[-9972968, 4972295]}
                 layers={Object.values(this.layers)}
                 layerSwitcherOptions={{}}
-                popupContent={this.getPopupContent}
                 updateMap={(map) => { this.map = map }}
-                updatePopup={(popupOverlay) => {
-                    popupOverlay.setElement(this.popupContainer.current)
-                    this.popupOverlay = popupOverlay
-                }}
+                popupContent={popupContent}
+                showPopupAt={showPopupAt}
                 events={{
                     click: this.handleMapClick
                 }}
@@ -525,14 +571,6 @@ class Home extends React.Component<Props, State> {
                         />
                     </Grid>
                 </Grid>
-                <Paper ref={this.popupContainer} className={classes.popup}>
-                    <CloseIcon
-                        className={classes.popupClose}
-                        fontSize="small"
-                        onClick={this.handlePopupClose}
-                    />
-                    <div ref={this.popupContent} />
-                </Paper>
                 <Dialog
                     open={showDialog}
                     onClose={() => this.setState({ showDialog: false })}
