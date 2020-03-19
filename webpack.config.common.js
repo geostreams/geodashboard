@@ -1,12 +1,12 @@
 // @flow
-const path = require('path')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const corePath = path.resolve().split('/').pop() === 'gd-core' ?
     './' :
-    './node_modules/gd-core/'
+    './node_modules/gd-core/';
 
 module.exports = {
     target: 'web',
@@ -168,4 +168,4 @@ module.exports = {
         new MiniCssExtractPlugin({ filename: 'css/[name]-[hash].css' }),
         new CleanWebpackPlugin()
     ]
-}
+};

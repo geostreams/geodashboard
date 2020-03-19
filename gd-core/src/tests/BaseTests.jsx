@@ -1,9 +1,9 @@
 // @flow
-import * as React from 'react'
-import { withRouter } from 'react-router'
-import { Link, Route } from 'react-router-dom'
-import { Button, Menu, MenuItem } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import * as React from 'react';
+import { withRouter } from 'react-router';
+import { Link, Route } from 'react-router-dom';
+import { Button, Menu, MenuItem } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 type Props = {
     match: {
@@ -20,19 +20,19 @@ const useStyles = makeStyles({
         right: 10,
         zIndex: 1000
     }
-})
+});
 
 const Tests = (props: Props) => {
-    const classes = useStyles()
-    const [anchorEl, setAnchorEl] = React.useState(null)
+    const classes = useStyles();
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = event => {
-        setAnchorEl(event.currentTarget)
-    }
+        setAnchorEl(event.currentTarget);
+    };
 
     const handleClose = () => {
-        setAnchorEl(null)
-    }
+        setAnchorEl(null);
+    };
 
     return (
         <>
@@ -65,7 +65,7 @@ const Tests = (props: Props) => {
                 />
             ))}
         </>
-    )
-}
+    );
+};
 
-export default withRouter(Tests)
+export default withRouter(Tests);

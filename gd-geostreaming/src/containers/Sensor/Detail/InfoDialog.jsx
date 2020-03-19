@@ -1,10 +1,10 @@
 // @flow
-import React from 'react'
-import { Container, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
+import React from 'react';
+import { Container, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
-import CONFIG from '../../../config'
-import { getSourceName } from '../../../utils/sensors'
+import CONFIG from '../../../config';
+import { getSourceName } from '../../../utils/sensors';
 
 type Props = {
     showDialog: boolean;
@@ -19,8 +19,8 @@ type Props = {
 const getDialogContent = (contentType, source) => {
     switch (contentType) {
         case 'parameters': {
-            const { description, qaqc, more_info, link } = CONFIG.source[source.id]
-            const content = []
+            const { description, qaqc, more_info, link } = CONFIG.source[source.id];
+            const content = [];
             if (description) {
                 content.push(
                     <Container key="paramDescription">
@@ -28,7 +28,7 @@ const getDialogContent = (contentType, source) => {
                             {description}
                         </Typography>
                     </Container>
-                )
+                );
             }
             if (qaqc) {
                 content.push(
@@ -37,7 +37,7 @@ const getDialogContent = (contentType, source) => {
                             {qaqc}
                         </Typography>
                     </Container>
-                )
+                );
             }
             if (link) {
                 content.push(
@@ -46,22 +46,22 @@ const getDialogContent = (contentType, source) => {
                             {more_info || link}
                         </Typography>
                     </Container>
-                )
+                );
             }
             return [
                 getSourceName(source),
                 content
-            ]
+            ];
         }
         case 'box':
             return [
                 'Box and Whisker Plots',
                 'Box and Whisker Plots provide a visual look at the data distribution. Lowest values are on the left, and the Highest values are on the right'
-            ]
+            ];
         default:
-            return [null, null]
+            return [null, null];
     }
-}
+};
 
 const InfoDialog = (props: Props) => {
     const {
@@ -69,9 +69,9 @@ const InfoDialog = (props: Props) => {
         contentType,
         source,
         handleClose
-    } = props
+    } = props;
 
-    const [dialogTitle, dialogBody] = getDialogContent(contentType, source)
+    const [dialogTitle, dialogBody] = getDialogContent(contentType, source);
 
     return (
         <Dialog
@@ -94,7 +94,7 @@ const InfoDialog = (props: Props) => {
                 {dialogBody}
             </DialogContent>
         </Dialog>
-    )
-}
+    );
+};
 
-export default InfoDialog
+export default InfoDialog;

@@ -1,4 +1,4 @@
 // @flow
-import React from 'react'
+import React from 'react';
 
-export default () => <div>Sources</div>
+export default () => <div>Sources</div>;

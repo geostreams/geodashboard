@@ -1,7 +1,7 @@
 // @flow
-import * as React from 'react'
+import * as React from 'react';
 
-import Tests from './tests/Tests'
+import Tests from './tests/Tests';
 
 type Routes = {
     [key: string]: {
@@ -12,11 +12,11 @@ type Routes = {
 
 const routes: Routes = {
     '/': { exact: true, component: () => 'Geodashboard Core' }
-}
+};
 
 if (process.env.NODE_ENV === 'development') {
-    routes['/tests/core'] = { component: Tests }
+    routes['/tests/core'] = { component: Tests };
 }
 
-export default routes
-export type { Routes }
+export default routes;
+export type { Routes };

@@ -1,10 +1,10 @@
 // @flow
-import * as React from 'react'
-import { connect } from 'react-redux'
-import { Box, CircularProgress, makeStyles } from '@material-ui/core'
-import Footer from 'gd-geostreaming/src/containers/Layout/Footer'
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Box, CircularProgress, makeStyles } from '@material-ui/core';
+import Footer from 'gd-geostreaming/src/containers/Layout/Footer';
 
-import Header, { HEADERS_HEIGHT } from './Header'
+import Header, { HEADERS_HEIGHT } from './Header';
 
 const useStyles = makeStyles({
     scrim: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles({
         width: '100%',
         height: `calc(100% - ${HEADERS_HEIGHT}px)`
     }
-})
+});
 
 type Props = {
     isLoading: boolean;
@@ -28,7 +28,7 @@ type Props = {
 }
 
 const Layout = ({ isLoading, children, extraMainClasses, hasFooter }: Props) => {
-    const classes = useStyles()
+    const classes = useStyles();
     return (
         <>
             {isLoading ?
@@ -47,17 +47,17 @@ const Layout = ({ isLoading, children, extraMainClasses, hasFooter }: Props) => 
                 {hasFooter ? <Footer /> : null}
             </main>
         </>
-    )
-}
+    );
+};
 
 Layout.defaultProps = {
     extraMainClasses: '',
     children: null,
     hasFooter: false
-}
+};
 
 const mapStateToProps = (state) => ({
     isLoading: state.page.isLoading
-})
+});
 
-export default connect(mapStateToProps)(Layout)
+export default connect(mapStateToProps)(Layout);

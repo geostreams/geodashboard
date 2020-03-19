@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-import Carousel from '../../components/Carousel'
+import Carousel from '../../components/Carousel';
 
 const TestCarousel = () => (
     <div style={{ margin: 150 }}>
@@ -20,6 +20,6 @@ const TestCarousel = () => (
             ))}
         </Carousel>
     </div>
-)
+);
 
-export default TestCarousel
+export default TestCarousel;

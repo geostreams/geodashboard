@@ -1,19 +1,19 @@
 // @flow
-import React from 'react'
-import { ascending, scaleLinear, scaleTime, timeYear } from 'd3'
-import { Checkbox, FormControlLabel, Grid, List, ListItem, Typography, makeStyles } from '@material-ui/core'
-import InfoIcon from '@material-ui/icons/Info'
-import { LineChart, BoxPlot } from 'gd-core/src/components/d3'
-import { entries } from 'gd-core/src/utils/array'
-import { precision } from 'gd-core/src/utils/format'
+import React from 'react';
+import { ascending, scaleLinear, scaleTime, timeYear } from 'd3';
+import { Checkbox, FormControlLabel, Grid, List, ListItem, Typography, makeStyles } from '@material-ui/core';
+import InfoIcon from '@material-ui/icons/Info';
+import { LineChart, BoxPlot } from 'gd-core/src/components/d3';
+import { entries } from 'gd-core/src/utils/array';
+import { precision } from 'gd-core/src/utils/format';
 
-import type { ParameterType, ParameterValue } from '../../../utils/flowtype'
+import type { ParameterType, ParameterValue } from '../../../utils/flowtype';
 
 const useStyle = makeStyles({
     chartContainer: {
         marginTop: 10
     }
-})
+});
 
 type ParametersState = Array<ParameterType & { isSelected: boolean; }>
 
@@ -26,10 +26,10 @@ type Props = {
 }
 
 const Parameters = (props: Props) => {
-    const classes = useStyle()
+    const classes = useStyle();
 
-    const lineChartContainerRef = React.useRef(null)
-    const boxPlotContainerRef = React.useRef(null)
+    const lineChartContainerRef = React.useRef(null);
+    const boxPlotContainerRef = React.useRef(null);
 
     const {
         data,
@@ -37,23 +37,23 @@ const Parameters = (props: Props) => {
         mapping,
         startAtZero,
         showInfoDialog
-    } = props
+    } = props;
 
     const prepareParameters = (parameters) => parameters.map((p) => ({
         ...p,
         isSelected: true
-    }))
+    }));
 
-    const [parameters: ParametersState, updateParameters] = React.useState(prepareParameters(mapping.parameters))
+    const [parameters: ParametersState, updateParameters] = React.useState(prepareParameters(mapping.parameters));
 
     React.useEffect(
         () => {
-            updateParameters(prepareParameters(mapping.parameters))
+            updateParameters(prepareParameters(mapping.parameters));
         },
         [mapping.parameters]
-    )
+    );
 
-    const processedData = {}
+    const processedData = {};
     entries(data).forEach(([paramName, paramData]) => {
         processedData[paramName] = {
             lineData: [],
@@ -62,25 +62,25 @@ const Parameters = (props: Props) => {
             maxDate: null,
             minAverage: Infinity,
             maxAverage: -Infinity
-        }
+        };
         paramData.forEach(({ average, date }) => {
-            const d = processedData[paramName]
-            d.lineData.push({ date: new Date(date), average })
-            d.boxData.push(average)
+            const d = processedData[paramName];
+            d.lineData.push({ date: new Date(date), average });
+            d.boxData.push(average);
             if (d.maxAverage < average) {
-                d.maxAverage = average
+                d.maxAverage = average;
             }
             if (d.minAverage > average) {
-                d.minAverage = average
+                d.minAverage = average;
             }
             if (d.maxDate < date) {
-                d.maxDate = date
+                d.maxDate = date;
             }
             if (d.minDate > date) {
-                d.minDate = date
+                d.minDate = date;
             }
-        })
-    })
+        });
+    });
 
 
     return (
@@ -104,10 +104,10 @@ const Parameters = (props: Props) => {
                                     onChange={(e, isChecked) => {
                                         updateParameters(parameters.map((p) => {
                                             if (p.name === name) {
-                                                p.isSelected = isChecked
+                                                p.isSelected = isChecked;
                                             }
-                                            return p
-                                        }))
+                                            return p;
+                                        }));
                                     }}
                                 />}
                                 label={`${title}${unit ? ` (${unit})` : ''}`}
@@ -133,16 +133,16 @@ const Parameters = (props: Props) => {
                 </Grid>
                 {parameters.map(({ name, isSelected }) => {
                     if (!processedData[name] || !isSelected) {
-                        return null
+                        return null;
                     }
-                    const { lineData, boxData, minAverage, maxAverage } = processedData[name]
-                    lineData.sort((d1, d2) => ascending(d1.date, d2.date))
-                    boxData.sort(ascending)
-                    const paramProps = mapping.parameters.find((p) => p.name === name)
+                    const { lineData, boxData, minAverage, maxAverage } = processedData[name];
+                    lineData.sort((d1, d2) => ascending(d1.date, d2.date));
+                    boxData.sort(ascending);
+                    const paramProps = mapping.parameters.find((p) => p.name === name);
                     const label = paramProps ?
                         `${paramProps.title}${paramProps.unit ? ` (${paramProps.unit})` : ''}` :
-                        ''
-                    const yTitle = paramProps && paramProps.unit
+                        '';
+                    const yTitle = paramProps && paramProps.unit;
                     return (
                         <React.Fragment key={name}>
                             <Grid item xs={12} align="center">
@@ -223,11 +223,11 @@ const Parameters = (props: Props) => {
                                 </div>
                             </Grid>
                         </React.Fragment>
-                    )
+                    );
                 })}
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
-export default Parameters
+export default Parameters;

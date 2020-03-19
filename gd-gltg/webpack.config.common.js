@@ -1,8 +1,8 @@
 // @flow
-const webpackMerge = require('webpack-merge')
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const webpackMerge = require('webpack-merge');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
-const commonConfigBase = require('../webpack.config.common')
+const commonConfigBase = require('../webpack.config.common');
 
 module.exports = webpackMerge(
     commonConfigBase,
@@ -19,4 +19,4 @@ module.exports = webpackMerge(
             })
         ]
     }
-)
+);

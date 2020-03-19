@@ -1,6 +1,6 @@
 // @flow
-const Webpack = require('webpack')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const Webpack = require('webpack');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
     mode: 'production',
@@ -17,4 +17,4 @@ module.exports = {
         }),
         new OptimizeCssAssetsPlugin()
     ]
-}
+};

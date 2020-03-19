@@ -134,7 +134,7 @@
     ],
     "semi": [
       "error",
-      "never"
+      "always"
     ],
     "space-infix-ops": [
       "error",

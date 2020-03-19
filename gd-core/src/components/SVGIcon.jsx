@@ -1,6 +1,6 @@
 // @flow
-import React from 'react'
-import Icon from '@material-ui/core/SvgIcon'
+import React from 'react';
+import Icon from '@material-ui/core/SvgIcon';
 
 type Props = {
     children: Icon;
@@ -38,7 +38,7 @@ const SVGIcon = ({
     >
         <g {...gProps}>{children}</g>
     </svg>
-)
+);
 
 SVGIcon.defaultProps = {
     width: 20,
@@ -49,6 +49,6 @@ SVGIcon.defaultProps = {
     opacity: 1,
     svgProps: {},
     gProps: {}
-}
+};
 
-export default SVGIcon
+export default SVGIcon;

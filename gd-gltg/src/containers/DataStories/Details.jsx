@@ -1,7 +1,7 @@
 // @flow
-import React from 'react'
-import { Box, Container, makeStyles, Modal, Typography } from '@material-ui/core'
-import CloseIcon from '@material-ui/core/SvgIcon/SvgIcon'
+import React from 'react';
+import { Box, Container, makeStyles, Modal, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/core/SvgIcon/SvgIcon';
 
 const useStyle = makeStyles({
     header: {
@@ -23,7 +23,7 @@ const useStyle = makeStyles({
         width: '100%',
         height: '90%'
     }
-})
+});
 
 type Props = {
     title: string,
@@ -36,7 +36,7 @@ const Details = ({
     source,
     handleClose
 }: Props) => {
-    const classes = useStyle()
+    const classes = useStyle();
     return (
         <Modal
             className={classes.modal}
@@ -73,12 +73,12 @@ const Details = ({
                     </Box>}
             </Container>
         </Modal>
-    )
-}
+    );
+};
 
 Details.defaultProps = {
     title: '',
     source: null
-}
+};
 
-export default Details
+export default Details;

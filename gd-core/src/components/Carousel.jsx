@@ -1,19 +1,19 @@
 // @flow
-import * as React from 'react'
+import * as React from 'react';
 import {
     Container,
     Fab,
     Grid,
     makeStyles
-} from '@material-ui/core'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import PauseIcon from '@material-ui/icons/Pause'
-import PlayIcon from '@material-ui/icons/PlayArrow'
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked'
-import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
+} from '@material-ui/core';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import PauseIcon from '@material-ui/icons/Pause';
+import PlayIcon from '@material-ui/icons/PlayArrow';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 
-import hooks from '../utils/hooks'
+import hooks from '../utils/hooks';
 
 const useStyle = makeStyles({
     container: {
@@ -35,7 +35,7 @@ const useStyle = makeStyles({
     navButton: {
         height: '85%'
     }
-})
+});
 
 type Props = {
     children: React.Node,
@@ -63,41 +63,41 @@ const Carousel = ({
     indicatorsColor,
     ...rest
 }: Props) => {
-    const classes = useStyle()
-    const [activeIndex, updateActiveIndex] = React.useState(startIndex)
-    const [delay, updateDelay] = React.useState(slidesInterval)
-    const [isPaused, togglePause] = React.useState(startInPause)
-    const childrenCount = React.Children.count(children)
+    const classes = useStyle();
+    const [activeIndex, updateActiveIndex] = React.useState(startIndex);
+    const [delay, updateDelay] = React.useState(slidesInterval);
+    const [isPaused, togglePause] = React.useState(startInPause);
+    const childrenCount = React.Children.count(children);
 
     hooks.useInterval(
         () => {
             if (activeIndex === childrenCount - 1) {
-                updateActiveIndex(0)
+                updateActiveIndex(0);
             } else {
-                updateActiveIndex(activeIndex + 1)
+                updateActiveIndex(activeIndex + 1);
             }
         },
         isPaused ? null : delay
-    )
+    );
 
     const handleNavigation = (nextSlide) => {
         if (slidesInterval) {
-            updateDelay(null)
+            updateDelay(null);
         }
         if (nextSlide === childrenCount) {
-            updateActiveIndex(0)
+            updateActiveIndex(0);
         } else if (nextSlide === -1) {
-            updateActiveIndex(childrenCount - 1)
+            updateActiveIndex(childrenCount - 1);
         } else {
-            updateActiveIndex(nextSlide)
+            updateActiveIndex(nextSlide);
         }
         if (slidesInterval) {
             // This delay is needed to allow `updateDelay(null` takes effect.
             // Otherwise the two state changes might happen too fast to reset
             // the interval
-            setTimeout(() => updateDelay(slidesInterval), 100)
+            setTimeout(() => updateDelay(slidesInterval), 100);
         }
-    }
+    };
 
     const renderIndicators = (size) => (
         <Grid item xs={size}>
@@ -133,7 +133,7 @@ const Carousel = ({
                 </Grid> :
                 null}
         </Grid>
-    )
+    );
 
     return (
         <Container className={classes.container}>
@@ -193,8 +193,8 @@ const Carousel = ({
                 </Grid> :
                 null}
         </Container>
-    )
-}
+    );
+};
 
 Carousel.defaultProps = {
     slidesInterval: null,
@@ -206,6 +206,6 @@ Carousel.defaultProps = {
     buttonsSize: 'medium',
     indicatorsLocation: 'outside',
     indicatorsColor: 'black'
-}
+};
 
-export default Carousel
+export default Carousel;

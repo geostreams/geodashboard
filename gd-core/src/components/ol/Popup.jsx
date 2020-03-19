@@ -1,7 +1,7 @@
 // @flow
-import * as React from 'react'
-import CloseIcon from '@material-ui/icons/Close'
-import { makeStyles, Paper } from '@material-ui/core'
+import * as React from 'react';
+import CloseIcon from '@material-ui/icons/Close';
+import { makeStyles, Paper } from '@material-ui/core';
 
 const useStyle = makeStyles((theme) => ({
     popup: {
@@ -15,7 +15,7 @@ const useStyle = makeStyles((theme) => ({
         cursor: 'pointer',
         color: 'red'
     }
-}))
+}));
 
 type Props = {
     content: Function | React.Node;
@@ -24,7 +24,7 @@ type Props = {
 }
 
 const Popup = ({ content, setRef, handleClose }: Props) => {
-    const classes = useStyle()
+    const classes = useStyle();
     return (
         <Paper
             ref={setRef}
@@ -40,7 +40,7 @@ const Popup = ({ content, setRef, handleClose }: Props) => {
                 null}
             {content}
         </Paper>
-    )
-}
+    );
+};
 
-export default Popup
+export default Popup;

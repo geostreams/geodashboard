@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React from 'react';
 import {
     axisBottom,
     format,
@@ -11,8 +11,8 @@ import {
     select,
     ScaleLinear,
     Selection
-} from 'd3'
-import { SVGElement } from 'dom-helpers'
+} from 'd3';
+import { SVGElement } from 'dom-helpers';
 
 type Props = {
     domain: Array<number>,
@@ -58,31 +58,31 @@ class Legend extends React.Component<Props> {
     }
 
     componentDidMount = (): void => {
-        this.createLegend()
+        this.createLegend();
     }
 
     componentDidUpdate = (): void => {
         if (this.legendProps.indicatorLine) {
-            this.updateIndicator()
+            this.updateIndicator();
         }
     }
 
     updateIndicator = () => {
-        const { indicator } = this.props
-        const { indicatorLine, scale } = this.legendProps
+        const { indicator } = this.props;
+        const { indicatorLine, scale } = this.legendProps;
         if (indicator) {
-            const xPos = scale(indicator.value)
+            const xPos = scale(indicator.value);
             indicatorLine
                 .transition()
                 .duration(200)
                 .attr('x1', xPos)
                 .attr('x2', xPos)
-                .attr('opacity', 1)
+                .attr('opacity', 1);
         } else {
             indicatorLine
                 .transition()
                 .duration(200)
-                .attr('opacity', 0)
+                .attr('opacity', 0);
         }
     }
 
@@ -101,9 +101,9 @@ class Legend extends React.Component<Props> {
             tickSize,
             tickFormat,
             indicator
-        } = this.props
+        } = this.props;
 
-        const colorScale = scaleSequential(color).domain(domain)
+        const colorScale = scaleSequential(color).domain(domain);
 
         const canvas = select(this.containerEl.current)
             .style('height', `${height * 2}px`)
@@ -118,31 +118,31 @@ class Legend extends React.Component<Props> {
             .style('position', 'absolute')
             .style('top', `${marginTop}px`)
             .style('left', `${marginLeft}px`)
-            .node()
+            .node();
 
-        const ctx = canvas.getContext('2d')
+        const ctx = canvas.getContext('2d');
 
         const scale = scaleLinear()
             .range([1, width - marginRight - marginLeft])
             .domain(colorScale.domain())
-            .clamp(clamp)
+            .clamp(clamp);
 
-        const image = ctx.createImageData(width, 1)
+        const image = ctx.createImageData(width, 1);
         range(width).forEach((i) => {
-            const c = rgb(colorScale(scale.invert(i)))
-            const idx = 4 * i
-            image.data[idx] = c.r
-            image.data[idx + 1] = c.g
-            image.data[idx + 2] = c.b
-            image.data[idx + 3] = 255
-        })
-        ctx.putImageData(image, 0, 0)
+            const c = rgb(colorScale(scale.invert(i)));
+            const idx = 4 * i;
+            image.data[idx] = c.r;
+            image.data[idx + 1] = c.g;
+            image.data[idx + 2] = c.b;
+            image.data[idx + 3] = 255;
+        });
+        ctx.putImageData(image, 0, 0);
 
         const legendAxis = axisBottom()
             .scale(scale)
             .tickSize(tickSize)
             .ticks(ticks)
-            .tickFormat(tickFormat)
+            .tickFormat(tickFormat);
 
         const svg = select(this.containerEl.current)
             .append('svg')
@@ -150,15 +150,15 @@ class Legend extends React.Component<Props> {
             .attr('width', `${width + marginLeft + marginRight}px`)
             .style('position', 'absolute')
             .style('left', '0px')
-            .style('top', '0px')
+            .style('top', '0px');
 
         svg
             .append('g')
             .attr('class', 'axis')
             .attr('transform', `translate(${marginLeft},${(height - marginTop) + 1})`)
-            .call(legendAxis)
+            .call(legendAxis);
 
-        let indicatorLine
+        let indicatorLine;
         if (indicator) {
             svg
                 .append('svg:defs')
@@ -172,9 +172,9 @@ class Legend extends React.Component<Props> {
                 .attr('orient', 'auto')
                 .append('path')
                 .attr('d', 'M 0 0 12 6 0 12 3 6')
-                .style('fill', indicator.stroke || 'black')
+                .style('fill', indicator.stroke || 'black');
 
-            const xPos = scale(indicator.value)
+            const xPos = scale(indicator.value);
             indicatorLine = svg
                 .append('line')
                 .attr('x1', xPos)
@@ -184,20 +184,20 @@ class Legend extends React.Component<Props> {
 
                 .attr('stroke-width', indicator.width || 1)
                 .attr('stroke', indicator.stroke || 'black')
-                .attr('marker-end', 'url(#triangle)')
+                .attr('marker-end', 'url(#triangle)');
         }
 
         this.legendProps = {
             indicatorLine,
             scale
-        }
+        };
     }
 
     render() {
         return (
             <div ref={this.containerEl} />
-        )
+        );
     }
 }
 
-export default Legend
+export default Legend;

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React from 'react';
 import {
     Avatar,
     Card,
@@ -11,11 +11,11 @@ import {
     Grid,
     Typography,
     makeStyles
-} from '@material-ui/core'
-import MenuBookIcon from '@material-ui/icons/MenuBook'
+} from '@material-ui/core';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 
-import dataStories from './pages'
-import Details from './Details'
+import dataStories from './pages';
+import Details from './Details';
 
 const useStyle = makeStyles({
     header: {
@@ -29,12 +29,12 @@ const useStyle = makeStyles({
         width: '18rem',
         height: '18rem'
     }
-})
+});
 
 const DataStories = () => {
-    const classes = useStyle()
-    const [iframeProps, updateIframeProps] = React.useState({})
-    const handleModalClose = () => updateIframeProps({})
+    const classes = useStyle();
+    const [iframeProps, updateIframeProps] = React.useState({});
+    const handleModalClose = () => updateIframeProps({});
     return (
         <>
             <Details {...iframeProps} handleClose={handleModalClose} />
@@ -83,7 +83,7 @@ const DataStories = () => {
                 </Grid>
             </Container>
         </>
-    )
-}
+    );
+};
 
-export default DataStories
+export default DataStories;

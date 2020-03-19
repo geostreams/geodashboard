@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React from 'react';
 import {
     Card,
     CardActionArea,
@@ -9,10 +9,10 @@ import {
     NativeSelect,
     Typography,
     makeStyles
-} from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
-import filters from './filters'
+import filters from './filters';
 
 const useStyle = makeStyles({
     header: {
@@ -33,24 +33,24 @@ const useStyle = makeStyles({
         zIndex: 1000,
         cursor: 'pointer'
     }
-})
+});
 
 const Sidebar = () => {
-    const classes = useStyle()
+    const classes = useStyle();
 
-    const [selectedFilters, updateSelectedFilters] = React.useState(new Set())
+    const [selectedFilters, updateSelectedFilters] = React.useState(new Set());
 
     const addFilter = ({ target: { value: filterLabel } }) => {
-        const updatedFilters = new Set(selectedFilters)
-        updatedFilters.add(filterLabel)
-        updateSelectedFilters(updatedFilters)
-    }
+        const updatedFilters = new Set(selectedFilters);
+        updatedFilters.add(filterLabel);
+        updateSelectedFilters(updatedFilters);
+    };
 
     const removeFilter = (filterLabel) => {
-        const updatedFilters = new Set(selectedFilters)
-        updatedFilters.delete(filterLabel)
-        updateSelectedFilters(updatedFilters)
-    }
+        const updatedFilters = new Set(selectedFilters);
+        updatedFilters.delete(filterLabel);
+        updateSelectedFilters(updatedFilters);
+    };
 
     return (
         <Container>
@@ -99,7 +99,7 @@ const Sidebar = () => {
                 </Card>
             ))}
         </Container>
-    )
-}
+    );
+};
 
-export default Sidebar
+export default Sidebar;

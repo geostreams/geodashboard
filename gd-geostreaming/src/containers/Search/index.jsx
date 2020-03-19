@@ -1,42 +1,42 @@
 // @flow
-import React from 'react'
-import { renderToString } from 'react-dom/server'
-import { connect } from 'react-redux'
-import { Grid, Paper, withStyles } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
-import MarkerIcon from '@material-ui/icons/Room'
-import { scaleLinear } from 'd3'
-import Feature from 'ol/Feature'
-import GeoJSON from 'ol/format/GeoJSON'
-import Point from 'ol/geom/Point'
-import GroupLayer from 'ol/layer/Group'
-import TileLayer from 'ol/layer/Tile'
-import OSM, { ATTRIBUTION as OSM_ATTRIBUTION } from 'ol/source/OSM'
-import VectorSource from 'ol/source/Vector'
-import XYZ from 'ol/source/XYZ'
-import { Circle, Fill, Icon, Stroke, Style, Text } from 'ol/style'
-import { Map } from 'gd-core/src/components/ol'
-import Control from 'gd-core/src/components/ol/Control'
-import ClusterControl from 'gd-core/src/components/ol/ClusterControl'
-import SVGIcon from 'gd-core/src/components/SVGIcon'
-import { values } from 'gd-core/src/utils/array'
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { connect } from 'react-redux';
+import { Grid, Paper, withStyles } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import MarkerIcon from '@material-ui/icons/Room';
+import { scaleLinear } from 'd3';
+import Feature from 'ol/Feature';
+import GeoJSON from 'ol/format/GeoJSON';
+import Point from 'ol/geom/Point';
+import GroupLayer from 'ol/layer/Group';
+import TileLayer from 'ol/layer/Tile';
+import OSM, { ATTRIBUTION as OSM_ATTRIBUTION } from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector';
+import XYZ from 'ol/source/XYZ';
+import { Circle, Fill, Icon, Stroke, Style, Text } from 'ol/style';
+import { Map } from 'gd-core/src/components/ol';
+import Control from 'gd-core/src/components/ol/Control';
+import ClusterControl from 'gd-core/src/components/ol/ClusterControl';
+import SVGIcon from 'gd-core/src/components/SVGIcon';
+import { values } from 'gd-core/src/utils/array';
 
-import type { Feature as FeatureType, Map as MapType, MapBrowserEventType, Overlay as OverlayType } from 'ol'
-import type { Layer as LayerType } from 'ol/layer'
-import type { Source as OLSourceType } from 'ol/source'
+import type { Feature as FeatureType, Map as MapType, MapBrowserEventType, Overlay as OverlayType } from 'ol';
+import type { Layer as LayerType } from 'ol/layer';
+import type { Source as OLSourceType } from 'ol/source';
 
-import CONFIG from '../../config'
-import { fetchParameters as fetchParametersAction } from '../../actions/parameters'
-import { fetchSensors as fetchSensorsAction } from '../../actions/sensors'
-import SensorDetail from '../Sensor/Detail'
-import SensorPopup from '../Sensor/Popup'
-import Sidebar from './Sidebar'
+import CONFIG from '../../config';
+import { fetchParameters as fetchParametersAction } from '../../actions/parameters';
+import { fetchSensors as fetchSensorsAction } from '../../actions/sensors';
+import SensorDetail from '../Sensor/Detail';
+import SensorPopup from '../Sensor/Popup';
+import Sidebar from './Sidebar';
 
-import type { ParameterType, SensorType, SourceType } from '../../utils/flowtype'
+import type { ParameterType, SensorType, SourceType } from '../../utils/flowtype';
 
-const INIT_ZOOM = 5.5
-const INIT_CENTER = [-9972968, 4972295]
-const CLUSTER_DISTANCE = 45
+const INIT_ZOOM = 5.5;
+const INIT_CENTER = [-9972968, 4972295];
+const CLUSTER_DISTANCE = 45;
 
 const styles = (theme) => ({
     mainContainer: {
@@ -78,7 +78,7 @@ const styles = (theme) => ({
         zIndex: 1000,
         cursor: 'pointer'
     }
-})
+});
 
 type Props = {
     classes: {
@@ -139,16 +139,16 @@ class Download extends React.Component<Props, State> {
     }
 
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             hasData: false,
             enableCluster: true,
             selectedFeatureIdx: -1,
             showSensorDetail: false
-        }
+        };
 
-        this.features = []
+        this.features = [];
 
         this.layers = {
             basemaps: new GroupLayer({
@@ -174,7 +174,7 @@ class Download extends React.Component<Props, State> {
                     })
                 ]
             })
-        }
+        };
 
         const marker = renderToString(
             <MarkerIcon
@@ -182,7 +182,7 @@ class Download extends React.Component<Props, State> {
                 fill="green"
                 stroke="green"
             />
-        )
+        );
         this.mapStyles = {
             linkedFeature: new Style({
                 image: new Icon({
@@ -199,59 +199,59 @@ class Download extends React.Component<Props, State> {
                     src: `data:image/svg+xml;utf-8,${marker}`
                 })
             })
-        }
+        };
 
-        this.selectedFeature = null
+        this.selectedFeature = null;
 
         this.clusterControl = new Control({
             className: this.props.classes.clusterControl
-        })
+        });
     }
 
     componentDidMount() {
         if (this.props.sensors.length > 0) {
-            this.initComponent()
+            this.initComponent();
         } else {
-            this.props.fetchSensors()
+            this.props.fetchSensors();
         }
         if (this.props.parameters.length === 0) {
-            this.props.fetchParameters()
+            this.props.fetchParameters();
         }
     }
 
     componentDidUpdate(prevProps: $ReadOnly<Props>, prevState: $ReadOnly<State>) {
         if (!prevState.hasData && this.props.sensors.length > 0) {
-            this.initComponent()
+            this.initComponent();
         }
     }
 
     initComponent = () => {
-        this.prepareData()
-        this.addClusters()
-        this.setState({ hasData: true })
+        this.prepareData();
+        this.addClusters();
+        this.setState({ hasData: true });
     }
 
     prepareData = () => {
-        this.data = {}
+        this.data = {};
 
         this.props.sensors.forEach((d, idx) => {
-            d.idx = idx
-            const sourceId = d.properties.type.id
+            d.idx = idx;
+            const sourceId = d.properties.type.id;
             if (!this.data[sourceId]) {
                 this.data[sourceId] = {
                     sensorCount: 0,
                     regions: {}
-                }
+                };
             }
-            const sourceAttrs = this.data[sourceId]
-            sourceAttrs.sensorCount += 1
-            const regionId = d.properties.region
+            const sourceAttrs = this.data[sourceId];
+            sourceAttrs.sensorCount += 1;
+            const regionId = d.properties.region;
             if (!sourceAttrs.regions[regionId]) {
-                sourceAttrs.regions[regionId] = []
+                sourceAttrs.regions[regionId] = [];
             }
-            const regionSensors = sourceAttrs.regions[regionId]
-            regionSensors.push(d)
-        })
+            const regionSensors = sourceAttrs.regions[regionId];
+            regionSensors.push(d);
+        });
     }
 
     getMarker = (fill: string, stroke: string) => encodeURIComponent(
@@ -266,37 +266,37 @@ class Download extends React.Component<Props, State> {
 
     getMarkerColor = (feature) => {
         if (feature.get('features')) {
-            const properties = feature.get('features')[0].get('properties')
-            const sourceAttrs = CONFIG.source[properties.type.id.toLowerCase()] || {}
-            const fillColor = sourceAttrs.color || 'black'
-            let strokeColor = 'black'
+            const properties = feature.get('features')[0].get('properties');
+            const sourceAttrs = CONFIG.source[properties.type.id.toLowerCase()] || {};
+            const fillColor = sourceAttrs.color || 'black';
+            let strokeColor = 'black';
             if (CONFIG.sensors.displayOnlineStatus) {
                 if (properties.online_status === 'online') {
-                    strokeColor = 'green'
+                    strokeColor = 'green';
                 }
                 if (properties.online_status === 'offline') {
-                    strokeColor = 'red'
+                    strokeColor = 'red';
                 }
             }
-            return [fillColor, strokeColor]
+            return [fillColor, strokeColor];
         }
-        return ['pink', 'pink']
+        return ['pink', 'pink'];
     }
 
     getClusteredStyle = (feature) => {
-        const { mapStyles } = this
-        const { enableCluster } = this.state
+        const { mapStyles } = this;
+        const { enableCluster } = this.state;
 
-        const size = feature.get('features').length
+        const size = feature.get('features').length;
 
         if (size === 1 || !enableCluster) {
-            return this.getSelectedStyle(feature)
+            return this.getSelectedStyle(feature);
         }
 
-        const radiusScale = scaleLinear().range([10, 20]).domain([0, 300]).clamp(true)
+        const radiusScale = scaleLinear().range([10, 20]).domain([0, 300]).clamp(true);
 
-        const styleName = `cluster-${size}`
-        let style = mapStyles[styleName]
+        const styleName = `cluster-${size}`;
+        let style = mapStyles[styleName];
         if (!style) {
             style = new Style({
                 image: new Circle({
@@ -314,37 +314,37 @@ class Download extends React.Component<Props, State> {
                         color: '#fff'
                     })
                 })
-            })
+            });
         }
 
-        mapStyles[styleName] = style
-        this.mapStyles = mapStyles
-        return style
+        mapStyles[styleName] = style;
+        this.mapStyles = mapStyles;
+        return style;
     }
 
     getSelectedStyle = (feature) => {
-        const size = feature.get('features').length
-        const { mapStyles } = this
-        const { enableCluster } = this.state
+        const size = feature.get('features').length;
+        const { mapStyles } = this;
+        const { enableCluster } = this.state;
 
         if (size > 1 && enableCluster) {
-            return this.getClusteredStyle(feature)
+            return this.getClusteredStyle(feature);
         }
 
-        const [fillColor, strokeColor] = this.getMarkerColor(feature)
-        const styleName = `cluster-${strokeColor}`
-        let style = mapStyles[styleName]
+        const [fillColor, strokeColor] = this.getMarkerColor(feature);
+        const styleName = `cluster-${strokeColor}`;
+        let style = mapStyles[styleName];
         if (!style) {
             style = new Style({
                 image: new Icon({
                     src: `data:image/svg+xml;utf-8,${this.getMarker(fillColor, strokeColor)}`
                 })
-            })
+            });
         }
 
-        mapStyles[styleName] = style
-        this.mapStyles = mapStyles
-        return style
+        mapStyles[styleName] = style;
+        this.mapStyles = mapStyles;
+        return style;
     }
 
     addClusters = () => {
@@ -353,21 +353,21 @@ class Download extends React.Component<Props, State> {
                 dataProjection: 'EPSG:4326',
                 featureProjection: 'EPSG:3857'
             }))
-        })
+        });
 
-        this.features = []
+        this.features = [];
         this.props.sensors.forEach((sensor) => {
-            const { geometry, ...attrs } = sensor
-            const geom = new Point(geometry.coordinates)
-            geom.transform('EPSG:4326', 'EPSG:3857')
+            const { geometry, ...attrs } = sensor;
+            const geom = new Point(geometry.coordinates);
+            geom.transform('EPSG:4326', 'EPSG:3857');
             const feature = new Feature({
                 geometry: geom,
                 // $FlowFixMe
                 ...attrs
-            })
-            this.features.push(feature)
-            this.clusterVectorSource.addFeature(feature)
-        })
+            });
+            this.features.push(feature);
+            this.clusterVectorSource.addFeature(feature);
+        });
 
         this.clusterSource = this.map.addClusterLayer({
             source: this.clusterVectorSource,
@@ -375,7 +375,7 @@ class Download extends React.Component<Props, State> {
             styleClustered: this.getClusteredStyle,
             styleSelected: this.getSelectedStyle,
             styleFeature: (feature) => {
-                const [fillColor, strokeColor] = this.getMarkerColor(feature)
+                const [fillColor, strokeColor] = this.getMarkerColor(feature);
                 return new Style({
                     image: new Icon({
                         src: `data:image/svg+xml;utf-8,${this.getMarker(fillColor, strokeColor)}`
@@ -385,59 +385,59 @@ class Download extends React.Component<Props, State> {
                         color: '#fff',
                         width: 1
                     })
-                })
+                });
             }
-        })
+        });
     }
 
     addRegionsToMap = (regions) => {
         values(regions).forEach((sensors) => {
             sensors.forEach((sensor) => {
-                this.clusterVectorSource.addFeature(this.features[sensor.idx])
-            })
-        })
+                this.clusterVectorSource.addFeature(this.features[sensor.idx]);
+            });
+        });
     }
 
     removeRegionsFromMap = (regions) => {
         values(regions).forEach((sensors) => {
             sensors.forEach((sensor) => {
-                this.clusterVectorSource.removeFeature(this.features[sensor.idx])
-            })
-        })
+                this.clusterVectorSource.removeFeature(this.features[sensor.idx]);
+            });
+        });
     }
 
     handleMapClick = (event: MapBrowserEventType) => {
-        const featuresAtPixel = this.map.forEachFeatureAtPixel(event.pixel, (featureChange) => featureChange)
+        const featuresAtPixel = this.map.forEachFeatureAtPixel(event.pixel, (featureChange) => featureChange);
         if (featuresAtPixel && featuresAtPixel.attributes && featuresAtPixel.attributes.type === 'single') {
             // Case when a feature is expanded
         } else if (featuresAtPixel && featuresAtPixel.get('features') && featuresAtPixel.get('features').length === 1) {
             // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
-            this.handlePopupOpen(featuresAtPixel.get('features')[0])
+            this.handlePopupOpen(featuresAtPixel.get('features')[0]);
         } else if (featuresAtPixel && featuresAtPixel.get('features') && featuresAtPixel.get('features').length > 1) {
             // Zoom in the clicked cluster it has more than `clusterExpandCountThreshold` features
             // and is in a zoom level lower than `clusterExpandZoomThreshold`
             if (featuresAtPixel.get('features').length > CONFIG.map.clusterExpandCountThreshold && this.map.getView().getZoom() < CONFIG.map.clusterExpandZoomThreshold) {
-                this.map.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates())
-                this.map.getView().animate({ zoom: this.map.getView().getZoom() + 1, duration: 500 })
+                this.map.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
+                this.map.getView().animate({ zoom: this.map.getView().getZoom() + 1, duration: 500 });
             }
         }
     }
 
     handlePopupClose = () => {
-        this.popupOverlay.setPosition(undefined)
-        this.map.getView().setZoom(INIT_ZOOM)
-        this.map.getView().setCenter(INIT_CENTER)
+        this.popupOverlay.setPosition(undefined);
+        this.map.getView().setZoom(INIT_ZOOM);
+        this.map.getView().setCenter(INIT_CENTER);
         this.setState({
             selectedFeatureIdx: -1,
             showSensorDetail: false
-        })
+        });
     }
 
     handlePopupOpen = (feature: FeatureType | number) => {
-        const f = typeof feature === 'number' ? this.features[feature] : feature
-        this.map.getView().fit(f.getGeometry().getExtent())
-        this.popupOverlay.setPosition(f.getGeometry().getCoordinates())
-        this.setState({ selectedFeatureIdx: f.get('idx') })
+        const f = typeof feature === 'number' ? this.features[feature] : feature;
+        this.map.getView().fit(f.getGeometry().getExtent());
+        this.popupOverlay.setPosition(f.getGeometry().getCoordinates());
+        this.setState({ selectedFeatureIdx: f.get('idx') });
         // const properties = f.get('properties')
         // const attributes = {
         //     name: f.get('name'),
@@ -456,8 +456,8 @@ class Download extends React.Component<Props, State> {
     }
 
     render() {
-        const { classes, sources } = this.props
-        const { hasData } = this.state
+        const { classes, sources } = this.props;
+        const { hasData } = this.state;
         return (
             <>
                 <Map
@@ -466,10 +466,10 @@ class Download extends React.Component<Props, State> {
                     center={INIT_CENTER}
                     controls={[this.clusterControl]}
                     layers={Object.values(this.layers)}
-                    updateMap={(map) => { this.map = map }}
+                    updateMap={(map) => { this.map = map; }}
                     updatePopup={(popupOverlay) => {
-                        popupOverlay.setElement(this.popupContainer.current)
-                        this.popupOverlay = popupOverlay
+                        popupOverlay.setElement(this.popupContainer.current);
+                        this.popupOverlay = popupOverlay;
                     }}
                     events={{
                         click: this.handleMapClick
@@ -511,10 +511,10 @@ class Download extends React.Component<Props, State> {
                         defaultDistance={CLUSTER_DISTANCE}
                         toggleCallback={
                             (isClustered) => {
-                                this.setState({ enableCluster: isClustered })
-                                const zoom = this.map.getView().getZoom()
-                                this.map.getView().setZoom(zoom + 0.001)
-                                setTimeout(() => this.map.getView().setZoom(zoom), 100)
+                                this.setState({ enableCluster: isClustered });
+                                const zoom = this.map.getView().getZoom();
+                                this.map.getView().setZoom(zoom + 0.001);
+                                setTimeout(() => this.map.getView().setZoom(zoom), 100);
                             }
                         }
                     />
@@ -543,7 +543,7 @@ class Download extends React.Component<Props, State> {
                     </div> :
                     null}
             </>
-        )
+        );
     }
 }
 
@@ -551,7 +551,7 @@ const mapStateToProps = (state) => ({
     sensors: state.__new_sensors.sensors,
     sources: state.__new_sensors.sources,
     parameters: state.__new_parameters.parameters
-})
+});
 
 export default connect(
     mapStateToProps,
@@ -559,4 +559,4 @@ export default connect(
         fetchSensors: fetchSensorsAction,
         fetchParameters: fetchParametersAction
     }
-)(withStyles(styles)(Download))
+)(withStyles(styles)(Download));

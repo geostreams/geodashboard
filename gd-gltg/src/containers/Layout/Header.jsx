@@ -1,6 +1,6 @@
 // @flow
-import React from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import {
     AppBar,
     Avatar,
@@ -13,11 +13,11 @@ import {
     Toolbar,
     Typography,
     makeStyles
-} from '@material-ui/core'
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
-import LogoApp from 'gd-geostreaming/src/images/logo_app.png'
+} from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import LogoApp from 'gd-geostreaming/src/images/logo_app.png';
 
-export const HEADERS_HEIGHT = 61
+export const HEADERS_HEIGHT = 61;
 
 const useStyles = makeStyles((theme) =>{
     return ({
@@ -47,8 +47,8 @@ const useStyles = makeStyles((theme) =>{
         dropdownIcon: {
             display: 'flex'
         }
-    })
-})
+    });
+});
 
 type Props = {
     location: {
@@ -57,13 +57,13 @@ type Props = {
 }
 
 const Header = ({ location }: Props) => {
-    const classes = useStyles()
+    const classes = useStyles();
 
-    const aboutMenuEl = React.useRef(null)
-    const [aboutMenuOpen, updateAboutMenuOpen] = React.useState(false)
+    const aboutMenuEl = React.useRef(null);
+    const [aboutMenuOpen, updateAboutMenuOpen] = React.useState(false);
 
-    const geostreamingMenuEl = React.useRef(null)
-    const [geostreamingMenuOpen, updateGeostreamingMenuOpen] = React.useState(false)
+    const geostreamingMenuEl = React.useRef(null);
+    const [geostreamingMenuOpen, updateGeostreamingMenuOpen] = React.useState(false);
 
     return (
         <AppBar position="fixed">
@@ -178,7 +178,7 @@ const Header = ({ location }: Props) => {
                 </Tabs>
             </Toolbar>
         </AppBar>
-    )
-}
+    );
+};
 
-export default withRouter(Header)
+export default withRouter(Header);

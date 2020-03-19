@@ -1,10 +1,10 @@
 // @flow
-import React from 'react'
-import { Container, makeStyles, Typography } from '@material-ui/core'
-import TileLayer from 'ol/layer/Tile'
-import OSM from 'ol/source/OSM'
+import React from 'react';
+import { Container, makeStyles, Typography } from '@material-ui/core';
+import TileLayer from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';
 
-import { Map } from '../../../components/ol'
+import { Map } from '../../../components/ol';
 
 const useStyle = makeStyles({
     header: {
@@ -13,10 +13,10 @@ const useStyle = makeStyles({
         right: 50,
         zIndex: 1001
     }
-})
+});
 
 const TestMap = () => {
-    const classes = useStyle()
+    const classes = useStyle();
     return (
         <Container className="fillContainer">
             <Typography
@@ -36,7 +36,7 @@ const TestMap = () => {
                 ]}
             />
         </Container>
-    )
-}
+    );
+};
 
-export default TestMap
+export default TestMap;

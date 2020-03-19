@@ -1,11 +1,11 @@
 // @flow
-import React from 'react'
-import { Legend } from '../../../components/d3'
+import React from 'react';
+import { Legend } from '../../../components/d3';
 
-const INITIAL_VALUE = 20
+const INITIAL_VALUE = 20;
 
 const TestLegend = () => {
-    const [value, updateValue] = React.useState(INITIAL_VALUE)
+    const [value, updateValue] = React.useState(INITIAL_VALUE);
     return (
         <div style={{ margin: 50 }}>
             <label htmlFor="input">
@@ -14,7 +14,7 @@ const TestLegend = () => {
                 <input
                     type="number"
                     value={value}
-                    onChange={(e) => { updateValue(e.target.value) }}
+                    onChange={(e) => { updateValue(e.target.value); }}
                 />
             </label>
 
@@ -25,12 +25,12 @@ const TestLegend = () => {
                     ticks={5}
                     tickFormat={(d) => {
                         if (d === 25) {
-                            return '> 25'
+                            return '> 25';
                         }
                         if (d > 25) {
-                            return ''
+                            return '';
                         }
-                        return d
+                        return d;
                     }}
                     indicator={{
                         value,
@@ -40,7 +40,7 @@ const TestLegend = () => {
                 />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default TestLegend
+export default TestLegend;

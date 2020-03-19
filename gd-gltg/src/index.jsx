@@ -21,8 +21,8 @@ render(
     reducers,
     routes,
     (store) => {
-        const selected = window.configruntime.gd3.geostreaming_endpoints[0].url
-        store.dispatch(addEndpoints())
-        store.dispatch(fetchSensors(selected))
+        const selected = window.configruntime.gd3.geostreaming_endpoints[0].url;
+        store.dispatch(addEndpoints());
+        store.dispatch(fetchSensors(selected));
     }
-)
+);

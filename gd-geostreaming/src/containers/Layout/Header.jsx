@@ -1,6 +1,6 @@
 // @flow
-import React from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import {
     AppBar,
     Avatar,
@@ -9,11 +9,11 @@ import {
     Toolbar,
     Typography,
     makeStyles
-} from '@material-ui/core'
+} from '@material-ui/core';
 
-import LogoApp from '../../images/logo_app.png'
+import LogoApp from '../../images/logo_app.png';
 
-export const HEADERS_HEIGHT = 50
+export const HEADERS_HEIGHT = 50;
 
 const useStyles = makeStyles((theme) =>{
     return ({
@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme) =>{
         navBar: {
             flexGrow: 1
         }
-    })
-})
+    });
+});
 
 type Props = {
     location: {
@@ -44,7 +44,7 @@ type Props = {
 }
 
 const Header = ({ location }: Props) => {
-    const classes = useStyles()
+    const classes = useStyles();
 
     return (
         <AppBar position="fixed">
@@ -89,7 +89,7 @@ const Header = ({ location }: Props) => {
                 </Tabs>
             </Toolbar>
         </AppBar>
-    )
-}
+    );
+};
 
-export default withRouter(Header)
+export default withRouter(Header);

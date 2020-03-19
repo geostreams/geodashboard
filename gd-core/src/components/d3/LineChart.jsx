@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React from 'react';
 import {
     ascending,
     axisBottom,
@@ -10,12 +10,12 @@ import {
     min,
     quantile,
     select
-} from 'd3'
-import { makeStyles } from '@material-ui/core'
+} from 'd3';
+import { makeStyles } from '@material-ui/core';
 
-import { sharedStyle, xAxisLabel, yAxisLabel } from './utils'
+import { sharedStyle, xAxisLabel, yAxisLabel } from './utils';
 
-const useStyle = makeStyles(sharedStyle)
+const useStyle = makeStyles(sharedStyle);
 
 type Props = {
     width: number;
@@ -68,7 +68,7 @@ type Props = {
 }
 
 const LineChart = (props: Props) => {
-    const classes = useStyle()
+    const classes = useStyle();
 
     const {
         width,
@@ -92,33 +92,33 @@ const LineChart = (props: Props) => {
         mouseOut,
         click,
         data
-    } = props
+    } = props;
 
-    const innerWidth = width - marginLeft - marginRight
-    const innerHeight = height - marginBottom - marginTop
+    const innerWidth = width - marginLeft - marginRight;
+    const innerHeight = height - marginBottom - marginTop;
 
-    const gRef = React.useRef(null)
-    const tooltipRef = React.useRef(null)
+    const gRef = React.useRef(null);
+    const tooltipRef = React.useRef(null);
 
     React.useEffect(() => {
         if (gRef.current) {
-            const gEl = select(gRef.current)
-            gEl.selectAll('*').remove()
+            const gEl = select(gRef.current);
+            gEl.selectAll('*').remove();
 
-            const x = xAxisProps.scale.range([ 0, innerWidth ])
-            const y = yAxisProps.scale.range([ innerHeight, 0 ])
+            const x = xAxisProps.scale.range([ 0, innerWidth ]);
+            const y = yAxisProps.scale.range([ innerHeight, 0 ]);
 
             // Add bounds box
             if (boxPlot) {
                 // Box Plot can only work for data with numerical values for their y axis
-                const yData = data.map(d => d[yAxisProps.key])
-                yData.sort(ascending)
-                const q1 = quantile(yData, .25)
-                const median = quantile(yData, .5)
-                const q3 = quantile(yData, .75)
+                const yData = data.map(d => d[yAxisProps.key]);
+                yData.sort(ascending);
+                const q1 = quantile(yData, .25);
+                const median = quantile(yData, .5);
+                const q3 = quantile(yData, .75);
 
-                const minY = min(data, (d) => d[yAxisProps.key])
-                const maxY = max(data, (d) => d[yAxisProps.key])
+                const minY = min(data, (d) => d[yAxisProps.key]);
+                const maxY = max(data, (d) => d[yAxisProps.key]);
 
                 gEl
                     .append('rect')
@@ -127,10 +127,10 @@ const LineChart = (props: Props) => {
                     .attr('width', innerWidth)
                     .attr('height', y(q1) - y(q3))
                     .attr('fill', boxPlot.fill)
-                    .attr('fill-opacity', boxPlot.fillOpacity || 0.3)
+                    .attr('fill-opacity', boxPlot.fillOpacity || 0.3);
 
                 // Add min and max lines
-                const values = [minY, median, maxY]
+                const values = [minY, median, maxY];
                 values.forEach((lineY) => {
                     gEl
                         .append('line')
@@ -140,18 +140,18 @@ const LineChart = (props: Props) => {
                         .attr('y2', y(lineY))
                         .attr('stroke', boxPlot.stroke || 'black')
                         .attr('stroke-width', boxPlot.strokeWidth || 1)
-                        .attr('stroke-dasharray', boxPlot.strokeDashArray || '0')
-                })
+                        .attr('stroke-dasharray', boxPlot.strokeDashArray || '0');
+                });
             }
 
             // Add X axis
-            const xAxis = axisBottom(x)
+            const xAxis = axisBottom(x);
             if (xAxisProps.ticks) {
-                xAxis.ticks(...xAxisProps.ticks)
+                xAxis.ticks(...xAxisProps.ticks);
             }
             gEl.append('g')
                 .attr('transform', `translate(0,${ innerHeight })`)
-                .call(xAxis)
+                .call(xAxis);
             if (xAxisProps.title) {
                 xAxisLabel(
                     gEl,
@@ -160,16 +160,16 @@ const LineChart = (props: Props) => {
                     xAxisProps.textColor,
                     xAxisProps.textOpacity,
                     xAxisProps.title
-                )
+                );
             }
 
             // Add Y axis
-            const yAxis = axisLeft(y)
+            const yAxis = axisLeft(y);
             if (yAxisProps.ticks) {
-                yAxis.ticks(...yAxisProps.ticks)
+                yAxis.ticks(...yAxisProps.ticks);
             }
             gEl.append('g')
-                .call(yAxis)
+                .call(yAxis);
             if (yAxisProps.title) {
                 yAxisLabel(
                     gEl,
@@ -178,7 +178,7 @@ const LineChart = (props: Props) => {
                     yAxisProps.textColor,
                     yAxisProps.textOpacity,
                     yAxisProps.title
-                )
+                );
             }
 
             // Add the line
@@ -192,10 +192,10 @@ const LineChart = (props: Props) => {
                 .attr('stroke-opacity', lineStrokeOpacity)
                 .attr('d', line()
                     .x((d) => x(d[xAxisProps.key]))
-                    .y((d) => y(d[yAxisProps.key])))
+                    .y((d) => y(d[yAxisProps.key])));
 
             // Prepare tooltip container
-            const tooltip = tooltipContent ? select(tooltipRef.current) : null
+            const tooltip = tooltipContent ? select(tooltipRef.current) : null;
 
             // Add the points
             gEl
@@ -219,7 +219,7 @@ const LineChart = (props: Props) => {
                             .duration(200)
                             .style('opacity', .9)
                             .style('left', `${event.clientX}px`)
-                            .style('top', `${event.clientY - 50}px`)
+                            .style('top', `${event.clientY - 50}px`);
                     }
                 })
                 .on('mouseout', () => {
@@ -227,11 +227,11 @@ const LineChart = (props: Props) => {
                         tooltip
                             .transition()
                             .duration(500)
-                            .style('opacity', 0)
+                            .style('opacity', 0);
                     }
-                })
+                });
         }
-    })
+    });
 
     return (
         <>
@@ -240,8 +240,8 @@ const LineChart = (props: Props) => {
             </svg>
             <div ref={tooltipRef} className={classes.tooltip} />
         </>
-    )
-}
+    );
+};
 
 LineChart.defaultProps = {
     marginTop: 0,
@@ -260,6 +260,6 @@ LineChart.defaultProps = {
     mouseOver: () => {},
     mouseOut: () => {},
     click: () => {}
-}
+};
 
-export default LineChart
+export default LineChart;

@@ -1,16 +1,16 @@
 // @flow
-import * as React from 'react'
-import { Map as OLMap, View } from 'ol'
-import { defaults as defaultControls, Control } from 'ol/control'
-import Layer from 'ol/layer/Layer'
-import Overlay from 'ol/Overlay'
-import LayerSwitcher from 'ol-layerswitcher/src/ol-layerswitcher'
-import VectorSource from 'ol/source/Vector'
-import ClusterSource from 'ol/source/Cluster'
-import AnimatedClusterLayer from 'ol-ext/layer/AnimatedCluster'
-import SelectClusterInteraction from 'ol-ext/interaction/SelectCluster'
+import * as React from 'react';
+import { Map as OLMap, View } from 'ol';
+import { defaults as defaultControls, Control } from 'ol/control';
+import Layer from 'ol/layer/Layer';
+import Overlay from 'ol/Overlay';
+import LayerSwitcher from 'ol-layerswitcher/src/ol-layerswitcher';
+import VectorSource from 'ol/source/Vector';
+import ClusterSource from 'ol/source/Cluster';
+import AnimatedClusterLayer from 'ol-ext/layer/AnimatedCluster';
+import SelectClusterInteraction from 'ol-ext/interaction/SelectCluster';
 
-import Popup from './Popup'
+import Popup from './Popup';
 
 type Props = {
     children: React.Node;
@@ -30,7 +30,7 @@ type Props = {
     events: {[k: string]: Function};
 }
 
-export const MapContext = React.createContext<{ map: OLMap } | null>(null)
+export const MapContext = React.createContext<{ map: OLMap } | null>(null);
 
 class Map extends React.Component<Props> {
     map: OLMap
@@ -72,19 +72,19 @@ class Map extends React.Component<Props> {
             updateMap,
             showPopupAt,
             events
-        } = this.props
+        } = this.props;
 
         this.popupOverlay = new Overlay({
             autoPan: true,
             autoPanAnimation: {
                 duration: 250
             }
-        })
+        });
 
         if (showPopupAt) {
-            this.openPopup(showPopupAt)
+            this.openPopup(showPopupAt);
         } else {
-            this.closePopup()
+            this.closePopup();
         }
 
         this.map = new OLMap({
@@ -99,37 +99,37 @@ class Map extends React.Component<Props> {
             layers,
             overlays: [this.popupOverlay],
             controls: defaultControls().extend(controls)
-        })
+        });
 
         if (events) {
             Object.entries(events).forEach(([event, handler]) => {
-                this.map.on(event, handler)
-            })
+                this.map.on(event, handler);
+            });
         }
 
         if (layerSwitcherOptions) {
-            const layerSwitcher = new LayerSwitcher(layerSwitcherOptions)
-            this.map.addControl(layerSwitcher)
+            const layerSwitcher = new LayerSwitcher(layerSwitcherOptions);
+            this.map.addControl(layerSwitcher);
         }
 
         if (updateMap) {
-            this.map.addClusterLayer = this.addClusterLayer
-            updateMap(this.map)
+            this.map.addClusterLayer = this.addClusterLayer;
+            updateMap(this.map);
         }
 
-        this.forceUpdate()
+        this.forceUpdate();
     }
 
     componentDidUpdate(prevProps: $ReadOnly<Props>) {
         if (this.popupContainer) {
             if (!this.popupOverlay.getElement()) {
-                this.popupOverlay.setElement(this.popupContainer)
+                this.popupOverlay.setElement(this.popupContainer);
             }
             if (prevProps.showPopupAt !== this.props.showPopupAt) {
                 if (this.props.showPopupAt) {
-                    this.openPopup(this.props.showPopupAt)
+                    this.openPopup(this.props.showPopupAt);
                 } else {
-                    this.closePopup()
+                    this.closePopup();
                 }
             }
         }
@@ -153,13 +153,13 @@ class Map extends React.Component<Props> {
         const clusterSource = new ClusterSource({
             distance,
             source
-        })
+        });
 
         const clusters = new AnimatedClusterLayer({
             source: clusterSource,
             style: styleClustered
-        })
-        this.map.addLayer(clusters)
+        });
+        this.map.addLayer(clusters);
 
         const selectCluster = new SelectClusterInteraction({
             pointRadius: 17,
@@ -169,26 +169,26 @@ class Map extends React.Component<Props> {
             featureStyle: styleFeature,
             // Style to draw cluster when selected
             style: styleSelected
-        })
-        this.map.addInteraction(selectCluster)
+        });
+        this.map.addInteraction(selectCluster);
 
         if (onSelect) {
             // On selected => get feature in cluster and show info
-            selectCluster.getFeatures().on(['add'], onSelect)
+            selectCluster.getFeatures().on(['add'], onSelect);
         }
 
-        return clusterSource
+        return clusterSource;
     }
 
     renderChildren = (children: React.Node) => {
         return React.Children.map(children, (child) => {
             if (!child || !child.props) {
-                return child
+                return child;
             }
 
             const nestedChildren = child.props.children ?
                 this.renderChildren(child.props.children) :
-                []
+                [];
 
             if (child.props.mapcontainer) {
                 return React.cloneElement(
@@ -197,34 +197,34 @@ class Map extends React.Component<Props> {
                         ref: this.mapContainer
                     },
                     [...nestedChildren]
-                )
+                );
             }
 
             if (nestedChildren.length) {
-                return React.cloneElement(child, { children: nestedChildren })
+                return React.cloneElement(child, { children: nestedChildren });
             }
-            return child
-        })
+            return child;
+        });
     }
 
     updatePopupContainer = (el: HTMLDivElement) => {
-        this.popupContainer = el
+        this.popupContainer = el;
     }
 
     openPopup = (coordinate: [number, number]) => {
-        this.popupOverlay.setPosition(coordinate)
+        this.popupOverlay.setPosition(coordinate);
     }
 
     closePopup = () => {
-        this.popupOverlay.setPosition(undefined)
+        this.popupOverlay.setPosition(undefined);
     }
 
     render() {
-        const { children, id, className, popupContent } = this.props
+        const { children, id, className, popupContent } = this.props;
 
         const data = {
             map: this.map
-        }
+        };
 
         return (
             <div
@@ -241,8 +241,8 @@ class Map extends React.Component<Props> {
                     handleClose={this.closePopup}
                 />
             </div>
-        )
+        );
     }
 }
 
-export default Map
+export default Map;

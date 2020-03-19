@@ -1,6 +1,6 @@
 // @flow
-import React from 'react'
-import { withRouter } from 'react-router-dom'
+import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 type Props = {
     location: {
@@ -8,6 +8,6 @@ type Props = {
     }
 }
 
-const About = ({ location }: Props) => <div>{location.pathname}</div>
+const About = ({ location }: Props) => <div>{location.pathname}</div>;
 
-export default withRouter(About)
+export default withRouter(About);

@@ -1,6 +1,6 @@
 // @flow
-import React from 'react'
-import { interpolateRgb } from 'd3'
+import React from 'react';
+import { interpolateRgb } from 'd3';
 import {
     Box,
     Button,
@@ -12,14 +12,14 @@ import {
     Grid,
     Typography,
     makeStyles
-} from '@material-ui/core'
-import CircleCheckedFilledIcon from '@material-ui/icons/CheckCircle'
-import CircleUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { entries } from 'gd-core/src/utils/array'
+} from '@material-ui/core';
+import CircleCheckedFilledIcon from '@material-ui/icons/CheckCircle';
+import CircleUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { entries } from 'gd-core/src/utils/array';
 
-import { getSourceColor } from '../../utils/sensors'
-import type { SensorType, SourceType } from '../../utils/flowtype'
+import { getSourceColor } from '../../utils/sensors';
+import type { SensorType, SourceType } from '../../utils/flowtype';
 
 const useStyle = makeStyles({
     header: {
@@ -53,7 +53,7 @@ const useStyle = makeStyles({
     sensorButton: {
         margin: 5
     }
-})
+});
 
 type Props = {
     data: {
@@ -81,30 +81,30 @@ const Sidebar = ({
     handlePopupOpen,
     handlePopupClose
 }: Props) => {
-    const classes = useStyle()
+    const classes = useStyle();
 
-    const [removedSources, updateRemovedSources] = React.useState({})
+    const [removedSources, updateRemovedSources] = React.useState({});
     const handleSourceClick = (e, sourceId) => {
-        e.stopPropagation()
-        const regions = data[sourceId].regions
+        e.stopPropagation();
+        const regions = data[sourceId].regions;
         if (removedSources[sourceId]) {
             // deselect
-            updateRemovedSources({ ...removedSources, [sourceId]: false })
-            addRegionsToMap(regions)
+            updateRemovedSources({ ...removedSources, [sourceId]: false });
+            addRegionsToMap(regions);
         } else {
             // select
-            updateRemovedSources({ ...removedSources, [sourceId]: true })
-            removeRegionsFromMap(regions)
+            updateRemovedSources({ ...removedSources, [sourceId]: true });
+            removeRegionsFromMap(regions);
         }
-    }
+    };
 
     const handleSensorClick = (sensorIdx) => {
         if (sensorIdx === selectedFeature) {
-            handlePopupClose()
+            handlePopupClose();
         } else {
-            handlePopupOpen(sensorIdx)
+            handlePopupOpen(sensorIdx);
         }
-    }
+    };
 
     return (
         <Container>
@@ -115,8 +115,8 @@ const Sidebar = ({
                 Explore Sources
             </Typography>
             {sources.map((source) => {
-                const primaryColor = getSourceColor(source.id)
-                const secondaryColor = interpolateRgb(primaryColor, '#fff')(0.8)
+                const primaryColor = getSourceColor(source.id);
+                const secondaryColor = interpolateRgb(primaryColor, '#fff')(0.8);
                 return (
                     <ExpansionPanel
                         key={`${source.id}-${source.label}`}
@@ -201,10 +201,10 @@ const Sidebar = ({
                             </Container>
                         </ExpansionPanelDetails>
                     </ExpansionPanel>
-                )
+                );
             })}
         </Container>
-    )
-}
+    );
+};
 
-export default Sidebar
+export default Sidebar;

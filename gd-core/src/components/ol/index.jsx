@@ -1,1 +1,1 @@
-export Map, { MapContext } from './Map'
+export Map, { MapContext } from './Map';

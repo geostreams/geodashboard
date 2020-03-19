@@ -2,8 +2,8 @@
 
 // High Order Components
 
-import * as React from 'react'
-import type { ContextRouter } from './flowtype'
+import * as React from 'react';
+import type { ContextRouter } from './flowtype';
 
 const withLayout = (
     Layout: Function | React.AbstractComponent<{}>,
@@ -15,8 +15,8 @@ const withLayout = (
             <Component {...routeProps} />
         </Layout>
     )
-)
+);
 
 export default {
     withLayout
-}
+};

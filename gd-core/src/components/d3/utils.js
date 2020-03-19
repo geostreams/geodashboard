@@ -1,5 +1,5 @@
 // @flow
-import type { SVGGElement } from 'dom-helpers'
+import type { SVGGElement } from 'dom-helpers';
 
 export const sharedStyle = {
     tooltip: {
@@ -10,7 +10,7 @@ export const sharedStyle = {
         padding: 5,
         opacity: 0
     }
-}
+};
 
 export const xAxisLabel = (
     parentEl: SVGGElement,
@@ -27,7 +27,7 @@ export const xAxisLabel = (
         .attr('fill', color || 'currentColor')
         .attr('fill-opacity', opacity || 0.3)
         .text(label)
-)
+);
 
 export const yAxisLabel = (
     parentEl: SVGGElement,
@@ -45,4 +45,4 @@ export const yAxisLabel = (
         .attr('fill', color || 'currentColor')
         .attr('fill-opacity', opacity || 0.3)
         .text(label)
-)
+);

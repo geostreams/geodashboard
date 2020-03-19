@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React from 'react';
 import {
     axisBottom,
     axisLeft,
@@ -10,12 +10,12 @@ import {
     select,
     ScaleLinear,
     Selection
-} from 'd3'
-import { withStyles } from '@material-ui/core'
+} from 'd3';
+import { withStyles } from '@material-ui/core';
 
-import type { SVGElement, SVGGElement } from 'dom-helpers'
+import type { SVGElement, SVGGElement } from 'dom-helpers';
 
-import { sharedStyle, xAxisLabel, yAxisLabel } from './utils'
+import { sharedStyle, xAxisLabel, yAxisLabel } from './utils';
 
 type Props = {
     classes: {
@@ -89,11 +89,11 @@ class BarChart extends React.Component<Props> {
     }
 
     componentDidMount = (): void => {
-        this.createChart()
+        this.createChart();
     }
 
     componentDidUpdate = (): void => {
-        this.updateData()
+        this.updateData();
     }
 
     updateData = (): void => {
@@ -113,7 +113,7 @@ class BarChart extends React.Component<Props> {
             mouseOver,
             mouseOut,
             click
-        } = this.props
+        } = this.props;
 
         const {
             gEl,
@@ -122,15 +122,15 @@ class BarChart extends React.Component<Props> {
             xAxisGroup,
             yAxisGroup,
             tooltip
-        } = this.chartProps
+        } = this.chartProps;
 
-        x.domain(data.map((d) => d[xAxisProps.key] ))
-        y.domain([0, max(data, (d) => +d[yAxisProps.key] )])
+        x.domain(data.map((d) => d[xAxisProps.key] ));
+        y.domain([0, max(data, (d) => +d[yAxisProps.key] )]);
 
         // X Axis
-        const xAxis = axisBottom(x)
+        const xAxis = axisBottom(x);
         if (xAxisProps.ticks) {
-            xAxis.ticks(...xAxisProps.ticks)
+            xAxis.ticks(...xAxisProps.ticks);
         }
         xAxisGroup
             .call(xAxis)
@@ -139,32 +139,32 @@ class BarChart extends React.Component<Props> {
             .attr('y', -5)
             .attr('transform', 'rotate(-90)')
             .attr('fill', xAxisProps.textColor || 'currentColor')
-            .attr('fill-opacity', xAxisProps.textOpacity || 0.3)
+            .attr('fill-opacity', xAxisProps.textOpacity || 0.3);
         xAxisGroup
             .selectAll('line,path')
             .style('stroke', xAxisProps.stroke || 'currentColor')
-            .attr('stroke-width', xAxisProps.strokeWidth || 1)
+            .attr('stroke-width', xAxisProps.strokeWidth || 1);
 
         // Y Axis
-        const yAxis = axisLeft(y)
+        const yAxis = axisLeft(y);
         if (yAxisProps.ticks) {
-            yAxis.ticks(...yAxisProps.ticks)
+            yAxis.ticks(...yAxisProps.ticks);
         }
         yAxisGroup
             .transition()
             .duration(500)
-            .call(yAxis)
+            .call(yAxis);
         yAxisGroup
             .selectAll('text')
             .attr('fill', yAxisProps.textColor || 'currentColor')
-            .attr('fill-opacity', yAxisProps.textOpacity || 0.3)
+            .attr('fill-opacity', yAxisProps.textOpacity || 0.3);
         yAxisGroup
             .selectAll('line,path')
             .attr('stroke', yAxisProps.stroke || 'currentColor')
-            .attr('stroke-width', yAxisProps.strokeWidth || 1)
+            .attr('stroke-width', yAxisProps.strokeWidth || 1);
 
         // Data join
-        const bars = gEl.selectAll('rect').data(data)
+        const bars = gEl.selectAll('rect').data(data);
 
         // Exit
         bars.exit()
@@ -172,7 +172,7 @@ class BarChart extends React.Component<Props> {
             .duration(500)
             .attr('y', y(0))
             .attr('height', 0)
-            .remove()
+            .remove();
 
         // Enter
         bars
@@ -193,7 +193,7 @@ class BarChart extends React.Component<Props> {
                         .duration(200)
                         .style('opacity', .9)
                         .style('left', `${event.clientX}px`)
-                        .style('top', `${event.clientY - 50}px`)
+                        .style('top', `${event.clientY - 50}px`);
                 }
             })
             .on('mouseout', () => {
@@ -201,7 +201,7 @@ class BarChart extends React.Component<Props> {
                     tooltip
                         .transition()
                         .duration(500)
-                        .style('opacity', 0)
+                        .style('opacity', 0);
                 }
             })
             .merge(bars)
@@ -215,7 +215,7 @@ class BarChart extends React.Component<Props> {
             .attr('stroke-width', barStrokeWidth)
             .attr('stroke-opacity', barStrokeOpacity)
             .attr('fill', barFill)
-            .attr('fill-opacity', barFillOpacity)
+            .attr('fill-opacity', barFillOpacity);
     }
 
     createChart = (): void => {
@@ -229,33 +229,33 @@ class BarChart extends React.Component<Props> {
             xAxisProps,
             yAxisProps,
             tooltipContent
-        } = this.props
+        } = this.props;
 
-        const innerWidth = width - marginLeft - marginRight
-        const innerHeight = height - marginBottom - marginTop
+        const innerWidth = width - marginLeft - marginRight;
+        const innerHeight = height - marginBottom - marginTop;
 
-        const svgEl = select(this.svgRef.current)
+        const svgEl = select(this.svgRef.current);
 
         const gEl = svgEl
             .append('g')
             .attr('width', innerWidth)
             .attr('height', innerHeight)
-            .attr('transform', `translate(${ marginLeft },${ marginTop })`)
+            .attr('transform', `translate(${ marginLeft },${ marginTop })`);
 
         const xAxisGroup = gEl
             .append('g')
             .attr('class', 'xAxis')
-            .attr('transform', `translate(0, ${ innerHeight })`)
+            .attr('transform', `translate(0, ${ innerHeight })`);
 
         const yAxisGroup = gEl
             .append('g')
-            .attr('class', 'yAxis')
+            .attr('class', 'yAxis');
 
         // X Scale
         const x = scaleBand()
             .range([0, innerWidth])
             .paddingInner(0.1)
-            .paddingOuter(0.3)
+            .paddingOuter(0.3);
 
         if (xAxisProps.title) {
             xAxisLabel(
@@ -265,11 +265,11 @@ class BarChart extends React.Component<Props> {
                 xAxisProps.textColor,
                 xAxisProps.textOpacity,
                 xAxisProps.title
-            )
+            );
         }
 
         // Y Scale
-        const y = scaleLinear().range([innerHeight, 0])
+        const y = scaleLinear().range([innerHeight, 0]);
 
         if (yAxisProps.title) {
             yAxisLabel(
@@ -279,10 +279,10 @@ class BarChart extends React.Component<Props> {
                 yAxisProps.textColor,
                 yAxisProps.textOpacity,
                 yAxisProps.title
-            )
+            );
         }
 
-        const tooltip = tooltipContent ? select(this.tooltipRef.current) : null
+        const tooltip = tooltipContent ? select(this.tooltipRef.current) : null;
 
         this.chartProps = {
             gEl,
@@ -291,19 +291,19 @@ class BarChart extends React.Component<Props> {
             xAxisGroup,
             yAxisGroup,
             tooltip
-        }
-        this.updateData()
+        };
+        this.updateData();
     }
 
     render() {
-        const { width, height, classes } = this.props
+        const { width, height, classes } = this.props;
         return (
             <>
                 <svg ref={this.svgRef} width={width} height={height} />
                 <div ref={this.tooltipRef} className={`${classes.tooltip} tooltip`} />
             </>
-        )
+        );
     }
 }
 
-export default withStyles(sharedStyle)(BarChart)
+export default withStyles(sharedStyle)(BarChart);

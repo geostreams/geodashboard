@@ -1,5 +1,5 @@
 // @flow
-import * as React from 'react'
+import * as React from 'react';
 import {
     Box,
     Button,
@@ -11,8 +11,8 @@ import {
     Slider,
     Typography,
     makeStyles, Tooltip
-} from '@material-ui/core'
-import { titleCase } from 'gd-core/src/utils/format'
+} from '@material-ui/core';
+import { titleCase } from 'gd-core/src/utils/format';
 
 const useStyle = makeStyles({
     container: {
@@ -36,21 +36,21 @@ const useStyle = makeStyles({
     downloadButton: {
         textAlign: 'center'
     }
-})
+});
 
 const DateRangeLabelComponent = (props: {
     children: React.Node;
     open: boolean;
     value: number;
 }) => {
-    const { children, open, value } = props
+    const { children, open, value } = props;
 
     return (
         <Tooltip open={open} enterTouchDelay={0} placement="top" title={value}>
             {children}
         </Tooltip>
-    )
-}
+    );
+};
 
 type Props = {
     selectAllDates: boolean;
@@ -68,7 +68,7 @@ type Props = {
 }
 
 const Filters = (props: Props) => {
-    const classes = useStyle()
+    const classes = useStyle();
     const {
         minStartTime,
         maxEndTime,
@@ -82,7 +82,7 @@ const Filters = (props: Props) => {
         handleDateRangeUpdate,
         handleStartDataAtZeroToggle,
         handleUseSameTimeScaleToggle
-    } = props
+    } = props;
     return <Grid
         className={classes.container}
         container
@@ -164,7 +164,7 @@ const Filters = (props: Props) => {
                 Download
             </Button>
         </Grid>
-    </Grid>
-}
+    </Grid>;
+};
 
-export default Filters
+export default Filters;

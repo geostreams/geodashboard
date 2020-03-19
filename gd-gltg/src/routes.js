@@ -1,38 +1,38 @@
 // @flow
-import coreRoutes from 'gd-core/src/routes'
-import hocs from 'gd-core/src/utils/hocs'
-import GeoStreamingExplore from 'gd-geostreaming/src/containers/Explore'
-import GeoStreamingHome from 'gd-geostreaming/src/containers/Home'
-import GeoStreamingSearch from 'gd-geostreaming/src/containers/Search'
+import coreRoutes from 'gd-core/src/routes';
+import hocs from 'gd-core/src/utils/hocs';
+import GeoStreamingExplore from 'gd-geostreaming/src/containers/Explore';
+import GeoStreamingHome from 'gd-geostreaming/src/containers/Home';
+import GeoStreamingSearch from 'gd-geostreaming/src/containers/Search';
 
 // $FlowFixMe
-import __old_Explore from 'gd-gltg__old/app/pages/Explore'
+import __old_Explore from 'gd-gltg__old/app/pages/Explore';
 // $FlowFixMe
-import __old_Detail from 'gd-gltg__old/app/pages/Detail'
+import __old_Detail from 'gd-gltg__old/app/pages/Detail';
 // $FlowFixMe
-import __old_Search from 'gd-gltg__old/app/pages/Search'
+import __old_Search from 'gd-gltg__old/app/pages/Search';
 // $FlowFixMe
-import __old_TrendsStation from 'gd-gltg__old/app/pages/TrendsSensor'
+import __old_TrendsStation from 'gd-gltg__old/app/pages/TrendsSensor';
 // $FlowFixMe
-import __old_TrendsRegion from 'gd-gltg__old/app/pages/TrendsRegion'
+import __old_TrendsRegion from 'gd-gltg__old/app/pages/TrendsRegion';
 // $FlowFixMe
-import __old_TrendsDetail from 'gd-gltg__old/app/pages/TrendsDetail'
+import __old_TrendsDetail from 'gd-gltg__old/app/pages/TrendsDetail';
 // $FlowFixMe
-import __old_Analysis from 'gd-gltg__old/app/pages/Analysis'
+import __old_Analysis from 'gd-gltg__old/app/pages/Analysis';
 // $FlowFixMe
-import __old_Partners from 'gd-gltg__old/app/pages/Partners'
+import __old_Partners from 'gd-gltg__old/app/pages/Partners';
 // $FlowFixMe
-import __old_Glossary from 'gd-gltg__old/app/pages/Glossary'
+import __old_Glossary from 'gd-gltg__old/app/pages/Glossary';
 // $FlowFixMe
-import __old_Help from 'gd-gltg__old/app/pages/Help'
+import __old_Help from 'gd-gltg__old/app/pages/Help';
 // $FlowFixMe
-import __old_FAQ from 'gd-gltg__old/app/pages/FAQ'
+import __old_FAQ from 'gd-gltg__old/app/pages/FAQ';
 
-import About from './containers/About'
-import DataStories from './containers/DataStories'
-import Home from './containers/Home'
-import GLTGLayout from './containers/Layout'
-import Tests from './tests/Tests'
+import About from './containers/About';
+import DataStories from './containers/DataStories';
+import Home from './containers/Home';
+import GLTGLayout from './containers/Layout';
+import Tests from './tests/Tests';
 
 const routes = Object.assign(
     coreRoutes,
@@ -56,10 +56,10 @@ const routes = Object.assign(
         '/help': { component: hocs.withLayout(GLTGLayout, __old_Help) },
         '/faq': { component: hocs.withLayout(GLTGLayout, __old_FAQ) }
     }
-)
+);
 
 if (process.env.NODE_ENV === 'development') {
-    routes['/tests/gltg'] = { component: Tests }
+    routes['/tests/gltg'] = { component: Tests };
 }
 
-export default routes
+export default routes;

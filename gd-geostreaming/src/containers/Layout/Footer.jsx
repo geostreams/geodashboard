@@ -1,16 +1,16 @@
 // @flow
-import React from 'react'
+import React from 'react';
 import {
     Divider,
     Grid,
     makeStyles
-} from '@material-ui/core'
+} from '@material-ui/core';
 
-import LogoLewisClark from '../../images/logo_lewis_clark.png'
-import LogoNCSA from '../../images/logo_ncsa.png'
-import LogoNGRREC from '../../images/logo_ngrrec.png'
-import LogoSeaGrant from '../../images/logo_seagrant.png'
-import LogoUICivil from '../../images/logo_ui_civil.png'
+import LogoLewisClark from '../../images/logo_lewis_clark.png';
+import LogoNCSA from '../../images/logo_ncsa.png';
+import LogoNGRREC from '../../images/logo_ngrrec.png';
+import LogoSeaGrant from '../../images/logo_seagrant.png';
+import LogoUICivil from '../../images/logo_ui_civil.png';
 
 
 const useStyles = makeStyles((theme) =>{
@@ -31,11 +31,11 @@ const useStyles = makeStyles((theme) =>{
             margin: '10px auto 5px',
             lineHeight: 1.5
         }
-    })
-})
+    });
+});
 
 const Footer = () => {
-    const classes = useStyles()
+    const classes = useStyles();
 
     return (
         <footer className={classes.footer}>
@@ -120,7 +120,7 @@ const Footer = () => {
                 </Grid>
             </Grid>
         </footer>
-    )
-}
+    );
+};
 
-export default Footer
+export default Footer;

@@ -1,8 +1,8 @@
 // @flow
-import React from 'react'
-import { extent, scaleLinear, scaleTime, timeParse } from 'd3'
+import React from 'react';
+import { extent, scaleLinear, scaleTime, timeParse } from 'd3';
 
-import { LineChart } from '../../../components/d3'
+import { LineChart } from '../../../components/d3';
 
 const FIXTURE = [
     { date: '2018-04-14', value: 8140.71 },
@@ -15,10 +15,10 @@ const FIXTURE = [
     { date: '2018-04-21', value: 8997.57 },
     { date: '2018-04-22', value: 9001.64 },
     { date: '2018-04-23', value: 8958.55 }
-]
+];
 
 const TestLineChart = () => {
-    const data = FIXTURE.map((d) => ({ date : timeParse('%Y-%m-%d')(d.date), value : d.value }))
+    const data = FIXTURE.map((d) => ({ date : timeParse('%Y-%m-%d')(d.date), value : d.value }));
 
     return (
         <div style={{ padding: 50 }}>
@@ -48,7 +48,7 @@ const TestLineChart = () => {
                 data={data}
             />
         </div>
-    )
-}
+    );
+};
 
-export default TestLineChart
+export default TestLineChart;

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React from 'react';
 import {
     Button,
     Card,
@@ -10,13 +10,13 @@ import {
     ListItem,
     Typography,
     makeStyles
-} from '@material-ui/core'
-import { toStringHDMS } from 'ol/coordinate'
-import { date, titleCase } from 'gd-core/src/utils/format'
+} from '@material-ui/core';
+import { toStringHDMS } from 'ol/coordinate';
+import { date, titleCase } from 'gd-core/src/utils/format';
 
-import { getSensorName, getSourceColor, getSourceName } from '../../utils/sensors'
+import { getSensorName, getSourceColor, getSourceName } from '../../utils/sensors';
 
-import type { ParameterType, SensorType } from '../../utils/flowtype'
+import type { ParameterType, SensorType } from '../../utils/flowtype';
 
 const useStyle = makeStyles((theme) => ({
     card: {
@@ -38,7 +38,7 @@ const useStyle = makeStyles((theme) => ({
     media: {
         height: 140
     }
-}))
+}));
 
 type Props = {
     sensor: SensorType,
@@ -47,18 +47,18 @@ type Props = {
 }
 
 const SensorPopup = ({ sensor, parameters, handleDetailClick }: Props) => {
-    const classes = useStyle()
-    const { properties } = sensor
-    const coordinates = toStringHDMS(sensor.geometry.coordinates)
+    const classes = useStyle();
+    const { properties } = sensor;
+    const coordinates = toStringHDMS(sensor.geometry.coordinates);
 
-    const sensorParameters = []
+    const sensorParameters = [];
     sensor.parameters.forEach((featureParameter) => {
-        const parameter = parameters.find(({ name }) => name === featureParameter)
+        const parameter = parameters.find(({ name }) => name === featureParameter);
         if (parameter && parameter.title) {
-            const unit = parameter.unit ? ` (${parameter.unit})` : ''
-            sensorParameters.push(`${parameter.title}${unit}`)
+            const unit = parameter.unit ? ` (${parameter.unit})` : '';
+            sensorParameters.push(`${parameter.title}${unit}`);
         }
-    })
+    });
 
     return (
         <Card
@@ -121,7 +121,7 @@ const SensorPopup = ({ sensor, parameters, handleDetailClick }: Props) => {
                 </Button>
             </CardActions>
         </Card>
-    )
-}
+    );
+};
 
-export default SensorPopup
+export default SensorPopup;

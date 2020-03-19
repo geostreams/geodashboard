@@ -158,4 +158,4 @@ export default {
             link : 'http://waterqualitydata.us/'
         }
     }
-}
+};

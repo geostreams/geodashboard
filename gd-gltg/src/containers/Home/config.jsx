@@ -1,25 +1,25 @@
 // @flow
-import * as React from 'react'
+import * as React from 'react';
 import {
     interpolatePuBu,
     rgb,
     scaleLinear,
     scaleSequential
-} from 'd3'
-import { Fill, Icon, Stroke, Style } from 'ol/style'
+} from 'd3';
+import { Fill, Icon, Stroke, Style } from 'ol/style';
 
-import type FeatureType from 'ol/Feature'
+import type FeatureType from 'ol/Feature';
 
-import huc8 from '../../data/huc8.geojson'
-import watersheds from '../../data/watersheds.geojson'
-import drainage from '../../data/il-drainage.geojson'
-import monitoringSites from '../../data/il-monitoring-sites.geojson'
-import markerMonitoringSite from '../../images/marker_monitoring_site.png'
-import data from '../../data/data.json'
+import huc8 from '../../data/huc8.geojson';
+import watersheds from '../../data/watersheds.geojson';
+import drainage from '../../data/il-drainage.geojson';
+import monitoringSites from '../../data/il-monitoring-sites.geojson';
+import markerMonitoringSite from '../../images/marker_monitoring_site.png';
+import data from '../../data/data.json';
 
-export const ACTION_BAR_HEIGHT = 105
+export const ACTION_BAR_HEIGHT = 105;
 
-export const LEGEND_DOMAIN = [0, 30]
+export const LEGEND_DOMAIN = [0, 30];
 
 export const getFeatureStyle = (
     feature: FeatureType,
@@ -36,18 +36,18 @@ export const getFeatureStyle = (
         {
             color: [0, 0, 0, 1],
             width: 1
-        }
+        };
 
-    const name = feature.get('Name') || feature.get('Station_ID')
+    const name = feature.get('Name') || feature.get('Station_ID');
 
     const nitrogenLevel = name ?
         parseFloat(data[nutrient][name][year]) || 0.0 :
-        0
+        0;
 
-    const colorScale = scaleSequential(interpolatePuBu).domain(LEGEND_DOMAIN)
-    const scale = scaleLinear()
-    const colorLevel = rgb(colorScale(scale(nitrogenLevel)))
-    const { r, g, b, a } = colorLevel
+    const colorScale = scaleSequential(interpolatePuBu).domain(LEGEND_DOMAIN);
+    const scale = scaleLinear();
+    const colorLevel = rgb(colorScale(scale(nitrogenLevel)));
+    const { r, g, b, a } = colorLevel;
 
     return (
         new Style({
@@ -57,8 +57,8 @@ export const getFeatureStyle = (
             stroke: new Stroke(strokeOptions),
             zIndex: isSelected ? 2 : 1
         })
-    )
-}
+    );
+};
 
 export type BoundaryType = {
     [key: string]: {
@@ -110,9 +110,9 @@ export const BOUNDARIES: BoundaryType = {
             }
         ]
     }
-}
+};
 
-export const YEARS = Array(38).fill(2017).map<number>((i, idx) => i - idx)
+export const YEARS = Array(38).fill(2017).map<number>((i, idx) => i - idx);
 
 export const VARIABLES_INFO = {
     boundary: {
@@ -183,4 +183,4 @@ export const VARIABLES_INFO = {
             </div>
         )
     }
-}
+};

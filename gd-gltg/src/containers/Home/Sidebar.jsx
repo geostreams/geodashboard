@@ -1,22 +1,22 @@
 // @flow
-import React from 'react'
-import { select } from 'd3'
+import React from 'react';
+import { select } from 'd3';
 import {
     Container,
     Divider,
     Grid,
     Typography,
     makeStyles
-} from '@material-ui/core'
-import { Link } from 'react-router-dom'
-import { BarChart, Legend } from 'gd-core/src/components/d3'
-import Carousel from 'gd-core/src/components/Carousel'
+} from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import { BarChart, Legend } from 'gd-core/src/components/d3';
+import Carousel from 'gd-core/src/components/Carousel';
 
-import dataStories from '../DataStories/pages'
-import DataStoriesModal from '../DataStories/Details'
+import dataStories from '../DataStories/pages';
+import DataStoriesModal from '../DataStories/Details';
 
-import data from '../../data/data.json'
-import { LEGEND_DOMAIN } from './config'
+import data from '../../data/data.json';
+import { LEGEND_DOMAIN } from './config';
 
 type Props = {
     featureId: string,
@@ -46,14 +46,14 @@ const useStyle = makeStyles({
     carouselSlide: {
         width: '100%'
     }
-})
+});
 
 const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
-    const classes = useStyle()
-    const featureValue = data[nutrient][featureId][selectedYear]
+    const classes = useStyle();
+    const featureValue = data[nutrient][featureId][selectedYear];
 
-    const [iframeProps, updateIframeProps] = React.useState({})
-    const handleDataStoriesModalClose = () => updateIframeProps({})
+    const [iframeProps, updateIframeProps] = React.useState({});
+    const handleDataStoriesModalClose = () => updateIframeProps({});
 
     return (
         <>
@@ -86,12 +86,12 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                         ticks={5}
                         tickFormat={(d) => {
                             if (d === 25) {
-                                return '> 25'
+                                return '> 25';
                             }
                             if (d > 25) {
-                                return ''
+                                return '';
                             }
-                            return d
+                            return d;
                         }}
                         indicator={featureValue ?
                             {
@@ -144,10 +144,10 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                     barStrokeWidth={2}
                     barStrokeOpacity={(d) => d.selected ? 1 : 0}
                     mouseOver={(d, idx, rects) => {
-                        select(rects[idx]).attr('fill', 'brown')
+                        select(rects[idx]).attr('fill', 'brown');
                     }}
                     mouseOut={(d, idx, rects) => {
-                        select(rects[idx]).attr('fill', '#4682b4')
+                        select(rects[idx]).attr('fill', '#4682b4');
                     }}
                     tooltipContent={(d) => `${d.value} lb/acre`}
                     width={450}
@@ -205,7 +205,7 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                 </Carousel>
             </Container>
         </>
-    )
-}
+    );
+};
 
-export default Sidebar
+export default Sidebar;

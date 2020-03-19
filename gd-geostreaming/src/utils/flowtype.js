@@ -1,6 +1,6 @@
 // @flow
-import type { Map } from 'immutable'
-import type { GeometryType } from 'gd-core/src/utils/flowtype'
+import type { Map } from 'immutable';
+import type { GeometryType } from 'gd-core/src/utils/flowtype';
 
 export type PropertiesType = {
     name: string;

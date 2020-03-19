@@ -1,8 +1,8 @@
 // @flow
-import React from 'react'
-import { select } from 'd3'
+import React from 'react';
+import { select } from 'd3';
 
-import { BarChart } from '../../../components/d3'
+import { BarChart } from '../../../components/d3';
 
 const FIXTURE = {
     meta: {},
@@ -159,9 +159,9 @@ const FIXTURE = {
             year: 2017,
             value: 13.2
         }
-    ] }
+    ] };
 
-const INITIAL_YEAR = 2000
+const INITIAL_YEAR = 2000;
 
 const increase = (data) => (
     data.map(({ year, value, selected }) => ({
@@ -169,7 +169,7 @@ const increase = (data) => (
         value: value + 1,
         selected
     }))
-)
+);
 
 const updateSelected = (data, selectedYear) => (
     data.map(
@@ -179,18 +179,18 @@ const updateSelected = (data, selectedYear) => (
             selected: year === selectedYear
         })
     )
-)
+);
 
 const TestBarChart = () => {
-    const [data, updateData] = React.useState(updateSelected(FIXTURE.data, INITIAL_YEAR))
-    const [year, updateYear] = React.useState(INITIAL_YEAR)
+    const [data, updateData] = React.useState(updateSelected(FIXTURE.data, INITIAL_YEAR));
+    const [year, updateYear] = React.useState(INITIAL_YEAR);
     return (
         <div style={{ padding : 50 }}>
             <div>
                 <button
                     type="submit"
                     style={{ margin: 20 }}
-                    onClick={() => { updateData(increase(data)) }}
+                    onClick={() => { updateData(increase(data)); }}
                 >
                     Increase
                 </button>
@@ -200,8 +200,8 @@ const TestBarChart = () => {
                     <button
                         type="submit"
                         onClick={() => {
-                            updateYear(year - 1)
-                            updateData(updateSelected(data, year - 1))
+                            updateYear(year - 1);
+                            updateData(updateSelected(data, year - 1));
                         }}
                     >
                         Down
@@ -209,8 +209,8 @@ const TestBarChart = () => {
                     <button
                         type="submit"
                         onClick={() => {
-                            updateYear(year + 1)
-                            updateData(updateSelected(data, year + 1))
+                            updateYear(year + 1);
+                            updateData(updateSelected(data, year + 1));
                         }}
                     >
                         Up
@@ -236,15 +236,15 @@ const TestBarChart = () => {
                 }}
                 barStroke={(d) => d.selected ? 'brown' : '#4682b4'}
                 mouseOver={(d, idx, rects) => {
-                    select(rects[idx]).attr('fill', 'brown')
+                    select(rects[idx]).attr('fill', 'brown');
                 }}
                 mouseOut={(d, idx, rects) => {
-                    select(rects[idx]).attr('fill', '#4682b4')
+                    select(rects[idx]).attr('fill', '#4682b4');
                 }}
                 data={data}
             />
         </div>
-    )
-}
+    );
+};
 
-export default TestBarChart
+export default TestBarChart;

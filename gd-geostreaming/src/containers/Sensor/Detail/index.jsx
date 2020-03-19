@@ -1,21 +1,21 @@
 // @flow
-import * as React from 'react'
-import { connect } from 'react-redux'
+import * as React from 'react';
+import { connect } from 'react-redux';
 import {
     Grid,
     Tab,
     Tabs,
     Typography,
     withStyles
-} from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
-import { callAPI } from '../../../utils/io'
-import { getSourceColor, getSourceName } from '../../../utils/sensors'
-import Filters from './Filters'
-import InfoDialog from './InfoDialog'
-import Parameters from './Parameters'
-import { getBinType } from './utils'
+import { callAPI } from '../../../utils/io';
+import { getSourceColor, getSourceName } from '../../../utils/sensors';
+import Filters from './Filters';
+import InfoDialog from './InfoDialog';
+import Parameters from './Parameters';
+import { getBinType } from './utils';
 
 import type {
     ParameterCategoryType,
@@ -23,14 +23,14 @@ import type {
     ParameterType,
     ParameterValue,
     SensorType
-} from '../../../utils/flowtype'
+} from '../../../utils/flowtype';
 
 const styles = (theme) => ({
     header: {
         color: theme.palette.primary.contrastText,
         padding: 10
     }
-})
+});
 
 type Props = {
     classes: {
@@ -75,16 +75,16 @@ class SensorDetail extends React.Component<Props, State> {
     }
 
     constructor(props) {
-        super(props)
+        super(props);
 
-        this.categoriesMapping = this.getCategories()
-        this.minStartTime = new Date(props.sensor.min_start_time)
-        this.maxEndTime = new Date(props.sensor.max_end_time)
+        this.categoriesMapping = this.getCategories();
+        this.minStartTime = new Date(props.sensor.min_start_time);
+        this.maxEndTime = new Date(props.sensor.max_end_time);
 
-        const activeCategory = Object.keys(this.categoriesMapping)[0]
+        const activeCategory = Object.keys(this.categoriesMapping)[0];
 
-        const startDate = new Date(props.sensor.min_start_time)
-        const endDate = new Date(props.sensor.max_end_time)
+        const startDate = new Date(props.sensor.min_start_time);
+        const endDate = new Date(props.sensor.max_end_time);
 
         this.state = {
             activeCategory,
@@ -102,110 +102,110 @@ class SensorDetail extends React.Component<Props, State> {
             sameTimeScale: true,
             selectAllDates: true,
             binType: getBinType(startDate, endDate)
-        }
+        };
     }
 
     componentDidMount() {
-        this.updateParamsData()
+        this.updateParamsData();
     }
 
     updateParamsData = () => {
-        const { sensor } = this.props
-        const { binType, startDate, endDate } = this.state
-        const queryParams = []
+        const { sensor } = this.props;
+        const { binType, startDate, endDate } = this.state;
+        const queryParams = [];
         if (startDate) {
-            queryParams.push(`since=${startDate.toISOString()}`)
+            queryParams.push(`since=${startDate.toISOString()}`);
             if (endDate) {
-                queryParams.push(`until=${endDate.toISOString()}`)
+                queryParams.push(`until=${endDate.toISOString()}`);
             }
         }
         callAPI(
             `cache/${binType}/${sensor.id}?${queryParams.join('&')}`,
             (data) => {
-                this.setState({ paramsData: data.properties })
+                this.setState({ paramsData: data.properties });
             }
-        )
+        );
     }
 
     getCategories = () => {
-        const { sensor, parameters, categories, mappings } = this.props
-        const categoriesMapping = {}
+        const { sensor, parameters, categories, mappings } = this.props;
+        const categoriesMapping = {};
         sensor.parameters.forEach(parameterName => {
-            const parameter = parameters.find(({ name }) => name === parameterName)
+            const parameter = parameters.find(({ name }) => name === parameterName);
             if (parameter) {
-                const mappedCategories = mappings.filter(m => m.parameter_id === parameter.id)
+                const mappedCategories = mappings.filter(m => m.parameter_id === parameter.id);
                 mappedCategories.forEach(mapping => {
-                    const category = categories.find(c => c.id === mapping.category_id)
+                    const category = categories.find(c => c.id === mapping.category_id);
                     if (category) {
                         if (categoriesMapping[category.name]) {
-                            categoriesMapping[category.name].parameters.push(parameter)
+                            categoriesMapping[category.name].parameters.push(parameter);
                         } else {
                             categoriesMapping[category.name] = {
                                 type: category.detail_type,
                                 parameters: [parameter]
-                            }
+                            };
                         }
                     }
-                })
+                });
             }
-        })
-        return categoriesMapping
+        });
+        return categoriesMapping;
     }
 
     handleCategoryChange = (e, category) => {
         this.setState({
             activeCategory: category
-        })
+        });
     }
 
     handleSelectAllDatesToggle = (e, isChecked) => {
         this.setState(
             (state) => {
-                state.selectAllDates = isChecked
+                state.selectAllDates = isChecked;
                 if (isChecked) {
-                    state.startDate = this.minStartTime
-                    state.endDate = this.maxEndTime
+                    state.startDate = this.minStartTime;
+                    state.endDate = this.maxEndTime;
                 }
-                state.binType = getBinType(state.startDate, state.endDate)
-                return state
+                state.binType = getBinType(state.startDate, state.endDate);
+                return state;
             },
             this.updateParamsData
-        )
+        );
     }
 
     handleDateRangeUpdate = (e, [start, end]) => {
         this.setState(
             (state) => {
-                state.startDate = new Date(start)
-                state.endDate = new Date(end)
+                state.startDate = new Date(start);
+                state.endDate = new Date(end);
                 state.selectAllDates = (
                     state.startDate.valueOf() === this.minStartTime.valueOf() &&
                     state.endDate.valueOf() === this.maxEndTime.valueOf()
-                )
-                state.binType = getBinType(state.startDate, state.endDate)
-                return state
+                );
+                state.binType = getBinType(state.startDate, state.endDate);
+                return state;
             },
             this.updateParamsData
-        )
+        );
     }
 
     handleStartDataAtZeroToggle = (e, isChecked) => {
-        this.setState({ startAtZero: isChecked })
+        this.setState({ startAtZero: isChecked });
     }
 
     handleUseSameTimeScaleToggle = (e, isChecked) => {
-        this.setState({ sameTimeScale: isChecked })
+        this.setState({ sameTimeScale: isChecked });
     }
 
     showInfoDialog = (content) => {
         this.setState({
             showDialog: true,
             dialogContent: content
-        })
+        });
     }
 
     render() {
-        const { classes, sensor, handleClose } = this.props
+        const { classes, sensor, handleClose } = this.props;
         const {
             activeCategory,
             selectAllDates,
@@ -217,9 +217,9 @@ class SensorDetail extends React.Component<Props, State> {
             paramsData,
             showDialog,
             dialogContent
-        } = this.state
+        } = this.state;
 
-        const { properties } = sensor
+        const { properties } = sensor;
 
         return (
             <>
@@ -288,7 +288,7 @@ class SensorDetail extends React.Component<Props, State> {
                     handleClose={() => this.setState({ showDialog: false })}
                 />
             </>
-        )
+        );
     }
 }
 
@@ -296,6 +296,6 @@ const mapStateToProps = (state) => ({
     parameters: state.__new_parameters.parameters,
     categories: state.__new_parameters.categories,
     mappings: state.__new_parameters.mappings
-})
+});
 
-export default connect(mapStateToProps)(withStyles(styles)(SensorDetail))
+export default connect(mapStateToProps)(withStyles(styles)(SensorDetail));

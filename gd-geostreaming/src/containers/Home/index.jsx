@@ -1,12 +1,12 @@
 // @flow
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
     Button,
     Container,
     Typography,
     makeStyles
-} from '@material-ui/core'
+} from '@material-ui/core';
 
 const useStyle = makeStyles({
     container: {
@@ -15,10 +15,10 @@ const useStyle = makeStyles({
         lineHeight: '220%',
         fontSize: '1rem'
     }
-})
+});
 
 const Home = () => {
-    const classes = useStyle()
+    const classes = useStyle();
     return (
         <Container className={classes.container} maxWidth="lg">
             <Typography variant="h4" align="center" gutterBottom>
@@ -51,7 +51,7 @@ const Home = () => {
                 </Link>
             </Typography>
         </Container>
-    )
-}
+    );
+};
 
-export default Home
+export default Home;

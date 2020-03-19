@@ -1,6 +1,6 @@
 // @flow
-const Webpack = require('webpack')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const Webpack = require('webpack');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
     mode: 'development',
@@ -24,4 +24,4 @@ module.exports = {
         }),
         new BundleAnalyzerPlugin({ openAnalyzer: false, analyzerPort: 5050 })
     ]
-}
+};

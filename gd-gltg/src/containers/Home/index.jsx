@@ -1,6 +1,6 @@
 // @flow
-import * as React from 'react'
-import { format } from 'd3'
+import * as React from 'react';
+import { format } from 'd3';
 import {
     Box,
     Dialog,
@@ -14,44 +14,44 @@ import {
     NativeSelect,
     Typography,
     withStyles
-} from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
-import InfoIcon from '@material-ui/icons/Info'
-import DownTrendIcon from '@material-ui/icons/ArrowDropDown'
-import UpTrendIcon from '@material-ui/icons/ArrowDropUp'
-import FlatTrendIcon from '@material-ui/icons/FiberManualRecord'
-import { createEmpty as createEmptyExtent, extend as extentExtent } from 'ol/extent'
-import GeoJSON from 'ol/format/GeoJSON'
-import GroupLayer from 'ol/layer/Group'
-import ImageLayer from 'ol/layer/Image'
-import TileLayer from 'ol/layer/Tile'
-import VectorLayer from 'ol/layer/Vector'
-import ImageWMSSource from 'ol/source/ImageWMS'
-import OSM, { ATTRIBUTION as OSM_ATTRIBUTION } from 'ol/source/OSM'
-import VectorSource from 'ol/source/Vector'
-import XYZ from 'ol/source/XYZ'
-import { Map } from 'gd-core/src/components/ol'
-import { entries } from 'gd-core/src/utils/array'
-import { SLRSlope } from 'gd-core/src/utils/math'
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import InfoIcon from '@material-ui/icons/Info';
+import DownTrendIcon from '@material-ui/icons/ArrowDropDown';
+import UpTrendIcon from '@material-ui/icons/ArrowDropUp';
+import FlatTrendIcon from '@material-ui/icons/FiberManualRecord';
+import { createEmpty as createEmptyExtent, extend as extentExtent } from 'ol/extent';
+import GeoJSON from 'ol/format/GeoJSON';
+import GroupLayer from 'ol/layer/Group';
+import ImageLayer from 'ol/layer/Image';
+import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
+import ImageWMSSource from 'ol/source/ImageWMS';
+import OSM, { ATTRIBUTION as OSM_ATTRIBUTION } from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector';
+import XYZ from 'ol/source/XYZ';
+import { Map } from 'gd-core/src/components/ol';
+import { entries } from 'gd-core/src/utils/array';
+import { SLRSlope } from 'gd-core/src/utils/math';
 
 import type {
     Feature as FeatureType,
     Map as MapType,
     MapBrowserEventType
-} from 'ol'
-import type { Layer as LayerType } from 'ol/layer'
+} from 'ol';
+import type { Layer as LayerType } from 'ol/layer';
 
-import data from '../../data/data.json'
-import { HEADERS_HEIGHT } from '../Layout/Header'
+import data from '../../data/data.json';
+import { HEADERS_HEIGHT } from '../Layout/Header';
 
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar';
 import {
     ACTION_BAR_HEIGHT,
     BOUNDARIES,
     VARIABLES_INFO,
     YEARS,
     getFeatureStyle
-} from './config'
+} from './config';
 
 const styles = (theme) => ({
     main: {
@@ -110,7 +110,7 @@ const styles = (theme) => ({
             color: '#000'
         }
     }
-})
+});
 
 type Props = {
     classes: {
@@ -150,7 +150,7 @@ class Home extends React.Component<Props, State> {
     selectedFeature: ?FeatureType
 
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             boundary: 'drainage',
@@ -161,7 +161,7 @@ class Home extends React.Component<Props, State> {
             showPopupAt: null,
             showDialog: false,
             dialogContent: {}
-        }
+        };
 
         this.layers = {
             basemaps: new GroupLayer({
@@ -219,39 +219,39 @@ class Home extends React.Component<Props, State> {
                                     dataProjection: 'EPSG:4326',
                                     featureProjection: 'EPSG:3857'
                                 })
-                            })
+                            });
                             const layer = new VectorLayer({
                                 source,
                                 name,
                                 style: (feature, resolution) => {
-                                    const { nutrient, year } = this.state
-                                    return style(feature, resolution, nutrient, year)
+                                    const { nutrient, year } = this.state;
+                                    return style(feature, resolution, nutrient, year);
                                 }
-                            })
+                            });
                             source.on(
                                 'change',
                                 () => {
                                     if (!group.isReady && source.getState() === 'ready') {
-                                        group.isReady = true
-                                        group.setVisible(visible)
+                                        group.isReady = true;
+                                        group.setVisible(visible);
                                     }
                                 }
-                            )
-                            return layer
+                            );
+                            return layer;
                         })
-                    })
-                    boundaryLayers[name] = group
-                    return boundaryLayers
+                    });
+                    boundaryLayers[name] = group;
+                    return boundaryLayers;
                 },
                 {}
             )
-        }
-        this.selectedFeature = null
+        };
+        this.selectedFeature = null;
     }
 
     handleBoundaryChange = ({ target: { value } }) => {
         if (this.selectedFeature) {
-            const { nutrient, year } = this.state
+            const { nutrient, year } = this.state;
             this.selectedFeature.setStyle(
                 getFeatureStyle(
                     this.selectedFeature,
@@ -260,29 +260,29 @@ class Home extends React.Component<Props, State> {
                     year,
                     false
                 )
-            )
-            this.selectedFeature = null
+            );
+            this.selectedFeature = null;
         }
-        this.layers[this.state.boundary].setVisible(false)
+        this.layers[this.state.boundary].setVisible(false);
 
-        this.layers[value].setVisible(true)
+        this.layers[value].setVisible(true);
 
-        const extent = createEmptyExtent()
+        const extent = createEmptyExtent();
         this.layers[value].getLayers().forEach((layer) => {
-            extentExtent(extent, layer.getSource().getExtent())
-        })
-        this.map.getView().fit(extent)
+            extentExtent(extent, layer.getSource().getExtent());
+        });
+        this.map.getView().fit(extent);
 
-        this.setState({ boundary: value, featureId: 'Overall summary' })
+        this.setState({ boundary: value, featureId: 'Overall summary' });
     }
 
     handleVariableChange = ({ target: { value } }, variable: string) => {
         this.setState(
             { [variable]: value },
             () => {
-                this.layers[this.state.boundary].getLayers().forEach((layer) => layer.changed())
+                this.layers[this.state.boundary].getLayers().forEach((layer) => layer.changed());
                 if (this.selectedFeature) {
-                    const { nutrient, year } = this.state
+                    const { nutrient, year } = this.state;
                     this.selectedFeature.setStyle(
                         getFeatureStyle(
                             this.selectedFeature,
@@ -291,26 +291,26 @@ class Home extends React.Component<Props, State> {
                             year,
                             true
                         )
-                    )
+                    );
                 }
             }
-        )
+        );
     }
 
     showInfoDialog = (variable) => {
         this.setState({
             showDialog: true,
             dialogContent: VARIABLES_INFO[variable]
-        })
+        });
     }
 
     handleMapClick = (event: MapBrowserEventType) => {
         // Get the feature from the click event, update the state, and
         // add the feature to the selection layer
-        const { featureId: previousFeatureId } = this.state
-        const previousFeature = this.selectedFeature
+        const { featureId: previousFeatureId } = this.state;
+        const previousFeature = this.selectedFeature;
 
-        const feature = event.map.forEachFeatureAtPixel(event.pixel, (f) => f)
+        const feature = event.map.forEachFeatureAtPixel(event.pixel, (f) => f);
 
         if (feature) {
             const selectedFeature = feature.get('interactive') ?
@@ -320,15 +320,15 @@ class Home extends React.Component<Props, State> {
                     .getSource()
                     .getFeatures()
                     .find((element) => element.get('Station_ID') === feature.get('Station_ID')) :
-                feature
+                feature;
 
             const popupState = {
                 showPopupAt: event.coordinate,
                 popupContent: this.getPopupContent(selectedFeature)
-            }
+            };
 
             if (this.state.boundary !== 'drainage' || feature.get('interactive')) {
-                const { nutrient, year } = this.state
+                const { nutrient, year } = this.state;
                 if (previousFeatureId !== 'Overall summary' && previousFeature) {
                     previousFeature.setStyle(
                         getFeatureStyle(
@@ -338,10 +338,10 @@ class Home extends React.Component<Props, State> {
                             year,
                             false
                         )
-                    )
+                    );
                 }
 
-                const featureId = selectedFeature.get('Name') || selectedFeature.get('Station_ID')
+                const featureId = selectedFeature.get('Name') || selectedFeature.get('Station_ID');
                 if (featureId !== previousFeatureId) {
                     // Feature is selected
                     selectedFeature.setStyle(getFeatureStyle(
@@ -350,20 +350,20 @@ class Home extends React.Component<Props, State> {
                         nutrient,
                         year,
                         true
-                    ))
+                    ));
                     this.setState(
                         { featureId, ...popupState },
-                        () => { this.selectedFeature = selectedFeature }
-                    )
+                        () => { this.selectedFeature = selectedFeature; }
+                    );
                 } else {
                     // Feature is deselected
                     this.setState(
                         { featureId: 'Overall summary', ...popupState },
-                        () => { this.selectedFeature = null }
-                    )
+                        () => { this.selectedFeature = null; }
+                    );
                 }
             } else {
-                this.setState(popupState)
+                this.setState(popupState);
             }
         } else {
             this.setState(
@@ -371,27 +371,27 @@ class Home extends React.Component<Props, State> {
                     showPopupAt: null,
                     popupContent: null
                 }
-            )
+            );
         }
     }
 
     getNutrientTrend = (nutrient: string, featureName: string): number => {
-        const x = []
-        const y = []
+        const x = [];
+        const y = [];
         Object.entries(data[nutrient][featureName]).forEach(([year, value]) => {
-            x.push(parseInt(year, 10))
-            y.push(parseFloat(value))
-        })
-        return SLRSlope(x, y) || 0
+            x.push(parseInt(year, 10));
+            y.push(parseFloat(value));
+        });
+        return SLRSlope(x, y) || 0;
     }
 
     getPopupContent = (feature: FeatureType) => {
-        const classes = this.props.classes
-        const featureName = feature.get('Name') || feature.get('Station_ID')
-        const { contributing_waterways, cumulative_acres } = feature.getProperties()
+        const classes = this.props.classes;
+        const featureName = feature.get('Name') || feature.get('Station_ID');
+        const { contributing_waterways, cumulative_acres } = feature.getProperties();
 
-        const nitrogenTrend = this.getNutrientTrend('Nitrogen', featureName)
-        const phosphorusTrend = this.getNutrientTrend('Phosphorus', featureName)
+        const nitrogenTrend = this.getNutrientTrend('Nitrogen', featureName);
+        const phosphorusTrend = this.getNutrientTrend('Phosphorus', featureName);
 
         return (
             <Typography variant="caption">
@@ -401,17 +401,17 @@ class Home extends React.Component<Props, State> {
                 <br />
                 <span>{format(',')(cumulative_acres)} Cumulative Acres</span>
                 {[['Nitrogen', nitrogenTrend], ['Phosphorus', phosphorusTrend]].map(([nutrient, trend]) => {
-                    let Icon
-                    let color
+                    let Icon;
+                    let color;
                     if (trend > 0) {
-                        Icon = UpTrendIcon
-                        color = 'red'
+                        Icon = UpTrendIcon;
+                        color = 'red';
                     } else if (trend < 0) {
-                        Icon = DownTrendIcon
-                        color = 'blue'
+                        Icon = DownTrendIcon;
+                        color = 'blue';
                     } else {
-                        Icon = FlatTrendIcon
-                        color = 'black'
+                        Icon = FlatTrendIcon;
+                        color = 'black';
                     }
                     return (
                         <>
@@ -421,14 +421,14 @@ class Home extends React.Component<Props, State> {
                                 <Icon className={`${classes.trendIcon} ${color}`} />
                             </span>
                         </>
-                    )
+                    );
                 })}
             </Typography>
-        )
+        );
     }
 
     render() {
-        const { classes } = this.props
+        const { classes } = this.props;
         const {
             boundary,
             featureId,
@@ -438,7 +438,7 @@ class Home extends React.Component<Props, State> {
             popupContent,
             showDialog,
             dialogContent
-        } = this.state
+        } = this.state;
         return (
             <Map
                 className="fillContainer"
@@ -446,7 +446,7 @@ class Home extends React.Component<Props, State> {
                 center={[-9972968, 4972295]}
                 layers={Object.values(this.layers)}
                 layerSwitcherOptions={{}}
-                updateMap={(map) => { this.map = map }}
+                updateMap={(map) => { this.map = map; }}
                 popupContent={popupContent}
                 showPopupAt={showPopupAt}
                 events={{
@@ -591,8 +591,8 @@ class Home extends React.Component<Props, State> {
                     </DialogContent>
                 </Dialog>
             </Map>
-        )
+        );
     }
 }
 
-export default withStyles(styles)(Home)
+export default withStyles(styles)(Home);

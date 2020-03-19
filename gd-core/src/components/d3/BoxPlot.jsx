@@ -1,16 +1,16 @@
 // @flow
-import React from 'react'
+import React from 'react';
 import {
     event,
     quantile,
     select
-} from 'd3'
-import { makeStyles } from '@material-ui/core'
+} from 'd3';
+import { makeStyles } from '@material-ui/core';
 
-import { precision } from '../../utils/format'
-import { sharedStyle } from './utils'
+import { precision } from '../../utils/format';
+import { sharedStyle } from './utils';
 
-const useStyle = makeStyles(sharedStyle)
+const useStyle = makeStyles(sharedStyle);
 
 type Props = {
     width: number;
@@ -62,7 +62,7 @@ type Props = {
 }
 
 const BoxPlot = (props: Props) => {
-    const classes = useStyle()
+    const classes = useStyle();
 
     const {
         width,
@@ -82,29 +82,29 @@ const BoxPlot = (props: Props) => {
         mouseOut,
         click,
         data
-    } = props
+    } = props;
 
-    const innerWidth = width - marginLeft - marginRight
-    const innerHeight = height - marginBottom - marginTop
+    const innerWidth = width - marginLeft - marginRight;
+    const innerHeight = height - marginBottom - marginTop;
 
-    const gRef = React.useRef(null)
-    const tooltipRef = React.useRef(null)
+    const gRef = React.useRef(null);
+    const tooltipRef = React.useRef(null);
 
     React.useEffect(() => {
         if (gRef.current) {
-            const gEl = select(gRef.current)
-            gEl.selectAll('*').remove()
+            const gEl = select(gRef.current);
+            gEl.selectAll('*').remove();
 
-            const q1 = quantile(data, .25)
-            const median = quantile(data, .5)
-            const q3 = quantile(data, .75)
-            const interQuantileRange = q3 - q1
-            const min = q1 - (1.5 * interQuantileRange)
-            const max = q1 + (1.5 * interQuantileRange)
+            const q1 = quantile(data, .25);
+            const median = quantile(data, .5);
+            const q3 = quantile(data, .75);
+            const interQuantileRange = q3 - q1;
+            const min = q1 - (1.5 * interQuantileRange);
+            const max = q1 + (1.5 * interQuantileRange);
 
-            const y = axisProps.scale.range([innerHeight, 0])
+            const y = axisProps.scale.range([innerHeight, 0]);
 
-            const center = innerWidth / 2
+            const center = innerWidth / 2;
 
             // Show the main vertical line
             gEl
@@ -115,7 +115,7 @@ const BoxPlot = (props: Props) => {
                 .attr('y2', y(max))
                 .attr('stroke', mainLine.stroke || 'black')
                 .attr('stroke-width', mainLine.strokeWidth || 1)
-                .attr('stroke-dasharray', mainLine.strokeDashArray || '0')
+                .attr('stroke-dasharray', mainLine.strokeDashArray || '0');
 
             // Show the box
             gEl
@@ -127,7 +127,7 @@ const BoxPlot = (props: Props) => {
                 .attr('stroke', box.stroke || 'black')
                 .attr('stroke-width', box.strokeWidth || 1)
                 .style('fill', box.fill || '#69b3a2')
-                .style('fill-opacity', box.fillOpacity || 0.3)
+                .style('fill-opacity', box.fillOpacity || 0.3);
 
             // Add min and max lines
             gEl
@@ -141,7 +141,7 @@ const BoxPlot = (props: Props) => {
                 .attr('y2', (d) => (y(d)) )
                 .attr('stroke', sideLine.stroke || 'black')
                 .attr('stroke-width', sideLine.strokeWidth || 1)
-                .attr('stroke-dasharray', sideLine.strokeDashArray || '0')
+                .attr('stroke-dasharray', sideLine.strokeDashArray || '0');
 
             // Add median line
             gEl
@@ -152,7 +152,7 @@ const BoxPlot = (props: Props) => {
                 .attr('y2', y(median))
                 .attr('stroke', medianLine.stroke || 'black')
                 .attr('stroke-width', medianLine.strokeWidth || 1)
-                .attr('stroke-dasharray', medianLine.strokeDashArray || '0')
+                .attr('stroke-dasharray', medianLine.strokeDashArray || '0');
 
             // Add value labels
             if (labels.max) {
@@ -162,7 +162,7 @@ const BoxPlot = (props: Props) => {
                     .attr('y', y(max))
                     .attr('dy', '1em')
                     .attr('font-size', labels.max)
-                    .text(precision(max, 0))
+                    .text(precision(max, 0));
             }
             if (labels.min) {
                 gEl
@@ -170,7 +170,7 @@ const BoxPlot = (props: Props) => {
                     .attr('x', center + (innerWidth / 2) + 5)
                     .attr('y', y(min))
                     .attr('font-size', labels.min)
-                    .text(precision(min, 0))
+                    .text(precision(min, 0));
             }
             if (labels.median) {
                 gEl
@@ -179,7 +179,7 @@ const BoxPlot = (props: Props) => {
                     .attr('y', y(median) - 5)
                     .attr('dy', '1em')
                     .attr('font-size', labels.median)
-                    .text(precision(median, 0))
+                    .text(precision(median, 0));
             }
             if (labels.q1) {
                 gEl
@@ -188,7 +188,7 @@ const BoxPlot = (props: Props) => {
                     .attr('y', y(q1))
                     .attr('text-anchor', 'end')
                     .attr('font-size', labels.q1)
-                    .text(precision(q1, 0))
+                    .text(precision(q1, 0));
             }
             if (labels.q3) {
                 gEl
@@ -197,11 +197,11 @@ const BoxPlot = (props: Props) => {
                     .attr('y', y(q3))
                     .attr('text-anchor', 'end')
                     .attr('font-size', labels.q3)
-                    .text(precision(q3, 0))
+                    .text(precision(q3, 0));
             }
 
             // Prepare tooltip container
-            const tooltip = tooltipContent ? select(tooltipRef.current) : null
+            const tooltip = tooltipContent ? select(tooltipRef.current) : null;
 
             // Attach events
             gEl
@@ -216,7 +216,7 @@ const BoxPlot = (props: Props) => {
                             .duration(200)
                             .style('opacity', .9)
                             .style('left', `${event.clientX}px`)
-                            .style('top', `${event.clientY}px`)
+                            .style('top', `${event.clientY}px`);
                     }
                 })
                 .on('mouseout', () => {
@@ -224,11 +224,11 @@ const BoxPlot = (props: Props) => {
                         tooltip
                             .transition()
                             .duration(500)
-                            .style('opacity', 0)
+                            .style('opacity', 0);
                     }
-                })
+                });
         }
-    })
+    });
 
     return (
         <>
@@ -237,8 +237,8 @@ const BoxPlot = (props: Props) => {
             </svg>
             <div ref={tooltipRef} className={classes.tooltip} />
         </>
-    )
-}
+    );
+};
 
 BoxPlot.defaultProps = {
     marginTop: 0,
@@ -254,6 +254,6 @@ BoxPlot.defaultProps = {
     mouseOver: () => {},
     mouseOut: () => {},
     click: () => {}
-}
+};
 
-export default BoxPlot
+export default BoxPlot;

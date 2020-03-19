@@ -1,9 +1,9 @@
 // @flow
-import { callAPI } from '../utils/io'
+import { callAPI } from '../utils/io';
 
-import type { ParameterCategoryType, ParameterMappingsType, ParameterType } from '../utils/flowtype'
+import type { ParameterCategoryType, ParameterMappingsType, ParameterType } from '../utils/flowtype';
 
-const UPDATE_PARAMETERS_DATA = 'UPDATE_PARAMETERS_DATA'
+const UPDATE_PARAMETERS_DATA = 'UPDATE_PARAMETERS_DATA';
 type UpdateParametersDataAction = {
     type: 'UPDATE_PARAMETERS_DATA',
     data: {
@@ -21,19 +21,19 @@ export const updateParameters = (
 ): UpdateParametersDataAction => ({
     type: UPDATE_PARAMETERS_DATA,
     data
-})
+});
 
 export const fetchParameters = () => {
     return (dispatch: Function) => {
         callAPI(
             'parameters',
             ({ parameters, categories, mappings }) => {
-                dispatch(updateParameters({ parameters, categories, mappings }))
+                dispatch(updateParameters({ parameters, categories, mappings }));
             },
             dispatch
-        )
-    }
-}
+        );
+    };
+};
 
 export type Action =
     | UpdateParametersDataAction
@@ -41,4 +41,4 @@ export type Action =
 
 export const ACTIONS = {
     UPDATE_PARAMETERS_DATA
-}
+};
