@@ -141,13 +141,13 @@ type State = {
 }
 
 class Home extends React.Component<Props, State> {
-    map: MapType
+    map: MapType;
 
     layers: {
         [key: string]: LayerType
-    }
+    };
 
-    selectedFeature: ?FeatureType
+    selectedFeature: ?FeatureType;
 
     constructor(props) {
         super(props);
@@ -274,7 +274,7 @@ class Home extends React.Component<Props, State> {
         this.map.getView().fit(extent);
 
         this.setState({ boundary: value, featureId: 'Overall summary' });
-    }
+    };
 
     handleVariableChange = ({ target: { value } }, variable: string) => {
         this.setState(
@@ -295,14 +295,14 @@ class Home extends React.Component<Props, State> {
                 }
             }
         );
-    }
+    };
 
     showInfoDialog = (variable) => {
         this.setState({
             showDialog: true,
             dialogContent: VARIABLES_INFO[variable]
         });
-    }
+    };
 
     handleMapClick = (event: MapBrowserEventType) => {
         // Get the feature from the click event, update the state, and
@@ -353,13 +353,17 @@ class Home extends React.Component<Props, State> {
                     ));
                     this.setState(
                         { featureId, ...popupState },
-                        () => { this.selectedFeature = selectedFeature; }
+                        () => {
+                            this.selectedFeature = selectedFeature;
+                        }
                     );
                 } else {
                     // Feature is deselected
                     this.setState(
                         { featureId: 'Overall summary', ...popupState },
-                        () => { this.selectedFeature = null; }
+                        () => {
+                            this.selectedFeature = null;
+                        }
                     );
                 }
             } else {
@@ -373,7 +377,7 @@ class Home extends React.Component<Props, State> {
                 }
             );
         }
-    }
+    };
 
     getNutrientTrend = (nutrient: string, featureName: string): number => {
         const x = [];
@@ -383,15 +387,40 @@ class Home extends React.Component<Props, State> {
             y.push(parseFloat(value));
         });
         return SLRSlope(x, y) || 0;
-    }
+    };
 
-    getPopupContent = (feature: FeatureType) => {
+    getTrends = (featureName: string) => {
         const classes = this.props.classes;
-        const featureName = feature.get('Name') || feature.get('Station_ID');
-        const { contributing_waterways, cumulative_acres } = feature.getProperties();
-
         const nitrogenTrend = this.getNutrientTrend('Nitrogen', featureName);
         const phosphorusTrend = this.getNutrientTrend('Phosphorus', featureName);
+        return [['Nitrogen', nitrogenTrend], ['Phosphorus', phosphorusTrend]].map(([nutrient, trend]) => {
+            let Icon;
+            let color;
+            if (trend > 0) {
+                Icon = UpTrendIcon;
+                color = 'red';
+            } else if (trend < 0) {
+                Icon = DownTrendIcon;
+                color = 'blue';
+            } else {
+                Icon = FlatTrendIcon;
+                color = 'black';
+            }
+            return (
+                <>
+                    <br />
+                    <span>
+                        {nutrient} Trend
+                        <Icon className={`${classes.trendIcon} ${color}`} />
+                    </span>
+                </>
+            );
+        });
+    };
+
+    getPopupContent = (feature: FeatureType) => {
+        const featureName = feature.get('Name') || feature.get('Station_ID');
+        const { contributing_waterways, cumulative_acres } = feature.getProperties();
 
         return (
             <Typography variant="caption">
@@ -400,32 +429,9 @@ class Home extends React.Component<Props, State> {
                 <span>{format(',')(contributing_waterways)} Contributing Waterways</span>
                 <br />
                 <span>{format(',')(cumulative_acres)} Cumulative Acres</span>
-                {[['Nitrogen', nitrogenTrend], ['Phosphorus', phosphorusTrend]].map(([nutrient, trend]) => {
-                    let Icon;
-                    let color;
-                    if (trend > 0) {
-                        Icon = UpTrendIcon;
-                        color = 'red';
-                    } else if (trend < 0) {
-                        Icon = DownTrendIcon;
-                        color = 'blue';
-                    } else {
-                        Icon = FlatTrendIcon;
-                        color = 'black';
-                    }
-                    return (
-                        <>
-                            <br />
-                            <span>
-                                {nutrient} Trend
-                                <Icon className={`${classes.trendIcon} ${color}`} />
-                            </span>
-                        </>
-                    );
-                })}
             </Typography>
         );
-    }
+    };
 
     render() {
         const { classes } = this.props;
@@ -446,7 +452,9 @@ class Home extends React.Component<Props, State> {
                 center={[-9972968, 4972295]}
                 layers={Object.values(this.layers)}
                 layerSwitcherOptions={{}}
-                updateMap={(map) => { this.map = map; }}
+                updateMap={(map) => {
+                    this.map = map;
+                }}
                 popupContent={popupContent}
                 showPopupAt={showPopupAt}
                 events={{

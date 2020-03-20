@@ -27,21 +27,21 @@ type Props = {
     updateMap: Function;
     popupContent: Function | React.Node;
     showPopupAt: ?[number, number];   // Coordinate to show the popup at. If value is null, it closes the popup.
-    events: {[k: string]: Function};
+    events: { [k: string]: Function };
 }
 
 export const MapContext = React.createContext<{ map: OLMap } | null>(null);
 
 class Map extends React.Component<Props> {
-    map: OLMap
+    map: OLMap;
 
-    popupOverlay: Overlay
+    popupOverlay: Overlay;
 
-    fallbackContainer: { current: null | HTMLDivElement } = React.createRef()
+    fallbackContainer: { current: null | HTMLDivElement } = React.createRef();
 
-    mapContainer: { current: null | HTMLDivElement } = React.createRef()
+    mapContainer: { current: null | HTMLDivElement } = React.createRef();
 
-    popupContainer: HTMLDivElement
+    popupContainer: HTMLDivElement;
 
     static defaultProps = {
         children: null,
@@ -56,8 +56,10 @@ class Map extends React.Component<Props> {
         layers: [],
         layerSwitcherOptions: null,
         updateMap: null,
+        showPopupAt: null,
+        popupContent: null,
         events: null
-    }
+    };
 
     componentDidMount() {
         const {
@@ -178,7 +180,7 @@ class Map extends React.Component<Props> {
         }
 
         return clusterSource;
-    }
+    };
 
     renderChildren = (children: React.Node) => {
         return React.Children.map(children, (child) => {
@@ -205,19 +207,19 @@ class Map extends React.Component<Props> {
             }
             return child;
         });
-    }
+    };
 
     updatePopupContainer = (el: HTMLDivElement) => {
         this.popupContainer = el;
-    }
+    };
 
     openPopup = (coordinate: [number, number]) => {
         this.popupOverlay.setPosition(coordinate);
-    }
+    };
 
     closePopup = () => {
         this.popupOverlay.setPosition(undefined);
-    }
+    };
 
     render() {
         const { children, id, className, popupContent } = this.props;

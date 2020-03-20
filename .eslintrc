@@ -163,6 +163,10 @@
     ],
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-props-no-spreading": "off",
+    "react/jsx-space-before-closing": [
+      "error",
+      "always"
+    ],
     "react/jsx-wrap-multilines": "off",
     "react/jsx-uses-vars": 2,
     "react/jsx-uses-react": 2,

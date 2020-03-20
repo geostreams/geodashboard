@@ -128,7 +128,7 @@ const Carousel = ({
                         color="primary"
                         onClick={() => togglePause(!isPaused)}
                     >
-                        {isPaused ? <PauseIcon/> : <PlayIcon/>}
+                        {isPaused ? <PauseIcon /> : <PlayIcon />}
                     </Fab>
                 </Grid> :
                 null}
