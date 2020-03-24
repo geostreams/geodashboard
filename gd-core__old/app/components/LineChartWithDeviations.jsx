@@ -1,7 +1,7 @@
 /* No Flow due to D3 Items */
 
 import React, { Component } from 'react';
-import { XYxis, YAxis } from '../../vendor/rd3/src';
+import { YAxis } from '../../vendor/rd3/src';
 const d3 = require('d3');
 
 
