@@ -62,13 +62,14 @@ export const getFeatureStyle = (
 
 export type BoundaryType = {
     [key: string]: {
-        visible: boolean,
-        label: string,
+        visible: boolean;
+        label: string;
         layers: Array<{
-            url: string,
-            style: Function
-        }>
-    }
+            url: string;
+            style: Function;
+            interactive?: boolean;
+        }>;
+    };
 }
 
 export const BOUNDARIES: BoundaryType = {
@@ -86,7 +87,8 @@ export const BOUNDARIES: BoundaryType = {
                     image: new Icon(({
                         src: markerMonitoringSite
                     }))
-                })
+                }),
+                interactive: true
             }
         ]
     },

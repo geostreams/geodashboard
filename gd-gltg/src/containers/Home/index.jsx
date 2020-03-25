@@ -211,7 +211,7 @@ class Home extends React.Component<Props, State> {
             ...entries(BOUNDARIES).reduce(
                 (boundaryLayers, [name, { visible, layers }]) => {
                     const group = new GroupLayer({
-                        layers: layers.map(({ url, style }) => {
+                        layers: layers.map(({ url, style, interactive = false }) => {
                             const source = new VectorSource({
                                 url,
                                 useSpatialIndex: true,
@@ -228,6 +228,7 @@ class Home extends React.Component<Props, State> {
                                     return style(feature, resolution, nutrient, year);
                                 }
                             });
+                            layer.set('interactive', interactive);
                             source.on(
                                 'change',
                                 () => {
@@ -248,6 +249,19 @@ class Home extends React.Component<Props, State> {
         };
         this.selectedFeature = null;
     }
+
+    updateMap = (map) => {
+        this.map = map;
+
+        // change mouse cursor when over marker
+        this.map.on('pointermove', (e) => {
+            const pixel = map.getEventPixel(e.originalEvent);
+            const feature = map.forEachFeatureAtPixel(pixel, (_, layer) => {
+                return layer.get('interactive');
+            });
+            map.getTarget().style.cursor = feature ? 'pointer' : '';
+        });
+    };
 
     handleBoundaryChange = ({ target: { value } }) => {
         if (this.selectedFeature) {
@@ -452,9 +466,7 @@ class Home extends React.Component<Props, State> {
                 center={[-9972968, 4972295]}
                 layers={Object.values(this.layers)}
                 layerSwitcherOptions={{}}
-                updateMap={(map) => {
-                    this.map = map;
-                }}
+                updateMap={this.updateMap}
                 popupContent={popupContent}
                 showPopupAt={showPopupAt}
                 events={{
