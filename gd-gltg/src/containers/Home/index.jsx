@@ -463,6 +463,7 @@ class Home extends React.Component<Props, State> {
             <Map
                 className="fillContainer"
                 zoom={7}
+                minZoom={5}
                 center={[-9972968, 4972295]}
                 layers={Object.values(this.layers)}
                 layerSwitcherOptions={{}}
