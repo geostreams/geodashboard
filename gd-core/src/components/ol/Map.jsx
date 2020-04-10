@@ -9,7 +9,6 @@ import VectorSource from 'ol/source/Vector';
 import ClusterSource from 'ol/source/Cluster';
 import AnimatedClusterLayer from 'ol-ext/layer/AnimatedCluster';
 import SelectClusterInteraction from 'ol-ext/interaction/SelectCluster';
-
 import Popup from './Popup';
 
 type Props = {
@@ -21,6 +20,7 @@ type Props = {
     center: [number, number];
     minZoom: number;
     maxZoom: number;
+    extent: Array<number>;
     controls: Control[];
     layers: Array<Layer>;
     layerSwitcherOptions: {};
@@ -52,6 +52,7 @@ class Map extends React.Component<Props> {
         zoom: 7,
         minZoom: 0,
         maxZoom: 14,
+        extent: undefined,
         controls: [],
         layers: [],
         layerSwitcherOptions: null,
@@ -68,6 +69,7 @@ class Map extends React.Component<Props> {
             zoom,
             minZoom,
             maxZoom,
+            extent,
             controls,
             layers,
             layerSwitcherOptions,
@@ -96,13 +98,14 @@ class Map extends React.Component<Props> {
                 center,
                 zoom,
                 minZoom,
-                maxZoom
+                maxZoom,
+                extent
             }),
             layers,
             overlays: [this.popupOverlay],
             controls: defaultControls().extend(controls)
         });
-
+        
         if (events) {
             Object.entries(events).forEach(([event, handler]) => {
                 this.map.on(event, handler);
