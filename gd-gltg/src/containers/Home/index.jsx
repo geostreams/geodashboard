@@ -46,6 +46,7 @@ import { HEADERS_HEIGHT } from '../Layout/Header';
 
 import Sidebar from './Sidebar';
 import {
+    MAP_BOUNDS,
     ACTION_BAR_HEIGHT,
     BOUNDARIES,
     VARIABLES_INFO,
@@ -464,6 +465,7 @@ class Home extends React.Component<Props, State> {
                 className="fillContainer"
                 zoom={7}
                 minZoom={5}
+                extent={MAP_BOUNDS}
                 center={[-9972968, 4972295]}
                 layers={Object.values(this.layers)}
                 layerSwitcherOptions={{}}

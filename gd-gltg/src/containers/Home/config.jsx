@@ -9,6 +9,7 @@ import {
 import { Fill, Icon, Stroke, Style } from 'ol/style';
 
 import type FeatureType from 'ol/Feature';
+import { transformExtent } from 'ol/proj';
 
 import huc8 from '../../data/huc8.geojson';
 import watersheds from '../../data/watersheds.geojson';
@@ -16,6 +17,14 @@ import drainage from '../../data/il-drainage.geojson';
 import monitoringSites from '../../data/il-monitoring-sites.geojson';
 import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import data from '../../data/data.json';
+
+// Coordinates for the bounds of the map converted to EPSG:3857
+export const MAP_BOUNDS = transformExtent([
+    -114.91457195054475,
+    27.98036759814649,
+    -75.78187893993685,
+    50.37966027007533],
+'EPSG:4326', 'EPSG:3857');
 
 export const ACTION_BAR_HEIGHT = 105;
 
