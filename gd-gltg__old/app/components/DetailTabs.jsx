@@ -11,7 +11,7 @@ const DetailTabs = ({ categories, sensorName, selected }) =>(
         {Object.keys(categories).map(category => (
             <li key={category} className={styles.navItem}>
                 <a
-                    href={`/geostreaming/detail/location/${sensorName}/detail_link/${category}`}
+                    href={`/geostreaming/detail/location/${sensorName}/${category}`}
                     className={selected === category ? styles.navLinkActive : styles.navLink}
                 >
                     {category}
