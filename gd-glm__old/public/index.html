@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700"
+          rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="public/styles/banners.css">
+
+    <!-- Main Stylesheet File -->
+    <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel="stylesheet">
+    <title>Great Lakes Monitoring</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let page = (window.location.href).toString().split("/#/")[1];
+            if (page === "welcome") {
+                $('#storyboard').show();
+            } else {
+                $('#storyboard').hide();
+            }
+            $('ul > li a[href]').filter(function () {
+                let path = (window.location.href).toString().split("/#/")[1];
+                return $(this).attr('href') === "/#/" + path;
+            }).addClass('active');
+            $("li").click(function () {
+                $('#sidebar').find('a').removeClass('active');
+            });
+            $('#sidebar').on('click', function (event) {
+                if ($(event.target).is("a")) {
+                    $(event.target).addClass('active');
+                }
+            });
+        });
+
+        // Open the Dropdown
+        function toggleDropdown(elementID) {
+            document.getElementById(elementID).classList.toggle("showDropdown");
+        }
+
+        // Close the Dropdown when the User Clicks outside of an open Dropdown
+        window.onclick = function (e) {
+            if (!e.target.matches('.dropdownLink')) {
+                let dropdownItems = document.getElementsByClassName("showDropdown");
+                if (dropdownItems.length > 0) {
+                    if (dropdownItems[0].classList.contains('showDropdown')) {
+                        dropdownItems[0].classList.remove('showDropdown');
+                    }
+                }
+                let dropdownLink = document.getElementById("dropdownLink");
+                if (dropdownLink.classList.contains('active')) {
+                    dropdownLink.classList.remove('active');
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+<noscript>
+    <p class="center">
+        This application requires JavaScript.
+        Please enable JavaScript to continue.
+    </p>
+</noscript>
+<script type="text/javascript" src="config.js"></script>
+<header>
+    <div class="header_banner">
+        <div>
+            <object class="header_image" data="public/images/logo.png" type="image/png">
+                <div></div>
+            </object>
+        </div>
+        <div class="header_title">
+            <p id="header-title-text" class="header_title_text">
+                Great Lakes Monitoring
+            </p>
+        </div>
+        <div class="header_subtitle">
+            <p id="header-subtitle-text" class="header_subtitle_text">
+                ILLINOIS-INDIANA SEA GRANT </p>
+        </div>
+        <div class="nav">
+            <ul id="sidebar">
+                <li class="welcome"><a href="/#/">WELCOME</a></li>
+                <li class="explore"><a href="/#/explore/all">EXPLORE</a></li>
+                <li class="download"><a href="/#/search">DOWNLOAD</a></li>
+                <li class="dropdown">
+                    <a class="dropdownLink" id="dropdownLink" onclick="toggleDropdown('dropdownItemsTrends')">
+                        TRENDS&#9660;
+                    </a>
+                    <span class="dropdownList" id="dropdownItemsTrends">
+                        <a href="/#/trendsstations">TRENDS STATIONS</a>
+                        <a href="/#/trendsregions">TRENDS REGIONS</a>
+                    </span>
+                </li>
+                <li class="analysis"><a href="/#/about">ABOUT</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+<div id='root'></div>
+</body>
+</html>

@@ -1,0 +1,360 @@
+.layersButton {
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    z-index: 1;
+    background-color: #5f99c1;
+}
+
+.layersButtonText {
+    font-weight: bold;
+    color: white;
+}
+
+.layersCloseButton {
+    color: white !important;
+}
+
+.layersCloseButtonDiv {
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    z-index: 5;
+}
+
+.layersHeader {
+    background-color: #467A9E !important;
+    color: white !important;
+    padding: 1em !important;
+    font-size: 120% !important;
+}
+
+.drawerSettings {
+    left: auto !important;
+    right: 0 !important;
+    margin-top: 3.8em;
+}
+
+.drawerSettings:before {
+    background: none !important;
+    right: 0 !important;
+}
+
+nav {
+    left: auto !important;
+    right: 0 !important;
+    width: 30em !important;
+}
+
+div > span > aside > nav {
+    height: calc(100vh - 6em) !important;
+}
+
+div > span > aside {
+    width: 20em !important;
+}
+
+span > span > aside {
+    z-index: 10 !important;
+}
+
+.layersDrawerClass {
+    visibility: hidden;
+}
+
+.exploreCard {
+    width: 24em;
+    margin-top: -2em;
+    margin-bottom: -1em;
+}
+
+.checkboxWidth {
+    width: 1em;
+}
+
+.checkboxLabel {
+    margin-left: 1.1em;
+}
+
+.col {
+    margin-left: 1em;
+    margin-top: 0.6em;
+    margin-bottom: -0.5em;
+    width: 90%;
+    padding-bottom: 0.2em;
+}
+
+.sliderStyle {
+    margin-left: 4em;
+    margin-top: 0.6em;
+    width: 12em;
+}
+
+.leftColumnExplore {
+    float: left;
+    height: calc(100vh - 3.8em);
+    overflow-y: auto;
+}
+
+.listHeaderStyle {
+    width: 16em;
+    font-size: x-large !important;
+    font-weight: bold !important;
+    background: #5f99c1;
+    padding: 0.5em;
+    color: #ffffff !important;
+    cursor: pointer;
+    margin-bottom: 1.3em !important;
+}
+
+.listHeadlineStyle {
+    margin-left: -0.7em !important;
+}
+
+.listItemsStyleOpen {
+    display: block;
+    padding-left: 0.5em;
+}
+
+.listItemsStyleClosed {
+    display: none;
+}
+
+.layersLegendDetails {
+    padding-left: 1em;
+    font-size: smaller;
+}
+
+.layersLegendText {
+    padding: 0.5em 1em;
+}
+
+img[src=""] {
+    display: none;
+}
+
+.layersGroup {
+    padding: 1em;
+}
+
+.layersGroupTitle {
+    padding-left: 1em;
+}
+
+.sectionPills {
+    margin: 0.5em 0 0.5em 0.5em;
+}
+
+.exploreButton {
+    width: 6em !important;
+    height: 2em !important;
+    font-weight: bold !important;
+    margin: 0.05em;
+    z-index: 0;
+    line-height: 0 !important;
+}
+
+.exploreButtonText {
+    color: black;
+    margin-left: -0.5em;
+}
+
+.regionCount {
+    float: right;
+    margin-top: 0.6em;
+}
+
+.regionLabel {
+    position: relative;
+    cursor: pointer;
+    padding: 4px;
+    margin: 5px 7.3px;
+    display: inline-block;
+}
+
+.regionLabel:before {
+    content: attr(data-tooltip);
+    display: none;
+    position: absolute;
+    background: #000;
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 10px;
+    line-height: 1.4;
+    min-width: 100px;
+    text-align: center;
+    border-radius: 4px;
+    left: 10%;
+    -ms-transform: translateX(-20%);
+    -moz-transform: translateX(-20%);
+    -webkit-transform: translateX(-20%);
+    transform: translateX(-20%);
+    top: 100%;
+    margin-top: 6px;
+}
+
+/* Tooltip arrow styling/placement */
+.regionLabel:after {
+    content: '';
+    display: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    left: 10%;
+    margin-left: -6px;
+    top: 100%;
+    border-width: 0 6px 6px;
+    border-bottom-color: #000;
+}
+
+/* Show the tooltip when hovering */
+.regionLabel:hover:before,
+.regionLabel:hover:after {
+    display: block;
+    z-index: 50;
+}
+
+.tabBackground {
+    background: #F5F5F5;
+    padding: 1em 0;
+    width: calc(100vw + 1.3em);
+}
+
+.tabTextStyle {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.tabTextStyleDisabled {
+    font-size: x-large;
+    font-weight: bold;
+    color: #a9a9a9;
+}
+
+.accordionIcon {
+    float: right;
+    position: relative;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+.groupAccordionIcon {
+    float: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+.exploreSourcesIcon {
+    min-width: 25%;
+    background-color: #E6ECF1;
+    position: relative;
+    cursor: pointer;
+}
+
+.exploreSourcesCountAndIcon {
+    width: 25%;
+    margin: 1em -4.8em 0.2em 0;
+    z-index: 4;
+    float: right;
+    cursor: pointer;
+}
+
+.listWidthStyle {
+    padding: 0 0.2em !important;
+}
+
+.listSubheaderStyle {
+    width: 15.8em;
+    font-size: x-large !important;
+    padding: 0.5em;
+    cursor: pointer;
+    text-transform: capitalize !important;
+}
+
+.exploreSubCard {
+    width: 24em;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    margin-left: -1em !important;
+}
+
+.exploreTitleCard {
+    display: flex;
+    font-size: 15px !important;
+}
+
+.exploreTitleLeft {
+    min-width: 20%;
+    text-align: center;
+}
+
+.exploreTitleRight {
+    width: 80%;
+    background-color: #E6ECF1;
+    padding: 1em;
+    margin: auto;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.exploreSourcesSelectionIcon {
+    position: relative;
+    top: calc(50% - 0.5em);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: xx-large;
+}
+
+div > span > aside > nav {
+    height: calc(100vh - 8em) !important;
+}
+
+.sourceItemsStyleOpen {
+    display: block;
+}
+
+.sourceItemsStyleClosed {
+    display: none;
+}
+
+@media screen and (max-device-width: 840px) {
+    .layersButton {
+        visibility: hidden;
+    }
+
+    .exploreCard {
+        width: 100% !important;
+        margin-left: 0.5em !important;
+    }
+
+    .exploreSourcesCountAndIcon {
+        background-color: #E6ECF1;
+        padding: 1em;
+        margin: 0 -4.8em 0 0;
+        cursor: pointer;
+        z-index: 3;
+        width: auto;
+    }
+
+    .exploreTitleCard {
+        font-size: xx-large !important;
+    }
+
+    .exploreSourcesSelectionIcon, .accordionIcon, .groupAccordionIcon {
+        font-size: 2em;
+    }
+
+    .leftColumnExplore {
+        margin-top: 1em;
+    }
+
+    .exploreTitleRight {
+        z-index: 3;
+    }
+}

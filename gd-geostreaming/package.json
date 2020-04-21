@@ -1,0 +1,13 @@
+{
+  "name": "gd-geostreaming",
+  "version": "3.3.0",
+  "main": "src/index.jsx",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.config.dev.js --color",
+    "build": "webpack --config webpack.config.prod.js"
+  },
+  "author": "NCSA",
+  "dependencies": {
+    "gd-core": "file:../gd-core"
+  }
+}
