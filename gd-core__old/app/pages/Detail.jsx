@@ -51,7 +51,7 @@ class Detail extends Component {
         const sensor = newProps.sensors.find(x => x.name === newProps.params.name);
         if (sensor) {
             const {parameters, categories, mappings} = newProps.parameters;
-            let categories_mapping = {};
+            let categories_mapping = { All: { parameters: [], type: 'time' } };
             sensor.parameters.map(parameter_name => {
                 const parameter = parameters.find(parameter => parameter.name === parameter_name);
                 if (parameter) {
@@ -66,6 +66,7 @@ class Detail extends Component {
                         } else {
                             categories_mapping[category.name]["parameters"].push(parameter)
                         }
+                        categories_mapping['All'].parameters.push(parameter);
                     })
                 }
             });
