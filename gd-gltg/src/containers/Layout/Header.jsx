@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) =>{
             marginLeft: 'auto !important'
         },
         dropdown: {
-            zIndex: 10
+            zIndex: 1100
         },
         dropdownIcon: {
             display: 'flex'
