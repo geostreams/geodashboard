@@ -2,10 +2,6 @@
   "name": "geodashboard",
   "version": "3.3.0",
   "main": "index.js",
-  "engines": {
-    "node": ">=12",
-    "npm": ">=6"
-  },
   "scripts": {
     "start": "lerna run start --stream --scope",
     "build": "lerna run build --stream --scope",
