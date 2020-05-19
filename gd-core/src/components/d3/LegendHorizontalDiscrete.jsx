@@ -9,6 +9,7 @@ type Props = {
     getBoxInfo: (idx: number) => ({ color: string; image: string; label: string; });
     activeBox: number;
     activeBoxLabel: string;
+    activeBoxBorderColor: string;
     boxWidth: number;
     boxHeight: number;
     gap: number;
@@ -24,6 +25,7 @@ const LegendHorizontalDiscrete = (props: Props) => {
         getBoxInfo,
         activeBox,
         activeBoxLabel,
+        activeBoxBorderColor,
         boxWidth,
         boxHeight,
         gap,
@@ -32,10 +34,11 @@ const LegendHorizontalDiscrete = (props: Props) => {
     } = props;
 
     const width = (boxWidth * boxCount) + (gap * (boxCount - 1));
-    const height = boxHeight + labelHeight + activeBoxLabelHeight + 30;
+    const height = boxHeight + labelHeight + activeBoxLabelHeight + 50;
 
     React.useEffect(() => {
-        const g = select(gRef.current);
+        const g = select(gRef.current)
+            .attr('transform', 'translate(0 20)');
         g.selectAll('*').remove();
 
         for (let i = 0; i < boxCount; i += 1) {
@@ -45,16 +48,8 @@ const LegendHorizontalDiscrete = (props: Props) => {
                 .append('g')
                 .attr('transform', `translate(${x} ${activeBoxLabelHeight})`);
 
-            if (activeBoxLabel && i === activeBox) {
-                gBox
-                    .append('text')
-                    .attr('dx', boxWidth / 2)
-                    .attr('text-anchor', 'middle')
-                    .attr('font-size', 20)
-                    .text(activeBoxLabel);
-            }
-
             if (color) {
+
                 gBox
                     .append('rect')
                     .attr('width', boxWidth)
@@ -69,7 +64,6 @@ const LegendHorizontalDiscrete = (props: Props) => {
                     .attr('height', boxHeight)
                     .attr('y', activeBoxLabelHeight);
             }
-
             gBox
                 .append('text')
                 .attr('dx', boxWidth / 2)
@@ -77,6 +71,27 @@ const LegendHorizontalDiscrete = (props: Props) => {
                 .attr('text-anchor', 'middle')
                 .attr('font-size', 11)
                 .text(label);
+
+            if (activeBoxLabel && i === activeBox) {
+                gBox
+                    .append('text')
+                    .attr('dx', boxWidth / 2)
+                    .attr('dy', 5)
+                    .attr('text-anchor', 'middle')
+                    .attr('font-size', 20)
+                    .text(activeBoxLabel);
+                if (activeBoxBorderColor) {
+                    gBox
+                        .append('rect')
+                        .attr('x', 0)
+                        .attr('y', -activeBoxLabelHeight)
+                        .attr('width', boxWidth)
+                        .attr('height', activeBoxLabelHeight + boxHeight + 15)
+                        .attr('stroke', activeBoxBorderColor)
+                        .attr('stroke-width', 3)
+                        .attr('fill', 'transparent');
+                }
+            }
         }
     });
 

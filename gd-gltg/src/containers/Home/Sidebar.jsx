@@ -83,6 +83,7 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                         activeBox={getNutrientValueCategoryIndex(featureValue)}
                         activeBoxLabel={featureValue}
                         activeBoxLabelHeight={15}
+                        activeBoxBorderColor="red"
                     />
                 </Container>
 
@@ -123,6 +124,11 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                     barStroke={(d) => d.selected ? 'red' : '#4682b4'}
                     barStrokeWidth={2}
                     barStrokeOpacity={(d) => d.selected ? 1 : 0}
+                    barFill={({ value }) => {
+                        const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(value)];
+                        return styleInfo.color ? styleInfo.color : '#000';
+                    }}
+                    barFillOpacity="1"
                     mouseOver={(d, idx, rects) => {
                         select(rects[idx]).attr('fill', 'brown');
                     }}
@@ -130,7 +136,7 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                         select(rects[idx]).attr('fill', '#4682b4');
                     }}
                     tooltipContent={(d) => `${d.value} lb/acre`}
-                    width={450}
+                    width={(window.innerWidth / 3) - 50}
                     height={235}
                     marginTop={50}
                     marginBottom={60}
