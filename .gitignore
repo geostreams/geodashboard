@@ -4,6 +4,7 @@
 *-compiled.js.map
 yarn-error.log
 npm-debug.log
+lerna-debug.log
 /tmp
 build
 node_modules

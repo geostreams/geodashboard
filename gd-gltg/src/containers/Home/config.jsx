@@ -56,7 +56,7 @@ export const FEATURE_STYLE_INFO = [
 ];
 
 export const getNutrientValueCategoryIndex = (nutrientLevel?: number): number => {
-    if (nutrientLevel !== 0 && !nutrientLevel) {
+    if ((nutrientLevel !== 0 && !nutrientLevel) || nutrientLevel < 0) {
         return 0;
     }
     if (nutrientLevel < 5) {

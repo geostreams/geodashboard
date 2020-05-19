@@ -81,7 +81,7 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                             idx === 0 ? undefined : (idx * 5) - 0.1
                         )]}
                         activeBox={getNutrientValueCategoryIndex(featureValue)}
-                        activeBoxLabel={featureValue}
+                        activeBoxLabel={featureValue >= 0 ? featureValue : ' '}
                         activeBoxLabelHeight={15}
                         activeBoxBorderColor="red"
                     />

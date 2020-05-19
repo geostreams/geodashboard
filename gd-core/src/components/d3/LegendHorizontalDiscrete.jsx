@@ -49,7 +49,6 @@ const LegendHorizontalDiscrete = (props: Props) => {
                 .attr('transform', `translate(${x} ${activeBoxLabelHeight})`);
 
             if (color) {
-
                 gBox
                     .append('rect')
                     .attr('width', boxWidth)
