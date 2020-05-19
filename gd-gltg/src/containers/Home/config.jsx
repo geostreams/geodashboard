@@ -202,39 +202,48 @@ export const VARIABLES_INFO = {
                     each of the measurement points represented on the map as
                     circles with a monitoring buoy. These stations were chosen
                     as part of the Illinois Nutrient Loss Reduction Strategy
-                    because they measure the runoff from about 75% of the land
-                    area of the state of Illinois.
+                    because collectively, they measure nutrients in the runoff
+                    from about 75% of the land area of the state of Illinois,
+                    and can be used to extrapolate the total mass of nutrients,
+                    or nutrient load, leaving the state of Illinois.
                 </p>
                 <b>HUC 8</b>
-                <p>HUCs, or Hydrologic Unit Codes are standardized boundaries
-                    that basically represent watersheds of different sizes,
-                    and are often used in water quality tracking. HUC-8 is a
-                    medium-sized watershed, and there are 31 such HUCs in
-                    the state of Illinois.
-                    The Illinois Nutrient Reduction Strategy has used modeling
-                    to estimate the nutrient yield from all of the HUC-8s
-                    in the State of Illinois.
+                <p>
+                    HUCs, or Hydrologic Unit Codes are standardized boundaries
+                    that basically are the boundaries of watersheds and are
+                    often used in water quality tracking. These HUCs are
+                    divided into successively smaller watershed units. HUC-8 is
+                    a medium-sized watershed, and there are 31 such HUCs in the
+                    state of Illinois. The Illinois Nutrient Reduction Strategy
+                    has used modeling to estimate the nutrient yield from all
+                    of the HUC-8s in the State of Illinois. The HUC 8 watershed
+                    boundaries allow for a more localized view of tracking
+                    nutrient loads than some of the larger “Illinois Drainage”
+                    boundaries.
                 </p>
                 <b>Watershed Boundaries</b>
-                <p>This view highlights the watershed or the land area that
+                <p>
+                    This view highlights the watershed or the land area that
                     drains through the point represented on the map as a pin.
-                    These locations are designated as “sentinel sites” because
-                    tracking water quality trends at these locations can be
-                    used to track progress in reducing nutrient loads from
-                    the watersheds above them. Many of these particular sites
-                    were selected because they are mostly contained within
-                    a single state, and thus can be used to track that
-                    state’s nutrient reduction progress.
+                    These locations are designated in Great Lakes to Gulf as
+                    &quot;Mississippi River Basin Trend Sites&quot; because
+                    calculating water quality trends at these locations can be
+                    used to track progress in reducing nutrient loads from the
+                    watersheds that drain to that point. Many of these
+                    particular sites were selected because they are mostly
+                    contained within a single state, and thus can be used to
+                    track that state’s nutrient reduction progress.
                 </p>
                 <b>Load to Gulf</b>
-                <p>This site, the Mississippi River at St. Francisville
-                    is used to measure the total load of nutrients that
-                    are delivered to the Gulf of Mexico in a given water
-                    year (12 Months beginning October 1). This site is used
-                    because it is just upstream from the Gulf, and yet does
-                    not behave like an estuary. Because some Mississippi River
-                    water is diverted to the Atchafalya River, appropriate
-                    corrections are made to report total load.
+                <p>
+                    This site, the Mississippi River at St. Francisville is
+                    used to measure the total load of nutrients that are
+                    delivered to the Gulf of Mexico in a given water year
+                    (12 Months beginning October 1). This site is used because
+                    it is just upstream from the Gulf, and yet does not behave
+                    like an estuary. Because some Mississippi River water is
+                    diverted to the Atchafalaya River, appropriate corrections
+                    are made to report total load.
                 </p>
             </div>
         )
