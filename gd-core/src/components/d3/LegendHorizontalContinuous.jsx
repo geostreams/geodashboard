@@ -34,7 +34,7 @@ type Props = {
     }
 }
 
-class Legend extends React.Component<Props> {
+class LegendHorizontalContinuous extends React.Component<Props> {
     containerEl: { current: null | HTMLElement } = React.createRef()
 
     legendProps: {
@@ -200,4 +200,4 @@ class Legend extends React.Component<Props> {
     }
 }
 
-export default Legend;
+export default LegendHorizontalContinuous;

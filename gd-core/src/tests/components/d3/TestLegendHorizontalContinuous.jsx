@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
-import { Legend } from '../../../components/d3';
+import { LegendHorizontalContinuous } from '../../../components/d3';
 
 const INITIAL_VALUE = 20;
 
-const TestLegend = () => {
+const TestLegendHorizontalContinuous = () => {
     const [value, updateValue] = React.useState(INITIAL_VALUE);
     return (
         <div style={{ margin: 50 }}>
@@ -19,7 +19,7 @@ const TestLegend = () => {
             </label>
 
             <div style={{ margin: 50 }}>
-                <Legend
+                <LegendHorizontalContinuous
                     domain={[0, 30]}
                     clamp
                     ticks={5}
@@ -43,4 +43,4 @@ const TestLegend = () => {
     );
 };
 
-export default TestLegend;
+export default TestLegendHorizontalContinuous;

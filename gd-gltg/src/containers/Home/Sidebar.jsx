@@ -9,14 +9,14 @@ import {
     makeStyles
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { BarChart, Legend } from 'gd-core/src/components/d3';
+import { BarChart, LegendHorizontalDiscrete } from 'gd-core/src/components/d3';
 import Carousel from 'gd-core/src/components/Carousel';
 
 import dataStories from '../DataStories/pages';
 import DataStoriesModal from '../DataStories/Details';
 
 import data from '../../data/data.json';
-import { LEGEND_DOMAIN } from './config';
+import { getNutrientValueCategoryIndex, FEATURE_STYLE_INFO } from './config';
 
 type Props = {
     featureId: string,
@@ -27,11 +27,6 @@ type Props = {
 const useStyle = makeStyles({
     header: {
         margin: '30px auto'
-    },
-    caption: {
-        fontSize: 12,
-        textAlign: 'center',
-        width: '100%'
     },
     featureProp: {
         color: '#E05769'
@@ -80,30 +75,15 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                 </Typography>
                 <Divider />
                 <Container>
-                    <Legend
-                        domain={LEGEND_DOMAIN}
-                        clamp
-                        ticks={5}
-                        tickFormat={(d) => {
-                            if (d === 25) {
-                                return '> 25';
-                            }
-                            if (d > 25) {
-                                return '';
-                            }
-                            return d;
-                        }}
-                        indicator={featureValue ?
-                            {
-                                value: data[nutrient][featureId][selectedYear],
-                                stroke: '#E05769',
-                                width: 2
-                            } :
-                            null}
+                    <LegendHorizontalDiscrete
+                        boxCount={7}
+                        getBoxInfo={(idx) => FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(
+                            idx === 0 ? undefined : (idx * 5) - 0.1
+                        )]}
+                        activeBox={getNutrientValueCategoryIndex(featureValue)}
+                        activeBoxLabel={featureValue}
+                        activeBoxLabelHeight={15}
                     />
-                    <div className={classes.caption}>
-                        Avg. of Surrounding Watersheds (lb/acre)
-                    </div>
                 </Container>
 
                 <Typography

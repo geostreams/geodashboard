@@ -4,7 +4,8 @@ import React from 'react';
 import BaseTests from './BaseTests';
 import TestBarChart from './components/d3/TestBarChart';
 import TestBoxPlot from './components/d3/TestBoxPlot';
-import TestLegend from './components/d3/TestLegend';
+import TestLegendHorizontalContinuous from './components/d3/TestLegendHorizontalContinuous';
+import TestLegendHorizontalDiscrete from './components/d3/TestLegendHorizontalDiscrete';
 import TestLineChart from './components/d3/TestLineChart';
 import TestMap from './components/ol/TestMap';
 import TestCarousel from './components/TestCarousel';
@@ -14,7 +15,8 @@ const tests = [
     { path: 'd3/barchart', name: 'BarChart', component: TestBarChart },
     { path: 'd3/boxplot', name: 'BoxPlot', component: TestBoxPlot },
     { path: 'd3/linechart', name: 'LineChart', component: TestLineChart },
-    { path: 'd3/legend', name: 'Legend', component: TestLegend },
+    { path: 'd3/legend-horizontal-continouus', name: 'Legend Horizontal Continuous', component: TestLegendHorizontalContinuous },
+    { path: 'd3/legend-horizontal-discrete', name: 'Legend Horizontal Discrete', component: TestLegendHorizontalDiscrete },
     { path: 'carousel', name: 'Carousel', component: TestCarousel }
 ];
 

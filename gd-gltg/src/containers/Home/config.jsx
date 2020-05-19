@@ -1,14 +1,9 @@
 // @flow
 import * as React from 'react';
-import {
-    interpolatePuBu,
-    rgb,
-    scaleLinear,
-    scaleSequential
-} from 'd3';
 import { Fill, Icon, Stroke, Style } from 'ol/style';
 
 import type FeatureType from 'ol/Feature';
+import { DEVICE_PIXEL_RATIO } from 'ol/has';
 import { transformExtent } from 'ol/proj';
 
 import huc8 from '../../data/huc8.geojson';
@@ -16,6 +11,7 @@ import watersheds from '../../data/watersheds.geojson';
 import drainage from '../../data/il-drainage.geojson';
 import monitoringSites from '../../data/il-monitoring-sites.geojson';
 import markerMonitoringSite from '../../images/marker_monitoring_site.png';
+import patternNoData from '../../images/pattern_no_data.png';
 import data from '../../data/data.json';
 
 // Coordinates for the bounds of the map converted to EPSG:3857
@@ -28,7 +24,76 @@ export const MAP_BOUNDS = transformExtent([
 
 export const ACTION_BAR_HEIGHT = 105;
 
-export const LEGEND_DOMAIN = [0, 30];
+export const FEATURE_STYLE_INFO = [
+    {
+        label: 'No data',
+        image: patternNoData
+    },
+    {
+        label: '<5',
+        color: '#EAEDF2'
+    },
+    {
+        label: '5-9.99',
+        color: '#C7D6E6'
+    },
+    {
+        label: '10-14.99',
+        color: '#93BDD4'
+    },
+    {
+        label: '15-19.99',
+        color: '#4D94C1'
+    },
+    {
+        label: '#20-24.99',
+        color: '#1B64A7'
+    },
+    {
+        label: '>25 lb/acre',
+        color: '#062D64'
+    }
+];
+
+export const getNutrientValueCategoryIndex = (nutrientLevel?: number): number => {
+    if (nutrientLevel !== 0 && !nutrientLevel) {
+        return 0;
+    }
+    if (nutrientLevel < 5) {
+        return 1;
+    }
+    if (nutrientLevel < 10) {
+        return 2;
+    }
+    if (nutrientLevel < 15) {
+        return 3;
+    }
+    if (nutrientLevel < 20) {
+        return 4;
+    }
+    if (nutrientLevel < 25) {
+        return 5;
+    }
+    return 6;
+};
+
+const noDataPattern = (() => {
+    const pixelRatio = DEVICE_PIXEL_RATIO;
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = 8 * pixelRatio;
+    canvas.height = 8 * pixelRatio;
+    // white background
+    context.fillStyle = 'white';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    // line
+    context.strokeStyle = '#b27eb2';
+    context.lineWidth = 2;
+    context.moveTo(0, 0);
+    context.lineTo(6 * pixelRatio, 3 * pixelRatio);
+    context.stroke();
+    return context.createPattern(canvas, 'repeat');
+})();
 
 export const getFeatureStyle = (
     feature: FeatureType,
@@ -49,20 +114,21 @@ export const getFeatureStyle = (
 
     const name = feature.get('Name') || feature.get('Station_ID');
 
-    const nitrogenLevel = name ?
+    const nutrientLevel = name ?
         parseFloat(data[nutrient][name][year]) || 0.0 :
         0;
 
-    const colorScale = scaleSequential(interpolatePuBu).domain(LEGEND_DOMAIN);
-    const scale = scaleLinear();
-    const colorLevel = rgb(colorScale(scale(nitrogenLevel)));
-    const { r, g, b, a } = colorLevel;
+    let color;
+    if (nutrientLevel >= 0) {
+        const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(nutrientLevel)];
+        color = styleInfo.color ? styleInfo.color : '#000';
+    } else {
+        color = noDataPattern;
+    }
 
     return (
         new Style({
-            fill: new Fill({
-                color: [r, g, b, a]
-            }),
+            fill: new Fill({ color }),
             stroke: new Stroke(strokeOptions),
             zIndex: isSelected ? 2 : 1
         })

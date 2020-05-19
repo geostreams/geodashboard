@@ -1,4 +1,5 @@
 export BarChart from './BarChart';
 export BoxPlot from './BoxPlot';
-export Legend from './Legend';
+export LegendHorizontalContinuous from './LegendHorizontalContinuous';
+export LegendHorizontalDiscrete from './LegendHorizontalDiscrete';
 export LineChart from './LineChart';
