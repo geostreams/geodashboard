@@ -12,6 +12,8 @@
     "gd-core__old": "file:../gd-core__old",
     "gd-geostreaming": "file:../gd-geostreaming",
     "gd-gltg__old": "file:../gd-gltg__old",
-    "material-components-web": "0.26.0"
+    "geobuf": "~3.0.1",
+    "material-components-web": "0.26.0",
+    "pbf": "~3.2.1"
   }
 }

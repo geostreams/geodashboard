@@ -1,15 +1,15 @@
 // @flow
 import * as React from 'react';
+import { DEVICE_PIXEL_RATIO } from 'ol/has';
+import { transformExtent } from 'ol/proj';
 import { Fill, Icon, Stroke, Style } from 'ol/style';
 
 import type FeatureType from 'ol/Feature';
-import { DEVICE_PIXEL_RATIO } from 'ol/has';
-import { transformExtent } from 'ol/proj';
 
-import huc8 from '../../data/huc8.geojson';
-import watersheds from '../../data/watersheds.geojson';
-import drainage from '../../data/il-drainage.geojson';
-import monitoringSites from '../../data/il-monitoring-sites.geojson';
+import huc8 from '../../data/huc8.pbf';
+import watersheds from '../../data/watersheds.pbf';
+import drainage from '../../data/il-drainage.pbf';
+import monitoringSites from '../../data/il-monitoring-sites.pbf';
 import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
 import data from '../../data/data.json';

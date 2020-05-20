@@ -30,6 +30,8 @@ import ImageWMSSource from 'ol/source/ImageWMS';
 import OSM, { ATTRIBUTION as OSM_ATTRIBUTION } from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import XYZ from 'ol/source/XYZ';
+import { decode } from 'geobuf';
+import Pbf from 'pbf';
 import { Map } from 'gd-core/src/components/ol';
 import { entries } from 'gd-core/src/utils/array';
 import { SLRSlope } from 'gd-core/src/utils/math';
@@ -164,6 +166,11 @@ class Home extends React.Component<Props, State> {
             dialogContent: {}
         };
 
+        const geoJSONFormat = new GeoJSON({
+            dataProjection: 'EPSG:4326',
+            featureProjection: 'EPSG:3857'
+        });
+
         this.layers = {
             basemaps: new GroupLayer({
                 title: 'Base Maps',
@@ -214,12 +221,26 @@ class Home extends React.Component<Props, State> {
                     const group = new GroupLayer({
                         layers: layers.map(({ url, style, interactive = false }) => {
                             const source = new VectorSource({
-                                url,
+                                loader: (extent) => {
+                                    const xhr = new XMLHttpRequest();
+                                    xhr.open('GET', url);
+                                    xhr.responseType = 'arraybuffer';
+                                    const onError = () => {
+                                        source.removeLoadedExtent(extent);
+                                    };
+                                    xhr.onerror = onError;
+                                    xhr.onload = () => {
+                                        if (xhr.status === 200) {
+                                            const geojson = decode(new Pbf(xhr.response));
+                                            source.addFeatures(geoJSONFormat.readFeatures(geojson));
+                                        } else {
+                                            onError();
+                                        }
+                                    };
+                                    xhr.send();
+                                },
                                 useSpatialIndex: true,
-                                format: new GeoJSON({
-                                    dataProjection: 'EPSG:4326',
-                                    featureProjection: 'EPSG:3857'
-                                })
+                                format: geoJSONFormat
                             });
                             const layer = new VectorLayer({
                                 source,
