@@ -1,22 +1,7 @@
 // @flow
 import * as React from 'react';
 import { format } from 'd3';
-import {
-    Box,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    FormControl,
-    FormLabel,
-    Grid,
-    IconButton,
-    InputBase,
-    NativeSelect,
-    Typography,
-    withStyles
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import InfoIcon from '@material-ui/icons/Info';
+import { Grid, Typography, withStyles } from '@material-ui/core';
 import DownTrendIcon from '@material-ui/icons/ArrowDropDown';
 import UpTrendIcon from '@material-ui/icons/ArrowDropUp';
 import FlatTrendIcon from '@material-ui/icons/FiberManualRecord';
@@ -49,53 +34,21 @@ import { HEADERS_HEIGHT } from '../Layout/Header';
 import Sidebar from './Sidebar';
 import {
     MAP_BOUNDS,
-    ACTION_BAR_HEIGHT,
     BOUNDARIES,
-    VARIABLES_INFO,
-    YEARS,
     getFeatureStyle
 } from './config';
 
-const styles = (theme) => ({
+const styles = {
     main: {
         height: `calc(100% - ${HEADERS_HEIGHT}px)`
     },
-    actionBar: {
-        position: 'absolute',
-        width: '100%',
-        height: ACTION_BAR_HEIGHT,
-        minHeight: 'unset',
-        borderBottom: '1px solid #ccc'
-    },
     mainContainer: {
         position: 'absolute',
-        top: ACTION_BAR_HEIGHT,
-        height: `calc(100% - ${ACTION_BAR_HEIGHT}px)`
+        height: '100%'
     },
     sidebar: {
         height: '100%',
         overflowY: 'auto'
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 200
-    },
-    formLabel: {
-        padding: theme.spacing(1)
-    },
-    selectButton: {
-        'background': theme.palette.primary.main,
-        'borderRadius': 4,
-        'color': theme.palette.primary.contrastText,
-        'position': 'relative',
-        'height': 42,
-        'padding': theme.spacing(2),
-        '&:focus': {
-            borderRadius: 4
-        },
-        '& option': {
-            color: 'initial'
-        }
     },
     fillContainer: {
         width: '100%',
@@ -113,17 +66,13 @@ const styles = (theme) => ({
             color: '#000'
         }
     }
-});
+};
 
 type Props = {
     classes: {
         main: string;
         mainContainer: string;
         sidebar: string;
-        actionBar: string;
-        formControl: string;
-        formLabel: string;
-        selectButton: string;
         fillContainer: string;
         trendIcon: string;
     }
@@ -136,11 +85,6 @@ type State = {
     nutrient: string;
     popupContent: ?React.Node;
     showPopupAt: ?[number, number];
-    showDialog: boolean;
-    dialogContent: {
-        title: string;
-        description: string | React.Node;
-    };
 }
 
 class Home extends React.Component<Props, State> {
@@ -161,9 +105,7 @@ class Home extends React.Component<Props, State> {
             year: 2017,
             nutrient: 'Nitrogen',
             popupContent: null,
-            showPopupAt: null,
-            showDialog: false,
-            dialogContent: {}
+            showPopupAt: null
         };
 
         const geoJSONFormat = new GeoJSON({
@@ -285,7 +227,7 @@ class Home extends React.Component<Props, State> {
         });
     };
 
-    handleBoundaryChange = ({ target: { value } }) => {
+    handleBoundaryChange = (boundary) => {
         if (this.selectedFeature) {
             const { nutrient, year } = this.state;
             this.selectedFeature.setStyle(
@@ -301,18 +243,18 @@ class Home extends React.Component<Props, State> {
         }
         this.layers[this.state.boundary].setVisible(false);
 
-        this.layers[value].setVisible(true);
+        this.layers[boundary].setVisible(true);
 
         const extent = createEmptyExtent();
-        this.layers[value].getLayers().forEach((layer) => {
+        this.layers[boundary].getLayers().forEach((layer) => {
             extentExtent(extent, layer.getSource().getExtent());
         });
         this.map.getView().fit(extent);
 
-        this.setState({ boundary: value, featureId: 'Statewide Summary' });
+        this.setState({ boundary, featureId: 'Statewide Summary' });
     };
 
-    handleVariableChange = ({ target: { value } }, variable: string) => {
+    handleVariableChange = (value, variable) => {
         this.setState(
             { [variable]: value },
             () => {
@@ -331,13 +273,6 @@ class Home extends React.Component<Props, State> {
                 }
             }
         );
-    };
-
-    showInfoDialog = (variable) => {
-        this.setState({
-            showDialog: true,
-            dialogContent: VARIABLES_INFO[variable]
-        });
     };
 
     handleMapClick = (event: MapBrowserEventType) => {
@@ -477,10 +412,9 @@ class Home extends React.Component<Props, State> {
             nutrient,
             year,
             showPopupAt,
-            popupContent,
-            showDialog,
-            dialogContent
+            popupContent
         } = this.state;
+
         return (
             <Map
                 className="fillContainer"
@@ -497,101 +431,6 @@ class Home extends React.Component<Props, State> {
                     click: this.handleMapClick
                 }}
             >
-                <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    className={classes.actionBar}
-                >
-                    <FormControl
-                        component="fieldset"
-                        className={classes.formControl}
-                    >
-                        <FormLabel
-                            component="legend"
-                            className={classes.formLabel}
-                        >
-                            <Box display="flex" alignItems="center">
-                                Boundary Type
-                                &nbsp;
-                                <InfoIcon
-                                    className="actionIcon"
-                                    fontSize="small"
-                                    onClick={(() => this.showInfoDialog('boundary'))}
-                                />
-                            </Box>
-                        </FormLabel>
-                        <NativeSelect
-                            className={classes.selectButton}
-                            value={boundary}
-                            onChange={this.handleBoundaryChange}
-                            input={<InputBase />}
-                        >
-                            {entries(BOUNDARIES).map(([name, { label }]) => (
-                                <option
-                                    key={name}
-                                    value={name}
-                                >
-                                    {label}
-                                </option>
-                            ))}
-                        </NativeSelect>
-                    </FormControl>
-                    <FormControl
-                        component="fieldset"
-                        className={classes.formControl}
-                    >
-                        <FormLabel
-                            component="legend"
-                            className={classes.formLabel}
-                        >
-                            <Box display="flex" alignItems="center">
-                                Nutrient
-                                &nbsp;
-                                <InfoIcon
-                                    className="actionIcon"
-                                    fontSize="small"
-                                    onClick={(() => this.showInfoDialog('nutrient'))}
-                                />
-                            </Box>
-                        </FormLabel>
-                        <NativeSelect
-                            className={classes.selectButton}
-                            value={nutrient}
-                            onChange={(e) => this.handleVariableChange(e, 'nutrient')}
-                            input={<InputBase />}
-                        >
-                            <option value="Phosphorus">Phosphorus</option>
-                            <option value="Nitrogen">Nitrogen</option>
-                        </NativeSelect>
-                    </FormControl>
-                    <FormControl
-                        component="fieldset"
-                        className={classes.formControl}
-                    >
-                        <FormLabel
-                            component="legend"
-                            className={classes.formLabel}
-                        >
-                            Year
-                        </FormLabel>
-                        <NativeSelect
-                            className={classes.selectButton}
-                            value={year}
-                            onChange={(e) => this.handleVariableChange(e, 'year')}
-                            input={<InputBase />}
-                        >
-                            {YEARS.map(
-                                (y) => (
-                                    <option key={y} value={y}>
-                                        {y}
-                                    </option>
-                                )
-                            )}
-                        </NativeSelect>
-                    </FormControl>
-                </Box>
-
                 <Grid
                     className={classes.mainContainer}
                     container
@@ -610,30 +449,14 @@ class Home extends React.Component<Props, State> {
                     >
                         <Sidebar
                             featureId={featureId}
-                            nutrient={nutrient}
+                            selectedBoundary={boundary}
+                            selectedNutrient={nutrient}
                             selectedYear={year}
+                            handleBoundaryChange={this.handleBoundaryChange}
+                            handleVariableChange={this.handleVariableChange}
                         />
                     </Grid>
                 </Grid>
-                <Dialog
-                    open={showDialog}
-                    onClose={() => this.setState({ showDialog: false })}
-                >
-                    <DialogTitle disableTypography>
-                        <Typography variant="h6" align="center">
-                            {dialogContent.title}
-                            <IconButton
-                                className="right noPadding actionIcon"
-                                onClick={() => this.setState({ showDialog: false })}
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                        </Typography>
-                    </DialogTitle>
-                    <DialogContent dividers>
-                        {dialogContent.description}
-                    </DialogContent>
-                </Dialog>
             </Map>
         );
     }

@@ -22,8 +22,6 @@ export const MAP_BOUNDS = transformExtent([
     50.37966027007533],
 'EPSG:4326', 'EPSG:3857');
 
-export const ACTION_BAR_HEIGHT = 105;
-
 export const FEATURE_STYLE_INFO = [
     {
         label: 'No data',

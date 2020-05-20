@@ -1,35 +1,76 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { select } from 'd3';
 import {
+    Box,
     Container,
+    Dialog,
+    DialogContent,
+    DialogTitle,
     Divider,
+    FormControl,
+    FormLabel,
     Grid,
+    IconButton,
+    InputBase,
+    NativeSelect,
     Typography,
     makeStyles
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import InfoIcon from '@material-ui/icons/Info';
 import { Link } from 'react-router-dom';
 import { BarChart, LegendHorizontalDiscrete } from 'gd-core/src/components/d3';
 import Carousel from 'gd-core/src/components/Carousel';
 
+import { entries } from 'gd-core/src/utils/array';
 import dataStories from '../DataStories/pages';
 import DataStoriesModal from '../DataStories/Details';
-
 import data from '../../data/data.json';
-import { getNutrientValueCategoryIndex, FEATURE_STYLE_INFO } from './config';
+import {
+    getNutrientValueCategoryIndex,
+    FEATURE_STYLE_INFO,
+    BOUNDARIES,
+    YEARS,
+    VARIABLES_INFO
+} from './config';
 
 type Props = {
-    featureId: string,
-    nutrient: string,
-    selectedYear: number
+    featureId: string;
+    selectedBoundary: string;
+    selectedNutrient: string;
+    selectedYear: number;
+    handleBoundaryChange: Function;
+    handleVariableChange: Function;
 }
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme) =>({
     header: {
         margin: '30px auto'
     },
     featureProp: {
         color: '#E05769'
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 200
+    },
+    formLabel: {
+        padding: theme.spacing(1)
+    },
+    selectButton: {
+        'background': theme.palette.primary.main,
+        'borderRadius': 4,
+        'color': theme.palette.primary.contrastText,
+        'position': 'relative',
+        'height': 42,
+        'padding': theme.spacing(2),
+        '&:focus': {
+            borderRadius: 4
+        },
+        '& option': {
+            color: 'initial'
+        }
     },
     carousel: {
         width: '100%',
@@ -41,18 +82,132 @@ const useStyle = makeStyles({
     carouselSlide: {
         width: '100%'
     }
-});
+}));
 
-const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
+const Sidebar = ({
+    featureId,
+    selectedBoundary,
+    selectedNutrient,
+    selectedYear,
+    handleBoundaryChange,
+    handleVariableChange
+}: Props) => {
     const classes = useStyle();
-    const featureValue = data[nutrient][featureId][selectedYear];
+
+    const featureValue = data[selectedNutrient][featureId][selectedYear];
 
     const [iframeProps, updateIframeProps] = React.useState({});
+
     const handleDataStoriesModalClose = () => updateIframeProps({});
+
+    const [dialogContent, updateDialogContent] = React.useState<null | {
+        title: string;
+        description: string | React.Node;
+    }>(null);
 
     return (
         <>
             <Container>
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <FormControl
+                        component="fieldset"
+                        className={classes.formControl}
+                    >
+                        <FormLabel
+                            component="legend"
+                            className={classes.formLabel}
+                        >
+                            <Box display="flex" alignItems="center">
+                                Boundary Type
+                                &nbsp;
+                                <InfoIcon
+                                    className="actionIcon"
+                                    fontSize="small"
+                                    onClick={(() => updateDialogContent(VARIABLES_INFO.boundary))}
+                                />
+                            </Box>
+                        </FormLabel>
+                        <NativeSelect
+                            className={classes.selectButton}
+                            value={selectedBoundary}
+                            onChange={({ target: { value } }) => {
+                                handleBoundaryChange(value);
+                            }}
+                            input={<InputBase />}
+                        >
+                            {entries(BOUNDARIES).map(([name, { label }]) => (
+                                <option
+                                    key={name}
+                                    value={name}
+                                >
+                                    {label}
+                                </option>
+                            ))}
+                        </NativeSelect>
+                    </FormControl>
+                    <FormControl
+                        component="fieldset"
+                        className={classes.formControl}
+                    >
+                        <FormLabel
+                            component="legend"
+                            className={classes.formLabel}
+                        >
+                            <Box display="flex" alignItems="center">
+                                Nutrient
+                                &nbsp;
+                                <InfoIcon
+                                    className="actionIcon"
+                                    fontSize="small"
+                                    onClick={(() => updateDialogContent(VARIABLES_INFO.nutrient))}
+                                />
+                            </Box>
+                        </FormLabel>
+                        <NativeSelect
+                            className={classes.selectButton}
+                            value={selectedNutrient}
+                            onChange={({ target: { value } }) => {
+                                handleVariableChange(value, 'nutrient');
+                            }}
+                            input={<InputBase />}
+                        >
+                            <option value="Phosphorus">Phosphorus</option>
+                            <option value="Nitrogen">Nitrogen</option>
+                        </NativeSelect>
+                    </FormControl>
+                    <FormControl
+                        component="fieldset"
+                        className={classes.formControl}
+                    >
+                        <FormLabel
+                            component="legend"
+                            className={classes.formLabel}
+                        >
+                            Year
+                        </FormLabel>
+                        <NativeSelect
+                            className={classes.selectButton}
+                            value={selectedYear}
+                            onChange={({ target: { value } }) => {
+                                handleVariableChange(value, 'year');
+                            }}
+                            input={<InputBase />}
+                        >
+                            {YEARS.map(
+                                (y) => (
+                                    <option key={y} value={y}>
+                                        {y}
+                                    </option>
+                                )
+                            )}
+                        </NativeSelect>
+                    </FormControl>
+                </Box>
+
                 <Typography
                     className={classes.header}
                     variant="h6"
@@ -98,7 +253,7 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                 <BarChart
                     data={
                         Object
-                            .entries(data[nutrient][featureId])
+                            .entries(data[selectedNutrient][featureId])
                             .map(
                                 ([year, value]) => ({
                                     year,
@@ -190,6 +345,24 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                     ))}
                 </Carousel>
             </Container>
+            {dialogContent ?
+                <Dialog open onClose={() => updateDialogContent(null)}>
+                    <DialogTitle disableTypography>
+                        <Typography variant="h6" align="center">
+                            {dialogContent.title}
+                            <IconButton
+                                className="right noPadding actionIcon"
+                                onClick={() => updateDialogContent(null)}
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        </Typography>
+                    </DialogTitle>
+                    <DialogContent dividers>
+                        {dialogContent.description}
+                    </DialogContent>
+                </Dialog> :
+                null}
         </>
     );
 };
