@@ -157,7 +157,7 @@ class Home extends React.Component<Props, State> {
 
         this.state = {
             boundary: 'drainage',
-            featureId: 'Overall summary',
+            featureId: 'Statewide Summary',
             year: 2017,
             nutrient: 'Nitrogen',
             popupContent: null,
@@ -309,7 +309,7 @@ class Home extends React.Component<Props, State> {
         });
         this.map.getView().fit(extent);
 
-        this.setState({ boundary: value, featureId: 'Overall summary' });
+        this.setState({ boundary: value, featureId: 'Statewide Summary' });
     };
 
     handleVariableChange = ({ target: { value } }, variable: string) => {
@@ -365,7 +365,7 @@ class Home extends React.Component<Props, State> {
 
             if (this.state.boundary !== 'drainage' || feature.get('interactive')) {
                 const { nutrient, year } = this.state;
-                if (previousFeatureId !== 'Overall summary' && previousFeature) {
+                if (previousFeatureId !== 'Statewide Summary' && previousFeature) {
                     previousFeature.setStyle(
                         getFeatureStyle(
                             previousFeature,
@@ -396,7 +396,7 @@ class Home extends React.Component<Props, State> {
                 } else {
                     // Feature is deselected
                     this.setState(
-                        { featureId: 'Overall summary', ...popupState },
+                        { featureId: 'Statewide Summary', ...popupState },
                         () => {
                             this.selectedFeature = null;
                         }

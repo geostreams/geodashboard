@@ -65,7 +65,7 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                     variant="subtitle2"
                     gutterBottom
                 >
-                    YEARLY AVERAGE - {selectedYear}:
+                    AVERAGE YIELD - {selectedYear}:
                     &nbsp;
                     <span className={classes.featureProp}>
                         {featureValue ?
