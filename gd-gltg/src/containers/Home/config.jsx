@@ -10,6 +10,7 @@ import huc8 from '../../data/huc8.pbf';
 import watersheds from '../../data/watersheds.pbf';
 import drainage from '../../data/il-drainage.pbf';
 import monitoringSites from '../../data/il-monitoring-sites.pbf';
+import watershedMonitoringSites from '../../data/watersheds-monitoring-sites.pbf';
 import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
 import data from '../../data/data.json';
@@ -184,6 +185,15 @@ export const BOUNDARIES: BoundaryType = {
             {
                 url: watersheds,
                 style: getFeatureStyle
+            },
+            {
+                url: watershedMonitoringSites,
+                style: () => new Style({
+                    image: new Icon(({
+                        src: markerMonitoringSite
+                    }))
+                }),
+                interactive: true
             }
         ]
     }
