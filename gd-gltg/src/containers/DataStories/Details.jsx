@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Box, Container, makeStyles, Modal, Typography } from '@material-ui/core';
+import { Container, makeStyles, Modal, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/core/SvgIcon/SvgIcon';
 
 const useStyle = makeStyles({
@@ -57,20 +57,11 @@ const Details = ({
                         onClick={handleClose}
                     />
                 </Typography>
-                {source ?
-                    <iframe
-                        src={source}
-                        title={title}
-                        className={classes.iframe}
-                    /> :
-                    <Box
-                        className={classes.iframe}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                    >
-                        Coming Soon
-                    </Box>}
+                <iframe
+                    src={source}
+                    title={title}
+                    className={classes.iframe}
+                />
             </Container>
         </Modal>
     );

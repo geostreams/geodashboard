@@ -28,6 +28,24 @@ const useStyle = makeStyles({
     card: {
         width: '18rem',
         height: '18rem'
+    },
+    missing: {
+        '&::after': {
+            content: '"Coming soon"',
+            background: '#000',
+            width: '100%',
+            height: '100%',
+            display: 'block',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            opacity: 0.3,
+            textAlign: 'center',
+            fontSize: 20,
+            cursor: 'not-allowed',
+            color: '#fff',
+            paddingTop: '30%'
+        }
     }
 });
 
@@ -56,12 +74,12 @@ const DataStories = () => {
                         <Grid key={title} item xs={4}>
                             <Card
                                 raised
-                                onClick={() => updateIframeProps({
+                                onClick={() => slides && updateIframeProps({
                                     source: slides,
                                     title
                                 })}
                             >
-                                <CardActionArea>
+                                <CardActionArea className={slides ? '' : classes.missing}>
                                     <CardMedia
                                         component="img"
                                         src={thumbnail}
