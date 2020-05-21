@@ -19,6 +19,7 @@ import data from '../../data/data.json';
 import { getNutrientValueCategoryIndex, FEATURE_STYLE_INFO } from './config';
 
 type Props = {
+    boundaryType: string,
     featureId: string,
     nutrient: string,
     selectedYear: number
@@ -43,7 +44,7 @@ const useStyle = makeStyles({
     }
 });
 
-const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
+const Sidebar = ({ boundaryType, featureId, nutrient, selectedYear }: Props) => {
     const classes = useStyle();
     const featureValue = data[nutrient][featureId][selectedYear];
 
@@ -143,6 +144,16 @@ const Sidebar = ({ featureId, nutrient, selectedYear }: Props) => {
                     marginLeft={60}
                     marginRight={20}
                 />
+                {boundaryType === 'huc8' ?
+                    <Typography variant="subtitle2" align="center" gutterBottom>
+                        <a target="_blank" 
+                            rel="noopener noreferrer" 
+                            href="https://www2.illinois.gov/epa/topics/water-quality/watershed-management/excess-nutrients/Documents/NLRS_SCIENCE_ASSESSMENT_UPDATE_2019%20v7_FINAL%20VERSION_web.pdf"
+                        >
+                                Illinois Nutrient Reduction Strategy Science Assessment Update 2019
+                        </a>
+                    </Typography> : null}
+                
             </Container>
             <DataStoriesModal
                 {...iframeProps}

@@ -612,6 +612,7 @@ class Home extends React.Component<Props, State> {
                             featureId={featureId}
                             nutrient={nutrient}
                             selectedYear={year}
+                            boundaryType={boundary}
                         />
                     </Grid>
                 </Grid>
