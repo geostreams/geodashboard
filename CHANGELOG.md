@@ -21,9 +21,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1303](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1303)
 - Binning description in the selection Menu Bar now appears as its own section in the row
   [GEOD-1248](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1248)
-  
 - Updated the font size and spacing in the Detail Page charts
   [GEOD-1294](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1294)
+- Updated terms in the landing page
+  [GLGVO-628](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-628)
 
 ### Fixed
 - Click the 'x' in the top right corner of the Detail Page, the page returns to the Explore Page
