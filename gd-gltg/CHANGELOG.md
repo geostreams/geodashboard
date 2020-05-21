@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## UNRELEASED
 
 ### Added
+- Added citation for HUC-8 dashboard
+  [GLGVO-630] (https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-630)
 
 ### Changed
 - Create Intervals as a Reusable Component
