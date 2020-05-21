@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-527](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-527)
 - Add lerna for package management
   [GLGVO-558](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-588)
+- Added catchment polygon for Iowa River at Wapello
+  [GLGVO-629](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-629) 
 
 ### Changed
 - Create Intervals as a Reusable Component
