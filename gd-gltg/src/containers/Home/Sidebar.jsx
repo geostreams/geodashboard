@@ -297,6 +297,16 @@ const Sidebar = ({
                     marginLeft={60}
                     marginRight={20}
                 />
+                {selectedBoundary === 'huc8' ?
+                    <Typography variant="subtitle2" align="center" gutterBottom>
+                        <a target="_blank" 
+                            rel="noopener noreferrer" 
+                            href="https://www2.illinois.gov/epa/topics/water-quality/watershed-management/excess-nutrients/Documents/NLRS_SCIENCE_ASSESSMENT_UPDATE_2019%20v7_FINAL%20VERSION_web.pdf"
+                        >
+                                Illinois Nutrient Reduction Strategy Science Assessment Update 2019
+                        </a>
+                    </Typography> : null}
+                
             </Container>
             <DataStoriesModal
                 {...iframeProps}
