@@ -52,8 +52,7 @@ const useStyle = makeStyles((theme) =>({
         color: '#E05769'
     },
     formControl: {
-        margin: theme.spacing(1),
-        minWidth: 200
+        margin: theme.spacing(1)
     },
     formLabel: {
         padding: theme.spacing(1)
@@ -223,7 +222,7 @@ const Sidebar = ({
                     AVERAGE YIELD - {selectedYear}:
                     &nbsp;
                     <span className={classes.featureProp}>
-                        {featureValue ?
+                        {featureValue >= 0 ?
                             `${featureValue} lb/acre` :
                             'No data is available'}
                     </span>
