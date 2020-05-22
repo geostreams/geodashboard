@@ -20,17 +20,15 @@ import __old_TrendsDetail from 'gd-gltg__old/app/pages/TrendsDetail';
 // $FlowFixMe
 import __old_Analysis from 'gd-gltg__old/app/pages/Analysis';
 // $FlowFixMe
-import __old_Partners from 'gd-gltg__old/app/pages/Partners';
-// $FlowFixMe
 import __old_Glossary from 'gd-gltg__old/app/pages/Glossary';
 // $FlowFixMe
 import __old_Help from 'gd-gltg__old/app/pages/Help';
-// $FlowFixMe
-import __old_FAQ from 'gd-gltg__old/app/pages/FAQ';
 
 import About from './containers/About';
 import DataStories from './containers/DataStories';
+import FAQ from './containers/FAQ';
 import Home from './containers/Home';
+import Partners from './containers/Partners';
 import GLTGLayout from './containers/Layout';
 import Tests from './tests/Tests';
 
@@ -51,10 +49,10 @@ const routes = Object.assign(
         '/geostreaming/trendsregions': { component: hocs.withLayout(GLTGLayout, __old_TrendsRegion) },
         '/geostreaming/trendsdetail/region/:region/:parameter/:season': { component: hocs.withLayout(GLTGLayout, __old_TrendsDetail) },
         '/geostreaming/analysis': { component: hocs.withLayout(GLTGLayout, __old_Analysis) },
-        '/partners': { component: hocs.withLayout(GLTGLayout, __old_Partners) },
+        '/partners': { component: hocs.withLayout(GLTGLayout, Partners) },
         '/glossary': { component: hocs.withLayout(GLTGLayout, __old_Glossary) },
         '/help': { component: hocs.withLayout(GLTGLayout, __old_Help) },
-        '/faq': { component: hocs.withLayout(GLTGLayout, __old_FAQ) }
+        '/faq': { component: hocs.withLayout(GLTGLayout, FAQ) }
     }
 );
 
