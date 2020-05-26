@@ -25,7 +25,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1294](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1294)
 - Updated terms in the landing page
   [GLGVO-628](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-628)
-
+- Rename "watershed boundary" to "Trend Watersheds" under Boundary Types
+  [GLGVO-637](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-637)
 ### Fixed
 - Click the 'x' in the top right corner of the Detail Page, the page returns to the Explore Page
   [GEOD-1274](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1274)
