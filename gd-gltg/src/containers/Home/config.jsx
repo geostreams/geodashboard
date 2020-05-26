@@ -178,7 +178,7 @@ export const BOUNDARIES: BoundaryType = {
     },
     watershed: {
         visible: false,
-        label: 'Watersheds',
+        label: 'Trend Watersheds',
         layers: [
             {
                 url: watersheds,
