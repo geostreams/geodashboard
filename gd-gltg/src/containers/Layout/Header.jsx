@@ -59,9 +59,6 @@ type Props = {
 const Header = ({ location }: Props) => {
     const classes = useStyles();
 
-    const aboutMenuEl = React.useRef(null);
-    const [aboutMenuOpen, updateAboutMenuOpen] = React.useState(false);
-
     const geostreamingMenuEl = React.useRef(null);
     const [geostreamingMenuOpen, updateGeostreamingMenuOpen] = React.useState(false);
 
@@ -97,15 +94,16 @@ const Header = ({ location }: Props) => {
                         value="data-stories"
                     />
                     <Tab
-                        ref={aboutMenuEl}
-                        component="a"
-                        label={
-                            <span className={classes.dropdownIcon}>
-                                About GLTG <ArrowDropDownIcon />
-                            </span>
-                        }
-                        value="about"
-                        onClick={() => updateAboutMenuOpen(true)}
+                        label="Partners"
+                        component={Link}
+                        to="/partners"
+                        value="partners"
+                    />
+                    <Tab
+                        label="FAQ"
+                        component={Link}
+                        to="/faq"
+                        value="faq"
                     />
                     <Tab
                         ref={geostreamingMenuEl}
@@ -119,26 +117,6 @@ const Header = ({ location }: Props) => {
                         value="geostreaming"
                         onClick={() => updateGeostreamingMenuOpen(true)}
                     />
-                    <Popper
-                        anchorEl={aboutMenuEl.current}
-                        open={aboutMenuOpen}
-                    >
-                        <ClickAwayListener
-                            onClickAway={() => updateAboutMenuOpen(false)}
-                        >
-                            <Paper>
-                                <MenuItem component={Link} to="/about">
-                                    About
-                                </MenuItem>
-                                <MenuItem component={Link} to="/about/partners">
-                                    Partners
-                                </MenuItem>
-                                <MenuItem component={Link} to="/about/faq">
-                                    FAQ
-                                </MenuItem>
-                            </Paper>
-                        </ClickAwayListener>
-                    </Popper>
                     <Popper
                         className={classes.dropdown}
                         anchorEl={geostreamingMenuEl.current}

@@ -19,8 +19,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-623](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-623)
 - Replaced geojson layers with geobuf on the landing page map
   [GEOD-1334](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1334)
+- Updated styling of data stories
+  [GLGVO-633](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-633)
 - Replaced the map popup with a permanent info box
   [GLGVO-634](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-634)
+- Updated partners and faq pages
+  [GLGVO-635](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-635)
 
 ### Fixed
 - Click the 'x' in the top right corner of the Detail Page, the page returns to the Explore Page
