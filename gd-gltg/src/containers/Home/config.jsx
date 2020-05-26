@@ -15,6 +15,36 @@ import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
 import data from '../../data/data.json';
 
+export const OVERALL_DATA = {
+    drainage: {
+        contributingWaterways: 122233,
+        cumulativeAcres: 36055019.8
+    },
+    huc8: {
+        contributingWaterways: '',
+        cumulativeAcres: ''
+    },
+    watershed: {
+        contributingWaterways: '',
+        cumulativeAcres: ''
+    }
+};
+
+export const getOverallFeatureLabels = (boundary: string) => {
+    // Returns an array of two items: the first item is the active boundary label,
+    // and the second item is its variable name in `data.json`, which can be used for rendering labels too.
+    switch (boundary) {
+        case 'drainage':
+            return ['Illinois', 'Statewide Summary'];
+        case 'huc8':
+            return ['Illinois', 'Statewide Summary'];
+        case 'watershed':
+            return ['Watershed', 'Watershed Summary'];
+        default:
+            return [null, null];
+    }
+};
+
 // Coordinates for the bounds of the map converted to EPSG:3857
 export const MAP_BOUNDS = transformExtent([
     -114.91457195054475,
@@ -172,7 +202,8 @@ export const BOUNDARIES: BoundaryType = {
         layers: [
             {
                 url: huc8,
-                style: getFeatureStyle
+                style: getFeatureStyle,
+                interactive: true
             }
         ]
     },

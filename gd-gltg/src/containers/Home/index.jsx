@@ -1,10 +1,11 @@
 // @flow
 import * as React from 'react';
 import { format } from 'd3';
-import { Grid, Typography, withStyles } from '@material-ui/core';
+import { Container, Grid, Typography, withStyles } from '@material-ui/core';
 import DownTrendIcon from '@material-ui/icons/ArrowDropDown';
 import UpTrendIcon from '@material-ui/icons/ArrowDropUp';
 import FlatTrendIcon from '@material-ui/icons/FiberManualRecord';
+import Control from 'gd-core/src/components/ol/Control';
 import { createEmpty as createEmptyExtent, extend as extentExtent } from 'ol/extent';
 import GeoJSON from 'ol/format/GeoJSON';
 import GroupLayer from 'ol/layer/Group';
@@ -31,11 +32,14 @@ import type { Layer as LayerType } from 'ol/layer';
 import data from '../../data/data.json';
 import { HEADERS_HEIGHT } from '../Layout/Header';
 
+import BoundaryInfo from './BoundaryInfo';
 import Sidebar from './Sidebar';
 import {
     MAP_BOUNDS,
     BOUNDARIES,
-    getFeatureStyle
+    getOverallFeatureLabels,
+    getFeatureStyle,
+    OVERALL_DATA
 } from './config';
 
 const styles = {
@@ -65,6 +69,14 @@ const styles = {
         '&.black': {
             color: '#000'
         }
+    },
+    boundaryInfoControl: {
+        top: '0.5em',
+        left: '3em',
+        background: '#fff',
+        height: 75,
+        border: '2px solid #aaa',
+        paddingTop: 10
     }
 };
 
@@ -75,38 +87,44 @@ type Props = {
         sidebar: string;
         fillContainer: string;
         trendIcon: string;
+        boundaryInfoControl: string;
     }
 }
 
 type State = {
     boundary: string;
-    featureId: string;
+    featureId: string | null;
+    regionLabel: string | null;
+    selectedFeature: FeatureType | null;
     year: number;
     nutrient: string;
-    popupContent: ?React.Node;
-    showPopupAt: ?[number, number];
 }
 
 class Home extends React.Component<Props, State> {
     map: MapType;
 
+    boundaryInfoControl: Control;
+
     layers: {
         [key: string]: LayerType
     };
 
-    selectedFeature: ?FeatureType;
-
     constructor(props) {
         super(props);
 
+        const [regionLabel, featureId] = getOverallFeatureLabels('drainage');
         this.state = {
             boundary: 'drainage',
-            featureId: 'Statewide Summary',
+            featureId,
+            regionLabel,
+            selectedFeature: null,
             year: 2017,
-            nutrient: 'Nitrogen',
-            popupContent: null,
-            showPopupAt: null
+            nutrient: 'Nitrogen'
         };
+
+        this.boundaryInfoControl = new Control({
+            className: this.props.classes.boundaryInfoControl
+        });
 
         const geoJSONFormat = new GeoJSON({
             dataProjection: 'EPSG:4326',
@@ -159,7 +177,7 @@ class Home extends React.Component<Props, State> {
                 ]
             }),
             ...entries(BOUNDARIES).reduce(
-                (boundaryLayers, [name, { visible, layers }]) => {
+                (boundaryLayers, [name, { visible, layers }], idx) => {
                     const group = new GroupLayer({
                         layers: layers.map(({ url, style, interactive = false }) => {
                             const source = new VectorSource({
@@ -193,6 +211,7 @@ class Home extends React.Component<Props, State> {
                                 }
                             });
                             layer.set('interactive', interactive);
+                            layer.set('idx', idx + 1);  // this arbitrary id is used in click the event to associate features within a group. It starts from 1 to make it a truthy value.
                             source.on(
                                 'change',
                                 () => {
@@ -211,13 +230,12 @@ class Home extends React.Component<Props, State> {
                 {}
             )
         };
-        this.selectedFeature = null;
     }
 
     updateMap = (map) => {
         this.map = map;
 
-        // change mouse cursor when over marker
+        // change cursor when mouse is over interactive layers
         this.map.on('pointermove', (e) => {
             const pixel = map.getEventPixel(e.originalEvent);
             const feature = map.forEachFeatureAtPixel(pixel, (_, layer) => {
@@ -228,18 +246,18 @@ class Home extends React.Component<Props, State> {
     };
 
     handleBoundaryChange = (boundary) => {
-        if (this.selectedFeature) {
+        const { selectedFeature } = this.state;
+        if (selectedFeature) {
             const { nutrient, year } = this.state;
-            this.selectedFeature.setStyle(
+            selectedFeature.setStyle(
                 getFeatureStyle(
-                    this.selectedFeature,
+                    selectedFeature,
                     null,
                     nutrient,
                     year,
                     false
                 )
             );
-            this.selectedFeature = null;
         }
         this.layers[this.state.boundary].setVisible(false);
 
@@ -251,7 +269,8 @@ class Home extends React.Component<Props, State> {
         });
         this.map.getView().fit(extent);
 
-        this.setState({ boundary, featureId: 'Statewide Summary' });
+        const [regionLabel, featureId] = getOverallFeatureLabels(boundary);
+        this.setState({ boundary, featureId, regionLabel, selectedFeature: null });
     };
 
     handleVariableChange = (value, variable) => {
@@ -259,11 +278,12 @@ class Home extends React.Component<Props, State> {
             { [variable]: value },
             () => {
                 this.layers[this.state.boundary].getLayers().forEach((layer) => layer.changed());
-                if (this.selectedFeature) {
+                const { selectedFeature } = this.state;
+                if (selectedFeature) {
                     const { nutrient, year } = this.state;
-                    this.selectedFeature.setStyle(
+                    selectedFeature.setStyle(
                         getFeatureStyle(
-                            this.selectedFeature,
+                            selectedFeature,
                             null,
                             nutrient,
                             year,
@@ -276,77 +296,63 @@ class Home extends React.Component<Props, State> {
     };
 
     handleMapClick = (event: MapBrowserEventType) => {
-        // Get the feature from the click event, update the state, and
-        // add the feature to the selection layer
-        const { featureId: previousFeatureId } = this.state;
-        const previousFeature = this.selectedFeature;
+        const {
+            featureId: previousFeatureId,
+            selectedFeature: previousFeature
+        } = this.state;
 
-        const feature = event.map.forEachFeatureAtPixel(event.pixel, (f) => f);
-
-        if (feature) {
-            const selectedFeature = feature.get('interactive') ?
-                // A site marker is clicked
-                this.layers.drainage
-                    .getLayersArray()[0]
-                    .getSource()
-                    .getFeatures()
-                    .find((element) => element.get('Station_ID') === feature.get('Station_ID')) :
-                feature;
-
-            const popupState = {
-                showPopupAt: event.coordinate,
-                popupContent: this.getPopupContent(selectedFeature)
-            };
-
-            if (this.state.boundary !== 'drainage' || feature.get('interactive')) {
-                const { nutrient, year } = this.state;
-                if (previousFeatureId !== 'Statewide Summary' && previousFeature) {
-                    previousFeature.setStyle(
-                        getFeatureStyle(
-                            previousFeature,
-                            null,
-                            nutrient,
-                            year,
-                            false
-                        )
-                    );
+        const clickedLayerId = event.map.forEachFeatureAtPixel(
+            event.pixel,
+            (feature, layer) => {
+                if (layer.get('interactive')) {
+                    return layer.get('idx');
                 }
+                return false;
+            }
+        );
+        const selectedFeature = event.map.forEachFeatureAtPixel(
+            event.pixel,
+            (feature, layer) => {
+                if (layer.get('idx') === clickedLayerId && feature.getGeometry().getType().indexOf('Polygon') > -1) {
+                    return feature;
+                }
+                return false;
+            },
+            {
+                hitTolerance: 10
+            }
+        );
 
-                const featureId = selectedFeature.get('Name') || selectedFeature.get('Station_ID');
-                if (featureId !== previousFeatureId) {
-                    // Feature is selected
-                    selectedFeature.setStyle(getFeatureStyle(
-                        selectedFeature,
+        if (selectedFeature) {
+            const { boundary, nutrient, year } = this.state;
+            const [regionLabel, overallFeatureId] = getOverallFeatureLabels(boundary);
+            if (previousFeatureId !== overallFeatureId && previousFeature) {
+                previousFeature.setStyle(
+                    getFeatureStyle(
+                        previousFeature,
                         null,
                         nutrient,
                         year,
-                        true
-                    ));
-                    this.setState(
-                        { featureId, ...popupState },
-                        () => {
-                            this.selectedFeature = selectedFeature;
-                        }
-                    );
-                } else {
-                    // Feature is deselected
-                    this.setState(
-                        { featureId: 'Statewide Summary', ...popupState },
-                        () => {
-                            this.selectedFeature = null;
-                        }
-                    );
-                }
-            } else {
-                this.setState(popupState);
+                        false
+                    )
+                );
             }
-        } else {
-            this.setState(
-                {
-                    showPopupAt: null,
-                    popupContent: null
-                }
-            );
+
+            const featureId = selectedFeature.get('Name') || selectedFeature.get('Station_ID');
+            if (featureId !== previousFeatureId) {
+                // Feature is selected
+                selectedFeature.setStyle(getFeatureStyle(
+                    selectedFeature,
+                    null,
+                    nutrient,
+                    year,
+                    true
+                ));
+                this.setState({ featureId, selectedFeature });
+            } else {
+                // Feature is deselected
+                this.setState({ featureId: overallFeatureId, regionLabel, selectedFeature: null });
+            }
         }
     };
 
@@ -389,18 +395,34 @@ class Home extends React.Component<Props, State> {
         });
     };
 
-    getPopupContent = (feature: FeatureType) => {
-        const featureName = feature.get('Name') || feature.get('Station_ID');
-        const { contributing_waterways, cumulative_acres } = feature.getProperties();
+    getBoundaryInfoContent = () => {
+        const { selectedFeature, boundary } = this.state;
+        let featureName;
+        let contributingWaterways;
+        let cumulativeAcres;
+
+        if (selectedFeature) {
+            featureName = selectedFeature.get('Name') || selectedFeature.get('Station_ID');
+            const featureProps = selectedFeature.getProperties();
+            contributingWaterways = featureProps.contributing_waterways;
+            cumulativeAcres = featureProps.cumulative_acres;
+        } else {
+            featureName = getOverallFeatureLabels(boundary).join(' - ');
+            contributingWaterways = OVERALL_DATA[boundary].contributingWaterways;
+            cumulativeAcres = OVERALL_DATA[boundary].cumulativeAcres;
+        }
 
         return (
-            <Typography variant="caption">
-                <span><b>{featureName}</b></span>
-                <br />
-                <span>{format(',')(contributing_waterways)} Contributing Waterways</span>
-                <br />
-                <span>{format(',')(cumulative_acres)} Cumulative Acres</span>
-            </Typography>
+            <>
+                <Typography variant="subtitle2" gutterBottom>
+                    <span><b>{featureName}</b></span>
+                </Typography>
+                <Typography variant="caption">
+                    <span>{format(',')(contributingWaterways)} Contributing Waterways</span>
+                    <br />
+                    <span>{format(',')(cumulativeAcres)} Cumulative Acres</span>
+                </Typography>
+            </>
         );
     };
 
@@ -408,11 +430,10 @@ class Home extends React.Component<Props, State> {
         const { classes } = this.props;
         const {
             boundary,
+            regionLabel,
             featureId,
             nutrient,
-            year,
-            showPopupAt,
-            popupContent
+            year
         } = this.state;
 
         return (
@@ -422,11 +443,10 @@ class Home extends React.Component<Props, State> {
                 minZoom={5}
                 extent={MAP_BOUNDS}
                 center={[-9972968, 4972295]}
+                controls={[this.boundaryInfoControl]}
                 layers={Object.values(this.layers)}
                 layerSwitcherOptions={{}}
                 updateMap={this.updateMap}
-                popupContent={popupContent}
-                showPopupAt={showPopupAt}
                 events={{
                     click: this.handleMapClick
                 }}
@@ -448,6 +468,7 @@ class Home extends React.Component<Props, State> {
                         xs={4}
                     >
                         <Sidebar
+                            regionLabel={regionLabel}
                             featureId={featureId}
                             selectedBoundary={boundary}
                             selectedNutrient={nutrient}
@@ -457,6 +478,10 @@ class Home extends React.Component<Props, State> {
                         />
                     </Grid>
                 </Grid>
+                <BoundaryInfo
+                    el={this.boundaryInfoControl.element}
+                    content={<Container>{this.getBoundaryInfoContent()}</Container>}
+                />
             </Map>
         );
     }

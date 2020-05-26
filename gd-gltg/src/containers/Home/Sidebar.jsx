@@ -36,7 +36,8 @@ import {
 } from './config';
 
 type Props = {
-    featureId: string;
+    regionLabel: string | null;
+    featureId: string | null;
     selectedBoundary: string;
     selectedNutrient: string;
     selectedYear: number;
@@ -84,6 +85,7 @@ const useStyle = makeStyles((theme) =>({
 }));
 
 const Sidebar = ({
+    regionLabel,
     featureId,
     selectedBoundary,
     selectedNutrient,
@@ -93,7 +95,7 @@ const Sidebar = ({
 }: Props) => {
     const classes = useStyle();
 
-    const featureValue = data[selectedNutrient][featureId][selectedYear];
+    const featureValue = data[selectedNutrient][featureId] ? data[selectedNutrient][featureId][selectedYear] : -1;  // -1 means no data
 
     const [iframeProps, updateIframeProps] = React.useState({});
 
@@ -211,7 +213,7 @@ const Sidebar = ({
                     className={classes.header}
                     variant="h6"
                 >
-                    ILLINOIS &gt; <span className={classes.featureProp}>{featureId}</span>
+                    {regionLabel} - <span className={classes.featureProp}>{featureId}</span>
                 </Typography>
 
                 <Typography
@@ -246,57 +248,59 @@ const Sidebar = ({
                     variant="subtitle2"
                     gutterBottom
                 >
-                    ANNUAL NITROGEN YIELD 1980-2017
+                    ANNUAL {selectedNutrient.toUpperCase()} YIELD 1980-2017
                 </Typography>
                 <Divider />
-                <BarChart
-                    data={
-                        Object
-                            .entries(data[selectedNutrient][featureId])
-                            .map(
-                                ([year, value]) => ({
-                                    year,
-                                    value,
-                                    selected: +year === +selectedYear
-                                })
-                            )
-                    }
-                    xAxisProps={{
-                        key: 'year',
-                        title: 'Year',
-                        titlePadding: 50,
-                        stroke: '#4682b4',
-                        strokeWidth: 2
-                    }}
-                    yAxisProps={{
-                        key: 'value',
-                        title: 'lb/acre',
-                        titlePadding: 40,
-                        stroke: '#4682b4',
-                        strokeWidth: 2
-                    }}
-                    barStroke={(d) => d.selected ? 'red' : '#4682b4'}
-                    barStrokeWidth={2}
-                    barStrokeOpacity={(d) => d.selected ? 1 : 0}
-                    barFill={({ value }) => {
-                        const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(value)];
-                        return styleInfo.color ? styleInfo.color : '#000';
-                    }}
-                    barFillOpacity="1"
-                    mouseOver={(d, idx, rects) => {
-                        select(rects[idx]).attr('fill', 'brown');
-                    }}
-                    mouseOut={(d, idx, rects) => {
-                        select(rects[idx]).attr('fill', '#4682b4');
-                    }}
-                    tooltipContent={(d) => `${d.value} lb/acre`}
-                    width={(window.innerWidth / 3) - 50}
-                    height={235}
-                    marginTop={50}
-                    marginBottom={60}
-                    marginLeft={60}
-                    marginRight={20}
-                />
+                {data[selectedNutrient][featureId] ?
+                    <BarChart
+                        data={
+                            Object
+                                .entries(data[selectedNutrient][featureId])
+                                .map(
+                                    ([year, value]) => ({
+                                        year,
+                                        value,
+                                        selected: +year === +selectedYear
+                                    })
+                                )
+                        }
+                        xAxisProps={{
+                            key: 'year',
+                            title: 'Year',
+                            titlePadding: 50,
+                            stroke: '#4682b4',
+                            strokeWidth: 2
+                        }}
+                        yAxisProps={{
+                            key: 'value',
+                            title: 'lb/acre',
+                            titlePadding: 40,
+                            stroke: '#4682b4',
+                            strokeWidth: 2
+                        }}
+                        barStroke={(d) => d.selected ? 'red' : '#4682b4'}
+                        barStrokeWidth={2}
+                        barStrokeOpacity={(d) => d.selected ? 1 : 0}
+                        barFill={({ value }) => {
+                            const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(value)];
+                            return styleInfo.color ? styleInfo.color : '#000';
+                        }}
+                        barFillOpacity="1"
+                        mouseOver={(d, idx, rects) => {
+                            select(rects[idx]).attr('fill', 'brown');
+                        }}
+                        mouseOut={(d, idx, rects) => {
+                            select(rects[idx]).attr('fill', '#4682b4');
+                        }}
+                        tooltipContent={(d) => `${d.value} lb/acre`}
+                        width={(window.innerWidth / 3) - 50}
+                        height={235}
+                        marginTop={50}
+                        marginBottom={60}
+                        marginLeft={60}
+                        marginRight={20}
+                    /> :
+                    null}
             </Container>
             <DataStoriesModal
                 {...iframeProps}
