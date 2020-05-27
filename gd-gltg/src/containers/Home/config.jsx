@@ -21,12 +21,12 @@ export const OVERALL_DATA = {
         cumulativeAcres: 36055019.8
     },
     huc8: {
-        contributingWaterways: '',
-        cumulativeAcres: ''
+        contributingWaterways: 122233,
+        cumulativeAcres: 36055019.8
     },
     watershed: {
-        contributingWaterways: '',
-        cumulativeAcres: ''
+        contributingWaterways: 0,
+        cumulativeAcres: 0
     }
 };
 
@@ -39,7 +39,7 @@ export const getOverallFeatureLabels = (boundary: string) => {
         case 'huc8':
             return ['Illinois', 'Statewide Summary'];
         case 'watershed':
-            return ['Watershed', 'Watershed Summary'];
+            return ['Mississippi River Basin', 'Nutrient Load to Gulf of Mexico'];
         default:
             return [null, null];
     }

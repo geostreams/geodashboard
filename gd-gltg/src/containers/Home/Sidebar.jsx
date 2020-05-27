@@ -95,7 +95,7 @@ const Sidebar = ({
 }: Props) => {
     const classes = useStyle();
 
-    const featureValue = data[selectedNutrient][featureId] ? data[selectedNutrient][featureId][selectedYear] : -1;  // -1 means no data
+    const featureValue = data[selectedNutrient][featureId] ? data[selectedNutrient][featureId][selectedYear] : null;
 
     const [iframeProps, updateIframeProps] = React.useState({});
 
@@ -216,32 +216,36 @@ const Sidebar = ({
                     {regionLabel} - <span className={classes.featureProp}>{featureId}</span>
                 </Typography>
 
-                <Typography
-                    className={classes.header}
-                    variant="subtitle2"
-                    gutterBottom
-                >
-                    AVERAGE YIELD - {selectedYear}:
-                    &nbsp;
-                    <span className={classes.featureProp}>
-                        {featureValue >= 0 ?
-                            `${featureValue} lb/acre` :
-                            'No data is available'}
-                    </span>
-                </Typography>
-                <Divider />
-                <Container>
-                    <LegendHorizontalDiscrete
-                        boxCount={7}
-                        getBoxInfo={(idx) => FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(
-                            idx === 0 ? undefined : (idx * 5) - 0.1
-                        )]}
-                        activeBox={getNutrientValueCategoryIndex(featureValue)}
-                        activeBoxLabel={featureValue >= 0 ? featureValue : ' '}
-                        activeBoxLabelHeight={15}
-                        activeBoxBorderColor="red"
-                    />
-                </Container>
+                {featureValue ?
+                    <>
+                        <Typography
+                            className={classes.header}
+                            variant="subtitle2"
+                            gutterBottom
+                        >
+                            AVERAGE YIELD - {selectedYear}:
+                            &nbsp;
+                            <span className={classes.featureProp}>
+                                {featureValue >= 0 ?
+                                    `${featureValue} lb/acre` :
+                                    'No data is available'}
+                            </span>
+                        </Typography>
+                        <Divider />
+                        <Container>
+                            <LegendHorizontalDiscrete
+                                boxCount={7}
+                                getBoxInfo={(idx) => FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(
+                                    idx === 0 ? undefined : (idx * 5) - 0.1
+                                )]}
+                                activeBox={getNutrientValueCategoryIndex(featureValue)}
+                                activeBoxLabel={featureValue >= 0 ? featureValue : ' '}
+                                activeBoxLabelHeight={15}
+                                activeBoxBorderColor="red"
+                            />
+                        </Container>
+                    </> :
+                    null}
 
                 <Typography
                     className={classes.header}

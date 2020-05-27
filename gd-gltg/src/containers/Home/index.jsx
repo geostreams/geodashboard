@@ -418,9 +418,13 @@ class Home extends React.Component<Props, State> {
                     <span><b>{featureName}</b></span>
                 </Typography>
                 <Typography variant="caption">
-                    <span>{format(',')(contributingWaterways)} Contributing Waterways</span>
+                    {contributingWaterways ?
+                        <span>{format(',')(contributingWaterways)} Contributing Waterways</span> :
+                        null}
                     <br />
-                    <span>{format(',')(cumulativeAcres)} Cumulative Acres</span>
+                    {cumulativeAcres ?
+                        <span>{format(',')(cumulativeAcres)} Cumulative Acres</span> :
+                        null}
                 </Typography>
             </>
         );
