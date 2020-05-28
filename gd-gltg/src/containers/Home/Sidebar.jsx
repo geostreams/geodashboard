@@ -28,6 +28,7 @@ import dataStories from '../DataStories/pages';
 import DataStoriesModal from '../DataStories/Details';
 import annualYieldData from '../../data/annual_yield.json';
 import annualLoadData from '../../data/annual_load.json';
+import overallData from '../../data/overall_data.json';
 import {
     getNutrientValueCategoryIndex,
     FEATURE_STYLE_INFO,
@@ -96,7 +97,7 @@ const Sidebar = ({
 }: Props) => {
     const classes = useStyle();
 
-    const annualLoadChartData = selectedBoundary === 'watershed' ? annualLoadData[featureId] : null;
+    const annualLoadChartData = annualLoadData[featureId];
 
     const featureValue = annualYieldData[selectedNutrient][featureId] ?
         annualYieldData[selectedNutrient][featureId][selectedYear] :
@@ -221,7 +222,14 @@ const Sidebar = ({
                     {regionLabel} - <span className={classes.featureProp}>{featureId}</span>
                 </Typography>
 
-                {annualLoadChartData ?
+                {selectedBoundary === 'drainage' && featureId === 'Statewide Summary' ?
+                    <Typography>
+                        The total nitrate load leaving the state of Illinois is estimated to be&nbsp;
+                        {overallData.drainage.annual_load[selectedYear]} lb {selectedYear}
+                    </Typography> :
+                    null}
+
+                {selectedBoundary === 'watershed' && annualLoadChartData ?
                     <BarChart
                         barsData={
                             annualLoadChartData.annual_load.map(

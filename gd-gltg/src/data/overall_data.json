@@ -1,0 +1,56 @@
+{
+    "drainage": {
+        "contributing_waterways": 122233,
+        "cumulative_acres": 36055019.8,
+        "annual_load": {
+            "1980": "[PLACEHOLDER]",
+            "1981": "[PLACEHOLDER]",
+            "1982": "[PLACEHOLDER]",
+            "1983": "[PLACEHOLDER]",
+            "1984": "[PLACEHOLDER]",
+            "1985": "[PLACEHOLDER]",
+            "1986": "[PLACEHOLDER]",
+            "1987": "[PLACEHOLDER]",
+            "1988": "[PLACEHOLDER]",
+            "1989": "[PLACEHOLDER]",
+            "1990": "[PLACEHOLDER]",
+            "1991": "[PLACEHOLDER]",
+            "1992": "[PLACEHOLDER]",
+            "1993": "[PLACEHOLDER]",
+            "1994": "[PLACEHOLDER]",
+            "1995": "[PLACEHOLDER]",
+            "1996": "[PLACEHOLDER]",
+            "1997": "[PLACEHOLDER]",
+            "1998": "[PLACEHOLDER]",
+            "1999": "[PLACEHOLDER]",
+            "2000": "[PLACEHOLDER]",
+            "2001": "[PLACEHOLDER]",
+            "2002": "[PLACEHOLDER]",
+            "2003": "[PLACEHOLDER]",
+            "2004": "[PLACEHOLDER]",
+            "2005": "[PLACEHOLDER]",
+            "2006": "[PLACEHOLDER]",
+            "2007": "[PLACEHOLDER]",
+            "2008": "[PLACEHOLDER]",
+            "2009": "[PLACEHOLDER]",
+            "2010": "[PLACEHOLDER]",
+            "2011": "[PLACEHOLDER]",
+            "2012": "[PLACEHOLDER]",
+            "2013": "[PLACEHOLDER]",
+            "2014": "[PLACEHOLDER]",
+            "2015": "[PLACEHOLDER]",
+            "2016": "[PLACEHOLDER]",
+            "2017": "[PLACEHOLDER]",
+            "2018": "[PLACEHOLDER]",
+            "2019": "[PLACEHOLDER]"
+        }
+    },
+    "huc8": {
+        "contributing_waterways": 122233,
+        "cumulative_acres": 36055019.8
+    },
+    "watershed": {
+        "contributing_waterways": 0,
+        "cumulative_acres": 0
+    }
+}
