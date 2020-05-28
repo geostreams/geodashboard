@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-640](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-640)
 - Added overall nitrate load text for IL drainage
   [GLGVO-641](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-641)
+- Added legend to nitrate flow chart
+  [GLGVO-643](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-643)
 
 ### Changed
 - Create Intervals as a Reusable Component
