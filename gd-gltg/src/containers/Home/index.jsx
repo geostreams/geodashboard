@@ -29,7 +29,7 @@ import type {
 } from 'ol';
 import type { Layer as LayerType } from 'ol/layer';
 
-import data from '../../data/data.json';
+import annualYieldData from '../../data/annual_yield.json';
 import { HEADERS_HEIGHT } from '../Layout/Header';
 
 import BoundaryInfo from './BoundaryInfo';
@@ -359,7 +359,7 @@ class Home extends React.Component<Props, State> {
     getNutrientTrend = (nutrient: string, featureName: string): number => {
         const x = [];
         const y = [];
-        Object.entries(data[nutrient][featureName]).forEach(([year, value]) => {
+        Object.entries(annualYieldData[nutrient][featureName]).forEach(([year, value]) => {
             x.push(parseInt(year, 10));
             y.push(parseFloat(value));
         });

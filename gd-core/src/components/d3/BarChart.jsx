@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
 import {
+    area,
     axisBottom,
     axisLeft,
     event,
+    line,
     max,
     scaleBand,
     scaleLinear,
@@ -28,7 +30,6 @@ type Props = {
     marginBottom: number;
     marginLeft: number;
     xAxisProps: {
-        key: string | number;
         title: string;
         titlePadding: number;
         ticks: Array<string | Function>;
@@ -38,7 +39,6 @@ type Props = {
         textOpacity: number
     };
     yAxisProps: {
-        key: string | number;
         title: string;
         titlePadding: number;
         ticks: Array<string | Function>;
@@ -52,16 +52,26 @@ type Props = {
     barStrokeOpacity: string | Function;
     barFill: string | Function;
     barFillOpacity: string | Function;
+    lineFill: string | Function;
+    lineFillOpacity: string | Function;
+    lineStroke: string | Function;
+    lineStrokeWidth: string | Function;
+    lineStrokeOpacity: string | Function;
+    intervalFill: string | Function;
+    intervalFillOpacity: string | Function;
     tooltipContent: string | Function;
     mouseOver: Function;
     mouseOut: Function;
     click: Function;
-    data: Array<{}>;
+    barsData: Array<{ x: number, y: number }>;
+    lineData: Array<{ x: number, y: number }> | null;
+    intervalData: Array<{ x: number, y0: number, y1: number }> | null;
 }
-class BarChart extends React.Component<Props> {
-    svgRef: { current: null | SVGElement } = React.createRef()
 
-    tooltipRef: { current: null | HTMLDivElement } = React.createRef()
+class BarChart extends React.Component<Props> {
+    svgRef: { current: null | SVGElement } = React.createRef();
+
+    tooltipRef: { current: null | HTMLDivElement } = React.createRef();
 
     chartProps: {
         gEl: Selection<SVGGElement>,
@@ -70,9 +80,11 @@ class BarChart extends React.Component<Props> {
         xAxisGroup: Selection<SVGGElement>,
         yAxisGroup: Selection<SVGGElement>,
         tooltip: Selection<HTMLElement>
-    }
+    };
 
     static defaultProps = {
+        lineData: null,
+        intervalData: null,
         marginTop: 0,
         marginRight: 0,
         marginBottom: 0,
@@ -82,23 +94,35 @@ class BarChart extends React.Component<Props> {
         barStrokeOpacity: 0.3,
         barFill: '#4682b4',
         barFillOpacity: 0.3,
+        lineStroke: '#69b3a2',
+        lineStrokeWidth: 1.5,
+        lineStrokeOpacity: 1,
+        lineFill: 'none',
+        lineFillOpacity: 1,
+        intervalFill: '#27ae8f',
+        intervalFillOpacity: .5,
         tooltipContent: null,
-        mouseOver: () => {},
-        mouseOut: () => {},
-        click: () => {}
-    }
+        mouseOver: () => {
+        },
+        mouseOut: () => {
+        },
+        click: () => {
+        }
+    };
 
     componentDidMount = (): void => {
         this.createChart();
-    }
+    };
 
     componentDidUpdate = (): void => {
         this.updateData();
-    }
+    };
 
     updateData = (): void => {
         const {
-            data,
+            barsData,
+            lineData,
+            intervalData,
             xAxisProps,
             yAxisProps,
             marginTop,
@@ -109,6 +133,13 @@ class BarChart extends React.Component<Props> {
             barStrokeOpacity,
             barFill,
             barFillOpacity,
+            lineStroke,
+            lineStrokeWidth,
+            lineStrokeOpacity,
+            lineFill,
+            lineFillOpacity,
+            intervalFill,
+            intervalFillOpacity,
             tooltipContent,
             mouseOver,
             mouseOut,
@@ -124,8 +155,8 @@ class BarChart extends React.Component<Props> {
             tooltip
         } = this.chartProps;
 
-        x.domain(data.map((d) => d[xAxisProps.key] ));
-        y.domain([0, max(data, (d) => +d[yAxisProps.key] )]);
+        x.domain(barsData.map((d) => d.x));
+        y.domain([0, max(barsData, (d) => d.y)]);
 
         // X Axis
         const xAxis = axisBottom(x);
@@ -163,8 +194,9 @@ class BarChart extends React.Component<Props> {
             .attr('stroke', yAxisProps.stroke || 'currentColor')
             .attr('stroke-width', yAxisProps.strokeWidth || 1);
 
+        // Update Bars
         // Data join
-        const bars = gEl.selectAll('rect').data(data);
+        const bars = gEl.selectAll('.bar').data(barsData);
 
         // Exit
         bars.exit()
@@ -178,8 +210,9 @@ class BarChart extends React.Component<Props> {
         bars
             .enter()
             .append('rect')
-            .attr('x', (d) => x(d[xAxisProps.key]))
-            .attr('width',x.bandwidth)
+            .attr('class', 'bar')
+            .attr('x', (d) => x(d.x))
+            .attr('width', x.bandwidth)
             .attr('y', y(0))
             .attr('height', 0)
             .on('mouseover', mouseOver)
@@ -207,16 +240,73 @@ class BarChart extends React.Component<Props> {
             .merge(bars)
             .transition()
             .duration(500)
-            .attr('y', (d) => y(+d[yAxisProps.key]))
-            .attr('x', (d) => x(d[xAxisProps.key]))
+            .attr('y', (d) => y(d.y))
+            .attr('x', (d) => x(d.x))
             .attr('width', x.bandwidth)
-            .attr('height', (d) => (height - marginBottom - marginTop) - y(d[yAxisProps.key]))
+            .attr('height', (d) => (height - marginBottom - marginTop) - y(d.y))
             .attr('stroke', barStroke)
             .attr('stroke-width', barStrokeWidth)
             .attr('stroke-opacity', barStrokeOpacity)
             .attr('fill', barFill)
             .attr('fill-opacity', barFillOpacity);
-    }
+
+        // Update Line
+        // Data join
+        if (lineData) {
+            // Remove the existing line
+            gEl
+                .selectAll('.line')
+                .transition()
+                .duration(250)
+                .attr('y', y(0))
+                .attr('height', 0)
+                .remove();
+
+            // Add the new path
+            gEl
+                .append('path')
+                .attr('class', 'line')
+                .datum(lineData)
+                .transition()
+                .duration(500)
+                .attr('x', (d) => x(d.x))
+                .attr('y', y(0))
+                .attr('fill', lineFill)
+                .attr('fill-opacity', lineFillOpacity)
+                .attr('stroke', lineStroke)
+                .attr('stroke-width', lineStrokeWidth)
+                .attr('stroke-opacity', lineStrokeOpacity)
+                .attr('d', line()
+                    .x((d) => x(d.x))
+                    .y((d) => y(d.y)));
+        }
+
+        // Update Intervals
+        // Data join
+        if (intervalData) {
+            gEl
+                .selectAll('.interval')
+                .transition()
+                .duration(250)
+                .attr('y', y(0))
+                .attr('height', 0)
+                .remove();
+
+            gEl
+                .append('path')
+                .attr('class', 'interval')
+                .datum(intervalData)
+                .transition()
+                .duration(500)
+                .attr('fill', intervalFill)
+                .attr('fill-opacity', intervalFillOpacity)
+                .attr('stroke', 'none')
+                .attr('d', area()
+                    .x((d) => x(d.x))
+                    .y0((d) => y(d.y0))
+                    .y1((d) => y(d.y1)));
+        }
+    };
 
     createChart = (): void => {
         const {
@@ -240,12 +330,12 @@ class BarChart extends React.Component<Props> {
             .append('g')
             .attr('width', innerWidth)
             .attr('height', innerHeight)
-            .attr('transform', `translate(${ marginLeft },${ marginTop })`);
+            .attr('transform', `translate(${marginLeft},${marginTop})`);
 
         const xAxisGroup = gEl
             .append('g')
             .attr('class', 'xAxis')
-            .attr('transform', `translate(0, ${ innerHeight })`);
+            .attr('transform', `translate(0, ${innerHeight})`);
 
         const yAxisGroup = gEl
             .append('g')
@@ -293,7 +383,7 @@ class BarChart extends React.Component<Props> {
             tooltip
         };
         this.updateData();
-    }
+    };
 
     render() {
         const { width, height, classes } = this.props;

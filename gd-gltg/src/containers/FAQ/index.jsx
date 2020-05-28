@@ -11,10 +11,10 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import historical from '../../data/faq/historical.png';
-import offline from '../../data/faq/offline.png';
-import online from '../../data/faq/online.png';
-import usgsCalculations from '../../data/faq/usgs_calculations.png';
+import historical from '../../images/faq/historical.png';
+import offline from '../../images/faq/offline.png';
+import online from '../../images/faq/online.png';
+import usgsCalculations from '../../images/faq/usgs_calculations.png';
 
 const useStyle = makeStyles({
     container: {

@@ -13,7 +13,7 @@ import monitoringSites from '../../data/il-monitoring-sites.pbf';
 import watershedMonitoringSites from '../../data/watersheds-monitoring-sites.pbf';
 import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
-import data from '../../data/data.json';
+import annualYieldData from '../../data/annual_yield.json';
 
 export const OVERALL_DATA = {
     drainage: {
@@ -143,9 +143,7 @@ export const getFeatureStyle = (
 
     const name = feature.get('Name') || feature.get('Station_ID');
 
-    const nutrientLevel = name ?
-        parseFloat(data[nutrient][name][year]) || 0.0 :
-        0;
+    const nutrientLevel = name ? parseFloat(annualYieldData[nutrient][name][year]) || 0.0 : 0;
 
     let color;
     if (nutrientLevel >= 0) {
