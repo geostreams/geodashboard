@@ -26,7 +26,8 @@ import Carousel from 'gd-core/src/components/Carousel';
 import { entries } from 'gd-core/src/utils/array';
 import dataStories from '../DataStories/pages';
 import DataStoriesModal from '../DataStories/Details';
-import data from '../../data/data.json';
+import annualYieldData from '../../data/annual_yield.json';
+import annualLoadData from '../../data/annual_load.json';
 import {
     getNutrientValueCategoryIndex,
     FEATURE_STYLE_INFO,
@@ -36,7 +37,8 @@ import {
 } from './config';
 
 type Props = {
-    featureId: string;
+    regionLabel: string | null;
+    featureId: string | null;
     selectedBoundary: string;
     selectedNutrient: string;
     selectedYear: number;
@@ -84,6 +86,7 @@ const useStyle = makeStyles((theme) =>({
 }));
 
 const Sidebar = ({
+    regionLabel,
     featureId,
     selectedBoundary,
     selectedNutrient,
@@ -93,7 +96,11 @@ const Sidebar = ({
 }: Props) => {
     const classes = useStyle();
 
-    const featureValue = data[selectedNutrient][featureId][selectedYear];
+    const annualLoadChartData = selectedBoundary === 'watershed' ? annualLoadData[featureId] : null;
+
+    const featureValue = annualYieldData[selectedNutrient][featureId] ?
+        annualYieldData[selectedNutrient][featureId][selectedYear] :
+        null;
 
     const [iframeProps, updateIframeProps] = React.useState({});
 
@@ -211,102 +218,156 @@ const Sidebar = ({
                     className={classes.header}
                     variant="h6"
                 >
-                    ILLINOIS &gt; <span className={classes.featureProp}>{featureId}</span>
+                    {regionLabel} - <span className={classes.featureProp}>{featureId}</span>
                 </Typography>
 
-                <Typography
-                    className={classes.header}
-                    variant="subtitle2"
-                    gutterBottom
-                >
-                    AVERAGE YIELD - {selectedYear}:
-                    &nbsp;
-                    <span className={classes.featureProp}>
-                        {featureValue >= 0 ?
-                            `${featureValue} lb/acre` :
-                            'No data is available'}
-                    </span>
-                </Typography>
-                <Divider />
-                <Container>
-                    <LegendHorizontalDiscrete
-                        boxCount={7}
-                        getBoxInfo={(idx) => FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(
-                            idx === 0 ? undefined : (idx * 5) - 0.1
-                        )]}
-                        activeBox={getNutrientValueCategoryIndex(featureValue)}
-                        activeBoxLabel={featureValue >= 0 ? featureValue : ' '}
-                        activeBoxLabelHeight={15}
-                        activeBoxBorderColor="red"
-                    />
-                </Container>
-
-                <Typography
-                    className={classes.header}
-                    variant="subtitle2"
-                    gutterBottom
-                >
-                    ANNUAL NITROGEN YIELD 1980-2017
-                </Typography>
-                <Divider />
-                <BarChart
-                    data={
-                        Object
-                            .entries(data[selectedNutrient][featureId])
-                            .map(
-                                ([year, value]) => ({
-                                    year,
-                                    value,
-                                    selected: +year === +selectedYear
+                {annualLoadChartData ?
+                    <BarChart
+                        barsData={
+                            annualLoadChartData.annual_load.map(
+                                ({ x, y }) => ({
+                                    x,
+                                    y,
+                                    selected: x === +selectedYear
                                 })
                             )
-                    }
-                    xAxisProps={{
-                        key: 'year',
-                        title: 'Year',
-                        titlePadding: 50,
-                        stroke: '#4682b4',
-                        strokeWidth: 2
-                    }}
-                    yAxisProps={{
-                        key: 'value',
-                        title: 'lb/acre',
-                        titlePadding: 40,
-                        stroke: '#4682b4',
-                        strokeWidth: 2
-                    }}
-                    barStroke={(d) => d.selected ? 'red' : '#4682b4'}
-                    barStrokeWidth={2}
-                    barStrokeOpacity={(d) => d.selected ? 1 : 0}
-                    barFill={({ value }) => {
-                        const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(value)];
-                        return styleInfo.color ? styleInfo.color : '#000';
-                    }}
-                    barFillOpacity="1"
-                    mouseOver={(d, idx, rects) => {
-                        select(rects[idx]).attr('fill', 'brown');
-                    }}
-                    mouseOut={(d, idx, rects) => {
-                        select(rects[idx]).attr('fill', '#4682b4');
-                    }}
-                    tooltipContent={(d) => `${d.value} lb/acre`}
-                    width={(window.innerWidth / 3) - 50}
-                    height={235}
-                    marginTop={50}
-                    marginBottom={60}
-                    marginLeft={60}
-                    marginRight={20}
-                />
+                        }
+                        lineData={annualLoadChartData.normalized_flow}
+                        intervalData={annualLoadChartData.confidence_interval}
+                        xAxisProps={{
+                            title: 'Year',
+                            titlePadding: 50,
+                            stroke: '#4682b4',
+                            strokeWidth: 2
+                        }}
+                        yAxisProps={{
+                            title: 'Tons',
+                            titlePadding: 40,
+                            stroke: '#4682b4',
+                            strokeWidth: 2
+                        }}
+                        barStroke={(d) => d.selected ? 'red' : '#117fc9'}
+                        barStrokeWidth={2}
+                        barStrokeOpacity={(d) => d.selected ? 1 : 0}
+                        barFill="#117fc9"
+                        barFillOpacity="1"
+                        lineStroke="#f63700"
+                        lineStrokeWidth={2}
+                        intervalFill="#fdb47f"
+                        width={(window.innerWidth / 3) - 50}
+                        height={235}
+                        marginTop={50}
+                        marginBottom={60}
+                        marginLeft={60}
+                        marginRight={20}
+                    /> :
+                    null}
+
+                {featureValue ?
+                    <>
+                        <Typography
+                            className={classes.header}
+                            variant="subtitle2"
+                            gutterBottom
+                        >
+                            AVERAGE YIELD - {selectedYear}:
+                            &nbsp;
+                            <span className={classes.featureProp}>
+                                {featureValue >= 0 ?
+                                    `${featureValue} lb/acre` :
+                                    'No data is available'}
+                            </span>
+                        </Typography>
+                        <Divider />
+                        <Container>
+                            <LegendHorizontalDiscrete
+                                boxCount={7}
+                                getBoxInfo={(idx) => FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(
+                                    idx === 0 ? undefined : (idx * 5) - 0.1
+                                )]}
+                                activeBox={getNutrientValueCategoryIndex(featureValue)}
+                                activeBoxLabel={featureValue >= 0 ? featureValue : ' '}
+                                activeBoxLabelHeight={15}
+                                activeBoxBorderColor="red"
+                            />
+                        </Container>
+                    </> :
+                    null}
+
+                <Typography
+                    className={classes.header}
+                    variant="subtitle2"
+                    gutterBottom
+                >
+                    <Box display="flex" alignItems="center">
+                        ANNUAL {selectedNutrient.toUpperCase()} YIELD 1980-2017
+                        &nbsp;
+                        <InfoIcon
+                            className="actionIcon"
+                            fontSize="small"
+                            onClick={(() => updateDialogContent(VARIABLES_INFO.yield))}
+                        />
+                    </Box>
+                </Typography>
+                <Divider />
+                {annualYieldData[selectedNutrient][featureId] ?
+                    <BarChart
+                        barsData={
+                            Object
+                                .entries(annualYieldData[selectedNutrient][featureId])
+                                .map(
+                                    ([year, value]) => ({
+                                        x: year,
+                                        y: value,
+                                        selected: +year === +selectedYear
+                                    })
+                                )
+                        }
+                        xAxisProps={{
+                            title: 'Year',
+                            titlePadding: 50,
+                            stroke: '#4682b4',
+                            strokeWidth: 2
+                        }}
+                        yAxisProps={{
+                            title: 'lb/acre',
+                            titlePadding: 40,
+                            stroke: '#4682b4',
+                            strokeWidth: 2
+                        }}
+                        barStroke={(d) => d.selected ? 'red' : '#4682b4'}
+                        barStrokeWidth={2}
+                        barStrokeOpacity={(d) => d.selected ? 1 : 0}
+                        barFill={({ y }) => {
+                            const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(y)];
+                            return styleInfo.color ? styleInfo.color : '#000';
+                        }}
+                        barFillOpacity="1"
+                        mouseOver={(d, idx, rects) => {
+                            select(rects[idx]).attr('fill', 'brown');
+                        }}
+                        mouseOut={(d, idx, rects) => {
+                            select(rects[idx]).attr('fill', '#4682b4');
+                        }}
+                        tooltipContent={(d) => `${d.y} lb/acre`}
+                        width={(window.innerWidth / 3) - 50}
+                        height={235}
+                        marginTop={50}
+                        marginBottom={60}
+                        marginLeft={60}
+                        marginRight={20}
+                    /> :
+                    null}
                 {selectedBoundary === 'huc8' ?
                     <Typography variant="subtitle2" align="center" gutterBottom>
-                        <a target="_blank" 
-                            rel="noopener noreferrer" 
+                        <a
+                            target="_blank"
+                            rel="noopener noreferrer"
                             href="https://www2.illinois.gov/epa/topics/water-quality/watershed-management/excess-nutrients/Documents/NLRS_SCIENCE_ASSESSMENT_UPDATE_2019%20v7_FINAL%20VERSION_web.pdf"
                         >
-                                Illinois Nutrient Reduction Strategy Science Assessment Update 2019
+                            Illinois Nutrient Reduction Strategy Science Assessment Update 2019
                         </a>
                     </Typography> : null}
-                
             </Container>
             <DataStoriesModal
                 {...iframeProps}

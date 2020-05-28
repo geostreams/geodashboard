@@ -15,12 +15,6 @@ import MenuDropdown from "gd-core__old/app/components/MenuDropdown";
 class MenuBar extends Component {
 
     render() {
-        let logo;
-        try {
-            // $FlowFixMe
-            logo = <div> <img className={styles.header_image} src={require("../../theme/logo.png")} /> </div>;
-        } catch(e) {}
-
         const applicationOptions = getApplicationOptions();
 
         const pageLinks = [];
@@ -64,7 +58,6 @@ class MenuBar extends Component {
         return (
             <div className={styles.header_background}>
                 <div className={styles.header_banner}>
-                    {logo}
                     <div className={styles.header_title}>
                         <p id="header-title-text" className={styles.header_title_text}>
                             {this.props.header_title}

@@ -13,7 +13,37 @@ import monitoringSites from '../../data/il-monitoring-sites.pbf';
 import watershedMonitoringSites from '../../data/watersheds-monitoring-sites.pbf';
 import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
-import data from '../../data/data.json';
+import annualYieldData from '../../data/annual_yield.json';
+
+export const OVERALL_DATA = {
+    drainage: {
+        contributingWaterways: 122233,
+        cumulativeAcres: 36055019.8
+    },
+    huc8: {
+        contributingWaterways: 122233,
+        cumulativeAcres: 36055019.8
+    },
+    watershed: {
+        contributingWaterways: 0,
+        cumulativeAcres: 0
+    }
+};
+
+export const getOverallFeatureLabels = (boundary: string) => {
+    // Returns an array of two items: the first item is the active boundary label,
+    // and the second item is its variable name in `data.json`, which can be used for rendering labels too.
+    switch (boundary) {
+        case 'drainage':
+            return ['Illinois', 'Statewide Summary'];
+        case 'huc8':
+            return ['Illinois', 'Statewide Summary'];
+        case 'watershed':
+            return ['Mississippi River Basin', 'Nutrient Load to Gulf of Mexico'];
+        default:
+            return [null, null];
+    }
+};
 
 // Coordinates for the bounds of the map converted to EPSG:3857
 export const MAP_BOUNDS = transformExtent([
@@ -113,9 +143,7 @@ export const getFeatureStyle = (
 
     const name = feature.get('Name') || feature.get('Station_ID');
 
-    const nutrientLevel = name ?
-        parseFloat(data[nutrient][name][year]) || 0.0 :
-        0;
+    const nutrientLevel = name ? parseFloat(annualYieldData[nutrient][name][year]) || 0.0 : 0;
 
     let color;
     if (nutrientLevel >= 0) {
@@ -172,7 +200,8 @@ export const BOUNDARIES: BoundaryType = {
         layers: [
             {
                 url: huc8,
-                style: getFeatureStyle
+                style: getFeatureStyle,
+                interactive: true
             }
         ]
     },
@@ -274,6 +303,16 @@ export const VARIABLES_INFO = {
                     treatment, though there are other sources as well such
                     as erosion.
                 </p>
+            </div>
+        )
+    },
+    yield: {
+        title: 'Yield',
+        description: (
+            <div>
+                Yield is a measure of nutrients lost per unit area. This measure is useful because
+                it removes the influence of watershed size in a measurement so that different size
+                watersheds may be compared.
             </div>
         )
     }

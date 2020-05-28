@@ -1,0 +1,44 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "USGS_05418720"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -93.19248127472197,
+                    44.870253309354425
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "USGS_05465500"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -91.18194444444445,
+                    41.1780556
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Illinois R, at Valley City"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -90.6454047,
+                    39.7033802
+                ]
+            }
+        }
+    ]
+}

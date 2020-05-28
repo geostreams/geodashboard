@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added citation for HUC-8 dashboard
   [GLGVO-630] (https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-630)
+- Added better explanation of the Avg. Annual Nutrient yield graph
+  [GLGVO-640](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-640)
 
 ### Changed
 - Create Intervals as a Reusable Component
@@ -21,8 +23,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1334](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1334)
 - Updated styling of data stories
   [GLGVO-633](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-633)
+- Replaced the map popup with a permanent info box
+  [GLGVO-634](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-634)
 - Updated partners and faq pages
   [GLGVO-635](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-635)
+- Added data nitrate load to Gulf of Mexico
+  [GLGVO-638](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-638)
 
 ### Fixed
 - Click the 'x' in the top right corner of the Detail Page, the page returns to the Explore Page
