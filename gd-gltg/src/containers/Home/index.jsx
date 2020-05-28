@@ -30,6 +30,7 @@ import type {
 import type { Layer as LayerType } from 'ol/layer';
 
 import annualYieldData from '../../data/annual_yield.json';
+import overallData from '../../data/overall_data.json';
 import { HEADERS_HEIGHT } from '../Layout/Header';
 
 import BoundaryInfo from './BoundaryInfo';
@@ -38,8 +39,7 @@ import {
     MAP_BOUNDS,
     BOUNDARIES,
     getOverallFeatureLabels,
-    getFeatureStyle,
-    OVERALL_DATA
+    getFeatureStyle
 } from './config';
 
 const styles = {
@@ -408,8 +408,8 @@ class Home extends React.Component<Props, State> {
             cumulativeAcres = featureProps.cumulative_acres;
         } else {
             featureName = getOverallFeatureLabels(boundary).join(' - ');
-            contributingWaterways = OVERALL_DATA[boundary].contributingWaterways;
-            cumulativeAcres = OVERALL_DATA[boundary].cumulativeAcres;
+            contributingWaterways = overallData[boundary].contributing_waterways;
+            cumulativeAcres = overallData[boundary].cumulative_acres;
         }
 
         return (

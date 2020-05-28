@@ -15,21 +15,6 @@ import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
 import annualYieldData from '../../data/annual_yield.json';
 
-export const OVERALL_DATA = {
-    drainage: {
-        contributingWaterways: 122233,
-        cumulativeAcres: 36055019.8
-    },
-    huc8: {
-        contributingWaterways: 122233,
-        cumulativeAcres: 36055019.8
-    },
-    watershed: {
-        contributingWaterways: 0,
-        cumulativeAcres: 0
-    }
-};
-
 export const getOverallFeatureLabels = (boundary: string) => {
     // Returns an array of two items: the first item is the active boundary label,
     // and the second item is its variable name in `data.json`, which can be used for rendering labels too.
