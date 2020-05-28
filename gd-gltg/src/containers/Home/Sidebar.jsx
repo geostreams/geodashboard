@@ -299,7 +299,15 @@ const Sidebar = ({
                     variant="subtitle2"
                     gutterBottom
                 >
-                    ANNUAL {selectedNutrient.toUpperCase()} YIELD 1980-2017
+                    <Box display="flex" alignItems="center">
+                        ANNUAL {selectedNutrient.toUpperCase()} YIELD 1980-2017
+                        &nbsp;
+                        <InfoIcon
+                            className="actionIcon"
+                            fontSize="small"
+                            onClick={(() => updateDialogContent(VARIABLES_INFO.yield))}
+                        />
+                    </Box>
                 </Typography>
                 <Divider />
                 {annualYieldData[selectedNutrient][featureId] ?

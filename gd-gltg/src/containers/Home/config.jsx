@@ -305,5 +305,15 @@ export const VARIABLES_INFO = {
                 </p>
             </div>
         )
+    },
+    yield: {
+        title: 'Yield',
+        description: (
+            <div>
+                Yield is a measure of nutrients lost per unit area. This measure is useful because
+                it removes the influence of watershed size in a measurement so that different size
+                watersheds may be compared.
+            </div>
+        )
     }
 };

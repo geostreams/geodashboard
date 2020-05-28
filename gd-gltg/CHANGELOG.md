@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added citation for HUC-8 dashboard
   [GLGVO-630] (https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-630)
+- Added better explanation of the Avg. Annual Nutrient yield graph
+  [GLGVO-640](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-640)
 
 ### Changed
 - Create Intervals as a Reusable Component
