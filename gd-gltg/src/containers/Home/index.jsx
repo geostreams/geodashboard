@@ -1,7 +1,16 @@
 // @flow
 import * as React from 'react';
 import { format } from 'd3';
-import { Container, Grid, Typography, withStyles } from '@material-ui/core';
+import {
+    Container,
+    Grid,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+    withStyles
+} from '@material-ui/core';
 import DownTrendIcon from '@material-ui/icons/ArrowDropDown';
 import UpTrendIcon from '@material-ui/icons/ArrowDropUp';
 import FlatTrendIcon from '@material-ui/icons/FiberManualRecord';
@@ -18,7 +27,7 @@ import VectorSource from 'ol/source/Vector';
 import XYZ from 'ol/source/XYZ';
 import { decode } from 'geobuf';
 import Pbf from 'pbf';
-import { Map } from 'gd-core/src/components/ol';
+import { Map, BaseControlPortal } from 'gd-core/src/components/ol';
 import { entries } from 'gd-core/src/utils/array';
 import { SLRSlope } from 'gd-core/src/utils/math';
 
@@ -33,7 +42,6 @@ import annualYieldData from '../../data/annual_yield.json';
 import overallData from '../../data/overall_data.json';
 import { HEADERS_HEIGHT } from '../Layout/Header';
 
-import BoundaryInfo from './BoundaryInfo';
 import Sidebar from './Sidebar';
 import {
     MAP_BOUNDS,
@@ -77,6 +85,18 @@ const styles = {
         height: 75,
         border: '2px solid #aaa',
         paddingTop: 10
+    },
+    legendControl: {
+        top: '0.5em',
+        right: '0.5em',
+        background: '#fff',
+        border: '2px solid #aaa'
+    },
+    legendItem: {
+        padding: '0 8px'
+    },
+    legendItemIcon: {
+        minWidth: 25
     }
 };
 
@@ -88,6 +108,9 @@ type Props = {
         fillContainer: string;
         trendIcon: string;
         boundaryInfoControl: string;
+        legendControl: string;
+        legendItem: string;
+        legendItemIcon: string;
     }
 }
 
@@ -105,9 +128,16 @@ class Home extends React.Component<Props, State> {
 
     boundaryInfoControl: Control;
 
+    legendControl: Control;
+
     layers: {
         [key: string]: LayerType
     };
+
+    legends: Array<{
+        title: string;
+        url: string;
+    }>;
 
     constructor(props) {
         super(props);
@@ -126,10 +156,16 @@ class Home extends React.Component<Props, State> {
             className: this.props.classes.boundaryInfoControl
         });
 
+        this.legendControl = new Control({
+            className: this.props.classes.legendControl
+        });
+
         const geoJSONFormat = new GeoJSON({
             dataProjection: 'EPSG:4326',
             featureProjection: 'EPSG:3857'
         });
+
+        this.legends = [];
 
         this.layers = {
             basemaps: new GroupLayer({
@@ -158,23 +194,25 @@ class Home extends React.Component<Props, State> {
             contextual: new GroupLayer({
                 title: 'Layers',
                 layers: [
-                    new ImageLayer({
-                        title: 'State Boundaries',
-                        source: new ImageWMSSource({
-                            url: 'https://greatlakestogulf.org/geoserver/wms',
-                            params: { LAYERS: 'gltg:us-states' }
-                        }),
+                    { title: 'Rivers', id: 'gltg:us-rivers' },
+                    { title: 'State Boundaries', id: 'gltg:us-states' }
+                ].map(({ title, id }) => {
+                    const source = new ImageWMSSource({
+                        url: 'https://greatlakestogulf.org/geoserver/wms',
+                        params: { LAYERS: id },
+                        ratio: 1,
+                        serverType: 'geoserver'
+                    });
+                    this.legends.push({
+                        title,
+                        url: source.getLegendUrl()
+                    });
+                    return new ImageLayer({
+                        title,
+                        source,
                         visible: true
-                    }),
-                    new ImageLayer({
-                        title: 'Rivers',
-                        source: new ImageWMSSource({
-                            url: 'https://greatlakestogulf.org/geoserver/wms',
-                            params: { LAYERS: 'gltg:us-rivers' }
-                        }),
-                        visible: true
-                    })
-                ]
+                    });
+                })
             }),
             ...entries(BOUNDARIES).reduce(
                 (boundaryLayers, [name, { visible, layers }], idx) => {
@@ -447,8 +485,9 @@ class Home extends React.Component<Props, State> {
                 minZoom={5}
                 extent={MAP_BOUNDS}
                 center={[-9972968, 4972295]}
-                controls={[this.boundaryInfoControl]}
+                controls={[this.boundaryInfoControl, this.legendControl]}
                 layers={Object.values(this.layers)}
+                legends={this.legends}
                 layerSwitcherOptions={{}}
                 updateMap={this.updateMap}
                 events={{
@@ -482,10 +521,27 @@ class Home extends React.Component<Props, State> {
                         />
                     </Grid>
                 </Grid>
-                <BoundaryInfo
-                    el={this.boundaryInfoControl.element}
-                    content={<Container>{this.getBoundaryInfoContent()}</Container>}
-                />
+                <BaseControlPortal el={this.boundaryInfoControl.element}>
+                    <Container>{this.getBoundaryInfoContent()}</Container>
+                </BaseControlPortal>
+
+                <BaseControlPortal el={this.legendControl.element}>
+                    <List dense disablePadding>
+                        {this.legends.map(({ title, url }) => (
+                            <ListItem
+                                key={title}
+                                classes={{
+                                    root: classes.legendItem
+                                }}
+                            >
+                                <ListItemIcon classes={{ root: classes.legendItemIcon }}>
+                                    <img src={url} alt={title} />
+                                </ListItemIcon>
+                                <ListItemText primary={title} />
+                            </ListItem>
+                        ))}
+                    </List>
+                </BaseControlPortal>
             </Map>
         );
     }

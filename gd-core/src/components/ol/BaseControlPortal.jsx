@@ -4,11 +4,11 @@ import ReactDOM from 'react-dom';
 
 type Props = {
     el: HTMLElement;
-    content: ?React.Node
+    children: React.Node | Function | string
 }
 
-const BoundaryInfo = ({ el, content }: Props) => ReactDOM.createPortal(
-    <>{content}</>,
+const BoundaryInfo = ({ el, children }: Props) => ReactDOM.createPortal(
+    children,
     el
 );
 
