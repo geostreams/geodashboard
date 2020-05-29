@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-635](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-635)
 - Added data nitrate load to Gulf of Mexico
   [GLGVO-638](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-638)
+- Fixed station MI_0035 name
+  [GLGVO-642](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-642)
 
 ### Fixed
 - Click the 'x' in the top right corner of the Detail Page, the page returns to the Explore Page
