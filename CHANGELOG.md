@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-558](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-588)
 - Added catchment polygon for Iowa River at Wapello
   [GLGVO-629](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-629) 
-
+- Added McIsaac's report to FAQ
+  [GLGVO-645](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-645) 
 ### Changed
 - Create Intervals as a Reusable Component
   [GEOD-1248](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1248)
