@@ -4,7 +4,8 @@
         {
             "type": "Feature",
             "properties": {
-                "Name": "USGS_05418720"
+                "Name": "Minnesota River at Fort Snelling",
+                "Station_ID": "MI_0035"
             },
             "geometry": {
                 "type": "Point",
