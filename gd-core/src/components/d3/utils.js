@@ -38,10 +38,9 @@ export const yAxisLabel = (
     label: string
 ) => (
     parentEl.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'middle')
-        .attr('transform', 'rotate(-90)')
+        .attr('x', 0)
+        .attr('y', -10)
+        .attr('text-anchor', 'end')
         .attr('fill', color || 'currentColor')
         .attr('fill-opacity', opacity || 0.3)
         .text(label)

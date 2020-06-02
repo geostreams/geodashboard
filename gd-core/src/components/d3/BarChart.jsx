@@ -20,9 +20,7 @@ import type { SVGElement, SVGGElement } from 'dom-helpers';
 import { sharedStyle, xAxisLabel, yAxisLabel } from './utils';
 
 type Props = {
-    classes: {
-        tooltip: string
-    },
+    className: string,
     width: number;
     height: number;
     marginTop: number;
@@ -102,6 +100,7 @@ class BarChart extends React.Component<Props> {
         intervalFill: '#27ae8f',
         intervalFillOpacity: .5,
         tooltipContent: null,
+        className: '',
         mouseOver: () => {
         },
         mouseOut: () => {
@@ -386,12 +385,12 @@ class BarChart extends React.Component<Props> {
     };
 
     render() {
-        const { width, height, classes } = this.props;
+        const { width, height, className } = this.props;
         return (
-            <>
+            <div className={className}>
                 <svg ref={this.svgRef} width={width} height={height} />
-                <div ref={this.tooltipRef} className={`${classes.tooltip} tooltip`} />
-            </>
+                <div ref={this.tooltipRef} className="tooltip" />
+            </div>
         );
     }
 }
