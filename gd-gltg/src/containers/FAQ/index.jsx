@@ -91,6 +91,30 @@ const FAQ = () => {
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
+            <ExpansionPanel>
+                <ExpansionPanelSummary
+                    className={classes.panel}
+                    expandIcon={<ExpandMoreIcon />}
+                >
+                    <Typography>
+                        Q: What is the source of the HUC-8 data?
+                    </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Typography>
+                        A: The data was compiled by Dr. Greg McIsaac as part of the Illinois Nutrient Loss Reduction
+                        Strategy Science Assessment and Update. <br />
+                        All data can be found here:{' '}
+                        <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://www2.illinois.gov/epa/topics/water-quality/watershed-management/excess-nutrients/Documents/NLRS_SCIENCE_ASSESSMENT_UPDATE_2019%20v7_FINAL%20VERSION_web.pdf"
+                        >
+                            NLRS-Biennial-Report-2019
+                        </a>
+                    </Typography>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
 
         </Container>
     );

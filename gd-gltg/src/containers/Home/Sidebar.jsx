@@ -20,7 +20,7 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import InfoIcon from '@material-ui/icons/Info';
 import { Link } from 'react-router-dom';
-import { BarChart, LegendHorizontalDiscrete } from 'gd-core/src/components/d3';
+import { BarChart, LegendHorizontalDiscrete, SimpleLegend } from 'gd-core/src/components/d3';
 import Carousel from 'gd-core/src/components/Carousel';
 
 import { entries } from 'gd-core/src/utils/array';
@@ -72,6 +72,16 @@ const useStyle = makeStyles((theme) =>({
         },
         '& option': {
             color: 'initial'
+        }
+    },
+    annualFlowChart: {
+        marginTop: -75
+    },
+    annualFlowLegend: {
+        '& svg': {
+            fontSize: '.8rem',
+            padding: 5,
+            border: '1px solid #aaa'
         }
     },
     carousel: {
@@ -230,45 +240,62 @@ const Sidebar = ({
                     null}
 
                 {selectedBoundary === 'watershed' && annualLoadChartData ?
-                    <BarChart
-                        barsData={
-                            annualLoadChartData.annual_load.map(
-                                ({ x, y }) => ({
-                                    x,
-                                    y,
-                                    selected: x === +selectedYear
-                                })
-                            )
-                        }
-                        lineData={annualLoadChartData.normalized_flow}
-                        intervalData={annualLoadChartData.confidence_interval}
-                        xAxisProps={{
-                            title: 'Year',
-                            titlePadding: 50,
-                            stroke: '#4682b4',
-                            strokeWidth: 2
-                        }}
-                        yAxisProps={{
-                            title: 'Tons',
-                            titlePadding: 40,
-                            stroke: '#4682b4',
-                            strokeWidth: 2
-                        }}
-                        barStroke={(d) => d.selected ? 'red' : '#117fc9'}
-                        barStrokeWidth={2}
-                        barStrokeOpacity={(d) => d.selected ? 1 : 0}
-                        barFill="#117fc9"
-                        barFillOpacity="1"
-                        lineStroke="#f63700"
-                        lineStrokeWidth={2}
-                        intervalFill="#fdb47f"
-                        width={(window.innerWidth / 3) - 50}
-                        height={235}
-                        marginTop={50}
-                        marginBottom={60}
-                        marginLeft={60}
-                        marginRight={20}
-                    /> :
+                    <>
+                        <Box className={classes.annualFlowLegend} display="flex" justifyContent="space-between">
+                            <Typography variant="subtitle2">
+                                ANNUAL NITRATE FLOW
+                            </Typography>
+                            <SimpleLegend
+                                width={175}
+                                itemHeight={13}
+                                data={[
+                                    { label: 'Annual flow', type: 'polygon', color: '#117fc9', width: 2, opacity: 1 },
+                                    { label: 'Normalized flow', type: 'line', color: '#f63700', width: 2, opacity: 1 },
+                                    { label: 'Confidence interval', type: 'polygon', color: '#fdb47f', width: 2, opacity: 1 }
+                                ]}
+                            />
+                        </Box>
+                        <BarChart
+                            className={classes.annualFlowChart}
+                            barsData={
+                                annualLoadChartData.annual_load.map(
+                                    ({ x, y }) => ({
+                                        x,
+                                        y,
+                                        selected: x === +selectedYear
+                                    })
+                                )
+                            }
+                            lineData={annualLoadChartData.normalized_flow}
+                            intervalData={annualLoadChartData.confidence_interval}
+                            xAxisProps={{
+                                title: 'Year',
+                                titlePadding: 50,
+                                stroke: '#4682b4',
+                                strokeWidth: 2
+                            }}
+                            yAxisProps={{
+                                title: 'Tons',
+                                titlePadding: 40,
+                                stroke: '#4682b4',
+                                strokeWidth: 2
+                            }}
+                            barStroke={(d) => d.selected ? 'red' : '#117fc9'}
+                            barStrokeWidth={2}
+                            barStrokeOpacity={(d) => d.selected ? 1 : 0}
+                            barFill="#117fc9"
+                            barFillOpacity="1"
+                            lineStroke="#f63700"
+                            lineStrokeWidth={2}
+                            intervalFill="#fdb47f"
+                            width={(window.innerWidth / 3) - 50}
+                            height={300}
+                            marginTop={50}
+                            marginBottom={60}
+                            marginLeft={60}
+                            marginRight={20}
+                        />
+                    </> :
                     null}
 
                 {featureValue ?
@@ -359,7 +386,7 @@ const Sidebar = ({
                         }}
                         tooltipContent={(d) => `${d.y} lb/acre`}
                         width={(window.innerWidth / 3) - 50}
-                        height={235}
+                        height={300}
                         marginTop={50}
                         marginBottom={60}
                         marginLeft={60}
