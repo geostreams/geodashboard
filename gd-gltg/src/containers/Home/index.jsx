@@ -46,6 +46,7 @@ import Sidebar from './Sidebar';
 import {
     MAP_BOUNDS,
     BOUNDARIES,
+    GEOSERVER_URL,
     getOverallFeatureLabels,
     getFeatureStyle
 } from './config';
@@ -195,10 +196,12 @@ class Home extends React.Component<Props, State> {
                 title: 'Layers',
                 layers: [
                     { title: 'Rivers', id: 'gltg:us-rivers' },
-                    { title: 'State Boundaries', id: 'gltg:us-states' }
+                    { title: 'State Boundaries', id: 'gltg:us-states' },
+                    { title: 'IL Drainage - Outside', id: 'gltg:il-drainage-outside' },
+                    { title: 'Unmonitored Areas', id: 'gltg:unmonitored-areas' }
                 ].map(({ title, id }) => {
                     const source = new ImageWMSSource({
-                        url: 'https://greatlakestogulf.org/geoserver/wms',
+                        url: `${GEOSERVER_URL}/wms`,
                         params: { LAYERS: id },
                         ratio: 1,
                         serverType: 'geoserver'
