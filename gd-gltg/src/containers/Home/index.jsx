@@ -218,7 +218,7 @@ class Home extends React.Component<Props, State> {
                 })
             }),
             ...entries(BOUNDARIES).reduce(
-                (boundaryLayers, [name, { visible, layers }], idx) => {
+                (boundaryLayers, [name, { visible, layers }]) => {
                     const group = new GroupLayer({
                         layers: layers.map(({ url, style, interactive = false }) => {
                             const source = new VectorSource({
@@ -252,7 +252,6 @@ class Home extends React.Component<Props, State> {
                                 }
                             });
                             layer.set('interactive', interactive);
-                            layer.set('idx', idx + 1);  // this arbitrary id is used in click the event to associate features within a group. It starts from 1 to make it a truthy value.
                             source.on(
                                 'change',
                                 () => {
@@ -342,19 +341,19 @@ class Home extends React.Component<Props, State> {
             selectedFeature: previousFeature
         } = this.state;
 
-        const clickedLayerId = event.map.forEachFeatureAtPixel(
+        const clickedStationId = event.map.forEachFeatureAtPixel(
             event.pixel,
             (feature, layer) => {
                 if (layer.get('interactive')) {
-                    return layer.get('idx');
+                    return feature.get('Station_ID');
                 }
                 return false;
             }
         );
         const selectedFeature = event.map.forEachFeatureAtPixel(
             event.pixel,
-            (feature, layer) => {
-                if (layer.get('idx') === clickedLayerId && feature.getGeometry().getType().indexOf('Polygon') > -1) {
+            (feature) => {
+                if (feature.get('Station_ID') === clickedStationId && feature.getGeometry().getType().indexOf('Polygon') > -1) {
                     return feature;
                 }
                 return false;

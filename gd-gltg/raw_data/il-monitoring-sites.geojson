@@ -6,7 +6,6 @@
             "type": "Feature",
             "properties": {
                 "Station_ID": "03339000",
-                "interactive": true,
                 "Source": "USGS",
                 "Lat": 40.10087,
                 "Lon": -87.59724,
@@ -28,7 +27,6 @@
             "type": "Feature",
             "properties": {
                 "Station_ID": "03381500",
-                "interactive": true,
                 "Source": "USGS",
                 "Lat": 38.06116,
                 "Lon": -88.15976,
@@ -50,7 +48,6 @@
             "type": "Feature",
             "properties": {
                 "Station_ID": "05437500",
-                "interactive": true,
                 "Source": "USGS",
                 "Lat": 42.45028,
                 "Lon": -89.0725,
@@ -72,7 +69,6 @@
             "type": "Feature",
             "properties": {
                 "Station_ID": "05446500",
-                "interactive": true,
                 "Source": "USGS",
                 "Lat": 41.55611,
                 "Lon": -90.18528,
@@ -94,7 +90,6 @@
             "type": "Feature",
             "properties": {
                 "Station_ID": "05586100",
-                "interactive": true,
                 "Source": "USGS",
                 "Lat": 39.70338,
                 "Lon": -90.6454,
@@ -116,7 +111,6 @@
             "type": "Feature",
             "properties": {
                 "Station_ID": "05594100",
-                "interactive": true,
                 "Source": "USGS",
                 "Lat": 38.4506,
                 "Lon": -89.62759,
@@ -138,7 +132,6 @@
             "type": "Feature",
             "properties": {
                 "Station_ID": "05599490",
-                "interactive": true,
                 "Source": "USGS",
                 "Lat": 37.75833,
                 "Lon": -89.32778,
@@ -160,7 +153,6 @@
             "type": "Feature",
             "properties": {
                 "Station_ID": "05447500",
-                "interactive": true,
                 "Source": "USGS",
                 "Lat": 41.48892,
                 "Lon": -90.15762,
@@ -182,7 +174,6 @@
             "type": "Feature",
             "properties": {
                 "Station_ID": "03345500",
-                "interactive": true,
                 "Source": "USGS",
                 "Lat": 38.93643,
                 "Lon": -88.02254,

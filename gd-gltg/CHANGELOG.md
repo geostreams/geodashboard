@@ -41,7 +41,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Click the 'x' in the top right corner of the Detail Page, the page returns to the Explore Page
   [GEOD-1274](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1274)
-- Browsable map bound to the Mississippi River and limit zoom out [GEOD-1320](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1320) 
+- Browsable map bound to the Mississippi River and limit zoom out
+  [GEOD-1320](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1320)
+- Fixed layer interaction bug on the Home map
+  [GLGVO-644](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-644)
 
 ## [3.1.0] - 2019-09-19
 
