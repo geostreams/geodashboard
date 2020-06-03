@@ -4,11 +4,11 @@ import { Map as OLMap, View } from 'ol';
 import { defaults as defaultControls, Control } from 'ol/control';
 import Layer from 'ol/layer/Layer';
 import Overlay from 'ol/Overlay';
-import LayerSwitcher from 'ol-layerswitcher/src/ol-layerswitcher';
 import VectorSource from 'ol/source/Vector';
 import ClusterSource from 'ol/source/Cluster';
 import AnimatedClusterLayer from 'ol-ext/layer/AnimatedCluster';
 import SelectClusterInteraction from 'ol-ext/interaction/SelectCluster';
+import LayerSwitcher from './LayerSwitcher';
 import Popup from './Popup';
 
 type Props = {
@@ -105,7 +105,7 @@ class Map extends React.Component<Props> {
             overlays: [this.popupOverlay],
             controls: defaultControls().extend(controls)
         });
-        
+
         if (events) {
             Object.entries(events).forEach(([event, handler]) => {
                 this.map.on(event, handler);

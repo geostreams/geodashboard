@@ -44,11 +44,13 @@ import { HEADERS_HEIGHT } from '../Layout/Header';
 
 import Sidebar from './Sidebar';
 import {
+    CONTEXTUAL_LAYERS,
     MAP_BOUNDS,
     BOUNDARIES,
     GEOSERVER_URL,
     getOverallFeatureLabels,
-    getFeatureStyle
+    getFeatureStyle,
+    initialState
 } from './config';
 
 const styles = {
@@ -88,8 +90,8 @@ const styles = {
         paddingTop: 10
     },
     legendControl: {
-        top: '0.5em',
-        right: '0.5em',
+        bottom: '0.5em',
+        left: '0.5em',
         background: '#fff',
         border: '2px solid #aaa'
     },
@@ -136,8 +138,11 @@ class Home extends React.Component<Props, State> {
     };
 
     legends: Array<{
+        layerId: string;
         title: string;
         url: string;
+        boundaries?: Array<string>;
+        visible: boolean;
     }>;
 
     constructor(props) {
@@ -145,12 +150,10 @@ class Home extends React.Component<Props, State> {
 
         const [regionLabel, featureId] = getOverallFeatureLabels('drainage');
         this.state = {
-            boundary: 'drainage',
             featureId,
             regionLabel,
             selectedFeature: null,
-            year: 2017,
-            nutrient: 'Nitrogen'
+            ...initialState
         };
 
         this.boundaryInfoControl = new Control({
@@ -194,27 +197,27 @@ class Home extends React.Component<Props, State> {
             }),
             contextual: new GroupLayer({
                 title: 'Layers',
-                layers: [
-                    { title: 'Rivers', id: 'gltg:us-rivers' },
-                    { title: 'State Boundaries', id: 'gltg:us-states' },
-                    { title: 'IL Drainage - Outside', id: 'gltg:il-drainage-outside' },
-                    { title: 'Unmonitored Areas', id: 'gltg:unmonitored-areas' }
-                ].map(({ title, id }) => {
+                layers: CONTEXTUAL_LAYERS.map(({ title, id, boundaries }) => {
                     const source = new ImageWMSSource({
                         url: `${GEOSERVER_URL}/wms`,
                         params: { LAYERS: id },
                         ratio: 1,
                         serverType: 'geoserver'
                     });
-                    this.legends.push({
-                        title,
-                        url: source.getLegendUrl()
-                    });
-                    return new ImageLayer({
+                    const visible = !boundaries || boundaries.indexOf(initialState.boundary) > -1;
+                    const layer = new ImageLayer({
                         title,
                         source,
-                        visible: true
+                        visible
                     });
+                    this.legends.push({
+                        layerId: layer.ol_uid,
+                        title,
+                        url: source.getLegendUrl(),
+                        boundaries,
+                        visible
+                    });
+                    return layer;
                 })
             }),
             ...entries(BOUNDARIES).reduce(
@@ -308,6 +311,14 @@ class Home extends React.Component<Props, State> {
             extentExtent(extent, layer.getSource().getExtent());
         });
         this.map.getView().fit(extent);
+
+        this.legends.forEach((legend) => {
+            const { layerId, boundaries } = legend;
+            const layer = this.layers.contextual.getLayersArray().find(({ ol_uid }) => ol_uid === layerId);
+            const visible = !boundaries || boundaries.indexOf(boundary) > -1;
+            layer.setVisible(visible);
+            legend.visible = visible;
+        });
 
         const [regionLabel, featureId] = getOverallFeatureLabels(boundary);
         this.setState({ boundary, featureId, regionLabel, selectedFeature: null });
@@ -490,7 +501,22 @@ class Home extends React.Component<Props, State> {
                 controls={[this.boundaryInfoControl, this.legendControl]}
                 layers={Object.values(this.layers)}
                 legends={this.legends}
-                layerSwitcherOptions={{}}
+                layerSwitcherOptions={{
+                    onShow: () => {
+                        this.legends.forEach((legend) => {
+                            const { title, visible } = legend;
+                            document.querySelectorAll('.layer-switcher li.layer').forEach((el) => {
+                                if (el.innerText === title) {
+                                    if (visible) {
+                                        el.classList.remove('hidden');
+                                    } else {
+                                        el.classList.add('hidden');
+                                    }
+                                }
+                            });
+                        });
+                    }
+                }}
                 updateMap={this.updateMap}
                 events={{
                     click: this.handleMapClick
@@ -529,18 +555,20 @@ class Home extends React.Component<Props, State> {
 
                 <BaseControlPortal el={this.legendControl.element}>
                     <List dense disablePadding>
-                        {this.legends.map(({ title, url }) => (
-                            <ListItem
-                                key={title}
-                                classes={{
-                                    root: classes.legendItem
-                                }}
-                            >
-                                <ListItemIcon classes={{ root: classes.legendItemIcon }}>
-                                    <img src={url} alt={title} />
-                                </ListItemIcon>
-                                <ListItemText primary={title} />
-                            </ListItem>
+                        {this.legends.map(({ title, url, visible }) => (
+                            visible ?
+                                <ListItem
+                                    key={title}
+                                    classes={{
+                                        root: classes.legendItem
+                                    }}
+                                >
+                                    <ListItemIcon classes={{ root: classes.legendItemIcon }}>
+                                        <img src={url} alt={title} />
+                                    </ListItemIcon>
+                                    <ListItemText primary={title} />
+                                </ListItem> :
+                                null
                         ))}
                     </List>
                 </BaseControlPortal>

@@ -15,7 +15,21 @@ import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
 import annualYieldData from '../../data/annual_yield.json';
 
+export const initialState = {
+    boundary: 'drainage',
+    nutrient: 'Nitrogen',
+    year: 2017
+};
+
 export const GEOSERVER_URL = process.env.GEOSERVER_URL || '';
+
+// A missing `boundaries` prop from a legend item means it will be shown for all boundary types
+export const CONTEXTUAL_LAYERS: Array<{ title: string; id: string; boundaries?: Array<string>}> = [
+    { title: 'Rivers', id: 'gltg:us-rivers' },
+    { title: 'State Boundaries', id: 'gltg:us-states' },
+    { title: 'IL Drainage - Outside', id: 'gltg:il-drainage-outside', boundaries: ['drainage', 'huc8'] },
+    { title: 'Unmonitored Areas', id: 'gltg:unmonitored-areas', boundaries: ['drainage', 'huc8'] }
+];
 
 export const getOverallFeatureLabels = (boundary: string) => {
     // Returns an array of two items: the first item is the active boundary label,
@@ -183,7 +197,7 @@ export const BOUNDARIES: BoundaryType = {
     },
     huc8: {
         visible: false,
-        label: 'HUC-8',
+        label: 'IL HUC8',
         layers: [
             {
                 url: huc8,
