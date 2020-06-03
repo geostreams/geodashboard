@@ -18,7 +18,8 @@
         {
             "type": "Feature",
             "properties": {
-                "Name": "USGS_05465500"
+                "Name": "Iowa River at Wapello",
+                "Station_ID": "USGS_05465500"
             },
             "geometry": {
                 "type": "Point",
@@ -31,7 +32,8 @@
         {
             "type": "Feature",
             "properties": {
-                "Name": "Illinois R, at Valley City"
+                "Name": "Illinois R, at Valley City",
+                "Station_ID": "05586100"
             },
             "geometry": {
                 "type": "Point",

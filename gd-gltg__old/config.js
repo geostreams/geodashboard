@@ -2,10 +2,7 @@ export const gd3 = {
 
     // Geostreaming API Information - this is also displayed in the Welcome Page dropdown selector
     geostreaming_endpoints: [
-        {url: "https://gltg-dev.ncsa.illinois.edu/geostreams", label: "GLTG DEV", title: "Great Lakes to Gulf",
-            subtitle: "VIRTUAL OBSERVATORY"},
-        {url: "https://greatlakestogulf.org/geostreams", label: "GLTG PROD", title: "Great Lakes to Gulf",
-            subtitle: "VIRTUAL OBSERVATORY"},
+        {url: process.env.GEOSTREAMS_URL}
     ],
 
     // Menu Bar Information
@@ -142,378 +139,378 @@ export const gd3 = {
             "layerGroup": "SPARROW 2002 Nutrient Model Results",
             "title": "SPARROW 2002 Nitrogen Load",
             "id": "gltg:sparrow-nitrogen",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:sparrow-nitrogen"
         },
         {
             "layerGroup": "SPARROW 2002 Nutrient Model Results",
             "title": " SPARROW 2002 Phosphorus Load",
             "id": "gltg:sparrow-phosphorus",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:sparrow-phosphorus"
         },
         {
             "layerGroup": "Watershed Boundaries",
             "title": "HUC 8",
             "id": "gltg:huc250k",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:huc250k"
         },
         {
             "layerGroup": "Watershed Boundaries",
             "title": "HUC 4",
             "id": "gltg:huc4",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:huc4"
         },
         {
             "layerGroup": "Watershed Boundaries",
             "title": "HUC 2",
             "id": "gltg:huc2",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:huc2"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2005 Hypoxia Contours",
             "id": "gltg:2005_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2005_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2006 Hypoxia Contours",
             "id": "gltg:2006_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2006_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2007 Hypoxia Contours",
             "id": "gltg:2007_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2007_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2008 Hypoxia Contours",
             "id": "gltg:2008_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2008_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2009 Hypoxia Contours",
             "id": "gltg:2009_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2009_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2010 Hypoxia Contours",
             "id": "gltg:2010_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2010_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2011 Hypoxia Contours",
             "id": "gltg:2011_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2011_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2012 Hypoxia Contours",
             "id": "gltg:2012_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2012_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2013 Hypoxia Contours",
             "id": "gltg:2013_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2013_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2014 Hypoxia Contours",
             "id": "gltg:2014_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2014_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2015 Hypoxia Contours",
             "id": "gltg:2015_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2015_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2016 Hypoxia Contours",
             "id": "gltg:2016_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2016_Hypoxia_Contours"
         },
         {
             "layerGroup": "Hypoxia and Precipitation",
             "title": "2017 Hypoxia Contours",
             "id": "gltg:2017_Hypoxia_Contours",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:2017_Hypoxia_Contours"
         },
         {
             "layerGroup": "Cropscape Frequency Data",
             "title": "Corn Frequency",
             "id": "gltg:corn_freq",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:corn_freq"
         },
         {
             "layerGroup": "Cropscape Frequency Data",
             "title": "Cotton Frequency",
             "id": "gltg:cotton_freq",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:cotton_freq"
         },
         {
             "layerGroup": "Cropscape Frequency Data",
             "title": "Soy Frequency",
             "id": "gltg:soy_freq",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.80,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:soy_freq"
         },
         {
             "layerGroup": "",
             "title": "River Reaches",
             "id": "gltg:gltg-pools",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.90,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:gltg-pools"
         },
         {
             "layerGroup": "",
             "title": "Large Rivers",
             "id": "gltg:us-rivers",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.25,
             "visibility": true,
             "legendShow": true,
             "legendStartOpen": true,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:us-rivers"
         },
         {
             "layerGroup": "",
             "title": "US States",
             "id": "gltg:us-states",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.50,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:us-states"
         },
         {
             "layerGroup": "",
             "title": "Total annual nitrogen from point sources by HUC8 watershed (avg. 2007-2014)",
             "id": "gltg:agg-pt-source",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.50,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:agg-pt-source"
         },
         {
             "layerGroup": "",
             "title": "Average Annual Nitrogen Fertilizer Inputs for 1997 to 2006",
             "id": "gltg:fertilizer_n",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.50,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:fertilizer_n"
         },
         {
             "layerGroup": "",
             "title": "EPA Impaired Stream Segments",
             "id": "gltg:impaired-epa",
-            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.75,
             "visibility": false,
             "legendShow": true,
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:impaired-epa"
         },
     ],

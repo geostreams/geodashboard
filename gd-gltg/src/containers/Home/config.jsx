@@ -15,6 +15,8 @@ import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
 import annualYieldData from '../../data/annual_yield.json';
 
+export const GEOSERVER_URL = process.env.GEOSERVER_URL || '';
+
 export const getOverallFeatureLabels = (boundary: string) => {
     // Returns an array of two items: the first item is the active boundary label,
     // and the second item is its variable name in `data.json`, which can be used for rendering labels too.

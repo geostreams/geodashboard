@@ -46,6 +46,7 @@ import Sidebar from './Sidebar';
 import {
     MAP_BOUNDS,
     BOUNDARIES,
+    GEOSERVER_URL,
     getOverallFeatureLabels,
     getFeatureStyle
 } from './config';
@@ -195,10 +196,12 @@ class Home extends React.Component<Props, State> {
                 title: 'Layers',
                 layers: [
                     { title: 'Rivers', id: 'gltg:us-rivers' },
-                    { title: 'State Boundaries', id: 'gltg:us-states' }
+                    { title: 'State Boundaries', id: 'gltg:us-states' },
+                    { title: 'IL Drainage - Outside', id: 'gltg:il-drainage-outside' },
+                    { title: 'Unmonitored Areas', id: 'gltg:unmonitored-areas' }
                 ].map(({ title, id }) => {
                     const source = new ImageWMSSource({
-                        url: 'https://greatlakestogulf.org/geoserver/wms',
+                        url: `${GEOSERVER_URL}/wms`,
                         params: { LAYERS: id },
                         ratio: 1,
                         serverType: 'geoserver'
@@ -215,7 +218,7 @@ class Home extends React.Component<Props, State> {
                 })
             }),
             ...entries(BOUNDARIES).reduce(
-                (boundaryLayers, [name, { visible, layers }], idx) => {
+                (boundaryLayers, [name, { visible, layers }]) => {
                     const group = new GroupLayer({
                         layers: layers.map(({ url, style, interactive = false }) => {
                             const source = new VectorSource({
@@ -249,7 +252,6 @@ class Home extends React.Component<Props, State> {
                                 }
                             });
                             layer.set('interactive', interactive);
-                            layer.set('idx', idx + 1);  // this arbitrary id is used in click the event to associate features within a group. It starts from 1 to make it a truthy value.
                             source.on(
                                 'change',
                                 () => {
@@ -339,19 +341,19 @@ class Home extends React.Component<Props, State> {
             selectedFeature: previousFeature
         } = this.state;
 
-        const clickedLayerId = event.map.forEachFeatureAtPixel(
+        const clickedStationId = event.map.forEachFeatureAtPixel(
             event.pixel,
             (feature, layer) => {
                 if (layer.get('interactive')) {
-                    return layer.get('idx');
+                    return feature.get('Station_ID');
                 }
                 return false;
             }
         );
         const selectedFeature = event.map.forEachFeatureAtPixel(
             event.pixel,
-            (feature, layer) => {
-                if (layer.get('idx') === clickedLayerId && feature.getGeometry().getType().indexOf('Polygon') > -1) {
+            (feature) => {
+                if (feature.get('Station_ID') === clickedStationId && feature.getGeometry().getType().indexOf('Polygon') > -1) {
                     return feature;
                 }
                 return false;

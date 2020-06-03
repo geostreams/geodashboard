@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-641](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-641)
 - Added legend to nitrate flow chart
   [GLGVO-643](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-643)
+- Added contextual layers for areas outside of IL drainage and unmonitored areas
+  [GLGVO-647](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-647)
 - Added layer legend to the map
   [GLGVO-648](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-648)
 
@@ -41,7 +43,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Click the 'x' in the top right corner of the Detail Page, the page returns to the Explore Page
   [GEOD-1274](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1274)
-- Browsable map bound to the Mississippi River and limit zoom out [GEOD-1320](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1320) 
+- Browsable map bound to the Mississippi River and limit zoom out
+  [GEOD-1320](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1320)
+- Fixed layer interaction bug on the Home map
+  [GLGVO-644](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-644)
 
 ## [3.1.0] - 2019-09-19
 
