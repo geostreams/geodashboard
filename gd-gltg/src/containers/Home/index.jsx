@@ -307,9 +307,6 @@ class Home extends React.Component<Props, State> {
 
         this.layers[boundary].setVisible(true);
         const extent = createEmptyExtent();
-        // this.layers[boundary].getLayers().forEach((layer) => {
-        //     extendExtent(extent, layer.getSource().getExtent());
-        // });
         extendExtent(extent, getLayerExtent(boundary));
         this.map.getView().fit(extent, { duration: 300 });
 
