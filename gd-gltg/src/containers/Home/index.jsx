@@ -15,7 +15,7 @@ import DownTrendIcon from '@material-ui/icons/ArrowDropDown';
 import UpTrendIcon from '@material-ui/icons/ArrowDropUp';
 import FlatTrendIcon from '@material-ui/icons/FiberManualRecord';
 import Control from 'gd-core/src/components/ol/Control';
-import { createEmpty as createEmptyExtent, extend as extentExtent } from 'ol/extent';
+import { createEmpty as createEmptyExtent, extend as extendExtent } from 'ol/extent';
 import GeoJSON from 'ol/format/GeoJSON';
 import GroupLayer from 'ol/layer/Group';
 import ImageLayer from 'ol/layer/Image';
@@ -48,6 +48,7 @@ import {
     MAP_BOUNDS,
     BOUNDARIES,
     GEOSERVER_URL,
+    getLayerExtent,
     getOverallFeatureLabels,
     getFeatureStyle,
     initialState
@@ -305,12 +306,12 @@ class Home extends React.Component<Props, State> {
         this.layers[this.state.boundary].setVisible(false);
 
         this.layers[boundary].setVisible(true);
-
         const extent = createEmptyExtent();
-        this.layers[boundary].getLayers().forEach((layer) => {
-            extentExtent(extent, layer.getSource().getExtent());
-        });
-        this.map.getView().fit(extent);
+        // this.layers[boundary].getLayers().forEach((layer) => {
+        //     extendExtent(extent, layer.getSource().getExtent());
+        // });
+        extendExtent(extent, getLayerExtent(boundary));
+        this.map.getView().fit(extent, { duration: 300 });
 
         this.legends.forEach((legend) => {
             const { layerId, boundaries } = legend;
