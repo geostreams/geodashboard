@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { DEVICE_PIXEL_RATIO } from 'ol/has';
-import { transformExtent } from 'ol/proj';
 import { Fill, Icon, Stroke, Style } from 'ol/style';
 
 import type FeatureType from 'ol/Feature';
@@ -28,7 +27,7 @@ export const CONTEXTUAL_LAYERS: Array<{ title: string; id: string; boundaries?: 
     { title: 'Rivers', id: 'gltg:us-rivers' },
     { title: 'State Boundaries', id: 'gltg:us-states' },
     { title: 'IL Drainage - Outside', id: 'gltg:il-drainage-outside', boundaries: ['drainage', 'huc8'] },
-    { title: 'Unmonitored Areas', id: 'gltg:unmonitored-areas', boundaries: ['drainage', 'huc8'] }
+    { title: 'Extrapolated Areas', id: 'gltg:extrapolated-areas', boundaries: ['drainage', 'huc8'] }
 ];
 
 export const getOverallFeatureLabels = (boundary: string) => {
@@ -46,13 +45,12 @@ export const getOverallFeatureLabels = (boundary: string) => {
     }
 };
 
-// Coordinates for the bounds of the map converted to EPSG:3857
-export const MAP_BOUNDS = transformExtent([
-    -114.91457195054475,
-    27.98036759814649,
-    -75.78187893993685,
-    50.37966027007533],
-'EPSG:4326', 'EPSG:3857');
+export const MAP_BOUNDS = [
+    -12792231.63426164,
+    3246498.818343048,
+    -8436000.174951272,
+    6512287.786512453
+];
 
 export const FEATURE_STYLE_INFO = [
     {
