@@ -329,69 +329,71 @@ const Sidebar = ({
                     </> :
                     null}
 
-                <Typography
-                    className={classes.header}
-                    variant="subtitle2"
-                    gutterBottom
-                >
-                    <Box display="flex" alignItems="center">
-                        ANNUAL {selectedNutrient.toUpperCase()} YIELD 1980-2017
-                        &nbsp;
-                        <InfoIcon
-                            className="actionIcon"
-                            fontSize="small"
-                            onClick={(() => updateDialogContent(VARIABLES_INFO.yield))}
-                        />
-                    </Box>
-                </Typography>
-                <Divider />
                 {annualYieldData[selectedNutrient][featureId] ?
-                    <BarChart
-                        barsData={
-                            Object
-                                .entries(annualYieldData[selectedNutrient][featureId])
-                                .map(
-                                    ([year, value]) => ({
-                                        x: year,
-                                        y: value,
-                                        selected: +year === +selectedYear
-                                    })
-                                )
-                        }
-                        xAxisProps={{
-                            title: 'Year',
-                            titlePadding: 50,
-                            stroke: '#4682b4',
-                            strokeWidth: 2
-                        }}
-                        yAxisProps={{
-                            title: 'lb/acre',
-                            titlePadding: 40,
-                            stroke: '#4682b4',
-                            strokeWidth: 2
-                        }}
-                        barStroke={(d) => d.selected ? 'red' : '#4682b4'}
-                        barStrokeWidth={2}
-                        barStrokeOpacity={(d) => d.selected ? 1 : 0}
-                        barFill={({ y }) => {
-                            const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(y)];
-                            return styleInfo.color ? styleInfo.color : '#000';
-                        }}
-                        barFillOpacity="1"
-                        mouseOver={(d, idx, rects) => {
-                            select(rects[idx]).attr('fill', 'brown');
-                        }}
-                        mouseOut={(d, idx, rects) => {
-                            select(rects[idx]).attr('fill', '#4682b4');
-                        }}
-                        tooltipContent={(d) => `${d.y} lb/acre`}
-                        width={(window.innerWidth / 3) - 50}
-                        height={300}
-                        marginTop={50}
-                        marginBottom={60}
-                        marginLeft={60}
-                        marginRight={20}
-                    /> :
+                    <>
+                        <Typography
+                            className={classes.header}
+                            variant="subtitle2"
+                            gutterBottom
+                        >
+                            <Box display="flex" alignItems="center">
+                                ANNUAL {selectedNutrient.toUpperCase()} YIELD 1980-2017
+                                &nbsp;
+                                <InfoIcon
+                                    className="actionIcon"
+                                    fontSize="small"
+                                    onClick={(() => updateDialogContent(VARIABLES_INFO.yield))}
+                                />
+                            </Box>
+                        </Typography>
+                        <Divider />
+                        <BarChart
+                            barsData={
+                                Object
+                                    .entries(annualYieldData[selectedNutrient][featureId])
+                                    .map(
+                                        ([year, value]) => ({
+                                            x: year,
+                                            y: value,
+                                            selected: +year === +selectedYear
+                                        })
+                                    )
+                            }
+                            xAxisProps={{
+                                title: 'Year',
+                                titlePadding: 50,
+                                stroke: '#4682b4',
+                                strokeWidth: 2
+                            }}
+                            yAxisProps={{
+                                title: 'lb/acre',
+                                titlePadding: 40,
+                                stroke: '#4682b4',
+                                strokeWidth: 2
+                            }}
+                            barStroke={(d) => d.selected ? 'red' : '#4682b4'}
+                            barStrokeWidth={2}
+                            barStrokeOpacity={(d) => d.selected ? 1 : 0}
+                            barFill={({ y }) => {
+                                const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(y)];
+                                return styleInfo.color ? styleInfo.color : '#000';
+                            }}
+                            barFillOpacity="1"
+                            mouseOver={(d, idx, rects) => {
+                                select(rects[idx]).attr('fill', 'brown');
+                            }}
+                            mouseOut={(d, idx, rects) => {
+                                select(rects[idx]).attr('fill', '#4682b4');
+                            }}
+                            tooltipContent={(d) => `${d.y} lb/acre`}
+                            width={(window.innerWidth / 3) - 50}
+                            height={300}
+                            marginTop={50}
+                            marginBottom={60}
+                            marginLeft={60}
+                            marginRight={20}
+                        />
+                    </> :
                     null}
                 {selectedBoundary === 'huc8' ?
                     <Typography variant="subtitle2" align="center" gutterBottom>
