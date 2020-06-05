@@ -15,7 +15,7 @@ import DownTrendIcon from '@material-ui/icons/ArrowDropDown';
 import UpTrendIcon from '@material-ui/icons/ArrowDropUp';
 import FlatTrendIcon from '@material-ui/icons/FiberManualRecord';
 import Control from 'gd-core/src/components/ol/Control';
-import { createEmpty as createEmptyExtent, extend as extentExtent } from 'ol/extent';
+import { createEmpty as createEmptyExtent, extend as extendExtent } from 'ol/extent';
 import GeoJSON from 'ol/format/GeoJSON';
 import GroupLayer from 'ol/layer/Group';
 import ImageLayer from 'ol/layer/Image';
@@ -48,6 +48,7 @@ import {
     MAP_BOUNDS,
     BOUNDARIES,
     GEOSERVER_URL,
+    getLayerExtent,
     getOverallFeatureLabels,
     getFeatureStyle,
     initialState
@@ -278,6 +279,10 @@ class Home extends React.Component<Props, State> {
     updateMap = (map) => {
         this.map = map;
 
+        const extent = createEmptyExtent();
+        extendExtent(extent, getLayerExtent(initialState.boundary));
+        this.map.getView().fit(extent, { duration: 300 });
+
         // change cursor when mouse is over interactive layers
         this.map.on('pointermove', (e) => {
             const pixel = map.getEventPixel(e.originalEvent);
@@ -305,12 +310,9 @@ class Home extends React.Component<Props, State> {
         this.layers[this.state.boundary].setVisible(false);
 
         this.layers[boundary].setVisible(true);
-
         const extent = createEmptyExtent();
-        this.layers[boundary].getLayers().forEach((layer) => {
-            extentExtent(extent, layer.getSource().getExtent());
-        });
-        this.map.getView().fit(extent);
+        extendExtent(extent, getLayerExtent(boundary));
+        this.map.getView().fit(extent, { duration: 300 });
 
         this.legends.forEach((legend) => {
             const { layerId, boundaries } = legend;

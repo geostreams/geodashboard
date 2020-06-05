@@ -52,6 +52,19 @@ export const MAP_BOUNDS = [
     6512287.786512453
 ];
 
+export const getLayerExtent = (boundary: string) =>{
+    switch(boundary){
+        case 'drainage':
+            return [-10673131.179092214,4240945.513367433,-9272804.820907786,5703644.486632567];
+        case 'huc8':
+            return [-10673131.179092214,4240945.513367433,-9272804.820907786,5703644.486632567];
+        case 'watershed':
+            return [-10923839.372435283,4545502.562858378,-9523076.314751584,6008657.686866852];
+        default:
+            return MAP_BOUNDS;
+    }
+};
+
 export const FEATURE_STYLE_INFO = [
     {
         label: 'No data',

@@ -41,6 +41,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-642](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-642)
 - Show unmonitored and outside areas only for IL drainage and huc8
   [GLGVO-650](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-650)
+- Added fixed extents for each boundary
+  [GLGVO-646](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-646)
 - Updated Unmonitored Areas layer (now called Extrapolated Areas)
   [GLGVO-652](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-652)
 
