@@ -33,7 +33,6 @@ import {
     getNutrientValueCategoryIndex,
     FEATURE_STYLE_INFO,
     BOUNDARIES,
-    YEARS,
     VARIABLES_INFO
 } from './config';
 
@@ -109,9 +108,25 @@ const Sidebar = ({
 
     const annualLoadChartData = annualLoadData[featureId];
 
-    const featureValue = annualYieldData[selectedNutrient][featureId] ?
-        annualYieldData[selectedNutrient][featureId][selectedYear] :
-        null;
+    const yearsOptions = [];
+    let annualYieldChartData;
+    let featureValue;
+    if (annualYieldData[selectedNutrient][featureId]) {
+        featureValue = annualYieldData[selectedNutrient][featureId][selectedYear];
+        annualYieldChartData = Object
+            .entries(annualYieldData[selectedNutrient][featureId])
+            .map(
+                ([year, value]) => {
+                    // Data is already sorted by year in `src/data/annual_yield.json`
+                    yearsOptions.push(<option key={year} value={year}>{year}</option>);
+                    return {
+                        x: year,
+                        y: value,
+                        selected: +year === +selectedYear
+                    };
+                }
+            );
+    };
 
     const [iframeProps, updateIframeProps] = React.useState({});
 
@@ -214,13 +229,7 @@ const Sidebar = ({
                             }}
                             input={<InputBase />}
                         >
-                            {YEARS.map(
-                                (y) => (
-                                    <option key={y} value={y}>
-                                        {y}
-                                    </option>
-                                )
-                            )}
+                            {yearsOptions}
                         </NativeSelect>
                     </FormControl>
                 </Box>
@@ -329,7 +338,7 @@ const Sidebar = ({
                     </> :
                     null}
 
-                {annualYieldData[selectedNutrient][featureId] ?
+                {annualYieldChartData ?
                     <>
                         <Typography
                             className={classes.header}
@@ -337,7 +346,8 @@ const Sidebar = ({
                             gutterBottom
                         >
                             <Box display="flex" alignItems="center">
-                                ANNUAL {selectedNutrient.toUpperCase()} YIELD 1980-2017
+                                ANNUAL {selectedNutrient.toUpperCase()} YIELD&nbsp;
+                                {annualYieldChartData[0].x}-{annualYieldChartData[annualYieldChartData.length - 1].x}
                                 &nbsp;
                                 <InfoIcon
                                     className="actionIcon"
@@ -348,17 +358,7 @@ const Sidebar = ({
                         </Typography>
                         <Divider />
                         <BarChart
-                            barsData={
-                                Object
-                                    .entries(annualYieldData[selectedNutrient][featureId])
-                                    .map(
-                                        ([year, value]) => ({
-                                            x: year,
-                                            y: value,
-                                            selected: +year === +selectedYear
-                                        })
-                                    )
-                            }
+                            barsData={annualYieldChartData}
                             xAxisProps={{
                                 title: 'Year',
                                 titlePadding: 50,

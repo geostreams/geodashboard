@@ -227,8 +227,6 @@ export const BOUNDARIES: BoundaryType = {
     }
 };
 
-export const YEARS = Array(38).fill(2017).map<number>((i, idx) => i - idx);
-
 export const VARIABLES_INFO = {
     boundary: {
         title: 'Boundary Type',
