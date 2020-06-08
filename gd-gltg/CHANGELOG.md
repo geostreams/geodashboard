@@ -55,6 +55,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1320](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1320)
 - Fixed layer interaction bug on the Home map
   [GLGVO-644](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-644)
+- Hide annual nutrient chart title when there is not chart
+  [GLGVO-653](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-653)
 
 ## [3.1.0] - 2019-09-19
 

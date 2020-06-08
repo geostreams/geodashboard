@@ -33,7 +33,6 @@ import {
     getNutrientValueCategoryIndex,
     FEATURE_STYLE_INFO,
     BOUNDARIES,
-    YEARS,
     VARIABLES_INFO
 } from './config';
 
@@ -109,9 +108,25 @@ const Sidebar = ({
 
     const annualLoadChartData = annualLoadData[featureId];
 
-    const featureValue = annualYieldData[selectedNutrient][featureId] ?
-        annualYieldData[selectedNutrient][featureId][selectedYear] :
-        null;
+    const yearsOptions = [];
+    let annualYieldChartData;
+    let featureValue;
+    if (annualYieldData[selectedNutrient][featureId]) {
+        featureValue = annualYieldData[selectedNutrient][featureId][selectedYear];
+        annualYieldChartData = Object
+            .entries(annualYieldData[selectedNutrient][featureId])
+            .map(
+                ([year, value]) => {
+                    // Data is already sorted by year in `src/data/annual_yield.json`
+                    yearsOptions.push(<option key={year} value={year}>{year}</option>);
+                    return {
+                        x: year,
+                        y: value,
+                        selected: +year === +selectedYear
+                    };
+                }
+            );
+    };
 
     const [iframeProps, updateIframeProps] = React.useState({});
 
@@ -214,13 +229,7 @@ const Sidebar = ({
                             }}
                             input={<InputBase />}
                         >
-                            {YEARS.map(
-                                (y) => (
-                                    <option key={y} value={y}>
-                                        {y}
-                                    </option>
-                                )
-                            )}
+                            {yearsOptions}
                         </NativeSelect>
                     </FormControl>
                 </Box>
@@ -329,69 +338,62 @@ const Sidebar = ({
                     </> :
                     null}
 
-                <Typography
-                    className={classes.header}
-                    variant="subtitle2"
-                    gutterBottom
-                >
-                    <Box display="flex" alignItems="center">
-                        ANNUAL {selectedNutrient.toUpperCase()} YIELD 1980-2017
-                        &nbsp;
-                        <InfoIcon
-                            className="actionIcon"
-                            fontSize="small"
-                            onClick={(() => updateDialogContent(VARIABLES_INFO.yield))}
+                {annualYieldChartData ?
+                    <>
+                        <Typography
+                            className={classes.header}
+                            variant="subtitle2"
+                            gutterBottom
+                        >
+                            <Box display="flex" alignItems="center">
+                                ANNUAL {selectedNutrient.toUpperCase()} YIELD&nbsp;
+                                {annualYieldChartData[0].x}-{annualYieldChartData[annualYieldChartData.length - 1].x}
+                                &nbsp;
+                                <InfoIcon
+                                    className="actionIcon"
+                                    fontSize="small"
+                                    onClick={(() => updateDialogContent(VARIABLES_INFO.yield))}
+                                />
+                            </Box>
+                        </Typography>
+                        <Divider />
+                        <BarChart
+                            barsData={annualYieldChartData}
+                            xAxisProps={{
+                                title: 'Year',
+                                titlePadding: 50,
+                                stroke: '#4682b4',
+                                strokeWidth: 2
+                            }}
+                            yAxisProps={{
+                                title: 'lb/acre',
+                                titlePadding: 40,
+                                stroke: '#4682b4',
+                                strokeWidth: 2
+                            }}
+                            barStroke={(d) => d.selected ? 'red' : '#4682b4'}
+                            barStrokeWidth={2}
+                            barStrokeOpacity={(d) => d.selected ? 1 : 0}
+                            barFill={({ y }) => {
+                                const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(y)];
+                                return styleInfo.color ? styleInfo.color : '#000';
+                            }}
+                            barFillOpacity="1"
+                            mouseOver={(d, idx, rects) => {
+                                select(rects[idx]).attr('fill', 'brown');
+                            }}
+                            mouseOut={(d, idx, rects) => {
+                                select(rects[idx]).attr('fill', '#4682b4');
+                            }}
+                            tooltipContent={(d) => `${d.y} lb/acre`}
+                            width={(window.innerWidth / 3) - 50}
+                            height={300}
+                            marginTop={50}
+                            marginBottom={60}
+                            marginLeft={60}
+                            marginRight={20}
                         />
-                    </Box>
-                </Typography>
-                <Divider />
-                {annualYieldData[selectedNutrient][featureId] ?
-                    <BarChart
-                        barsData={
-                            Object
-                                .entries(annualYieldData[selectedNutrient][featureId])
-                                .map(
-                                    ([year, value]) => ({
-                                        x: year,
-                                        y: value,
-                                        selected: +year === +selectedYear
-                                    })
-                                )
-                        }
-                        xAxisProps={{
-                            title: 'Year',
-                            titlePadding: 50,
-                            stroke: '#4682b4',
-                            strokeWidth: 2
-                        }}
-                        yAxisProps={{
-                            title: 'lb/acre',
-                            titlePadding: 40,
-                            stroke: '#4682b4',
-                            strokeWidth: 2
-                        }}
-                        barStroke={(d) => d.selected ? 'red' : '#4682b4'}
-                        barStrokeWidth={2}
-                        barStrokeOpacity={(d) => d.selected ? 1 : 0}
-                        barFill={({ y }) => {
-                            const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(y)];
-                            return styleInfo.color ? styleInfo.color : '#000';
-                        }}
-                        barFillOpacity="1"
-                        mouseOver={(d, idx, rects) => {
-                            select(rects[idx]).attr('fill', 'brown');
-                        }}
-                        mouseOut={(d, idx, rects) => {
-                            select(rects[idx]).attr('fill', '#4682b4');
-                        }}
-                        tooltipContent={(d) => `${d.y} lb/acre`}
-                        width={(window.innerWidth / 3) - 50}
-                        height={300}
-                        marginTop={50}
-                        marginBottom={60}
-                        marginLeft={60}
-                        marginRight={20}
-                    /> :
+                    </> :
                     null}
                 {selectedBoundary === 'huc8' ?
                     <Typography variant="subtitle2" align="center" gutterBottom>
