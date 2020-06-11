@@ -3,7 +3,6 @@ import {Icon} from 'react-mdc-web/lib';
 import styles from '../styles/map.css';
 import {maxDisplayParams, displayOnlineStatus, getMobileDetailPath, getMobileSizeMax} from '../utils/getConfig'
 import {Link} from 'react-router';
-import {removePopup} from '../utils/mapPopup';
 
 class ExplorePopup extends Component{
 
@@ -14,15 +13,16 @@ class ExplorePopup extends Component{
 
     componentWillUpdate(nextProps, nextState){
         let props = nextProps;
-        console.log(props)
 
         if(props.map && props.showPopup){
             let feature = props.features.find((feature)=>{
                 return feature.attributes.name == props.popupSensorname
             });
             this.attributes= feature.attributes;
+            // Formats dates from timestamps
             this.attributes.maxEndTime= new Date(this.attributes.maxEndTime).toLocaleDateString();
             this.attributes.minStartTime= new Date(this.attributes.minStartTime).toLocaleDateString();
+            
             this.attributes.id=feature.getId().toUpperCase();
         }
     }
@@ -34,7 +34,6 @@ class ExplorePopup extends Component{
             unit="";
         else
             unit = '('+ unit;
-        console.log(param)
         return(
                 <tr>
                     <td key ={id} style={{ width:"100%", borderSpacing:"0.4em"}}>
@@ -118,9 +117,9 @@ class ExplorePopup extends Component{
     }
 
     closePopup=(e)=>{
-        event.preventDefault();
-        removePopup(this.props.map);
+        e.preventDefault();
         this.props.resetDetailPage();
+        this.props.map.getOverlayById("marker").setPosition(undefined);
     }
 
     
@@ -136,6 +135,7 @@ class ExplorePopup extends Component{
             {label: "Time Period", value: minStartTime + " - " + maxEndTime},
             {label: "Lat, Long", value: latitude + " - " + longitude}
         ]
+        // Adds online status the table if required
         if(onlineStatus && displayOnlineStatus()){
             let onlineStatus = sensorInfo.onlineStatus.charAt(0).toUpperCase() + sensorInfo.onlineStatus.slice(1);
             tableValues.push({label: "Online Status", value: onlineStatus})
@@ -155,15 +155,15 @@ class ExplorePopup extends Component{
                     <Icon name="close"/>
                 </div>
                 <div id="popup-details">
-                <table className={styles.popup_table}>
-                <tbody>
-                    {tableValues.map(({label,value}, id)=>
-                        this.renderRows(label, value, id)
-                    )}
-                </tbody>
-                </table>
-                {this.renderParams()}
-                <Link className={styles.viewdetail} to={detailLink}>View Data</Link>
+                    <table className={styles.popup_table}>
+                    <tbody>
+                        {tableValues.map(({label,value}, id)=>
+                            this.renderRows(label, value, id)
+                        )}
+                    </tbody>
+                    </table>
+                    {this.renderParams()}
+                    <Link className={styles.viewdetail} to={detailLink}>View Data</Link>
                 </div>
             </div>
         )

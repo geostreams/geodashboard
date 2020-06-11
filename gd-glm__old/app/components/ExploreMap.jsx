@@ -121,15 +121,9 @@ class ExploreMap extends Component {
     };
 
     popupHandleHelper = (feature: ol.Feature, coordinate: number[], overlay: ol.Overlay, theMap: ol.Map) => {
-        const content = document.getElementById('popup-content');
         if (feature && feature.getId()) {
             if (theMap) {
                 theMap.getView().setCenter(feature.getGeometry().getCoordinates());
-            }
-            let popupText = popupHeader(feature, styles, true) + popupParameters(feature, styles);
-
-            if (content) {
-                content.innerHTML = popupText;
             }
 
             // Use Sensor Coordinates for Popup location
