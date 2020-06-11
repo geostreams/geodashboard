@@ -16,10 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        resetDetailPageSelection: () => {
+        resetDetailPage: () => {
             dispatch(resetDetailPage());
-            dispatch(initializeExploreDataSources());
-            dispatch(resetExploreSensors());
         }
     }
 };

@@ -70,12 +70,6 @@ class BasicMap extends Component {
                 <div id='map' className={styles.root}> </div>
                 <div style={{display: 'none'}}>
                     <div id="marker" title="Marker" className="marker"> </div>
-                    {/* <div id="popup" className={styles.olPopup}>
-                        <a href="#" id="popup-closer" className={styles.olPopupCloser}>
-                            <Icon name="close"/>
-                        </a>
-                        <div id="popup-content"> </div>
-                    </div> */}
                     <ExplorePopup map={this.state.map} features={this.props.features}/>
 
                     <div id="ol-centercontrol" className={styles.olCenterButton}
@@ -196,7 +190,6 @@ class BasicMap extends Component {
         ];
 
         const container = ReactDOM.findDOMNode(this).querySelector('#popup');
-        const closer = document.getElementById('popup-closer');
 
         let overlay = new ol.Overlay({
             id: "marker",
@@ -219,17 +212,6 @@ class BasicMap extends Component {
         let theMap;
 
         const that = this;
-
-        // If the User clicks the closing 'X' Button in Popups opened from the
-        // - Map Points: The view WILL NOT reset and recenter
-        // - Accordions: The view WILL reset and recenter
-        if (closer) {
-            closer.onclick = function () {
-                that.props.onMapSingleClick(theMap);
-                removePopup(theMap);
-                return false;
-            };
-        }
 
         let centerControl;
         const centerButton = this.centerButton;

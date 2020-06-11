@@ -1,9 +1,9 @@
 import React, {Component, useState} from 'react';
 import {Icon} from 'react-mdc-web/lib';
 import styles from '../styles/map.css';
-import {maxDisplayParams, displayOnlineStatus} from '../utils/getConfig'
-import {Row, Col} from 'react-flexbox-grid';
+import {maxDisplayParams, displayOnlineStatus, getMobileDetailPath, getMobileSizeMax} from '../utils/getConfig'
 import {Link} from 'react-router';
+import {removePopup} from '../utils/mapPopup';
 
 class ExplorePopup extends Component{
 
@@ -27,6 +27,7 @@ class ExplorePopup extends Component{
         }
     }
     
+    /* Renders each parameter row */
     displayParameter=(value, id)=>{
         let [param, unit ]= value.split('(',2);
         if(unit===undefined)
@@ -83,7 +84,7 @@ class ExplorePopup extends Component{
             </table>
         )
     }
-
+    // Converts latitutde longitude decimal values to degree notation.
     formatCoordinates=(lat, long)=>{
         let latitude = Number(lat).toPrecision(5).toString();
         if (latitude.includes("-")) {
@@ -102,15 +103,8 @@ class ExplorePopup extends Component{
         return({latitude, longitude})
     }
 
-    getOnlineStatus=()=>{
-        if(displayOnlineStatus() && this.attributes.onlineStatus!="none"){
-            let onlineStatusVal = sensorInfo.onlineStatus.charAt(0).toUpperCase() + sensorInfo.onlineStatus.slice(1);
-            return onlineStatusVal;
-        }
-        return(null);
-    }
-
-    renderRows(label, value, id){
+    // Returns a single row of header data
+    renderRows=(label, value, id)=>{
         return(
             <tr key={id}>
                 <td className={styles.table_title} style={{width:"30%",  textAlign:"right"}} >
@@ -123,9 +117,16 @@ class ExplorePopup extends Component{
         )
     }
 
+    closePopup=(e)=>{
+        event.preventDefault();
+        removePopup(this.props.map);
+        this.props.resetDetailPage();
+    }
+
     
     render(){
-        if(!this.attributes && !this.props.showPopup){
+        // Renders an empty div if popup is to be hidden
+        if(!this.attributes || !this.props.showPopup){
             return(<div id="popup"></div>)
         }
         const {id, color, dataSource, maxEndTime, minStartTime, onlineStatus} = this.attributes;
@@ -136,16 +137,24 @@ class ExplorePopup extends Component{
             {label: "Lat, Long", value: latitude + " - " + longitude}
         ]
         if(onlineStatus && displayOnlineStatus()){
-            tableValues.push({label: "Online Status", value: this.getOnlineStatus()})
+            let onlineStatus = sensorInfo.onlineStatus.charAt(0).toUpperCase() + sensorInfo.onlineStatus.slice(1);
+            tableValues.push({label: "Online Status", value: onlineStatus})
         }
+        let detailLink= "/detail/location/"
+
+        // Gets the mobile link from config if required
+        if (screen.width <= getMobileSizeMax()) {
+            detailLink = getMobileDetailPath();
+        }
+        detailLink += this.attributes.name+"/seperate";
 
         return(
             <div id="popup" className={styles.olPopup}>
                 <h2 className={styles.header2style} style={{backgroundColor: color}}>{id}</h2>
-                <a href="#" id="popupcloser" className={styles.olPopupCloser}>
+                <div onClick={this.closePopup} id="popupcloser" className={styles.olPopupCloser}>
                     <Icon name="close"/>
-                </a>
-                <div id="header">
+                </div>
+                <div id="popup-details">
                 <table className={styles.popup_table}>
                 <tbody>
                     {tableValues.map(({label,value}, id)=>
@@ -154,7 +163,7 @@ class ExplorePopup extends Component{
                 </tbody>
                 </table>
                 {this.renderParams()}
-                <Link className={styles.viewdetail} to={"/detail/location/"+this.attributes.name+"/seperate"}>View Data</Link>
+                <Link className={styles.viewdetail} to={detailLink}>View Data</Link>
                 </div>
             </div>
         )
