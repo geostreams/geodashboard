@@ -11,6 +11,9 @@ import type {sensorDetailState} from '../utils/flowtype';
 
 const defaultState = {
     id: null,
+    name: null,
+    coordinates: null,
+    showExplorePopup: false,
     datapoints: []
 };
 

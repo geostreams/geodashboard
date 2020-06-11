@@ -22,6 +22,8 @@ import {getMapTileURLSetting, getClustersDistance, maxZoom, minZoom, mapCenter} 
 import {clusteringOptions, getAttribution, getControls} from '../utils/mapUtils';
 import {removePopup} from '../utils/mapPopup';
 import {drawClearButtonFunction, drawControlElements} from '../utils/mapDraw';
+import ExplorePopup from '../containers/ExplorePopup';
+import ReactDOM from 'react-dom';
 
 
 class BasicMap extends Component {
@@ -63,18 +65,18 @@ class BasicMap extends Component {
     }
 
     render() {
-
         return (
             <div>
                 <div id='map' className={styles.root}> </div>
                 <div style={{display: 'none'}}>
                     <div id="marker" title="Marker" className="marker"> </div>
-                    <div id="popup" className={styles.olPopup}>
+                    {/* <div id="popup" className={styles.olPopup}>
                         <a href="#" id="popup-closer" className={styles.olPopupCloser}>
                             <Icon name="close"/>
                         </a>
                         <div id="popup-content"> </div>
-                    </div>
+                    </div> */}
+                    <ExplorePopup map={this.state.map} features={this.props.features}/>
 
                     <div id="ol-centercontrol" className={styles.olCenterButton}
                          ref={(div) => {
@@ -193,7 +195,7 @@ class BasicMap extends Component {
             customLocationFilterLayer
         ];
 
-        const container = document.getElementById('popup');
+        const container = ReactDOM.findDOMNode(this).querySelector('#popup');
         const closer = document.getElementById('popup-closer');
 
         let overlay = new ol.Overlay({
@@ -202,7 +204,8 @@ class BasicMap extends Component {
             autoPan: true,
             autoPanAnimation: {
                 duration: 250
-            }
+            },
+            stopEvent: false
         });
 
         let view = new ol.View({
