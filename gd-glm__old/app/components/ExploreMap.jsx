@@ -6,9 +6,7 @@ import React, {Component} from 'react';
 import ol from 'openlayers';
 
 require("openlayers/css/ol.css");
-import styles from '../styles/map.css';
 import {sensorsToFeatures, getMultiLineLayer, matchMapArea} from '../utils/mapUtils';
-import {popupHeader, popupParameters} from '../utils/mapPopup';
 import BasicMap from './BasicMap';
 import type {InputEventMap} from '../utils/flowtype';
 import {

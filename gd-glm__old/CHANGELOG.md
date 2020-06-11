@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GEOD-1291](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1291)
   
 ### Fixed
+- Created a new popup component to fix popup closing issue.
+  [GEOD-1327] (https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1327)
 
 ## [3.1.0] - 2019-09-19
 
