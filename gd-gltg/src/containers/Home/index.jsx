@@ -63,8 +63,11 @@ const styles = {
         height: '100%'
     },
     sidebar: {
-        height: '100%',
-        overflowY: 'auto'
+        'height': '100%',
+        'overflowY': 'auto',
+        '& a': {
+            color: '#0D73C5'
+        }
     },
     fillContainer: {
         width: '100%',

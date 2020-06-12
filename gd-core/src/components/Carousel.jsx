@@ -38,16 +38,17 @@ const useStyle = makeStyles({
 });
 
 type Props = {
-    children: React.Node,
-    slidesInterval: number,
-    startIndex: number,
-    startInPause: boolean,
-    showPauseControl: boolean,
-    showNavigationControls: boolean,
-    showIndicators: boolean,
-    buttonsSize: 'small' | 'medium' | 'large',
-    indicatorsLocation: 'outside' | 'overlay',
-    indicatorsColor: string
+    children: React.Node;
+    slidesInterval: number;
+    startIndex: number;
+    startInPause: boolean;
+    showPauseControl: boolean;
+    showNavigationControls: boolean;
+    showIndicators: boolean;
+    buttonsSize: 'small' | 'medium' | 'large';
+    indicatorsLocation: 'outside' | 'overlay';
+    indicatorsColor: string;
+    buttonClasses: string;
 }
 
 const Carousel = ({
@@ -61,6 +62,7 @@ const Carousel = ({
     buttonsSize,
     indicatorsLocation,
     indicatorsColor,
+    buttonClasses,
     ...rest
 }: Props) => {
     const classes = useStyle();
@@ -150,7 +152,7 @@ const Carousel = ({
                         className={classes.navButton}
                     >
                         <Fab
-                            className={classes.button}
+                            className={`${buttonClasses} ${classes.button}`}
                             color="primary"
                             size={buttonsSize}
                             onClick={() => handleNavigation(activeIndex - 1)}
@@ -167,7 +169,7 @@ const Carousel = ({
                         className={classes.navButton}
                     >
                         <Fab
-                            className={classes.button}
+                            className={`${buttonClasses} ${classes.button}`}
                             color="primary"
                             size={buttonsSize}
                             onClick={() => handleNavigation(activeIndex + 1)}
@@ -205,7 +207,8 @@ Carousel.defaultProps = {
     showIndicators: true,
     buttonsSize: 'medium',
     indicatorsLocation: 'outside',
-    indicatorsColor: 'black'
+    indicatorsColor: 'black',
+    buttonClasses: ''
 };
 
 export default Carousel;

@@ -68,7 +68,7 @@ const LegendHorizontalDiscrete = (props: Props) => {
                 .attr('dx', boxWidth / 2)
                 .attr('y', activeBoxLabelHeight + boxHeight + 15)
                 .attr('text-anchor', 'middle')
-                .attr('font-size', 11)
+                .attr('font-size', 12)
                 .text(label);
 
             if (activeBoxLabel && i === activeBox) {

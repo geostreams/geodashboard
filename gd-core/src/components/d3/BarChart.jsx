@@ -4,7 +4,6 @@ import {
     area,
     axisBottom,
     axisLeft,
-    event,
     line,
     max,
     scaleBand,
@@ -13,14 +12,13 @@ import {
     ScaleLinear,
     Selection
 } from 'd3';
-import { withStyles } from '@material-ui/core';
 
 import type { SVGElement, SVGGElement } from 'dom-helpers';
 
-import { sharedStyle, xAxisLabel, yAxisLabel } from './utils';
+import { xAxisLabel, yAxisLabel } from './utils';
 
 type Props = {
-    className: string,
+    className: string;
     width: number;
     height: number;
     marginTop: number;
@@ -34,7 +32,7 @@ type Props = {
         stroke: string;
         strokeWidth: number;
         textColor: string;
-        textOpacity: number
+        textOpacity: number;
     };
     yAxisProps: {
         title: string;
@@ -43,7 +41,7 @@ type Props = {
         stroke: string;
         strokeWidth: number;
         textColor: string;
-        textOpacity: number
+        textOpacity: number;
     };
     barStroke: string | Function;
     barStrokeWidth: string | Function;
@@ -57,7 +55,6 @@ type Props = {
     lineStrokeOpacity: string | Function;
     intervalFill: string | Function;
     intervalFillOpacity: string | Function;
-    tooltipContent: string | Function;
     mouseOver: Function;
     mouseOut: Function;
     click: Function;
@@ -69,15 +66,12 @@ type Props = {
 class BarChart extends React.Component<Props> {
     svgRef: { current: null | SVGElement } = React.createRef();
 
-    tooltipRef: { current: null | HTMLDivElement } = React.createRef();
-
     chartProps: {
         gEl: Selection<SVGGElement>,
         x: ScaleLinear,
         y: ScaleLinear,
         xAxisGroup: Selection<SVGGElement>,
-        yAxisGroup: Selection<SVGGElement>,
-        tooltip: Selection<HTMLElement>
+        yAxisGroup: Selection<SVGGElement>
     };
 
     static defaultProps = {
@@ -99,7 +93,6 @@ class BarChart extends React.Component<Props> {
         lineFillOpacity: 1,
         intervalFill: '#27ae8f',
         intervalFillOpacity: .5,
-        tooltipContent: null,
         className: '',
         mouseOver: () => {
         },
@@ -139,7 +132,6 @@ class BarChart extends React.Component<Props> {
             lineFillOpacity,
             intervalFill,
             intervalFillOpacity,
-            tooltipContent,
             mouseOver,
             mouseOut,
             click
@@ -150,8 +142,7 @@ class BarChart extends React.Component<Props> {
             x,
             y,
             xAxisGroup,
-            yAxisGroup,
-            tooltip
+            yAxisGroup
         } = this.chartProps;
 
         x.domain(barsData.map((d) => d.x));
@@ -217,25 +208,6 @@ class BarChart extends React.Component<Props> {
             .on('mouseover', mouseOver)
             .on('mouseout', mouseOut)
             .on('click', click)
-            .on('mouseover', (d) => {
-                if (tooltip) {
-                    tooltip
-                        .html(typeof tooltipContent === 'function' ? tooltipContent(d) : tooltipContent)
-                        .transition()
-                        .duration(200)
-                        .style('opacity', .9)
-                        .style('left', `${event.clientX}px`)
-                        .style('top', `${event.clientY - 50}px`);
-                }
-            })
-            .on('mouseout', () => {
-                if (tooltip) {
-                    tooltip
-                        .transition()
-                        .duration(500)
-                        .style('opacity', 0);
-                }
-            })
             .merge(bars)
             .transition()
             .duration(500)
@@ -316,8 +288,7 @@ class BarChart extends React.Component<Props> {
             width,
             height,
             xAxisProps,
-            yAxisProps,
-            tooltipContent
+            yAxisProps
         } = this.props;
 
         const innerWidth = width - marginLeft - marginRight;
@@ -371,15 +342,12 @@ class BarChart extends React.Component<Props> {
             );
         }
 
-        const tooltip = tooltipContent ? select(this.tooltipRef.current) : null;
-
         this.chartProps = {
             gEl,
             x,
             y,
             xAxisGroup,
-            yAxisGroup,
-            tooltip
+            yAxisGroup
         };
         this.updateData();
     };
@@ -389,10 +357,9 @@ class BarChart extends React.Component<Props> {
         return (
             <div className={className}>
                 <svg ref={this.svgRef} width={width} height={height} />
-                <div ref={this.tooltipRef} className="tooltip" />
             </div>
         );
     }
 }
 
-export default withStyles(sharedStyle)(BarChart);
+export default BarChart;

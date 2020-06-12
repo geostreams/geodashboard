@@ -149,7 +149,7 @@ export const getFeatureStyle = (
             width: 4
         } :
         {
-            color: [0, 0, 0, 1],
+            color: '#7f7f7f',
             width: 1
         };
 

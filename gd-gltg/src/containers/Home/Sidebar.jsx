@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { select } from 'd3';
+import { event, select } from 'd3';
 import {
     Box,
     Container,
@@ -47,8 +47,19 @@ type Props = {
 }
 
 const useStyle = makeStyles((theme) =>({
+    dropdownsContainer: {
+        background: '#e2ebf4'
+    },
     header: {
-        margin: '30px auto'
+        margin: '10px auto'
+    },
+    divider: {
+        borderTop: '1px dashed #000',
+        backgroundColor: 'unset'
+    },
+    infoIcon: {
+        color: '#0D73C5',
+        fontSize: '1rem'
     },
     featureProp: {
         color: '#E05769'
@@ -57,7 +68,8 @@ const useStyle = makeStyles((theme) =>({
         margin: theme.spacing(1)
     },
     formLabel: {
-        padding: theme.spacing(1)
+        padding: theme.spacing(1),
+        fontSize: '.88rem'
     },
     selectButton: {
         'background': theme.palette.primary.main,
@@ -66,6 +78,7 @@ const useStyle = makeStyles((theme) =>({
         'position': 'relative',
         'height': 42,
         'padding': theme.spacing(2),
+        'fontSize': '.75rem',
         '&:focus': {
             borderRadius: 4
         },
@@ -83,9 +96,31 @@ const useStyle = makeStyles((theme) =>({
             border: '1px solid #aaa'
         }
     },
+    annualYieldChart: {
+        '& .xAxis .tick:nth-child(2n) text': {
+            visibility: 'hidden'
+        }
+    },
+    annualYieldTooltip: {
+        height: 15
+    },
+    chartTooltip: {
+        position: 'fixed',
+        background: '#fff',
+        border: '1px solid #eee',
+        borderRadius: 5,
+        padding: 5,
+        opacity: 0
+    },
     carousel: {
         width: '100%',
         marginBottom: 20
+    },
+    carouselButton: {
+        'backgroundColor': '#0D73C5',
+        '&:hover': {
+            backgroundColor: '#0D73C5'
+        }
     },
     carouselSlideContainer: {
         width: '100%'
@@ -105,6 +140,9 @@ const Sidebar = ({
     handleVariableChange
 }: Props) => {
     const classes = useStyle();
+
+    const annualYieldTooltipRef: { current: null | HTMLDivElement } = React.createRef();
+    const annualYieldChartTooltipRef: { current: null | HTMLDivElement } = React.createRef();
 
     const annualLoadChartData = annualLoadData[featureId];
 
@@ -139,104 +177,102 @@ const Sidebar = ({
 
     return (
         <>
-            <Container>
-                <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
+            <Box
+                className={classes.dropdownsContainer}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+            >
+                <FormControl
+                    component="fieldset"
+                    className={classes.formControl}
                 >
-                    <FormControl
-                        component="fieldset"
-                        className={classes.formControl}
+                    <FormLabel
+                        component="legend"
+                        className={classes.formLabel}
                     >
-                        <FormLabel
-                            component="legend"
-                            className={classes.formLabel}
-                        >
-                            <Box display="flex" alignItems="center">
-                                Boundary Type
-                                &nbsp;
-                                <InfoIcon
-                                    className="actionIcon"
-                                    fontSize="small"
-                                    onClick={(() => updateDialogContent(VARIABLES_INFO.boundary))}
-                                />
-                            </Box>
-                        </FormLabel>
-                        <NativeSelect
-                            className={classes.selectButton}
-                            value={selectedBoundary}
-                            onChange={({ target: { value } }) => {
-                                handleBoundaryChange(value);
-                            }}
-                            input={<InputBase />}
-                        >
-                            {entries(BOUNDARIES).map(([name, { label }]) => (
-                                <option
-                                    key={name}
-                                    value={name}
-                                >
-                                    {label}
-                                </option>
-                            ))}
-                        </NativeSelect>
-                    </FormControl>
-                    <FormControl
-                        component="fieldset"
-                        className={classes.formControl}
+                        <Box display="flex" alignItems="center">
+                            Boundary Type
+                            &nbsp;
+                            <InfoIcon
+                                className={`actionIcon ${classes.infoIcon}`}
+                                onClick={(() => updateDialogContent(VARIABLES_INFO.boundary))}
+                            />
+                        </Box>
+                    </FormLabel>
+                    <NativeSelect
+                        className={classes.selectButton}
+                        value={selectedBoundary}
+                        onChange={({ target: { value } }) => {
+                            handleBoundaryChange(value);
+                        }}
+                        input={<InputBase />}
                     >
-                        <FormLabel
-                            component="legend"
-                            className={classes.formLabel}
-                        >
-                            <Box display="flex" alignItems="center">
-                                Nutrient
-                                &nbsp;
-                                <InfoIcon
-                                    className="actionIcon"
-                                    fontSize="small"
-                                    onClick={(() => updateDialogContent(VARIABLES_INFO.nutrient))}
-                                />
-                            </Box>
-                        </FormLabel>
-                        <NativeSelect
-                            className={classes.selectButton}
-                            value={selectedNutrient}
-                            onChange={({ target: { value } }) => {
-                                handleVariableChange(value, 'nutrient');
-                            }}
-                            input={<InputBase />}
-                        >
-                            <option value="Phosphorus">Phosphorus</option>
-                            <option value="Nitrogen">Nitrogen</option>
-                        </NativeSelect>
-                    </FormControl>
-                    <FormControl
-                        component="fieldset"
-                        className={classes.formControl}
+                        {entries(BOUNDARIES).map(([name, { label }]) => (
+                            <option
+                                key={name}
+                                value={name}
+                            >
+                                {label}
+                            </option>
+                        ))}
+                    </NativeSelect>
+                </FormControl>
+                <FormControl
+                    component="fieldset"
+                    className={classes.formControl}
+                >
+                    <FormLabel
+                        component="legend"
+                        className={classes.formLabel}
                     >
-                        <FormLabel
-                            component="legend"
-                            className={classes.formLabel}
-                        >
-                            Year
-                        </FormLabel>
-                        <NativeSelect
-                            className={classes.selectButton}
-                            value={selectedYear}
-                            onChange={({ target: { value } }) => {
-                                handleVariableChange(value, 'year');
-                            }}
-                            input={<InputBase />}
-                        >
-                            {yearsOptions}
-                        </NativeSelect>
-                    </FormControl>
-                </Box>
-
+                        <Box display="flex" alignItems="center">
+                            Nutrient
+                            &nbsp;
+                            <InfoIcon
+                                className={`actionIcon ${classes.infoIcon}`}
+                                onClick={(() => updateDialogContent(VARIABLES_INFO.nutrient))}
+                            />
+                        </Box>
+                    </FormLabel>
+                    <NativeSelect
+                        className={classes.selectButton}
+                        value={selectedNutrient}
+                        onChange={({ target: { value } }) => {
+                            handleVariableChange(value, 'nutrient');
+                        }}
+                        input={<InputBase />}
+                    >
+                        <option value="Phosphorus">Phosphorus</option>
+                        <option value="Nitrogen">Nitrogen</option>
+                    </NativeSelect>
+                </FormControl>
+                <FormControl
+                    component="fieldset"
+                    className={classes.formControl}
+                >
+                    <FormLabel
+                        component="legend"
+                        className={classes.formLabel}
+                    >
+                        Year
+                    </FormLabel>
+                    <NativeSelect
+                        className={classes.selectButton}
+                        value={selectedYear}
+                        onChange={({ target: { value } }) => {
+                            handleVariableChange(value, 'year');
+                        }}
+                        input={<InputBase />}
+                    >
+                        {yearsOptions}
+                    </NativeSelect>
+                </FormControl>
+            </Box>
+            <Container>
                 <Typography
                     className={classes.header}
-                    variant="h6"
+                    variant="h5"
                 >
                     {regionLabel} - <span className={classes.featureProp}>{featureId}</span>
                 </Typography>
@@ -309,9 +345,10 @@ const Sidebar = ({
 
                 {featureValue ?
                     <>
+                        <Divider className={classes.divider} />
                         <Typography
                             className={classes.header}
-                            variant="subtitle2"
+                            variant="subtitle1"
                             gutterBottom
                         >
                             AVERAGE YIELD - {selectedYear}:
@@ -322,10 +359,10 @@ const Sidebar = ({
                                     'No data is available'}
                             </span>
                         </Typography>
-                        <Divider />
                         <Container>
                             <LegendHorizontalDiscrete
                                 boxCount={7}
+                                boxWidth={((window.innerWidth / 3) - 150) / 7}
                                 getBoxInfo={(idx) => FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(
                                     idx === 0 ? undefined : (idx * 5) - 0.1
                                 )]}
@@ -340,9 +377,10 @@ const Sidebar = ({
 
                 {annualYieldChartData ?
                     <>
+                        <Divider className={classes.divider} />
                         <Typography
                             className={classes.header}
-                            variant="subtitle2"
+                            variant="subtitle1"
                             gutterBottom
                         >
                             <Box display="flex" alignItems="center">
@@ -350,14 +388,19 @@ const Sidebar = ({
                                 {annualYieldChartData[0].x}-{annualYieldChartData[annualYieldChartData.length - 1].x}
                                 &nbsp;
                                 <InfoIcon
-                                    className="actionIcon"
-                                    fontSize="small"
+                                    className={`actionIcon ${classes.infoIcon}`}
                                     onClick={(() => updateDialogContent(VARIABLES_INFO.yield))}
                                 />
                             </Box>
                         </Typography>
-                        <Divider />
+                        <Typography
+                            ref={annualYieldTooltipRef}
+                            className={`${classes.header} ${classes.annualYieldTooltip}`}
+                            variant="subtitle1"
+                            gutterBottom
+                        />
                         <BarChart
+                            className={classes.annualYieldChart}
                             barsData={annualYieldChartData}
                             xAxisProps={{
                                 title: 'Year',
@@ -381,11 +424,27 @@ const Sidebar = ({
                             barFillOpacity="1"
                             mouseOver={(d, idx, rects) => {
                                 select(rects[idx]).attr('fill', 'brown');
+                                select(annualYieldTooltipRef.current)
+                                    .html(`${d.x}: <span class=${classes.featureProp}>${d.y} lb/acre</span>`);
+                                select(annualYieldChartTooltipRef.current)
+                                    .html(`${d.y} lb/acre`)
+                                    .transition()
+                                    .duration(200)
+                                    .style('opacity', .9)
+                                    .style('left', `${event.clientX}px`)
+                                    .style('top', `${event.clientY - 50}px`);
                             }}
                             mouseOut={(d, idx, rects) => {
-                                select(rects[idx]).attr('fill', '#4682b4');
+                                const styleInfo = FEATURE_STYLE_INFO[getNutrientValueCategoryIndex(d.y)];
+                                select(rects[idx])
+                                    .attr('fill', styleInfo.color ? styleInfo.color : '#000');
+                                select(annualYieldTooltipRef.current)
+                                    .html('');
+                                select(annualYieldChartTooltipRef.current)
+                                    .transition()
+                                    .duration(500)
+                                    .style('opacity', 0);
                             }}
-                            tooltipContent={(d) => `${d.y} lb/acre`}
                             width={(window.innerWidth / 3) - 50}
                             height={300}
                             marginTop={50}
@@ -393,9 +452,10 @@ const Sidebar = ({
                             marginLeft={60}
                             marginRight={20}
                         />
+                        <div ref={annualYieldChartTooltipRef} className={classes.chartTooltip} />
                     </> :
                     null}
-                {selectedBoundary === 'huc8' ?
+                {selectedBoundary === 'drainage' || selectedBoundary === 'huc8' ?
                     <Typography variant="subtitle2" align="center" gutterBottom>
                         <a
                             target="_blank"
@@ -411,16 +471,20 @@ const Sidebar = ({
                 handleClose={handleDataStoriesModalClose}
             />
             <Container className={classes.carousel}>
-                <Typography variant="subtitle2" gutterBottom>
-                    Learn More About GLTG
+                <Divider />
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <Typography variant="h5" gutterBottom>
+                        Learn More About GLTG
+                    </Typography>
                     <Link to="/data-stories" className="right">
                         View All Data Stories
                     </Link>
-                </Typography>
+                </Box>
                 <Carousel
                     slidesInterval={3000}
                     buttonsSize="small"
                     showPauseControl={false}
+                    buttonClasses={classes.carouselButton}
                 >
                     {dataStories.map(({ title, thumbnail, slides }) => (
                         <Grid

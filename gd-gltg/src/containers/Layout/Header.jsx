@@ -35,8 +35,15 @@ const useStyles = makeStyles((theme) =>{
             color: theme.palette.primary.contrastText,
             textDecoration: 'none'
         },
-        navBar: {
+        tabsRoot: {
+            fontSize: 16,
             flexGrow: 1
+        },
+        tabsIndicator: {
+            backgroundColor: '#fff'
+        },
+        tabRoot: {
+            fontSize: '1rem'
         },
         marginLeftAuto: {
             marginLeft: 'auto !important'
@@ -79,27 +86,37 @@ const Header = ({ location }: Props) => {
                 >
                     Great Lakes to Gulf
                 </Typography>
-                <Tabs className={classes.navBar} centered value={location.pathname.split('/')[1]}>
+                <Tabs
+                    classes={{
+                        root: classes.tabsRoot,
+                        indicator: classes.tabsIndicator
+                    }}
+                    centered
+                    value={location.pathname.split('/')[1]}
+                >
                     <Tab
-                        className={classes.marginLeftAuto}
+                        className={`${classes.marginLeftAuto} ${classes.tabRoot}`}
                         label="Home"
                         component={Link}
                         to="/"
                         value=""
                     />
                     <Tab
+                        className={classes.tabRoot}
                         label="Data Stories"
                         component={Link}
                         to="/data-stories"
                         value="data-stories"
                     />
                     <Tab
+                        className={classes.tabRoot}
                         label="Partners"
                         component={Link}
                         to="/partners"
                         value="partners"
                     />
                     <Tab
+                        className={classes.tabRoot}
                         label="FAQ"
                         component={Link}
                         to="/faq"
@@ -108,7 +125,7 @@ const Header = ({ location }: Props) => {
                     <Tab
                         ref={geostreamingMenuEl}
                         component="a"
-                        className={classes.marginLeftAuto}
+                        className={`${classes.marginLeftAuto} ${classes.tabRoot}`}
                         label={
                             <span className={classes.dropdownIcon}>
                                 Geostreaming App <ArrowDropDownIcon />
