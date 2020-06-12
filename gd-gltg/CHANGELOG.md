@@ -57,6 +57,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-644](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-644)
 - Hide annual nutrient chart title when there is not chart
   [GLGVO-653](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-653)
+- Updated the styling of the home page
+  [GLGVO-657](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-657)
 
 ## [3.1.0] - 2019-09-19
 

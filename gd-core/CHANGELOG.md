@@ -15,5 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Added `LegendHorizontalDiscrete` component and renamed `Legend` to `LegendHorizontalDiscrete`.
   [GLGVO-623](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-623)
+ - Removed the tooltip from bar chart, so it can be set and customized in the parent component
+   [GLGVO-657](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-657)
 
 ### Fixed
