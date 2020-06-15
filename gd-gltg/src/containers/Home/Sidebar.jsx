@@ -289,16 +289,16 @@ const Sidebar = ({
                         <Divider className={classes.divider} />
                         <Box className={classes.annualFlowLegend} display="flex" justifyContent="space-between">
                             <Typography variant="subtitle1">
-                                ANNUAL NITRATE FLOW
+                                ANNUAL NITRATE LOAD
                             </Typography>
                             <SimpleLegend
-                                width={135}
+                                width={165}
                                 itemHeight={13}
                                 marginBottom={4}
                                 data={[
-                                    { label: 'Annual flow', type: 'polygon', color: '#117fc9', width: 2, opacity: 1 },
-                                    { label: 'Normalized flow', type: 'line', color: '#f63700', width: 2, opacity: 1 },
-                                    { label: 'Confidence interval', type: 'polygon', color: '#fdb47f', width: 2, opacity: 1 }
+                                    { label: 'Annual Load', type: 'polygon', color: '#117fc9', width: 2, opacity: 1 },
+                                    { label: 'Flow Normalized Load', type: 'line', color: '#f63700', width: 2, opacity: 1 },
+                                    { label: '95% Confidence Interval', type: 'polygon', color: '#fdb47f', width: 2, opacity: 1 }
                                 ]}
                             />
                         </Box>
