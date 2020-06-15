@@ -87,7 +87,7 @@ export const FEATURE_STYLE_INFO = [
         color: '#4D94C1'
     },
     {
-        label: '#20-24.99',
+        label: '20-24.99',
         color: '#1B64A7'
     },
     {

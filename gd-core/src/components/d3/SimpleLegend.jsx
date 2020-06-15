@@ -31,8 +31,7 @@ const SimpleLegend = (props: Props) => {
         data
     } = props;
 
-    const height = (itemHeight + itemGap) * data.length;
-    const innerWidth = width - marginLeft - marginRight;
+    const height = ((itemHeight + itemGap) * data.length) - itemGap + marginBottom + marginTop;
 
     const svgRef = React.useRef(null);
 
@@ -43,8 +42,6 @@ const SimpleLegend = (props: Props) => {
 
             const gEl = svgEl
                 .append('g')
-                .attr('width', innerWidth)
-                .attr('height', height)
                 .attr('transform', `translate(${marginLeft},${marginTop})`);
 
             data.forEach(({ label, type, color, width: strokeWidth, opacity }, idx) => {
@@ -80,7 +77,7 @@ const SimpleLegend = (props: Props) => {
         }
     });
 
-    return <svg ref={svgRef} width={width} height={height + marginTop + marginBottom} />;
+    return <svg ref={svgRef} width={width + marginLeft + marginRight} height={height} />;
 };
 
 SimpleLegend.defaultProps = {

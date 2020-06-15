@@ -96,7 +96,7 @@ const useStyle = makeStyles((theme) =>({
             border: '1px solid #aaa'
         }
     },
-    annualYieldChart: {
+    barChart: {
         '& .xAxis .tick:nth-child(2n) text': {
             visibility: 'hidden'
         }
@@ -286,13 +286,15 @@ const Sidebar = ({
 
                 {selectedBoundary === 'watershed' && annualLoadChartData ?
                     <>
+                        <Divider className={classes.divider} />
                         <Box className={classes.annualFlowLegend} display="flex" justifyContent="space-between">
-                            <Typography variant="subtitle2">
+                            <Typography variant="subtitle1">
                                 ANNUAL NITRATE FLOW
                             </Typography>
                             <SimpleLegend
-                                width={175}
+                                width={135}
                                 itemHeight={13}
+                                marginBottom={4}
                                 data={[
                                     { label: 'Annual flow', type: 'polygon', color: '#117fc9', width: 2, opacity: 1 },
                                     { label: 'Normalized flow', type: 'line', color: '#f63700', width: 2, opacity: 1 },
@@ -301,7 +303,7 @@ const Sidebar = ({
                             />
                         </Box>
                         <BarChart
-                            className={classes.annualFlowChart}
+                            className={classes.barChart}
                             barsData={
                                 annualLoadChartData.annual_load.map(
                                     ({ x, y }) => ({
@@ -400,7 +402,7 @@ const Sidebar = ({
                             gutterBottom
                         />
                         <BarChart
-                            className={classes.annualYieldChart}
+                            className={classes.barChart}
                             barsData={annualYieldChartData}
                             xAxisProps={{
                                 title: 'Year',
@@ -471,7 +473,7 @@ const Sidebar = ({
                 handleClose={handleDataStoriesModalClose}
             />
             <Container className={classes.carousel}>
-                <Divider />
+                <Divider className={classes.divider} />
                 <Box display="flex" justifyContent="space-between" alignItems="center">
                     <Typography variant="h5" gutterBottom>
                         Learn More About GLTG
