@@ -279,10 +279,50 @@ const Sidebar = ({
                 </Typography>
 
                 {selectedBoundary === 'drainage' && featureId === 'Statewide Summary' ?
-                    <Typography>
-                        The total {selectedNutrient} load leaving the state of Illinois is estimated to be&nbsp;
-                        {overallData.drainage.annual_load[selectedNutrient][selectedYear]} million lb in {selectedYear}.
-                    </Typography> :
+                    <>
+                        <Typography>
+                            The total {selectedNutrient} load leaving the state of Illinois is estimated to be&nbsp;
+                            {overallData.drainage.annual_load[selectedNutrient][selectedYear]} million lb in {selectedYear}.
+                        </Typography>
+                        <BarChart
+                            className={classes.barChart}
+                            barsData={
+                                Object.entries(overallData.drainage.annual_load[selectedNutrient]).map(
+                                    ([year, value]) => ({
+                                        x: +year,
+                                        y: +value,
+                                        selected: +year === +selectedYear
+                                    })
+                                )
+                            }
+                            xAxisProps={{
+                                title: 'Year',
+                                titlePadding: 50,
+                                stroke: '#4682b4',
+                                strokeWidth: 2
+                            }}
+                            yAxisProps={{
+                                title: 'M. lb',
+                                titlePadding: 40,
+                                stroke: '#4682b4',
+                                strokeWidth: 2
+                            }}
+                            barStroke={(d) => yearsOptions.length && d.selected ? 'red' : '#117fc9'}
+                            barStrokeWidth={2}
+                            barStrokeOpacity={(d) => d.selected ? 1 : 0}
+                            barFill="#117fc9"
+                            barFillOpacity="1"
+                            lineStroke="#f63700"
+                            lineStrokeWidth={2}
+                            intervalFill="#fdb47f"
+                            width={(window.innerWidth / 3) - 50}
+                            height={300}
+                            marginTop={50}
+                            marginBottom={60}
+                            marginLeft={60}
+                            marginRight={20}
+                        />
+                    </> :
                     null}
 
                 {selectedBoundary === 'watershed' && annualLoadChartData ?
