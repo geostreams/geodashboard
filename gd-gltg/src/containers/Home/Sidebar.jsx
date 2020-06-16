@@ -250,12 +250,13 @@ const Sidebar = ({
                 <FormControl
                     component="fieldset"
                     className={classes.formControl}
+                    disabled={!yearsOptions.length}
                 >
                     <FormLabel
                         component="legend"
                         className={classes.formLabel}
                     >
-                        Year
+                        Year {!yearsOptions.length ? '(N/A)' : ''}
                     </FormLabel>
                     <NativeSelect
                         className={classes.selectButton}
