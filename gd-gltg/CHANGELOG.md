@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-648](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-648)
 - Added exectuive summary to HUC8 section in FAQs
   [GLGVO-651](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-651)
+- Added state annual nutrient load chart
+  [GLGVO-662](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-662)
 
 ### Changed
 - Create Intervals as a Reusable Component
