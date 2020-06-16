@@ -473,7 +473,7 @@ const Sidebar = ({
                 handleClose={handleDataStoriesModalClose}
             />
             <Container className={classes.carousel}>
-                <Divider className={classes.divider} />
+                <Divider />
                 <Box display="flex" justifyContent="space-between" alignItems="center">
                     <Typography variant="h5" gutterBottom>
                         Learn More About GLTG
