@@ -328,7 +328,7 @@ const Sidebar = ({
                                 stroke: '#4682b4',
                                 strokeWidth: 2
                             }}
-                            barStroke={(d) => d.selected ? 'red' : '#117fc9'}
+                            barStroke={(d) => yearsOptions.length && d.selected ? 'red' : '#117fc9'}
                             barStrokeWidth={2}
                             barStrokeOpacity={(d) => d.selected ? 1 : 0}
                             barFill="#117fc9"
