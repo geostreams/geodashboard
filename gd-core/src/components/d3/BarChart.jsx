@@ -205,9 +205,6 @@ class BarChart extends React.Component<Props> {
             .attr('width', x.bandwidth)
             .attr('y', y(0))
             .attr('height', 0)
-            .on('mouseover', mouseOver)
-            .on('mouseout', mouseOut)
-            .on('click', click)
             .merge(bars)
             .transition()
             .duration(500)
@@ -220,6 +217,11 @@ class BarChart extends React.Component<Props> {
             .attr('stroke-opacity', barStrokeOpacity)
             .attr('fill', barFill)
             .attr('fill-opacity', barFillOpacity);
+
+        gEl.selectAll('.bar')
+            .on('mouseover', mouseOver)
+            .on('mouseout', mouseOut)
+            .on('click', click);
 
         // Update Line
         // Data join

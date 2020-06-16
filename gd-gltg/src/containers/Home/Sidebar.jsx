@@ -279,8 +279,8 @@ const Sidebar = ({
 
                 {selectedBoundary === 'drainage' && featureId === 'Statewide Summary' ?
                     <Typography>
-                        The total nitrate load leaving the state of Illinois is estimated to be&nbsp;
-                        {overallData.drainage.annual_load[selectedYear]} lb {selectedYear}
+                        The total {selectedNutrient} load leaving the state of Illinois is estimated to be&nbsp;
+                        {overallData.drainage.annual_load[selectedNutrient][selectedYear]} million lb in {selectedYear}.
                     </Typography> :
                     null}
 

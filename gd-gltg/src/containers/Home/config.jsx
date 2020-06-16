@@ -26,7 +26,7 @@ export const GEOSERVER_URL = process.env.GEOSERVER_URL || '';
 export const CONTEXTUAL_LAYERS: Array<{ title: string; id: string; boundaries?: Array<string>}> = [
     { title: 'Rivers', id: 'gltg:us-rivers' },
     { title: 'State Boundaries', id: 'gltg:us-states' },
-    { title: 'IL Drainage - Outside', id: 'gltg:il-drainage-outside', boundaries: ['drainage', 'huc8'] },
+    { title: 'IL Drainage - Outside', id: 'gltg:il-drainage-outside', boundaries: ['drainage'] },
     { title: 'Extrapolated Areas', id: 'gltg:extrapolated-areas', boundaries: ['drainage', 'huc8'] }
 ];
 
