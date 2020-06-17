@@ -23,8 +23,8 @@ export const initialState = {
 export const GEOSERVER_URL = process.env.GEOSERVER_URL || '';
 
 // A missing `boundaries` prop from a legend item means it will be shown for all boundary types
-export const CONTEXTUAL_LAYERS: Array<{ title: string; id: string; boundaries?: Array<string>}> = [
-    { title: 'Rivers', id: 'gltg:us-rivers' },
+export const CONTEXTUAL_LAYERS: Array<{ title: string; id: string; zIndex?: number, boundaries?: Array<string>}> = [
+    { title: 'Rivers', id: 'gltg:us-rivers', zIndex: 2 },
     { title: 'State Boundaries', id: 'gltg:us-states' },
     { title: 'IL Drainage - Outside', id: 'gltg:il-drainage-outside', boundaries: ['drainage'] },
     { title: 'Extrapolated Areas', id: 'gltg:extrapolated-areas', boundaries: ['drainage', 'huc8'] }
@@ -182,6 +182,7 @@ export type BoundaryType = {
             url: string;
             style: Function;
             interactive?: boolean;
+            zIndex?: number
         }>;
     };
 }
@@ -202,6 +203,7 @@ export const BOUNDARIES: BoundaryType = {
                         src: markerMonitoringSite
                     }))
                 }),
+                zIndex: 3,
                 interactive: true
             }
         ]
@@ -232,6 +234,7 @@ export const BOUNDARIES: BoundaryType = {
                         src: markerMonitoringSite
                     }))
                 }),
+                zIndex: 3,
                 interactive: true
             }
         ]

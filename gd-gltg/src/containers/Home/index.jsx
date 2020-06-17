@@ -201,7 +201,7 @@ class Home extends React.Component<Props, State> {
             }),
             contextual: new GroupLayer({
                 title: 'Layers',
-                layers: CONTEXTUAL_LAYERS.map(({ title, id, boundaries }) => {
+                layers: CONTEXTUAL_LAYERS.map(({ title, id, boundaries, zIndex }) => {
                     const source = new ImageWMSSource({
                         url: `${GEOSERVER_URL}/wms`,
                         params: { LAYERS: id },
@@ -212,7 +212,8 @@ class Home extends React.Component<Props, State> {
                     const layer = new ImageLayer({
                         title,
                         source,
-                        visible
+                        visible,
+                        zIndex
                     });
                     this.legends.push({
                         layerId: layer.ol_uid,
@@ -227,7 +228,7 @@ class Home extends React.Component<Props, State> {
             ...entries(BOUNDARIES).reduce(
                 (boundaryLayers, [name, { visible, layers }]) => {
                     const group = new GroupLayer({
-                        layers: layers.map(({ url, style, interactive = false }) => {
+                        layers: layers.map(({ url, style, interactive = false, zIndex = undefined }) => {
                             const source = new VectorSource({
                                 loader: (extent) => {
                                     const xhr = new XMLHttpRequest();
@@ -259,6 +260,7 @@ class Home extends React.Component<Props, State> {
                                 }
                             });
                             layer.set('interactive', interactive);
+                            layer.setZIndex(zIndex);
                             source.on(
                                 'change',
                                 () => {
