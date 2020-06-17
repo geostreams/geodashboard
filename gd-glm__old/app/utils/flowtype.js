@@ -163,6 +163,13 @@ export type BasicMapState = {
     maxZoom: number
 };
 
+export type PopupProps ={
+    map: ol.Map,
+    popupSensorname: string,
+    showPopup: boolean,
+    features: Array<ol.Feature>
+}
+
 //TODO: remove this when using BasicMap in Trends Map
 export type TrendsMapState = {
     center: Array<number>,
