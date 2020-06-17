@@ -61,6 +61,7 @@
 }
 
 .olPopupCloser {
+    cursor: pointer;
     text-decoration: none;
     position: absolute;
     top: 9px;
