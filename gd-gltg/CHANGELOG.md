@@ -61,6 +61,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-653](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-653)
 - Updated the styling of the home page and added data for state annual nutrient load
   [GLGVO-657](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-657)
+- Fixed an issue with legend not showing when nutrient level is zero
+  [GLGVO-663](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-663)
 
 ## [3.1.0] - 2019-09-19
 

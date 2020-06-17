@@ -407,8 +407,7 @@ const Sidebar = ({
                         />
                     </> :
                     null}
-
-                {featureValue ?
+                {featureValue !== undefined ?
                     <>
                         <Divider className={classes.divider} />
                         <Typography
@@ -432,7 +431,7 @@ const Sidebar = ({
                                     idx === 0 ? undefined : (idx * 5) - 0.1
                                 )]}
                                 activeBox={getNutrientValueCategoryIndex(featureValue)}
-                                activeBoxLabel={featureValue >= 0 ? featureValue : ' '}
+                                activeBoxLabel={featureValue >= 0 ? featureValue.toString() : ' '}
                                 activeBoxLabelHeight={15}
                                 activeBoxBorderColor="red"
                             />
