@@ -141,6 +141,8 @@ const Sidebar = ({
 }: Props) => {
     const classes = useStyle();
 
+    const annualStateFlowChartTooltipRef: { current: null | HTMLDivElement } = React.createRef();
+
     const annualYieldTooltipRef: { current: null | HTMLDivElement } = React.createRef();
     const annualYieldChartTooltipRef: { current: null | HTMLDivElement } = React.createRef();
 
@@ -280,7 +282,11 @@ const Sidebar = ({
 
                 {selectedBoundary === 'drainage' && featureId === 'Statewide Summary' ?
                     <>
-                        <Typography>
+                        <Divider className={classes.divider} />
+                        <Typography variant="subtitle1">
+                            TOTAL {selectedNutrient.toUpperCase()} LOAD LEAVING THE STATE OF ILLINOIS
+                        </Typography>
+                        <Typography variant="caption">
                             The total {selectedNutrient} load leaving the state of Illinois is estimated to be&nbsp;
                             {overallData.drainage.annual_load[selectedNutrient][selectedYear]} million lb in {selectedYear}.
                         </Typography>
@@ -307,6 +313,21 @@ const Sidebar = ({
                                 stroke: '#4682b4',
                                 strokeWidth: 2
                             }}
+                            mouseOver={(d) => {
+                                select(annualStateFlowChartTooltipRef.current)
+                                    .html(`${d.y} Million lb`)
+                                    .transition()
+                                    .duration(200)
+                                    .style('opacity', .9)
+                                    .style('left', `${event.clientX}px`)
+                                    .style('top', `${event.clientY - 50}px`);
+                            }}
+                            mouseOut={() => {
+                                select(annualStateFlowChartTooltipRef.current)
+                                    .transition()
+                                    .duration(500)
+                                    .style('opacity', 0);
+                            }}
                             barStroke={(d) => yearsOptions.length && d.selected ? 'red' : '#117fc9'}
                             barStrokeWidth={2}
                             barStrokeOpacity={(d) => d.selected ? 1 : 0}
@@ -322,6 +343,7 @@ const Sidebar = ({
                             marginLeft={60}
                             marginRight={20}
                         />
+                        <div ref={annualStateFlowChartTooltipRef} className={classes.chartTooltip} />
                     </> :
                     null}
 
