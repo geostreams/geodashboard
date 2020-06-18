@@ -3,7 +3,7 @@
 This repository uses [Lerna](https://github.com/lerna/lerna) to manage all the links and dependencies between
 the `gd-core` package and project packages like `gd-gltg`.
 
-It uses `node >= 12`, `npm >= 6`, `less` for styling, and `ES6` syntax for all `js` files except for `webpack` configs.
+It uses `node = 12`, `npm >= 6`, `less` for styling, and `ES6` syntax for all `js` files except for `webpack` configs.
 
 ### Main files in project root:
 

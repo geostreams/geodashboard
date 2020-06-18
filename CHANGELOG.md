@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.3.0] - 2020-06-18
+See submodule changelogs.
+
 ## [3.2.0] - 2020-02-26
 ### Added
 - Add the ability to have a Download Button Dialog Box to provide explanatory text 

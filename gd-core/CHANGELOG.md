@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## UNRELEASED
+## [3.3.0] - 2020-06-18
 
 ### Added
 - `extent` parameters can be passed to ol/Map to set bounds for the map view.
@@ -18,4 +18,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  - Removed the tooltip from bar chart, so it can be set and customized in the parent component
    [GLGVO-657](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-657)
 
-### Fixed
