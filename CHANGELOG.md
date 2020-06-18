@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.3.0] - 2020-06-18
-See submodule changelogs.
+This version marks the migration to [Lerna](https://lerna.js.org). See submodules for specific changelogs.
 
 ## [3.2.0] - 2020-02-26
 ### Added
