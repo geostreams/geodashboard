@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-651](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-651)
 - Added state annual nutrient load chart
   [GLGVO-662](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-662)
+- Added Google Analytics config
+  [GLGVO-664](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-664)
 
 ### Changed
 - Create Intervals as a Reusable Component
