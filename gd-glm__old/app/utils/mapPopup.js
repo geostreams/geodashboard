@@ -5,7 +5,7 @@
 import ol from 'openlayers';
 
 import {
-    getApplicationWebsite, getColor, getMobileSizeMax, getMobileDetailPath, displayOnlineStatus, maxDisplayParams
+    getColor, getMobileSizeMax, getMobileDetailPath, displayOnlineStatus, maxDisplayParams
 } from './getConfig';
 
 export function popupHeader(feature: ol.Feature, styles: Object, online: boolean = false) {
@@ -64,8 +64,7 @@ export function popupHeader(feature: ol.Feature, styles: Object, online: boolean
 
 export function popupParameters(feature: ol.Feature, styles: Object) {
 
-    let application_sensors_website = getApplicationWebsite();
-    let detail_link = application_sensors_website + '#detail/location/';
+    let detail_link = '/trendsstations/detail/location/';
     if (screen.width <= getMobileSizeMax()) {
         detail_link = getMobileDetailPath();
     }
@@ -102,7 +101,7 @@ export function popupParameters(feature: ol.Feature, styles: Object) {
             '<i class="material-icons ' + styles.params_icon + '">warning </i>' + '</td>' +
             '<td width="70%">' + 'There are too many parameters to display here. </td></tr>' +
             '<tr><td width="30%" align="right"> </td>' + '<td width="70%"> ' +
-            '<a href=" ' + detail_link + sensorInfo.name + '/separate/" >View Data</a> ' +
+            '<a href="' + detail_link + sensorInfo.name + '/All/">View Data</a> ' +
             'to see a full list of parameters for this site.' + ' </td></tr>';
     }
 
@@ -113,7 +112,7 @@ export function popupParameters(feature: ol.Feature, styles: Object) {
 
     let bodyText = '<div class=' + styles.paramsborder + '>' + params + '</div>';
 
-    bodyText += '<a href=" ' + detail_link + sensorInfo.name + '/separate/" class=' +
+    bodyText += '<a href=" ' + detail_link + sensorInfo.name + '/All/" class=' +
         styles.viewdetail + ' >View Data</a>';
 
     return bodyText;
@@ -121,8 +120,6 @@ export function popupParameters(feature: ol.Feature, styles: Object) {
 }
 
 export function popupAnalysis(feature: ol.Feature, styles: Object) {
-
-    let application_sensors_website = getApplicationWebsite();
     let sensorInfo = feature.attributes;
     let sensorTrends = sensorInfo.trend_type;
     let trendColor = sensorInfo.trend_color;
@@ -174,8 +171,8 @@ export function popupAnalysis(feature: ol.Feature, styles: Object) {
     }
 
     if (paramsLength > 0 && sensorInfo.trends_detail) {
-        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/' +
-            sensorInfo.name + '/separate/" class=' +
+        bodyText += '<a href="/trendsstations/detail/location/' +
+            sensorInfo.name + '/All/" class=' +
             styles.viewsitedetail + ' >View Data for the ' + sensorInfo.name + ' Site </a>';
     }
 
@@ -184,8 +181,6 @@ export function popupAnalysis(feature: ol.Feature, styles: Object) {
 }
 
 export function popupTrends(feature: ol.Feature, styles: Object) {
-
-    let application_sensors_website = getApplicationWebsite();
     let sensorInfo = feature.attributes;
     let sensorTrends = sensorInfo.trend_type;
     let trendColor = sensorInfo.trend_color;
@@ -239,8 +234,8 @@ export function popupTrends(feature: ol.Feature, styles: Object) {
     }
 
     if (paramsLength > 0 && sensorInfo.trends_detail) {
-        bodyText += '<a href=" ' + application_sensors_website + '#detail/location/' +
-            sensorInfo.name + '/separate/" class=' +
+        bodyText += '<a href="/trendsstations/detail/location/' +
+            sensorInfo.name + '/All/" class=' +
             styles.viewsitedetail + ' >View Data for the ' + sensorInfo.name + ' Site </a>';
     }
 
@@ -308,7 +303,7 @@ export function popupRegion(feature: ol.Feature, styles: Object) {
         '</table>';
 
     if (sensorInfo.trend_type !== 'noTrend' && sensorInfo.trend_type !== "") {
-        regionText += '<a href="#/trendsdetail/region/' + sensorInfo.location +
+        regionText += '<a href="/trendsdetail/region/' + sensorInfo.location +
             '/' + sensorInfo.url_parameter + '/' + sensorInfo.season + '" class=' +
             styles.viewdetail + '>View Data for the ' + sensorInfo.region + ' Region </a>';
 

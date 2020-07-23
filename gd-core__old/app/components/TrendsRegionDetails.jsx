@@ -5,7 +5,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
-import mainStyles from '../styles/main.css';
+import mainStyles from '../styles/mainStyle.css';
 import {Card, CardHeader, CardTitle, CardText} from 'react-mdc-web/lib';
 import {sensorsToFeaturesTrendRegionPage} from '../utils/mapUtils';
 import {getTrendsPageSettings} from '../utils/getConfig';

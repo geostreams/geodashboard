@@ -117,7 +117,7 @@ class DetailContents extends Component {
         }
     }
 
-    componentWillReceiveProps(newProps: Object) {
+    UNSAFE_componentWillReceiveProps(newProps: Object) {
         this.updateParametersAndSeason(newProps);
     }
 

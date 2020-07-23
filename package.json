@@ -22,7 +22,6 @@
     "connected-react-router": "~6.8.0",
     "d3": "~5.15.0",
     "history": "~4.10.1",
-    "immutable": "~4.0.0-rc.12",
     "ol": "~6.2.1",
     "ol-ext": "~3.1.10",
     "ol-layerswitcher": "~3.5.0",
@@ -31,7 +30,6 @@
     "react-redux": "~7.2.0",
     "react-router-dom": "~5.1.2",
     "redux": "~4.0.5",
-    "redux-immutable": "~4.0.0",
     "redux-thunk": "~2.3.0"
   },
   "devDependencies": {

@@ -4,7 +4,7 @@
 
 import React, {Component} from 'react';
 import styles from '../styles/filterList.css';
-import mainStyles from '../styles/main.css';
+import mainStyles from '../styles/mainStyle.css';
 import TimeFilter from '../containers/TimeFilter';
 import UpdateFilters from '../containers/FilterOption';
 import dimensions from '../../data/dimensions.json';

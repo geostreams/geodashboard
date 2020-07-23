@@ -5,6 +5,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
+        mcw__old: 'material-components-web/dist/material-components-web.min.css',
+        mdc__old: 'gd-gltg__old/app/styles_custom/react-mdc-web.css',
+        gltgMain__new: './src/index.jsx',
         gltgStyle: './src/styles/gltg.less'
     },
     plugins: [
@@ -13,7 +16,7 @@ module.exports = {
             google_analytics: process.env.GA_TOKEN
         }),
         new FaviconsWebpackPlugin({
-            logo: './src/images/favicon.png',
+            logo: './src/images/logo_app.png',
             prefix: 'icons/',
             emitStats: false,
             inject: true

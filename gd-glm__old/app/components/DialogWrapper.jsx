@@ -6,8 +6,8 @@ import React, {Component} from "react";
 import {
     Body1, Body2, Dialog, DialogBody, DialogHeader, DialogTitle, Icon
 } from 'react-mdc-web/lib';
-import styles from "../styles/main.css";
-import {Link} from 'react-router';
+import styles from "../styles/mainStyle.css";
+import {Link} from 'react-router-dom';
 import boxWhiskerImage from "../../theme/images/boxwhisker.png";
 
 

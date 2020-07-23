@@ -6,7 +6,7 @@ import React, {Component} from "react";
 import {
     Body1, Body2, Dialog, DialogBody, DialogHeader, DialogTitle, Icon
 } from 'react-mdc-web/lib';
-import styles from "../styles/main.css";
+import styles from "../styles/mainStyle.css";
 import {Link} from 'react-router';
 
 

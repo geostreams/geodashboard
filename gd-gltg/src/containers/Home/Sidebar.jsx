@@ -288,7 +288,8 @@ const Sidebar = ({
                         </Typography>
                         <Typography variant="caption">
                             The total {selectedNutrient} load leaving the state of Illinois is estimated to be&nbsp;
-                            {overallData.drainage.annual_load[selectedNutrient][selectedYear]} million lb in {selectedYear}.
+                            {overallData.drainage.annual_load[selectedNutrient][selectedYear]} million lb
+                            in {selectedYear}.
                         </Typography>
                         <BarChart
                             className={classes.barChart}

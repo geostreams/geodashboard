@@ -3,7 +3,7 @@
 
 import React, {Component} from "react";
 import {Button} from 'react-mdc-web/lib';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import PropTypes from "prop-types";
 
 
@@ -24,7 +24,7 @@ class AnalysisSearchButtonComponent extends Component {
 
     render() {
         let searchButton = (
-            <Link href="/#analysis">
+            <Link href="/analysis">
                 <Button raised id={this.props.index_val}
                         onClick={this.handleClickButton}>
                     {this.props.button_info.title}

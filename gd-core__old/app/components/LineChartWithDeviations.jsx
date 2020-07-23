@@ -1,7 +1,7 @@
 /* No Flow due to D3 Items */
 
 import React, { Component } from 'react';
-import { YAxis } from '../../vendor/rd3/src';
+import { Xaxis, Yaxis } from '../../vendor/react-d3-core/src';
 const d3 = require('d3');
 
 
@@ -20,7 +20,7 @@ class LineChartWithDeviations extends Component {
         this.setUpGraph(this.props);
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setUpGraph(nextProps);
     }
 
@@ -244,14 +244,14 @@ class LineChartWithDeviations extends Component {
                                   fill="none"/>
                         </g>
 
-                        <XAxis
+                        <Xaxis
                             id="Xaxis"
                             {...this.props}
                             xDomain={this.state.xDomain}
                             xRange={this.state.xRange}
                             x={x}
                         />
-                        <YAxis
+                        <Yaxis
                             id="Yaxis"
                             {...this.props}
                             y={y}

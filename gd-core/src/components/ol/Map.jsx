@@ -24,7 +24,7 @@ type Props = {
     controls: Control[];
     layers: Array<Layer>;
     layerSwitcherOptions: {};
-    updateMap: Function;
+    updateMap: ?Function;
     popupContent: Function | React.Node;
     showPopupAt: ?[number, number];   // Coordinate to show the popup at. If value is null, it closes the popup.
     events: { [k: string]: Function };

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Icon } from 'react-mdc-web/lib';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
+
 import PopupProps from '../utils/flowtype';
 import styles from '../styles/map.css';
 import { maxDisplayParams, displayOnlineStatus, getMobileDetailPath, getMobileSizeMax } from '../utils/getConfig';
 
 class ExplorePopup extends Component {
     attributes: ?Object;
-    
+
     constructor(props: PopupProps) {
         super(props);
         this.attributes = null;
@@ -71,8 +72,11 @@ class ExplorePopup extends Component {
                             {showError ?
                                 <div>
                                     <p>There are too many parameters to display here.</p>
-                                    <Link to={`/detail/location/${ this.attributes.name }/seperate`}>View Data</Link> to
-                                            see a full list of parameters for this site.
+                                    <Link to={`detail/location/${ this.attributes.name }/All?use-season=1`}>
+                                        View Data
+                                    </Link>
+                                    &nbsp;
+                                    to see a full list of parameters for this site.
                                 </div> :
                                 params.map((param, id) => this.displayParameter(param, id))}
                         </div>
@@ -139,13 +143,13 @@ class ExplorePopup extends Component {
             const status = onlineStatus.charAt(0).toUpperCase() + onlineStatus.slice(1);
             tableValues.push({ label: 'Online Status', value: status });
         }
-        let detailLink = '/detail/location/';
+        let detailLink = `detail/location/`;
 
         // Gets the mobile link from config if required
         if (window.screen.width <= getMobileSizeMax()) {
             detailLink = getMobileDetailPath();
         }
-        detailLink += `${this.attributes.name }/seperate`;
+        detailLink += `${this.attributes.name}/All?use-season=1`;
 
         return (
             <div id="popup" className={styles.olPopup}>

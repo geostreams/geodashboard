@@ -44,7 +44,7 @@ const Home = () => {
             </Typography>
 
             <Typography variant="p" align="center" paragraph>
-                <Link to="/geostreaming/explore/all">
+                <Link to="/explore/all">
                     <Button variant="contained" color="primary">
                         Explore Now
                     </Button>

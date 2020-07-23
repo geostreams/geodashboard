@@ -1,17 +1,6 @@
 // @flow
 import type { SVGGElement } from 'dom-helpers';
 
-export const sharedStyle = {
-    tooltip: {
-        position: 'fixed',
-        background: '#fff',
-        border: '1px solid #eee',
-        borderRadius: 5,
-        padding: 5,
-        opacity: 0
-    }
-};
-
 export const xAxisLabel = (
     parentEl: SVGGElement,
     x: number,
@@ -45,3 +34,19 @@ export const yAxisLabel = (
         .attr('fill-opacity', opacity || 0.3)
         .text(label)
 );
+
+
+export const downloadSvg = (svgEl: SVGGElement, name: string | Function) => {
+    const svgData = svgEl.outerHTML;
+    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const svgUrl = URL.createObjectURL(svgBlob);
+    const downloadLink = document.createElement('a');
+    downloadLink.href = svgUrl;
+    downloadLink.download = typeof name === 'function' ? name() : name;
+    const { body } = document;
+    if (body) {
+        body.appendChild(downloadLink);
+        downloadLink.click();
+        body.removeChild(downloadLink);
+    }
+};

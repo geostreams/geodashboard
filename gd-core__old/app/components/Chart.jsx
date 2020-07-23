@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {Row, Col} from 'react-flexbox-grid';
 import styles from "../styles/detail.css";
-import mainStyles from '../styles/main.css'
+import mainStyles from '../styles/mainStyle.css'
 import BoxAndWhiskers from '../components/BoxAndWhiskers';
 import LinePlot from './LinePlot';
 import LineNoData from './LineNoData';

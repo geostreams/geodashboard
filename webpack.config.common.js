@@ -15,8 +15,7 @@ module.exports = {
         olStyle: 'ol/ol.css',
         olLayerSwitcherStyle: 'ol-layerswitcher/src/ol-layerswitcher.css',
         coreStyle: path.resolve(corePath, 'src/styles/core.less'),
-        polyfill:  path.resolve(corePath, 'src/polyfill.js'),
-        main: './src/index.jsx'
+        polyfill:  path.resolve(corePath, 'src/polyfill.js')
     },
 
     output: {
@@ -47,7 +46,7 @@ module.exports = {
             },
             {
                 test: /\.jsx?$/,
-                exclude: /(node_modules|gd-core__old|gd-gltg__old)/,    // TODO remove __old after porting all the __old codes
+                exclude: /(node_modules|gd-core__old|gd-gltg__old|gd-glm__old)/,    // TODO remove __old after porting all the __old codes
                 use: [
                     {
                         loader: 'eslint-loader',

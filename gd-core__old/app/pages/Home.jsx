@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 import SwitchBackend from '../containers/SwitchAPI';
 import Carousel from "../components/Carousel";
 import {getCarouselImageNames} from '../utils/getConfig';

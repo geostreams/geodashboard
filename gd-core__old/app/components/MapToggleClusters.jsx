@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 import {Checkbox, FormField} from 'react-mdc-web/lib';
 
 class MapToggleClusters extends Component {

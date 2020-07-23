@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import {browserHistory, Link} from 'react-router';
+import {browserHistory, Link} from 'react-router-dom';
 import styles from '../styles/menuPage.css';
 import {
 	Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle,
@@ -59,9 +59,9 @@ class MenuPage extends Component {
                                       onClose={() => this.toggleTrendMenu(false)}
                                 >
                                     <MenuItem key="trends_stations" className="mdc-button"><Link
-                                        href={"/#trendsstations"}>TRENDS BY STATION </Link></MenuItem>
+                                        href={"/trendsstations"}>TRENDS BY STATION </Link></MenuItem>
                                     <MenuItem key="trends_regions" className="mdc-button"><Link
-                                        href={"/#trendsregions"}>TRENDS BY REGIONS </Link></MenuItem>
+                                        href={"/trendsregions"}>TRENDS BY REGIONS </Link></MenuItem>
                                 </Menu>
                             </MenuAnchor>
                         )
