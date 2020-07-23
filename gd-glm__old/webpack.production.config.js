@@ -15,7 +15,8 @@ module.exports = merge(commonConfig, {
     plugins: [
         new webpack.DefinePlugin({
             VERSION: JSON.stringify('0.1-prod'),
-            'process.env.NODE_ENV': '"production"'
+            'process.env.NODE_ENV': '"production"',
+            'process.env.GEOSTREAMS_URL': JSON.stringify(process.env.GEOSTREAMS_URL || '/geostreams')
         }),
         new CopyWebpackPlugin([{
             from: 'config.js',

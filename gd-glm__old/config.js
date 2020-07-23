@@ -1,11 +1,7 @@
 export const gd3 = {
 
     geostreaming_endpoints: [
-        {url: "https://seagrant-dev.ncsa.illinois.edu/geostreams", label: "GLM DEV", title: "Great Lakes Monitoring",
-            subtitle: "ILLINOIS-INDIANA SEA GRANT"},
-        {url: "https://greatlakesmonitoring.org/geostreams", label: "GLM PROD", title: "Great Lakes Monitoring",
-            subtitle: "ILLINOIS-INDIANA SEA GRANT"},
-        {url:"http://localhost:9000", label:"TEST", title:"TEST", subtitle:"TEST"}
+        {url: process.env.GEOSTREAMS_URL}
     ],
 
     // Menu Bar Information
