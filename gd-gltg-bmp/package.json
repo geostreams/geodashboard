@@ -1,0 +1,14 @@
+{
+  "name": "gd-gltg-bmp",
+  "version": "0.1.0",
+  "main": "src/index.jsx",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.config.dev.js --color",
+    "build": "webpack --config webpack.config.prod.js"
+  },
+  "author": "NCSA",
+  "license": "ISC",
+  "dependencies": {
+    "gd-core": "file:../gd-core"
+  }
+}
