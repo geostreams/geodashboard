@@ -99,7 +99,7 @@ const LineChartWrapper = (props: Props) => {
                                     lineChartContainerRef.current.offsetWidth :
                                     800
                             }
-                            marginTop={20}
+                            marginTop={30}
                             marginBottom={30}
                             marginRight={20}
                             marginLeft={55}
@@ -165,8 +165,8 @@ const LineChartWrapper = (props: Props) => {
                                 strokeDashArray: '2'
                             }}
                             labels={{
-                                max: 10,
-                                min: 10,
+                                whiskerUpper: 10,
+                                whiskerLower: 10,
                                 median: 10,
                                 q1: 10,
                                 q3: 10

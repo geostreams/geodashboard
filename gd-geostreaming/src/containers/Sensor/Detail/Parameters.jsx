@@ -15,8 +15,7 @@ import StackedBarChartWrapper from './StackedBarChartWrapper';
 const useStyle = makeStyles({
     chartContainer: {
         margin: '20px auto',
-        minHeight: 300,
-        textAlign: 'center'
+        minHeight: 300
     },
     chartTitle: {
         marginTop: 40
@@ -33,7 +32,8 @@ const useStyle = makeStyles({
     },
     chartDownloadIcon: {
         color: '#3f51b5',
-        height: 10
+        height: 10,
+        marginTop: -10
     }
 });
 

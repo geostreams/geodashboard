@@ -81,7 +81,7 @@ const BoxPlot = (props: Props) => {
         data
     } = props;
 
-    const innerWidth = width - marginLeft - marginRight;
+    const innerWidth = width - marginLeft - marginRight - 10;   // 10px is reduced to account for value texts next to the box
     const innerHeight = height - marginBottom - marginTop;
 
     const svgRef = React.useRef(null);
@@ -190,17 +190,17 @@ const BoxPlot = (props: Props) => {
                 gEl
                     .append('text')
                     .attr('x', center + (innerWidth / 2) + 5)
-                    .attr('y', y(precision(whiskerUpper, 1)))
+                    .attr('y', y(whiskerUpper))
                     .attr('font-size', labels.whiskerUpper)
-                    .text(precision(whiskerUpper, 1));
+                    .text(precision(whiskerUpper, 2));
             }
             if (labels.whiskerLower) {
                 gEl
                     .append('text')
                     .attr('x', center + (innerWidth / 2) + 5)
-                    .attr('y', y(precision(whiskerLower, 1)))
+                    .attr('y', y(whiskerLower))
                     .attr('font-size', labels.whiskerLower)
-                    .text(precision(whiskerLower, 1));
+                    .text(precision(whiskerLower, 2));
             }
             if (labels.median) {
                 gEl
@@ -209,12 +209,12 @@ const BoxPlot = (props: Props) => {
                     .attr('y', y(median) - 5)
                     .attr('dy', '1em')
                     .attr('font-size', labels.median)
-                    .text(precision(median, 1));
+                    .text(precision(median, 2));
             }
 
             [
-                [labels.q1, precision(q1, 1)],
-                [labels.q3, precision(q3, 1)]
+                [labels.q1, q1],
+                [labels.q3, q3]
             ].forEach(([quantileLabelSize, quantileValue]) => {
                 if (quantileLabelSize) {
                     gEl
@@ -223,7 +223,7 @@ const BoxPlot = (props: Props) => {
                         .attr('y', y(quantileValue))
                         .attr('text-anchor', 'end')
                         .attr('font-size', quantileLabelSize)
-                        .text(quantileValue);
+                        .text(precision(quantileValue, 2));
                 }
             });
 
