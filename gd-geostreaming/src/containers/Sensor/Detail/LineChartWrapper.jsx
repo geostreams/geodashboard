@@ -4,6 +4,7 @@ import { ascending, extent, scaleLinear, scaleTime, select, timeYear } from 'd3'
 import { Grid } from '@material-ui/core';
 import { BoxPlot, LineChart } from 'gd-core/src/components/d3';
 import { precision } from 'gd-core/src/utils/format';
+import { useElementRect } from 'gd-core/src/utils/hooks';
 
 import type { ParameterValue } from '../../../utils/flowtype';
 
@@ -19,8 +20,6 @@ type Props = {
     data: ParameterValue[];
     startAtZero: boolean;
     sameTimeScale: boolean;
-    lineChartContainerRef: { current: HTMLDivElement | null };
-    boxPlotContainerRef: { current: HTMLDivElement | null };
     tooltipContainerRef: { current: HTMLDivElement | null };
 };
 
@@ -34,10 +33,11 @@ const LineChartWrapper = (props: Props) => {
         data,
         startAtZero,
         sameTimeScale,
-        lineChartContainerRef,
-        boxPlotContainerRef,
         tooltipContainerRef
     } = props;
+
+    const [lineChartContainer, lineChartContainerRect] = useElementRect();
+    const [boxPlotContainer, boxPlotContainerRect] = useElementRect();
 
     const lineData = [];
     const boxData = [];
@@ -74,7 +74,7 @@ const LineChartWrapper = (props: Props) => {
     return (
         <>
             <Grid item xs={10}>
-                <div className={classes.chartContainer}>
+                <div ref={lineChartContainer} className={classes.chartContainer}>
                     {lineData.length ?
                         <LineChart
                             data={lineData}
@@ -94,11 +94,7 @@ const LineChartWrapper = (props: Props) => {
                             dotRadius={2}
                             dotFill={({ average }, boxPlotData) => average < boxPlotData.whiskerLower || average > boxPlotData.whiskerUpper ? 'red' : '#0072B2'}
                             height="320"
-                            width={
-                                lineChartContainerRef.current ?
-                                    lineChartContainerRef.current.offsetWidth :
-                                    800
-                            }
+                            width={lineChartContainerRect.width || 0}
                             marginTop={30}
                             marginBottom={30}
                             marginRight={20}
@@ -144,7 +140,7 @@ const LineChartWrapper = (props: Props) => {
                 </div>
             </Grid>
             <Grid item xs={2}>
-                <div className={classes.chartContainer}>
+                <div ref={boxPlotContainer} className={classes.chartContainer}>
                     {boxData.length ?
                         <BoxPlot
                             data={boxData}
@@ -172,11 +168,7 @@ const LineChartWrapper = (props: Props) => {
                                 q3: 10
                             }}
                             height="320"
-                            width={
-                                boxPlotContainerRef.current ?
-                                    boxPlotContainerRef.current.offsetWidth * 0.7 :
-                                    800
-                            }
+                            width={(boxPlotContainerRect.width || 0) * 0.7}
                             marginTop={30}
                             marginBottom={30}
                             marginRight={20}

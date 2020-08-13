@@ -13,7 +13,7 @@ import PlayIcon from '@material-ui/icons/PlayArrow';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 
-import hooks from '../utils/hooks';
+import { useInterval } from '../utils/hooks';
 
 const useStyle = makeStyles({
     container: {
@@ -71,7 +71,7 @@ const Carousel = ({
     const [isPaused, togglePause] = React.useState(startInPause);
     const childrenCount = React.Children.count(children);
 
-    hooks.useInterval(
+    useInterval(
         () => {
             if (activeIndex === childrenCount - 1) {
                 updateActiveIndex(0);

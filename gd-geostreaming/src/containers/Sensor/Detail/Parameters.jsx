@@ -54,8 +54,6 @@ type Props = {
 const Parameters = (props: Props) => {
     const classes = useStyle();
 
-    const firstColumnRefRef = React.useRef(null);
-    const secondColumnRef = React.useRef(null);
     const tooltipContainerRef = React.useRef(null);
 
     const {
@@ -132,8 +130,6 @@ const Parameters = (props: Props) => {
                             data={filteredData[name]}
                             startAtZero={startAtZero}
                             sameTimeScale={sameTimeScale}
-                            lineChartContainerRef={firstColumnRefRef}
-                            boxPlotContainerRef={secondColumnRef}
                             tooltipContainerRef={tooltipContainerRef}
                         />
                     );
@@ -173,10 +169,10 @@ const Parameters = (props: Props) => {
 
     return (
         <>
-            <Grid ref={firstColumnRefRef} item xs={10}>
+            <Grid item xs={10}>
                 <Typography variant="h6" align="center">Parameter Charts</Typography>
             </Grid>
-            <Grid ref={secondColumnRef} item xs={2}>
+            <Grid item xs={2}>
                 <Typography variant="h6" align="center">
                     Box and Whiskers
                     &nbsp;

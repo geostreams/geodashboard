@@ -4,6 +4,7 @@ import { scaleBand, scaleLinear, select } from 'd3';
 import { Grid } from '@material-ui/core';
 import { SimpleLegend, StackedBarChart } from 'gd-core/src/components/d3';
 import { precision } from 'gd-core/src/utils/format';
+import { useElementRect } from 'gd-core/src/utils/hooks';
 
 import type { ParameterValue } from '../../../utils/flowtype';
 
@@ -33,6 +34,9 @@ const StackedBarChartWrapper = (props: Props) => {
         tooltipContainerRef
     } = props;
 
+    const [barChartContainer, barChartContainerRect] = useElementRect();
+    const [legendContainer, legendContainerRect] = useElementRect();
+
     const processedData = [];
     const years = new Set();
 
@@ -44,10 +48,10 @@ const StackedBarChartWrapper = (props: Props) => {
     return (
         <>
             <Grid item xs={10}>
-                <div className={classes.chartContainer}>
+                <div ref={barChartContainer} className={classes.chartContainer}>
                     {data.length ?
                         <StackedBarChart
-                            width={960}
+                            width={barChartContainerRect.width || 0}
                             height={500}
                             marginTop={50}
                             marginBottom={50}
@@ -88,10 +92,10 @@ const StackedBarChartWrapper = (props: Props) => {
                         'No Data Available'}
                 </div>
             </Grid>
-            <Grid item xs={2} alignItems="center" container>
-                <div className={classes.chartContainer}>
+            <Grid item xs={2}>
+                <div ref={legendContainer} className={classes.chartContainer}>
                     <SimpleLegend
-                        width={250}
+                        width={legendContainerRect.width || 0}
                         itemHeight={13}
                         marginBottom={4}
                         data={categories.map((category, idx) => ({

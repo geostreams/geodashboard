@@ -4,6 +4,7 @@ import { scaleBand, scaleLinear, select } from 'd3';
 import { makeStyles } from '@material-ui/core';
 
 import { StackedBarChart } from '../../../components/d3';
+import { useElementRect } from '../../../utils/hooks';
 
 const FIXTURE = {
     meta: {},
@@ -25,6 +26,11 @@ for (let year = 1980; year < 2020; year += 1) {
 }
 
 const useStyle = makeStyles({
+    chartContainer: {
+        padding: 50,
+        width: '100%',
+        height: '100%'
+    },
     tooltipContainer: {
         position: 'fixed',
         background: '#283d4b',
@@ -39,13 +45,15 @@ const useStyle = makeStyles({
 const TestStackedBarChart = () => {
     const classes = useStyle();
 
+    const [container, containerRect] = useElementRect();
+
     const tooltipContainerRef = React.useRef(null);
 
     return (
-        <div style={{ padding : 50 }}>
+        <div ref={container} className={classes.chartContainer}>
             <StackedBarChart
-                width={960}
-                height={500}
+                width={(containerRect.width || 0) * 0.9}
+                height={(containerRect.height || 0) * 0.9}
                 marginTop={50}
                 marginBottom={50}
                 marginLeft={60}

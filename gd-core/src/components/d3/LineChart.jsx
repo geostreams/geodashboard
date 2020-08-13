@@ -154,10 +154,10 @@ const LineChart = (props: Props) => {
                 let whiskerUpperIndex = yData.length - 1;
                 while (yData[whiskerLowerIndex] < lowerIQR) {
                     whiskerLowerIndex += 1;
-                };
+                }
                 while (yData[whiskerUpperIndex] > upperIQR) {
                     whiskerUpperIndex -= 1;
-                };
+                }
                 boxPlotData.whiskerLower = yData[whiskerLowerIndex];
                 boxPlotData.whiskerUpper = yData[whiskerUpperIndex];
 
