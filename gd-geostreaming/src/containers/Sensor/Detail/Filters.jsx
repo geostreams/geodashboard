@@ -116,8 +116,12 @@ const Filters = (props: Props) => {
                                 value={activeSeason}
                                 onChange={( { target: { value } }) => handleSeasonUpdate(value)}
                             >
-                                <MenuItem value="spring">Spring</MenuItem>
-                                <MenuItem value="summer">Summer</MenuItem>
+                                <MenuItem value="spring">
+                                    <Typography variant="body2">Spring</Typography>
+                                </MenuItem>
+                                <MenuItem value="summer">
+                                    <Typography variant="body2">Summer</Typography>
+                                </MenuItem>
                             </Select>
                         </FormControl>
                     </CardContent>
@@ -142,11 +146,13 @@ const Filters = (props: Props) => {
                                     checked={selectAllDates}
                                     onChange={handleSelectAllDatesToggle}
                                 />}
-                                label="Select All Dates"
+                                label={<Typography variant="body2">Select All Dates</Typography>}
                             />
                         </Grid>
                         <Grid item xs={4}>
-                            Binning: {titleCase(binType)}
+                            <Typography variant="body2">
+                                Binning: {titleCase(binType)}
+                            </Typography>
                         </Grid>
                     </Grid>
                 </CardContent>
@@ -183,7 +189,7 @@ const Filters = (props: Props) => {
                             checked={startAtZero}
                             onChange={handleStartDataAtZeroToggle}
                         />}
-                        label="Start Data at Zero"
+                        label={<Typography variant="body2">Start Data at Zero</Typography>}
                     />
                 </CardContent>
                 <CardContent>
@@ -192,7 +198,7 @@ const Filters = (props: Props) => {
                             checked={sameTimeScale}
                             onChange={handleUseSameTimeScaleToggle}
                         />}
-                        label="Use Same Timescale"
+                        label={<Typography variant="body2">Use Same Timescale</Typography>}
                     />
                 </CardContent>
             </Card>

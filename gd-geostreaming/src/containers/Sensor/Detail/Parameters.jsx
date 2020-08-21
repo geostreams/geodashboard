@@ -159,7 +159,7 @@ const Parameters = (props: Props) => {
             return (
                 <React.Fragment key={name}>
                     <Grid className={classes.chartTitle} item xs={10} align="center">
-                        <Typography variant="h6">{label}</Typography>
+                        <Typography variant="subtitle1">{label}</Typography>
                     </Grid>
                     {content}
                 </React.Fragment>
