@@ -455,7 +455,7 @@ class SensorDetail extends React.Component<Props, State> {
                                                             this.handleParameterToggle(name, isChecked);
                                                         }}
                                                     />}
-                                                    label={<Typography variant="body2">{title}{unit ? ` (${unit})` : ''}</Typography>}
+                                                    label={<Typography variant="body2" dangerouslySetInnerHTML={{ __html: `${title}${unit ? ` (${unit})` : ''}` }} />}
                                                 />
                                             </ListItem> :
                                             null

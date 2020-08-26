@@ -18,7 +18,10 @@ const useStyle = makeStyles({
         minHeight: 300
     },
     chartTitle: {
-        marginTop: 40
+        'marginTop': 40,
+        '& i': {
+            fontStyle: 'normal'
+        }
     },
     tooltipContainer: {
         position: 'fixed',
@@ -159,7 +162,7 @@ const Parameters = (props: Props) => {
             return (
                 <React.Fragment key={name}>
                     <Grid className={classes.chartTitle} item xs={10} align="center">
-                        <Typography variant="subtitle1">{label}</Typography>
+                        <Typography variant="subtitle1" dangerouslySetInnerHTML={{ __html: label }} />
                     </Grid>
                     {content}
                 </React.Fragment>
