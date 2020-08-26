@@ -1,14 +1,17 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import { Container, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import CONFIG from '../../../config';
 import { getSourceName } from '../../../utils/sensors';
+
+import type { SourceConfig } from '../../../utils/flowtype';
 
 type Props = {
     showDialog: boolean;
     contentType: ?string;
+    sourceConfig: SourceConfig;
     source: {
         id: string;
         title: string;
@@ -16,10 +19,10 @@ type Props = {
     handleClose: Function;
 }
 
-const getDialogContent = (contentType, source) => {
+const getDialogContent = (contentType, sourceConfig, source) => {
     switch (contentType) {
         case 'parameters': {
-            const { description, qaqc, more_info, link } = CONFIG.source[source.id];
+            const { description, qaqc, more_info, link } = sourceConfig;
             const content = [];
             if (description) {
                 content.push(
@@ -42,14 +45,14 @@ const getDialogContent = (contentType, source) => {
             if (link) {
                 content.push(
                     <Container key="paramLink">
-                        <Typography variant="subtitle2" component="a" href={link}>
+                        <Typography variant="subtitle2" component="a" href={link} target="_blank">
                             {more_info || link}
                         </Typography>
                     </Container>
                 );
             }
             return [
-                getSourceName(source),
+                getSourceName(sourceConfig, source),
                 content
             ];
         }
@@ -67,11 +70,12 @@ const InfoDialog = (props: Props) => {
     const {
         showDialog,
         contentType,
+        sourceConfig,
         source,
         handleClose
     } = props;
 
-    const [dialogTitle, dialogBody] = getDialogContent(contentType, source);
+    const [dialogTitle, dialogBody] = getDialogContent(contentType, sourceConfig, source);
 
     return (
         <Dialog
@@ -97,4 +101,8 @@ const InfoDialog = (props: Props) => {
     );
 };
 
-export default InfoDialog;
+const mapStateToProps = (state) => ({
+    sourceConfig: state.config.source
+});
+
+export default connect(mapStateToProps)(InfoDialog);

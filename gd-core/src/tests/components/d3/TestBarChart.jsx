@@ -1,8 +1,10 @@
 // @flow
 import React from 'react';
 import { select } from 'd3';
+import { makeStyles } from '@material-ui/core';
 
 import { BarChart } from '../../../components/d3';
+import { useElementRect } from '../../../utils/hooks';
 
 const FIXTURE = {
     meta: {},
@@ -43,11 +45,23 @@ const updateSelected = (data, selectedYear) => (
     )
 );
 
+const useStyle = makeStyles({
+    chartContainer: {
+        padding: 50,
+        width: '100%',
+        height: '100%'
+    }
+});
+
 const TestBarChart = () => {
+    const classes = useStyle();
+
+    const [container, containerRect] = useElementRect();
+
     const [data, updateData] = React.useState(updateSelected(FIXTURE.data, INITIAL_YEAR));
     const [year, updateYear] = React.useState(INITIAL_YEAR);
     return (
-        <div style={{ padding : 50 }}>
+        <div ref={container} className={classes.chartContainer}>
             <div>
                 <button
                     type="submit"
@@ -80,8 +94,8 @@ const TestBarChart = () => {
                 </span>
             </div>
             <BarChart
-                width={960}
-                height={500}
+                width={(containerRect.width || 0) * 0.9}
+                height={(containerRect.height || 0) * 0.9}
                 marginTop={50}
                 marginBottom={50}
                 marginLeft={60}

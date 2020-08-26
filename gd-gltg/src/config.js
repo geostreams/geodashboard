@@ -3,13 +3,7 @@ export default {
         clusterExpandCountThreshold: 10,
         clusterExpandZoomThreshold: 12
     },
-    geostreamingEndpoints: (
-        process.env.GEOSTREAMING_API ||
-        (process.env.NODE_ENV === 'development' ?
-            'https://gltg-dev.ncsa.illinois.edu/geostreams' :
-            'https://greatlakestogulf.org/geostreams'
-        )
-    ),
+    geostreamingEndpoint: process.env.GEOSTREAMS_URL,
     sensors: {
         displayOnlineStatus: true
     },
@@ -20,7 +14,8 @@ export default {
             color: '#a87c03',
             description: 'These locations contain data related to EPA Pollutant Loading.',
             more_info: 'Click here for more information about EPA Pollutant Loading',
-            link : 'https://cfpub.epa.gov/dmr/'
+            link : 'https://cfpub.epa.gov/dmr/',
+            useSeasonFilter: true
         },
         'glfsmp': {
             order: 2

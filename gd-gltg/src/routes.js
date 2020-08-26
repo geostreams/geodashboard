@@ -4,25 +4,14 @@ import hocs from 'gd-core/src/utils/hocs';
 import GeoStreamingExplore from 'gd-geostreaming/src/containers/Explore';
 import GeoStreamingHome from 'gd-geostreaming/src/containers/Home';
 import GeoStreamingSearch from 'gd-geostreaming/src/containers/Search';
+import GeoStreamingSensorDetail from 'gd-geostreaming/src/containers/Sensor/Detail';
 
 // $FlowFixMe
 import __old_Explore from 'gd-gltg__old/app/pages/Explore';
 // $FlowFixMe
-import __old_Detail from 'gd-gltg__old/app/pages/Detail';
-// $FlowFixMe
 import __old_Search from 'gd-gltg__old/app/pages/Search';
 // $FlowFixMe
-import __old_TrendsStation from 'gd-gltg__old/app/pages/TrendsSensor';
-// $FlowFixMe
-import __old_TrendsRegion from 'gd-gltg__old/app/pages/TrendsRegion';
-// $FlowFixMe
-import __old_TrendsDetail from 'gd-gltg__old/app/pages/TrendsDetail';
-// $FlowFixMe
 import __old_Analysis from 'gd-gltg__old/app/pages/Analysis';
-// $FlowFixMe
-import __old_Glossary from 'gd-gltg__old/app/pages/Glossary';
-// $FlowFixMe
-import __old_Help from 'gd-gltg__old/app/pages/Help';
 
 import About from './containers/About';
 import DataStories from './containers/DataStories';
@@ -39,24 +28,19 @@ const routes = Object.assign(
         '/data-stories': { component: hocs.withLayout(GLTGLayout, DataStories) },
         '/about': { component: hocs.withLayout(GLTGLayout, About) },
         '/geostreaming': { exact: true, component: hocs.withLayout(GLTGLayout, GeoStreamingHome, { hasFooter: true }) },
-        '/geostreaming/__new_explore': { component: hocs.withLayout(GLTGLayout, GeoStreamingExplore) },
-        '/geostreaming/__new_search': { component: hocs.withLayout(GLTGLayout, GeoStreamingSearch) },
-        // Routes pointing to the __old code
-        '/geostreaming/explore/:stations': { component: hocs.withLayout(GLTGLayout, __old_Explore) },
-        '/geostreaming/detail/location/:name/:category': { component: hocs.withLayout(GLTGLayout, __old_Detail) },
-        '/geostreaming/search': { component: hocs.withLayout(GLTGLayout, __old_Search) },
-        '/geostreaming/trendsstations': { component: hocs.withLayout(GLTGLayout, __old_TrendsStation) },
-        '/geostreaming/trendsregions': { component: hocs.withLayout(GLTGLayout, __old_TrendsRegion) },
-        '/geostreaming/trendsdetail/region/:region/:parameter/:season': { component: hocs.withLayout(GLTGLayout, __old_TrendsDetail) },
-        '/geostreaming/analysis': { component: hocs.withLayout(GLTGLayout, __old_Analysis) },
+        '/:parent(explore|search|analysis)/detail/location/:name/:category': { component: hocs.withLayout(GLTGLayout, GeoStreamingSensorDetail) },
         '/partners': { component: hocs.withLayout(GLTGLayout, Partners) },
-        '/glossary': { component: hocs.withLayout(GLTGLayout, __old_Glossary) },
-        '/help': { component: hocs.withLayout(GLTGLayout, __old_Help) },
-        '/faq': { component: hocs.withLayout(GLTGLayout, FAQ) }
+        '/faq': { component: hocs.withLayout(GLTGLayout, FAQ) },
+        // Routes pointing to the __old code
+        '/explore/:stations': { component: hocs.withLayout(GLTGLayout, __old_Explore), exact: true },
+        '/search': { component: hocs.withLayout(GLTGLayout, __old_Search), exact: true },
+        '/analysis': { component: hocs.withLayout(GLTGLayout, __old_Analysis), exact: true }
     }
 );
 
 if (process.env.NODE_ENV === 'development') {
+    routes['/__new_explore'] = { component: hocs.withLayout(GLTGLayout, GeoStreamingExplore) };
+    routes['/__new_search'] = { component: hocs.withLayout(GLTGLayout, GeoStreamingSearch) };
     routes['/tests/gltg'] = { component: Tests };
 }
 

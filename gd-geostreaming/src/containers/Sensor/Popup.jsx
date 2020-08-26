@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     Button,
     Card,
@@ -16,7 +17,7 @@ import { date, titleCase } from 'gd-core/src/utils/format';
 
 import { getSensorName, getSourceColor, getSourceName } from '../../utils/sensors';
 
-import type { ParameterType, SensorType } from '../../utils/flowtype';
+import type { ParameterType, SensorType, SourceConfig } from '../../utils/flowtype';
 
 const useStyle = makeStyles((theme) => ({
     card: {
@@ -41,12 +42,13 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 type Props = {
+    sourcesConfig: { [k: string]: SourceConfig; };
     sensor: SensorType,
     parameters: ParameterType[],
     handleDetailClick: Function
 }
 
-const SensorPopup = ({ sensor, parameters, handleDetailClick }: Props) => {
+const SensorPopup = ({ sourcesConfig, sensor, parameters, handleDetailClick }: Props) => {
     const classes = useStyle();
     const { properties } = sensor;
     const coordinates = toStringHDMS(sensor.geometry.coordinates);
@@ -67,7 +69,7 @@ const SensorPopup = ({ sensor, parameters, handleDetailClick }: Props) => {
             <CardActionArea>
                 <CardContent
                     className={`${classes.cardHeader} ${classes.cardContent}`}
-                    style={{ backgroundColor: getSourceColor(properties.type.id) }}
+                    style={{ backgroundColor: getSourceColor(sourcesConfig[properties.type.id]) }}
                 >
                     <Typography gutterBottom variant="h5" component="h2">
                         {getSensorName(properties)}
@@ -78,7 +80,7 @@ const SensorPopup = ({ sensor, parameters, handleDetailClick }: Props) => {
                         <ListItem>
                             <Typography variant="subtitle2">Data Source:</Typography>
                             &nbsp;
-                            {getSourceName(properties.type)}
+                            {getSourceName(sourcesConfig[properties.type.id], properties.type)}
                             &nbsp;
                             Monitoring Site
                         </ListItem>
@@ -124,4 +126,8 @@ const SensorPopup = ({ sensor, parameters, handleDetailClick }: Props) => {
     );
 };
 
-export default SensorPopup;
+const mapStateToProps = (state) => ({
+    sourcesConfig: state.config.source
+});
+
+export default connect(mapStateToProps)(SensorPopup);

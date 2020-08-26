@@ -5,7 +5,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import trendsStyles from '../styles/trends.css';
-import mainStyles from '../styles/main.css';
+import mainStyles from '../styles/mainStyle.css';
 import {
     Textfield, Cell, Grid,
     Card, CardHeader, CardTitle, CardSubtitle, CardActions, CardText

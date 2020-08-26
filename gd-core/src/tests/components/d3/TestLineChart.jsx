@@ -1,8 +1,10 @@
 // @flow
 import React from 'react';
-import { extent, scaleLinear, scaleTime, timeParse } from 'd3';
+import { event, extent, scaleLinear, scaleTime, select, timeParse } from 'd3';
+import { makeStyles } from '@material-ui/core';
 
 import { LineChart } from '../../../components/d3';
+import { useElementRect } from '../../../utils/hooks';
 
 const FIXTURE = [
     { date: '2018-04-14', value: 8140.71 },
@@ -17,14 +19,35 @@ const FIXTURE = [
     { date: '2018-04-23', value: 8958.55 }
 ];
 
+const useStyle = makeStyles({
+    chartContainer: {
+        padding: 50,
+        width: '100%',
+        height: '100%'
+    },
+    tooltipContainer: {
+        position: 'fixed',
+        background: '#fff',
+        border: '1px solid #eee',
+        borderRadius: 5,
+        padding: 5,
+        opacity: 0
+    }
+});
+
 const TestLineChart = () => {
+    const classes = useStyle();
+
+    const [container, containerRect] = useElementRect();
+
     const data = FIXTURE.map((d) => ({ date : timeParse('%Y-%m-%d')(d.date), value : d.value }));
+    const tooltipContainerRef = React.useRef(null);
 
     return (
-        <div style={{ padding: 50 }}>
+        <div ref={container} className={classes.chartContainer}>
             <LineChart
-                width={460}
-                height={400}
+                width={(containerRect.width || 0) * 0.9}
+                height={(containerRect.height || 0) * 0.9}
                 marginTop={10}
                 marginBottom={40}
                 marginRight={30}
@@ -44,9 +67,25 @@ const TestLineChart = () => {
                 boxPlot={{
                     fill: '#7688B3'
                 }}
-                tooltipContent={(d) => `${d.date.toLocaleDateString()}: ${d.value}` }
+                trace
+                mouseOver={(d) => {
+                    select(tooltipContainerRef.current)
+                        .html(`Date: ${d.date.toLocaleDateString()}<br />Value: ${d.value}`)
+                        .transition()
+                        .duration(200)
+                        .style('opacity', .9)
+                        .style('left', `${event.clientX}px`)
+                        .style('top', `${event.clientY - 50}px`);
+                }}
+                mouseOut={() => {
+                    select(tooltipContainerRef.current)
+                        .transition()
+                        .duration(500)
+                        .style('opacity', 0);
+                }}
                 data={data}
             />
+            <div ref={tooltipContainerRef} className={classes.tooltipContainer} />
         </div>
     );
 };

@@ -6,7 +6,7 @@ import React, {Component} from "react";
 import ChartStackedLine from './ChartStackedLine';
 import Spinner from './Spinner';
 import {Row} from 'react-flexbox-grid';
-import mainStyles from '../styles/main.css';
+import mainStyles from '../styles/mainStyle.css';
 
 
 class StackedLineChart extends Component {

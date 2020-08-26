@@ -5,7 +5,7 @@
 import React from 'react';
 import {Tab, Tabbar} from 'react-mdc-web/lib';
 import {getChromeDisabled} from './getConfig';
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 
 
 export function generateMobilePageTabs(

@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 import Select from './material/Select';
 import {getErrorText} from '../utils/getConfig';
 

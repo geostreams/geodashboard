@@ -4,3 +4,4 @@ export LegendHorizontalContinuous from './LegendHorizontalContinuous';
 export LegendHorizontalDiscrete from './LegendHorizontalDiscrete';
 export LineChart from './LineChart';
 export SimpleLegend from './SimpleLegend';
+export StackedBarChart from './StackedBarChart';

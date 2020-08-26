@@ -14,7 +14,7 @@ import {
 } from '../utils/getConfig';
 import {intersectArrays, serialize} from '../utils/arrayUtils';
 import styles from '../styles/downloadButton.css';
-import stylesMain from '../styles/main.css';
+import stylesMain from '../styles/mainStyle.css';
 import Spinner from './Spinner';
 
 

@@ -24,14 +24,13 @@ import type { Feature as FeatureType, Map as MapType, MapBrowserEventType } from
 import type { Layer as LayerType } from 'ol/layer';
 import type { Source as OLSourceType } from 'ol/source';
 
-import CONFIG from '../../config';
 import { fetchParameters } from '../../actions/parameters';
 import { fetchSensors } from '../../actions/sensors';
 import SensorDetail from '../Sensor/Detail';
 import SensorPopup from '../Sensor/Popup';
 import Sidebar from './Sidebar';
 
-import type { ParameterType, SensorType, SourceType } from '../../utils/flowtype';
+import type { MapConfig, ParameterType, SensorType, SourceConfig, SourceType } from '../../utils/flowtype';
 
 const INIT_ZOOM = 5.5;
 const INIT_CENTER = [-9972968, 4972295];
@@ -84,6 +83,9 @@ type Props = {
         sensorDetail: string;
         clusterControl: string;
     };
+    mapConfig: MapConfig;
+    sourcesConfig: { [k: string]: SourceConfig; };
+    displayOnlineStatus: boolean;
     sensors: SensorType[];
     sources: SourceType[];
     parameters: ParameterType[];
@@ -261,10 +263,10 @@ class Explore extends React.Component<Props, State> {
     getMarkerColor = (feature) => {
         if (feature.get('features')) {
             const properties = feature.get('features')[0].get('properties');
-            const sourceAttrs = CONFIG.source[properties.type.id.toLowerCase()] || {};
+            const sourceAttrs = this.props.sourcesConfig[properties.type.id.toLowerCase()] || {};
             const fillColor = sourceAttrs.color || 'black';
             let strokeColor = 'black';
-            if (CONFIG.sensors.displayOnlineStatus) {
+            if (this.props.displayOnlineStatus) {
                 if (properties.online_status === 'online') {
                     strokeColor = 'green';
                 }
@@ -409,7 +411,7 @@ class Explore extends React.Component<Props, State> {
         } else if (featuresAtPixel && featuresAtPixel.get('features') && featuresAtPixel.get('features').length > 1) {
             // Zoom in the clicked cluster it has more than `clusterExpandCountThreshold` features
             // and is in a zoom level lower than `clusterExpandZoomThreshold`
-            if (featuresAtPixel.get('features').length > CONFIG.map.clusterExpandCountThreshold && this.map.getView().getZoom() < CONFIG.map.clusterExpandZoomThreshold) {
+            if (featuresAtPixel.get('features').length > this.props.mapConfig.clusterExpandCountThreshold && this.map.getView().getZoom() < this.props.mapConfig.clusterExpandZoomThreshold) {
                 this.map.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
                 this.map.getView().animate({ zoom: this.map.getView().getZoom() + 1, duration: 500 });
             }
@@ -438,14 +440,14 @@ class Explore extends React.Component<Props, State> {
         // const properties = f.get('properties')
         // const attributes = {
         //     name: f.get('name'),
-        //     dataSource: getSourceName(properties.type),
+        //     dataSource: getSourceName(sourceConfig[properties.type.id], properties.type),
         //     maxEndTime: f.get('max_end_time'),
         //     minStartTime: f.get('min_start_time'),
         //     latitude: f.get('geometry').getCoordinates()[1],
         //     longitude: f.get('geometry').getCoordinates()[0],
         //     location: f.get('properties').region,
         //     parameters: f.get('parameters'),
-        //     color: getSourceColor(properties.type.id),
+        //     color: getSourceColor(sourcesConfig[properties.type.id]),
         //     type: 'single',
         //     onlineStatus: properties.online_status ? properties.online_status : 'none',
         //     id: f.get('id')
@@ -525,10 +527,7 @@ class Explore extends React.Component<Props, State> {
 
                 {this.state.showSensorDetail ?
                     <div className={classes.sensorDetail}>
-                        <SensorDetail
-                            sensor={this.props.sensors[this.state.selectedFeatureIdx]}
-                            handleClose={() => this.setState({ showSensorDetail: false })}
-                        />
+                        <SensorDetail handleClose={() => this.setState({ showSensorDetail: false })} />
                     </div> :
                     null}
             </>
@@ -537,6 +536,9 @@ class Explore extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state) => ({
+    mapConfig: state.config.map,
+    sourcesConfig: state.config.source,
+    displayOnlineStatus: state.config.sensors.displayOnlineStatus,
     sensors: state.__new_sensors.sensors,
     sources: state.__new_sensors.sources,
     parameters: state.__new_parameters.parameters

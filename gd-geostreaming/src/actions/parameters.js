@@ -24,8 +24,9 @@ export const updateParameters = (
 });
 
 export const fetchParameters = () => {
-    return (dispatch: Function) => {
+    return (dispatch: Function, getState: Function) => {
         callAPI(
+            getState().config.geostreamingEndpoint,
             'parameters',
             ({ parameters, categories, mappings }) => {
                 dispatch(updateParameters({ parameters, categories, mappings }));

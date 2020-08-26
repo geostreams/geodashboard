@@ -2,27 +2,30 @@
 
 /* eslint-disable */
 // $FlowFixMe
-const __old_config = require('gd-gltg__old/config')
-window.configruntime = __old_config
+const __old_config = require('gd-gltg__old/config');
+window.configruntime = __old_config;
 
 // $FlowFixMe
-import { addEndpoints, fetchSensors } from 'gd-core__old/app/actions'
-import 'material-components-web/dist/material-components-web.min.css';
-// $FlowFixMe
-import 'gd-gltg__old/app/styles_custom/react-mdc-web.css';
+import { addEndpoints, fetchSensors as __old_fetchSensors } from 'gd-core__old/app/actions';
 
-import render from 'gd-core/src/render'
+import render from 'gd-core/src/render';
+import { updateGeoStreamingConfig } from 'gd-geostreaming/src/actions/config';
+import { fetchParameters } from 'gd-geostreaming/src/actions/parameters';
+import { fetchSensors } from 'gd-geostreaming/src/actions/sensors';
 
-import reducers from './reducers'
-import routes from './routes'
+import config from './config';
+import reducers from './reducers';
+import routes from './routes';
 /* eslint-enable */
 
 render(
     reducers,
     routes,
     (store) => {
-        const selected = window.configruntime.gd3.geostreaming_endpoints[0].url;
+        store.dispatch(updateGeoStreamingConfig(config));
         store.dispatch(addEndpoints());
-        store.dispatch(fetchSensors(selected));
+        store.dispatch(__old_fetchSensors(config.geostreamingEndpoint));
+        store.dispatch(fetchParameters());
+        store.dispatch(fetchSensors());
     }
 );

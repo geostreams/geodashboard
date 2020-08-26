@@ -1,20 +1,21 @@
 // @flow
 import { updateLoadingStatus } from 'gd-core/src/actions/page';
+import logger from 'gd-core/src/utils/logger';
 
-import CONFIG from '../config';
-
-export const callAPI = (endpoint: string, successCallback: Function, dispatch: ?Function) => {
+export const callAPI = (host: string, endpoint: string, successCallback: ?Function, dispatch: ?Function) => {
     if (dispatch) {
         dispatch(updateLoadingStatus(true));
     }
 
-    return fetch(`${CONFIG.geostreamingEndpoints}/api/${endpoint}`)
+    return fetch(`${host}/api/${endpoint}`)
         .then(response => response.json())
         .then((json) => {
-            successCallback(json);
+            if (successCallback) {
+                successCallback(json);
+            }
         })
         .catch((error) => {
-            console.error(`Error: ${error}`);
+            logger.error(`Error: ${error}`);
         })
         .finally(() => {
             if (dispatch) {

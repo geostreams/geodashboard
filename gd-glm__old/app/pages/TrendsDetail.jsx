@@ -3,14 +3,15 @@
  */
 
 import React, {Component} from 'react';
+import TrendsDetailRight from 'gd-core__old/app/containers/TrendsDetailRight';
+
 import RegionMiniMap from '../containers/RegionMiniMap';
 import TrendsRegionDetails from '../containers/TrendsRegionDetails';
-import TrendsDetailRight from '../containers/TrendsDetailRight';
 import {Grid, Cell, Content, List, Card, CardTitle} from 'react-mdc-web/lib';
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 import trendsStyles from '../styles/trends.css';
 import { getCustomTrendsRegion, getTrendsPageSettings } from '../utils/getConfig';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 class TrendsDetail extends Component {
 
@@ -30,8 +31,8 @@ class TrendsDetail extends Component {
     render() {
 
         const trendsPageSettings = getTrendsPageSettings();
-        const trendsRegionTitle =  getCustomTrendsRegion(this.props.params.region);
-        const trendsRegionTitleLink =  " > " + getCustomTrendsRegion(this.props.params.region);
+        const trendsRegionTitle =  getCustomTrendsRegion(this.props.match.params.region);
+        const trendsRegionTitleLink =  " > " + getCustomTrendsRegion(this.props.match.params.region);
         return (
             <div>
                 <Content>
@@ -40,19 +41,19 @@ class TrendsDetail extends Component {
                             <Cell col={4}>
                                 <Card className={trendsStyles.detailTitle}>
                                     <CardTitle className={styles.title_card}>
-                                        <Link href={"#trendsregions"}>Trends Regions</Link>
+                                        <Link href={"trendsregions"}>Trends Regions</Link>
                                         {trendsRegionTitleLink}
                                     </CardTitle>
                                 </Card>
                                 <List className={trendsStyles.detailListStyle}>
                                     <TrendsRegionDetails
-                                        trends_region_name={this.props.params.region}
-                                        trends_season={this.props.params.season}
-                                        trends_parameter={this.props.params.parameter}
+                                        trends_region_name={this.props.match.params.region}
+                                        trends_season={this.props.match.params.season}
+                                        trends_parameter={this.props.match.params.parameter}
                                     />
                                     <RegionMiniMap
-                                        trends_region={this.props.params.region}
-                                        trends_parameter={this.props.params.parameter}
+                                        trends_region={this.props.match.params.region}
+                                        trends_parameter={this.props.match.params.parameter}
                                         trends_region_title={trendsRegionTitle}
                                     />
                                 </List>
@@ -62,9 +63,9 @@ class TrendsDetail extends Component {
                                 <div className={trendsStyles.detailChart}>
                                     <TrendsDetailRight
                                         trends_settings={trendsPageSettings}
-                                        trends_region_id={this.props.params.region}
-                                        trends_parameter={this.props.params.parameter}
-                                        trends_season={this.props.params.season}
+                                        trends_region_id={this.props.match.params.region}
+                                        trends_parameter={this.props.match.params.parameter}
+                                        trends_season={this.props.match.params.season}
                                         start_year={this.state.selectedStartYear}
                                         end_year={this.state.selectedEndYear}
                                     />

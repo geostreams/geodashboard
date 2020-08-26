@@ -10,19 +10,19 @@ export const gd3 = {
         "pages": [
             {
                 "name": "HOME",
-                "url": "/#",
+                "url": "/",
             },
             {
                 "name": "EXPLORE",
-                "url": "/#explore/all",
+                "url": "/explore/all",
             },
             {
                 "name": "SEARCH",
-                "url": "/#search",
+                "url": "/search",
             },
             {
                 "name": "ANALYSIS",
-                "url": "/#analysis",
+                "url": "/analysis",
             },
             {
                 "name": "TRENDS",
@@ -39,7 +39,7 @@ export const gd3 = {
             },
             {
                 "name": "ABOUT",
-                "url": "/#about",
+                "url": "/about",
             },
         ]
     },
@@ -156,8 +156,8 @@ export const gd3 = {
     mobile_size_max: 840,
     chrome_detail_mobile_disabled: true,
     filter_unavailable_sensors: true,
-    mobile_detail_path: '/#detail/location/',
-    mobile_explore_path: '/#explore/all/',
+    mobile_detail_path: 'detail/location/',
+    mobile_explore_path: 'explore/all/',
 
     // Max Number of Parameters to display in the Map Popups (default is 10)
     max_display_params: 10,

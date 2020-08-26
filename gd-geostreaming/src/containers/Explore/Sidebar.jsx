@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import { interpolateRgb } from 'd3';
 import {
     Box,
@@ -19,7 +20,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { entries } from 'gd-core/src/utils/array';
 
 import { getSourceColor } from '../../utils/sensors';
-import type { SensorType, SourceType } from '../../utils/flowtype';
+import type { SensorType, SourceConfig, SourceType } from '../../utils/flowtype';
 
 const useStyle = makeStyles({
     header: {
@@ -64,6 +65,7 @@ type Props = {
             }
         }
     };
+    sourcesConfig: { [k: string]: SourceConfig; };
     sources: SourceType[];
     selectedFeature: ?number;
     addRegionsToMap: Function;
@@ -74,6 +76,7 @@ type Props = {
 
 const Sidebar = ({
     data,
+    sourcesConfig,
     sources,
     selectedFeature,
     addRegionsToMap,
@@ -115,7 +118,7 @@ const Sidebar = ({
                 Explore Sources
             </Typography>
             {sources.map((source) => {
-                const primaryColor = getSourceColor(source.id);
+                const primaryColor = getSourceColor(sourcesConfig[source.id]);
                 const secondaryColor = interpolateRgb(primaryColor, '#fff')(0.8);
                 return (
                     <ExpansionPanel
@@ -207,4 +210,8 @@ const Sidebar = ({
     );
 };
 
-export default Sidebar;
+const mapStateToProps = (state) => ({
+    sourcesConfig: state.config.source
+});
+
+export default connect(mapStateToProps)(Sidebar);

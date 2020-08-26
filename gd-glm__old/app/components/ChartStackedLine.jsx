@@ -7,7 +7,7 @@ import {Subheading2} from 'react-mdc-web/lib';
 import {Row, Col} from 'react-flexbox-grid';
 import BoxAndWhisker from '../components/BoxAndWhisker';
 import styles from '../styles/detail.css';
-import mainStyles from '../styles/main.css';
+import mainStyles from '../styles/mainStyle.css';
 import StackedLine from "./StackedLine";
 import {handleParamsWithItalics} from "../utils/configUtils";
 
