@@ -11,7 +11,8 @@ module.exports = merge(commonConfig, {
     plugins: [
         new webpack.DefinePlugin({
             VERSION: JSON.stringify('0.1-prod'),
-            'process.env.NODE_ENV': '"development"'
+            'process.env.NODE_ENV': '"development"',
+            'process.env.GEOSTREAMS_URL': JSON.stringify(process.env.GEOSTREAMS_URL || 'https://seagrant-dev.ncsa.illinois.edu/geostreams')
         }),
         new webpack.HotModuleReplacementPlugin(),
         new BundleAnalyzerPlugin({

@@ -1,24 +1,31 @@
 // @flow
 import { callAPI } from '../utils/io';
 
-import type { SensorType } from '../utils/flowtype';
+import type { SensorType, SourceConfig } from '../utils/flowtype';
 
 const UPDATE_SENSORS_DATA = 'UPDATE_SENSORS_DATA';
 type UpdateSensorsDataAction = {
     type: 'UPDATE_SENSORS_DATA',
+    sources: { [k: string]: SourceConfig; },
     data: SensorType[]
 }
-export const updateSensors = (data: SensorType[]): UpdateSensorsDataAction => ({
+export const updateSensors = (
+    sources: { [k: string]: SourceConfig; },
+    data: SensorType[]
+): UpdateSensorsDataAction => ({
     type: UPDATE_SENSORS_DATA,
+    sources,
     data
 });
 
 export const fetchSensors = () => {
-    return (dispatch: Function) => {
+    return (dispatch: Function, getState: Function) => {
+        const { config } = getState();
         callAPI(
+            config.geostreamingEndpoint,
             'sensors',
             ({ sensors }) => {
-                dispatch(updateSensors(sensors));
+                dispatch(updateSensors(config.source, sensors));
             },
             dispatch
         );

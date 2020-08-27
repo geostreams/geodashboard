@@ -12,7 +12,7 @@ import {getMobileSizeMax, getSourceName, getMobileExplorePath, getColor} from ".
 import {resetDetailPage} from '../actions';
 import type {Dispatch} from '../utils/flowtype'
 import {Row, Col} from 'react-flexbox-grid';
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 import {Icon} from 'react-mdc-web/lib';
 
 
@@ -39,7 +39,7 @@ class Detail extends Component {
         this.setUpCategoryMappings(this.props);
     }
 
-    componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) {
         this.setUpCategoryMappings(newProps);
     }
 

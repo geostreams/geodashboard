@@ -11,7 +11,7 @@ import ExploreLayers from '../components/ExploreLayers';
 import {
     Cell, Content, Grid, Icon, List, ListHeader, ListGroup, Tabbar, Tab
 } from 'react-mdc-web/lib';
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 import exploreStyles from '../styles/explore.css';
 import {connect} from 'react-redux';
 import {

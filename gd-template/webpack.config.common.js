@@ -8,7 +8,8 @@ module.exports = webpackMerge(
     commonConfigBase,
     {
         entry: {
-            projectStyle: './src/styles/template.less'
+            projectStyle: './src/styles/template.less',
+            main: './src/index.jsx'
         },
         plugins: [
             new FaviconsWebpackPlugin({

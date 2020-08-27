@@ -9,7 +9,7 @@ import {Tabbar, Tab} from 'react-mdc-web/lib';
 
 class DetailTabs extends Component {
     render() {
-        let detail_link = '#/detail/location/' + this.props.sensorName;
+        let detail_link = 'detail/location/' + this.props.sensorName;
         let tabs;
         const that = this;
         // TODO: If there is nothing, select the first tab

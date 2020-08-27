@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 import styleSearch from '../styles/search.css';
 import stylesMobile from '../styles/mobilePageTabs.css';
 import SearchMap from '../containers/SearchMap';

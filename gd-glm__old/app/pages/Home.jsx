@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import mainStyles from '../styles/main.css';
+import mainStyles from '../styles/mainStyle.css';
 import styles from '../styles/home.css';
 import Carousel from "../components/Carousel";
 import {getCarouselImageNames} from '../utils/getConfig';

@@ -10,7 +10,7 @@ import Spinner from '../components/Spinner';
 import {
     Grid, Cell, Content, List, Card, CardHeader, CardTitle, CardText, Tabbar, Tab
 } from 'react-mdc-web/lib';
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 import trendsStyles from '../styles/trends.css';
 import {connect} from 'react-redux';
 import {

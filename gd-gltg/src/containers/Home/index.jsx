@@ -89,7 +89,6 @@ const styles = {
         top: '0.5em',
         left: '3em',
         background: '#fff',
-        height: 75,
         border: '2px solid #aaa',
         paddingTop: 10
     },

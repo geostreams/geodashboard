@@ -6,11 +6,15 @@ import {
     Card,
     CardContent,
     Checkbox,
+    FormControl,
     FormControlLabel,
     Grid,
+    MenuItem,
+    Select,
     Slider,
+    Tooltip,
     Typography,
-    makeStyles, Tooltip
+    makeStyles
 } from '@material-ui/core';
 import { titleCase } from 'gd-core/src/utils/format';
 
@@ -53,6 +57,8 @@ const DateRangeLabelComponent = (props: {
 };
 
 type Props = {
+    showSeasonFilter: ?boolean;
+    activeSeason: string;
     selectAllDates: boolean;
     minStartTime: Date;
     maxEndTime: Date;
@@ -61,6 +67,8 @@ type Props = {
     binType: string;
     startAtZero: boolean;
     sameTimeScale: boolean;
+    downloadUrl: string;
+    handleSeasonUpdate: Function;
     handleSelectAllDatesToggle: Function;
     handleDateRangeUpdate: Function;
     handleStartDataAtZeroToggle: Function;
@@ -69,7 +77,10 @@ type Props = {
 
 const Filters = (props: Props) => {
     const classes = useStyle();
+
     const {
+        showSeasonFilter,
+        activeSeason,
         minStartTime,
         maxEndTime,
         selectAllDates,
@@ -78,11 +89,14 @@ const Filters = (props: Props) => {
         binType,
         startAtZero,
         sameTimeScale,
+        downloadUrl,
+        handleSeasonUpdate,
         handleSelectAllDatesToggle,
         handleDateRangeUpdate,
         handleStartDataAtZeroToggle,
         handleUseSameTimeScaleToggle
     } = props;
+
     return <Grid
         className={classes.container}
         container
@@ -90,6 +104,31 @@ const Filters = (props: Props) => {
         xs={12}
         alignItems="center"
     >
+        <Grid item xs={2}>
+            {showSeasonFilter ?
+                <Card className={classes.card}>
+                    <CardContent>
+                        <Typography variant="h6">Season</Typography>
+                    </CardContent>
+                    <CardContent>
+                        <FormControl className={classes.formControl}>
+                            <Select
+                                value={activeSeason}
+                                onChange={( { target: { value } }) => handleSeasonUpdate(value)}
+                            >
+                                <MenuItem value="spring">
+                                    <Typography variant="body2">Spring</Typography>
+                                </MenuItem>
+                                <MenuItem value="summer">
+                                    <Typography variant="body2">Summer</Typography>
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
+                    </CardContent>
+                </Card> :
+                null}
+        </Grid>
+
         <Grid item xs={4}>
             <Card className={classes.card}>
                 <CardContent>
@@ -107,17 +146,19 @@ const Filters = (props: Props) => {
                                     checked={selectAllDates}
                                     onChange={handleSelectAllDatesToggle}
                                 />}
-                                label="Select All Dates"
+                                label={<Typography variant="body2">Select All Dates</Typography>}
                             />
                         </Grid>
                         <Grid item xs={4}>
-                            Binning: {titleCase(binType)}
+                            <Typography variant="body2">
+                                Binning: {titleCase(binType)}
+                            </Typography>
                         </Grid>
                     </Grid>
                 </CardContent>
                 <CardContent>
                     <Box display="flex">
-                        <Typography variant="subtitle1">{minStartTime.toLocaleDateString()}</Typography>
+                        <Typography variant="subtitle1">{startDate.toLocaleDateString()}</Typography>
                         <Slider
                             className={classes.dateRangeSlider}
                             min={minStartTime.valueOf()}
@@ -129,15 +170,18 @@ const Filters = (props: Props) => {
                             ValueLabelComponent={DateRangeLabelComponent}
                             onChange={handleDateRangeUpdate}
                         />
-                        <Typography variant="subtitle1">{maxEndTime.toLocaleDateString()}</Typography>
+                        <Typography variant="subtitle1">{endDate.toLocaleDateString()}</Typography>
                     </Box>
                 </CardContent>
             </Card>
         </Grid>
-        <Grid item xs={4}>
+
+        <Grid item xs={1} />
+
+        <Grid item xs={3}>
             <Card className={classes.card}>
                 <CardContent>
-                    <Typography variant="h6" align="center">Graph Options</Typography>
+                    <Typography variant="h6">Graph Options</Typography>
                 </CardContent>
                 <CardContent>
                     <FormControlLabel
@@ -145,7 +189,7 @@ const Filters = (props: Props) => {
                             checked={startAtZero}
                             onChange={handleStartDataAtZeroToggle}
                         />}
-                        label="Start Data at Zero"
+                        label={<Typography variant="body2">Start Data at Zero</Typography>}
                     />
                 </CardContent>
                 <CardContent>
@@ -154,13 +198,21 @@ const Filters = (props: Props) => {
                             checked={sameTimeScale}
                             onChange={handleUseSameTimeScaleToggle}
                         />}
-                        label="Use Same Timescale"
+                        label={<Typography variant="body2">Use Same Timescale</Typography>}
                     />
                 </CardContent>
             </Card>
         </Grid>
-        <Grid className={classes.downloadButton} item xs={4}>
-            <Button variant="contained" color="primary">
+
+        <Grid className={classes.downloadButton} item xs={1}>
+            <Button
+                component="a"
+                variant="contained"
+                color="primary"
+                disabled={!downloadUrl}
+                href={downloadUrl}
+                target="_blank"
+            >
                 Download
             </Button>
         </Grid>

@@ -52,7 +52,7 @@ class About extends Component {
                                 Nutrients
                             </Col>
                             <Col md={2} sm={4} xs={5}>
-                                <img width="131" height="131" src={require("../../theme/images/data-icons-01.png")}/>
+                                <img width="131" height="131" src={require("../../theme/images/data-icons-01.png").default}/>
                             </Col>
                             <Col md={4} smOffset={2} sm={8} xsOffset={1} xs={10} className={styles.parameterList}>
                                 <span className={styles.block}>Chlorophyll a</span>
@@ -74,7 +74,7 @@ class About extends Component {
                                 Contaminants
                             </Col>
                             <Col md={2} sm={4} xs={5}>
-                                <img width="131" height="131" src={require("../../theme/images/data-icons-02.png")}/>
+                                <img width="131" height="131" src={require("../../theme/images/data-icons-02.png").default}/>
                             </Col>
                             <Col md={2} smOffset={2} sm={4} xsOffset={1} xs={5} className={styles.parameterList}>
                                 <span className={styles.block}>Chlordane</span>
@@ -101,7 +101,7 @@ class About extends Component {
                                 Sensor Data
                             </Col>
                             <Col md={2} sm={4} xs={5}>
-                                <img width="131" height="131" src={require("../../theme/images/data-icons-03.png")}/>
+                                <img width="131" height="131" src={require("../../theme/images/data-icons-03.png").default}/>
                             </Col>
                             <Col md={2} smOffset={2} sm={4} xsOffset={1} xs={5} className={styles.parameterList}>
                                 <span className={styles.block}>Beam Attenuation</span>
@@ -127,7 +127,7 @@ class About extends Component {
                                 River Discharge
                             </Col>
                             <Col md={2} sm={4} xs={5}>
-                                <img width="131" height="131" src={require("../../theme/images/data-icons-04.png")}/>
+                                <img width="131" height="131" src={require("../../theme/images/data-icons-04.png").default}/>
                             </Col>
                             <Col md={4} smOffset={2} sm={8} xsOffset={1} xs={10} className={styles.parameterList}>
                                 <span className={styles.block}>River Water Discharge
@@ -147,7 +147,7 @@ class About extends Component {
                                 Aquatic Life
                             </Col>
                             <Col md={2} sm={4} xs={5}>
-                                <img width="131" height="131" src={require("../../theme/images/data-icons-05.png")}/>
+                                <img width="131" height="131" src={require("../../theme/images/data-icons-05.png").default}/>
                             </Col>
                             <Col md={4} smOffset={2} sm={8} xsOffset={1} xs={10} className={styles.parameterList}>
                                 <span className={styles.block}>Zooplankton</span>

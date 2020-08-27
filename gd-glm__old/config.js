@@ -1,11 +1,7 @@
 export const gd3 = {
 
     geostreaming_endpoints: [
-        {url: "https://seagrant-dev.ncsa.illinois.edu/geostreams", label: "GLM DEV", title: "Great Lakes Monitoring",
-            subtitle: "ILLINOIS-INDIANA SEA GRANT"},
-        {url: "https://greatlakesmonitoring.org/geostreams", label: "GLM PROD", title: "Great Lakes Monitoring",
-            subtitle: "ILLINOIS-INDIANA SEA GRANT"},
-        {url:"http://localhost:9000", label:"TEST", title:"TEST", subtitle:"TEST"}
+        {url: process.env.GEOSTREAMS_URL}
     ],
 
     // Menu Bar Information
@@ -14,19 +10,19 @@ export const gd3 = {
         "pages": [
             {
                 "name": "HOME",
-                "url": "/#",
+                "url": "/",
             },
             {
                 "name": "EXPLORE",
-                "url": "/#explore/all",
+                "url": "/explore/all",
             },
             {
                 "name": "SEARCH",
-                "url": "/#search",
+                "url": "/search",
             },
             {
                 "name": "ANALYSIS",
-                "url": "/#analysis",
+                "url": "/analysis",
             },
             {
                 "name": "TRENDS",
@@ -43,7 +39,7 @@ export const gd3 = {
             },
             {
                 "name": "ABOUT",
-                "url": "/#about",
+                "url": "/about",
             },
         ]
     },
@@ -160,8 +156,8 @@ export const gd3 = {
     mobile_size_max: 840,
     chrome_detail_mobile_disabled: true,
     filter_unavailable_sensors: true,
-    mobile_detail_path: '/#detail/location/',
-    mobile_explore_path: '/#explore/all/',
+    mobile_detail_path: 'detail/location/',
+    mobile_explore_path: 'explore/all/',
 
     // Max Number of Parameters to display in the Map Popups (default is 10)
     max_display_params: 10,

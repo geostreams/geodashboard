@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react'
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 import exploreStyles from '../styles/explore.css';
 import {Button, Icon, List, ListHeader, ListGroup} from 'react-mdc-web/lib';
 import {
@@ -95,7 +95,7 @@ class ExploreSourcesTab extends Component {
                     </span>)
                 } else {
                     mobile_data.map(data => {
-                        let location = (getMobileDetailPath() + data.name.toString() + '/separate/');
+                        let location = (getMobileDetailPath() + data.name.toString() + '/All/');
                         contents.push(
                             <span key={data.id}>
                             <a key={data.id} href={location}>

@@ -3,8 +3,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Box, CircularProgress, makeStyles } from '@material-ui/core';
 
-import Header, { HEADERS_HEIGHT } from './Header';
 import Footer from './Footer';
+import Header, { HEADERS_HEIGHT } from './Header';
+
 
 const useStyles = makeStyles({
     scrim: {

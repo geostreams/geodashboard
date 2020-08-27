@@ -15,7 +15,8 @@ import {
     makeStyles
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import LogoApp from 'gd-geostreaming/src/images/logo_app.png';
+
+import LogoApp from '../../images/logo_app.png';
 
 export const HEADERS_HEIGHT = 61;
 
@@ -69,6 +70,8 @@ const Header = ({ location }: Props) => {
     const geostreamingMenuEl = React.useRef(null);
     const [geostreamingMenuOpen, updateGeostreamingMenuOpen] = React.useState(false);
 
+    const activeTab = location.pathname.split('/')[1];
+
     return (
         <AppBar position="fixed">
             <Toolbar className={classes.mainHeader}>
@@ -92,7 +95,7 @@ const Header = ({ location }: Props) => {
                         indicator: classes.tabsIndicator
                     }}
                     centered
-                    value={location.pathname.split('/')[1]}
+                    value={activeTab.search(/^(explore|search|analysis)/) === 0 ? 'geostreaming' : activeTab}
                 >
                     <Tab
                         className={`${classes.marginLeftAuto} ${classes.tabRoot}`}
@@ -151,19 +154,19 @@ const Header = ({ location }: Props) => {
                                 </MenuItem>
                                 <MenuItem
                                     component={Link}
-                                    to="/geostreaming/explore/all"
+                                    to="/explore/all"
                                 >
                                     Explore
                                 </MenuItem>
                                 <MenuItem
                                     component={Link}
-                                    to="/geostreaming/search"
+                                    to="/search"
                                 >
                                     Download
                                 </MenuItem>
                                 <MenuItem
                                     component={Link}
-                                    to="/geostreaming/analysis"
+                                    to="/analysis"
                                 >
                                     Analysis
                                 </MenuItem>

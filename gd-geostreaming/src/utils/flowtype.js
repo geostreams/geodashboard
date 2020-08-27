@@ -1,5 +1,4 @@
 // @flow
-import type { Map } from 'immutable';
 import type { GeometryType } from 'gd-core/src/utils/flowtype';
 
 export type PropertiesType = {
@@ -14,6 +13,12 @@ export type PropertiesType = {
     online_status: string;
 }
 
+export type CategoryType = {
+    id: number;
+    name: string;
+    title: string;
+}
+
 export type ParameterType = {
     id: number;
     name: string;
@@ -21,26 +26,11 @@ export type ParameterType = {
     unit: string;
     search_view: boolean;
     explore_view: boolean;
-    scale_names: [];
-    scale_colors: [];
-}
-export interface ImmutableParameterType extends Map<string, any> {
-    id: number;
-    name: string;
-    title: string;
-    unit: string;
-    search_view: boolean;
-    explore_view: boolean;
-    scale_names: [];
-    scale_colors: [];
+    scale_names: string[];
+    scale_colors: string[];
 }
 
 export type ParameterCategoryType = {
-    id: number;
-    name: string;
-    detail_type: string;
-}
-export interface ImmutableParameterCategoryType extends Map<string, any> {
     id: number;
     name: string;
     detail_type: string;
@@ -51,13 +41,9 @@ export type ParameterMappingsType = {
     parameter_id: number;
     category_id: number;
 }
-export interface ImmutableParameterMappingsType extends Map<string, any> {
-    id: number;
-    parameter_id: number;
-    category_id: number;
-}
 
 export type ParameterValue = {
+    data: {};
     count: number;
     average: number;
     year: number;
@@ -73,33 +59,21 @@ export type SensorType = {
     created: string;
     geometry: GeometryType;
     max_end_time: string;
-    min_end_time: string;
+    min_end_time: string;       // FIXME missing from API
     name: string;
     parameters: string[];
     properties: PropertiesType;
-    geoType: string;
-    type: string;
+    geoType: string;            // FIXME should it be type in API?
+    type: string;               // FIXME missing from API
     min_start_time: string;
-    trend_end_time: string;
-    trend_start_time: string;
-    trends: [];
+    trend_end_time: string;     // FIXME missing from API
+    trend_start_time: string;   // FIXME missing from API
+    trends: [];                 // FIXME missing from API
 }
 
-export interface ImmutableSensorType extends Map<string, any> {
-    id: number;
-    created: string;
-    geometry: GeometryType;
-    max_end_time: string;
-    min_end_time: string; // FIXME missing from API
-    name: string;
-    parameters: string[];
-    properties: PropertiesType;
-    type: string; // FIXME missing from API
-    geoType: string;     // FIXME should it be type in API?
-    min_start_time: Date;
-    trend_end_time: Date; // FIXME missing from API
-    trend_start_time: Date; // FIXME missing from API
-    trends: []; // FIXME missing from API
+export type MapConfig = {
+    clusterExpandCountThreshold: number;
+    clusterExpandZoomThreshold: number;
 }
 
 export type SourceType = {
@@ -107,7 +81,27 @@ export type SourceType = {
     label: string;
 }
 
-export interface ImmutableSourceType extends Map<string, any> {
-    id: string;
+export type SourceConfig = {
     label: string;
+    order: number;
+    color: string;
+    description: string;
+    qaqc: string;
+    more_info: string;
+    link: string;
+    useSeasonFilter: boolean;
+}
+
+export type Config = {
+    geostreamingEndpoint: string;
+
+    map: MapConfig;
+
+    sensors: {
+        displayOnlineStatus: boolean;
+    };
+
+    source: {
+        [k: string]: SourceConfig;
+    };
 }

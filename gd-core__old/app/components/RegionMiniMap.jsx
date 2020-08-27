@@ -8,7 +8,7 @@ import ol from 'openlayers';
 
 require("openlayers/css/ol.css");
 import trendsStyles from '../styles/trends.css';
-import mainStyles from '../styles/main.css';
+import mainStyles from '../styles/mainStyle.css';
 import {
     Card, CardHeader, CardTitle, CardMedia,
     Dialog, DialogBody, DialogHeader, DialogTitle,

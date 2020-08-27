@@ -7,7 +7,7 @@ import React, {Component} from "react";
 import styles from '../styles/carousel.css';
 import {Button, Fab, Icon, Card, CardTitle, CardActions, CardMedia} from 'react-mdc-web/lib';
 import {getCarouselImageNames, getCarouselImageCaptions} from '../utils/getConfig';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 
 class Carousel extends Component {
@@ -213,7 +213,7 @@ class Carousel extends Component {
                     <div>
                         <CardMedia>
                             <div className={'carouselImages ' + styles.imageTransition} key={"image" + indexVal}>
-                                <img className={styles.imageSize} src={require("../../theme/" + image)}/>
+                                <img className={styles.imageSize} src={require("../../theme/" + image).default}/>
                             </div>
                         </CardMedia>
                         {captionLink}

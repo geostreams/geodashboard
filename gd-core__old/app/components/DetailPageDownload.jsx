@@ -12,7 +12,7 @@ import {
 } from '../utils/getConfig';
 import {intersectArrays, serialize} from '../utils/arrayUtils';
 import styles from '../styles/detail.css';
-import stylesMain from '../styles/main.css';
+import stylesMain from '../styles/mainStyle.css';
 
 
 class DetailPageDownload extends Component {

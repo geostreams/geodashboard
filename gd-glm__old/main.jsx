@@ -4,7 +4,7 @@ import React from 'react';
 import {render} from 'react-dom';
 import App from './app/containers/App';
 import { Provider } from 'react-redux';
-import './app/styles/main.css';
+import './app/styles/mainStyle.css';
 import './app/styles_custom/react-mdc-web.css'
 import configureStore from './app/store/configureStore';
 

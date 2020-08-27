@@ -1,65 +1,62 @@
 // @flow
-import { fromJS, List, Map, Record, Set } from 'immutable';
+import logger from 'gd-core/src/utils/logger';
+import { values } from 'gd-core/src/utils/array';
 
-import type { RecordOf } from 'immutable';
-
-import CONFIG from '../config';
 import { ACTIONS } from '../actions/sensors';
 import { getSourceName } from '../utils/sensors';
 
 import type { Action } from '../actions/sensors';
 import type {
-    ImmutableSensorType,
-    ImmutableSourceType,
-    SensorType
+    SensorType, SourceConfig,
+    SourceType
 } from '../utils/flowtype';
 
-type State = RecordOf<{
-    sensors: List<ImmutableSensorType>;
-    sources: Set<ImmutableSourceType>;
-    regions: Set<string>;
-}>
+type State = {
+    sensors: SensorType[];
+    sources: SourceType[];
+    regions: string[];
+}
 
-const stateRecord = Record({
-    sensors: List(),
-    sources: Set(),
-    regions: Set()
-});
+const INIT_STATE = {
+    sensors: [],
+    sources: [],
+    regions: []
+};
 
-const processData = (data: SensorType[]): {
-    sensors: List<ImmutableSensorType>;
-    sources: Set<ImmutableSourceType>;
-    regions: Set<string>;
-} => {
-    const sensors = List().asMutable();
-    const sources = Set().asMutable();
-    const regions = Set().asMutable();
+const processData = (sourcesConfig: { [k: string]: SourceConfig; }, data: SensorType[]): State => {
+    const sensors = [];
+    const sources = {};
+    const regions = [];
 
     data.forEach((sensor) => {
         sensor.type = sensor.geoType;    // FIXME Replace `geoType` with `type` in API (?)
-        sensors.push(fromJS(sensor));
+        sensors.push(sensor);
 
         const source = sensor.properties.type;
         if (source) {
-            sources.add(Map({ id: source.id, label: getSourceName(source) || '' }));
+            if (!sources[source.id]) {
+                sources[source.id] = { id: source.id, label: getSourceName(sourcesConfig[source.id], source) || '' };
+            }
         } else {
-            console.warn(`Found sensor ${sensor.id} without data source`);
+            logger.debug(`Found sensor ${sensor.id} without data source`);
         }
 
         const region = sensor.properties.region;
         if (region) {
-            // Check if region exists already
-            regions.add(region);
+            if (regions.indexOf(region) === -1) {
+                regions.push(region);
+            }
         } else {
-            console.warn(`Found sensor ${sensor.id} without region`);
+            logger.debug(`Found sensor ${sensor.id} without region ${region}`);
         }
     });
+
     return {
-        sensors: sensors.asImmutable(),
-        sources: sources
+        sensors,
+        sources: values(sources)
             .sort((s1, s2) => {
-                const s1Rank = (CONFIG.source[s1.get('id').toLowerCase()] && CONFIG.source[s1.get('id').toLowerCase()].order) || 9999;
-                const s2Rank = (CONFIG.source[s2.get('id').toLowerCase()] && CONFIG.source[s2.get('id').toLowerCase()].order) || 9999;
+                const s1Rank = (sourcesConfig[s1.id.toLowerCase()] && sourcesConfig[s1.id.toLowerCase()].order) || 9999;
+                const s2Rank = (sourcesConfig[s2.id.toLowerCase()] && sourcesConfig[s2.id.toLowerCase()].order) || 9999;
                 if (s1Rank !== 9999 || s2Rank !== 9999) {
                     if (s1Rank > s2Rank) {
                         return 1;
@@ -69,22 +66,16 @@ const processData = (data: SensorType[]): {
                     }
                     return 0;
                 }
-                return s1.get('label').toUpperCase().localeCompare(s2.get('label').toUpperCase());
-            })
-            .asImmutable(),
-        regions: regions.asImmutable()
+                return s1.label.toUpperCase().localeCompare(s2.label.toUpperCase());
+            }),
+        regions
     };
 };
 
-export default (state: State = stateRecord(), action: Action) => {
+export default (state: State = INIT_STATE, action: Action) => {
     switch (action.type) {
-        case ACTIONS.UPDATE_SENSORS_DATA: {
-            const { sensors, sources, regions } = processData(action.data);
-            return state
-                .set('sensors', sensors)
-                .set('sources', sources)
-                .set('regions', regions);
-        }
+        case ACTIONS.UPDATE_SENSORS_DATA:
+            return processData(action.sources, action.data);
         default:
             return state;
     }

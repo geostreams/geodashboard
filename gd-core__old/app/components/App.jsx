@@ -23,7 +23,7 @@ import {
     getIEAlertBoxTitle, getIEAlertBoxBody, getIEAlertButtonText, getIEAlertShow,
     getIEVersionsBeforeEleven, getIEVersionEleven, getIEVersionEdge
 } from "../utils/getConfig";
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 
 
 const routes = (

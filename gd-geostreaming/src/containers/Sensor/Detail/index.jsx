@@ -2,160 +2,269 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import {
+    Checkbox,
+    FormControlLabel,
     Grid,
+    List,
+    ListItem,
     Tab,
     Tabs,
     Typography,
     withStyles
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import InfoIcon from '@material-ui/icons/Info';
+import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
+import { fromLonLat } from 'ol/proj';
+import OSM from 'ol/source/OSM';
+import { Map } from 'gd-core/src/components/ol';
+import { dateUTC } from 'gd-core/src/utils/format';
 
-import { callAPI } from '../../../utils/io';
-import { getSourceColor, getSourceName } from '../../../utils/sensors';
+import type { History, Location } from 'connected-react-router';
+
+import { getSensorMarker, getSensorName, getSourceName } from '../../../utils/sensors';
 import Filters from './Filters';
+
 import InfoDialog from './InfoDialog';
 import Parameters from './Parameters';
 import { getBinType } from './utils';
 
 import type {
+    CategoryType,
     ParameterCategoryType,
     ParameterMappingsType,
     ParameterType,
-    ParameterValue,
-    SensorType
+    SensorType,
+    SourceConfig
 } from '../../../utils/flowtype';
 
 const styles = (theme) => ({
     header: {
         color: theme.palette.primary.contrastText,
         padding: 10
+    },
+    map: {
+        width: '100%',
+        height: 200
     }
 });
 
 type Props = {
     classes: {
         header: string;
-        filtersContainer: string;
-        filterCard: string;
-        dateRangeSlider: string;
-        downloadButton: string;
+        map: string;
     };
+    geostreamingEndpoint: string;
+    sourceConfig: SourceConfig;
     sensor: SensorType;
-    parameters: ParameterType[];
-    categories: ParameterCategoryType[];
+    displayOnlineStatus: boolean;
+    allParameters: CategoryType[];
+    allCategories: ParameterCategoryType[];
     mappings: ParameterMappingsType[];
     handleClose: ?Function;
+    history: History;
+    location: Location;
+    match: { params: { [k: string]: string } };
 }
 
 type State = {
-    activeCategory: string;
+    hasSensor: boolean;
+    sensorMarkerLayer: ?VectorLayer;
+    categories: string[];
+    parameters: Array<ParameterType & { category: string; visualization: string; isSelected: boolean; }>;
+    activeCategory: ?string;
     showDialog: boolean;
     dialogContent: ?string;
-    paramsData: { [key: string]: ParameterValue[] };
-    startDate: Date;
-    endDate: Date;
-    showSeasonFilter: boolean;
+    minStartTime: ?Date;
+    maxEndTime: ?Date;
+    startDate: ?Date;
+    endDate: ?Date;
     selectedSeason: string;
     displayLines: boolean;
     startAtZero: boolean;
     sameTimeScale: boolean;
     selectAllDates: boolean;
-    binType: string;
+    binType: ?string;
+    showSeasonFilter: boolean;
+    activeSeason: string;
 }
 
 class SensorDetail extends React.Component<Props, State> {
-    categoriesMapping: { [key: string]: { type: string, parameters: ParameterType[] } }
-
-    minStartTime: Date
-
-    maxEndTime: Date
-
     static defaultProps = {
         handleClose: null
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        if (props.sensor) {
+            if (!state.hasSensor) {
+                const { sensor, allParameters, allCategories, mappings, location } = props;
+                const queryParams = new URLSearchParams(location.search);
+                const selectedParametersQuery = queryParams.get('params');
+                const selectedParameters = selectedParametersQuery ? selectedParametersQuery.split(',') : [];
+
+                const categories = new Set();
+                const parameters = [];
+                sensor.parameters.forEach(parameterName => {
+                    const parameter = allParameters.find(({ name }) => name === parameterName);
+                    if (parameter) {
+                        const mappedCategories = mappings.find(m => m.parameter_id === parameter.id);
+                        if (mappedCategories) {
+                            const category = allCategories.find(c => c.id === mappedCategories.category_id);
+                            if (category && category.name) {
+                                categories.add(category.name);
+                                parameters.push({
+                                    ...parameter,
+                                    category: category.name,
+                                    visualization: category.detail_type,
+                                    isSelected: (
+                                        selectedParameters.length === 0 ||
+                                        selectedParameters.indexOf(parameter.name) > -1
+                                    )
+                                });
+                            }
+                        }
+                    }
+                });
+
+                const startDateQuery = queryParams.get('start');
+                const endDateQuery = queryParams.get('end');
+                const startTime = new Date(props.sensor.min_start_time);
+                const endTime = new Date(props.sensor.max_end_time);
+                // Some sensors might have invalid date strings, e.g. "N/A"; in those cases, fallback to the following start and end time.
+                const minStartTime = startTime.valueOf() ? startTime : new Date('1980-01-01');
+                const maxEndTime = endTime.valueOf() ? endTime : new Date();
+
+                const startDate = startDateQuery ? dateUTC(startDateQuery) : minStartTime;
+                const endDate = endDateQuery ? dateUTC(endDateQuery) : maxEndTime;
+
+                return {
+                    ...state,
+                    hasSensor: true,
+                    sensorMarkerLayer: getSensorMarker(sensor, props.sourceConfig, props.displayOnlineStatus),
+                    categories: ['All', ...Array.from(categories).sort()],
+                    parameters: parameters.sort(({ name: name1 }, { name: name2 }) => name1.localeCompare(name2)),
+                    minStartTime,
+                    maxEndTime,
+                    startDate: startDate.valueOf() ? startDate : startTime,
+                    endDate: endDate.valueOf() ? endDate : endTime,
+                    binType: getBinType(startDate, endDate),
+                    selectAllDates: (
+                        startDate.valueOf() === minStartTime.valueOf() &&
+                        endDate.valueOf() === maxEndTime.valueOf()
+                    ),
+                    showSeasonFilter: !!(queryParams.get('use-season') && sensor && props.sourceConfig.useSeasonFilter)
+                };
+            }
+            return state;
+        }
+        return null;
     }
 
     constructor(props) {
         super(props);
 
-        this.categoriesMapping = this.getCategories();
-        this.minStartTime = new Date(props.sensor.min_start_time);
-        this.maxEndTime = new Date(props.sensor.max_end_time);
-
-        const activeCategory = Object.keys(this.categoriesMapping)[0];
-
-        const startDate = new Date(props.sensor.min_start_time);
-        const endDate = new Date(props.sensor.max_end_time);
-
         this.state = {
-            activeCategory,
+            hasSensor: false,
+            sensorMarkerLayer: null,
+            categories: [],
+            parameters: [],
+            activeCategory: this.props.match.params.category,
             showDialog: false,
             dialogContent: null,
-            paramsData: {},
-            startDate,
-            endDate,
-            /* eslint-disable react/no-unused-state */
-            showSeasonFilter: false,
+            minStartTime: null,
+            maxEndTime: null,
+            startDate: null,
+            endDate: null,
             selectedSeason: '',
             displayLines: true,
-            /* eslint-enable react/no-unused-state */
             startAtZero: false,
             sameTimeScale: true,
             selectAllDates: true,
-            binType: getBinType(startDate, endDate)
+            binType: null,
+            showSeasonFilter: false,
+            activeSeason: (new URLSearchParams(props.location.search)).get('season') || 'spring'
         };
     }
 
-    componentDidMount() {
-        this.updateParamsData();
-    }
-
-    updateParamsData = () => {
-        const { sensor } = this.props;
-        const { binType, startDate, endDate } = this.state;
+    getQueryParams = () => {
         const queryParams = [];
+        const { startDate, endDate } = this.state;
         if (startDate) {
             queryParams.push(`since=${startDate.toISOString()}`);
             if (endDate) {
                 queryParams.push(`until=${endDate.toISOString()}`);
             }
         }
-        callAPI(
-            `cache/${binType}/${sensor.id}?${queryParams.join('&')}`,
-            (data) => {
-                this.setState({ paramsData: data.properties });
-            }
-        );
+        return queryParams.join('&');
     }
 
-    getCategories = () => {
-        const { sensor, parameters, categories, mappings } = this.props;
-        const categoriesMapping = {};
-        sensor.parameters.forEach(parameterName => {
-            const parameter = parameters.find(({ name }) => name === parameterName);
-            if (parameter) {
-                const mappedCategories = mappings.filter(m => m.parameter_id === parameter.id);
-                mappedCategories.forEach(mapping => {
-                    const category = categories.find(c => c.id === mapping.category_id);
-                    if (category) {
-                        if (categoriesMapping[category.name]) {
-                            categoriesMapping[category.name].parameters.push(parameter);
-                        } else {
-                            categoriesMapping[category.name] = {
-                                type: category.detail_type,
-                                parameters: [parameter]
-                            };
-                        }
-                    }
-                });
+    updateUrl = () => {
+        const queryParams = [];
+        const { activeSeason, activeCategory, startDate, endDate, minStartTime, maxEndTime, parameters } = this.state;
+
+        if ((new URLSearchParams(this.props.location.search)).get('use-season')) {
+            queryParams.push('use-season=1');
+        }
+
+        queryParams.push(`season=${activeSeason}`);
+
+        const selectedParameters = parameters.filter(({ isSelected }) => isSelected).map(({ name }) => name);
+        if (selectedParameters.length !== parameters.length) {
+            queryParams.push(`params=${selectedParameters.join(',')}`);
+        }
+
+        if (startDate && startDate !== minStartTime) {
+            queryParams.push(`start=${startDate.toISOString().split('T')[0]}`);
+        }
+        if (endDate && endDate !== maxEndTime) {
+            queryParams.push(`end=${endDate.toISOString().split('T')[0]}`);
+        }
+
+        const pathname = this.props.location.pathname.replace(/[^/]+(?=\/$|$)/, activeCategory);
+        const search = queryParams.length ? `?${queryParams.join('&')}` : '';
+
+        this.props.history.replace(`${pathname}${search}`, this.props.history.location.state);
+    }
+
+    getDownloadUrl = () => {
+        const { geostreamingEndpoint, sensor } = this.props;
+        const { startDate, endDate, minStartTime, maxEndTime, parameters } = this.state;
+
+        const downloadParams = [];
+
+        parameters.forEach(({ name, isSelected }) => {
+            if (isSelected) {
+                downloadParams.push(`attributes=${name}`);
             }
         });
-        return categoriesMapping;
+
+        if (!downloadParams.length) {
+            return '';
+        }
+
+        if (startDate && startDate !== minStartTime) {
+            downloadParams.push(`since=${startDate.toISOString().split('T')[0]}`);
+        }
+        if (endDate && endDate !== maxEndTime) {
+            downloadParams.push(`until=${endDate.toISOString().split('T')[0]}`);
+        }
+
+        return `${geostreamingEndpoint}/datapoints/download?format=csv&sensor_id=${sensor.id}&${downloadParams.join('&')}`;
     }
 
     handleCategoryChange = (e, category) => {
-        this.setState({
-            activeCategory: category
-        });
+        this.setState(
+            { activeCategory: category },
+            this.updateUrl
+        );
+    }
+
+    handleSeasonUpdate = (season) => {
+        this.setState(
+            { activeSeason: season },
+            this.updateUrl
+        );
     }
 
     handleSelectAllDatesToggle = (e, isChecked) => {
@@ -163,29 +272,36 @@ class SensorDetail extends React.Component<Props, State> {
             (state) => {
                 state.selectAllDates = isChecked;
                 if (isChecked) {
-                    state.startDate = this.minStartTime;
-                    state.endDate = this.maxEndTime;
+                    state.startDate = state.minStartTime;
+                    state.endDate = state.maxEndTime;
                 }
-                state.binType = getBinType(state.startDate, state.endDate);
+                if (state. startDate && state.endDate) {
+                    state.binType = getBinType(state.startDate, state.endDate);
+                }
                 return state;
             },
-            this.updateParamsData
+            this.updateUrl
         );
     }
 
     handleDateRangeUpdate = (e, [start, end]) => {
         this.setState(
             (state) => {
-                state.startDate = new Date(start);
-                state.endDate = new Date(end);
-                state.selectAllDates = (
-                    state.startDate.valueOf() === this.minStartTime.valueOf() &&
-                    state.endDate.valueOf() === this.maxEndTime.valueOf()
-                );
-                state.binType = getBinType(state.startDate, state.endDate);
+                const { minStartTime, maxEndTime } = state;
+                if (minStartTime && maxEndTime) {
+                    const startDate = new Date(start);
+                    const endDate = new Date(end);
+                    state.selectAllDates = (
+                        startDate.valueOf() === minStartTime.valueOf() &&
+                        endDate.valueOf() === maxEndTime.valueOf()
+                    );
+                    state.binType = getBinType(startDate, endDate);
+                    state.startDate = startDate;
+                    state.endDate = endDate;
+                }
                 return state;
             },
-            this.updateParamsData
+            this.updateUrl
         );
     }
 
@@ -197,6 +313,31 @@ class SensorDetail extends React.Component<Props, State> {
         this.setState({ sameTimeScale: isChecked });
     }
 
+    handleParameterToggle = (parameterName: string, isChecked: boolean) => {
+        this.setState((state) => {
+            const parameterIndex = state.parameters.findIndex(({ name }) => name === parameterName);
+            if (parameterIndex > -1) {
+                state.parameters[parameterIndex].isSelected = isChecked;
+            }
+            return state;
+        });
+    }
+
+    handleClose = () => {
+        if (this.props.handleClose) {
+            this.props.handleClose();
+        } else {
+            const { parent } = this.props.match.params;
+            if (parent) {
+                let next = `/${parent}`;
+                if (parent.toLowerCase().indexOf('explore') > -1) {
+                    next = `${next}/all`;
+                }
+                this.props.history.push(next);
+            }
+        }
+    }
+
     showInfoDialog = (content) => {
         this.setState({
             showDialog: true,
@@ -205,97 +346,176 @@ class SensorDetail extends React.Component<Props, State> {
     }
 
     render() {
-        const { classes, sensor, handleClose } = this.props;
         const {
+            hasSensor,
+            sensorMarkerLayer,
+            categories,
             activeCategory,
+            parameters,
             selectAllDates,
+            minStartTime,
+            maxEndTime,
             startDate,
             endDate,
             binType,
+            showSeasonFilter,
+            activeSeason,
             startAtZero,
             sameTimeScale,
-            paramsData,
             showDialog,
             dialogContent
         } = this.state;
 
-        const { properties } = sensor;
+        if (
+            hasSensor &&
+            sensorMarkerLayer &&
+            activeCategory &&
+            minStartTime &&
+            maxEndTime &&
+            startDate &&
+            endDate &&
+            binType
+        ) {
+            const { classes, sourceConfig, sensor } = this.props;
 
-        return (
-            <>
-                <Grid container>
-                    <Grid
-                        item
-                        className={classes.header}
-                        xs={12}
-                        style={{ backgroundColor: getSourceColor(properties.type.id) }}
-                    >
-                        <Typography variant="h4">
-                            {properties.name} - {getSourceName(properties.type)}
-                            {handleClose ?
+            const { properties } = sensor;
+
+            return (
+                <>
+                    <Grid container>
+                        <Grid
+                            item
+                            className={classes.header}
+                            xs={12}
+                            style={{ backgroundColor: sourceConfig.color }}
+                        >
+                            <Typography variant="h4">
+                                {getSensorName(properties)} - {getSourceName(sourceConfig, properties.type)}
                                 <CloseIcon
                                     className="right actionIcon"
-                                    onClick={handleClose}
-                                /> :
-                                null}
-                        </Typography>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <Tabs
-                            centered
-                            value={activeCategory}
-                            onChange={this.handleCategoryChange}
-                        >
-                            {Object.keys(this.categoriesMapping).map((category) => (
-                                <Tab
-                                    key={category}
-                                    label={category}
-                                    value={category}
+                                    onClick={this.handleClose}
                                 />
-                            ))}
-                        </Tabs>
+                            </Typography>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Tabs
+                                centered
+                                value={activeCategory}
+                                onChange={this.handleCategoryChange}
+                            >
+                                {categories.map((category) => (
+                                    <Tab
+                                        key={category}
+                                        label={category}
+                                        value={category}
+                                    />
+                                ))}
+                            </Tabs>
+                        </Grid>
+
+                        <Filters
+                            showSeasonFilter={showSeasonFilter}
+                            minStartTime={minStartTime}
+                            maxEndTime={maxEndTime}
+                            selectAllDates={selectAllDates}
+                            startDate={startDate}
+                            endDate={endDate}
+                            binType={binType}
+                            activeSeason={activeSeason}
+                            startAtZero={startAtZero}
+                            sameTimeScale={sameTimeScale}
+                            downloadUrl={this.getDownloadUrl()}
+                            handleSeasonUpdate={this.handleSeasonUpdate}
+                            handleSelectAllDatesToggle={this.handleSelectAllDatesToggle}
+                            handleDateRangeUpdate={this.handleDateRangeUpdate}
+                            handleStartDataAtZeroToggle={this.handleStartDataAtZeroToggle}
+                            handleUseSameTimeScaleToggle={this.handleUseSameTimeScaleToggle}
+                        />
+
+                        <Grid container>
+                            <Grid item xs={3}>
+                                <Typography variant="h6" align="center">
+                                    Selected Parameters
+                                    &nbsp;
+                                    <InfoIcon
+                                        className="actionIcon"
+                                        fontSize="small"
+                                        onClick={(() => this.showInfoDialog('parameters'))}
+                                    />
+                                </Typography>
+                                <List>
+                                    {parameters.map(({ category, id, title, unit, name, isSelected }) => (
+                                        activeCategory === 'All' || activeCategory === category ?
+                                            <ListItem key={id}>
+                                                <FormControlLabel
+                                                    control={<Checkbox
+                                                        checked={isSelected}
+                                                        onChange={(e, isChecked) => {
+                                                            this.handleParameterToggle(name, isChecked);
+                                                        }}
+                                                    />}
+                                                    label={<Typography variant="body2" dangerouslySetInnerHTML={{ __html: `${title}${unit ? ` (${unit})` : ''}` }} />}
+                                                />
+                                            </ListItem> :
+                                            null
+                                    ))}
+                                </List>
+                                <Map
+                                    className={classes.map}
+                                    zoom={5}
+                                    center={fromLonLat(sensor.geometry.coordinates)}
+                                    layers={[
+                                        new TileLayer({
+                                            type: 'base',
+                                            title: 'OSM',
+                                            source: new OSM()
+                                        }),
+                                        sensorMarkerLayer
+                                    ]}
+                                />
+                            </Grid>
+                            <Grid item container xs={9}>
+                                <Parameters
+                                    binType={showSeasonFilter ? 'season' : binType}
+                                    season={showSeasonFilter ? activeSeason : null}
+                                    sensorId={sensor.id}
+                                    parameters={parameters.filter(({ category, isSelected }) => (activeCategory === 'All' || category === activeCategory) && isSelected )}
+                                    queryParams={this.getQueryParams()}
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    startAtZero={startAtZero}
+                                    sameTimeScale={sameTimeScale}
+                                    showInfoDialog={this.showInfoDialog}
+                                />
+                            </Grid>
+                        </Grid>
                     </Grid>
 
-                    <Filters
-                        minStartTime={this.minStartTime}
-                        maxEndTime={this.maxEndTime}
-                        selectAllDates={selectAllDates}
-                        startDate={startDate}
-                        endDate={endDate}
-                        binType={binType}
-                        startAtZero={startAtZero}
-                        sameTimeScale={sameTimeScale}
-                        handleSelectAllDatesToggle={this.handleSelectAllDatesToggle}
-                        handleDateRangeUpdate={this.handleDateRangeUpdate}
-                        handleStartDataAtZeroToggle={this.handleStartDataAtZeroToggle}
-                        handleUseSameTimeScaleToggle={this.handleUseSameTimeScaleToggle}
+                    <InfoDialog
+                        showDialog={showDialog}
+                        contentType={dialogContent}
+                        source={sensor.properties.type}
+                        handleClose={() => this.setState({ showDialog: false })}
                     />
-
-                    <Parameters
-                        data={paramsData}
-                        dateRange={sameTimeScale ? [startDate, endDate] : [startDate, endDate]}
-                        mapping={this.categoriesMapping[activeCategory]}
-                        startAtZero={startAtZero}
-                        showInfoDialog={this.showInfoDialog}
-                    />
-                </Grid>
-
-                <InfoDialog
-                    showDialog={showDialog}
-                    contentType={dialogContent}
-                    source={sensor.properties.type}
-                    handleClose={() => this.setState({ showDialog: false })}
-                />
-            </>
-        );
+                </>
+            );
+        }
+        return null;
     }
 }
 
-const mapStateToProps = (state) => ({
-    parameters: state.__new_parameters.parameters,
-    categories: state.__new_parameters.categories,
-    mappings: state.__new_parameters.mappings
-});
+const mapStateToProps = (state, props) => {
+    const sensor = state.__new_sensors.sensors.find(({ name }) => name === props.match.params.name);
+    return {
+        geostreamingEndpoint: state.config.geostreamingEndpoint,
+        sourceConfig: sensor && state.config.source[sensor.properties.type.id],
+        sensor,
+        displayOnlineStatus: state.config.displayOnlineStatus,
+        allParameters: state.__new_parameters.parameters,
+        allCategories: state.__new_parameters.categories,
+        mappings: state.__new_parameters.mappings
+    };
+};
 
 export default connect(mapStateToProps)(withStyles(styles)(SensorDetail));

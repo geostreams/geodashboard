@@ -16,6 +16,7 @@ type Props = {
         color: string;
         opacity: string;
         width: string;
+        size: number;
     }>;
 }
 
@@ -44,7 +45,7 @@ const SimpleLegend = (props: Props) => {
                 .append('g')
                 .attr('transform', `translate(${marginLeft},${marginTop})`);
 
-            data.forEach(({ label, type, color, width: strokeWidth, opacity }, idx) => {
+            data.forEach(({ label, type, color, width: strokeWidth, opacity, size }, idx) => {
                 const baseY = ((idx * (itemHeight + itemGap)) + itemGap);
 
                 if (type === 'line') {
@@ -55,8 +56,8 @@ const SimpleLegend = (props: Props) => {
                         .attr('x2', 20)
                         .attr('y2', baseY - (itemHeight / 2))
                         .attr('stroke', color)
-                        .attr('stroke-width', strokeWidth)
-                        .attr('stroke-opacity', opacity);
+                        .attr('stroke-width', strokeWidth || 2)
+                        .attr('stroke-opacity', opacity || 1);
                 } else if (type === 'polygon') {
                     gEl
                         .append('rect')
@@ -72,7 +73,8 @@ const SimpleLegend = (props: Props) => {
                     .append('text')
                     .text(label)
                     .attr('x', 25)
-                    .attr('y', baseY);
+                    .attr('y', baseY)
+                    .attr('font-size', size || 16);
             });
         }
     });

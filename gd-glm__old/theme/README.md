@@ -1,1 +1,0 @@
-Directory for project specific images, files, theme items, etc.

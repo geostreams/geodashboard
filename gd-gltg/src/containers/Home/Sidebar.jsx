@@ -22,8 +22,9 @@ import InfoIcon from '@material-ui/icons/Info';
 import { Link } from 'react-router-dom';
 import { BarChart, LegendHorizontalDiscrete, SimpleLegend } from 'gd-core/src/components/d3';
 import Carousel from 'gd-core/src/components/Carousel';
-
 import { entries } from 'gd-core/src/utils/array';
+import { useElementRect } from 'gd-core/src/utils/hooks';
+
 import dataStories from '../DataStories/pages';
 import DataStoriesModal from '../DataStories/Details';
 import annualYieldData from '../../data/annual_yield.json';
@@ -140,6 +141,8 @@ const Sidebar = ({
     handleVariableChange
 }: Props) => {
     const classes = useStyle();
+
+    const [container, containerRect] = useElementRect();
 
     const annualStateFlowChartTooltipRef: { current: null | HTMLDivElement } = React.createRef();
 
@@ -272,7 +275,7 @@ const Sidebar = ({
                     </NativeSelect>
                 </FormControl>
             </Box>
-            <Container>
+            <Container ref={container}>
                 <Typography
                     className={classes.header}
                     variant="h5"
@@ -288,7 +291,8 @@ const Sidebar = ({
                         </Typography>
                         <Typography variant="caption">
                             The total {selectedNutrient} load leaving the state of Illinois is estimated to be&nbsp;
-                            {overallData.drainage.annual_load[selectedNutrient][selectedYear]} million lb in {selectedYear}.
+                            {overallData.drainage.annual_load[selectedNutrient][selectedYear]} million lb
+                            in {selectedYear}.
                         </Typography>
                         <BarChart
                             className={classes.barChart}
@@ -336,7 +340,7 @@ const Sidebar = ({
                             lineStroke="#f63700"
                             lineStrokeWidth={2}
                             intervalFill="#fdb47f"
-                            width={(window.innerWidth / 3) - 50}
+                            width={(containerRect.width || 0) * 0.9}
                             height={300}
                             marginTop={50}
                             marginBottom={60}

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## UNRELEASED
+
+### Changed
+- Improved the components and config relations between `gd-gltg` and `gd-geostreaming`
+  [GEOD-1341](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1341)
+
 ## [3.3.0] - 2020-06-18
 
 ### Added
@@ -19,10 +25,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [GLGVO-647](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-647)
 - Added layer legend to the map
   [GLGVO-648](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-648)
-- Added exectuive summary to HUC8 section in FAQs
+- Added executive summary to HUC8 section in FAQs
   [GLGVO-651](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-651)
 - Added state annual nutrient load chart
   [GLGVO-662](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-662)
+- Added Google Analytics config
+  [GLGVO-664](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-664)
 
 ### Changed
 - Create Intervals as a Reusable Component

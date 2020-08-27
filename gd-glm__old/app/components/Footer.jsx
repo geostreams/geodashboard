@@ -5,7 +5,7 @@
 import React, {Component} from 'react';
 import styles from '../styles/footer.css';
 import packageJson from '../../package.json';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 
 class Footer extends Component {
@@ -16,25 +16,25 @@ class Footer extends Component {
                 <div className={styles.footerImagesParent}>
                     <Link target="_blank" href="http://www.iisgcp.org">
                         <img className={styles.footerImagesItem}
-                             src={require("../../theme/seagrantil-in-grayscale.png")}
+                             src={require("../../theme/seagrantil-in-grayscale.png").default}
                              alt="" width="85" height="53"
                         />
                     </Link>
                     <Link target="_blank" href="http://ncsa.illinois.edu">
                         <img className={styles.footerImagesItem}
-                             src={require("../../theme/ncsa_horizontal-grayscale.png")}
+                             src={require("../../theme/ncsa_horizontal-grayscale.png").default}
                              alt="" width="126" height="24"
                         />
                     </Link>
                     <Link target="_blank" href="http://greatlakesrestoration.us">
                         <img className={styles.footerImagesItem}
-                             src={require("../../theme/glri_logolightgray.png")}
+                             src={require("../../theme/glri_logolightgray.png").default}
                              alt="" width="171" height="53"
                         />
                     </Link>
                     <Link target="_blank" href="http://cee.illinois.edu">
                         <img className={styles.footerImagesItem}
-                             src={require("../../theme/imark_bw.png")}
+                             src={require("../../theme/imark_bw.png").default}
                              alt="" height="45"
                         />
                     </Link>

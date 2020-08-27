@@ -4,7 +4,7 @@
 
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import DetailTabs from '../components/DetailTabs';
 import Spinner from '../components/Spinner';
 import DetailContents from '../containers/DetailContents';
@@ -12,7 +12,7 @@ import {getMobileSizeMax, getSourceName, getMobileExplorePath, getColor} from ".
 import {resetDetailPage} from '../actions';
 import type {Dispatch} from '../utils/flowtype'
 import {Row, Col} from 'react-flexbox-grid';
-import styles from '../styles/main.css';
+import styles from '../styles/mainStyle.css';
 import {Icon} from 'react-mdc-web/lib';
 
 
@@ -39,7 +39,7 @@ class Detail extends Component {
         this.setUpCategoryMappings(this.props);
     }
 
-    componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) {
         this.setUpCategoryMappings(newProps);
     }
 
@@ -98,7 +98,7 @@ class Detail extends Component {
                             </Col>
                             <Col md={1} className={styles.detail_header}>
                                 <span className={styles.close_detail}>
-                                <Link href={"/#explore/all"}> <Icon name="close"/></Link>
+                                <Link href={"/explore/all"}> <Icon name="close"/></Link>
                                 </span>
                             </Col>
                         </Row>
@@ -148,7 +148,7 @@ class Detail extends Component {
                             </Col>
                             <Col md={1} className={styles.detail_header}>
                                 <span className={styles.close_detail}>
-                                <Link href={"/#explore/all"}> <Icon name="close"/></Link>
+                                <Link href={"/explore/all"}> <Icon name="close"/></Link>
                                 </span>
                             </Col>
                         </Row>

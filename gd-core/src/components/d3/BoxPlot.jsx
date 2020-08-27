@@ -1,18 +1,11 @@
 // @flow
 import React from 'react';
-import {
-    event,
-    quantile,
-    select
-} from 'd3';
-import { makeStyles } from '@material-ui/core';
+import { quantile, select } from 'd3';
 
 import { precision } from '../../utils/format';
-import { sharedStyle } from './utils';
-
-const useStyle = makeStyles(sharedStyle);
 
 type Props = {
+    className: string;
     width: number;
     height: number;
     marginTop: number;
@@ -47,14 +40,19 @@ type Props = {
         strokeWidth: number;
         strokeDashArray: string;
     };
+    outliers: boolean;
+    outliersStyle: {
+        radius: number;
+        fill: string | Function;
+        fillOpacity: number | Function;
+    };
     labels: {
         median: number;
-        min: number;
-        max: number;
+        whiskerLower: number;
+        whiskerUpper: number;
         q1: number;
         q3: number;
     };
-    tooltipContent: string | Function;
     mouseOver: Function;
     mouseOut: Function;
     click: Function;
@@ -62,9 +60,8 @@ type Props = {
 }
 
 const BoxPlot = (props: Props) => {
-    const classes = useStyle();
-
     const {
+        className,
         width,
         height,
         marginTop,
@@ -76,31 +73,47 @@ const BoxPlot = (props: Props) => {
         mainLine,
         medianLine,
         sideLine,
+        outliers,
         labels,
-        tooltipContent,
         mouseOver,
         mouseOut,
         click,
         data
     } = props;
 
-    const innerWidth = width - marginLeft - marginRight;
+    const innerWidth = width - marginLeft - marginRight - 10;   // 10px is reduced to account for value texts next to the box
     const innerHeight = height - marginBottom - marginTop;
 
-    const gRef = React.useRef(null);
-    const tooltipRef = React.useRef(null);
+    const svgRef = React.useRef(null);
 
     React.useEffect(() => {
-        if (gRef.current) {
-            const gEl = select(gRef.current);
-            gEl.selectAll('*').remove();
+        if (svgRef.current) {
+            const svgEl = select(svgRef.current);
+            svgEl.selectAll('*').remove();
+            const gEl = svgEl
+                .append('g')
+                .attr('width', innerWidth)
+                .attr('height', innerHeight)
+                .attr('transform', `translate(${marginLeft},${marginTop})`);
 
             const q1 = quantile(data, .25);
             const median = quantile(data, .5);
             const q3 = quantile(data, .75);
+
             const interQuantileRange = q3 - q1;
-            const min = q1 - (1.5 * interQuantileRange);
-            const max = q1 + (1.5 * interQuantileRange);
+
+            const lowerIQR = q1 - (1.5 * interQuantileRange);
+            const upperIQR = q3 + (1.5 * interQuantileRange);
+            let whiskerLowerIndex = 0;
+            let whiskerUpperIndex = data.length - 1;
+            while (data[whiskerLowerIndex] < lowerIQR) {
+                whiskerLowerIndex += 1;
+            };
+            while (data[whiskerUpperIndex] > upperIQR) {
+                whiskerUpperIndex -= 1;
+            };
+            const whiskerLower = data[whiskerLowerIndex];
+            const whiskerUpper = data[whiskerUpperIndex];
 
             const y = axisProps.scale.range([innerHeight, 0]);
 
@@ -110,9 +123,9 @@ const BoxPlot = (props: Props) => {
             gEl
                 .append('line')
                 .attr('x1', center)
-                .attr('y1', y(min))
+                .attr('y1', y(whiskerLower))
                 .attr('x2', center)
-                .attr('y2', y(max))
+                .attr('y2', y(whiskerUpper))
                 .attr('stroke', mainLine.stroke || 'black')
                 .attr('stroke-width', mainLine.strokeWidth || 1)
                 .attr('stroke-dasharray', mainLine.strokeDashArray || '0');
@@ -129,10 +142,10 @@ const BoxPlot = (props: Props) => {
                 .style('fill', box.fill || '#69b3a2')
                 .style('fill-opacity', box.fillOpacity || 0.3);
 
-            // Add min and max lines
+            // Add whiskers
             gEl
                 .selectAll()
-                .data([min, max])
+                .data([whiskerLower, whiskerUpper])
                 .enter()
                 .append('line')
                 .attr('x1', center - (innerWidth / 2))
@@ -154,23 +167,40 @@ const BoxPlot = (props: Props) => {
                 .attr('stroke-width', medianLine.strokeWidth || 1)
                 .attr('stroke-dasharray', medianLine.strokeDashArray || '0');
 
-            // Add value labels
-            if (labels.max) {
+            if (outliers) {
+                const outliersStyle = {
+                    ...BoxPlot.defaultProps.outliersStyle,
+                    ...props.outliersStyle
+                };
                 gEl
-                    .append('text')
-                    .attr('x', center + (innerWidth / 2) + 5)
-                    .attr('y', y(max))
-                    .attr('dy', '1em')
-                    .attr('font-size', labels.max)
-                    .text(precision(max, 0));
+                    .selectAll()
+                    .data(data)
+                    .enter()
+                    .filter(d => d < whiskerLower || d > whiskerUpper)
+                    .append('circle')
+                    .attr('cx', center)
+                    .attr('cy', d => y(d))
+                    .attr('r', outliersStyle.radius)
+                    .attr('fill', outliersStyle.fill)
+                    .attr('fill-opacity', outliersStyle.fillOpacity);
             }
-            if (labels.min) {
+
+            // Add value labels
+            if (labels.whiskerUpper) {
                 gEl
                     .append('text')
                     .attr('x', center + (innerWidth / 2) + 5)
-                    .attr('y', y(min))
-                    .attr('font-size', labels.min)
-                    .text(precision(min, 0));
+                    .attr('y', y(whiskerUpper))
+                    .attr('font-size', labels.whiskerUpper)
+                    .text(precision(whiskerUpper, 2));
+            }
+            if (labels.whiskerLower) {
+                gEl
+                    .append('text')
+                    .attr('x', center + (innerWidth / 2) + 5)
+                    .attr('y', y(whiskerLower))
+                    .attr('font-size', labels.whiskerLower)
+                    .text(precision(whiskerLower, 2));
             }
             if (labels.median) {
                 gEl
@@ -179,68 +209,43 @@ const BoxPlot = (props: Props) => {
                     .attr('y', y(median) - 5)
                     .attr('dy', '1em')
                     .attr('font-size', labels.median)
-                    .text(precision(median, 0));
-            }
-            if (labels.q1) {
-                gEl
-                    .append('text')
-                    .attr('x', center - (innerWidth / 2) - 5)
-                    .attr('y', y(q1))
-                    .attr('text-anchor', 'end')
-                    .attr('font-size', labels.q1)
-                    .text(precision(q1, 0));
-            }
-            if (labels.q3) {
-                gEl
-                    .append('text')
-                    .attr('x', center - (innerWidth / 2) - 5)
-                    .attr('y', y(q3))
-                    .attr('text-anchor', 'end')
-                    .attr('font-size', labels.q3)
-                    .text(precision(q3, 0));
+                    .text(precision(median, 2));
             }
 
-            // Prepare tooltip container
-            const tooltip = tooltipContent ? select(tooltipRef.current) : null;
+            [
+                [labels.q1, q1],
+                [labels.q3, q3]
+            ].forEach(([quantileLabelSize, quantileValue]) => {
+                if (quantileLabelSize) {
+                    gEl
+                        .append('text')
+                        .attr('x', center - (innerWidth / 2) - 5)
+                        .attr('y', y(quantileValue))
+                        .attr('text-anchor', 'end')
+                        .attr('font-size', quantileLabelSize)
+                        .text(precision(quantileValue, 2));
+                }
+            });
 
             // Attach events
             gEl
                 .on('mouseover', mouseOver)
                 .on('mouseout', mouseOut)
-                .on('click', click)
-                .on('mouseover', (d) => {
-                    if (tooltip) {
-                        tooltip
-                            .html(typeof tooltipContent === 'function' ? tooltipContent(d) : tooltipContent)
-                            .transition()
-                            .duration(200)
-                            .style('opacity', .9)
-                            .style('left', `${event.clientX}px`)
-                            .style('top', `${event.clientY}px`);
-                    }
-                })
-                .on('mouseout', () => {
-                    if (tooltip) {
-                        tooltip
-                            .transition()
-                            .duration(500)
-                            .style('opacity', 0);
-                    }
-                });
+                .on('click', click);
         }
     });
 
     return (
-        <>
-            <svg width={width} height={height}>
-                <g ref={gRef} transform={`translate(${ marginLeft },${ marginTop })`} />
+        <div className={className}>
+            <svg ref={svgRef} width={width} height={height}>
+                <g transform={`translate(${ marginLeft },${ marginTop })`} />
             </svg>
-            <div ref={tooltipRef} className={classes.tooltip} />
-        </>
+        </div>
     );
 };
 
 BoxPlot.defaultProps = {
+    className: '',
     marginTop: 0,
     marginBottom: 0,
     marginRight: 0,
@@ -249,8 +254,13 @@ BoxPlot.defaultProps = {
     mainLine: {},
     medianLine: {},
     sideLine: {},
+    outliers: true,
+    outliersStyle: {
+        radius: 2,
+        fill: 'red',
+        fillOpacity: 1
+    },
     labels: {},
-    tooltipContent: null,
     mouseOver: () => {},
     mouseOut: () => {},
     click: () => {}

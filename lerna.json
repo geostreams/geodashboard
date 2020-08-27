@@ -3,8 +3,10 @@
         "gd-core",
         "gd-core__old",
         "gd-geostreaming",
+        "gd-glm",
         "gd-glm__old",
         "gd-gltg",
+        "gd-gltg-bmp",
         "gd-gltg__old",
         "gd-ilnlrs__old",
         "gd-imlczo__old"
