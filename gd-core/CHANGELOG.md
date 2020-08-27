@@ -4,8 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## UNRELEASED
-
+## [3.4.0] - 2020-08-27
 ### Added
 - Stacked Bar Chart
   [GEOD-1341](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1341)
