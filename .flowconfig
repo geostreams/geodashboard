@@ -5,6 +5,7 @@
 .*/gd-gltg__old/.*
 .*/gd-ilnlrs__old/.*
 .*/gd-imlczo__old/.*
+.*/node_modules/@mapbox/jsonlint-lines-primitives/test/fails/.*\.json$
 
 [include]
 
