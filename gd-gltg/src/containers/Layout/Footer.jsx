@@ -5,6 +5,7 @@ import {
     Grid,
     makeStyles
 } from '@material-ui/core';
+import packageJson from '../../../../package.json';
 
 
 const useStyles = makeStyles((theme) =>{
@@ -51,7 +52,7 @@ const Footer = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Geodashboard v.3.1.0
+                        Geodashboard v.{packageJson.version}
                     </a>
                 </Grid>
             </Grid>

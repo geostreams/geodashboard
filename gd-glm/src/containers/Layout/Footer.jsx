@@ -5,7 +5,7 @@ import {
     Grid,
     makeStyles
 } from '@material-ui/core';
-
+import packageJson from '../../../package.json';
 import LogoNCSA from '../../images/logo_ncsa.png';
 import LogoSeaGrant from '../../images/logo_seagrant.png';
 import LogoGLRI from '../../images/logo_glri.png';
@@ -107,7 +107,7 @@ const Footer = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Geodashboard v.3.3.0
+                        Geodashboard v.{packageJson.version}
                     </a>
                 </Grid>
             </Grid>
