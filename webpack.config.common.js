@@ -1,8 +1,11 @@
 // @flow
 const path = require('path');
+const Webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const { version } = require('./package.json');
 
 const corePath = path.resolve().split('/').pop() === 'gd-core' ?
     './' :
@@ -161,6 +164,9 @@ module.exports = {
     // },
 
     plugins: [
+        new Webpack.DefinePlugin({
+            'process.env.VERSION': JSON.stringify(version)
+        }),
         new HtmlWebpackPlugin({
             template: path.resolve('./src/index.html')
         }),
