@@ -72,10 +72,12 @@ module.exports = {
                     {
                         loader: 'less-loader',
                         options: {
-                            paths: [
-                                path.resolve('./src'),
-                                path.resolve('./node_modules')
-                            ],
+                            lessOptions: {
+                                paths: [
+                                    path.resolve('./src'),
+                                    path.resolve('./node_modules')
+                                ]
+                            },
                             sourceMap: true
                         }
                     }

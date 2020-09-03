@@ -363,9 +363,8 @@ class Download extends React.Component<Props, State> {
             const geom = new Point(geometry.coordinates);
             geom.transform('EPSG:4326', 'EPSG:3857');
             const feature = new Feature({
-                geometry: geom,
-                // $FlowFixMe
-                ...attrs
+                ...attrs,
+                geometry: geom
             });
             this.features.push(feature);
             this.clusterVectorSource.addFeature(feature);
