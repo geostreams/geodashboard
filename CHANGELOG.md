@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## UNRELEASED
+### Added
+- Added support for url path context
+  [GLGVO-692](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-692)
+
+### Changed
 - Update dependencies
   [Issue-3](https://github.com/geostreams/geodashboard/issues/3)
 

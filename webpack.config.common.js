@@ -23,7 +23,7 @@ module.exports = {
 
     output: {
         path: path.resolve('./build'),
-        publicPath: '/',
+        publicPath: process.env.CONTEXT || '/',
         filename: 'js/[name]-[hash].js',
         crossOriginLoading: 'anonymous'
     },
@@ -167,7 +167,8 @@ module.exports = {
 
     plugins: [
         new Webpack.DefinePlugin({
-            'process.env.VERSION': JSON.stringify(version)
+            'process.env.VERSION': JSON.stringify(version),
+            'process.env.CONTEXT': JSON.stringify(process.env.CONTEXT)
         }),
         new HtmlWebpackPlugin({
             template: path.resolve('./src/index.html')
