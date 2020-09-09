@@ -11,7 +11,7 @@ type Props = {
 const App = ({ routes }: Props) => Object
     .entries(routes)
     .map(([path, props]) => (
-        <Route key={path} path={path} {...props} />
+        <Route key={path} path={`${process.env.CONTEXT || ''}${path}`} {...props} />
     ));
 
 const mapStateToProps = (state) => ({
