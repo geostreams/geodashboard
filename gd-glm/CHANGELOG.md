@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Decrease the zoom level when a source is selected
   [GLM-127](https://opensource.ncsa.illinois.edu/jira/browse/GLM-127)
+- Fixed a typo in the source section of the config file
+  [GLM-131](https://opensource.ncsa.illinois.edu/jira/browse/GLM-131)
 
 
 ## [3.4.0] - 2020-08-27

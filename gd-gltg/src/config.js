@@ -17,7 +17,7 @@ export default {
             link : 'https://cfpub.epa.gov/dmr/',
             useSeasonFilter: true
         },
-        'glfsmp': {
+        'glfmsp': {
             order: 2
         },
         'greon': {

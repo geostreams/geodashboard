@@ -17,7 +17,7 @@ export default {
             link : 'https://cfpub.epa.gov/dmr/',
             useSeasonFilter: true
         },
-        'glfsmp': {
+        'glfmsp': {
             label: 'Great Lakes Fish Monitoring and Surveillance Program',
             color: '#F7941E',
             order: 2
