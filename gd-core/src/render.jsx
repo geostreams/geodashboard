@@ -2,15 +2,13 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
-import { ThemeProvider } from '@material-ui/core/styles';
 
 import App from './App';
-import baseReducers, { history } from './reducers';
+import baseReducers from './reducers';
 import baseRoutes from './routes';
-import theme from './theme';
 
 import type { Routes } from './routes';
 
@@ -25,7 +23,6 @@ const render = (
     const store = createStore(
         combineReducers(reducers),
         composeEnhancers(applyMiddleware(
-            routerMiddleware(history),
             thunk
         ))
     );
@@ -39,11 +36,9 @@ const render = (
     if (root) {
         ReactDOM.render(
             <Provider store={store}>
-                <ConnectedRouter history={history}>
-                    <ThemeProvider theme={theme}>
-                        <App routes={routes} />
-                    </ThemeProvider>
-                </ConnectedRouter>
+                <Router>
+                    <App routes={routes} />
+                </Router>
             </Provider>,
             root
         );

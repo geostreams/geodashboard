@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Update dependencies
   [Issue-3](https://github.com/geostreams/geodashboard/issues/3)
+- Removed `connected-react-router`
+  [Issue-12](https://github.com/geostreams/geodashboard/issues/12)
 
 ## [3.4.0] - 2020-08-27
 - See `gd-core/CHANGELOG.md`, `gd-glm/CHANGELOG.md` and `gd-glm_old/CHANGELOG.md` for changes.

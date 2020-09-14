@@ -21,7 +21,7 @@ import OSM from 'ol/source/OSM';
 import { Map } from 'gd-core/src/components/ol';
 import { dateUTC } from 'gd-core/src/utils/format';
 
-import type { History, Location } from 'connected-react-router';
+import type { History, Location } from 'react-router-dom';
 
 import { getSensorMarker, getSensorName, getSourceName } from '../../../utils/sensors';
 import Filters from './Filters';
