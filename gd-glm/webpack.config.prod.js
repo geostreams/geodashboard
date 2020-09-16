@@ -6,7 +6,7 @@ const commonConfigBase = require('../webpack.config.common');
 const prodConfigBase = require('../webpack.config.prod');
 const commonConfigGLM = require('./webpack.config.common');
 
-module.exports = webpackMerge(
+module.exports = webpackMerge.merge(
     commonConfigBase,
     prodConfigBase,
     commonConfigGLM,
