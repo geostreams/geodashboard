@@ -506,7 +506,8 @@ class SensorDetail extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state, props) => {
-    const sensor = state.__new_sensors.sensors.find(({ name }) => name === props.match.params.name);
+    const sensorName = decodeURIComponent(props.match.params.name);
+    const sensor = state.__new_sensors.sensors.find(({ name }) => name === sensorName);
     return {
         geostreamingEndpoint: state.config.geostreamingEndpoint,
         sourceConfig: sensor && state.config.source[sensor.properties.type.id],

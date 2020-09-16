@@ -9,3 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Sensor detail view
   [GEOD-1341](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1341)
+
+### Changed
+- Use encoded variable for sensor names in the url
+  [GEOD-1347](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1347)
