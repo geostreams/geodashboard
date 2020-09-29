@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [SMARTFARM-2](https://opensource.ncsa.illinois.edu/jira/browse/SMARTFARM-2)
 - Added support for url path context
   [GLGVO-692](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-692)
-
+- Setup Github Actions for building and deploying docker images
 ### Changed
 - Update dependencies
   [Issue-3](https://github.com/geostreams/geodashboard/issues/3)
