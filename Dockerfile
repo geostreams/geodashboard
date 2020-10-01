@@ -16,8 +16,8 @@ RUN npm i --quiet
 RUN npm run postinstall
 
 ARG PROJECT_NAME
-# Loads environment variables for npm if provided
-RUN set -a && . .env && set +a && npm run build -- $PROJECT_NAME
+# Loads environment variables for npm if .env file present
+RUN [ -f .env ] && set -a . .env && set +a; npm run build -- $PROJECT_NAME
 
 
 FROM nginx:stable-alpine
