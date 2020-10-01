@@ -20,38 +20,38 @@ jobs:
       matrix:
         name:
           - gltg
-          - glm
-#           - imlczo
-#           - ilnrs
+        # - glm
+        # - imlczo
+        # - ilnrs
           - smartfarm
         include:
           - name: gltg
             gd-name: gd-gltg
-            prod-host: "greatlakestogulf.org"
+          # prod-host: "greatlakestogulf.org"
             dev-host: "gltg-dev.ncsa.illinois.edu"
-            file-path: /Users/ubuntu/gltg
+            file-path: /home/ubuntu/gltg
             description: "GLTG Geodashboard Image"
             # Cannot directly get secrets value here hence
             # passing on the name of the secrets variable. Used in ga_token step
             ga-token-ref: GLTG_GA_TOKEN
-          - name: glm
-            gd-name: gd-glm
-            prod-host: greatlakesmonitoring.org
-            dev-host: seagrant-dev.ncsa.illinois.edu
-            file-path: /home/ubuntu/glm
-            description: "GLM Geodashboard Image"
-#           - name: imlczo
-#             gd-name: gd-imlczo__old
-#             prod-host: "."
-#             dev-host: "."
-#             file-path: "."
-#             description: "IMLCZO Geodashboard Image"
-#           - name: ilnlrs
-#             gd-name: gd-ilnlrs__old
-#             prod-host: "."
-#             dev-host: "."
-#             file-path: "."
-#             description: "ILNLRS Geodashboard Image"
+          # - name: glm
+          #   gd-name: gd-glm
+          #  prod-host: greatlakesmonitoring.org
+          #   dev-host: seagrant-dev.ncsa.illinois.edu
+          #   file-path: /home/ubuntu/glm
+          #   description: "GLM Geodashboard Image"
+          # - name: imlczo
+          #   gd-name: gd-imlczo__old
+          #   prod-host: "."
+          #   dev-host: "."
+          #   file-path: "."
+          #   description: "IMLCZO Geodashboard Image"
+          # - name: ilnlrs
+          #   gd-name: gd-ilnlrs__old
+          #   prod-host: "."
+          #   dev-host: "."
+          #   file-path: "."
+          #   description: "ILNLRS Geodashboard Image"
           - name: smartfarm
             gd-name: gd-smartfarm
             prod-host: ""
@@ -141,18 +141,18 @@ jobs:
           labels: |
             image.title= ${{ matrix.description }}
             image.version=${{ steps.info.outputs.version }}
-            image.geodashboard-version=${{ steps.info.gd-version }}
-            image.created=${{ steps.prep.outputs.created }}
+            image.geodashboard-version=${{ steps.info.outputs.gd-version }}
+            image.created=${{ steps.info.outputs.created }}
             image.revision=${{ github.sha }}
       -
          name: Setup SSH to VM
          if: ${{ env.SSH_HOST }}
          env:
             SSH_HOST: ${{ env.SSH_HOST }}
-            SSH_KEY: ${{ secrets.SMARTFARM_KEY }}
+            SSH_KEY: ${{ secrets.SSH_KEY }}
          run: |
             mkdir -p ~/.ssh/
-            echo "${{ secrets.SMARTFARM_KEY }}" > ~/.ssh/deploy_key.pem
+            echo "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key.pem
             chmod 600 ~/.ssh/deploy_key.pem
             cat >>~/.ssh/config <<END
             Host vm
@@ -170,5 +170,5 @@ jobs:
            HUB_PASS: ${{ secrets.HUB_PASSWORD }}
            FILE_PATH: ${{ matrix.file-path }}
          run: |
-           ssh vm "sudo docker login -u $HUB_USER -p $HUB_PASS hub.ncsa.illinois.edu"
+           ssh vm "sudo docker login -u '$HUB_USER' -p '$HUB_PASS' hub.ncsa.illinois.edu"
            ssh vm "sleep 5 && cd $FILE_PATH && sudo docker-compose pull geodashboard && sudo docker-compose up -d"
