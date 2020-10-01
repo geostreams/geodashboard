@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## UNRELEASED
+## [3.5.0] - 2020-10-01
 
 ### Changed
 - Improved the components and config relations between `gd-gltg` and `gd-geostreaming`

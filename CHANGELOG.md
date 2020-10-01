@@ -4,9 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.5.0] - 2020-08-27
+See `gd-gltg/CHANGELOG.md`, `gd-geostreaming/CHANGELOG.md`, `gd-glm__old`, `gd-glm` for specific changes.
 
-## UNRELEASED
 ### Added
+- New BPM dashboard `gd-gltg-bmp`.
 - Created new project for Smartfarm
   [SMARTFARM-2](https://opensource.ncsa.illinois.edu/jira/browse/SMARTFARM-2)
 - Added support for url path context
