@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.5.0] - 2020-08-27
+See `gd-gltg/CHANGELOG.md`, `gd-geostreaming/CHANGELOG.md`, `gd-glm__old`, `gd-glm` for specific changes.
+
+### Added
+- New BPM dashboard `gd-gltg-bmp`.
+- Created new project for Smartfarm
+  [SMARTFARM-2](https://opensource.ncsa.illinois.edu/jira/browse/SMARTFARM-2)
+- Added support for url path context
+  [GLGVO-692](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-692)
+- Setup Github Actions for building and deploying docker images
+### Changed
+- Update dependencies
+  [Issue-3](https://github.com/geostreams/geodashboard/issues/3)
+- Removed `connected-react-router`
+  [Issue-12](https://github.com/geostreams/geodashboard/issues/12)
 
 ## [3.4.0] - 2020-08-27
 - See `gd-core/CHANGELOG.md`, `gd-glm/CHANGELOG.md` and `gd-glm_old/CHANGELOG.md` for changes.

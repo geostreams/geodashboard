@@ -1,6 +1,6 @@
 {
   "name": "gd-glm__old",
-  "version": "3.3.0",
+  "version": "3.5.0",
   "description": "Geodashboard using React.js to visualize data from Geostreaming API.",
   "main": "main.jsx",
   "scripts": {

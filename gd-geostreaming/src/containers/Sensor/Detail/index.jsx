@@ -21,7 +21,7 @@ import OSM from 'ol/source/OSM';
 import { Map } from 'gd-core/src/components/ol';
 import { dateUTC } from 'gd-core/src/utils/format';
 
-import type { History, Location } from 'connected-react-router';
+import type { History, Location } from 'react-router-dom';
 
 import { getSensorMarker, getSensorName, getSourceName } from '../../../utils/sensors';
 import Filters from './Filters';
@@ -506,7 +506,8 @@ class SensorDetail extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state, props) => {
-    const sensor = state.__new_sensors.sensors.find(({ name }) => name === props.match.params.name);
+    const sensorName = decodeURIComponent(props.match.params.name);
+    const sensor = state.__new_sensors.sensors.find(({ name }) => name === sensorName);
     return {
         geostreamingEndpoint: state.config.geostreamingEndpoint,
         sourceConfig: sensor && state.config.source[sensor.properties.type.id],

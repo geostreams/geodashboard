@@ -1,8 +1,11 @@
 // @flow
 const path = require('path');
+const Webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const { version } = require('./package.json');
 
 const corePath = path.resolve().split('/').pop() === 'gd-core' ?
     './' :
@@ -20,7 +23,7 @@ module.exports = {
 
     output: {
         path: path.resolve('./build'),
-        publicPath: '/',
+        publicPath: process.env.CONTEXT || '/',
         filename: 'js/[name]-[hash].js',
         crossOriginLoading: 'anonymous'
     },
@@ -69,10 +72,12 @@ module.exports = {
                     {
                         loader: 'less-loader',
                         options: {
-                            paths: [
-                                path.resolve('./src'),
-                                path.resolve('./node_modules')
-                            ],
+                            lessOptions: {
+                                paths: [
+                                    path.resolve('./src'),
+                                    path.resolve('./node_modules')
+                                ]
+                            },
                             sourceMap: true
                         }
                     }
@@ -161,6 +166,10 @@ module.exports = {
     // },
 
     plugins: [
+        new Webpack.DefinePlugin({
+            'process.env.VERSION': JSON.stringify(version),
+            'process.env.CONTEXT': JSON.stringify(process.env.CONTEXT)
+        }),
         new HtmlWebpackPlugin({
             template: path.resolve('./src/index.html')
         }),

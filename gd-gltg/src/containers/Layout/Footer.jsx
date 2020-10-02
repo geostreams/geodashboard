@@ -51,7 +51,7 @@ const Footer = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Geodashboard v.3.1.0
+                        Geodashboard v.{process.env.VERSION}
                     </a>
                 </Grid>
             </Grid>

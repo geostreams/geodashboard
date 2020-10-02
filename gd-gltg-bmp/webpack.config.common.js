@@ -4,7 +4,7 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const commonConfigBase = require('../webpack.config.common');
 
-module.exports = webpackMerge(
+module.exports = webpackMerge.merge(
     commonConfigBase,
     {
         entry: {

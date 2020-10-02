@@ -88,3 +88,11 @@ passed to it after its initialization.
 
 See `index.jsx`, `routes.js` and `reducers/index.js` in `gd-geostreaming/src` for an example of how routes and reducers
 can be set up.
+
+### Environment variables
+
+This a list of high level environment variables. For project-specific variables, see their README file in their folders.
+
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| CONTEXT | string | | The url path context the app is running in, e.g. `CONTEXT=/bmp` |

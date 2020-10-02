@@ -1296,7 +1296,7 @@ export const gd3 = {
     mapClustersDistance: 1,
     clustersChoiceOption: false,
     clustersExpandMaxNumberFeatures: 10,
-    mapMaxZoom: 16,
+    mapMaxZoom: 10,
     mapMinZoom: 5.5,
     mapCenterValue: [-84.44799549, 38.9203417],
     mapPopupZoomMax: 10,

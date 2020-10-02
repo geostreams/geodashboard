@@ -101,7 +101,7 @@ export function popupParameters(feature: ol.Feature, styles: Object) {
             '<i class="material-icons ' + styles.params_icon + '">warning </i>' + '</td>' +
             '<td width="70%">' + 'There are too many parameters to display here. </td></tr>' +
             '<tr><td width="30%" align="right"> </td>' + '<td width="70%"> ' +
-            '<a href="' + detail_link + sensorInfo.name + '/All/" >View Data</a> ' +
+            '<a href="' + detail_link + encodeURIComponent(sensorInfo.name) + '/All/" >View Data</a> ' +
             'to see a full list of parameters for this site.' + ' </td></tr>';
     }
 
@@ -112,7 +112,7 @@ export function popupParameters(feature: ol.Feature, styles: Object) {
 
     let bodyText = '<div class=' + styles.paramsborder + '>' + params + '</div>';
 
-    bodyText += '<a href="' + detail_link + sensorInfo.name + '/All/" class=' +
+    bodyText += '<a href="' + detail_link + encodeURIComponent(sensorInfo.name) + '/All/" class=' +
         styles.viewdetail + ' >View Data</a>';
 
     return bodyText;
@@ -172,7 +172,7 @@ export function popupAnalysis(feature: ol.Feature, styles: Object) {
 
     if (paramsLength > 0 && sensorInfo.trends_detail) {
         bodyText += `<a href="/${location.pathname.split('/')[1]}/detail/location/` +
-            sensorInfo.name + '/All/" class=' +
+            encodeURIComponent(sensorInfo.name) + '/All/" class=' +
             styles.viewsitedetail + ' >View Data for the ' + sensorInfo.name + ' Site </a>';
     }
 
@@ -235,7 +235,7 @@ export function popupTrends(feature: ol.Feature, styles: Object) {
 
     if (paramsLength > 0 && sensorInfo.trends_detail) {
         bodyText += `<a href="/${location.pathname.split('/')[1]}/detail/location/` +
-            sensorInfo.name + '/All/" class=' +
+            encodeURIComponent(sensorInfo.name) + '/All/" class=' +
             styles.viewsitedetail + ' >View Data for the ' + sensorInfo.name + ' Site </a>';
     }
 

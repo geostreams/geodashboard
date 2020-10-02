@@ -1,21 +1,21 @@
 // @flow
-import React from 'react';
-import { connect } from 'react-redux';
+import * as React from 'react';
 import { Route } from 'react-router-dom';
+import { ThemeProvider } from '@material-ui/core/styles';
+
+import theme from './theme';
+import { entries } from './utils/array';
 
 type Props = {
     routes: { [key: string]: Function };
-    pathname: string;
 }
 
-const App = ({ routes }: Props) => Object
-    .entries(routes)
-    .map(([path, props]) => (
-        <Route key={path} path={path} {...props} />
-    ));
+const App = ({ routes }: Props) => (
+    <ThemeProvider theme={theme}>
+        {entries(routes).map(([path, props]) => (
+            <Route key={path} path={`${process.env.CONTEXT || ''}${path}`} {...props} />
+        ))}
+    </ThemeProvider>
+);
 
-const mapStateToProps = (state) => ({
-    pathname: state.router.location.pathname
-});
-
-export default connect(mapStateToProps)(App);
+export default App;

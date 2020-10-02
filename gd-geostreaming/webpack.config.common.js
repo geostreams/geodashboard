@@ -3,7 +3,7 @@ const webpackMerge = require('webpack-merge');
 
 const commonConfigBase = require('../webpack.config.common');
 
-module.exports = webpackMerge(
+module.exports = webpackMerge.merge(
     commonConfigBase,
     {
         entry: {
