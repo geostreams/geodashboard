@@ -20,26 +20,26 @@ jobs:
       matrix:
         name:
           - gltg
-        # - glm
+          - glm
         # - imlczo
         # - ilnrs
           - smartfarm
         include:
           - name: gltg
             gd-name: gd-gltg
-          # prod-host: "greatlakestogulf.org"
+            prod-host: "greatlakestogulf.org"
             dev-host: "gltg-dev.ncsa.illinois.edu"
             file-path: /home/ubuntu/gltg
             description: "GLTG Geodashboard Image"
             # Cannot directly get secrets value here hence
             # passing on the name of the secrets variable. Used in ga_token step
             ga-token-ref: GLTG_GA_TOKEN
-          # - name: glm
-          #   gd-name: gd-glm
-          #  prod-host: greatlakesmonitoring.org
-          #   dev-host: seagrant-dev.ncsa.illinois.edu
-          #   file-path: /home/ubuntu/glm
-          #   description: "GLM Geodashboard Image"
+          - name: glm
+            gd-name: gd-glm
+            prod-host: greatlakesmonitoring.org
+          # dev-host: seagrant-dev.ncsa.illinois.edu
+            file-path: /home/ubuntu/glm
+            description: "GLM Geodashboard Image"
           # - name: imlczo
           #   gd-name: gd-imlczo__old
           #   prod-host: "."
