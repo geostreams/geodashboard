@@ -14,6 +14,8 @@ const useStyles = makeStyles({
         zIndex: 2000
     },
     main: {
+        display: 'flex',
+        flexDirection: 'column',
         position: 'absolute',
         top: HEADERS_HEIGHT,
         width: '100%',
