@@ -96,13 +96,6 @@ const Header = ({ location }: Props) => {
                     />
                     <Tab
                         className={`${classes.tabRoot}`}
-                        label="About"
-                        component={Link}
-                        to="/about"
-                        value="about"
-                    />
-                    <Tab
-                        className={`${classes.tabRoot}`}
                         label="Explore"
                         component={Link}
                         to="/explore"
@@ -114,6 +107,13 @@ const Header = ({ location }: Props) => {
                         component={Link}
                         to="/search"
                         value="search"
+                    />
+                    <Tab
+                        className={`${classes.tabRoot}`}
+                        label="About"
+                        component={Link}
+                        to="/about"
+                        value="about"
                     />
                     
                 </Tabs>
