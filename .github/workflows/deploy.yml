@@ -21,9 +21,7 @@ jobs:
         name:
           - gltg
           - glm
-        # - imlczo
-        # - ilnrs
-          - smartfarm
+          - mbclab
         include:
           - name: gltg
             gd-name: gd-gltg
@@ -40,24 +38,12 @@ jobs:
           # dev-host: seagrant-dev.ncsa.illinois.edu
             file-path: /home/ubuntu/glm
             description: "GLM Geodashboard Image"
-          # - name: imlczo
-          #   gd-name: gd-imlczo__old
-          #   prod-host: "."
-          #   dev-host: "."
-          #   file-path: "."
-          #   description: "IMLCZO Geodashboard Image"
-          # - name: ilnlrs
-          #   gd-name: gd-ilnlrs__old
-          #   prod-host: "."
-          #   dev-host: "."
-          #   file-path: "."
-          #   description: "ILNLRS Geodashboard Image"
-          - name: smartfarm
-            gd-name: gd-smartfarm
-            prod-host: ""
-            dev-host: "141.142.208.219"
-            file-path: /home/ubuntu/smartfarm
-            description: "Smartfarm Geodashboard Image"
+          - name: mbclab
+            gd-name: gd-mbclab
+            prod-host: "mbclab.ncsa.illinois.edu"
+            dev-host: "mbclab-dev.ncsa.illinois.edu"
+            file-path: /home/ubuntu/mbclab
+            description: "MBC Lab Geodashboard Image"
     steps:
       -
         name: Checkout
@@ -81,7 +67,7 @@ jobs:
           echo -n > .env
           if [ "$TARGET_BRANCH" == "master" ]; then
             TAGS="${HUB_REPO}/${PROJECT_NAME}:latest,${HUB_REPO}/${PROJECT_NAME}:${VERSION}"
-            echo ::set-env name=HOST:: ${{ matrix.prod-host }}
+            echo ::set-env name=SSH_HOST:: ${{ matrix.prod-host }}
           elif [ "$TARGET_BRANCH" == "develop" ]; then
             TAGS="${HUB_REPO}/${PROJECT_NAME}:develop"
             TAGS="$TAGS,${HUB_REPO}/${PROJECT_NAME}:sha-${GITHUB_SHA::8}"
