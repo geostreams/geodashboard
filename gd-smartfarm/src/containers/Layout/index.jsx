@@ -14,8 +14,6 @@ const useStyles = makeStyles({
         zIndex: 2000
     },
     main: {
-        display: 'flex',
-        flexDirection: 'column',
         position: 'absolute',
         top: HEADERS_HEIGHT,
         width: '100%',
@@ -56,7 +54,7 @@ const Layout = ({ isLoading, children, extraMainClasses, hasFooter }: Props) => 
 Layout.defaultProps = {
     extraMainClasses: '',
     children: null,
-    hasFooter: true
+    hasFooter: false
 };
 
 const mapStateToProps = (state) => ({
