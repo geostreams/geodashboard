@@ -98,7 +98,7 @@ const Header = ({ location }: Props) => {
                         className={`${classes.tabRoot}`}
                         label="Explore"
                         component={Link}
-                        to="/explore"
+                        to="/explore/all"
                         value="explore"
                     />
                     <Tab
