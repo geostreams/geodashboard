@@ -6,9 +6,11 @@ const commonConfigBase = require('../webpack.config.common');
 
 module.exports = webpackMerge.merge(
     commonConfigBase,
+    
     {
         entry: {
-            projectStyle: './src/styles/template.less',
+            mcw__old: 'material-components-web/dist/material-components-web.min.css',
+            style: './src/styles/template.less',
             main: './src/index.jsx'
         },
         plugins: [
