@@ -11,7 +11,8 @@
   "dependencies": {
     "gd-core": "file:../gd-core",
     "gd-core__old": "file:../gd-core__old",
-    "gd-geostreaming": "file:../gd-geostreaming"
+    "gd-geostreaming": "file:../gd-geostreaming",
+    "material-components-web": "0.26.0"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^6.0.3"
