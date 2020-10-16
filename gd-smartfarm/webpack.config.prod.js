@@ -3,11 +3,11 @@ const Webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 
 const prodConfigBase = require('../webpack.config.prod');
-const commonConfigGLTGBMP = require('./webpack.config.common');
+const commonConfig = require('./webpack.config.common');
 
 module.exports = webpackMerge.merge(
     prodConfigBase,
-    commonConfigGLTGBMP,
+    commonConfig,
     {
         plugins: [
             new Webpack.DefinePlugin({
