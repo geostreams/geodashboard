@@ -9,6 +9,11 @@
   "author": "NCSA",
   "license": "ISC",
   "dependencies": {
-    "gd-core": "file:../gd-core"
+    "gd-core": "file:../gd-core",
+    "gd-core__old": "file:../gd-core__old",
+    "gd-geostreaming": "file:../gd-geostreaming"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^6.0.3"
   }
 }
