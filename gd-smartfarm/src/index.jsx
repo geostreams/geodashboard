@@ -11,6 +11,9 @@ import reducers from './reducers';
 
 import config from './config';
 
+const old_config = require('./old_config');
+
+window.configruntime = old_config;
 
 render(
     reducers,
