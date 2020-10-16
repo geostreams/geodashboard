@@ -11,8 +11,8 @@
 }
 
 .root {
-    height: calc(100vh - 9.2em);
-    width: calc(100vw - 25.4em);
+    height: calc(100vh - 3.8em);
+    width: calc(100vw - 26.2em);
     cursor: pointer;
 }
 
@@ -113,6 +113,7 @@
     color: #ffffff;
     padding: 0.5em;
     font-weight: normal;
+    font-size: x-large;
 }
 
 .header3style {
@@ -192,7 +193,7 @@
 
 .trends_legend {
     position: absolute;
-    top: 8.8em;
+    top: 5.8em;
     right: 0.5em;
 }
 
