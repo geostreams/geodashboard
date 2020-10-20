@@ -5,6 +5,9 @@ import {
     Grid,
     makeStyles
 } from '@material-ui/core';
+import UIUCLogo from '../../images/logos/uiuc_logo.png';
+import NCSALogo from '../../images/logos/ncsa_logo.png';
+import ARPAELogo from '../../images/logos/arpa-e.png';
 
 const useStyles = makeStyles((theme) =>{
     return ({
@@ -24,7 +27,23 @@ const useStyles = makeStyles((theme) =>{
             width: '75%',
             margin: '10px auto 5px',
             lineHeight: 1.1
+        },
+        footerImagesParent: {
+            display: 'flex',
+            padding: '0% 10%',
+            alignSelf: 'center',
+            placeContent: 'space-evenly'
+        },
+
+        footerImagesItem: {
+            width: '10vw',
+            margin: '0.5em',
+            verticalAlign: 'baseline'
+        },
+        footerText: {
+            textDecoration: 'none'
         }
+
     });
 });
 
@@ -34,13 +53,36 @@ const Footer = () => {
     return (
         <footer className={classes.footer}>
             <Divider />
+            <div className={classes.footerImagesParent}>
+                <a target="_blank" rel="noreferrer" href="http://ncsa.illinois.edu/">
+                    <img className={classes.footerImagesItem}
+                        src={NCSALogo}
+                        alt="ncsa"
+                    />
+                </a>
+                <a target="_blank" rel="noreferrer" href="https://illinois.edu/">
+                    <img className={classes.footerImagesItem}
+                        src={UIUCLogo}
+                        alt="uiuc"
+                    />
+                </a>
+                <a target="_blank" rel="noreferrer" href="https://arpa-e.energy.gov/">
+                    <img className={classes.footerImagesItem}
+                        style={{ filter: 'invert(50%)' }}
+                        src={ARPAELogo}
+                        alt="arpa-e"
+                    />
+                </a>
+            </div>
+            <Divider />
             <Grid item xs={12}>
                 <a
                     href="https://geodashboard.ncsa.illinois.edu/"
                     target="_blank"
                     rel="noopener noreferrer"
+                    className={classes.footerText}
                 >
-                        Geodashboard v.{process.env.VERSION}
+                        Made with Geodashboard v.{process.env.VERSION}
                 </a>
             </Grid>
         </footer>
