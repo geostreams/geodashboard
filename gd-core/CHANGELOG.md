@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## UNRELEASED
+
+### Changed
+- Moved `callAPI` from `gd-geostreaming` to `gd-core` and added error callback
+  [GLGVO-709](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-709)
+
 ## [3.4.0] - 2020-08-27
 ### Added
 - Stacked Bar Chart

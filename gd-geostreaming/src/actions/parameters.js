@@ -1,5 +1,6 @@
 // @flow
-import { callAPI } from '../utils/io';
+import { callAPI } from 'gd-core/src/utils/io';
+import logger from 'gd-core/src/utils/logger';
 
 import type { ParameterCategoryType, ParameterMappingsType, ParameterType } from '../utils/flowtype';
 
@@ -27,10 +28,11 @@ export const fetchParameters = () => {
     return (dispatch: Function, getState: Function) => {
         callAPI(
             getState().config.geostreamingEndpoint,
-            'parameters',
+            '/api/parameters',
             ({ parameters, categories, mappings }) => {
                 dispatch(updateParameters({ parameters, categories, mappings }));
             },
+            logger.error,
             dispatch
         );
     };
