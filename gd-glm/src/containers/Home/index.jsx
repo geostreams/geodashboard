@@ -4,8 +4,6 @@
 
 import React from 'react';
 // $FlowFixMe
-import { getCarouselImageNames } from 'gd-core__old/app/utils/getConfig';
-// $FlowFixMe
 import Carousel from 'gd-core__old/app/components/Carousel';
 import styles from './home.css';
 import mainStyles from '../../styles/old_mainStyle.css';
@@ -13,17 +11,11 @@ import carouselImages from '../../images/carousel_images';
 
 
 function Home (){
-
-    let carousel = '';
-    if (getCarouselImageNames().length > 0) {
-        carousel = <Carousel images={carouselImages} captions={[]} />;
-    }
-
     return (
         <div>
             <div className={mainStyles.contentcenter}>
                 <h2 className={styles.title}>Your Lakes. Your Data.</h2>
-                {carousel}
+                <Carousel images={carouselImages} captions={[]} />
             </div>
             <div className={styles.contentcenter}>
                 <div className={styles.section_style}>
