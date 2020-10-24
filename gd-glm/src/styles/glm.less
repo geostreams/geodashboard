@@ -69,7 +69,6 @@ body {
     background: -ms-linear-gradient(top, #6396b2, white 100%);
     background: -o-linear-gradient(top, #6396b2, white 100%);
     background: linear-gradient(to bottom, #054455, #467A9E);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#6396B2', endColorstr='#FFFFFF', GradientType=0)";
     text-align: center;
 }
 
@@ -112,6 +111,7 @@ body {
     text-align: left;
     position: relative;
     pointer-events: none;
+    text-decoration: 'none';
 }
 
 .header_title_text {
@@ -155,7 +155,7 @@ body {
 }
 
 .dropdownList {
-    display: none;
+    display: block;
     position: absolute;
     background-color: #FFFFFF;
     box-shadow: 0 4px 8px 0 #888888;
@@ -167,9 +167,7 @@ body {
     padding: 0.5em;
 }
 
-.showDropdown {
-    display: block;
-}
+
 
 @media screen and (max-device-width: 840px) {
     .navigation_item {
