@@ -85,7 +85,7 @@ class Explore extends Component {
 
             sourcesSection = <ExploreSourcesTab
                 key='source_data' regions={this.props.regions} data={this.props.data}
-                userStations={this.props.params.stations} sources={sources}
+                userStations={this.props.match.params.stations} sources={sources}
             />;
 
             if (screen.width > getMobileSizeMax()) {
@@ -152,7 +152,7 @@ class Explore extends Component {
             }
             mapObject =
                 <Map disable_clusters={disableClusters}
-                     userStations={this.props.params.stations}
+                     userStations={this.props.match.params.stations}
                      exploreLayersDetails={exploreLayersDetails}
                      layersVisibility={layersVisibility}
                 />;

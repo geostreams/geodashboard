@@ -3,11 +3,10 @@
 // The User can manually select an image using navigation options
 // The User can also Pause and Play the Carousel
 
-import React, {Component} from "react";
+import React, { Component } from 'react';
+import { Button, Fab, Icon, Card, CardTitle, CardActions, CardMedia } from 'react-mdc-web/lib';
+import { Link } from 'react-router-dom';
 import styles from '../styles/carousel.css';
-import {Button, Fab, Icon, Card, CardTitle, CardActions, CardMedia} from 'react-mdc-web/lib';
-import {getCarouselImageNames, getCarouselImageCaptions} from '../utils/getConfig';
-import {Link} from 'react-router';
 
 
 class Carousel extends Component {
@@ -25,11 +24,11 @@ class Carousel extends Component {
             // The Index of the Image Displayed
             imageIndex: 1,
             // The number of Images in the Carousel
-            numImages: getCarouselImageNames().length,
+            numImages: props.images.length,
             // Is the Carousel active on the page?
             carouselActive: false,
             // Is the Carousel paused on the page?
-            carouselPause: false,
+            carouselPause: false
         };
         (this: any).selectImage = this.selectImage.bind(this);
         (this: any).navIconSelectImage = this.navIconSelectImage.bind(this);
@@ -44,7 +43,7 @@ class Carousel extends Component {
     componentDidMount() {
         // Select the first image
         this.displayImage(this.state.imageIndex);
-        let playButton = document.getElementById("carouselPlay");
+        const playButton = document.getElementById('carouselPlay');
         if (playButton) {
             window.onload = function () {
                 playButton.click();
@@ -59,15 +58,15 @@ class Carousel extends Component {
 
     selectImage(index) {
         // User clicks to select a specific Image
-        this.setState({carouselActive: false});
+        this.setState({ carouselActive: false });
         this.displayImage(index);
         this.playCarousel();
     }
 
     pauseCarousel() {
-        //Pauses the Carousel
+        // Pauses the Carousel
         clearInterval(this.carouselInterval);
-        this.setState({carouselPause: true, carouselActive: false});
+        this.setState({ carouselPause: true, carouselActive: false });
     }
 
     playCarousel() {
@@ -76,39 +75,39 @@ class Carousel extends Component {
             if (this.state.carouselActive && this.state.carouselPause === false) {
                 this.forwardImageAuto();
             } else {
-                this.setState({carouselPause: false, carouselActive: true});
+                this.setState({ carouselPause: false, carouselActive: true });
             }
         }, 1500);
     }
 
     navIconSelectImage(index) {
         // User clicks to select a specific Image
-        this.setState({carouselActive: false});
+        this.setState({ carouselActive: false });
         this.displayImage(index);
-        this.setState({imageIndex: 0});
+        this.setState({ imageIndex: 0 });
     }
 
     forwardImageAuto() {
         // Move Carousel Forward Automatically
         let index = 1;
-        this.setState({carouselActive: false});
+        this.setState({ carouselActive: false });
         if (this.state.imageIndex >= this.state.numImages) {
-            this.setState({imageIndex: index});
+            this.setState({ imageIndex: index });
         } else {
             index = this.state.imageIndex + 1;
-            this.setState({imageIndex: index});
+            this.setState({ imageIndex: index });
         }
         this.displayImage(this.state.imageIndex);
     }
 
     forwardImage() {
         // User clicks the Forward Button
-        let index = this.state.imageIndex + 1;
-        this.setState({carouselActive: false});
+        const index = this.state.imageIndex + 1;
+        this.setState({ carouselActive: false });
         if (index > this.state.numImages) {
-            this.setState({imageIndex: 1});
+            this.setState({ imageIndex: 1 });
         } else {
-            this.setState({imageIndex: index});
+            this.setState({ imageIndex: index });
         }
         this.displayImage(this.state.imageIndex);
     }
@@ -116,73 +115,73 @@ class Carousel extends Component {
     backwardImage() {
         // User clicks the Backward Button
         let index = this.state.imageIndex;
-        this.setState({carouselActive: false});
+        this.setState({ carouselActive: false });
         if (index <= 1) {
             index = this.state.numImages;
-            this.setState({imageIndex: index});
+            this.setState({ imageIndex: index });
         } else {
             index = this.state.imageIndex - 1;
-            this.setState({imageIndex: index});
+            this.setState({ imageIndex: index });
         }
         this.displayImage(this.state.imageIndex);
     }
 
     displayImage(imageIndex) {
         // Select the parent Div
-        let images = document.getElementsByClassName("carouselImages");
-        let icons = document.getElementsByClassName("carouselNavIcons");
-        let captions = document.getElementsByClassName("carouselCaptions");
+        const images = document.getElementsByClassName('carouselImages');
+        const icons = document.getElementsByClassName('carouselNavIcons');
+        const captions = document.getElementsByClassName('carouselCaptions');
 
         // All images hidden by default
         for (let i = 0; i < images.length; i++) {
-            images[i].style.display = "none";
-            icons[i].style.color = "grey";
-            captions[i].style.display = "none";
+            images[i].style.display = 'none';
+            icons[i].style.color = 'grey';
+            captions[i].style.display = 'none';
         }
 
         // Only show the current image
         if (images.length > 0) {
-            images[imageIndex - 1].style.display = "block";
-            icons[imageIndex - 1].style.color = "black";
-            captions[imageIndex - 1].style.display = "block";
+            images[imageIndex - 1].style.display = 'block';
+            icons[imageIndex - 1].style.color = 'black';
+            captions[imageIndex - 1].style.display = 'block';
         }
 
-        this.setState({carouselActive: false});
+        this.setState({ carouselActive: false });
     }
 
     render() {
 
-        let carouselImages = [];
-        let carouselNavIcons = [
-            <Button key={"carouselPauseButton"}
-                    onClick={() => {
-                        this.pauseCarousel()
-                    }}>
-                <Icon name={'pause_circle_outline'} key={"carouselPause"} id={"carouselPause"}
-                      className={'carouselPause ' + styles.navIcons}
-                      style={this.state.carouselPause === true ? {
-                          color: "black"
-                      } : {color: "grey"}}
+        const carouselImages = [];
+        const carouselNavIcons = [
+            <Button key="carouselPauseButton"
+                onClick={() => {
+                    this.pauseCarousel();
+                }}>
+                <Icon name="pause_circle_outline" key="carouselPause" id="carouselPause"
+                    className={`carouselPause ${ styles.navIcons}`}
+                    style={this.state.carouselPause === true ? {
+                        color: 'black'
+                    } : { color: 'grey' }}
                 />
             </Button>
         ];
-        let carouselCaptions = getCarouselImageCaptions();
+        const carouselCaptions = this.props.captions;
 
         // Setup Navigation Arrows Backward and Forward for the Carousel
-        let carouselArrows = (
+        const carouselArrows = (
             <div className={styles.navButtons}>
                 <Fab mini className={styles.backButton} onClick={this.backwardImage}>
-                    <Icon name="chevron_left"/>
+                    <Icon name="chevron_left" />
                 </Fab>
                 <Fab mini className={styles.forwardButton} onClick={this.forwardImage}>
-                    <Icon name="chevron_right"/>
+                    <Icon name="chevron_right" />
                 </Fab>
             </div>
         );
 
-        getCarouselImageNames().map((image, i) => {
+        this.props.images.map((image, i) => {
             // Used for values below
-            let indexVal = i + 1;
+            const indexVal = i + 1;
             let captionText = '';
             let captionLink = '';
 
@@ -192,54 +191,56 @@ class Carousel extends Component {
                         {carouselCaptions[indexVal].caption}
                     </CardTitle>
                 );
-                captionLink = (
-                    <CardActions className={styles.captionStyle}>
-                        <Link className={styles.captionButtonStyle} href={carouselCaptions[indexVal].link}>
-                            <Button>
-                                <div className={styles.captionIcon}>
-                                    <Icon name={'import_contacts'} key={"data_icon"} id={"data_icon"}/>
-                                </div>
-                                <div className={styles.captionText}>{carouselCaptions[indexVal].linkText}</div>
-                            </Button>
-                        </Link>
-                    </CardActions>
-                )
+                if (carouselCaptions[indexVal].link) {
+                    captionLink = (
+                        <CardActions className={styles.captionStyle}>
+                            <Link className={styles.captionButtonStyle} href={carouselCaptions[indexVal].link}>
+                                <Button>
+                                    <div className={styles.captionIcon}>
+                                        <Icon name="import_contacts" key="data_icon" id="data_icon" />
+                                    </div>
+                                    <div className={styles.captionText}>{carouselCaptions[indexVal].linkText}</div>
+                                </Button>
+                            </Link>
+                        </CardActions>
+                    );
+                }
             }
 
             carouselImages.push(
-                <div className={'carouselCaptions ' + styles.imageTransition} key={"text" + indexVal}>
-                    <Card>
+                <div className={`carouselCaptions ${ styles.imageTransition}`} key={`text${ indexVal}`}>
+                    <div>
                         <CardMedia>
-                            <div className={'carouselImages ' + styles.imageTransition} key={"image" + indexVal}>
-                                <img className={styles.imageSize} src={require("../../theme/" + image)}/>
+                            <div className={`carouselImages ${ styles.imageTransition}`} key={`image${ indexVal}`}>
+                                <img className={styles.imageSize} src={image} />
                             </div>
                         </CardMedia>
                         {captionLink}
                         {captionText}
-                    </Card>
+                    </div>
                 </div>
             );
 
             carouselNavIcons.push(
-                <Icon name={'fiber_manual_record'} key={"navImage" + indexVal} id={indexVal}
-                      className={'carouselNavIcons ' + styles.navIcons}
-                      onClick={() => {
-                          this.navIconSelectImage(indexVal)
-                      }}
+                <Icon name="fiber_manual_record" key={`navImage${ indexVal}`} id={indexVal}
+                    className={`carouselNavIcons ${ styles.navIcons}`}
+                    onClick={() => {
+                        this.navIconSelectImage(indexVal);
+                    }}
                 />
             );
         });
 
         carouselNavIcons.push(
-            <Button key={"carouselPlayButton"}
-                    onClick={() => {
-                        this.playCarousel()
-                    }}>
-                <Icon name={'play_circle_outline'} key={"carouselPlay"} id={"carouselPlay"}
-                      className={'carouselPlay ' + styles.navIcons}
-                      style={this.state.carouselPause === false ? {
-                          color: "black"
-                      } : {color: "grey"}}
+            <Button key="carouselPlayButton"
+                onClick={() => {
+                    this.playCarousel();
+                }}>
+                <Icon name="play_circle_outline" key="carouselPlay" id="carouselPlay"
+                    className={`carouselPlay ${ styles.navIcons}`}
+                    style={this.state.carouselPause === false ? {
+                        color: 'black'
+                    } : { color: 'grey' }}
                 />
             </Button>
         );
@@ -255,5 +256,10 @@ class Carousel extends Component {
     }
 
 }
+
+Carousel.defaultProps = {
+    images: [],
+    captions: []
+};
 
 export default Carousel;
