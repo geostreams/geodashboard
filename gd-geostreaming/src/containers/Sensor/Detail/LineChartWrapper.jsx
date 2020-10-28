@@ -36,8 +36,10 @@ const LineChartWrapper = (props: Props) => {
         tooltipContainerRef
     } = props;
 
-    const [lineChartContainer, lineChartContainerRect] = useElementRect();
-    const [boxPlotContainer, boxPlotContainerRect] = useElementRect();
+    const lineChartContainer = React.useRef();
+    const lineChartContainerRect = useElementRect(lineChartContainer);
+    const boxPlotContainer = React.useRef();
+    const boxPlotContainerRect = useElementRect(boxPlotContainer);
 
     const lineData = [];
     const boxData = [];

@@ -45,7 +45,8 @@ const useStyle = makeStyles({
 const TestStackedBarChart = () => {
     const classes = useStyle();
 
-    const [container, containerRect] = useElementRect();
+    const container = React.useRef();
+    const containerRect = useElementRect(container);
 
     const tooltipContainerRef = React.useRef(null);
 

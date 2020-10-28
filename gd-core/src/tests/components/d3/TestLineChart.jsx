@@ -38,7 +38,8 @@ const useStyle = makeStyles({
 const TestLineChart = () => {
     const classes = useStyle();
 
-    const [container, containerRect] = useElementRect();
+    const container = React.useRef();
+    const containerRect = useElementRect(container);
 
     const data = FIXTURE.map((d) => ({ date : timeParse('%Y-%m-%d')(d.date), value : d.value }));
     const tooltipContainerRef = React.useRef(null);

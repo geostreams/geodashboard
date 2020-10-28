@@ -34,8 +34,10 @@ const StackedBarChartWrapper = (props: Props) => {
         tooltipContainerRef
     } = props;
 
-    const [barChartContainer, barChartContainerRect] = useElementRect();
-    const [legendContainer, legendContainerRect] = useElementRect();
+    const barChartContainer = React.useRef();
+    const barChartContainerRect = useElementRect(barChartContainer);
+    const legendContainer = React.useRef();
+    const legendContainerRect = useElementRect(legendContainer);
 
     const processedData = [];
     const years = new Set();
