@@ -16,49 +16,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            let page = (window.location.href).toString().split('/#/')[1];
-            if (page === 'welcome') {
-                $('#storyboard').show();
-            } else {
-                $('#storyboard').hide();
-            }
-            $('ul > li a[href]').filter(function() {
-                let path = (window.location.href).toString().split('/#/')[1];
-                return $(this).attr('href') === '/#/' + path;
-            }).addClass('active');
-            $('li').click(function() {
-                $('#sidebar').find('a').removeClass('active');
-            });
-            $('#sidebar').on('click', function(event) {
-                if ($(event.target).is('a')) {
-                    $(event.target).addClass('active');
-                }
-            });
-        });
-
-        // // Open the Dropdown
-        // function toggleDropdown(elementID) {
-        //     document.getElementById(elementID).classList.toggle('showDropdown');
-        // }
-
-        // Close the Dropdown when the User Clicks outside of an open Dropdown
-        // window.onclick = function(e) {
-        //     if (!e.target.matches('.dropdownLink')) {
-        //         let dropdownItems = document.getElementsByClassName('showDropdown');
-        //         if (dropdownItems.length > 0) {
-        //             if (dropdownItems[0].classList.contains('showDropdown')) {
-        //                 dropdownItems[0].classList.remove('showDropdown');
-        //             }
-        //         }
-        //         let dropdownLink = document.getElementById('dropdownLink');
-        //         if (dropdownLink.classList.contains('active')) {
-        //             dropdownLink.classList.remove('active');
-        //         }
-        //     }
-        // };
-    </script>
 </head>
 <body>
 <noscript>

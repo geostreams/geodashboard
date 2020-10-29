@@ -22,6 +22,7 @@ import 'material-components-web/dist/material-components-web.min.css';
 import config from './config';
 import reducers from './reducers'
 import routes from './routes'
+import theme from './theme'
 /* eslint-enable */
 
 render(
@@ -33,5 +34,6 @@ render(
         store.dispatch(__old_fetchSensors(config.geostreamingEndpoint));
         store.dispatch(fetchParameters());
         store.dispatch(fetchSensors());
-    }
+    },
+    theme
 );
