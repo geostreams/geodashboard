@@ -1,5 +1,6 @@
 // @flow
-import { callAPI } from '../utils/io';
+import { callAPI } from 'gd-core/src/utils/io';
+import logger from 'gd-core/src/utils/logger';
 
 import type { SensorType, SourceConfig } from '../utils/flowtype';
 
@@ -23,10 +24,11 @@ export const fetchSensors = () => {
         const { config } = getState();
         callAPI(
             config.geostreamingEndpoint,
-            'sensors',
+            '/api/sensors',
             ({ sensors }) => {
                 dispatch(updateSensors(config.source, sensors));
             },
+            logger.error,
             dispatch
         );
     };

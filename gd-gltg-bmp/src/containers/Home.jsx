@@ -1,19 +1,24 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import { Grid, makeStyles } from '@material-ui/core';
 import { Map } from 'gd-core/src/components/ol';
+import { updateLoadingStatus } from 'gd-core/src/actions/page';
+import logger from 'gd-core/src/utils/logger';
+
 
 import type {
     Feature as FeatureType,
     Layer as LayerType,
     MapBrowserEventType
 } from 'ol';
+import type { Action as PageAction } from 'gd-core/src/actions/page';
 
-import { BOUNDARIES, INITIAL_FILTERS, LAYERS, MAP_BOUNDS, getStyle } from '../config';
+import { BMP_API_URL, BOUNDARIES, INITIAL_FILTERS, LAYERS, MAP_CENTER, getStyle } from '../config';
+import { FiltersContext } from './Context';
 import Sidebar from './Sidebar';
 
-import type { Filters, FiltersAction } from '../utils/flowtype';
-import { FiltersContext } from './Context';
+import type { Config, Filters, FiltersAction } from '../utils/flowtype';
 
 const useStyle = makeStyles({
     mainContainer: {
@@ -52,7 +57,11 @@ const filtersReducer = (state: Filters = INITIAL_FILTERS, action: FiltersAction)
     }
 };
 
-const Home = () => {
+type Props = {
+    dispatch: (pageAction: PageAction) => void;
+};
+
+const Home = ({ dispatch }: Props) => {
     const classes = useStyle();
 
     const [filters, dispatchFilterUpdate] = React.useReducer(filtersReducer, INITIAL_FILTERS);
@@ -62,78 +71,133 @@ const Home = () => {
         current: filters
     });
 
+    const [config, updateConfig] = React.useState<Config | null>(null);
+    const configRef = React.useRef<Config | null>(null);
+
+    React.useEffect(
+        () => {
+            dispatch(updateLoadingStatus(true));
+            Promise
+                .all([
+                    fetch(`${BMP_API_URL}/assumptions?limit=-1`).then((response) => response.json()),
+                    fetch(`${BMP_API_URL}/states?limit=-1`).then((response) => response.json()),
+                    fetch(`${BMP_API_URL}/huc8?limit=-1`).then((response) => response.json())
+                ])
+                .then(([assumptionsResponse, statesResponse, huc8Response]) => {
+                    const configObj = {
+                        assumptions: assumptionsResponse.results,
+                        states: statesResponse.results,
+                        huc8: huc8Response.results
+                    };
+                    const boundaryOptions = configObj[filters.boundaryType].map(
+                        (attrs) => attrs[BOUNDARIES[filters.boundaryType].idKey]
+                    );
+                    const activeLayer = LAYERS[filtersRef.current.current.boundaryType];
+                    activeLayer.setStyle((feature) => getStyle(
+                        boundaryOptions,
+                        feature,
+                        BOUNDARIES[filters.boundaryType].layer.featureIdKey,
+                        false
+                    ));
+                    configRef.current = configObj;
+                    updateConfig(configObj);
+                })
+                .catch(logger.error)
+                .finally(() => {
+                    dispatch(updateLoadingStatus(false));
+                });
+        },
+        []
+    );
+
     React.useEffect(() => {
-        const previous = filtersRef.current.current;
+        if (config && config[filters.boundaryType]) {
+            const previous = filtersRef.current.current;
 
-        if (previous.boundaryType !== filters.boundaryType) {
-            // Switch layers
-            const oldLayer = LAYERS[previous.boundaryType];
-            oldLayer.setVisible(false);
-            oldLayer.setStyle((feature) => getStyle(
-                BOUNDARIES[filters.boundaryType].options,
-                feature,
-                BOUNDARIES[filters.boundaryType].layer.featureIdKey,
-                false
-            ));
-            LAYERS[filters.boundaryType].setVisible(true);
+            const boundaryOptions = config[filters.boundaryType].map(
+                (attrs) => attrs[BOUNDARIES[filters.boundaryType].idKey]
+            );
+
+            if (previous.boundaryType !== filters.boundaryType) {
+                // Switch layers
+                const oldLayer = LAYERS[previous.boundaryType];
+                oldLayer.setVisible(false);
+                oldLayer.setStyle((feature) => getStyle(
+                    boundaryOptions,
+                    feature,
+                    BOUNDARIES[filters.boundaryType].layer.featureIdKey,
+                    false
+                ));
+                LAYERS[filters.boundaryType].setVisible(true);
+            }
+
+            if (previous.selectedBoundaries !== filters.selectedBoundaries) {
+                // Update styling of toggled boundaries
+                LAYERS[filters.boundaryType].setStyle((feature) => getStyle(
+                    boundaryOptions,
+                    feature,
+                    BOUNDARIES[filters.boundaryType].layer.featureIdKey,
+                    filters.selectedBoundaries.includes(
+                        feature.get(BOUNDARIES[filters.boundaryType].layer.featureIdKey)
+                    )
+                ));
+            }
+
+            filtersRef.current = {
+                previous,
+                current: filters
+            };
         }
-
-        if (previous.selectedBoundaries !== filters.selectedBoundaries) {
-            // Update styling of toggled boundaries
-            LAYERS[filters.boundaryType].setStyle((feature) => getStyle(
-                BOUNDARIES[filters.boundaryType].options,
-                feature,
-                BOUNDARIES[filters.boundaryType].layer.featureIdKey,
-                filters.selectedBoundaries.includes(feature.get(BOUNDARIES[filters.boundaryType].layer.featureIdKey))
-            ));
-        }
-
-        filtersRef.current = {
-            previous,
-            current: filters
-        };
     }, [filters]);
 
     const handleMapClick = React.useCallback((e: MapBrowserEventType) => {
+        const currentConfig = configRef.current;
         const currentFilters = filtersRef.current.current;
-        const boundaryProps = BOUNDARIES[currentFilters.boundaryType];
-
-        const clickedObject: [FeatureType, LayerType] | null = e.map.forEachFeatureAtPixel(
-            e.pixel,
-            (feature, layer) => layer.get('interactive') && boundaryProps.options.includes(feature.get(boundaryProps.layer.featureIdKey)) ?
-                [feature, layer] : null
-        );
-
-        if (clickedObject && currentFilters) {
-            const [clickedFeature, clickedLayer] = clickedObject;
-            const boundaryIndex = currentFilters.selectedBoundaries.indexOf(
-                clickedFeature.get(boundaryProps.layer.featureIdKey)
+        if (currentConfig && currentConfig[currentFilters.boundaryType]) {
+            const boundaryProps = BOUNDARIES[currentFilters.boundaryType];
+            const boundaryOptions = currentConfig[currentFilters.boundaryType].map(
+                (attrs) => attrs[BOUNDARIES[currentFilters.boundaryType].idKey]
             );
-            const { selectedBoundaries } = currentFilters;
-            if (boundaryIndex > -1) {
-                // Deselect the feature
-                selectedBoundaries.splice(boundaryIndex, 1);
-            } else {
-                // Select the feature
-                selectedBoundaries.push(clickedFeature.get(boundaryProps.layer.featureIdKey));
-            }
 
-            clickedLayer.setStyle((feature) => getStyle(
-                boundaryProps.options,
-                feature,
-                boundaryProps.layer.featureIdKey,
-                selectedBoundaries.includes(feature.get(boundaryProps.layer.featureIdKey))
-            ));
-
-            dispatchFilterUpdate({
-                type: 'selectedBoundaries',
-                value: (
-                    selectedBoundaries.length === 0 ||
-                    selectedBoundaries.length === BOUNDARIES[currentFilters.boundaryType].options.length - 1
+            const clickedObject: [FeatureType, LayerType] | null = e.map.forEachFeatureAtPixel(
+                e.pixel,
+                (feature, layer) => (
+                    layer.get('interactive') && boundaryOptions.includes(feature.get(boundaryProps.layer.featureIdKey))
                 ) ?
-                    [] :
-                    selectedBoundaries
-            });
+                    [feature, layer] : null
+            );
+
+            if (clickedObject && currentFilters) {
+                const [clickedFeature, clickedLayer] = clickedObject;
+                const boundaryIndex = currentFilters.selectedBoundaries.indexOf(
+                    clickedFeature.get(boundaryProps.layer.featureIdKey)
+                );
+                const { selectedBoundaries } = currentFilters;
+                if (boundaryIndex > -1) {
+                    // Deselect the feature
+                    selectedBoundaries.splice(boundaryIndex, 1);
+                } else {
+                    // Select the feature
+                    selectedBoundaries.push(clickedFeature.get(boundaryProps.layer.featureIdKey));
+                }
+
+                clickedLayer.setStyle((feature) => getStyle(
+                    boundaryOptions,
+                    feature,
+                    boundaryProps.layer.featureIdKey,
+                    selectedBoundaries.includes(feature.get(boundaryProps.layer.featureIdKey))
+                ));
+
+                dispatchFilterUpdate({
+                    type: 'selectedBoundaries',
+                    value: (
+                        selectedBoundaries.length === 0 ||
+                        selectedBoundaries.length === boundaryOptions.length - 1
+                    ) ?
+                        [] :
+                        selectedBoundaries
+                });
+            }
         }
     }, [filtersRef]);
 
@@ -141,43 +205,42 @@ const Home = () => {
         <FiltersContext.Provider
             value={{
                 dispatch: dispatchFilterUpdate,
-                filters
+                filters,
+                config
             }}
         >
-            <Map
-                className="fillContainer"
-                zoom={7}
-                minZoom={5}
-                extent={MAP_BOUNDS}
-                center={[-9972968, 4972295]}
-                layers={Object.values(LAYERS)}
-                layerSwitcherOptions={{}}
-                events={{
-                    click: handleMapClick
-                }}
-            >
-                <Grid
-                    className={classes.mainContainer}
-                    container
-                    alignItems="stretch"
+            {config ?
+                <Map
+                    className="fillContainer"
+                    zoom={5}
+                    center={MAP_CENTER}
+                    layers={Object.values(LAYERS)}
+                    layerSwitcherOptions={{}}
+                    events={{ click: handleMapClick }}
                 >
                     <Grid
-                        className="fillContainer"
-                        mapcontainer={1}
-                        item
-                        xs={8}
-                    />
-                    <Grid
-                        className={classes.sidebar}
-                        item
-                        xs={4}
+                        className={classes.mainContainer}
+                        container
+                        alignItems="stretch"
                     >
-                        <Sidebar />
+                        <Grid
+                            className="fillContainer"
+                            mapcontainer={1}
+                            item
+                            xs={8}
+                        />
+                        <Grid
+                            className={classes.sidebar}
+                            item
+                            xs={4}
+                        >
+                            <Sidebar />
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Map>
+                </Map> :
+                null}
         </FiltersContext.Provider>
     );
 };
 
-export default Home;
+export default connect()(Home);

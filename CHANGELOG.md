@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## UNRELEASED
+
+### Changed
+See `gd-gltg-bmp/CHANGELOG.md`, `gd-geostreaming/CHANGELOG.md`, and `gd-core` for specific changes.
+
 ## [3.5.0] - 2020-08-27
 See `gd-gltg/CHANGELOG.md`, `gd-geostreaming/CHANGELOG.md`, `gd-glm__old`, `gd-glm` for specific changes.
 

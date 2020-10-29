@@ -28,7 +28,7 @@ const useStyle = makeStyles((theme) => ({
 const Filters = () => {
     const classes = useStyle();
 
-    const { dispatch, filters } = React.useContext(FiltersContext);
+    const { dispatch, filters, config } = React.useContext(FiltersContext);
 
     const {
         years,
@@ -89,7 +89,7 @@ const Filters = () => {
                     ChipProps={{
                         size: 'small'
                     }}
-                    options={BOUNDARIES[boundaryType].options}
+                    options={config[boundaryType].map((attrs) => attrs[BOUNDARIES[boundaryType].idKey])}
                     value={selectedBoundaries}
                     renderInput={(params) => (
                         <TextField

@@ -15,8 +15,8 @@ export default (state: State = INIT_STATE, action: Action) => {
     switch (action.type) {
         case ACTIONS.UPDATE_LOADING_STATUS:
             return {
-                isLoading: action.isLoading,
-                ...state
+                ...state,
+                isLoading: action.isLoading
             };
         default:
             return state;

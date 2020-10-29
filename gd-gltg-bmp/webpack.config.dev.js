@@ -12,7 +12,8 @@ module.exports = webpackMerge.merge(
         plugins: [
             new Webpack.DefinePlugin({
                 'process.env.NODE_ENV': '"development"',
-                'process.env.GEOSERVER_URL': JSON.stringify(process.env.GEOSERVER_URL || 'https://gltg-dev.ncsa.illinois.edu/geoserver')
+                'process.env.GEOSERVER_URL': JSON.stringify(process.env.GEOSERVER_URL || 'https://gltg-dev.ncsa.illinois.edu/geoserver'),
+                'process.env.BMP_API_URL': JSON.stringify(process.env.BMP_API_URL || 'https://gltg-dev.ncsa.illinois.edu/bmp')
             })
         ]
     }
