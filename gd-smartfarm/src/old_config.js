@@ -148,7 +148,7 @@ export const gd3 = {
 
     // Explore Page Sources Child Sections Initial Open Status
     // true === open, false === closed
-    start_explore_each_source_open: false,
+    start_explore_each_source_open: true,
 
     // Explore Page Additional Accordion Sections
     additional_explore_accordion_sections: [],
