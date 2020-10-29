@@ -2,7 +2,7 @@
 
 /* eslint-disable */
 // $FlowFixMe
-const __old_config = require('gd-glm__old/config')
+const __old_config = require('./oldConfig')
 window.configruntime = __old_config
 
 // $FlowFixMe
