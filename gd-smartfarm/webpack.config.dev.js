@@ -12,7 +12,7 @@ module.exports = webpackMerge.merge(
         plugins: [
             new Webpack.DefinePlugin({
                 'process.env.NODE_ENV': '"development"',
-                'process.env.GEOSTREAMS_URL': JSON.stringify(process.env.GEOSTREAMS_URL || 'https://mbclab-dev.ncsa.illinois.edu/geostreams')
+                'process.env.GEOSTREAMS_URL': JSON.stringify(process.env.GEOSTREAMS_URL || 'https://smartfarm-dev.ncsa.illinois.edu/geostreams')
             })
         ]
     }
