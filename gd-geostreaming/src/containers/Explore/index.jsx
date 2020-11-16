@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
 import { connect } from 'react-redux';
-import { Grid, withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import MarkerIcon from '@material-ui/icons/Room';
 import { scaleLinear } from 'd3';
 import Feature from 'ol/Feature';
@@ -24,11 +24,11 @@ import type { Feature as FeatureType, Map as MapType, MapBrowserEventType } from
 import type { Layer as LayerType } from 'ol/layer';
 import type { Source as OLSourceType } from 'ol/source';
 
+import Sidebar from './Sidebar';
 import { fetchParameters } from '../../actions/parameters';
 import { fetchSensors } from '../../actions/sensors';
 import SensorDetail from '../Sensor/Detail';
 import SensorPopup from '../Sensor/Popup';
-import Sidebar from './Sidebar';
 
 import type { MapConfig, ParameterType, SensorType, SourceConfig, SourceType } from '../../utils/flowtype';
 
@@ -37,6 +37,18 @@ const INIT_CENTER = [-9972968, 4972295];
 const CLUSTER_DISTANCE = 45;
 
 const styles = (theme) => ({
+    root: {
+        display: 'flex',
+        width: '100%',
+        height: '100%'
+    },
+    content: {
+        height: '100%',
+        flexGrow: 1
+    },
+    map: {
+        flexGrow: 1
+    },
     mainContainer: {
         position: 'absolute',
         height: '100%'
@@ -78,6 +90,8 @@ const styles = (theme) => ({
 
 type Props = {
     classes: {
+        root: string;
+        content: string,
         mainContainer: string;
         sidebar: string;
         sensorDetail: string;
@@ -463,11 +477,20 @@ class Explore extends React.Component<Props, State> {
 
     render() {
         const { classes, sources } = this.props;
-        const { hasData, showPopupAt, popupContent } = this.state;
+        const { showPopupAt, popupContent } = this.state;
         return (
-            <>
+            <div className={classes.root}>
+                <Sidebar
+                    data={this.data}
+                    sources={sources}
+                    selectedFeature={this.state.selectedFeatureIdx}
+                    addRegionsToMap={this.addRegionsToMap}
+                    removeRegionsFromMap={this.removeRegionsFromMap}
+                    handlePopupOpen={this.handlePopupOpen}
+                    handlePopupClose={this.handlePopupClose}
+                />
                 <Map
-                    className="fillContainer"
+                    className={classes.content}
                     zoom={INIT_ZOOM}
                     center={INIT_CENTER}
                     controls={[this.clusterControl]}
@@ -479,36 +502,6 @@ class Explore extends React.Component<Props, State> {
                         click: this.handleMapClick
                     }}
                 >
-                    <Grid
-                        className={classes.mainContainer}
-                        container
-                        alignItems="stretch"
-                    >
-                        <Grid
-                            className={classes.sidebar}
-                            item
-                            xs={4}
-                        >
-                            {hasData ?
-                                <Sidebar
-                                    data={this.data}
-                                    sources={sources}
-                                    selectedFeature={this.state.selectedFeatureIdx}
-                                    addRegionsToMap={this.addRegionsToMap}
-                                    removeRegionsFromMap={this.removeRegionsFromMap}
-                                    handlePopupOpen={this.handlePopupOpen}
-                                    handlePopupClose={this.handlePopupClose}
-                                /> :
-                                null}
-                        </Grid>
-                        <Grid
-                            className="fillContainer"
-                            mapcontainer={1}
-                            item
-                            xs={8}
-                        />
-                    </Grid>
-
                     <ClusterControl
                         el={this.clusterControl.element}
                         cluster={this.clusterSource}
@@ -529,7 +522,7 @@ class Explore extends React.Component<Props, State> {
                         <SensorDetail handleClose={() => this.setState({ showSensorDetail: false })} />
                     </div> :
                     null}
-            </>
+            </div>
         );
     }
 }
