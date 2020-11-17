@@ -57,6 +57,7 @@ class Explore extends Component {
 
     render() {
 
+        let selfStyles= this.props.styles;
         let disableClusters = this.state.disableClusters;
         let sourcesSection = '';
         let exploreCustomSections = [];
@@ -85,7 +86,7 @@ class Explore extends Component {
 
             sourcesSection = <ExploreSourcesTab
                 key='source_data' regions={this.props.regions} data={this.props.data}
-                userStations={this.props.params.stations} sources={sources}
+                userStations={this.props.match.params.stations} sources={sources}
             />;
 
             if (screen.width > getMobileSizeMax()) {
@@ -109,16 +110,16 @@ class Explore extends Component {
                         );
                     });
                     exploreCategoriesSections = (
-                        <ListGroup className={exploreStyles.listWidthStyle}>
-                            <ListHeader className={exploreStyles.listHeaderStyle}
+                        <ListGroup className={selfStyles.listWidthStyle}>
+                            <ListHeader className={selfStyles.listHeaderStyle}
                                         onClick={() => {this.clickedCategoriesAccordion()}}>
                                 Categories
-                                <Icon className={"material-icons " + exploreStyles.accordionIcon}
+                                <Icon className={"material-icons " + selfStyles.accordionIcon}
                                       name={this.state.categories_accordion_icon ? 'expand_more' : 'chevron_right'}
                                 />
                             </ListHeader>
                             <div className={this.state.categories_accordion_icon ?
-                                exploreStyles.listItemsStyleOpen : exploreStyles.listItemsStyleClosed}>
+                                selfStyles.listItemsStyleOpen : selfStyles.listItemsStyleClosed}>
                                 {exploreCategories}
                             </div>
                         </ListGroup>
@@ -152,7 +153,7 @@ class Explore extends Component {
             }
             mapObject =
                 <Map disable_clusters={disableClusters}
-                     userStations={this.props.params.stations}
+                     userStations={this.props.match.params.stations}
                      exploreLayersDetails={exploreLayersDetails}
                      layersVisibility={layersVisibility}
                 />;
@@ -171,7 +172,7 @@ class Explore extends Component {
                     <div className={styles.bodymap}>
                         <Grid className={styles.noPadding}>
                             <Cell col={3}>
-                                <div className={exploreStyles.leftColumnExplore}>
+                                <div className={selfStyles.leftColumnExplore}>
                                     {sourcesSection}
                                     {exploreCustomSections}
                                     {exploreCategoriesSections}
@@ -195,6 +196,10 @@ class Explore extends Component {
     }
 
 }
+
+Explore.defaultProps = {
+    styles: exploreStyles
+};
 
 const mapStateToProps = (state) => {
     return {

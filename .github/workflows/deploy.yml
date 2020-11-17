@@ -54,9 +54,9 @@ jobs:
           #   description: "ILNLRS Geodashboard Image"
           - name: smartfarm
             gd-name: gd-smartfarm
-            prod-host: ""
-            dev-host: "141.142.208.219"
-            file-path: /home/ubuntu/smartfarm
+            prod-host: "141.142.210.210"
+            dev-host: "141.142.210.220"
+            file-path: /home/ubuntu/mbclab
             description: "Smartfarm Geodashboard Image"
     steps:
       -

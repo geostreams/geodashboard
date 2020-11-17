@@ -2,7 +2,6 @@
  * @flow
  */
 
-import {combineReducers} from 'redux';
 import backends from './backends';
 import sensors from './sensors';
 import searchFilters from './searchFilters';
@@ -14,7 +13,7 @@ import exploreFiltering from './exploreFiltering';
 import parameters from './parameters';
 
 
-const geodashboardApp = combineReducers({
+const geodashboardApp = {
     backends,
     searchFilters,
     sensors,
@@ -24,6 +23,6 @@ const geodashboardApp = combineReducers({
     exploreLayers,
     exploreFiltering,
     parameters
-});
+};
 
 export default geodashboardApp;
