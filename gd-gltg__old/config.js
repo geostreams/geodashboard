@@ -513,6 +513,48 @@ export const gd3 = {
             "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:impaired-epa"
         },
+        {
+            "layerGroup": "",
+            "title": "State Legislative District - Lower Chamber",
+            "id": "gltg:state-legi-dist-lower",
+            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "opacity": 0.75,
+            "visibility": false,
+            "legendShow": false,
+            "legendStartOpen": false,
+            "legendTitle": "Legend",
+            "legendText": "",
+            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+                "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:state-legi-dist-lower"
+        },
+        {
+            "layerGroup": "",
+            "title": "State Legislative District - Upper Chamber",
+            "id": "gltg:state-legi-dist-upper",
+            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "opacity": 0.75,
+            "visibility": false,
+            "legendShow": false,
+            "legendStartOpen": false,
+            "legendTitle": "Legend",
+            "legendText": "",
+            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+                "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:state-legi-dist-upper"
+        },
+        {
+            "layerGroup": "",
+            "title": "Congressional District",
+            "id": "gltg:cong-dist-il",
+            "wms": "https://greatlakestogulf.org/geoserver/wms",
+            "opacity": 0.75,
+            "visibility": false,
+            "legendShow": false,
+            "legendStartOpen": false,
+            "legendTitle": "Legend",
+            "legendText": "",
+            "legendImage": "https://greatlakestogulf.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&" +
+                "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:cong-dist-il"
+        }
     ],
 
     // Layers for the Analysis Page
