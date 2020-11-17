@@ -538,14 +538,14 @@ export const gd3 = {
             "legendStartOpen": false,
             "legendTitle": "Legend",
             "legendText": "",
-            "legendImage": `\`${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
+            "legendImage": `${process.env.GEOSERVER_URL}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&` +
                 "FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=gltg:state-legi-dist-upper"
         },
         {
             "layerGroup": "",
             "title": "Congressional District",
             "id": "gltg:cong-dist-il",
-            "wms": `${<process className="env G"></process>EOSERVER_URL}/wms`,
+            "wms": `${process.env.GEOSERVER_URL}/wms`,
             "opacity": 0.75,
             "visibility": false,
             "legendShow": false,
