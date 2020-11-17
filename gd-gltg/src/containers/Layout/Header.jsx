@@ -22,6 +22,9 @@ export const HEADERS_HEIGHT = 61;
 
 const useStyles = makeStyles((theme) =>{
     return ({
+        appbar: {
+            zIndex: theme.zIndex.drawer + 1
+        },
         mainHeader: {
             'background': theme.palette.primary.main,
             'color': theme.palette.primary.contrastText,
@@ -73,7 +76,7 @@ const Header = ({ location }: Props) => {
     const activeTab = location.pathname.split('/')[1];
 
     return (
-        <AppBar position="fixed">
+        <AppBar position="fixed" className={classes.appbar}>
             <Toolbar className={classes.mainHeader}>
                 <Avatar
                     component={Link}
