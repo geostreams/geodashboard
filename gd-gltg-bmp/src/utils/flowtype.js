@@ -16,6 +16,13 @@ export type Filters = {
     selectedBoundaries: string[];
 };
 
+export type QueryParams = {
+    applied_date: number;
+    sunset: number;
+    group_by: string[];
+    aggregates: string[];
+};
+
 type UpdateYearsAction = {
     type: 'years';
     value: [number, number];
@@ -101,7 +108,17 @@ type State = {
 };
 
 export type Config = {
-    assumptions: Assumption[];
-    huc8: HUC8[];
-    states: State[];
+    assumptions?: Assumption[];
+    huc8?: HUC8[];
+    states?: State[];
+};
+
+export type BMPContextType = {
+    config: Config;
+    activeView: 'filter' | 'results';
+    updateActiveView: (activeView: 'filter' | 'results') => void;
+    filters: Filters;
+    dispatchFilterUpdate: (action: FiltersAction) => void;
+    results: any;
+    updateResults: (results: any) => void;
 };

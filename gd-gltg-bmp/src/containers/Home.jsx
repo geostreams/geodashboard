@@ -6,7 +6,6 @@ import { Map } from 'gd-core/src/components/ol';
 import { updateLoadingStatus } from 'gd-core/src/actions/page';
 import logger from 'gd-core/src/utils/logger';
 
-
 import type {
     Feature as FeatureType,
     Layer as LayerType,
@@ -15,7 +14,7 @@ import type {
 import type { Action as PageAction } from 'gd-core/src/actions/page';
 
 import { BMP_API_URL, BOUNDARIES, INITIAL_FILTERS, LAYERS, MAP_CENTER, getStyle } from '../config';
-import { FiltersContext } from './Context';
+import { BMPContext } from './Context';
 import Sidebar from './Sidebar';
 
 import type { Config, Filters, FiltersAction } from '../utils/flowtype';
@@ -64,15 +63,20 @@ type Props = {
 const Home = ({ dispatch }: Props) => {
     const classes = useStyle();
 
-    const [filters, dispatchFilterUpdate] = React.useReducer(filtersReducer, INITIAL_FILTERS);
+    const [activeView, updateActiveView] = React.useState<'filter' | 'results'>('filter');
+
+    const [results, updateResults] = React.useState({});
+
+    const [filters, dispatchFilterUpdate] = React.useReducer<Filters, FiltersAction>(filtersReducer, INITIAL_FILTERS);
 
     const filtersRef = React.useRef<{ previous: Filters, current: Filters }>({
         previous: filters,
         current: filters
     });
 
-    const [config, updateConfig] = React.useState<Config | null>(null);
+    const [config, updateConfig] = React.useState<Config>({});
     const configRef = React.useRef<Config | null>(null);
+    const hasConfig = Object.keys(config).length > 0;
 
     React.useEffect(
         () => {
@@ -111,7 +115,7 @@ const Home = ({ dispatch }: Props) => {
     );
 
     React.useEffect(() => {
-        if (config && config[filters.boundaryType]) {
+        if (hasConfig && config[filters.boundaryType]) {
             const previous = filtersRef.current.current;
 
             const boundaryOptions = config[filters.boundaryType].map(
@@ -202,14 +206,18 @@ const Home = ({ dispatch }: Props) => {
     }, [filtersRef]);
 
     return (
-        <FiltersContext.Provider
+        <BMPContext.Provider
             value={{
-                dispatch: dispatchFilterUpdate,
+                config,
+                activeView,
+                updateActiveView,
+                dispatchFilterUpdate,
                 filters,
-                config
+                results,
+                updateResults
             }}
         >
-            {config ?
+            {hasConfig ?
                 <Map
                     className="fillContainer"
                     zoom={5}
@@ -239,7 +247,7 @@ const Home = ({ dispatch }: Props) => {
                     </Grid>
                 </Map> :
                 null}
-        </FiltersContext.Provider>
+        </BMPContext.Provider>
     );
 };
 
