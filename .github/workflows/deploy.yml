@@ -81,11 +81,11 @@ jobs:
           echo -n > .env
           if [ "$TARGET_BRANCH" == "master" ]; then
             TAGS="${HUB_REPO}/${PROJECT_NAME}:latest,${HUB_REPO}/${PROJECT_NAME}:${VERSION}"
-            echo ::set-env name=HOST:: ${{ matrix.prod-host }}
+            echo "HOST=${{ matrix.prod-host }}" >> $GITHUB_ENV
           elif [ "$TARGET_BRANCH" == "develop" ]; then
             TAGS="${HUB_REPO}/${PROJECT_NAME}:develop"
             TAGS="$TAGS,${HUB_REPO}/${PROJECT_NAME}:sha-${GITHUB_SHA::8}"
-            echo ::set-env name=SSH_HOST:: ${{ matrix.dev-host }}
+            echo "HOST=${{ matrix.dev-host }}" >> $GITHUB_ENV
           fi
           echo "::set-output name=version::${VERSION}"
           echo "::set-output name=tags::${TAGS}"
