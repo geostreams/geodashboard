@@ -1,9 +1,11 @@
-// @flow
-import React from 'react';
+
+/*
+ * @flow
+ */
+import React, { useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import {
     AppBar,
-    Avatar,
     ClickAwayListener,
     MenuItem,
     Paper,
@@ -15,167 +17,163 @@ import {
     makeStyles
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import LogoApp from '../../images/logo_app.png';
+import LogoApp from '../../images/logo.png';
 
 export const HEADERS_HEIGHT = 132;
-
-const useStyles = makeStyles((theme) =>{
-    return ({
-        mainHeader: {
-            'background': 'linear-gradient(to bottom, #054455, #467A9E)',
-            'color': theme.palette.primary.contrastText,
-            'textDecoration': 'none',
-            'height': HEADERS_HEIGHT,
-            'minHeight': HEADERS_HEIGHT,
-            '& a': {
-                margin: 5
-            }
-        },
-        logo: {
-            height: 90
-        },
-        headerText: {
-            color: theme.palette.primary.contrastText,
-            textDecoration: 'none'
-        },
-        tabsRoot: {
-            fontSize: 16,
-            flexGrow: 1
-        },
-        tabsIndicator: {
-            backgroundColor: '#fff'
-        },
-        tabRoot: {
-            fontSize: '1rem'
-        },
-        marginLeftAuto: {
-            marginLeft: 'auto !important'
-        },
-        dropdown: {
-            zIndex: 1100
-        },
-        dropdownIcon: {
-            display: 'flex'
-        }
-    });
-});
 
 type Props = {
     location: {
         pathname: string
     }
-}
+};
+
+const useStyles = makeStyles(() =>{
+    return ({
+        mainHeader: {
+            backgroundImage: 'linear-gradient(to bottom, #054455, #467A9E)',
+            textDecoration: 'none',
+            position: 'static',
+            minHeight: HEADERS_HEIGHT,
+            height: HEADERS_HEIGHT
+        },
+        headerText: {
+            position: 'relative',
+            left: '-25px'
+        },
+        logo: {
+            display: 'flex',
+            margin: '10px 0 0 10px',
+            height: '90px',
+            zIndex: 32
+        },
+        tabsRoot: {
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '36px'
+        },
+        tabsIndicator: {
+            backgroundColor: '#fff'
+        },
+        tabRoot: {
+            fontSize: '1.1em',
+            lineHeight: '36px',
+            fontWeight: 700,
+            color: '#fff',
+            padding: 0,
+            minHeight: '36px'
+        },
+        dropdownIcon: {
+            display: 'flex',
+            alignItems: 'center'
+        },
+        dropDownItem: {
+            color: 'black',
+            fontWeight: 700,
+            padding: '10px',
+            fontSize: '1.1em'
+        }
+    });
+});
 
 const Header = ({ location }: Props) => {
+    const dropDownRef = React.useRef(null);
+    const [isDropDownOpen, handleDropDown] = useState(false);
+    const activeTab = location.pathname.split('/')[1];
     const classes = useStyles();
-
-    const geostreamingMenuEl = React.useRef(null);
-    const [geostreamingMenuOpen, updateGeostreamingMenuOpen] = React.useState(false);
-
     return (
-        <AppBar position="fixed">
-            <Toolbar className={classes.mainHeader}>
-                <Avatar
-                    className={classes.logo}
-                    component={Link}
-                    to="/"
-                    src={LogoApp}
-                />
-                <Typography
-                    component={Link}
-                    to="/"
-                    className={classes.headerText}
-                    variant="h6"
-                    noWrap
-                >
-                    Great Lakes Monitoring
-                </Typography>
-                <Tabs
-                    classes={{
-                        root: classes.tabsRoot,
-                        indicator: classes.tabsIndicator
-                    }}
-                    centered
-                    value={location.pathname.split('/')[1]}
-                >
-                    <Tab
-                        className={`${classes.marginLeftAuto} ${classes.tabRoot}`}
-                        label="Home"
-                        component={Link}
-                        to="/"
-                        value=""
-                    />
-                    <Tab
-                        className={classes.tabRoot}
-                        label="Data Stories"
-                        component={Link}
-                        to="/data-stories"
-                        value="data-stories"
-                    />
-                    <Tab
-                        className={classes.tabRoot}
-                        label="Partners"
-                        component={Link}
-                        to="/partners"
-                        value="partners"
-                    />
-                    <Tab
-                        className={classes.tabRoot}
-                        label="FAQ"
-                        component={Link}
-                        to="/faq"
-                        value="faq"
-                    />
-                    <Tab
-                        ref={geostreamingMenuEl}
-                        component="a"
-                        className={`${classes.marginLeftAuto} ${classes.tabRoot}`}
-                        label={
-                            <span className={classes.dropdownIcon}>
-                                Geostreaming App <ArrowDropDownIcon />
-                            </span>
-                        }
-                        value="geostreaming"
-                        onClick={() => updateGeostreamingMenuOpen(true)}
-                    />
-                    <Popper
-                        className={classes.dropdown}
-                        anchorEl={geostreamingMenuEl.current}
-                        open={geostreamingMenuOpen}
-                    >
-                        <ClickAwayListener
-                            onClickAway={() => updateGeostreamingMenuOpen(false)}
-                        >
-                            <Paper>
-                                <MenuItem
-                                    component={Link}
-                                    to="/geostreaming"
-                                >
-                                    About
-                                </MenuItem>
-                                <MenuItem
-                                    component={Link}
-                                    to="/geostreaming/explore/all"
-                                >
-                                    Explore
-                                </MenuItem>
-                                <MenuItem
-                                    component={Link}
-                                    to="/geostreaming/search"
-                                >
-                                    Download
-                                </MenuItem>
-                                <MenuItem
-                                    component={Link}
-                                    to="/geostreaming/analysis"
-                                >
-                                    Analysis
-                                </MenuItem>
-                            </Paper>
-                        </ClickAwayListener>
-                    </Popper>
-                </Tabs>
+        <AppBar position="fixed" className={classes.mainHeader}>
+            <Toolbar>
+                <img className={classes.logo} src={LogoApp} alt="GLM Logo" />
+                <div className={classes.headerText}>
+                    <Typography variant="h1">
+                            Great Lakes Monitoring
+                    </Typography>
+                    <Typography variant="h2">
+                        ILLINOIS-INDIANA SEA GRANT
+                    </Typography>
+                </div>
             </Toolbar>
+            <Tabs
+                classes={{
+                    root: classes.tabsRoot,
+                    indicator: classes.tabsIndicator
+                }}
+                centered
+                value={activeTab.search(/^(trendsstation|trendsregion)/) === 0 ? 'trends' : activeTab}
+            >
+                <Tab
+                    className={classes.tabRoot}
+                    label="WELCOME"
+                    component={Link}
+                    to="/"
+                    value=""
+                />
+                <Tab
+                    className={classes.tabRoot}
+                    label="EXPLORE"
+                    component={Link}
+                    to="/explore/all"
+                    value="explore"
+                />
+                <Tab
+                    className={classes.tabRoot}
+                    label="DOWNLOAD"
+                    component={Link}
+                    to="/search"
+                    value="search"
+                />
+
+                <Tab
+                    className={classes.tabRoot}
+                    ref={dropDownRef}
+                    label={
+                        <span className={classes.dropdownIcon}>
+                        TRENDS <ArrowDropDownIcon />
+                        </span>
+                    }
+                    value="trends"
+                    component={Link}
+                    onClick= {() => handleDropDown(true)}
+                />
+                <Tab
+                    className={classes.tabRoot}
+                    label="ABOUT"
+                    component={Link}
+                    to="/about"
+                    value="about"
+                />
+            </Tabs>
+            {/* Trends menu */}
+            <Popper
+                anchorEl={dropDownRef.current}
+                getContentAnchorEl={null}
+                open={isDropDownOpen}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+                onClose={() => handleDropDown(false)}
+            >
+                <ClickAwayListener onClickAway={() => handleDropDown(false)}>
+                        
+                    <Paper square>
+                        <MenuItem
+                            classes={{
+                                root: classes.dropDownItem
+                            }}
+                            component={Link}
+                            to="/trendsstations">
+                        TRENDS STATIONS
+                        </MenuItem> 
+                        <MenuItem
+                            classes={{
+                                root: classes.dropDownItem
+                            }}
+                            component={Link}
+                            to="/trendsregions">
+                        TRENDS REGIONS
+                        </MenuItem>
+                    </Paper>
+                </ClickAwayListener>
+            </Popper>
         </AppBar>
     );
 };

@@ -1,10 +1,13 @@
-// @flow
+/*
+ * @flow
+ */
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Box, CircularProgress, makeStyles } from '@material-ui/core';
 
 import Footer from './Footer';
-import Header, { HEADERS_HEIGHT } from './Header';
+import Header from './Header';
 
 
 const useStyles = makeStyles({
@@ -15,9 +18,7 @@ const useStyles = makeStyles({
     },
     main: {
         position: 'absolute',
-        top: HEADERS_HEIGHT,
-        width: '100%',
-        height: `calc(100% - ${HEADERS_HEIGHT}px)`
+        width: '100%'
     }
 });
 
@@ -42,8 +43,8 @@ const Layout = ({ isLoading, children, extraMainClasses, hasFooter }: Props) => 
                     <CircularProgress />
                 </Box> :
                 null}
-            <Header />
             <main className={`${classes.main} ${extraMainClasses}`}>
+                <Header />
                 {children}
                 {hasFooter ? <Footer /> : null}
             </main>
