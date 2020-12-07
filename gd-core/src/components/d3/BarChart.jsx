@@ -137,11 +137,11 @@ const BarChart = (props: Props) => {
             if (xAxisProps.title) {
                 xAxisLabel(
                     gEl,
+                    xAxisProps.title,
                     innerWidth / 2,
                     innerHeight + xAxisProps.titlePadding,
                     xAxisProps.textColor,
-                    xAxisProps.textOpacity,
-                    xAxisProps.title
+                    xAxisProps.textOpacity
                 );
             }
 
@@ -151,11 +151,11 @@ const BarChart = (props: Props) => {
             if (yAxisProps.title) {
                 yAxisLabel(
                     gEl,
-                    -(innerHeight) / 2,
+                    yAxisProps.title,
+                    0,
                     -yAxisProps.titlePadding,
                     yAxisProps.textColor,
-                    yAxisProps.textOpacity,
-                    yAxisProps.title
+                    yAxisProps.textOpacity
                 );
             }
 

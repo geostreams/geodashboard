@@ -204,11 +204,11 @@ const LineChart = (props: Props) => {
             if (xAxisProps.title) {
                 xAxisLabel(
                     gEl,
+                    xAxisProps.title,
                     innerWidth / 2,
                     innerHeight + (xAxisProps.titlePadding || 0),
                     xAxisProps.textColor,
-                    xAxisProps.textOpacity,
-                    xAxisProps.title
+                    xAxisProps.textOpacity
                 );
             }
 
@@ -222,11 +222,11 @@ const LineChart = (props: Props) => {
             if (yAxisProps.title) {
                 yAxisLabel(
                     gEl,
-                    -(innerHeight) / 2,
+                    yAxisProps.title,
+                    0,
                     -yAxisProps.titlePadding || 0,
                     yAxisProps.textColor,
-                    yAxisProps.textOpacity,
-                    yAxisProps.title
+                    yAxisProps.textOpacity
                 );
             }
 

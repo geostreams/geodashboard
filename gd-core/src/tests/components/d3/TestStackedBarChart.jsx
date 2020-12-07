@@ -63,13 +63,13 @@ const TestStackedBarChart = () => {
                     scale: scaleBand().domain(FIXTURE.data.map(({ year }) => year)),
                     key: 'year',
                     title: 'Year',
-                    titlePadding: 50
+                    titleYPadding: 50
                 }}
                 yAxisProps={{
                     scale: scaleLinear(),
                     keys: ['yes', 'no', 'maybe'],
                     title: 'lb/acre',
-                    titlePadding: 30
+                    titleYPadding: 30
                 }}
                 barFill={(values) => FIXTURE.colors[values.key]}
                 data={FIXTURE.data}

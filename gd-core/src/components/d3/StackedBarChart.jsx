@@ -25,7 +25,9 @@ type Props = {
         scale: Function;
         key: string;
         title: string;
-        titlePadding: number;
+        titleXPadding: number;
+        titleYPadding: number;
+        titleSize: number | string;
         ticks: Array<string | Function>;
         stroke: string;
         strokeWidth: number;
@@ -36,7 +38,9 @@ type Props = {
         scale: Function;
         keys: string[];
         title: string;
-        titlePadding: number;
+        titleXPadding: number;
+        titleYPadding: number;
+        titleSize: number | string;
         ticks: Array<string | Function>;
         stroke: string;
         strokeWidth: number;
@@ -159,11 +163,12 @@ const StackedBarChart = (props: Props) => {
             if (xAxisProps.title) {
                 xAxisLabel(
                     gEl,
-                    innerWidth / 2,
-                    innerHeight + (xAxisProps.titlePadding || 0),
+                    xAxisProps.title,
+                    (innerWidth / 2) + (xAxisProps.titleXPadding || 0),
+                    innerHeight + (xAxisProps.titleYPadding || 0),
                     xAxisProps.textColor,
                     xAxisProps.textOpacity,
-                    xAxisProps.title
+                    xAxisProps.titleSize
                 );
             }
 
@@ -177,11 +182,12 @@ const StackedBarChart = (props: Props) => {
             if (yAxisProps.title) {
                 yAxisLabel(
                     gEl,
-                    -(innerHeight) / 2,
-                    -yAxisProps.titlePadding || 0,
+                    yAxisProps.title,
+                    yAxisProps.titleXPadding || 0,
+                    -(yAxisProps.titleYPadding || 0),
                     yAxisProps.textColor,
                     yAxisProps.textOpacity,
-                    yAxisProps.title
+                    yAxisProps.titleSize
                 );
             }
         }

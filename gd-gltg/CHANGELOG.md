@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added district layers
   [GLGVO-710] (https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-710)
 
+### Changed
+- Updated charts' axis titles' padding
+  [GLGVO-711](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-711)
 
 ## [3.5.0] - 2020-10-01
 

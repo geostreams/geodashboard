@@ -65,6 +65,8 @@ const Home = ({ dispatch }: Props) => {
 
     const [activeView, updateActiveView] = React.useState<'filter' | 'results'>('filter');
 
+    const activeViewRef = React.useRef<string>(activeView);
+
     const [results, updateResults] = React.useState({});
 
     const [filters, dispatchFilterUpdate] = React.useReducer<Filters, FiltersAction>(filtersReducer, INITIAL_FILTERS);
@@ -90,8 +92,8 @@ const Home = ({ dispatch }: Props) => {
                 .then(([assumptionsResponse, statesResponse, huc8Response]) => {
                     const configObj = {
                         assumptions: assumptionsResponse.results,
-                        states: statesResponse.results,
-                        huc8: huc8Response.results
+                        state: statesResponse.results,
+                        huc_8: huc8Response.results
                     };
                     const boundaryOptions = configObj[filters.boundaryType].map(
                         (attrs) => attrs[BOUNDARIES[filters.boundaryType].idKey]
@@ -155,52 +157,49 @@ const Home = ({ dispatch }: Props) => {
     }, [filters]);
 
     const handleMapClick = React.useCallback((e: MapBrowserEventType) => {
-        const currentConfig = configRef.current;
-        const currentFilters = filtersRef.current.current;
-        if (currentConfig && currentConfig[currentFilters.boundaryType]) {
-            const boundaryProps = BOUNDARIES[currentFilters.boundaryType];
-            const boundaryOptions = currentConfig[currentFilters.boundaryType].map(
-                (attrs) => attrs[BOUNDARIES[currentFilters.boundaryType].idKey]
-            );
-
-            const clickedObject: [FeatureType, LayerType] | null = e.map.forEachFeatureAtPixel(
-                e.pixel,
-                (feature, layer) => (
-                    layer.get('interactive') && boundaryOptions.includes(feature.get(boundaryProps.layer.featureIdKey))
-                ) ?
-                    [feature, layer] : null
-            );
-
-            if (clickedObject && currentFilters) {
-                const [clickedFeature, clickedLayer] = clickedObject;
-                const boundaryIndex = currentFilters.selectedBoundaries.indexOf(
-                    clickedFeature.get(boundaryProps.layer.featureIdKey)
+        if (activeViewRef.current === 'filter') {
+            const currentConfig = configRef.current;
+            const currentFilters = filtersRef.current.current;
+            if (currentConfig && currentConfig[currentFilters.boundaryType]) {
+                const boundaryProps = BOUNDARIES[currentFilters.boundaryType];
+                const boundaryOptions = currentConfig[currentFilters.boundaryType].map(
+                    (attrs) => attrs[BOUNDARIES[currentFilters.boundaryType].idKey]
                 );
-                const { selectedBoundaries } = currentFilters;
-                if (boundaryIndex > -1) {
-                    // Deselect the feature
-                    selectedBoundaries.splice(boundaryIndex, 1);
-                } else {
-                    // Select the feature
-                    selectedBoundaries.push(clickedFeature.get(boundaryProps.layer.featureIdKey));
-                }
 
-                clickedLayer.setStyle((feature) => getStyle(
-                    boundaryOptions,
-                    feature,
-                    boundaryProps.layer.featureIdKey,
-                    selectedBoundaries.includes(feature.get(boundaryProps.layer.featureIdKey))
-                ));
-
-                dispatchFilterUpdate({
-                    type: 'selectedBoundaries',
-                    value: (
-                        selectedBoundaries.length === 0 ||
-                        selectedBoundaries.length === boundaryOptions.length - 1
+                const clickedObject: [FeatureType, LayerType] | null = e.map.forEachFeatureAtPixel(
+                    e.pixel,
+                    (feature, layer) => (
+                        layer.get('interactive') && boundaryOptions.includes(feature.get(boundaryProps.layer.featureIdKey))
                     ) ?
-                        [] :
-                        selectedBoundaries
-                });
+                        [feature, layer] : null
+                );
+
+                if (clickedObject && currentFilters) {
+                    const [clickedFeature, clickedLayer] = clickedObject;
+                    const boundaryIndex = currentFilters.selectedBoundaries.indexOf(
+                        clickedFeature.get(boundaryProps.layer.featureIdKey)
+                    );
+                    const { selectedBoundaries } = currentFilters;
+                    if (boundaryIndex > -1) {
+                        // Deselect the feature
+                        selectedBoundaries.splice(boundaryIndex, 1);
+                    } else {
+                        // Select the feature
+                        selectedBoundaries.push(clickedFeature.get(boundaryProps.layer.featureIdKey));
+                    }
+
+                    clickedLayer.setStyle((feature) => getStyle(
+                        boundaryOptions,
+                        feature,
+                        boundaryProps.layer.featureIdKey,
+                        selectedBoundaries.includes(feature.get(boundaryProps.layer.featureIdKey))
+                    ));
+
+                    dispatchFilterUpdate({
+                        type: 'selectedBoundaries',
+                        value: selectedBoundaries
+                    });
+                }
             }
         }
     }, [filtersRef]);
@@ -210,7 +209,10 @@ const Home = ({ dispatch }: Props) => {
             value={{
                 config,
                 activeView,
-                updateActiveView,
+                updateActiveView: (view) => {
+                    updateActiveView(view);
+                    activeViewRef.current = view;
+                },
                 dispatchFilterUpdate,
                 filters,
                 results,

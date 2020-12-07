@@ -62,13 +62,13 @@ const StackedBarChartWrapper = (props: Props) => {
                             xAxisProps={{
                                 scale: scaleBand().domain(Array.from(years).sort()),
                                 key: 'year',
-                                titlePadding: 50
+                                titleYPadding: 50
                             }}
                             yAxisProps={{
                                 scale: scaleLinear(),
                                 keys: categories,
                                 title: unit,
-                                titlePadding: 30
+                                titleYPadding: 20
                             }}
                             data={processedData}
                             barFill={(d) => colors[d.index]}

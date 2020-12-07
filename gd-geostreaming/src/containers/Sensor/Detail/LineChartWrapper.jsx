@@ -89,7 +89,7 @@ const LineChartWrapper = (props: Props) => {
                                 key: 'average',
                                 scale: scaleLinear().domain( [startAtZero ? 0 : minAverage, maxAverage]),
                                 title: unit,
-                                titlePadding: 40
+                                titlePadding: 10
                             }}
                             lineStroke="#56B4E9"
                             lineStrokeWidth={2}

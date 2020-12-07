@@ -19,8 +19,11 @@ export type Filters = {
 export type QueryParams = {
     applied_date: number;
     sunset: number;
+    state?: string[];
+    huc_8?: string[];
     group_by: string[];
     aggregates: string[];
+    order_by: string[];
 };
 
 type UpdateYearsAction = {

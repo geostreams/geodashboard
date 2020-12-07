@@ -3,45 +3,77 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FormControl, Grid, Select, makeStyles } from '@material-ui/core';
 import { updateLoadingStatus } from 'gd-core/src/actions/page';
-import { BarChart } from 'gd-core/src/components/d3';
 import { entries } from 'gd-core/src/utils/array';
 import { useElementRect } from 'gd-core/src/utils/hooks';
 import logger from 'gd-core/src/utils/logger';
 
 import type { Action as PageAction } from 'gd-core/src/actions/page';
 
-import { BMP_API_URL } from '../config';
-import { BMPContext } from './Context';
+import { BMP_API_URL } from '../../config';
+import { BMPContext } from '../Context';
+import ProgramsCount, { config as programsCountConfig } from './ProgramsCount';
+import ProgramsFunding, { config as programsFundingConfig } from './ProgramsFunding';
+import ProgramsAreaTreated, { config as programsAreaTreatedConfig } from './ProgramsAreaTreated';
 
-import type { QueryParams } from '../utils/flowtype';
+import type { Filters, QueryParams } from '../../utils/flowtype';
 
 const RESULTS = {
-    programs_grouped: {
-        label: 'Programs count',
-        component: (data, containerRect) => <BarChart
-            width={(containerRect.width || 0) * 0.95}
-            height={(containerRect.height || 0) * 0.95}
-            marginTop={50}
-            marginBottom={80}
-            marginLeft={70}
-            marginRight={20}
-            xAxisProps={{
-                title: 'Program',
-                titlePadding: 70
-            }}
-            yAxisProps={{
-                title: 'Count',
-                titlePadding: 0
-            }}
-            barStroke="#4682b4"
-            barsData={data}
-        />
+    programsCount: {
+        component: ProgramsCount,
+        config: programsCountConfig
+    },
+    programsFunding: {
+        component: ProgramsFunding,
+        config: programsFundingConfig
+    },
+    programsAreaTreated: {
+        component: ProgramsAreaTreated,
+        config: programsAreaTreatedConfig
     }
+};
+
+const createRequestParams = (prepareParams: (params: QueryParams) => void, filters: Filters): string => {
+    const params: QueryParams = {
+        limit: 0,
+        applied_date: filters.years[0],
+        sunset: filters.years[1],
+        group_by: [],
+        aggregates: [],
+        order_by: []
+    };
+
+    if (filters.selectedBoundaries.length) {
+        params.group_by.push(filters.boundaryType);
+        params[filters.boundaryType] = filters.selectedBoundaries;
+        params.order_by.push(filters.boundaryType);
+    }
+
+    prepareParams(params);
+
+    return entries(params).reduce((queryParams, [param, value]) => {
+        if (Array.isArray(value)) {
+            value.forEach((v) => {
+                queryParams.push(`${param}=${v}`);
+            });
+        } else {
+            queryParams.push(`${param}=${value}`);
+        }
+        return queryParams;
+    }, []).join('&');
 };
 
 const useStyle = makeStyles({
     plotContainer: {
         height: 300
+    },
+    plotTooltip: {
+        position: 'fixed',
+        background: '#283d4b',
+        color: '#fff',
+        border: '1px solid #eee',
+        borderRadius: 5,
+        padding: 5,
+        opacity: 0
     }
 });
 
@@ -55,37 +87,13 @@ const Results = ({ dispatch }: Props) => {
     const { filters, results, updateResults } = React.useContext(BMPContext);
 
     const [activeResultKey, updateActiveResultKey] = React.useState<string>('');
-    const [activeResultCategory, updateActiveResultCategory] = React.useState<$Keys<typeof RESULTS>>('programs_grouped');
+    const [activeResultCategory, updateActiveResultCategory] = React.useState<$Keys<typeof RESULTS>>('programsCount');
+    const { component: ResultComponent, config: resultConfig } = RESULTS[activeResultCategory];
 
-    const createRequestParams = (): string => {
-        const params: QueryParams = {
-            applied_date: filters.years[0],
-            sunset: filters.years[1],
-            group_by: [],
-            aggregates: []
-        };
-
-        switch (activeResultCategory) {
-            case 'programs_grouped':
-                params.group_by.push('program');
-                params.aggregates.push('program-count');
-                break;
-        }
-
-        return entries(params).reduce((queryParams, [param, value]) => {
-            if (Array.isArray(value)) {
-                value.forEach((v) => {
-                    queryParams.push(`${param}=${v}`);
-                });
-            } else {
-                queryParams.push(`${param}=${value}`);
-            }
-            return queryParams;
-        }, []).join('&');
-    };
+    const plotTooltipRef = React.useRef<null | HTMLDivElement>(null);
 
     const fetchResults = () => {
-        const queryParams = createRequestParams();
+        const queryParams = createRequestParams(resultConfig.prepareParams, filters);
         const queryParamsBase64 = btoa(queryParams);
         if (results[queryParamsBase64]) {
             updateActiveResultKey(queryParamsBase64);
@@ -100,15 +108,9 @@ const Results = ({ dispatch }: Props) => {
             )
                 .then((response) => response.json())
                 .then((response) => {
-                    let categoryResults;
-                    switch (activeResultCategory) {
-                        case 'programs_grouped':
-                            categoryResults = response.results.map(({ program: x, count: y }) => ({ x, y }));
-                            break;
-                    }
                     updateResults({
                         ...results,
-                        [queryParamsBase64]: categoryResults
+                        [queryParamsBase64]: resultConfig.prepareData(filters, response.results)
                     });
                     updateActiveResultKey(queryParamsBase64);
                 })
@@ -135,7 +137,7 @@ const Results = ({ dispatch }: Props) => {
                         value={activeResultCategory}
                         onChange={({ target: { value } }) => updateActiveResultCategory(value)}
                     >
-                        {entries(RESULTS).map(([name, { label }]) => (
+                        {entries(RESULTS).map(([name, { config: { label } }]) => (
                             <option
                                 key={name}
                                 value={name}
@@ -148,8 +150,14 @@ const Results = ({ dispatch }: Props) => {
             </Grid>
             <Grid ref={plotContainer} className={classes.plotContainer} item>
                 {results[activeResultKey] ?
-                    RESULTS[activeResultCategory].component(results[activeResultKey], plotContainerRect) :
+                    <ResultComponent
+                        filters={filters}
+                        data={results[activeResultKey]}
+                        containerRect={plotContainerRect}
+                        tooltipRef={plotTooltipRef}
+                    /> :
                     null}
+                <div ref={plotTooltipRef} className={classes.plotTooltip} />
             </Grid>
         </Grid>
     );

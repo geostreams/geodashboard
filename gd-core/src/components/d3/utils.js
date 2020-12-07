@@ -3,11 +3,12 @@ import type { SVGGElement } from 'dom-helpers';
 
 export const xAxisLabel = (
     parentEl: SVGGElement,
+    label: string,
     x: number,
     y: number,
     color: ?string,
     opacity: ?number,
-    label: string
+    size: ?(number | string)
 ) => {
     parentEl.select('.xTitle').remove();
     return parentEl
@@ -18,26 +19,29 @@ export const xAxisLabel = (
         .attr('text-anchor', 'middle')
         .attr('fill', color || 'currentColor')
         .attr('fill-opacity', opacity || 0.3)
+        .attr('font-size', size || '1.1rem')
         .text(label);
 };
 
 export const yAxisLabel = (
     parentEl: SVGGElement,
+    label: string,
     x: number,
     y: number,
     color: ?string,
     opacity: ?number,
-    label: string
+    size: ?(number | string)
 ) => {
     parentEl.select('.yTitle').remove();
     return parentEl
         .append('text')
         .attr('class', 'yTitle')
-        .attr('x', 0)
-        .attr('y', -10)
+        .attr('x', x)
+        .attr('y', y)
         .attr('text-anchor', 'end')
         .attr('fill', color || 'currentColor')
         .attr('fill-opacity', opacity || 0.3)
+        .attr('font-size', size || '1.1rem')
         .text(label);
 };
 

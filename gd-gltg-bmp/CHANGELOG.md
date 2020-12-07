@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Added support for fetching config from the api
   [GLGVO-709](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-709)
-- Integrate the results view with `gltg-bmp` api
+- Integrate the results view with `gltg-bmp` api and add a few visualizations
   [GLGVO-711](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-711)
 
 

@@ -1,6 +1,8 @@
 // @flow
 import { useEffect, useRef, useState } from 'react';
 
+import type { ElementRect } from './flowtype';
+
 export const useInterval = (callback: Function, delay: ?number) => {
     const savedCallback: { current: Function } = useRef();
 
@@ -26,23 +28,6 @@ export const useInterval = (callback: Function, delay: ?number) => {
         [delay]
     );
 };
-
-type ElementRect = {
-    width: number | null;
-    height: number | null;
-    top: number | null;
-    right: number | null;
-    bottom: number | null;
-    left: number | null;
-    marginTop: number | null;
-    marginRight: number | null;
-    marginBottom: number | null;
-    marginLeft: number | null;
-    paddingTop: number | null;
-    paddingRight: number | null;
-    paddingBottom: number | null;
-    paddingLeft: number | null;
-}
 
 /**
  * A custom hook that receives an `Element` ref and returns an `ElementRect` objects.

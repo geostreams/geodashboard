@@ -308,13 +308,13 @@ const Sidebar = ({
                             }
                             xAxisProps={{
                                 title: 'Year',
-                                titlePadding: 50,
+                                titlePadding: 55,
                                 stroke: '#4682b4',
                                 strokeWidth: 2
                             }}
                             yAxisProps={{
                                 title: 'M. lb',
-                                titlePadding: 40,
+                                titlePadding: 10,
                                 stroke: '#4682b4',
                                 strokeWidth: 2
                             }}
@@ -360,8 +360,8 @@ const Sidebar = ({
                                 ANNUAL NITRATE LOAD
                             </Typography>
                             <SimpleLegend
-                                width={165}
-                                itemHeight={13}
+                                width={230}
+                                itemHeight={25}
                                 marginBottom={4}
                                 data={[
                                     { label: 'Annual Load', type: 'polygon', color: '#117fc9', width: 2, opacity: 1 },
@@ -391,7 +391,7 @@ const Sidebar = ({
                             }}
                             yAxisProps={{
                                 title: 'Tons',
-                                titlePadding: 40,
+                                titlePadding: 10,
                                 stroke: '#4682b4',
                                 strokeWidth: 2
                             }}
@@ -479,7 +479,7 @@ const Sidebar = ({
                             }}
                             yAxisProps={{
                                 title: 'lb/acre',
-                                titlePadding: 40,
+                                titlePadding: 10,
                                 stroke: '#4682b4',
                                 strokeWidth: 2
                             }}
