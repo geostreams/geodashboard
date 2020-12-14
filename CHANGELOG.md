@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## UNRELEASED
+## 3.6.0 - 2020-12-14
+See `gd-glm/CHANGELOG.md`, `gd-smartfarm/CHANGELOG.md`, `gd-gltg-bmp/CHANGELOG.md`, `gd-gltg/CHANGELOG.md`, 
+`gd-geostreaming/CHANGELOG.md`, `gd-core/CHANGELOG.md`, and `gd-core_old/CHANGELOG.md` for specific changes.
 
-### Changed
-See `gd-gltg-bmp/CHANGELOG.md`, `gd-geostreaming/CHANGELOG.md`, and `gd-core` for specific changes.
+- Updated GitHub workflows.
 
 ## [3.5.0] - 2020-08-27
 See `gd-gltg/CHANGELOG.md`, `gd-geostreaming/CHANGELOG.md`, `gd-glm__old`, `gd-glm` for specific changes.
