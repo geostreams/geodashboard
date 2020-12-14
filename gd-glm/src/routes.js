@@ -12,8 +12,6 @@ import __old_TrendsStation from 'gd-glm__old/app/pages/TrendsSensor';
 import __old_TrendsRegion from 'gd-glm__old/app/pages/TrendsRegion';
 // $FlowFixMe
 import __old_TrendsDetail from 'gd-glm__old/app/pages/TrendsDetail';
-// $FlowFixMe
-import __old_Analysis from 'gd-glm__old/app/pages/Analysis';
 import GLMLayout from './containers/Layout';
 import About from './containers/About';
 import Home from './containers/Home';
@@ -26,8 +24,7 @@ const routes = {
     '/search': { component: hocs.withLayout(GLMLayout,__old_Search) },
     '/trendsstations': { component: hocs.withLayout(GLMLayout,__old_TrendsStation), exact: true },
     '/trendsregions': { component: hocs.withLayout(GLMLayout,__old_TrendsRegion) },
-    '/trendsdetail/region/:region/:parameter/:season': { component: hocs.withLayout(GLMLayout,__old_TrendsDetail) },
-    '/analysis': { component: hocs.withLayout(GLMLayout,__old_Analysis) }
+    '/trendsdetail/region/:region/:parameter/:season': { component: hocs.withLayout(GLMLayout,__old_TrendsDetail) }
 };
 
 export default routes;
