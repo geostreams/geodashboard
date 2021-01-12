@@ -34,8 +34,10 @@ const StackedBarChartWrapper = (props: Props) => {
         tooltipContainerRef
     } = props;
 
-    const [barChartContainer, barChartContainerRect] = useElementRect();
-    const [legendContainer, legendContainerRect] = useElementRect();
+    const barChartContainer = React.useRef();
+    const barChartContainerRect = useElementRect(barChartContainer);
+    const legendContainer = React.useRef();
+    const legendContainerRect = useElementRect(legendContainer);
 
     const processedData = [];
     const years = new Set();
@@ -60,13 +62,13 @@ const StackedBarChartWrapper = (props: Props) => {
                             xAxisProps={{
                                 scale: scaleBand().domain(Array.from(years).sort()),
                                 key: 'year',
-                                titlePadding: 50
+                                titleYPadding: 50
                             }}
                             yAxisProps={{
                                 scale: scaleLinear(),
                                 keys: categories,
                                 title: unit,
-                                titlePadding: 30
+                                titleYPadding: 20
                             }}
                             data={processedData}
                             barFill={(d) => colors[d.index]}

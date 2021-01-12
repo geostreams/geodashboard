@@ -56,7 +56,8 @@ const useStyle = makeStyles({
 const TestBarChart = () => {
     const classes = useStyle();
 
-    const [container, containerRect] = useElementRect();
+    const container = React.useRef();
+    const containerRect = useElementRect(container);
 
     const [data, updateData] = React.useState(updateSelected(FIXTURE.data, INITIAL_YEAR));
     const [year, updateYear] = React.useState(INITIAL_YEAR);

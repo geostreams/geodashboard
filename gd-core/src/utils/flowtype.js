@@ -1,4 +1,20 @@
 // @flow
+export type ElementRect = {
+    width: number | null;
+    height: number | null;
+    top: number | null;
+    right: number | null;
+    bottom: number | null;
+    left: number | null;
+    marginTop: number | null;
+    marginRight: number | null;
+    marginBottom: number | null;
+    marginLeft: number | null;
+    paddingTop: number | null;
+    paddingRight: number | null;
+    paddingBottom: number | null;
+    paddingLeft: number | null;
+}
 
 type Location = {
     pathname: string;

@@ -4,6 +4,7 @@ import { Box, Container, Fab, Tooltip, Typography, makeStyles } from '@material-
 import FiltersIcon from '@material-ui/icons/Tune';
 import ResultsIcon from '@material-ui/icons/BarChart';
 
+import { BMPContext } from './Context';
 import Filters from './Filters';
 import Results from './Results';
 
@@ -21,7 +22,7 @@ const useStyle = makeStyles({
 const Sidebar = () => {
     const classes = useStyle();
 
-    const [showResults, updateShowResults] = React.useState(false);
+    const { activeView, updateActiveView } = React.useContext(BMPContext);
 
     return (
         <>
@@ -30,14 +31,14 @@ const Sidebar = () => {
                 display="flex"
                 alignItems="center"
             >
-                {showResults ?
+                {activeView === 'results' ?
                     <>
                         <Typography variant="h4">
                             Results
                         </Typography>
                         <Box display="flex" flexGrow={1} justifyContent="end">
                             <Tooltip title="Back to the filters">
-                                <Fab color="primary" size="small" onClick={() => updateShowResults(!showResults)}>
+                                <Fab color="primary" size="small" onClick={() => updateActiveView('filter')}>
                                     <FiltersIcon />
                                 </Fab>
                             </Tooltip>
@@ -49,7 +50,7 @@ const Sidebar = () => {
                         </Typography>
                         <Box display="flex" flexGrow={1} justifyContent="end">
                             <Tooltip title="See the results">
-                                <Fab color="primary" size="small" onClick={() => updateShowResults(!showResults)}>
+                                <Fab color="primary" size="small" onClick={(() => updateActiveView('results'))}>
                                     <ResultsIcon />
                                 </Fab>
                             </Tooltip>
@@ -61,7 +62,7 @@ const Sidebar = () => {
                     className={classes.headerText}
                     variant="h5"
                 >
-                    {showResults ? <Results /> : <Filters />}
+                    {activeView === 'results' ? <Results /> : <Filters />}
                 </Typography>
             </Container>
         </>

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Moved `callAPI` from `gd-geostreaming` to `gd-core` and added error callback
   [GLGVO-709](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-709)
+- Refactored `useElementRect` and fixed charts' axis titles' padding
+  [GLGVO-711](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-711)
 
 ## [3.4.0] - 2020-08-27
 ### Added

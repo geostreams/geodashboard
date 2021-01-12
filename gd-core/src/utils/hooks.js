@@ -1,6 +1,8 @@
 // @flow
 import { useEffect, useRef, useState } from 'react';
 
+import type { ElementRect } from './flowtype';
+
 export const useInterval = (callback: Function, delay: ?number) => {
     const savedCallback: { current: Function } = useRef();
 
@@ -27,34 +29,16 @@ export const useInterval = (callback: Function, delay: ?number) => {
     );
 };
 
-type ElementRect = {
-    width: number | null;
-    height: number | null;
-    top: number | null;
-    right: number | null;
-    bottom: number | null;
-    left: number | null;
-    marginTop: number | null;
-    marginRight: number | null;
-    marginBottom: number | null;
-    marginLeft: number | null;
-    paddingTop: number | null;
-    paddingRight: number | null;
-    paddingBottom: number | null;
-    paddingLeft: number | null;
-}
-
 /**
- * A custom hook that returns an array of a `red` and `rect` objects.
- * `ref` can be assigned to an element via its `ref` attribute and then the hook handles changes in the element position
- * and size and returns those relevant attributes such  as top, left, width, and height in `rect`.
- * This is handles via `handleResize` event listener. This event listener is added on component mount
+ * A custom hook that receives an `Element` ref and returns an `ElementRect` objects.
+ * The hook handles changes in the element position and size and returns those relevant attributes such
+ * as top, left, width, and height in the `ElementRect` object.
+ * This is handled via `handleResize` event listener. This event listener is added on component mount
  * and removed on unmount.
- *
- * @returns {[{current: (HTMLElement|null)}, ElementRect]}
+ * @returns {ElementRect} an `ElementRect` object
  */
-export const useElementRect = (): [{ current: HTMLElement | null }, ElementRect] => {
-    const INITIAL_RECT = {
+export const useElementRect = (elementRef: {|current: ?React$ElementRef<string>|}): ElementRect => {
+    const INITIAL_RECT: ElementRect = {
         width: null,
         height: null,
         top: null,
@@ -71,21 +55,14 @@ export const useElementRect = (): [{ current: HTMLElement | null }, ElementRect]
         paddingLeft: null
     };
 
-    const ref: { current: HTMLElement | null } = useRef(null);
     const [rect, setRect] = useState(INITIAL_RECT);
 
     const handleResize = () => {
         let updatedRect = INITIAL_RECT;
-        if (ref.current) {
-            const {
-                width,
-                height,
-                top,
-                bottom,
-                right,
-                left
-            } = ref.current.getBoundingClientRect();
-            const refStyle = window.getComputedStyle(ref.current);
+        const element = elementRef.current;
+        if (element) {
+            const { width, height, top, bottom, right, left } = element.getBoundingClientRect();
+            const refStyle = window.getComputedStyle(element);
             const paddingTop = parseFloat(refStyle.paddingTop);
             const paddingRight = parseFloat(refStyle.paddingRight);
             const paddingBottom = parseFloat(refStyle.paddingBottom);
@@ -96,8 +73,8 @@ export const useElementRect = (): [{ current: HTMLElement | null }, ElementRect]
             const marginLeft = parseFloat(refStyle.marginLeft);
 
             updatedRect = {
-                width: width - paddingLeft - paddingRight - marginLeft - marginRight,
-                height: height - paddingTop - paddingBottom - marginTop - marginBottom,
+                width,
+                height,
                 top,
                 right,
                 bottom,
@@ -121,5 +98,5 @@ export const useElementRect = (): [{ current: HTMLElement | null }, ElementRect]
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    return [ref, rect];
+    return rect;
 };

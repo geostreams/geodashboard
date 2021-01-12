@@ -60,7 +60,7 @@ export const getStyle = (options: string[], feature: FeatureType, featureIdKey: 
 };
 
 export const BOUNDARIES: { [k: string]: Boundary } = {
-    states: {
+    state: {
         visible: true,
         label: 'States',
         idKey: 'id',
@@ -70,7 +70,7 @@ export const BOUNDARIES: { [k: string]: Boundary } = {
             crs: 900913
         }
     },
-    huc8: {
+    huc_8: {
         visible: false,
         label: 'HUC-8s',
         idKey: 'huc8',
@@ -129,6 +129,6 @@ export const YEAR_RANGE = [1980, 2020];
 
 export const INITIAL_FILTERS: Filters = {
     years: YEAR_RANGE,
-    boundaryType: 'states',
+    boundaryType: 'state',
     selectedBoundaries: []
 };

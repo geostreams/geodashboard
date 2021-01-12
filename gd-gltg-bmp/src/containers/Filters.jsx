@@ -16,7 +16,7 @@ import { Autocomplete } from '@material-ui/lab';
 import { entries } from 'gd-core/src/utils/array';
 
 import { BOUNDARIES, YEAR_RANGE } from '../config';
-import { FiltersContext } from './Context';
+import { BMPContext } from './Context';
 
 const useStyle = makeStyles((theme) => ({
     formControl: {
@@ -28,7 +28,7 @@ const useStyle = makeStyles((theme) => ({
 const Filters = () => {
     const classes = useStyle();
 
-    const { dispatch, filters, config } = React.useContext(FiltersContext);
+    const { dispatchFilterUpdate, filters, config } = React.useContext(BMPContext);
 
     const {
         years,
@@ -44,7 +44,7 @@ const Filters = () => {
                 value={years}
                 min={YEAR_RANGE[0]}
                 max={YEAR_RANGE[1]}
-                onChange={(e, value) => dispatch({ type: 'years', value })}
+                onChange={(e, value) => dispatchFilterUpdate({ type: 'years', value })}
                 valueLabelDisplay="auto"
             />
 
@@ -66,7 +66,7 @@ const Filters = () => {
                             id: 'BoundaryType'
                         }}
                         onChange={({ target: { value } }) => {
-                            dispatch({ type: 'boundaryType', value });
+                            dispatchFilterUpdate({ type: 'boundaryType', value });
                         }}
                     >
                         {entries(BOUNDARIES).map(([name, { label }]) => (
@@ -99,7 +99,7 @@ const Filters = () => {
                         />
                     )}
                     onChange={(e, selectedOptions) => {
-                        dispatch({ type: 'selectedBoundaries', value: selectedOptions });
+                        dispatchFilterUpdate({ type: 'selectedBoundaries', value: selectedOptions });
                     }}
                 />
             </Box>
