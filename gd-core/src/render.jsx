@@ -15,7 +15,8 @@ import type { Routes } from './routes';
 const render = (
     reducers: { [key: string]: Function } = baseReducers,
     routes: Routes = baseRoutes,
-    storeCallback: Function
+    storeCallback: Function,
+    theme: Object,
 ) => {
     const composeEnhancers = (
         (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
@@ -37,7 +38,7 @@ const render = (
         ReactDOM.render(
             <Provider store={store}>
                 <Router>
-                    <App routes={routes} />
+                    <App routes={routes} theme={theme} />
                 </Router>
             </Provider>,
             root

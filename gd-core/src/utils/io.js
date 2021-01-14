@@ -1,13 +1,18 @@
 // @flow
-import { updateLoadingStatus } from 'gd-core/src/actions/page';
-import logger from 'gd-core/src/utils/logger';
+import { updateLoadingStatus } from '../actions/page';
 
-export const callAPI = (host: string, endpoint: string, successCallback: ?Function, dispatch: ?Function) => {
+export const callAPI = (
+    host: string,
+    endpoint: string,
+    successCallback: ?Function,
+    errorCallback: ?Function,
+    dispatch: ?Function
+) => {
     if (dispatch) {
         dispatch(updateLoadingStatus(true));
     }
 
-    return fetch(`${host}/api/${endpoint}`)
+    return fetch(`${host}${endpoint}`)
         .then(response => response.json())
         .then((json) => {
             if (successCallback) {
@@ -15,7 +20,9 @@ export const callAPI = (host: string, endpoint: string, successCallback: ?Functi
             }
         })
         .catch((error) => {
-            logger.error(`Error: ${error}`);
+            if (errorCallback) {
+                errorCallback(error);
+            }
         })
         .finally(() => {
             if (dispatch) {

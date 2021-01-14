@@ -5,9 +5,10 @@ import { Grid, Typography, makeStyles } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 
 import { entries } from 'gd-core/src/utils/array';
+import { callAPI } from 'gd-core/src/utils/io';
+import logger from 'gd-core/src/utils/logger';
 
 import type { ParameterType, ParameterValue } from '../../../utils/flowtype';
-import { callAPI } from '../../../utils/io';
 
 import LineChartWrapper from './LineChartWrapper';
 import StackedBarChartWrapper from './StackedBarChartWrapper';
@@ -79,10 +80,11 @@ const Parameters = (props: Props) => {
     React.useEffect(() => {
         callAPI(
             geostreamingEndpoint,
-            `cache/${binType}/${sensorId}?${queryParams}`,
+            `/api/cache/${binType}/${sensorId}?${queryParams}`,
             ({ properties }) => {
                 updateOriginalData(properties);
-            }
+            },
+            logger.error
         );
     }, [binType, queryParams]);
 

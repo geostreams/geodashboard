@@ -1,6 +1,6 @@
 {
   "name": "gd-glm",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "main": "src/index.jsx",
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.dev.js --color",
@@ -12,7 +12,9 @@
     "gd-core__old": "file:../gd-core__old",
     "gd-geostreaming": "file:../gd-geostreaming",
     "gd-glm__old": "file:../gd-glm__old",
-    "material-components-web": "0.26.0"
+    "material-components-web": "0.26.0",
+    "react-flexbox-grid": "1.1.3",
+    "react-mdc-web": "0.17.0"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^6.0.3"

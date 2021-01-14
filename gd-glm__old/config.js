@@ -65,28 +65,6 @@ export const gd3 = {
     // This variable is used to determine the location for links to the Detail Page
     application_website: "/",
 
-    // Home Page Carousel file names - Should be located in /geodashboard-v3/theme folder
-    home_page_carousel_images: [
-        'images/ss_000.jpg',
-        'images/ss_001.jpg',
-        'images/ss_002.jpg',
-        'images/ss_003.jpg',
-        'images/ss_004.jpg',
-        'images/ss_005.jpg',
-        'images/ss_006.jpg',
-        'images/ss_007.jpg',
-        'images/ss_008.jpg',
-        'images/ss_009.jpg',
-        'images/ss_010.jpg',
-        'images/ss_011.jpg',
-        'images/ss_012.jpg',
-        'images/ss_013.jpg',
-        'images/ss_014.jpg',
-    ],
-
-    // Home Page Carousel Caption Information - Numbers correspond to the order of images above
-    home_page_carousel_captions : {},
-
     // Should Tabs to select multi-parameter graphs be displayed on the Detail Page
     show_detail_tabs: true,
 
