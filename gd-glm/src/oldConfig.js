@@ -1171,6 +1171,27 @@ export const gd3 = {
                 title: 'Turbidity (NTU)',
                 lake_regions: false
             }
+        },
+        {
+            parameter: {
+                id: 'zooplankton-biomass',
+                title: 'Zooplankton Biovolume Total',
+                lake_regions: false
+            }
+        },
+        {
+            parameter: {
+                id: 'zooplankton-density',
+                title: 'Zooplankton Density Total',
+                lake_regions: false
+            }
+        },
+        {
+            parameter: {
+                id: 'phytoplankton-biovolume',
+                title: 'Phytoplankton Biovolume Total',
+                lake_regions: false
+            }
         }
     ],
 
