@@ -11,6 +11,7 @@ import type { Action as PageAction } from 'gd-core/src/actions/page';
 
 import { BMP_API_URL } from '../../config';
 import { BMPContext } from '../Context';
+import NutrientReduction, { config as nutrientReductionConfig } from './NutrientReduction';
 import ProgramsCount, { config as programsCountConfig } from './ProgramsCount';
 import ProgramsFunding, { config as programsFundingConfig } from './ProgramsFunding';
 import ProgramsAreaTreated, { config as programsAreaTreatedConfig } from './ProgramsAreaTreated';
@@ -29,6 +30,10 @@ const RESULTS = {
     programsAreaTreated: {
         component: ProgramsAreaTreated,
         config: programsAreaTreatedConfig
+    },
+    nutrientReduction: {
+        component: NutrientReduction,
+        config: nutrientReductionConfig
     }
 };
 
@@ -62,9 +67,14 @@ const createRequestParams = (prepareParams: (params: QueryParams) => void, filte
     }, []).join('&');
 };
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme) => ({
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 150
+    },
     plotContainer: {
-        height: 300
+        height: '100%',
+        overflowY: 'auto'
     },
     plotTooltip: {
         position: 'fixed',
@@ -75,7 +85,7 @@ const useStyle = makeStyles({
         padding: 5,
         opacity: 0
     }
-});
+}));
 
 type Props = {
     dispatch: (pageAction: PageAction) => void;
@@ -110,7 +120,7 @@ const Results = ({ dispatch }: Props) => {
                 .then((response) => {
                     updateResults({
                         ...results,
-                        [queryParamsBase64]: resultConfig.prepareData(filters, response.results)
+                        [queryParamsBase64]: response.results
                     });
                     updateActiveResultKey(queryParamsBase64);
                 })
@@ -135,7 +145,10 @@ const Results = ({ dispatch }: Props) => {
                     <Select
                         native
                         value={activeResultCategory}
-                        onChange={({ target: { value } }) => updateActiveResultCategory(value)}
+                        onChange={({ target: { value } }) => {
+                            updateActiveResultKey('');
+                            updateActiveResultCategory(value);
+                        }}
                     >
                         {entries(RESULTS).map(([name, { config: { label } }]) => (
                             <option

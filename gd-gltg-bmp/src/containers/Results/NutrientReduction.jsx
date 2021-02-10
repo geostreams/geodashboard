@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { VegaLite } from 'react-vega';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, makeStyles } from '@material-ui/core';
+import { makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { entries } from 'gd-core/src/utils/array';
 import { precision } from 'gd-core/src/utils/format';
 
@@ -11,43 +11,48 @@ import type { Filters, QueryParams } from '../../utils/flowtype';
 
 
 export const config = {
-    label: 'Programs Count',
+    label: 'Nutrient reduction',
     prepareParams: (params: QueryParams) => {
-        params.group_by.push('program');
-        params.group_by.push('applied_date');
-        params.aggregates.push('program-count');
-        params.order_by.push('-program-count');
+        params.aggregates.push('p_reduction_fraction-sum');
+        params.aggregates.push('n_reduction_fraction-sum');
+        params.order_by.push('-p_reduction_fraction-sum');
+        params.order_by.push('-p_reduction_fraction-sum');
     },
     chartSpec: {
-        data: { name: 'program_count' },
+        data: { name: 'nutrient_reduction' },
+        transform: [
+            { calculate: 'datum["p_reduction_fraction-sum"] * 100', as: 'P' },
+            { calculate: 'datum["n_reduction_fraction-sum"] * 100', as: 'N' },
+            { fold: ['P', 'N'], as: ['nutrient', 'reduction'] }
+        ],
         mark: 'bar',
         selection: {
-            program: {
+            nutrient: {
                 type: 'multi',
-                fields: ['program'],
+                fields: ['nutrient'],
                 bind: 'legend'
             }
         },
         encoding: {
             row: { field: '', title: '' },
             x: {
-                field: 'program-count',
-                title: 'Count',
+                field: 'reduction',
+                title: 'Reduction (%)',
                 type: 'quantitative',
-                axis: { format: ',.0d' }
+                axis: { format: ',.01f' }
             },
-            y: { field: 'applied_date', title: 'Year' },
+            y: { field: 'nutrient', axis: { title: '' } },
             color: {
-                field: 'program',
+                field: 'nutrient',
                 scale: { scheme: 'category10' },
-                title: 'Program',
+                title: 'Nutrient',
                 legend: { orient: 'top' }
             },
             opacity: {
-                condition: { selection: 'program', value: 1 },
+                condition: { selection: 'nutrient', value: 1 },
                 value: 0.2
             },
-            tooltip: { field: 'program-count', format: ',.01d' }
+            tooltip: { field: 'reduction', format: ',.02f' }
         }
     }
 };
@@ -62,15 +67,14 @@ type Props = {
     filters: Filters;
     /** Sample data
      * [
-     *   { "state": "Indiana", "program": "EQIP", "applied_date": 2015, "program-count": 2952 },
-     *   { "state": "Indiana", "program": "EQIP", "applied_date": 2016, "program-count": 2809 },
+     *   { "state": "Illinois", "p_reduction_fraction-sum": 0.0004683620385481556, "n_reduction_fraction-sum": 0.000493042593381203 },
+     *   { "state": "Iowa", "p_reduction_fraction-sum": 0.0015097308506042226, "n_reduction_fraction-sum": 0.0018844352499341763 },
      *   ...
      * ]
      */
     data: Array<{
-        'program': string;
-        'applied_date': number;
-        'program-count': number;
+        'p_reduction_fraction-sum': number;
+        'n_reduction_fraction-sum': number;
         // Each item has only one of the following boundary types:
         'state'?: string;
         'huc_8'?: string;
@@ -78,7 +82,7 @@ type Props = {
     containerRect: ElementRect;
 };
 
-const ProgramsCount = (props: Props) => {
+const NutrientReduction = (props: Props) => {
     const classes = useStyle();
 
     const { containerRect, filters } = props;
@@ -95,22 +99,21 @@ const ProgramsCount = (props: Props) => {
         config.chartSpec.encoding.row = { field: '', title: '' };
     }
 
-    const programsSet = new Set();
+    const nutrients = ['p_reduction_fraction-sum', 'n_reduction_fraction-sum'];
     const tableData = {};
     props.data.forEach((d) => {
         const boundaryId: string = filters.selectedBoundaries.length ? (d[filters.boundaryType]: any) : 'Total';
 
-        programsSet.add(d.program);
-
         if (tableData[boundaryId]) {
-            tableData[boundaryId][d.program] = (tableData[boundaryId][d.program] || 0) + (d['program-count'] || 0);
+            tableData[boundaryId]['p_reduction_fraction-sum'] += (d['p_reduction_fraction-sum'] || 0);
+            tableData[boundaryId]['n_reduction_fraction-sum'] += (d['n_reduction_fraction-sum'] || 0);
         } else {
             tableData[boundaryId] = {
-                [d.program]: d['program-count'] || 0
+                'p_reduction_fraction-sum': d['p_reduction_fraction-sum'] || 0,
+                'n_reduction_fraction-sum': d['n_reduction_fraction-sum'] || 0
             };
         }
     });
-    const programs = Array.from(programsSet);
 
     return (
         <>
@@ -123,7 +126,7 @@ const ProgramsCount = (props: Props) => {
                     compiled: process.env.NODE_ENV === 'development',
                     editor: process.env.NODE_ENV === 'development'
                 }}
-                data={{ program_count: props.data }}
+                data={{ nutrient_reduction: props.data }}
                 spec={config.chartSpec}
             />
             <TableContainer className={classes.tableContainer}>
@@ -131,22 +134,25 @@ const ProgramsCount = (props: Props) => {
                     <TableHead>
                         <TableRow>
                             <TableCell />
-                            {programs.map((program) => (
-                                <TableCell key={program} align="center">{program}</TableCell>
-                            ))}
+                            <TableCell align="center">P</TableCell>
+                            <TableCell align="center">N</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell />
+                            <TableCell colSpan={2} align="center">Reduction (%)</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {entries(tableData).map(([
                             boundary,
-                            boundaryPrograms
+                            boundaryNutrients
                         ]) => (
                             <TableRow key={boundary}>
-                                <TableCell>
-                                    {boundary}
-                                </TableCell>
-                                {programs.map((program: string) => (
-                                    <TableCell key={program} align="center">{precision(boundaryPrograms[program] || 0, 0)}</TableCell>
+                                <TableCell>{boundary}</TableCell>
+                                {nutrients.map((nutrient: string) => (
+                                    <TableCell key={nutrient} align="center">
+                                        {boundaryNutrients[nutrient] ? `${precision((boundaryNutrients[nutrient] || 0) * 100, 5)}%` : '-'}
+                                    </TableCell>
                                 ))}
                             </TableRow>
                         ))}
@@ -157,4 +163,4 @@ const ProgramsCount = (props: Props) => {
     );
 };
 
-export default ProgramsCount;
+export default NutrientReduction;

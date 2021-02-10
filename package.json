@@ -30,8 +30,11 @@
     "react-dom": "~16.13.1",
     "react-redux": "~7.2.1",
     "react-router-dom": "~5.2.0",
+    "react-vega": "^7.4.2",
     "redux": "~4.0.5",
-    "redux-thunk": "~2.3.0"
+    "redux-thunk": "~2.3.0",
+    "vega": "^5.19.1",
+    "vega-lite": "^4.17.0"
   },
   "devDependencies": {
     "@babel/core": "~7.11.4",

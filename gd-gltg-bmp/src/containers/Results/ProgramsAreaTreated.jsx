@@ -1,8 +1,7 @@
 // @flow
 import React from 'react';
-import { scaleBand, scaleLinear } from 'd3';
+import { VegaLite } from 'react-vega';
 import { makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import { StackedBarChart } from 'gd-core/src/components/d3';
 import { entries } from 'gd-core/src/utils/array';
 import { precision } from 'gd-core/src/utils/format';
 
@@ -15,67 +14,41 @@ export const config = {
     label: 'Programs - Area Treated',
     prepareParams: (params: QueryParams) => {
         params.group_by.push('program');
+        params.group_by.push('applied_date');
         params.aggregates.push('area_treated-sum');
         params.order_by.push('-area_treated-sum');
     },
-    prepareData: (filters: Filters, data: { [k: string]: any }) => {
-        const chartDataObject = {};
-        const tableDataObject = {};
-        const programs = [];
-        const colors = {};
-        const colorScale = scaleLinear([0, filters.selectedBoundaries.length], ['blue', 'green']);
-
-        data.forEach((d, idx) => {
-            const boundaryId: string = filters.selectedBoundaries.length ? (d[filters.boundaryType]: any) : 'Total';
-            const color = colorScale(idx);
-
-            if (!colors[boundaryId]) {
-                colors[boundaryId] = color;
+    chartSpec: {
+        data: { name: 'area_treated' },
+        mark: 'bar',
+        selection: {
+            program: {
+                type: 'multi',
+                fields: ['program'],
+                bind: 'legend'
             }
-
-            if (chartDataObject[d.program]) {
-                chartDataObject[d.program][boundaryId] = d['area_treated-sum'];
-            } else {
-                chartDataObject[d.program] = {
-                    [boundaryId]: d['area_treated-sum']
-                };
-            }
-
-            if (tableDataObject[boundaryId]) {
-                tableDataObject[boundaryId][d.program] = d['area_treated-sum'];
-            } else {
-                tableDataObject[boundaryId] = {
-                    color,
-                    [d.program]: d['area_treated-sum']
-                };
-            }
-        });
-
-        const chartData = entries(chartDataObject).reduce(
-            (processedData, [program, d]) => {
-                filters.selectedBoundaries.forEach((boundary) => {
-                    if (!d[boundary]) {
-                        d[boundary] = 0;
-                    }
-                });
-                processedData.push({
-                    ...d,
-                    program
-                });
-                programs.push(program);
-                return processedData;
+        },
+        encoding: {
+            row: { field: '', title: '' },
+            x: {
+                field: 'area_treated-sum',
+                title: 'Area treated',
+                type: 'quantitative',
+                axis: { format: ',.0f' }
             },
-            []
-        );
-
-        programs.sort();
-
-        return {
-            programs,
-            colors,
-            chartData,
-            tableData: tableDataObject
-        };
+            y: { field: 'applied_date', title: 'Year' },
+            color: {
+                field: 'program',
+                scale: { scheme: 'category10' },
+                title: 'Program',
+                legend: { orient: 'top' }
+            },
+            opacity: {
+                condition: { selection: 'program', value: 1 },
+                value: 0.2
+            },
+            tooltip: { field: 'area_treated-sum', format: ',.01f' }
+        }
     }
 };
 
@@ -87,85 +60,96 @@ const useStyle = makeStyles({
 
 type Props = {
     filters: Filters;
-    data: {
-        colors: { [boundary: string]: string };
-        programs: string[];
-        chartData: Array<{ [k: string]: any }>;
-        tableData: {
-            color: string;
-            [program: string]: number;
-        }
-    };
+    /** Sample data
+     * [
+     *   { "state": "Illinois", "program": "EQIP", "applied_date": 2007, "area_treated-sum": 36.63392857142857 },
+     *   { "state": "Iowa", "program": "CSP", "applied_date": 2015, "area_treated-sum": 269182.60000000003 },
+     *   ...
+     * ]
+     */
+    data: Array<{
+        'program': string;
+        'applied_date': number;
+        'area_treated-sum': number;
+        // Each item has only one of the following boundary types:
+        'state'?: string;
+        'huc_8'?: string;
+    }>;
     containerRect: ElementRect;
 };
 
-const ProgramsAreaTreated = ({
-    filters,
-    data,
-    containerRect
-}: Props) => {
+const ProgramsAreaTreated = (props: Props) => {
     const classes = useStyle();
+
+    const { containerRect, filters } = props;
+
+    if (filters.selectedBoundaries.length) {
+        if (filters.boundaryType === 'state') {
+            config.chartSpec.encoding.row.field = 'state';
+            config.chartSpec.encoding.row.title = 'State';
+        } else if (filters.boundaryType === 'huc_8') {
+            config.chartSpec.encoding.row.field = 'huc_8';
+            config.chartSpec.encoding.row.title = 'HUC8';
+        }
+    } else {
+        config.chartSpec.encoding.row = { field: '', title: '' };
+    }
+
+    const programsSet = new Set();
+    const tableData = {};
+    props.data.forEach((d) => {
+        const boundaryId: string = filters.selectedBoundaries.length ? (d[filters.boundaryType]: any) : 'Total';
+
+        programsSet.add(d.program);
+
+        if (tableData[boundaryId]) {
+            tableData[boundaryId][d.program] = (tableData[boundaryId][d.program] || 0) + (d['area_treated-sum'] || 0);
+        } else {
+            tableData[boundaryId] = {
+                [d.program]: d['area_treated-sum'] || 0
+            };
+        }
+    });
+    const programs = Array.from(programsSet);
+
     return (
         <>
-            <StackedBarChart
-                width={(containerRect.width || 0) * 0.95}
-                height={(containerRect.height || 0) * 0.95}
-                marginTop={50}
-                marginBottom={80}
-                marginLeft={70}
-                marginRight={20}
-                xAxisProps={{
-                    scale: scaleBand().domain(data.chartData.map(({ program }) => program)),
-                    key: 'program',
-                    title: 'Program',
-                    titleYPadding: 40
+            <VegaLite
+                width={(containerRect.width || 0) * 0.6}
+                height={(containerRect.height || 0) * 0.6}
+                actions={{
+                    export: true,
+                    source: process.env.NODE_ENV === 'development',
+                    compiled: process.env.NODE_ENV === 'development',
+                    editor: process.env.NODE_ENV === 'development'
                 }}
-                yAxisProps={{
-                    scale: scaleLinear(),
-                    keys: filters.selectedBoundaries.length ? filters.selectedBoundaries : ['Total'],
-                    title: 'Area Treated (acre)',
-                    titleXPadding: 30,
-                    titleYPadding: 15,
-                    titleSize: '1rem'
-                }}
-                data={data.chartData}
-                barFill={(d) => data.colors[d.key]}
+                data={{ area_treated: props.data }}
+                spec={config.chartSpec}
             />
             <TableContainer className={classes.tableContainer}>
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>
                             <TableCell />
-                            {data.programs.map((program) => (
+                            {programs.map((program) => (
                                 <TableCell key={program} align="center">{program}</TableCell>
                             ))}
                         </TableRow>
                         <TableRow>
                             <TableCell />
-                            <TableCell colSpan={data.programs.length} align="center">Acres</TableCell>
+                            <TableCell colSpan={programs.length} align="center">Acres</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {entries(data.tableData).map(([
+                        {entries(tableData).map(([
                             boundary,
                             boundaryPrograms
                         ]) => (
                             <TableRow key={boundary}>
-                                <TableCell>
-                                    <div
-                                        style={{
-                                            display: 'inline-block',
-                                            width: 10,
-                                            height: 10,
-                                            marginRight: 10,
-                                            background: boundaryPrograms.color
-                                        }}
-                                    />
-                                    {boundary}
-                                </TableCell>
-                                {data.programs.map((program: string) => (
+                                <TableCell>{boundary}</TableCell>
+                                {programs.map((program: string) => (
                                     <TableCell key={program} align="center">
-                                        {boundaryPrograms[program] ? precision(boundaryPrograms[program], 0) : '-'}
+                                        {boundaryPrograms[program] ? precision(boundaryPrograms[program] || 0, 0) : '-'}
                                     </TableCell>
                                 ))}
                             </TableRow>
