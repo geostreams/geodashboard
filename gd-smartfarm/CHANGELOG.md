@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
+## UNRELEASED
+
+- Added explore layers for satellite images and research regions [SMARTFARM-20](https://opensource.ncsa.illinois.edu/jira/browse/SMARTFARM-20)
 
 ## 3.6.0 - 2020-12-14
 

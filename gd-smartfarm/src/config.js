@@ -8,10 +8,18 @@ export default {
         displayOnlineStatus: true
     },
     source: {
-        mbclab: {
-            label : 'MBC Lab',
+        field: {
+            label : 'Field Data',
             order : 1,
             color : '#a87c03',
+            description : 'Data collected by the Midwest Bioenergy Crops Landscape Lab',
+            more_info : '',
+            link : 'https://arpa-e.energy.gov/technologies/projects/midwest-bioenergy-crop-landscape-laboratory-mbc-lab-capturing-spatio-temporal' 
+        },
+        subfield: {
+            label : 'Subfield Data',
+            order : 1,
+            color : '#8A2BE2',
             description : 'Data collected by the Midwest Bioenergy Crops Landscape Lab',
             more_info : '',
             link : 'https://arpa-e.energy.gov/technologies/projects/midwest-bioenergy-crop-landscape-laboratory-mbc-lab-capturing-spatio-temporal' 
