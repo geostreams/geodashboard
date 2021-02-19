@@ -87,6 +87,86 @@ export const gd3 = {
 
     // Layers for the Explore Page
     exploreLayers: [
+        {
+            layerGroup: 'Research Region',
+            title: 'Research Region',
+            id: '602d9528e4b0b7c798c8212e:research-region.zip_602d954fe4b0b7c798c82134',
+            wms: `${process.env.GEOSERVER_URL}/wms`,
+            opacity: 0.80,
+            visibility: false,
+            legendShow: true,
+            legendStartOpen: false,
+            legendTitle: 'Opacity',
+            legendText: '',
+            legendImage: `${process.env.GEOSERVER_URL}/wms?request=GetMap&` +
+            'layers=602d9528e4b0b7c798c8212e:research-region.zip_602d954fe4b0b7c798c82134&bbox=-9828873.095744213,4848513.033479578,-9812933.65369004,4867025.709042344&' +
+            'width=640&height=480&srs=EPSG:3857&format=image%2Fpng'
+        },
+        {
+            layerGroup: 'Satellite Multispectral Image SR',
+            title: 'SR 09-30-2020',
+            id: '601d8c3fe4b0affc633634ad:SatelliteImage.Reifsteck.2020.09.30.SR.tif_601d8d40e4b0affc63363757 ',
+            wms: `${process.env.GEOSERVER_URL}/wms`,
+            opacity: 0.80,
+            visibility: false,
+            legendShow: true,
+            legendStartOpen: false,
+            legendTitle: 'Opacity',
+            legendText: '',
+            legendImage: `${process.env.GEOSERVER_URL}wms?request=GetMap&` +
+            'layers=601d8c3fe4b0affc633634ad:SatelliteImage.Reifsteck.2020.09.30.SR.tif_601d8d40e4b0affc63363757&' +
+            'bbox=-9828974.37528645,4866229.991661974,-9827597.817471862,4867541.604250039' +
+            '&width=640&height=480&srs=EPSG:3857&format=image%2Fpng'
+        },
+        {
+            layerGroup: 'Satellite Multispectral Image SR',
+            title: 'SR 09-01-2020',
+            id: '601d8c3fe4b0affc633634ad:SatelliteImage.Reifsteck.2020.09.01.SR.tif_601d8d40e4b0affc633636fd',
+            wms: `${process.env.GEOSERVER_URL}/wms`,
+            opacity: 0.80,
+            visibility: false,
+            legendShow: true,
+            legendStartOpen: false,
+            legendTitle: 'Opacity',
+            legendText: '',
+            legendImage: `${process.env.GEOSERVER_URL}wms?request=GetMap&` +
+            'layers=601d8c3fe4b0affc633634ad:SatelliteImage.Reifsteck.2020.09.01.SR.tif_601d8d40e4b0affc633636fd&' +
+            'bbox=-9828974.37528645,4866229.991661974,-9827597.817471862,4867541.604250039' +
+            '&width=640&height=480&srs=EPSG:3857&format=image%2Fpng'
+        },
+        {
+            layerGroup: 'Satellite Multispectral Image NDVI',
+            title: 'NDVI 09-30-2020',
+            id: '601d8dcde4b0affc633642ac:SatelliteImage.Reifsteck.2020.09.30.NDVI.tif_601d8e4de4b0affc6336476b',
+            wms: `${process.env.GEOSERVER_URL}/wms`,
+            opacity: 0.80,
+            visibility: false,
+            legendShow: true,
+            legendStartOpen: false,
+            legendTitle: 'Opacity',
+            legendText: '',
+            legendImage: `${process.env.GEOSERVER_URL}wms?request=GetMap&` +
+            'layers=601d8dcde4b0affc633642ac:SatelliteImage.Reifsteck.2020.09.30.NDVI.tif_601d8e4de4b0affc6336476b&' +
+            'bbox=-9828974.37528645,4866229.991661974,-9827597.817471862,4867541.604250039' +
+            '&width=640&height=480&srs=EPSG:3857&format=image%2Fpng'
+        },
+        {
+            layerGroup: 'Satellite Multispectral Image NDVI',
+            title: 'NDVI 09-01-2020',
+            id: '601d8dcde4b0affc633642ac:SatelliteImage.Reifsteck.2020.09.01.NDVI.tif_601d8e4de4b0affc6336471f',
+            wms: `${process.env.GEOSERVER_URL}/wms`,
+            opacity: 0.80,
+            visibility: false,
+            legendShow: true,
+            legendStartOpen: false,
+            legendTitle: 'Opacity',
+            legendText: '',
+            legendImage: `${process.env.GEOSERVER_URL}wms?request=GetMap&` +
+            'layers=601d8dcde4b0affc633642ac:SatelliteImage.Reifsteck.2020.09.01.NDVI.tif_601d8e4de4b0affc6336471f&' +
+            'bbox=-9828974.37528645,4866229.991661974,-9827597.817471862,4867541.604250039' +
+            '&width=640&height=480&srs=EPSG:3857&format=image%2Fpng'
+        }
+
     ],
 
     // Layers for the Analysis Page
@@ -122,29 +202,42 @@ export const gd3 = {
     ie_show_menu_bar_alert: false,
     ie_menu_bar_message_text: '',
 
-    // Source IDs and their Display Names
-    sourcename: {
-    },
-
     // Show Info Boxes on the Explore Page
-    show_source_info_boxes: true,
+    show_source_info_boxes: false,
     // For Source Info Boxes on the Explore Page
     source_information: {
+        field: {
+            prettyName: 'Field Data',
+            description: ''
+        },
+        subfield: {
+            prettyName: 'Subfield Data',
+            description: ''
+        }
     },
 
     source_order: {
+        field: 3,
+        subfield: 1
     },
 
     // Colors associated with specific Sources
     sourcecolor: {
+        subfield: '#0D71BA',
+        field: '#043C82'
     },
-
-    // Will be added to the Exploratory Analysis and Trends Stations Regions
-    draw_and_all_regions: [],
 
     // Explore Page Accordion Source Section Initial Open Status
     // true === open, false === closed
     sources_explore_accordion_open: true,
+
+
+    // Source IDs and their Display Names
+    sourcename: {
+    },
+
+    // Will be added to the Exploratory Analysis and Trends Stations Regions
+    draw_and_all_regions: [],
 
     // Explore Page Sources Child Sections Initial Open Status
     // true === open, false === closed
@@ -182,11 +275,11 @@ export const gd3 = {
     mapClustersDistance: 45,
     clustersChoiceOption: true,
     mapMiniMinZoom: 3,
-    clustersExpandMaxNumberFeatures: 10,
-    mapMaxZoom: 16,
+    clustersExpandMaxNumberFeatures: 50,
+    mapMaxZoom: 17,
     mapMinZoom: 5.5,
     mapCenterValue: [-90.498703, 37.9203417],
-    mapPopupZoomMax: 10
+    mapPopupZoomMax: 16
 };
 // ATTENTION: don't add semicolon at the end of this config. config.js on production will wrap this with additional {}
 // Keep the next new line at the end of the file
