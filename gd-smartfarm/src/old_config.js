@@ -224,7 +224,7 @@ export const gd3 = {
     // Colors associated with specific Sources
     sourcecolor: {
         subfield: '#0D71BA',
-        field: '#043C82'
+        field: '#FF0000'
     },
 
     // Explore Page Accordion Source Section Initial Open Status
