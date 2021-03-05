@@ -1,4 +1,5 @@
-module.exports = {
+// This example config is based on GLTG
+export default {
     map: {
         geoserverUrl: process.env.GEOSERVER_URL,
         zoom: 5.5,

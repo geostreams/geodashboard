@@ -1,7 +1,13 @@
 // @flow
 import { format } from 'd3';
 
-export const date = (s: string): string => new Date(s).toLocaleDateString();
+export const date = (s: string, invalidMessage: ?string): string => {
+    const d = new Date(s);
+    if (Number.isNaN(d.valueOf())) {
+        return invalidMessage || 'Invalid date';
+    }
+    return d.toLocaleDateString();
+};
 
 export const dateUTC = (s: string) => {
     const [year, month, day] = s.split('-').map(Number);

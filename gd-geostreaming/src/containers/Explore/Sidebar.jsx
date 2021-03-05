@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { connect } from 'react-redux';
 import { interpolateRgb } from 'd3';
 import {
     Box,
@@ -14,23 +13,25 @@ import {
 import CircleCheckedFilledIcon from '@material-ui/icons/CheckCircle';
 import CircleUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import { Skeleton } from '@material-ui/lab';
 import BaseSidebar from 'gd-core/src/components/theme/BaseSidebar';
 import SidebarCategory from 'gd-core/src/components/theme/SidebarCategory';
 import { entries } from 'gd-core/src/utils/array';
-import { Skeleton } from '@material-ui/lab';
-import type { SensorType, SourceConfig } from '../../utils/flowtype';
+
 import { getSourceColor } from '../../utils/sensors';
+
+import type { SensorType, SourceConfig } from '../../utils/flowtype';
+
 import InfoDialog from './InfoDialog';
 
-const useStyle = makeStyles(()=>({
+const useStyles = makeStyles(() => ({
     categoryHeader: {
         background: '#5f99c1',
         color: '#ffff',
         lineHeight: 2,
         fontSize: 'x-large !important',
         fontWeight: 700,
-        paddingLeft: 5,
-        borderRadius: 4
+        paddingLeft: 5
     },
     categoryDropDown: {
         alignSelf: 'center',
@@ -40,7 +41,6 @@ const useStyle = makeStyles(()=>({
     sourceHeader: {
         background: '#e6ecf1',
         justifyContent: 'space-between',
-        borderRadius: 4,
         overflow: 'hidden',
         paddingRight: 2
     },
@@ -80,7 +80,7 @@ const useStyle = makeStyles(()=>({
 }));
 
 type Props = {
-    data: {
+    data: ?{
         [sourceId: string]: {
             sensorCount: number,
             regions: {
@@ -90,11 +90,10 @@ type Props = {
     };
     sourcesConfig: { [k: string]: SourceConfig; };
     sources: Object;
-    selectedFeature: ?number;
-    addRegionsToMap: Function;
-    removeRegionsFromMap: Function;
-    handlePopupOpen: Function;
-    handlePopupClose: Function;
+    selectedFeature: ?{ idx: number, zoom: boolean };
+    toggleRegions: (sourcesVisibility: { [sourceId: string]: boolean }) => void;
+    handlePopupOpen: (feature: number) => void;
+    handlePopupClose: () => void;
 }
 
 const Sidebar = ({
@@ -102,65 +101,90 @@ const Sidebar = ({
     sourcesConfig,
     sources,
     selectedFeature,
-    addRegionsToMap,
-    removeRegionsFromMap,
+    toggleRegions,
     handlePopupOpen,
     handlePopupClose
 }: Props) => {
-    const classes = useStyle();
+    const classes = useStyles();
 
-    const [removedSources, updateRemovedSources] = React.useState({});
+    const [sourcesVisibility, updateSourcesVisibility] = React.useState<{ [sourceId: string]: boolean; }>({});
     const [isSidebarOpen, toggleSidebar] = React.useState(true);
     const [infoDialogControl, toggleInfoDialog] = React.useState(false);
     const [selectedSourceId, setSourceId] = React.useState('');
 
-    const handleInfoDialog = (e, id)=> {
+    React.useEffect(() => {
+        // When new data comes in, make all sources visible.
+        if (data) {
+            const updatedSourcesVisibility = Object.keys(data).reduce((regionsVisibility, sourceId) => {
+                regionsVisibility[sourceId] = true;
+                return regionsVisibility;
+            }, {});
+            updateSourcesVisibility(updatedSourcesVisibility);
+            toggleRegions(updatedSourcesVisibility);
+        }
+    }, [data]);
+
+    const handleInfoDialog = (e, id) => {
         e.stopPropagation();
         setSourceId(id);
         toggleInfoDialog(true);
     };
 
-    const handleSourceClick = (e, sourceId) => {
+    const toggleSource = (e, sourceId) => {
         e.stopPropagation();
-        const regions = data[sourceId].regions;
-        if (removedSources[sourceId]) {
-            // deselect
-            updateRemovedSources({ ...removedSources, [sourceId]: false });
-            addRegionsToMap(regions);
-        } else {
-            // select
-            updateRemovedSources({ ...removedSources, [sourceId]: true });
-            removeRegionsFromMap(regions);
+        if (data) {
+            const updatedSourcesVisibility = { ...sourcesVisibility, [sourceId]: !sourcesVisibility[sourceId] };
+            updateSourcesVisibility(updatedSourcesVisibility);
+            toggleRegions(updatedSourcesVisibility);
         }
     };
 
     const handleSensorClick = (sensorIdx) => {
-        if (sensorIdx === selectedFeature) {
+        if (selectedFeature && selectedFeature.idx === sensorIdx) {
             handlePopupClose();
         } else {
             handlePopupOpen(sensorIdx);
         }
     };
 
+    const getStatusStyle = (sensor) => {
+        switch (sensor.properties.online_status) {
+            case 'online':
+                return '.15rem solid green';
+            case 'offline':
+                return '.15rem dashed red';
+            default:
+                return 'none';
+        }
+    };
+
     return (
-        <BaseSidebar 
+        <BaseSidebar
             toggleSidebar={toggleSidebar}
             expanded={isSidebarOpen}
         >
-            <SidebarCategory 
-                key="sidebarcat"
+            <SidebarCategory
                 title="Explore Sources"
-                classes={{ 
-                    header: classes.categoryHeader, 
-                    content: classes.sourceContent, 
-                    icon: classes.categoryDropDown 
+                classes={{
+                    header: classes.categoryHeader,
+                    content: classes.sourceContent,
+                    icon: classes.categoryDropDown
                 }}
-                defaultOpen>
+                defaultOpen
+            >
                 {sources.map((source) => {
                     const primaryColor = getSourceColor(sourcesConfig[source.id]);
                     const secondaryColor = interpolateRgb(primaryColor, '#fff')(0.8);
-                    if(!data)
-                        return <Skeleton key={`placeholder-${source.id}-${source.label}`} classes={{ root: classes.headerPlaceholder }} variant="rect" width={375} height={50} />; 
+                    if (!data)
+                        return (
+                            <Skeleton
+                                key={`placeholder-${source.id}-${source.label}`}
+                                classes={{ root: classes.headerPlaceholder }}
+                                variant="rect"
+                                width={375}
+                                height={50}
+                            />
+                        );
                     return (
                         <SidebarCategory
                             key={`${source.id}-${source.label}-main`}
@@ -177,10 +201,10 @@ const Sidebar = ({
                                         item
                                         xs={2}
                                         style={{ background: primaryColor }}
-                                        onClick={(e) => handleSourceClick(e, source.id)}
+                                        onClick={(e) => toggleSource(e, source.id)}
                                     >
                                         <Checkbox
-                                            defaultChecked
+                                            checked={!!sourcesVisibility[source.id]}
                                             icon={<CircleUncheckedIcon htmlColor="white" />}
                                             checkedIcon={<CircleCheckedFilledIcon htmlColor="white" />}
                                         />
@@ -190,45 +214,48 @@ const Sidebar = ({
                                             {source.label}
                                         </Grid>
                                         <Grid className="centeredText" item xs={3}>
-                                    ({data[source.id].sensorCount})
+                                            ({data[source.id].sensorCount})
                                         </Grid>
-                                        <IconButton style={{ alignSelf: 'flex-start' }} onClick={(e)=>handleInfoDialog(e,source.id)} 
-                                            edge="end" 
-                                            size="small" 
+                                        <IconButton
+                                            style={{ alignSelf: 'flex-start' }}
+                                            onClick={(e) => handleInfoDialog(e, source.id)}
+                                            edge="end"
+                                            size="small"
                                             id={`info-icon-${classes.sourceCheckbox} `}
                                             color="primary"
-                                            alignItems="flex-start"
                                         >
                                             <InfoOutlinedIcon id={`info-icon-${classes.sourceCheckbox} `} />
                                         </IconButton>
                                     </>
 
-                                </Grid> 
+                                </Grid>
                             }
                         >
-                            {data ? entries(data[source.id].regions).map(([region, sensors]) => (
-                                <SidebarCategory 
+                            {data ? entries(data[source.id].regions).sort().map(([region, sensors]) => (
+                                <SidebarCategory
                                     key={`${source.id}-${region}-main`}
-                                    classes={{ 
-                                        header: classes.regionHeader, 
-                                        icon: classes.categoryDropDown 
+                                    classes={{
+                                        header: classes.regionHeader,
+                                        icon: classes.categoryDropDown
                                     }}
-                                    backgroundColor= {secondaryColor}
+                                    backgroundColor={secondaryColor}
                                     title={<Typography variant="subtitle2">
                                         {region} ({sensors.length})
                                     </Typography>}
                                 >
-                                    <Box idx={`${source.id}-${region}-sensors`} display="flex" flexWrap="wrap">
+                                    <Box id={`${source.id}-${region}-sensors`} display="flex" flexWrap="wrap">
                                         {sensors.map((sensor) => (
                                             <Button
-                                                key={sensor.idx}
+                                                key={sensor.id}
                                                 className={classes.sensorButton}
                                                 style={{
-                                                    background: selectedFeature === sensor.idx ?
+                                                    background: selectedFeature && selectedFeature.idx === sensor.idx ?
                                                         primaryColor :
-                                                        secondaryColor
+                                                        secondaryColor,
+                                                    border: getStatusStyle(sensor)
                                                 }}
                                                 size="small"
+                                                disabled={!sourcesVisibility[source.id]}
                                                 onClick={() => handleSensorClick(sensor.idx)}
                                             >
                                                 {sensor.name}
@@ -250,8 +277,4 @@ const Sidebar = ({
     );
 };
 
-const mapStateToProps = (state) => ({
-    sourcesConfig: state.config.source
-});
-
-export default connect(mapStateToProps)(Sidebar);
+export default Sidebar;

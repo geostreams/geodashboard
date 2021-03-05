@@ -2,16 +2,11 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { 
-    Container, 
-    Drawer, 
-    IconButton 
-} 
-    from '@material-ui/core';
+import { Container, Drawer, IconButton } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-/* 
+/*
     BaseSidebar creates an animated collapsible empty sidebar.
     Props:
         - classes: Override default classes
@@ -20,7 +15,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
         - Collapsible Sidebar
             - collapsible: Shows the collapse control button on bottom
             - expanded: Boolean value of whether to open or close sidebar
-            - toggleSidebar: Controls whether its open or not 
+            - toggleSidebar: Controls whether its open or not
 */
 
 const drawerWidth = 400;
@@ -62,11 +57,9 @@ const useStyles = makeStyles((theme) => ({
         padding: '0 8px'
     },
     content: props => ({
-        alignItems: 'flex-start',       
+        alignItems: 'flex-start',
         padding:0,
         width: drawerWidth - 15,
-        marginRight: 15,
-        marginLeft: 5,
         paddingBottom: 10,
         ...props.classes.content
     })
@@ -86,7 +79,7 @@ function BaseSidebar(props: Props) {
 
     const classes = useStyles(props);
     const open = props.expanded;
-    
+
     // fire resize events when sidebar is toggled to update other components in tree (map)
     // multiple events to smooth out the updates
     React.useEffect(() => {
@@ -97,8 +90,8 @@ function BaseSidebar(props: Props) {
                 ()=>{window.dispatchEvent(new Event('resize'));},
                 i
             );
-        } 
-        
+        }
+
     }, [open]);
 
 
