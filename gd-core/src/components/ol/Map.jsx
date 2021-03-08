@@ -64,6 +64,7 @@ const Map = (props: Props) => {
             overlays: [
                 new Overlay({
                     id: 'popup',
+                    className: 'ol-popup',
                     autoPan: true,
                     autoPanAnimation: {
                         duration: 250

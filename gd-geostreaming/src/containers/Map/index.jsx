@@ -206,9 +206,15 @@ const Map = (props: Props) => {
             const popupOverlay = map.getOverlayById('popup');
             if (selectedFeature) {
                 const geometry = features[selectedFeature.idx].getGeometry();
-                popupOverlay.setPosition(geometry.getCoordinates());
                 if (selectedFeature.zoom) {
-                    map.getView().fit(geometry.getExtent());
+                    map.getView().fit(
+                        geometry.getExtent(),
+                        {
+                            callback: () => popupOverlay.setPosition(geometry.getCoordinates())
+                        }
+                    );
+                } else {
+                    popupOverlay.setPosition(geometry.getCoordinates());
                 }
             } else {
                 popupOverlay.setPosition();
