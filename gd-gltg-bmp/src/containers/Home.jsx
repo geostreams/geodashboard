@@ -237,12 +237,12 @@ const Home = ({ dispatch }: Props) => {
                             className="fillContainer"
                             mapcontainer={1}
                             item
-                            xs={8}
+                            xs={6}
                         />
                         <Grid
                             className={classes.sidebar}
                             item
-                            xs={4}
+                            xs={6}
                         >
                             <Sidebar />
                         </Grid>
