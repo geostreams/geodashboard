@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 - Added new visualization and updated the existing one to use vega
   [GLGVO-724](https://opensource.ncsa.illinois.edu/jira/browse/GLGVO-724)
+- Add top ten practices by area treated to BMP results
+  [GEOD-1364](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1364)
 
 ## [3.6.0] - 2020-12-14
 
