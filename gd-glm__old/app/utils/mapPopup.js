@@ -235,7 +235,7 @@ export function popupTrends(feature: ol.Feature, styles: Object) {
 
     if (paramsLength > 0 && sensorInfo.trends_detail) {
         bodyText += '<a href="/trendsstations/detail/location/' +
-            sensorInfo.name + '/All/" class=' +
+            sensorInfo.name + '/All?use-season=1" class=' +
             styles.viewsitedetail + ' >View Data for the ' + sensorInfo.name + ' Site </a>';
     }
 
