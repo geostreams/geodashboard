@@ -212,7 +212,7 @@ export const BOUNDARIES: BoundaryType = {
     },
     huc8: {
         visible: false,
-        label: 'IL HUC8',
+        label: 'TN HUC8',
         layers: [
             {
                 url: huc8,

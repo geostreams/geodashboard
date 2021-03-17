@@ -47,7 +47,7 @@ type Props = {
     handleVariableChange: Function;
 }
 
-const useStyle = makeStyles((theme) =>({
+const useStyle = makeStyles((theme) => ({
     dropdownsContainer: {
         background: '#e2ebf4'
     },
@@ -175,10 +175,10 @@ const Sidebar = ({
 
     const handleDataStoriesModalClose = () => updateIframeProps({});
 
-    const [dialogContent, updateDialogContent] = React.useState<null | {
+    const [dialogContent, updateDialogContent] = React.useState < null | {
         title: string;
         description: string | React.Node;
-    }>(null);
+    } > (null);
 
     return (
         <>
@@ -287,7 +287,7 @@ const Sidebar = ({
                     <>
                         <Divider className={classes.divider} />
                         <Typography variant="subtitle1">
-                            TOTAL {selectedNutrient.toUpperCase()} LOAD LEAVING THE STATE OF ILLINOIS
+                            TOTAL {selectedNutrient.toUpperCase()} LOAD LEAVING THE STATE OF TENNESSE
                         </Typography>
                         <Typography variant="caption">
                             The total {selectedNutrient} load leaving the state of Tennessee is estimated to be&nbsp;
@@ -530,7 +530,7 @@ const Sidebar = ({
                             rel="noopener noreferrer"
                             href="https://www2.illinois.gov/epa/topics/water-quality/watershed-management/excess-nutrients/Documents/NLRS_SCIENCE_ASSESSMENT_UPDATE_2019%20v7_FINAL%20VERSION_web.pdf"
                         >
-                            Illinois Nutrient Reduction Strategy Science Assessment Update 2019
+                            Tennessee Nutrient Reduction Strategy Science Assessment Update 2019
                         </a>
                     </Typography> : null}
             </Container>
