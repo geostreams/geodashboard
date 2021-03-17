@@ -290,7 +290,7 @@ const Sidebar = ({
                             TOTAL {selectedNutrient.toUpperCase()} LOAD LEAVING THE STATE OF ILLINOIS
                         </Typography>
                         <Typography variant="caption">
-                            The total {selectedNutrient} load leaving the state of Illinois is estimated to be&nbsp;
+                            The total {selectedNutrient} load leaving the state of Tennessee is estimated to be&nbsp;
                             {overallData.drainage.annual_load[selectedNutrient][selectedYear]}&nbsp;
                             million lb in {selectedYear}.
                         </Typography>

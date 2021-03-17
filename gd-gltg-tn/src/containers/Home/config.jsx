@@ -26,7 +26,7 @@ export const GEOSERVER_URL = process.env.GEOSERVER_URL || '';
 export const CONTEXTUAL_LAYERS: Array<{ title: string; id: string; zIndex?: number, boundaries?: Array<string>}> = [
     { title: 'Rivers', id: 'gltg:us-rivers', zIndex: 2 },
     { title: 'State Boundaries', id: 'gltg:us-states' },
-    { title: 'IL Drainage - Outside', id: 'gltg:il-drainage-outside', boundaries: ['drainage'] },
+    { title: 'TN Drainage - Outside', id: 'gltg:il-drainage-outside', boundaries: ['drainage'] },
     { title: 'Extrapolated Areas', id: 'gltg:extrapolated-areas', boundaries: ['drainage', 'huc8'] }
 ];
 
@@ -35,9 +35,9 @@ export const getOverallFeatureLabels = (boundary: string) => {
     // and the second item is its variable name in `data.json`, which can be used for rendering labels too.
     switch (boundary) {
         case 'drainage':
-            return ['Illinois', 'Statewide Summary'];
+            return ['Tennessee', 'Statewide Summary'];
         case 'huc8':
-            return ['Illinois', 'Statewide Summary'];
+            return ['Tennessee', 'Statewide Summary'];
         case 'watershed':
             return ['Mississippi River Basin', 'Nutrient Load to Gulf of Mexico'];
         default:
@@ -192,7 +192,7 @@ export type BoundaryType = {
 export const BOUNDARIES: BoundaryType = {
     drainage: {
         visible: true,
-        label: 'IL Drainage',
+        label: 'TN Drainage',
         layers: [
             {
                 url: drainage,
