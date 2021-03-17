@@ -47,7 +47,7 @@ type Props = {
     handleVariableChange: Function;
 }
 
-const useStyle = makeStyles((theme) =>({
+const useStyle = makeStyles((theme) => ({
     dropdownsContainer: {
         background: '#e2ebf4'
     },
@@ -175,10 +175,10 @@ const Sidebar = ({
 
     const handleDataStoriesModalClose = () => updateIframeProps({});
 
-    const [dialogContent, updateDialogContent] = React.useState<null | {
+    const [dialogContent, updateDialogContent] = React.useState < null | {
         title: string;
         description: string | React.Node;
-    }>(null);
+    } > (null);
 
     return (
         <>
@@ -287,10 +287,10 @@ const Sidebar = ({
                     <>
                         <Divider className={classes.divider} />
                         <Typography variant="subtitle1">
-                            TOTAL {selectedNutrient.toUpperCase()} LOAD LEAVING THE STATE OF ILLINOIS
+                            TOTAL {selectedNutrient.toUpperCase()} LOAD LEAVING THE STATE OF ARKANSAS
                         </Typography>
                         <Typography variant="caption">
-                            The total {selectedNutrient} load leaving the state of Tennessee is estimated to be&nbsp;
+                            The total {selectedNutrient} load leaving the state of Arkansas is estimated to be&nbsp;
                             {overallData.drainage.annual_load[selectedNutrient][selectedYear]}&nbsp;
                             million lb in {selectedYear}.
                         </Typography>

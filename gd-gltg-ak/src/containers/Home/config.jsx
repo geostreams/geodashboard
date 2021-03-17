@@ -23,10 +23,10 @@ export const initialState = {
 export const GEOSERVER_URL = process.env.GEOSERVER_URL || '';
 
 // A missing `boundaries` prop from a legend item means it will be shown for all boundary types
-export const CONTEXTUAL_LAYERS: Array<{ title: string; id: string; zIndex?: number, boundaries?: Array<string>}> = [
+export const CONTEXTUAL_LAYERS: Array<{ title: string; id: string; zIndex?: number, boundaries?: Array<string> }> = [
     { title: 'Rivers', id: 'gltg:us-rivers', zIndex: 2 },
     { title: 'State Boundaries', id: 'gltg:us-states' },
-    { title: 'TN Drainage - Outside', id: 'gltg:il-drainage-outside', boundaries: ['drainage'] },
+    { title: 'AR Drainage - Outside', id: 'gltg:il-drainage-outside', boundaries: ['drainage'] },
     { title: 'Extrapolated Areas', id: 'gltg:extrapolated-areas', boundaries: ['drainage', 'huc8'] }
 ];
 
@@ -35,9 +35,9 @@ export const getOverallFeatureLabels = (boundary: string) => {
     // and the second item is its variable name in `data.json`, which can be used for rendering labels too.
     switch (boundary) {
         case 'drainage':
-            return ['Tennessee', 'Statewide Summary'];
+            return ['Arkansas', 'Statewide Summary'];
         case 'huc8':
-            return ['Tennessee', 'Statewide Summary'];
+            return ['Arkansas', 'Statewide Summary'];
         case 'watershed':
             return ['Mississippi River Basin', 'Nutrient Load to Gulf of Mexico'];
         default:
@@ -46,22 +46,22 @@ export const getOverallFeatureLabels = (boundary: string) => {
 };
 
 export const MAP_BOUNDS = [
-    -10353854.1034,
-    3895230.9614,
-    -8850796.3792,
-    4618019.5009
+    -94.183217,
+    33.754274,
+    -90.250112,
+    36.450243
 ];
 
 
 
-export const getLayerExtent = (boundary: string) =>{
-    switch(boundary){
+export const getLayerExtent = (boundary: string) => {
+    switch (boundary) {
         case 'drainage':
-            return [-10673131.179092214,4240945.513367433,-9272804.820907786,5703644.486632567];
+            return [-10673131.179092214, 4240945.513367433, -9272804.820907786, 5703644.486632567];
         case 'huc8':
-            return [-10673131.179092214,4240945.513367433,-9272804.820907786,5703644.486632567];
+            return [-10673131.179092214, 4240945.513367433, -9272804.820907786, 5703644.486632567];
         case 'watershed':
-            return [-10923839.372435283,4545502.562858378,-9523076.314751584,6008657.686866852];
+            return [-10923839.372435283, 4545502.562858378, -9523076.314751584, 6008657.686866852];
         default:
             return MAP_BOUNDS;
     }
@@ -192,7 +192,7 @@ export type BoundaryType = {
 export const BOUNDARIES: BoundaryType = {
     drainage: {
         visible: true,
-        label: 'TN Drainage',
+        label: 'AR Drainage',
         layers: [
             {
                 url: drainage,
