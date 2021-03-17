@@ -15,6 +15,7 @@ import NutrientReduction, { config as nutrientReductionConfig } from './Nutrient
 import ProgramsCount, { config as programsCountConfig } from './ProgramsCount';
 import ProgramsFunding, { config as programsFundingConfig } from './ProgramsFunding';
 import ProgramsAreaTreated, { config as programsAreaTreatedConfig } from './ProgramsAreaTreated';
+import TopPracticesByArea, { config as topPracticesByAreaConfig } from './TopPracticesByArea';
 
 import type { Filters, QueryParams } from '../../utils/flowtype';
 
@@ -34,16 +35,22 @@ const RESULTS = {
     nutrientReduction: {
         component: NutrientReduction,
         config: nutrientReductionConfig
+    },
+    topPracticesByArea: {
+        component: TopPracticesByArea,
+        config: topPracticesByAreaConfig
     }
 };
 
-const createRequestParams = (prepareParams: (params: QueryParams) => void, filters: Filters): string => {
+const createRequestParams = (prepareParams: (params: QueryParams, boundaryType: ?string) => void, filters: Filters): string => {
     const params: QueryParams = {
         limit: 0,
         applied_date: filters.years[0],
         sunset: filters.years[1],
         group_by: [],
         aggregates: [],
+        partitions: [],
+        partition_size: 0,
         order_by: []
     };
 
@@ -53,7 +60,7 @@ const createRequestParams = (prepareParams: (params: QueryParams) => void, filte
         params.order_by.push(filters.boundaryType);
     }
 
-    prepareParams(params);
+    prepareParams(params, filters.selectedBoundaries.length ? filters.boundaryType : null);
 
     return entries(params).reduce((queryParams, [param, value]) => {
         if (Array.isArray(value)) {
