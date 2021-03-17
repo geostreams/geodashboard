@@ -17,12 +17,17 @@ export type Filters = {
 };
 
 export type QueryParams = {
+    limit: number;
     applied_date: number;
     sunset: number;
+    min_area_treated?: number;
+    max_area_treated?: number;
     state?: string[];
     huc_8?: string[];
     group_by: string[];
     aggregates: string[];
+    partitions: string[];
+    partition_size: number;
     order_by: string[];
 };
 

@@ -8,16 +8,16 @@ import { BMPContext } from './Context';
 import Filters from './Filters';
 import Results from './Results';
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme) => ({
     topHeader: {
         background: '#e2ebf4',
         minHeight: 60,
         padding: '0 20px'
     },
-    headerText: {
-        margin: '10px auto'
+    contentContainer: {
+        marginTop: theme.spacing(2)
     }
-});
+}));
 
 const Sidebar = () => {
     const classes = useStyle();
@@ -57,13 +57,8 @@ const Sidebar = () => {
                         </Box>
                     </>}
             </Box>
-            <Container>
-                <Typography
-                    className={classes.headerText}
-                    variant="h5"
-                >
-                    {activeView === 'results' ? <Results /> : <Filters />}
-                </Typography>
+            <Container className={classes.contentContainer}>
+                {activeView === 'results' ? <Results /> : <Filters />}
             </Container>
         </>
     );
