@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## UNRELEASED
+
+### Changed
+- Turned Map into a function component and added two new map controls: FitViewControl and LayersControl.
+  [Github-38](https://github.com/geostreams/geodashboard/issues/38)
+
 ## 3.6.0 - 2020-12-14
 
 ### Added

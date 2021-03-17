@@ -10,11 +10,16 @@ import {
 const useStyles = makeStyles((theme) =>{
     return ({
         footer: {
+            'position': 'absolute',
+            'width': '100%',
+            'height': 110,
+            'bottom': -110,
+            'left': 0,
             'background': theme.palette.primary.lighter,
             'color': theme.palette.primary.contrastText,
             'textDecoration': 'none',
             'textAlign': 'center',
-            'padding': 10,
+            'padding': '10px 180px',
             '& a': {
                 margin: 15
             },

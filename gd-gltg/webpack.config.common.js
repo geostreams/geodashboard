@@ -7,6 +7,7 @@ module.exports = {
     entry: {
         mcw__old: 'material-components-web/dist/material-components-web.min.css',
         mdc__old: 'gd-gltg__old/app/styles_custom/react-mdc-web.css',
+        geostreamingStyles: 'gd-geostreaming/src/styles/geostreaming.less',
         gltgMain__new: './src/index.jsx',
         gltgStyle: './src/styles/gltg.less'
     },

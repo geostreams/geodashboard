@@ -7,8 +7,6 @@ import GeoStreamingSearch from 'gd-geostreaming/src/containers/Search';
 import GeoStreamingSensorDetail from 'gd-geostreaming/src/containers/Sensor/Detail';
 
 // $FlowFixMe
-import __old_Explore from 'gd-gltg__old/app/pages/Explore';
-// $FlowFixMe
 import __old_Search from 'gd-gltg__old/app/pages/Search';
 // $FlowFixMe
 import __old_Analysis from 'gd-gltg__old/app/pages/Analysis';
@@ -32,14 +30,13 @@ const routes = Object.assign(
         '/partners': { component: hocs.withLayout(GLTGLayout, Partners) },
         '/faq': { component: hocs.withLayout(GLTGLayout, FAQ) },
         // Routes pointing to the __old code
-        '/explore/:stations': { component: hocs.withLayout(GLTGLayout, __old_Explore), exact: true },
+        '/explore/:stations': { component: hocs.withLayout(GLTGLayout, GeoStreamingExplore), exact: true },
         '/search': { component: hocs.withLayout(GLTGLayout, __old_Search), exact: true },
         '/analysis': { component: hocs.withLayout(GLTGLayout, __old_Analysis), exact: true }
     }
 );
 
 if (process.env.NODE_ENV === 'development') {
-    routes['/__new_explore'] = { component: hocs.withLayout(GLTGLayout, GeoStreamingExplore) };
     routes['/__new_search'] = { component: hocs.withLayout(GLTGLayout, GeoStreamingSearch) };
     routes['/tests/gltg'] = { component: Tests };
 }

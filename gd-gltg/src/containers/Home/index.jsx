@@ -498,87 +498,87 @@ class Home extends React.Component<Props, State> {
         } = this.state;
 
         return (
-            <Map
-                className="fillContainer"
-                zoom={7}
-                minZoom={5}
-                extent={MAP_BOUNDS}
-                center={[-9972968, 4972295]}
-                controls={[this.boundaryInfoControl, this.legendControl]}
-                layers={Object.values(this.layers)}
-                legends={this.legends}
-                layerSwitcherOptions={{
-                    onShow: () => {
-                        this.legends.forEach((legend) => {
-                            const { title, visible } = legend;
-                            document.querySelectorAll('.layer-switcher li.layer').forEach((el) => {
-                                if (el.innerText === title) {
-                                    if (visible) {
-                                        el.classList.remove('hidden');
-                                    } else {
-                                        el.classList.add('hidden');
-                                    }
-                                }
-                            });
-                        });
-                    }
-                }}
-                updateMap={this.updateMap}
-                events={{
-                    click: this.handleMapClick
-                }}
+            <Grid
+                className={classes.mainContainer}
+                container
+                alignItems="stretch"
             >
                 <Grid
-                    className={classes.mainContainer}
-                    container
-                    alignItems="stretch"
+                    className="fillContainer"
+                    item
+                    xs={8}
                 >
-                    <Grid
+                    <Map
                         className="fillContainer"
-                        mapcontainer={1}
-                        item
-                        xs={8}
-                    />
-                    <Grid
-                        className={classes.sidebar}
-                        item
-                        xs={4}
+                        zoom={7}
+                        minZoom={5}
+                        extent={MAP_BOUNDS}
+                        center={[-9972968, 4972295]}
+                        controls={[this.boundaryInfoControl, this.legendControl]}
+                        layers={Object.values(this.layers)}
+                        legends={this.legends}
+                        layerSwitcherOptions={{
+                            onShow: () => {
+                                this.legends.forEach((legend) => {
+                                    const { title, visible } = legend;
+                                    document.querySelectorAll('.layer-switcher li.layer').forEach((el) => {
+                                        if (el.innerText === title) {
+                                            if (visible) {
+                                                el.classList.remove('hidden');
+                                            } else {
+                                                el.classList.add('hidden');
+                                            }
+                                        }
+                                    });
+                                });
+                            }
+                        }}
+                        updateMap={this.updateMap}
+                        events={{
+                            click: this.handleMapClick
+                        }}
                     >
-                        <Sidebar
-                            regionLabel={regionLabel}
-                            featureId={featureId}
-                            selectedBoundary={boundary}
-                            selectedNutrient={nutrient}
-                            selectedYear={year}
-                            handleBoundaryChange={this.handleBoundaryChange}
-                            handleVariableChange={this.handleVariableChange}
-                        />
-                    </Grid>
-                </Grid>
-                <BaseControlPortal el={this.boundaryInfoControl.element}>
-                    <Container>{this.getBoundaryInfoContent()}</Container>
-                </BaseControlPortal>
+                        <BaseControlPortal el={this.boundaryInfoControl.element}>
+                            <Container>{this.getBoundaryInfoContent()}</Container>
+                        </BaseControlPortal>
 
-                <BaseControlPortal el={this.legendControl.element}>
-                    <List dense disablePadding>
-                        {this.legends.map(({ title, url, visible }) => (
-                            visible ?
-                                <ListItem
-                                    key={title}
-                                    classes={{
-                                        root: classes.legendItem
-                                    }}
-                                >
-                                    <ListItemIcon classes={{ root: classes.legendItemIcon }}>
-                                        <img src={url} alt={title} />
-                                    </ListItemIcon>
-                                    <ListItemText primary={title} />
-                                </ListItem> :
-                                null
-                        ))}
-                    </List>
-                </BaseControlPortal>
-            </Map>
+                        <BaseControlPortal el={this.legendControl.element}>
+                            <List dense disablePadding>
+                                {this.legends.map(({ title, url, visible }) => (
+                                    visible ?
+                                        <ListItem
+                                            key={title}
+                                            classes={{
+                                                root: classes.legendItem
+                                            }}
+                                        >
+                                            <ListItemIcon classes={{ root: classes.legendItemIcon }}>
+                                                <img src={url} alt={title} />
+                                            </ListItemIcon>
+                                            <ListItemText primary={title} />
+                                        </ListItem> :
+                                        null
+                                ))}
+                            </List>
+                        </BaseControlPortal>
+                    </Map>
+                </Grid>
+                <Grid
+                    className={classes.sidebar}
+                    item
+                    xs={4}
+                >
+                    <Sidebar
+                        regionLabel={regionLabel}
+                        featureId={featureId}
+                        selectedBoundary={boundary}
+                        selectedNutrient={nutrient}
+                        selectedYear={year}
+                        handleBoundaryChange={this.handleBoundaryChange}
+                        handleVariableChange={this.handleVariableChange}
+                    />
+                </Grid>
+            </Grid>
         );
     }
 }

@@ -1,8 +1,6 @@
 // @flow
 import * as React from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import {
     Box,
     Collapse,
@@ -10,6 +8,8 @@ import {
     ListItem,
     Grid
 } from '@material-ui/core';
+import ChevronDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import ChevronRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 /*
     Renders collapsible category component in sidebar.
@@ -71,18 +71,17 @@ function SidebarCategories(props: Props) {
         <List
             className={`${classes.root} noPadding`}
             subheader={
-                <Box 
+                <Box
                     button disableRipple disableGutters dense
-                    borderRadius={4} 
-                    component={ListItem}  
+                    borderRadius={4}
+                    component={ListItem}
                     onClick={()=>toggleOpen(!open)}
                 >
                     <Grid container className={classes.header} justify="space-between" alignitems="center" >
                         {props.title}
-                        <ExpandMore className={clsx(classes.icon,{
-                            [classes.open]: open,
-                            [classes.close]: !open
-                        })} />
+                        {open ?
+                            <ChevronDownIcon className={classes.icon} /> :
+                            <ChevronRightIcon className={classes.icon} />}
                     </Grid>
                 </Box>
             }

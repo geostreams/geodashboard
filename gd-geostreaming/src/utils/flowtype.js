@@ -1,5 +1,5 @@
 // @flow
-import type { GeometryType } from 'gd-core/src/utils/flowtype';
+import type { GeometryType, MapLayerConfig } from 'gd-core/src/utils/flowtype';
 
 export type PropertiesType = {
     name: string;
@@ -72,8 +72,16 @@ export type SensorType = {
 }
 
 export type MapConfig = {
+    geoserverUrl: string;
+    zoom: number;
+    center: [number, number];
+    useCluster: boolean;
+    clusterDistance: number;
     clusterExpandCountThreshold: number;
     clusterExpandZoomThreshold: number;
+    layers: {
+        [groupName: string]: MapLayerConfig[];
+    };
 }
 
 export type SourceType = {
@@ -92,14 +100,17 @@ export type SourceConfig = {
     useSeasonFilter: boolean;
 }
 
+export type SensorsConfig = {
+    maxDisplayParameters: number;
+    displayOnlineStatus: boolean;
+};
+
 export type Config = {
     geostreamingEndpoint: string;
 
     map: MapConfig;
 
-    sensors: {
-        displayOnlineStatus: boolean;
-    };
+    sensors: SensorsConfig;
 
     source: {
         [k: string]: SourceConfig;

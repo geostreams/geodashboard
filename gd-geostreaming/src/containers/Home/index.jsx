@@ -25,7 +25,7 @@ const Home = () => {
                 Welcome to the Great Lakes to Gulf Virtual Observatory
             </Typography>
 
-            <Typography variant="p" align="justify" paragraph>
+            <Typography variant="body1" align="justify" paragraph>
                 In the Mississippi River watershed, water quality remains a primary and ongoing concern that
                 requires monitoring conducted by multiple state and federal agencies and academic institutions.
                 The Great Lakes to Gulf Virtual Observatory (GLTG<sup>SM</sup>) is an interactive geospatial
@@ -36,14 +36,14 @@ const Home = () => {
                 download data in compatible formats.
             </Typography>
 
-            <Typography variant="p" align="justify" paragraph>
+            <Typography variant="body1" align="justify" paragraph>
                 Currently, GLTG<sup>SM</sup> includes sites with five or more years of discreet nutrient data
                 in the main stem of the Mississippi River, continuous water quality monitoring sites in the
                 Mississippi River watershed with nutrient data, and selected small watersheds (HUC-8 or smaller).
                 GLTG will display additional parameters as they are available.
             </Typography>
 
-            <Typography variant="p" align="center" paragraph>
+            <Typography variant="body1" align="center" paragraph>
                 <Link to="/explore/all">
                     <Button variant="contained" color="primary">
                         Explore Now

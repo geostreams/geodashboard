@@ -48,3 +48,12 @@ export type GeometryType = {
     type: string;
     coordinates: string[];
 }
+
+export type MapLayerConfig = {
+    title: string;
+    id: string;
+    type: string;
+    legend: ?string;
+    initialVisibility: ?boolean;
+    initialOpacity: ?number;
+};
