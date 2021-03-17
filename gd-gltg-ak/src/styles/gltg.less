@@ -1,0 +1,20 @@
+// This pushes the active fragment in the url down by 61px (i.e. the header height) so it shows after the header and doesn't get covered by it.
+:target::before {
+    content: "";
+    display: block;
+    height: 61px; /* fixed header height*/
+    margin: -61px 0 0; /* negative fixed header height */
+}
+
+.layer-switcher {
+    top: 4.4em !important;
+    left: 0.5em;
+    right: unset;
+
+    button {
+        width: 1.375em;
+        height: 1.375em;
+        background-position: 0;
+        background-size: contain;
+    }
+}

@@ -1,0 +1,195 @@
+{
+    "type": "FeatureCollection",
+    "name": "il-monitoring-site",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "Station_ID": "03339000",
+                "Source": "USGS",
+                "Lat": 40.10087,
+                "Lon": -87.59724,
+                "HUC8_ID": 5120109,
+                "tag": 1,
+                "contributing_waterways": 2347.0,
+                "cumulative_acres": 822534.0,
+                "Name": "Vermilion at Danville"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.5972419,
+                    40.1008701
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Station_ID": "03381500",
+                "Source": "USGS",
+                "Lat": 38.06116,
+                "Lon": -88.15976,
+                "HUC8_ID": 5120114,
+                "tag": 1,
+                "contributing_waterways": 5912.0,
+                "cumulative_acres": 1984228.0,
+                "Name": "Little Wabash at Carmi"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -88.1597597,
+                    38.0611573
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Station_ID": "05437500",
+                "Source": "USGS",
+                "Lat": 42.45028,
+                "Lon": -89.0725,
+                "HUC8_ID": 7090005,
+                "tag": 1,
+                "contributing_waterways": 12503.0,
+                "cumulative_acres": 4077849.0,
+                "Name": "Rock at Rockton"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -89.0725,
+                    42.4502778
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Station_ID": "05446500",
+                "Source": "USGS",
+                "Lat": 41.55611,
+                "Lon": -90.18528,
+                "HUC8_ID": 7090005,
+                "tag": 1,
+                "contributing_waterways": 19014.0,
+                "cumulative_acres": 6080248.0,
+                "Name": "Rock at Joslin"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -90.1852778,
+                    41.5561111
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Station_ID": "05586100",
+                "Source": "USGS",
+                "Lat": 39.70338,
+                "Lon": -90.6454,
+                "HUC8_ID": 7130011,
+                "tag": 1,
+                "contributing_waterways": 54075.0,
+                "cumulative_acres": 16060256.0,
+                "Name": "Illinois R, at Valley City"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -90.6454047,
+                    39.7033802
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Station_ID": "05594100",
+                "Source": "USGS",
+                "Lat": 38.4506,
+                "Lon": -89.62759,
+                "HUC8_ID": 7140202,
+                "tag": 1,
+                "contributing_waterways": 8002.0,
+                "cumulative_acres": 822534.0,
+                "Name": "Kaskaskia at Venedy Sta."
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -89.6275926,
+                    38.4506049
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Station_ID": "05599490",
+                "Source": "USGS",
+                "Lat": 37.75833,
+                "Lon": -89.32778,
+                "HUC8_ID": 7140106,
+                "tag": 1,
+                "contributing_waterways": 4574.0,
+                "cumulative_acres": 1380116.0,
+                "Name": "Big Muddy at Murphysboro"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -89.3277778,
+                    37.7583333
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Station_ID": "05447500",
+                "Source": "USGS",
+                "Lat": 41.48892,
+                "Lon": -90.15762,
+                "HUC8_ID": 5120111,
+                "tag": 1,
+                "contributing_waterways": 2002.0,
+                "cumulative_acres": 615388.0,
+                "Name": "Green at Geneseo"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -90.1576186,
+                    41.4889231
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Station_ID": "03345500",
+                "Source": "USGS",
+                "Lat": 38.93643,
+                "Lon": -88.02254,
+                "HUC8_ID": 5120111,
+                "tag": 1,
+                "contributing_waterways": 2639.0,
+                "cumulative_acres": 979246.0,
+                "Name": "Embarras at St. Marie"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -88.0225351,
+                    38.9364327
+                ]
+            }
+        }
+    ]
+}

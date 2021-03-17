@@ -1,0 +1,47 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Minnesota River at Fort Snelling",
+                "Station_ID": "MI_0035"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -93.19248127472197,
+                    44.870253309354425
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Iowa River at Wapello",
+                "Station_ID": "USGS_05465500"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -91.18194444444445,
+                    41.1780556
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Illinois R, at Valley City",
+                "Station_ID": "05586100"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -90.6454047,
+                    39.7033802
+                ]
+            }
+        }
+    ]
+}
