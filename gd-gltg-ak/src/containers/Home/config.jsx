@@ -46,10 +46,7 @@ export const getOverallFeatureLabels = (boundary: string) => {
 };
 
 export const MAP_BOUNDS = [
-    -94.183217,
-    33.754274,
-    -90.250112,
-    36.450243
+    -10504763.3962, 3876100.5797, -10065709.1057, 4290695.0211
 ];
 
 
