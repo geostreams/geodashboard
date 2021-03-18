@@ -530,7 +530,7 @@ const Sidebar = ({
                             rel="noopener noreferrer"
                             href="https://www2.illinois.gov/epa/topics/water-quality/watershed-management/excess-nutrients/Documents/NLRS_SCIENCE_ASSESSMENT_UPDATE_2019%20v7_FINAL%20VERSION_web.pdf"
                         >
-                            Tennessee Nutrient Reduction Strategy Science Assessment Update 2019
+                            Illinois Nutrient Reduction Strategy Science Assessment Update 2019
                         </a>
                     </Typography> : null}
             </Container>
