@@ -7,9 +7,9 @@ import type FeatureType from 'ol/Feature';
 
 import huc8 from '../../data/huc8.pbf';
 import watersheds from '../../data/watersheds.pbf';
-import drainage from '../../data/il-drainage.pbf';
+import drainage from '../../data/AR_Nitrate_Trend_Catchments.pbf';
 import monitoringSites from '../../data/il-monitoring-sites.pbf';
-import watershedMonitoringSites from '../../data/watersheds-monitoring-sites.pbf';
+import watershedMonitoringSites from '../../data/AR_Nitrate_Trend_Sites.pbf';
 import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
 import annualYieldData from '../../data/annual_yield.json';
