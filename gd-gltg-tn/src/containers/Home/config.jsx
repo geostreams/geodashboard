@@ -5,10 +5,10 @@ import { Fill, Icon, Stroke, Style } from 'ol/style';
 
 import type FeatureType from 'ol/Feature';
 
-import huc8 from '../../data/huc8.pbf';
+import huc8 from '../../data/TN_HUC8.pbf';
 import watersheds from '../../data/watersheds.pbf';
-import drainage from '../../data/il-drainage.pbf';
-import monitoringSites from '../../data/il-monitoring-sites.pbf';
+import drainage from '../../data/TN_Nitrate_Trend_Catchments.pbf';
+import monitoringSites from '../../data/TN_Nitrate_Trend_Sites.pbf';
 import watershedMonitoringSites from '../../data/watersheds-monitoring-sites.pbf';
 import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
@@ -23,7 +23,7 @@ export const initialState = {
 export const GEOSERVER_URL = process.env.GEOSERVER_URL || '';
 
 // A missing `boundaries` prop from a legend item means it will be shown for all boundary types
-export const CONTEXTUAL_LAYERS: Array<{ title: string; id: string; zIndex?: number, boundaries?: Array<string>}> = [
+export const CONTEXTUAL_LAYERS: Array<{ title: string; id: string; zIndex?: number, boundaries?: Array<string> }> = [
     { title: 'Rivers', id: 'gltg:us-rivers', zIndex: 2 },
     { title: 'State Boundaries', id: 'gltg:us-states' },
     { title: 'TN Drainage - Outside', id: 'gltg:il-drainage-outside', boundaries: ['drainage'] },
@@ -53,15 +53,14 @@ export const MAP_BOUNDS = [
 ];
 
 
-
-export const getLayerExtent = (boundary: string) =>{
-    switch(boundary){
+export const getLayerExtent = (boundary: string) => {
+    switch (boundary) {
         case 'drainage':
-            return [-10673131.179092214,4240945.513367433,-9272804.820907786,5703644.486632567];
+            return [-10673131.179092214, 4240945.513367433, -9272804.820907786, 5703644.486632567];
         case 'huc8':
-            return [-10673131.179092214,4240945.513367433,-9272804.820907786,5703644.486632567];
+            return [-10673131.179092214, 4240945.513367433, -9272804.820907786, 5703644.486632567];
         case 'watershed':
-            return [-10923839.372435283,4545502.562858378,-9523076.314751584,6008657.686866852];
+            return [-10923839.372435283, 4545502.562858378, -9523076.314751584, 6008657.686866852];
         default:
             return MAP_BOUNDS;
     }
