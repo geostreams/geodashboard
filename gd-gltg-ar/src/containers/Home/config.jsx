@@ -191,7 +191,7 @@ export type BoundaryType = {
 
 export const BOUNDARIES: BoundaryType = {
     drainage: {
-        visible: true,
+        visible: false,
         label: 'AR Drainage',
         layers: [
             {
@@ -211,7 +211,7 @@ export const BOUNDARIES: BoundaryType = {
         ]
     },
     huc8: {
-        visible: true,
+        visible: false,
         label: 'AR HUC8',
         layers: [
             {
@@ -222,7 +222,7 @@ export const BOUNDARIES: BoundaryType = {
         ]
     },
     watershed: {
-        visible: true,
+        visible: false,
         label: 'Trend Watersheds',
         layers: [
             {
