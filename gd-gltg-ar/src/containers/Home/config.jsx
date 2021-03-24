@@ -211,7 +211,7 @@ export const BOUNDARIES: BoundaryType = {
         ]
     },
     huc8: {
-        visible: false,
+        visible: true,
         label: 'AR HUC8',
         layers: [
             {
@@ -222,7 +222,7 @@ export const BOUNDARIES: BoundaryType = {
         ]
     },
     watershed: {
-        visible: false,
+        visible: true,
         label: 'Trend Watersheds',
         layers: [
             {
@@ -248,16 +248,16 @@ export const VARIABLES_INFO = {
         title: 'Boundary Type',
         description: (
             <div>
-                <b>IL Drainage</b>
+                <b>AR Drainage</b>
                 <p>
                     This view represents the land area that drains through
                     each of the measurement points represented on the map as
                     circles with a monitoring buoy. These stations were chosen
-                    as part of the Illinois Nutrient Loss Reduction Strategy
+                    as part of the Arkansas Nutrient Loss Reduction Strategy
                     because collectively, they measure nutrients in the runoff
-                    from about 75% of the land area of the state of Illinois,
+                    from about 75% of the land area of the state of Arkansas,
                     and can be used to extrapolate the total mass of nutrients,
-                    or nutrient load, leaving the state of Illinois.
+                    or nutrient load, leaving the state of Arkansas.
                 </p>
                 <b>HUC 8</b>
                 <p>
@@ -266,11 +266,11 @@ export const VARIABLES_INFO = {
                     often used in water quality tracking. These HUCs are
                     divided into successively smaller watershed units. HUC-8 is
                     a medium-sized watershed, and there are 31 such HUCs in the
-                    state of Illinois. The Illinois Nutrient Reduction Strategy
+                    state of Arkansas. The Arkansas Nutrient Reduction Strategy
                     has used modeling to estimate the nutrient yield from all
-                    of the HUC-8s in the State of Illinois. The HUC 8 watershed
+                    of the HUC-8s in the State of Arkansas. The HUC 8 watershed
                     boundaries allow for a more localized view of tracking
-                    nutrient loads than some of the larger “Illinois Drainage”
+                    nutrient loads than some of the larger “Arkansas Drainage”
                     boundaries.
                 </p>
                 <b>Watershed Boundaries</b>
