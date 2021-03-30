@@ -1,7 +1,14 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { FormControl, Grid, Select, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Fab from '@material-ui/core/Fab';
+import FormControl from '@material-ui/core/FormControl';
+import Grid from '@material-ui/core/Grid';
+import Select from '@material-ui/core/Select';
+import Tooltip from '@material-ui/core/Tooltip';
+import PdfIcon from '@material-ui/icons/PictureAsPdf';
 import { updateLoadingStatus } from 'gd-core/src/actions/page';
 import { entries } from 'gd-core/src/utils/array';
 import { useElementRect } from 'gd-core/src/utils/hooks';
@@ -11,68 +18,9 @@ import type { Action as PageAction } from 'gd-core/src/actions/page';
 
 import { BMP_API_URL } from '../../config';
 import { BMPContext } from '../Context';
-import NutrientReduction, { config as nutrientReductionConfig } from './NutrientReduction';
-import ProgramsCount, { config as programsCountConfig } from './ProgramsCount';
-import ProgramsFunding, { config as programsFundingConfig } from './ProgramsFunding';
-import ProgramsAreaTreated, { config as programsAreaTreatedConfig } from './ProgramsAreaTreated';
-import TopPracticesByArea, { config as topPracticesByAreaConfig } from './TopPracticesByArea';
+import { RESULTS, createRequestParams } from './config';
+import Pdf from './Pdf';
 
-import type { Filters, QueryParams } from '../../utils/flowtype';
-
-const RESULTS = {
-    programsCount: {
-        component: ProgramsCount,
-        config: programsCountConfig
-    },
-    programsFunding: {
-        component: ProgramsFunding,
-        config: programsFundingConfig
-    },
-    programsAreaTreated: {
-        component: ProgramsAreaTreated,
-        config: programsAreaTreatedConfig
-    },
-    nutrientReduction: {
-        component: NutrientReduction,
-        config: nutrientReductionConfig
-    },
-    topPracticesByArea: {
-        component: TopPracticesByArea,
-        config: topPracticesByAreaConfig
-    }
-};
-
-const createRequestParams = (prepareParams: (params: QueryParams, boundaryType: ?string) => void, filters: Filters): string => {
-    const params: QueryParams = {
-        limit: 0,
-        applied_date: filters.years[0],
-        sunset: filters.years[1],
-        group_by: [],
-        aggregates: [],
-        partitions: [],
-        partition_size: 0,
-        order_by: []
-    };
-
-    if (filters.selectedBoundaries.length) {
-        params.group_by.push(filters.boundaryType);
-        params[filters.boundaryType] = filters.selectedBoundaries;
-        params.order_by.push(filters.boundaryType);
-    }
-
-    prepareParams(params, filters.selectedBoundaries.length ? filters.boundaryType : null);
-
-    return entries(params).reduce((queryParams, [param, value]) => {
-        if (Array.isArray(value)) {
-            value.forEach((v) => {
-                queryParams.push(`${param}=${v}`);
-            });
-        } else {
-            queryParams.push(`${param}=${value}`);
-        }
-        return queryParams;
-    }, []).join('&');
-};
 
 const useStyle = makeStyles((theme) => ({
     formControl: {
@@ -91,6 +39,13 @@ const useStyle = makeStyles((theme) => ({
         borderRadius: 5,
         padding: 5,
         opacity: 0
+    },
+    pdfDialogAppBar: {
+        position: 'relative'
+    },
+    pdfDialogTitle: {
+        marginLeft: theme.spacing(2),
+        flex: 1
     }
 }));
 
@@ -101,16 +56,19 @@ type Props = {
 const Results = ({ dispatch }: Props) => {
     const classes = useStyle();
 
+    // Is the pdf view open?
+    const [pdfView, updatePdfView] = React.useState(false);
+
     const { filters, results, updateResults } = React.useContext(BMPContext);
 
     const [activeResultKey, updateActiveResultKey] = React.useState<string>('');
     const [activeResultCategory, updateActiveResultCategory] = React.useState<$Keys<typeof RESULTS>>('programsCount');
-    const { component: ResultComponent, config: resultConfig } = RESULTS[activeResultCategory];
+    const { component: ResultComponent } = RESULTS[activeResultCategory];
 
     const plotTooltipRef = React.useRef<null | HTMLDivElement>(null);
 
-    const fetchResults = () => {
-        const queryParams = createRequestParams(resultConfig.prepareParams, filters);
+    React.useEffect(() => {
+        const queryParams = createRequestParams(activeResultCategory, filters);
         const queryParamsBase64 = btoa(queryParams);
         if (results[queryParamsBase64]) {
             updateActiveResultKey(queryParamsBase64);
@@ -136,50 +94,56 @@ const Results = ({ dispatch }: Props) => {
                     dispatch(updateLoadingStatus(false));
                 });
         }
-    };
-
-    React.useEffect(() => {
-        fetchResults();
     }, [activeResultCategory]);
 
     const plotContainer = React.useRef();
     const plotContainerRect = useElementRect(plotContainer);
 
     return (
-        <Grid container direction="column">
-            <Grid item>
-                <FormControl className={classes.formControl}>
-                    <Select
-                        native
-                        value={activeResultCategory}
-                        onChange={({ target: { value } }) => {
-                            updateActiveResultKey('');
-                            updateActiveResultCategory(value);
-                        }}
-                    >
-                        {entries(RESULTS).map(([name, { config: { label } }]) => (
-                            <option
-                                key={name}
-                                value={name}
-                            >
-                                {label}
-                            </option>
-                        ))}
-                    </Select>
-                </FormControl>
+        <>
+            <Grid container direction="column">
+                <Grid container item>
+                    <FormControl className={classes.formControl}>
+                        <Select
+                            native
+                            value={activeResultCategory}
+                            onChange={({ target: { value } }) => {
+                                updateActiveResultKey('');
+                                updateActiveResultCategory(value);
+                            }}
+                        >
+                            {entries(RESULTS).map(([name, { config: { label } }]) => (
+                                <option
+                                    key={name}
+                                    value={name}
+                                >
+                                    {label}
+                                </option>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <Box display="flex" flexGrow={1} justifyContent="end">
+                        <Tooltip title="Export to PDF">
+                            <Fab color="primary" size="small" onClick={() => updatePdfView(true)}>
+                                <PdfIcon />
+                            </Fab>
+                        </Tooltip>
+                    </Box>
+                </Grid>
+                <Grid ref={plotContainer} className={classes.plotContainer} item>
+                    {results[activeResultKey] ?
+                        <ResultComponent
+                            filters={filters}
+                            data={results[activeResultKey]}
+                            containerRect={plotContainerRect}
+                            tooltipRef={plotTooltipRef}
+                        /> :
+                        null}
+                    <div ref={plotTooltipRef} className={classes.plotTooltip} />
+                </Grid>
             </Grid>
-            <Grid ref={plotContainer} className={classes.plotContainer} item>
-                {results[activeResultKey] ?
-                    <ResultComponent
-                        filters={filters}
-                        data={results[activeResultKey]}
-                        containerRect={plotContainerRect}
-                        tooltipRef={plotTooltipRef}
-                    /> :
-                    null}
-                <div ref={plotTooltipRef} className={classes.plotTooltip} />
-            </Grid>
-        </Grid>
+            {pdfView ? <Pdf handleClose={() => updatePdfView(false)} /> : null}
+        </>
     );
 };
 

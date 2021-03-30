@@ -67,10 +67,11 @@ type Props = {
         'huc_8'?: string;
     }>;
     containerRect: ElementRect;
+    showVegaActions: boolean;
 };
 
 const TopPracticesByArea = (props: Props) => {
-    const { containerRect, filters } = props;
+    const { containerRect, filters, showVegaActions } = props;
 
     if (filters.selectedBoundaries.length) {
         if (filters.boundaryType === 'state') {
@@ -88,7 +89,7 @@ const TopPracticesByArea = (props: Props) => {
         <VegaLite
             width={(containerRect.width || 0) * 0.6}
             height={(containerRect.height || 0) * 0.6}
-            actions={{
+            actions={showVegaActions && {
                 export: true,
                 source: process.env.NODE_ENV === 'development',
                 compiled: process.env.NODE_ENV === 'development',
@@ -98,6 +99,10 @@ const TopPracticesByArea = (props: Props) => {
             spec={config.chartSpec}
         />
     );
+};
+
+TopPracticesByArea.defaultProps = {
+    showVegaActions: true
 };
 
 export default TopPracticesByArea;

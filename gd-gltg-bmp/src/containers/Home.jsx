@@ -220,34 +220,34 @@ const Home = ({ dispatch }: Props) => {
             }}
         >
             {hasConfig ?
-                <Map
-                    className="fillContainer"
-                    zoom={5}
-                    center={MAP_CENTER}
-                    layers={Object.values(LAYERS)}
-                    layerSwitcherOptions={{}}
-                    events={{ click: handleMapClick }}
+                <Grid
+                    className={classes.mainContainer}
+                    container
+                    alignItems="stretch"
                 >
                     <Grid
-                        className={classes.mainContainer}
-                        container
-                        alignItems="stretch"
+                        className="fillContainer"
+                        mapcontainer={1}
+                        item
+                        xs={6}
                     >
-                        <Grid
+                        <Map
                             className="fillContainer"
-                            mapcontainer={1}
-                            item
-                            xs={6}
+                            zoom={5}
+                            center={MAP_CENTER}
+                            layers={Object.values(LAYERS)}
+                            layerSwitcherOptions={{}}
+                            events={{ click: handleMapClick }}
                         />
-                        <Grid
-                            className={classes.sidebar}
-                            item
-                            xs={6}
-                        >
-                            <Sidebar />
-                        </Grid>
                     </Grid>
-                </Map> :
+                    <Grid
+                        className={classes.sidebar}
+                        item
+                        xs={6}
+                    >
+                        <Sidebar />
+                    </Grid>
+                </Grid> :
                 null}
         </BMPContext.Provider>
     );

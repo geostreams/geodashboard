@@ -37,7 +37,7 @@ const Sidebar = () => {
                             Results
                         </Typography>
                         <Box display="flex" flexGrow={1} justifyContent="end">
-                            <Tooltip title="Back to the filters">
+                            <Tooltip title="Back to the filters" arrow enterDelay={200}>
                                 <Fab color="primary" size="small" onClick={() => updateActiveView('filter')}>
                                     <FiltersIcon />
                                 </Fab>
@@ -49,7 +49,7 @@ const Sidebar = () => {
                             Filters
                         </Typography>
                         <Box display="flex" flexGrow={1} justifyContent="end">
-                            <Tooltip title="See the results">
+                            <Tooltip title="See the results" arrow enterDelay={200}>
                                 <Fab color="primary" size="small" onClick={(() => updateActiveView('results'))}>
                                     <ResultsIcon />
                                 </Fab>

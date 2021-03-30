@@ -127,6 +127,6 @@ export type BMPContextType = {
     updateActiveView: (activeView: 'filter' | 'results') => void;
     filters: Filters;
     dispatchFilterUpdate: (action: FiltersAction) => void;
-    results: any;
+    results: { [queryParamsBase64: string]: any };
     updateResults: (results: any) => void;
 };

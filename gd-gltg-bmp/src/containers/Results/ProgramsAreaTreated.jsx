@@ -54,7 +54,7 @@ export const config = {
 
 const useStyle = makeStyles({
     tableContainer: {
-        height: '100%'
+        marginBottom: 5
     }
 });
 
@@ -76,12 +76,13 @@ type Props = {
         'huc_8'?: string;
     }>;
     containerRect: ElementRect;
+    showVegaActions: boolean;
 };
 
 const ProgramsAreaTreated = (props: Props) => {
     const classes = useStyle();
 
-    const { containerRect, filters } = props;
+    const { containerRect, filters, showVegaActions } = props;
 
     if (filters.selectedBoundaries.length) {
         if (filters.boundaryType === 'state') {
@@ -117,7 +118,7 @@ const ProgramsAreaTreated = (props: Props) => {
             <VegaLite
                 width={(containerRect.width || 0) * 0.6}
                 height={(containerRect.height || 0) * 0.6}
-                actions={{
+                actions={showVegaActions && {
                     export: true,
                     source: process.env.NODE_ENV === 'development',
                     compiled: process.env.NODE_ENV === 'development',
@@ -159,6 +160,10 @@ const ProgramsAreaTreated = (props: Props) => {
             </TableContainer>
         </>
     );
+};
+
+ProgramsAreaTreated.defaultProps = {
+    showVegaActions: true
 };
 
 export default ProgramsAreaTreated;
