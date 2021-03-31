@@ -1,7 +1,14 @@
 // @flow
 import React from 'react';
 import { VegaLite } from 'react-vega';
-import { makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import { entries } from 'gd-core/src/utils/array';
 import { precision } from 'gd-core/src/utils/format';
 
@@ -115,6 +122,7 @@ const ProgramsAreaTreated = (props: Props) => {
 
     return (
         <>
+            <Typography variant="body1" paragraph>LOREM IPSUM</Typography>
             <VegaLite
                 width={(containerRect.width || 0) * 0.6}
                 height={(containerRect.height || 0) * 0.6}
