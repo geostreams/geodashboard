@@ -152,6 +152,7 @@ const Sidebar = ({
     const annualYieldChartTooltipRef: { current: null | HTMLDivElement } = React.createRef();
 
     const annualLoadChartData = annualLoadData[featureId];
+    const arkansasData = arData[featureId];
 
     const yearsOptions = [];
     let annualYieldChartData;
@@ -253,6 +254,7 @@ const Sidebar = ({
                         <option value="Phosphorus">Phosphorus</option>
                         <option value="Nitrogen">Nitrogen</option>
                     </NativeSelect>
+
                 </FormControl>
                 <FormControl
                     component="fieldset"
@@ -527,9 +529,9 @@ const Sidebar = ({
                         <div ref={annualYieldChartTooltipRef} className={classes.chartTooltip} />
                     </> :
                     null}
-                {selectedBoundary === 'drainage' || selectedBoundary === 'huc8' ?
+
+                {selectedBoundary === 'drainage' ?
                     <Typography variant="subtitle2" align="center" gutterBottom>
-                        <h3>arkansas working in progress</h3>
                         <a
                             target="_blank"
                             rel="noopener noreferrer"
@@ -538,9 +540,17 @@ const Sidebar = ({
 
                             Illinois Nutrient Reduction Strategy Science Assessment Update 2019
                         </a>
-                    </Typography> : <p>null</p>}
+                    </Typography> : null}
+
+                {selectedBoundary === 'huc8' ?
+                    <Typography variant="subtitle2" align="center" gutterBottom>
+                        <h3>arkansas working in progress</h3>
+                        <p> data: {arkansasData}</p>
+
+                    </Typography> : null}
 
             </Container>
+
             <DataStoriesModal
                 {...iframeProps}
                 handleClose={handleDataStoriesModalClose}
