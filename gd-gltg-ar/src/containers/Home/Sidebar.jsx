@@ -30,6 +30,8 @@ import DataStoriesModal from '../DataStories/Details';
 import annualYieldData from '../../data/annual_yield.json';
 import annualLoadData from '../../data/annual_load.json';
 import overallData from '../../data/overall_data.json';
+import arData from '../../data/arkansas_aggregate_data.json';
+
 import {
     getNutrientValueCategoryIndex,
     FEATURE_STYLE_INFO,
@@ -275,6 +277,7 @@ const Sidebar = ({
                     </NativeSelect>
                 </FormControl>
             </Box>
+
             <Container ref={container}>
                 <Typography
                     className={classes.header}
@@ -411,6 +414,7 @@ const Sidebar = ({
                         />
                     </> :
                     null}
+
                 {featureValue !== undefined ?
                     <>
                         <Divider className={classes.divider} />
@@ -525,19 +529,23 @@ const Sidebar = ({
                     null}
                 {selectedBoundary === 'drainage' || selectedBoundary === 'huc8' ?
                     <Typography variant="subtitle2" align="center" gutterBottom>
+                        <h3>arkansas working in progress</h3>
                         <a
                             target="_blank"
                             rel="noopener noreferrer"
                             href="https://www2.illinois.gov/epa/topics/water-quality/watershed-management/excess-nutrients/Documents/NLRS_SCIENCE_ASSESSMENT_UPDATE_2019%20v7_FINAL%20VERSION_web.pdf"
                         >
+
                             Illinois Nutrient Reduction Strategy Science Assessment Update 2019
                         </a>
-                    </Typography> : null}
+                    </Typography> : <p>null</p>}
+
             </Container>
             <DataStoriesModal
                 {...iframeProps}
                 handleClose={handleDataStoriesModalClose}
             />
+
             <Container className={classes.carousel}>
                 <Divider />
                 <Box display="flex" justifyContent="space-between" alignItems="center">

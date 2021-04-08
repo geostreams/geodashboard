@@ -13,6 +13,7 @@ import watershedMonitoringSites from '../../data/AR_Nitrate_Trend_Sites.pbf';
 import markerMonitoringSite from '../../images/marker_monitoring_site.png';
 import patternNoData from '../../images/pattern_no_data.png';
 import annualYieldData from '../../data/annual_yield.json';
+import arData from '../../data/arkansas_aggregate_data.json';
 
 export const initialState = {
     boundary: 'drainage',
