@@ -1,16 +1,19 @@
-{
-  "extends": [
+module.exports = {
+  extends: [
+    "plugin:flowtype/recommended",
     "airbnb",
     "prettier",
-    "prettier/flowtype",
-    "prettier/react",
-    "plugin:flowtype/recommended"
   ],
-  "env": {
+  plugins: [
+    "flowtype",
+    "prettier",
+    "react",
+  ],
+  env: {
     "browser": true,
     "es6": true
   },
-  "settings": {
+  settings: {
     "import/resolver": {
       "node": {
         "moduleDirectory": [
@@ -20,20 +23,15 @@
       }
     }
   },
-  "plugins": [
-    "flowtype",
-    "prettier",
-    "react"
-  ],
-  "parser": "babel-eslint",
-  "parserOptions": {
+  parser: "@babel/eslint-parser",
+  parserOptions: {
     "ecmaVersion": 6,
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true
     },
     "sourceType": "module"
   },
-  "rules": {
+  rules: {
     "brace-style": [
       "error",
       "1tbs",
@@ -179,6 +177,16 @@
     "react/static-property-placement": [
       "warn",
       "static public field"
+    ],
+    'prettier/prettier': [
+      'warn',
+      {
+        "printWidth": 80,
+        "trailingComma": "none",
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": true
+      }
     ]
   }
 }

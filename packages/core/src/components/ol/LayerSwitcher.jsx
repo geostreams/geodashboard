@@ -1,5 +1,5 @@
 // @flow
-import LayerSwitcher from 'ol-layerswitcher/src/ol-layerswitcher';
+import LayerSwitcher from 'ol-layerswitcher';
 
 interface Options {
     onShow?: Function;

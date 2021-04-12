@@ -6,6 +6,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const { dependencies } = require('./package.json');
 
@@ -13,9 +14,9 @@ module.exports = {
     target: 'web',
 
     entry: {
+        index: path.resolve(__dirname, "./src/index.jsx"),
         mcw__old: 'material-components-web/dist/material-components-web.min.css',
         style: './src/styles/template.less',
-        main: './src/index.jsx',
         coreStyle: path.resolve('node_modules/@geostreams/core/src/styles/core.less'),
         olStyle: 'ol/ol.css',
         olLayerSwitcherStyle: 'ol-layerswitcher/src/ol-layerswitcher.css'
@@ -24,7 +25,7 @@ module.exports = {
     output: {
         path: path.resolve('./build'),
         publicPath: process.env.CONTEXT || '/',
-        filename: 'js/[name]-[hash].js',
+        filename: 'js/[name]-[chunkhash].js',
         crossOriginLoading: 'anonymous'
     },
 
@@ -43,18 +44,6 @@ module.exports = {
                                 '@babel/plugin-proposal-export-default-from',
                                 '@babel/plugin-proposal-export-namespace-from'
                             ]
-                        }
-                    }
-                ]
-            },
-            {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,    // TODO remove __old after porting all the __old codes
-                use: [
-                    {
-                        loader: 'eslint-loader',
-                        options: {
-                            emitWarning: true
                         }
                     }
                 ]
@@ -111,14 +100,18 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'files/[name]-[hash].[ext]'
+                            name: 'files/[name]-[chunkhash].[ext]'
                         }
                     }
                 ]
             },
             {
                 test: /\.svg$/,
-                loader: 'svg-inline-loader'
+                use: [
+                    {
+                        loader: 'raw-loader'
+                    }
+                ]
             },
             {
                 test: /\.(jpg|jpeg|png|eot|ttf|woff|woff2|pbf)$/,
@@ -126,7 +119,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'files/[name]-[hash].[ext]'
+                            name: 'files/[name]-[chunkhash].[ext]'
                         }
                     }
                 ]
@@ -138,7 +131,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'pages/[name]-[hash].html'
+                            name: 'pages/[name]-[chunkhash].html'
                         }
                     }
                 ]
@@ -147,7 +140,7 @@ module.exports = {
     },
 
     resolve: {
-        modules: ['node_modules', './src'],
+        modules: [path.join(__dirname, 'node_modules'), path.join(__dirname, 'src')],
         extensions: ['.js', '.jsx'],
         alias: {
             'react' : path.resolve('./node_modules/react'),
@@ -172,7 +165,10 @@ module.exports = {
             emitStats: false,
             inject: true
         }),
-        new MiniCssExtractPlugin({ filename: 'css/[name]-[hash].css' }),
-        new CleanWebpackPlugin()
+        new MiniCssExtractPlugin({ filename: 'css/[name]-[chunkhash].css' }),
+        new CleanWebpackPlugin(),
+        new ESLintPlugin({
+            emitWarning: true
+            })
     ]
 };

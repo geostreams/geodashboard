@@ -3,7 +3,7 @@ const Webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-const commonConfig = require('./webpack.config.common');
+const commonConfig = require('./webpack.common');
 
 module.exports = webpackMerge.merge(
     commonConfig,

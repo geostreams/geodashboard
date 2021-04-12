@@ -1,8 +1,3 @@
 build
 node_modules
-gd-template
-gd-core__old
-gd-glm__old
-gd-gltg__old
-gd-ilnlrs__old
-gd-imlczo__old
+packages/core__old

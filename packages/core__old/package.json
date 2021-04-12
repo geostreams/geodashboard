@@ -1,6 +1,6 @@
 {
   "name": "@geostreams/core__old",
-  "version": "3.0.0",
+  "version": "4.1.1",
   "description": "Geodashboard using React.js to visualize data from Geostreaming API.",
   "main": "main.jsx",
   "scripts": {

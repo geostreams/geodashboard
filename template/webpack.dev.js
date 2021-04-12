@@ -2,7 +2,7 @@
 const Webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 
-const commonConfig = require('./webpack.config.common');
+const commonConfig = require('./webpack.common');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = webpackMerge.merge(
@@ -16,7 +16,7 @@ module.exports = webpackMerge.merge(
             host: '0.0.0.0',
             port: 8080,
             inline: true,
-            stats: ['minimal', 'color'],
+            stats: {'errors-only': true, colors: true},
             historyApiFallback: true,
             allowedHosts: JSON.parse(process.env.ALLOWED_HOSTS || '["localhost"]'),
             headers: { 'Access-Control-Allow-Origin': '*' }

@@ -14,43 +14,41 @@ import LogoApp from '../../images/favicon.png';
 
 export const HEADERS_HEIGHT = 61;
 
-const useStyles = makeStyles((theme) =>{
-    return ({
-        mainHeader: {
-            'background': theme.palette.primary.main,
-            'color': theme.palette.primary.contrastText,
-            'textDecoration': 'none',
-            'height': HEADERS_HEIGHT,
-            'minHeight': HEADERS_HEIGHT,
-            '& a': {
-                margin: 5
-            }
-        },
-        headerText: {
-            color: theme.palette.primary.contrastText,
-            textDecoration: 'none'
-        },
-        tabsRoot: {
-            fontSize: 16,
-            flexGrow: 1
-        },
-        tabsIndicator: {
-            backgroundColor: '#fff'
-        },
-        tabRoot: {
-            fontSize: '1rem'
-        },
-        marginLeftAuto: {
-            marginLeft: 'auto !important'
-        },
-        dropdown: {
-            zIndex: 1100
-        },
-        dropdownIcon: {
-            display: 'flex'
+const useStyles = makeStyles((theme) =>({
+    mainHeader: {
+        'background': theme.palette.primary.main,
+        'color': theme.palette.primary.contrastText,
+        'textDecoration': 'none',
+        'height': HEADERS_HEIGHT,
+        'minHeight': HEADERS_HEIGHT,
+        '& a': {
+            margin: 5
         }
-    });
-});
+    },
+    headerText: {
+        color: theme.palette.primary.contrastText,
+        textDecoration: 'none'
+    },
+    tabsRoot: {
+        fontSize: 16,
+        flexGrow: 1
+    },
+    tabsIndicator: {
+        backgroundColor: '#fff'
+    },
+    tabRoot: {
+        fontSize: '1rem'
+    },
+    marginLeftAuto: {
+        marginLeft: 'auto !important'
+    },
+    dropdown: {
+        zIndex: 1100
+    },
+    dropdownIcon: {
+        display: 'flex'
+    }
+}));
 
 type Props = {
     location: {
