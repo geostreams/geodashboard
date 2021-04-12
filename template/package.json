@@ -10,9 +10,9 @@
   "author": "NCSA",
   "license": "ISC",
   "dependencies": {
-    "@geostreams/core": "3.6.0",
-    "@geostreams/core__old": "^3.0.2",
-    "@geostreams/geostreaming": "3.6.0",
+    "@geostreams/core": "latest",
+    "@geostreams/core__old": "latest",
+    "@geostreams/geostreaming": "latest",
     "@material-ui/core": "~4.11.0",
     "@material-ui/icons": "~4.9.1",
     "@material-ui/lab": "~4.0.0-alpha.56",
