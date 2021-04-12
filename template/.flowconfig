@@ -1,6 +1,5 @@
 [ignore]
-./template/.*
-./packages/gd-core__old/.*
+.*/node_modules/@geostreams/core__old.*
 .*/node_modules/@mapbox/jsonlint-lines-primitives/test/fails/.*\.json$
 
 [include]

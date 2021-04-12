@@ -1,8 +1,0 @@
-[
-  {"id":"data_sources", "name":"Data Sources"},
-  {"id":"parameters", "name":"Parameters"},
-  {"id":"time", "name":"Time"},
-  {"id":"locations", "name":"Locations"},
-  {"id":"online", "name":"Online"},
-  {"id":"span", "name":"Span"}
-]

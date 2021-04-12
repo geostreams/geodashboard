@@ -1,9 +1,11 @@
 ## Geodashboard
 
-This repository uses [Lerna](https://github.com/lerna/lerna) to manage all the links and dependencies between
-the `gd-core` package and project packages like `gd-gltg`.
+Geodashboard is built using React to visualize data from Geostreaming API. This repository contains the base components library used in different projects that use geostreams. 
+
+This repository uses [Lerna](https://github.com/lerna/lerna) to manage the different packages.
 
 It uses `node = 12`, `npm >= 6`, `less` for styling, and `ES6` syntax for all `js` files except for `webpack` configs.
+
 
 ### Main files in project root:
 
@@ -16,19 +18,19 @@ and [prettier](https://github.com/prettier/eslint-config-prettier).
 
 ### Set up your environment:
 
-> Note: whenever you see `<project-name>`, it refers to the project you are working on as listed in `lerna.json`,
->e.g. `gd-gltg`.
+- Clone this repository your local machine
 
-After cloning the repo, run `git submodule init` and `git submodule update` to initiate data stories
-from `https://opensource.ncsa.illinois.edu/bitbucket/projects/GEOD/repos/geodashboard-datastories/browse`.
+- Go into the repository  root folder
+- Run `npm install`
+- Run `npm run link:all`. (This command will create a symlink for all packages in this repository to the global node_modules folder)
+- Go into the project repository folder and run the following command for each of the packages you want to edit and work on:
+-- ` npm link @geostreams/core`
+-- `npm link @geostreams/core__old`
+-- `npm link @geostreams/geostreaming`
 
-Then run `npm install` to install the shared and project dependencies and set up the links between `gd-core` and
-other projects.
+Any changes you make now in your local version should be reflected in your project app as well.
 
-To start a specific project, run `npm start -- <project-name>`.
-
-To build a project, run `npm run build -- <project-name>`. This creates the bundles for the given project and puts
-them in `<project-name>/build` folder.
+### Additional Scripts
 
 To check flow types, run `npm run flow`.
 
@@ -44,14 +46,13 @@ See [`eslint` user guide for more details](https://github.com/prettier/eslint-co
 
 ### How to set up a new project:
 
-The easiest way is to copy `gd-template` folder and rename and customize it for the new project. Then include the
-project name in `lerna.json`, under `packages`.
+Create a new repository and move the contents of the template folder to the new repository. These files contain the basic setup of the geostreaming pages. 
 
-After adjusting the files in the new project folder and customizing its `package.json`, run `npm install` to
-set up its dependencies and links. Make sure `gd-core` is included in the project `package.json`, unless your project
-does not depend on `gd-core`.
+After adjusting the files in the new project folder and customizing its `package.json`, run `npm install` to set up its dependencies and links. Make sure `@geostreams/core` and `@geostreams/geostreaming` is included in the project `package.json`, unless your project does not depend on geostreams.
 
 If you are extending the base `webpack` configs, then your project must provide `src/index.jsx` and `src/index.html`.
+
+Refer to existing projects repositories for more information on how to setup a new project.
 
 ### What goes where?
 
@@ -61,7 +62,6 @@ All code that can be (re-)used by other projects should go in `gd-core`. Here ar
 - Utility functions, e.g. formatters and converters
 - Shared styles like typography and icons
 
-Everything else that is only relevant to one or two specific projects should go in their own project folders.
 
 ### Recommended practices:
 
