@@ -542,10 +542,15 @@ const Sidebar = ({
                         </a>
                     </Typography> : null}
 
-                {selectedBoundary === 'huc8' ?
+                {selectedBoundary === 'huc8' && featureId !== undefined ?
                     <Typography variant="subtitle2" align="center" gutterBottom>
-                        <h3>arkansas working in progress</h3>
-                        <p> data: {arkansasData}</p>
+                        {/*<h3>arkansas working in progress</h3>*/}
+                        {/*<p> hucid: {featureId}</p>*/}
+                        <p> Description: {featureId in arData ? arData[featureId].Description : null}</p>
+                        <p> Sampling point: {featureId in arData ? arData[featureId].SamplingPoint : null}</p>
+                        <p> Longitude: {featureId in arData ? arData[featureId].Longitude : null}</p>
+                        <p> Latitude: {featureId in arData ? arData[featureId].Latitude : null}</p>
+
 
                     </Typography> : null}
 
