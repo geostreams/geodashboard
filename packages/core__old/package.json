@@ -1,7 +1,7 @@
 {
   "name": "@geostreams/core__old",
-  "version": "4.1.1",
-  "description": "Geodashboard using React.js to visualize data from Geostreaming API.",
+  "version": "3.2.0",
+  "description": "Geodashboard using React.js to visualize data from Geostreaming API (old).",
   "main": "main.jsx",
   "scripts": {
     "test": "mocha --require ignore-styles --require isomorphic-fetch -w --compilers js:babel-core/register app/setup.js app/**/*.spec.js",

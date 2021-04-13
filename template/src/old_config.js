@@ -1,9 +1,6 @@
 export const gd3 = {
-
     // Geostreaming API Information - this is also displayed in the Welcome Page dropdown selector
-    geostreaming_endpoints: [
-        { url: process.env.GEOSTREAMS_URL }
-    ],
+    geostreaming_endpoints: [{ url: process.env.GEOSTREAMS_URL }],
 
     // Paths for Downloads
     download_button_path: '/datapoints/download?',
@@ -16,7 +13,8 @@ export const gd3 = {
 
     // Download Alert Text options
     general_error: 'An error occurred with Download - Please try again!',
-    max_datapoints_error: 'Too Many Datapoints to Download - Please continue to filter down your query.',
+    max_datapoints_error:
+        'Too Many Datapoints to Download - Please continue to filter down your query.',
 
     // Interval Time in milliseconds for the Spinner to wait for change style to include text
     set_interval_time: 3000,
@@ -30,7 +28,7 @@ export const gd3 = {
     home_page_carousel_images: [],
 
     // Home Page Carousel Caption Information - Numbers correspond to the order of images above
-    home_page_carousel_captions : {},
+    home_page_carousel_captions: {},
 
     // Should Tabs to select multi-parameter graphs be displayed on the Detail Page
     show_detail_tabs: true,
@@ -43,8 +41,9 @@ export const gd3 = {
         description: 'Select a maximum of three Parameters to view'
     },
     detail_page_box_and_whisker: {
-        description: 'Box and Whisker Plots provide a visual look at the data distribution. ' +
-                        'Lowest values are on the left, and the Highest values are on the right'
+        description:
+            'Box and Whisker Plots provide a visual look at the data distribution. ' +
+            'Lowest values are on the left, and the Highest values are on the right'
     },
     detail_page_raw_processed: [
         { listText: 'Level 0: No Processing - Raw Data' },
@@ -86,8 +85,7 @@ export const gd3 = {
     display_online_status: true,
 
     // Layers for the Explore Page
-    exploreLayers: [
-    ],
+    exploreLayers: [],
 
     // Layers for the Analysis Page
     analysisLayers: [],
@@ -117,27 +115,23 @@ export const gd3 = {
     ie_version_eleven: false,
     ie_version_edge: false,
     ie_message_title: '',
-    ie_message_text: '' ,
+    ie_message_text: '',
     ie_button_text: '',
     ie_show_menu_bar_alert: false,
     ie_menu_bar_message_text: '',
 
     // Source IDs and their Display Names
-    sourcename: {
-    },
+    sourcename: {},
 
     // Show Info Boxes on the Explore Page
     show_source_info_boxes: true,
     // For Source Info Boxes on the Explore Page
-    source_information: {
-    },
+    source_information: {},
 
-    source_order: {
-    },
+    source_order: {},
 
     // Colors associated with specific Sources
-    sourcecolor: {
-    },
+    sourcecolor: {},
 
     // Will be added to the Exploratory Analysis and Trends Stations Regions
     draw_and_all_regions: [],
@@ -176,7 +170,8 @@ export const gd3 = {
 
     // These variables are for Map settings
     mapTileURL: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    mapAttributions: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    mapAttributions:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     mapAttributionsCollapsible: true,
     mapMiniAttributionsCollapsible: true,
     mapClustersDistance: 45,

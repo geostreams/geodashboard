@@ -1,6 +1,6 @@
 {
-  "name": "eslint-config-geostreams",
-  "version": "4.2.5",
+  "name": "@geostreams/eslint-config",
+  "version": "1.0.0",
   "description": "Geodashboard ESLint Configuration",
   "main": "index.js",
   "scripts": {

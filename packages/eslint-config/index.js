@@ -29,7 +29,11 @@ module.exports = {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true
     },
-    "sourceType": "module"
+    "sourceType": "module",
+    "requireConfigFile" : "false" ,
+    babelOptions: { 
+    "configFile": "./.babelrc", 
+    },
   },
   rules: {
     "brace-style": [
@@ -161,9 +165,10 @@ module.exports = {
     ],
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-props-no-spreading": "off",
-    "react/jsx-space-before-closing": [
-      "error",
-      "always"
+    "react/jsx-tag-spacing": [
+      "error", { 
+        "beforeSelfClosing": "always" 
+      }
     ],
     "react/jsx-wrap-multilines": "off",
     "react/jsx-uses-vars": 2,
@@ -177,16 +182,6 @@ module.exports = {
     "react/static-property-placement": [
       "warn",
       "static public field"
-    ],
-    'prettier/prettier': [
-      'warn',
-      {
-        "printWidth": 80,
-        "trailingComma": "none",
-        "tabWidth": 4,
-        "semi": true,
-        "singleQuote": true
-      }
     ]
   }
 }

@@ -7,7 +7,5 @@ export default {
     sensors: {
         displayOnlineStatus: true
     },
-    source: {
-    }
-
+    source: {}
 };

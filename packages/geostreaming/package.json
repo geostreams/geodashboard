@@ -1,6 +1,6 @@
 {
   "name": "@geostreams/geostreaming",
-  "version": "4.1.2",
+  "version": "3.6.0",
   "main": "src/index.jsx",
   "author": "NCSA",
   "publishConfig": {
@@ -13,6 +13,7 @@
     "clsx": "^1.1.1"
   },
   "peerDependencies": {
+    "@geostreams/core": "latest",
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "~4.0.0-alpha.57",

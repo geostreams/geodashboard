@@ -14,7 +14,7 @@ import LogoApp from '../../images/favicon.png';
 
 export const HEADERS_HEIGHT = 61;
 
-const useStyles = makeStyles((theme) =>({
+const useStyles = makeStyles((theme) => ({
     mainHeader: {
         'background': theme.palette.primary.main,
         'color': theme.palette.primary.contrastText,
@@ -54,7 +54,7 @@ type Props = {
     location: {
         pathname: string
     }
-}
+};
 
 const Header = ({ location }: Props) => {
     const classes = useStyles();
@@ -63,7 +63,7 @@ const Header = ({ location }: Props) => {
         <AppBar position="fixed">
             <Toolbar className={classes.mainHeader}>
                 <Avatar
-                    variant='square'
+                    variant="square"
                     component={Link}
                     to="/"
                     src={LogoApp}
@@ -113,7 +113,6 @@ const Header = ({ location }: Props) => {
                         to="/about"
                         value="about"
                     />
-                    
                 </Tabs>
             </Toolbar>
         </AppBar>

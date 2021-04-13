@@ -1,8 +1,6 @@
 // @flow
 import React from 'react';
-import {
-    withStyles
-} from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import PageStyles from '../../styles/home.css';
 
 const styles = {
@@ -12,7 +10,6 @@ const styles = {
         height: '100%'
     }
 };
-
 
 function Home() {
     return (

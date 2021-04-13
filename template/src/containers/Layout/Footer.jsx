@@ -1,13 +1,9 @@
 // @flow
 import React from 'react';
-import {
-    Divider,
-    Grid,
-    makeStyles
-} from '@material-ui/core';
+import { Divider, Grid, makeStyles } from '@material-ui/core';
 import NCSALogo from '../../images/logos/ncsa_logo.png';
 
-const useStyles = makeStyles((theme) =>({
+const useStyles = makeStyles((theme) => ({
     footer: {
         'background': theme.palette.primary.lighter,
         'color': theme.palette.primary.contrastText,
@@ -43,7 +39,6 @@ const useStyles = makeStyles((theme) =>({
     footerText: {
         textDecoration: 'none'
     }
-
 }));
 
 const Footer = () => {
@@ -53,8 +48,13 @@ const Footer = () => {
         <footer className={classes.footer}>
             <Divider />
             <div className={classes.footerImagesParent}>
-                <a target="_blank" rel="noreferrer" href="http://ncsa.illinois.edu/">
-                    <img className={classes.footerImagesItem}
+                <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://ncsa.illinois.edu/"
+                >
+                    <img
+                        className={classes.footerImagesItem}
                         src={NCSALogo}
                         alt="ncsa"
                     />
@@ -68,7 +68,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className={classes.footerText}
                 >
-                        Made with Geodashboard v.{process.env.VERSION}
+                    Made with Geodashboard v.{process.env.VERSION}
                 </a>
             </Grid>
         </footer>

@@ -1,5 +1,3 @@
-// @flow
-const webpackMerge = require('webpack-merge');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const Webpack = require('webpack');
 const path = require('path');
@@ -14,10 +12,13 @@ module.exports = {
     target: 'web',
 
     entry: {
-        index: path.resolve(__dirname, "./src/index.jsx"),
-        mcw__old: 'material-components-web/dist/material-components-web.min.css',
+        index: path.resolve(__dirname, './src/index.jsx'),
+        mcw__old:
+            'material-components-web/dist/material-components-web.min.css',
         style: './src/styles/template.less',
-        coreStyle: path.resolve('node_modules/@geostreams/core/src/styles/core.less'),
+        coreStyle: path.resolve(
+            'node_modules/@geostreams/core/src/styles/core.less'
+        ),
         olStyle: 'ol/ol.css',
         olLayerSwitcherStyle: 'ol-layerswitcher/src/ol-layerswitcher.css'
     },
@@ -33,12 +34,16 @@ module.exports = {
         rules: [
             {
                 test: /\.jsx?$/,
-                exclude: /node_modules\/(?!(\@geostreams)\/).*/,
+                exclude: /node_modules\/(?!(@geostreams)\/).*/,
                 use: [
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: ['@babel/env', '@babel/flow', '@babel/react'],
+                            presets: [
+                                '@babel/env',
+                                '@babel/flow',
+                                '@babel/react'
+                            ],
                             plugins: [
                                 '@babel/plugin-proposal-class-properties',
                                 '@babel/plugin-proposal-export-default-from',
@@ -49,7 +54,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.less$/,    // TODO add css after porting all the __old codes
+                test: /\.less$/, // TODO add css after porting all the __old codes
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,
@@ -75,7 +80,10 @@ module.exports = {
             // TODO remove the following two rules after porting all the __old codes
             {
                 test: /\.css$/,
-                include: [/node_modules\/(?!(\@geostreams)\/).*/, /styles_custom/],
+                include: [
+                    /node_modules\/(?!(@geostreams)\/).*/,
+                    /styles_custom/
+                ],
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader
@@ -85,7 +93,10 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                exclude: [/node_modules\/(?!(\@geostreams)\/).*/, /styles_custom/],
+                exclude: [
+                    /node_modules\/(?!(@geostreams)\/).*/,
+                    /styles_custom/
+                ],
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader
@@ -140,11 +151,14 @@ module.exports = {
     },
 
     resolve: {
-        modules: [path.join(__dirname, 'node_modules'), path.join(__dirname, 'src')],
+        modules: [
+            path.join(__dirname, 'node_modules'),
+            path.join(__dirname, 'src')
+        ],
         extensions: ['.js', '.jsx'],
         alias: {
-            'react' : path.resolve('./node_modules/react'),
-            'redux' : path.resolve('./node_modules/redux'),
+            'react': path.resolve('./node_modules/react'),
+            'redux': path.resolve('./node_modules/redux'),
             'react-router-dom': path.resolve('./node_modules/react-router-dom'),
             'react-redux': path.resolve('./node_modules/react-redux'),
             '@material-ui': path.resolve('./node_modules/@material-ui')
@@ -153,7 +167,9 @@ module.exports = {
 
     plugins: [
         new Webpack.DefinePlugin({
-            'process.env.VERSION': JSON.stringify(dependencies['@geostreams/core']),
+            'process.env.VERSION': JSON.stringify(
+                dependencies['@geostreams/core']
+            ),
             'process.env.CONTEXT': JSON.stringify(process.env.CONTEXT)
         }),
         new HtmlWebpackPlugin({
@@ -169,6 +185,6 @@ module.exports = {
         new CleanWebpackPlugin(),
         new ESLintPlugin({
             emitWarning: true
-            })
+        })
     ]
 };

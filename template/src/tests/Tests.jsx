@@ -4,8 +4,6 @@ import BaseTests from '@geostreams/core/src/tests/BaseTests';
 
 const tests = [];
 
-const Tests = () => (
-    <BaseTests components={tests} />
-);
+const Tests = () => <BaseTests components={tests} />;
 
 export default Tests;

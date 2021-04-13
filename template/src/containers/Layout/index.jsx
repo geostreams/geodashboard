@@ -6,7 +6,6 @@ import { Box, CircularProgress, makeStyles } from '@material-ui/core';
 import Footer from './Footer';
 import Header, { HEADERS_HEIGHT } from './Header';
 
-
 const useStyles = makeStyles({
     scrim: {
         position: 'absolute',
@@ -22,17 +21,22 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-    isLoading: boolean;
-    extraMainClasses: string;
-    children: React.Node;
-    hasFooter: boolean;
-}
+    isLoading: boolean,
+    extraMainClasses: string,
+    children: React.Node,
+    hasFooter: boolean
+};
 
-const Layout = ({ isLoading, children, extraMainClasses, hasFooter }: Props) => {
+const Layout = ({
+    isLoading,
+    children,
+    extraMainClasses,
+    hasFooter
+}: Props) => {
     const classes = useStyles();
     return (
         <>
-            {isLoading ?
+            {isLoading ? (
                 <Box
                     className={`fillContainer ${classes.scrim}`}
                     display="flex"
@@ -40,8 +44,8 @@ const Layout = ({ isLoading, children, extraMainClasses, hasFooter }: Props) => 
                     justifyContent="center"
                 >
                     <CircularProgress />
-                </Box> :
-                null}
+                </Box>
+            ) : null}
             <Header />
             <main className={`${classes.main} ${extraMainClasses}`}>
                 {children}
