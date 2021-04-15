@@ -13,7 +13,7 @@ Geodashboard components are available as npm packages.
 
 
 ```sh
-npm install @geostreams/core @geostreams/geostreaming
+yarn add @geostreams/core @geostreams/geostreaming
 ```
 
 For setting up a new project based on geodashboard, go to [Usage > New Project](#new-project). If using geodashboard in an existing project, go to [Usage > Existing Project](#existing-project).
@@ -21,13 +21,13 @@ For setting up a new project based on geodashboard, go to [Usage > New Project](
 ## Set up development environment
 - Clone this repository your local machine
 - Go into the repository  root folder
-- Run `npm install`
-- Run `npm run link:all`. (This command will create a symlink for all packages in this repository to the global node_modules folder)
+- Run `yarn`
+- Run `yarn link:all`. (This command will create a symlink for all packages in this repository to the global node_modules folder)
 - Go into the project repository folder and run the following command for each of the packages you want to edit and work on:
--- ` npm link @geostreams/core`
--- `npm link @geostreams/core__old`
--- `npm link @geostreams/geostreaming`
- If using the template project, run `npm run link:geostreams` to link all packages.
+-- `yarn link @geostreams/core`
+-- `yarn link @geostreams/core__old`
+-- `yarn link @geostreams/geostreaming`
+ If using the template project, run `yarn link:geostreams` to link all packages.
 
 Any changes you make now in your local version should be reflected in your project app as well.
 
