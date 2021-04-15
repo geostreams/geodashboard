@@ -550,7 +550,8 @@ const Sidebar = ({
                         <p> Sampling point: {featureId in arData ? arData[featureId].SamplingPoint : null}</p>
                         <p> Longitude: {featureId in arData ? arData[featureId].Longitude : null}</p>
                         <p> Latitude: {featureId in arData ? arData[featureId].Latitude : null}</p>
-
+                        <p> n_obs: {featureId in arData ? arData[featureId].n_obs : null}</p>
+                        <p> mean_obs: {featureId in arData ? arData[featureId].mean_obs : null}</p>
 
                     </Typography> : null}
 

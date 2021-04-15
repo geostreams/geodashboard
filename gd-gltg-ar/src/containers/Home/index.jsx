@@ -395,7 +395,7 @@ class Home extends React.Component<Props, State> {
                 );
             }
 
-            const featureId = selectedFeature.get('Name') || selectedFeature.get('HUC_8');
+            const featureId = selectedFeature.get('Name') || selectedFeature.get('HUC_8') || selectedFeature.get('Station_ID');
             if (featureId !== previousFeatureId) {
                 // Feature is selected
                 selectedFeature.setStyle(getFeatureStyle(
