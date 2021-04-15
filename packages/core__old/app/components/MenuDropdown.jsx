@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import {hashHistory} from 'react-router';
+import {hashHistory} from 'react-router-dom';
 import styles from '../styles/menuBar.css';
 import {MenuItem, Menu, MenuAnchor, Icon, Tab} from 'react-mdc-web/lib';
 

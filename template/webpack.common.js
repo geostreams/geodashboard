@@ -111,7 +111,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'files/[name]-[chunkhash].[ext]'
+                            name: 'files/[name]-[contenthash].[ext]'
                         }
                     }
                 ]
@@ -130,7 +130,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'files/[name]-[chunkhash].[ext]'
+                            name: 'files/[name]-[contenthash].[ext]'
                         }
                     }
                 ]
@@ -142,7 +142,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'pages/[name]-[chunkhash].html'
+                            name: 'pages/[name]-[contenthash].html'
                         }
                     }
                 ]

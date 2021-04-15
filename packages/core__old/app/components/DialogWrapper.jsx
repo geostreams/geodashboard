@@ -7,7 +7,7 @@ import {
     Body1, Body2, Dialog, DialogBody, DialogHeader, DialogTitle, Icon
 } from 'react-mdc-web/lib';
 import styles from "../styles/mainStyle.css";
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 
 class DialogWrapper extends Component {
@@ -70,7 +70,7 @@ class DialogWrapper extends Component {
                             {body_text}<br/>{qaqc_text}
                         </Body1>
                         <Body2>
-                            <Link target="_blank" href={moreinfo_link}>{moreinfo_text}</Link>
+                            <Link target="_blank" to={moreinfo_link}>{moreinfo_text}</Link>
                         </Body2>
                     </DialogBody>
                 </Dialog>

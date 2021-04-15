@@ -10,7 +10,7 @@ import {Grid, Cell, Content, List, Card, CardTitle} from 'react-mdc-web/lib';
 import styles from '../styles/mainStyle.css';
 import trendsStyles from '../styles/trends.css';
 import { getCustomTrendsRegion, getTrendsPageSettings } from '../utils/getConfig';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 class TrendsDetail extends Component {
 
@@ -40,7 +40,7 @@ class TrendsDetail extends Component {
                             <Cell col={4}>
                                 <Card className={trendsStyles.detailTitle}>
                                     <CardTitle className={styles.title_card}>
-                                        <Link href={"#trendsregions"}>Trends Regions</Link>
+                                        <Link to={"#trendsregions"}>Trends Regions</Link>
                                         {trendsRegionTitleLink}
                                     </CardTitle>
                                 </Card>

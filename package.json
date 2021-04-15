@@ -33,7 +33,7 @@
   },
   "workspaces": {
     "packages": ["packages/*"],
-    "nohoist": ["core__old/*"]
+    "nohoist": ["core__old/**"]
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",
