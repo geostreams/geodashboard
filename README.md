@@ -11,23 +11,50 @@ Geodashboard components are available as npm packages.
 - [@geostreams/core](https://www.npmjs.com/package/@geostreams/core)
 - [@geostreams/geostreaming](https://www.npmjs.com/package/@geostreams/geostreaming)
 
+```bash
+# If you use npm:
+npm install @geostreams/core @geostreams/geostreaming
 
-```sh
+# Or if you use Yarn:
 yarn add @geostreams/core @geostreams/geostreaming
 ```
 
 For setting up a new project based on geodashboard, go to [Usage > New Project](#new-project). If using geodashboard in an existing project, go to [Usage > Existing Project](#existing-project).
 
 ## Set up development environment
-- Clone this repository your local machine
-- Go into the repository  root folder
-- Run `yarn`
-- Run `yarn link:all`. (This command will create a symlink for all packages in this repository to the global node_modules folder)
-- Go into the project repository folder and run the following command for each of the packages you want to edit and work on:
--- `yarn link @geostreams/core`
--- `yarn link @geostreams/core__old`
--- `yarn link @geostreams/geostreaming`
- If using the template project, run `yarn link:geostreams` to link all packages.
+> Yarn workspaces is used to setup lerna. Make sure you have yarn installed globally before proceeding. To install, run `npm install --global yarn`
+
+- From the repository root folder, run
+  ```bash
+  yarn install
+  ```
+- The geostreaming and core packages can be run standalone for testing by:
+  ```bash
+  yarn start @geostreams/geostreaming 
+  #Short command: yarn geostreaming
+  
+  yarn start @geostreams/core 
+  #Short command: yarn core
+
+  ```
+
+### Linking guide
+To test and see changes in your project, complete the following steps:
+- From the repository root folder, run
+  ```bash
+  yarn link:all 
+  #Creates symlinks for all packages in this repository to the global node_modules folder)
+  ```
+- Go into the project repository folder and run the following commands to link:
+  ```bash
+  # Link individual packages:
+  yarn link @geostreams/core
+  yarn link @geostreams/core__old
+  yarn link @geostreams/geostreaming
+
+  # Link all packages:
+  yarn link:geostreams
+  ```
 
 Any changes you make now in your local version should be reflected in your project app as well.
 
