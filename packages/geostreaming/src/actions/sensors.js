@@ -19,19 +19,17 @@ export const updateSensors = (
     data
 });
 
-export const fetchSensors = () => {
-    return (dispatch: Function, getState: Function) => {
-        const { config } = getState();
-        callAPI(
-            config.geostreamingEndpoint,
-            '/api/sensors',
-            ({ sensors }) => {
-                dispatch(updateSensors(config.source, sensors));
-            },
-            logger.error,
-            dispatch
-        );
-    };
+export const fetchSensors = () => (dispatch: Function, getState: Function) => {
+    const { config } = getState();
+    callAPI(
+        config.geostreamingEndpoint,
+        '/api/sensors',
+        ({ sensors }) => {
+            dispatch(updateSensors(config.source, sensors));
+        },
+        logger.error,
+        dispatch
+    );
 };
 
 export type Action =

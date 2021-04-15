@@ -24,18 +24,16 @@ export const updateParameters = (
     data
 });
 
-export const fetchParameters = () => {
-    return (dispatch: Function, getState: Function) => {
-        callAPI(
-            getState().config.geostreamingEndpoint,
-            '/api/parameters',
-            ({ parameters, categories, mappings }) => {
-                dispatch(updateParameters({ parameters, categories, mappings }));
-            },
-            logger.error,
-            dispatch
-        );
-    };
+export const fetchParameters = () => (dispatch: Function, getState: Function) => {
+    callAPI(
+        getState().config.geostreamingEndpoint,
+        '/api/parameters',
+        ({ parameters, categories, mappings }) => {
+            dispatch(updateParameters({ parameters, categories, mappings }));
+        },
+        logger.error,
+        dispatch
+    );
 };
 
 export type Action =
