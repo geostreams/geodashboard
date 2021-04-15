@@ -11,7 +11,7 @@ type Routes = {
 }
 
 const routes: Routes = {
-    '/': { exact: true, component: () => 'Geodashboard Core' }
+    '/': { exact: true, component: Tests }
 };
 
 if (process.env.NODE_ENV === 'development') {

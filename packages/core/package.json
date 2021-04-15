@@ -7,6 +7,12 @@
   },
   "author": "NCSA",
   "license": "ISC",
+  "scripts": {
+    "start": "webpack serve --open --config webpack.dev.js",
+    "lint": "eslint -c .eslintrc --ext .js --ext .jsx --ignore-path .eslintignore ./",
+    "lint:fix": "eslint -c .eslintrc --ext .js --ext .jsx --ignore-path .eslintignore --fix ./",
+    "flow": "flow"
+  },
   "dependencies": {
     "clsx": "^1.1.1",
     "d3": "~5.16.0",
