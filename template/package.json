@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "src/index.jsx",
   "scripts": {
-    "link:geostreams": "npm link @geostreams/core && npm link @geostreams/geostreaming && npm link @geostreams/core__old",
+    "link:geostreams": "yarn link @geostreams/core && yarn link @geostreams/geostreaming && yarn link @geostreams/core__old",
     "start": "webpack serve --open --config webpack.dev.js",
     "lint": "eslint -c .eslintrc --ext .js --ext .jsx --ignore-path .eslintignore ./",
     "lint:fix": "eslint -c .eslintrc --ext .js --ext .jsx --ignore-path .eslintignore --fix ./",
