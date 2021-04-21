@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## UNRELEASED
 
+### Added
+- Add htmlToPdf utility function
+  [GEOD-1366](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1366)
+  [GH-42](https://github.com/geostreams/geodashboard/issues/42)
+
 ### Changed
 - Turned Map into a function component and added two new map controls: FitViewControl and LayersControl.
   [Github-38](https://github.com/geostreams/geodashboard/issues/38)

@@ -16,6 +16,8 @@
   "dependencies": {
     "clsx": "^1.1.1",
     "d3": "~5.16.0",
+    "html2canvas": "^1.0.0-rc.7",
+    "jspdf": "^2.3.1",
     "ol": "~6.5.0",
     "ol-ext": "~3.1.14",
     "ol-layerswitcher": "~3.8.0"
