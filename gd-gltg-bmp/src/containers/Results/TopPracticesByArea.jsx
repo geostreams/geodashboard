@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { VegaLite } from 'react-vega';
-
+import Typography from '@material-ui/core/Typography';
 import type { ElementRect } from 'gd-core/src/utils/flowtype';
 
 import type { Filters, QueryParams } from '../../utils/flowtype';
@@ -67,10 +67,11 @@ type Props = {
         'huc_8'?: string;
     }>;
     containerRect: ElementRect;
+    showVegaActions: boolean;
 };
 
 const TopPracticesByArea = (props: Props) => {
-    const { containerRect, filters } = props;
+    const { containerRect, filters, showVegaActions } = props;
 
     if (filters.selectedBoundaries.length) {
         if (filters.boundaryType === 'state') {
@@ -85,19 +86,26 @@ const TopPracticesByArea = (props: Props) => {
     }
 
     return (
-        <VegaLite
-            width={(containerRect.width || 0) * 0.6}
-            height={(containerRect.height || 0) * 0.6}
-            actions={{
-                export: true,
-                source: process.env.NODE_ENV === 'development',
-                compiled: process.env.NODE_ENV === 'development',
-                editor: process.env.NODE_ENV === 'development'
-            }}
-            data={{ top_practices: props.data }}
-            spec={config.chartSpec}
-        />
+        <>
+            <Typography variant="body1" paragraph>LOREM IPSUM</Typography>
+            <VegaLite
+                width={(containerRect.width || 0) * 0.6}
+                height={(containerRect.height || 0) * 0.6}
+                actions={showVegaActions && {
+                    export: true,
+                    source: process.env.NODE_ENV === 'development',
+                    compiled: process.env.NODE_ENV === 'development',
+                    editor: process.env.NODE_ENV === 'development'
+                }}
+                data={{ top_practices: props.data }}
+                spec={config.chartSpec}
+            />
+        </>
     );
+};
+
+TopPracticesByArea.defaultProps = {
+    showVegaActions: true
 };
 
 export default TopPracticesByArea;

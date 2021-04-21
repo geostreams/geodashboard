@@ -1,7 +1,14 @@
 // @flow
 import React from 'react';
 import { VegaLite } from 'react-vega';
-import { makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import { entries } from 'gd-core/src/utils/array';
 import { precision } from 'gd-core/src/utils/format';
 
@@ -59,7 +66,7 @@ export const config = {
 
 const useStyle = makeStyles({
     tableContainer: {
-        height: '100%'
+        marginBottom: 5
     }
 });
 
@@ -80,12 +87,13 @@ type Props = {
         'huc_8'?: string;
     }>;
     containerRect: ElementRect;
+    showVegaActions: boolean;
 };
 
 const NutrientReduction = (props: Props) => {
     const classes = useStyle();
 
-    const { containerRect, filters } = props;
+    const { containerRect, filters, showVegaActions } = props;
 
     if (filters.selectedBoundaries.length) {
         if (filters.boundaryType === 'state') {
@@ -117,10 +125,11 @@ const NutrientReduction = (props: Props) => {
 
     return (
         <>
+            <Typography variant="body1" paragraph>LOREM IPSUM</Typography>
             <VegaLite
                 width={(containerRect.width || 0) * 0.6}
                 height={(containerRect.height || 0) * 0.6}
-                actions={{
+                actions={showVegaActions && {
                     export: true,
                     source: process.env.NODE_ENV === 'development',
                     compiled: process.env.NODE_ENV === 'development',
@@ -161,6 +170,10 @@ const NutrientReduction = (props: Props) => {
             </TableContainer>
         </>
     );
+};
+
+NutrientReduction.defaultProps = {
+    showVegaActions: true
 };
 
 export default NutrientReduction;

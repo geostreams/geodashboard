@@ -13,7 +13,7 @@ export const BMPContext = React.createContext<BMPContextType>({
     filters: INITIAL_FILTERS,
     // eslint-disable-next-line no-unused-vars
     dispatchFilterUpdate: (action) => {},
-    results: null,
+    results: {},
     // eslint-disable-next-line no-unused-vars
     updateResults: (results) => {}
 });
