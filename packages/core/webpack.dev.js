@@ -22,10 +22,7 @@ module.exports = webpackMerge.merge(commonConfig, {
     plugins: [
         new BundleAnalyzerPlugin({ openAnalyzer: false, analyzerPort: 5050 }),
         new Webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"development"',
-            'process.env.GEOSTREAMS_URL': JSON.stringify(process.env.GEOSTREAMS_URL || 'https://gltg-dev.ncsa.illinois.edu/geostreams'),
-            'process.env.GEOSERVER_URL': JSON.stringify(process.env.GEOSERVER_URL || 'https://gltg-dev.ncsa.illinois.edu/geoserver')
-
+            'process.env.NODE_ENV': '"development"'
         })
     ]
 });

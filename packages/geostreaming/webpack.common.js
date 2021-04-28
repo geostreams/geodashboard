@@ -179,7 +179,8 @@ module.exports = {
         new MiniCssExtractPlugin({ filename: 'css/[name]-[chunkhash].css' }),
         new CleanWebpackPlugin(),
         new ESLintPlugin({
-            emitWarning: true
+            emitWarning: true,
+            failOnError: false
         })
     ]
 };
