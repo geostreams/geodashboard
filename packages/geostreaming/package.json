@@ -1,0 +1,35 @@
+{
+  "name": "@geostreams/geostreaming",
+  "version": "3.6.0",
+  "main": "src/index.jsx",
+  "author": "NCSA",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "start": "webpack serve --open --config webpack.dev.js",
+    "lint": "eslint -c .eslintrc --ext .js --ext .jsx --ignore-path .eslintignore ./",
+    "lint:fix": "eslint -c .eslintrc --ext .js --ext .jsx --ignore-path .eslintignore --fix ./",
+    "flow": "flow"
+  },
+  "dependencies": {
+    "@geostreams/core": "^3.6.0",
+    "clsx": "^1.1.1",
+    "d3": "~5.16.0",
+    "ol": "~6.5.0",
+    "ol-ext": "~3.1.14",
+    "ol-layerswitcher": "~3.8.0"
+  },
+  "peerDependencies": {
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "~4.0.0-alpha.57",
+    "@material-ui/styles": "^4.11.2",
+    "react": "^16.8.0 || ^17.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0",
+    "react-redux": "~7.2.1",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
+  }
+}
