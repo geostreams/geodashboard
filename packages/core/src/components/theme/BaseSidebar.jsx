@@ -28,9 +28,11 @@ const useStyles = makeStyles((theme) => ({
     drawerPaper:{
         width: drawerWidth,
         borderRight: 'none',
-        paddingTop: 65,
         overflowX: 'hidden',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        height: `calc(100% - ${theme.HEADER_HEIGHT ? theme.HEADER_HEIGHT : 55}px)`,
+        top: theme.header ? theme.header.height : 55,
+        paddingTop: 10
     },
     drawerOpen: {
         width: drawerWidth,

@@ -75,6 +75,10 @@ export type MapConfig = {
     geoserverUrl: string;
     zoom: number;
     center: [number, number];
+    minZoom: number,
+    maxZoom: number,
+    popupZoom: number,
+    mapTileURL: string
     useCluster: boolean;
     clusterDistance: number;
     clusterExpandCountThreshold: number;
