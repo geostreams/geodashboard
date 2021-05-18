@@ -1,8 +1,0 @@
-build/
-node_modules/
-.idea/
-.DS_Store
-*-compiled.js
-*-compiled.js.map
-yarn-error.log
-npm-debug.log
