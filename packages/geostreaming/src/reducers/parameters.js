@@ -28,3 +28,4 @@ export default (state: State = INIT_STATE, action: Action) => {
             return state;
     }
 };
+

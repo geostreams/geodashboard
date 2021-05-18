@@ -1,104 +1,48 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-console */
 // @flow
 import React from 'react';
 import {
-    Card,
-    CardActionArea,
-    CardContent,
-    Container,
-    InputBase,
-    NativeSelect,
-    Typography,
     makeStyles
 } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import BaseSidebar from '@geostreams/core/src/components/theme/BaseSidebar';
+import ListSelect from './filters/ListSelect';
+import sanitizeParameters from '../../utils/parameters';
 
-import filters from './filters';
+const useStyles = makeStyles(() => ({
+}));
 
-const useStyle = makeStyles({
-    header: {
-        margin: '30px auto'
-    },
-    filterSelect: {
-        fontStyle: 'italic',
-        background: '#eee',
-        margin: 20
-    },
-    filterCard: {
-        margin: 20
-    },
-    popupClose: {
-        position: 'absolute',
-        top: 5,
-        right: 5,
-        zIndex: 1000,
-        cursor: 'pointer'
-    }
-});
 
-const Sidebar = () => {
-    const classes = useStyle();
+const Sidebar = (props) => {
+    console.log(props);
+    const { parameters, locations, sources } = props;
 
-    const [selectedFilters, updateSelectedFilters] = React.useState(new Set());
+    let params = parameters.filter((param)=> param.search_view);
 
-    const addFilter = ({ target: { value: filterLabel } }) => {
-        const updatedFilters = new Set(selectedFilters);
-        updatedFilters.add(filterLabel);
-        updateSelectedFilters(updatedFilters);
-    };
-
-    const removeFilter = (filterLabel) => {
-        const updatedFilters = new Set(selectedFilters);
-        updatedFilters.delete(filterLabel);
-        updateSelectedFilters(updatedFilters);
-    };
+    params = sanitizeParameters(props.sensors, props.parameters);
+    const classes = useStyles();
+    console.log(classes);
+    const [isSidebarOpen, toggleSidebar] = React.useState(true);
 
     return (
-        <Container>
-            <Typography
-                className={classes.header}
-                variant="h6"
-            >
-                Download
-            </Typography>
-
-            <NativeSelect
-                className={classes.filterSelect}
-                onChange={addFilter}
-                input={<InputBase />}
-                fullWidth
-            >
-                <option className="hidden">
-                    {selectedFilters.size === Object.keys(filters).length ?
-                        'No filter is available' :
-                        'Add a Filter'}
-                </option>
-                {Object.keys(filters).map(label => (
-                    selectedFilters.has(label) ?
-                        null :
-                        <option key={label} value={label}>{label}</option>
-                ))}
-            </NativeSelect>
-
-            {Array.from(selectedFilters).map(filterLabel => (
-                <Card key={filterLabel} className={classes.filterCard}>
-                    <CardActionArea>
-                        <CardContent>
-                            <Typography gutterBottom variant="h5" component="h2">
-                                {filterLabel}
-                            </Typography>
-                            <CloseIcon
-                                className={classes.popupClose}
-                                fontSize="small"
-                                onClick={() => removeFilter(filterLabel)}
-                            />
-                        </CardContent>
-                        <CardContent className={classes.cardProperties}>
-                            {filters[filterLabel]()}
-                        </CardContent>
-                    </CardActionArea>
-                </Card>
-            ))}
-        </Container>
+        <BaseSidebar
+            toggleSidebar={toggleSidebar}
+            expanded={isSidebarOpen}
+        >
+            <ListSelect  
+                defaultOpen
+                title="Locations" 
+                options={locations.map(({ properties: { title, id } }) => ({ label:title, id }))} 
+            />
+            <ListSelect  
+                title="Data Sources" 
+                options={params} 
+            />
+            <ListSelect  
+                title="Sources" 
+                options={sources} 
+            />
+        </BaseSidebar>
     );
 };
 
