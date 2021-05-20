@@ -1,47 +1,32 @@
-/*
- * @flow
- */
-
-
-import {ADD_SEARCH_FILTER, ADD_FILTER, CHANGE_FILTER, DELETE_FILTER, DELETE_FILTERS_AFTER} from '../actions';
-import type {searchFiltersState} from '../utils/flowtype';
-
-type SearchFilterAction = {|
-    type: string, filter: Array<Object>, selectedFilter: Array<string>, allFilters: Object, idx: number
-|};
+import { SET_FILTER, REMOVE_FILTER } from '../actions/search';
 
 const defaultState = {
-    filters: [{'id': 'locations'}, {'id': 'data_sources'}, {'id': 'parameters'}, {'id': 'time'},
-        {'id': 'span'}, {'id': 'online'}],
-    selected: []
-};
-
-const filters = (state: searchFiltersState = defaultState, action: SearchFilterAction) => {
-    switch (action.type) {
-        case ADD_SEARCH_FILTER:
-            return Object.assign({}, state, {
-                filters: {$push: action.filter}
-            });
-
-        case ADD_FILTER:
-            const newSelected = state.selected.concat(action.selectedFilter);
-            return Object.assign({}, state, {selected: newSelected});
-
-        case CHANGE_FILTER:
-            return Object.assign({}, state, {selected: action.selectedFilter});
-
-        case DELETE_FILTER:
-            let newFiltersDelete = state.selected.slice(0, action.idx);
-            newFiltersDelete = newFiltersDelete.concat(state.selected.slice(parseInt(action.idx) + 1));
-            return Object.assign({}, state, {selected: newFiltersDelete});
-
-        case DELETE_FILTERS_AFTER:
-            let newFiltersDeleteAfter = state.selected.slice(0, action.idx + 1);
-            return Object.assign({}, state, {selected: newFiltersDeleteAfter});
-
-        default:
-            return state
+    filters: {
+        parameters: [],
+        locations: [],
+        sources: [],
+        time: [],
+        online: []
     }
 };
 
-export default filters;
+export default function filterReducer(state = defaultState, action) {
+    const { type, payload } = action;
+
+    switch (type) {
+        case SET_FILTER:
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    [payload.attribute]: payload.query
+                }
+            };
+        case REMOVE_FILTER: {
+            const { filters: { [payload.attribute]: omit, ...res } } = state;
+            return { ...state, filters: { ...res } };
+        }
+        default:
+            return state;
+    }
+}

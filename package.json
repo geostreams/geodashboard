@@ -20,8 +20,8 @@
   "main": "index.js",
   "scripts": {
     "link:all": "for d in packages/*/; do (cd $d && yarn link); done",
-    "geostreaming": "lerna run start --scope @geostreams/geostreaming",
-    "core": "lerna run start --scope @geostreams/core",
+    "geostreaming": "lerna run start --stream --scope @geostreams/geostreaming",
+    "core": "lerna run start --stream --scope @geostreams/core",
     "start": "lerna run start --stream --scope",
     "postinstall": "lerna bootstrap --use-workspaces --force-local",
     "release": "lerna publish",
