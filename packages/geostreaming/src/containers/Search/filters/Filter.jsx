@@ -2,21 +2,17 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import SidebarCategory from '@geostreams/core/src/components/theme/SidebarCategory';
-import Checkbox from '@material-ui/core/Checkbox';
-import Radio from '@material-ui/core/Radio';
 import {
-    Paper,
     Divider,
     Button, Box, Chip, Typography
 } from '@material-ui/core';
+import { date } from '@geostreams/core/src/utils/format';
+import SelectFilter from './SelectFilter';
+import DateRangeFilter from './DateRangeFilter';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         background: '#fff'
-    },
-    content: {
-        maxHeight: '25vh',
-        overflowY: 'scroll'
     },
     categoryHeader: {
         lineHeight: 2,
@@ -38,9 +34,6 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: 'center',
         position: 'initial'
     },
-    option: {
-        fontSize: 'small !important'
-    },
     expandedHeader: {
         padding: '8px 5px'
     },
@@ -57,86 +50,66 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-function SelectFilter(props){
-    const { options, handleChange } = props; 
-
-    return(
-        <div className={classes.content}>
-            {options.map(option => (
-                <Box 
-                    className={classes.option} 
-                    onClick={(event)=> handleChange(event, option.id)}>
-                    <Select
-                        checked={selected.includes(option.id)}
-                        size="small"
-                        disableRipple
-                        style={{ backgroundColor: 'transparent', padding: 1 }}
-                    />
-                    {option.label}
-                </Box>
-            ))}
-        </div>
-    );
-}
-
-function DateRangeFilter(props){
-
-}
-
-function BooleanFilter(props){
-
-}
-
 type Props = {
     title: string,
-    options: array,
+    options?: array,
     defaultOpen?: boolean,
-    multiSelect?: boolean,
     onChange: (q) => void,
     value: string[],
     onReset: ()=>void,
     icon: any,
-    type: "select" | "dateRange"
+    type: "multiSelect" | "dateRange" | "singleSelect" | "boolean"
 }
 
-function ListSelectFilter(props: Props) {
-    const { title, options, value, defaultOpen, multiSelect, onChange, onReset, icon: TitleIcon, type } = props;
+
+
+function Filter(props: Props) {
+    const { title, options, value, defaultOpen, onChange, onReset, icon: TitleIcon, type } = props;
     const classes = useStyles();
-    const [selected, setSelected ] = useState(value);
 
-    const filter = {
-        select: SelectFilter,
-        dateRange: DateRangeFilter
-    };
+    const Input = type === 'dateRange' ? DateRangeFilter : SelectFilter;
+    const inputProps = type !== 'dateRange' ? { type } : null;
 
-    
     const getLabel = (id)=>{
         const temp = props.options.filter((o)=>o.id === id);
         return temp[0].label;
     };
 
-    const handleChange = (event, id) => {
-        if(selected.includes(id)){
-            setSelected(selected.filter(x => x !== id));
-            onChange(selected);
-        } else{
-            setSelected(multiSelect ? [...selected, id] : [id]);
-            onChange(selected);
-        }
+    const renderSelectedDate = () => {
+        const startDate = value[0];
+        const endDate = value[1];
+        return(
+            <>
+                <Chip 
+                    className={classes.chip} 
+                    label={value.length > 0 ? `Start Date: ${date(startDate)}` : null} 
+                    size="small" 
+                />
+                <Chip 
+                    className={classes.chip} 
+                    label={value.length > 1 ? `End Date: ${date(endDate)}` : null} 
+                    size="small" 
+                />
+            </>
+        );
+    };
+
+    const handleChange = (val) => {
+        onChange(val);
     };
 
     const renderSelected = () => {
         let output = [];
         let disableDelete = false;
-        if(options.length === selected.length){
+        if(options.length === value.length){
             output = ['All'];
             disableDelete = true;
-        } else if(selected.length > 4) {
-            output = selected.slice(0, 4).map(v => getLabel(v));
-            output.push(`+ ${selected.length - 4} more`);
+        } else if(value.length > 4) {
+            output = value.slice(0, 4).map(v => getLabel(v));
+            output.push(`+ ${value.length - 4} more`);
             disableDelete = true;
         }else {
-            output = selected.map(v => getLabel(v));
+            output = value.map(v => getLabel(v));
         }
         return(
             output.map((label, idx) => 
@@ -167,13 +140,14 @@ function ListSelectFilter(props: Props) {
                     expandedHeader: classes.expandedHeader,
                     headerContainer: classes.headerContainer
                 }}
-                summary={renderSelected()}
+                summary={type === 'dateRange' ? renderSelectedDate() : renderSelected()}
                 title={renderTitle()}
                 backgroundColor="#fff"
             >
+                <Input {...inputProps} onChange={handleChange} value={value} options={options} />
 
                 <Divider />
-                <Button style={{ alignItem: 'flex-end' }}size="small">Reset</Button>
+                <Button style={{ alignItem: 'flex-end' }} size="small" onClick={onReset}>Reset</Button>
             </SidebarCategory>
 
             <Divider />
@@ -181,9 +155,10 @@ function ListSelectFilter(props: Props) {
     );
 }
 
-ListSelectFilter.defaultProps = {
+Filter.defaultProps = {
     defaultOpen: false,
-    type: 'multiSelect'
+    type: 'multiSelect',
+    options: []
 };
 
-export default ListSelectFilter;
+export default Filter;

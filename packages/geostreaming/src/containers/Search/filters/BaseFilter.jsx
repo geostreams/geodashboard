@@ -58,25 +58,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SelectFilter(props){
-    const { options, handleChange } = props; 
-
-    return(
-        <div className={classes.content}>
-            {options.map(option => (
-                <Box 
-                    className={classes.option} 
-                    onClick={(event)=> handleChange(event, option.id)}>
-                    <Select
-                        checked={selected.includes(option.id)}
-                        size="small"
-                        disableRipple
-                        style={{ backgroundColor: 'transparent', padding: 1 }}
-                    />
-                    {option.label}
-                </Box>
-            ))}
-        </div>
-    );
 }
 
 function DateRangeFilter(props){
@@ -96,18 +77,13 @@ type Props = {
     value: string[],
     onReset: ()=>void,
     icon: any,
-    type: "select" | "dateRange"
+    children: any
 }
 
-function ListSelectFilter(props: Props) {
-    const { title, options, value, defaultOpen, multiSelect, onChange, onReset, icon: TitleIcon, type } = props;
+function BaseFilter(props: Props) {
+    const { title, options, value, defaultOpen, onReset, icon: TitleIcon, children } = props;
     const classes = useStyles();
     const [selected, setSelected ] = useState(value);
-
-    const filter = {
-        select: SelectFilter,
-        dateRange: DateRangeFilter
-    };
 
     
     const getLabel = (id)=>{
@@ -115,20 +91,10 @@ function ListSelectFilter(props: Props) {
         return temp[0].label;
     };
 
-    const handleChange = (event, id) => {
-        if(selected.includes(id)){
-            setSelected(selected.filter(x => x !== id));
-            onChange(selected);
-        } else{
-            setSelected(multiSelect ? [...selected, id] : [id]);
-            onChange(selected);
-        }
-    };
-
     const renderSelected = () => {
         let output = [];
         let disableDelete = false;
-        if(options.length === selected.length){
+        if(options.length === selected.length && options.length > 0){
             output = ['All'];
             disableDelete = true;
         } else if(selected.length > 4) {
@@ -171,9 +137,9 @@ function ListSelectFilter(props: Props) {
                 title={renderTitle()}
                 backgroundColor="#fff"
             >
-
+                {children}
                 <Divider />
-                <Button style={{ alignItem: 'flex-end' }}size="small">Reset</Button>
+                <Button style={{ alignItem: 'flex-end' }} size="small" onClick={onReset}>Reset</Button>
             </SidebarCategory>
 
             <Divider />
@@ -181,9 +147,8 @@ function ListSelectFilter(props: Props) {
     );
 }
 
-ListSelectFilter.defaultProps = {
-    defaultOpen: false,
-    type: 'multiSelect'
+BaseFilter.defaultProps = {
+    defaultOpen: false
 };
 
-export default ListSelectFilter;
+export default BaseFilter;
