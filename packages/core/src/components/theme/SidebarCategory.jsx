@@ -8,6 +8,7 @@ import {
     ListItem,
     Grid
 } from '@material-ui/core';
+import clsx from 'clsx';
 import ChevronDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import ChevronRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
@@ -24,8 +25,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: 'auto',
         overflowX: 'hidden',
-        overflowY: 'auto',
-        backgroundColor: theme.palette.background.paper
+        overflowY: 'auto'
     },
     open : {
         transform: 'rotate(180deg)'
@@ -39,7 +39,13 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 4,
         marginRight: 4,
         ...props.classes.header,
+        transition: theme.transitions.create(['padding'], {
+            duration: theme.transitions.duration.short
+        }),
         background: props.backgroundColor
+    }),
+    expandedHeader: props => ({
+        ...props.classes.expandedHeader
     }),
     icon: props => ({
         position: 'absolute',
@@ -52,7 +58,11 @@ const useStyles = makeStyles((theme) => ({
     }),
     content: props => ({
         paddingLeft: theme.spacing(1),
+        background: 'unset',
         ...props.classes.content
+    }),
+    headerContainer: props => ({
+        ...props.classes.headerContainer
     })
 }));
 
@@ -61,7 +71,8 @@ type Props = {
     children?: React.Node,
     title: React.Node,
     // eslint-disable-next-line react/no-unused-prop-types
-    classes: Object
+    classes: Object,
+    summary?: React.Node
 }
 
 function SidebarCategories(props: Props) {
@@ -76,8 +87,9 @@ function SidebarCategories(props: Props) {
                     borderRadius={4}
                     component={ListItem}
                     onClick={()=>toggleOpen(!open)}
+                    className={classes.headerContainer}
                 >
-                    <Grid container className={classes.header} justify="space-between" alignitems="center" >
+                    <Grid container className={clsx(classes.header, { [classes.expandedHeader]: open })} justify="space-between" alignitems="center" >
                         {props.title}
                         {open ?
                             <ChevronDownIcon className={classes.icon} /> :
@@ -89,6 +101,9 @@ function SidebarCategories(props: Props) {
             <Collapse in={open} className={classes.content} unmountOnExit timeout="auto">
                 {props.children}
             </Collapse>
+            <Collapse in={props.summary && !open} unmountOnExit timeout="auto">
+                {props.summary}
+            </Collapse>
         </List>
     );
 }
@@ -96,7 +111,8 @@ function SidebarCategories(props: Props) {
 SidebarCategories.defaultProps = {
     defaultOpen: false,
     children: null,
-    classes: null
+    classes: null,
+    summary: null
 };
 
 export default SidebarCategories;

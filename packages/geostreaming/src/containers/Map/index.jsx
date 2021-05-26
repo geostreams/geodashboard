@@ -71,11 +71,12 @@ interface Props {
     displayOnlineStatus: boolean;
     parameters: ParameterType[];
     sensors: SensorType[];
-    sourcesVisibility: { [sourceId: string]: boolean; };
     features: FeatureType[];
     selectedFeature: ?{ idx: number; zoom: boolean; };
     handleFeatureToggle: (feature: ?FeatureType) => void;
     openSenorDetails: () => void;
+    showLayers?: boolean;
+    featuresFilter?: ()=> void;
 }
 
 const getMarker = (fill: string, stroke: string) => encodeURIComponent(
@@ -88,7 +89,8 @@ const getMarker = (fill: string, stroke: string) => encodeURIComponent(
 const prepareLayers = (
     mapTileURL: string,
     geoserverUrl: string,
-    layersConfig: { [group: string]: MapLayerConfig[] } = {}
+    layersConfig: { [group: string]: MapLayerConfig[] } = {},
+    showLayers: boolean
 ): { [layerName: string]: LayerType } => {
     let source = new OSM();
     if(mapTileURL)
@@ -108,49 +110,49 @@ const prepareLayers = (
             ]
         })
     };
-
-    entries(layersConfig).forEach(([group, groupLayersConfig]) => {
-        const groupLayers = [];
-        groupLayersConfig.forEach(({
-            title,
-            id,
-            type,
-            initialOpacity,
-            initialVisibility,
-            legend
-        }: MapLayerConfig) => {
-            let layer;
-            if (type === 'wms') {
-                layer = new ImageLayer({
-                    source: new ImageWMSSource({
-                        url: `${geoserverUrl}/wms`,
-                        params: { LAYERS: id },
-                        ratio: 1,
-                        serverType: 'geoserver'
-                    }),
-                    opacity: initialOpacity || 0.8,
-                    visible: initialVisibility || false
+    if(showLayers)
+        entries(layersConfig).forEach(([group, groupLayersConfig]) => {
+            const groupLayers = [];
+            groupLayersConfig.forEach(({
+                title,
+                id,
+                type,
+                initialOpacity,
+                initialVisibility,
+                legend
+            }: MapLayerConfig) => {
+                let layer;
+                if (type === 'wms') {
+                    layer = new ImageLayer({
+                        source: new ImageWMSSource({
+                            url: `${geoserverUrl}/wms`,
+                            params: { LAYERS: id },
+                            ratio: 1,
+                            serverType: 'geoserver'
+                        }),
+                        opacity: initialOpacity || 0.8,
+                        visible: initialVisibility || false
+                    });
+                    layer.set('title', title);
+                    if (legend) {
+                        layer.set('legend', `${geoserverUrl}/${legend}`,);
+                    }
+                }
+                if (layer) {
+                    if (group) {
+                        groupLayers.push(layer);
+                    } else {
+                        layers[title] = layer;
+                    }
+                }
+            });
+            if (group) {
+                layers[group] = new GroupLayer({
+                    title: group,
+                    layers: groupLayers
                 });
-                layer.set('title', title);
-                if (legend) {
-                    layer.set('legend', `${geoserverUrl}/${legend}`,);
-                }
-            }
-            if (layer) {
-                if (group) {
-                    groupLayers.push(layer);
-                } else {
-                    layers[title] = layer;
-                }
             }
         });
-        if (group) {
-            layers[group] = new GroupLayer({
-                title: group,
-                layers: groupLayers
-            });
-        }
-    });
 
     return layers;
 };
@@ -162,11 +164,12 @@ const Map = (props: Props) => {
         displayOnlineStatus,
         parameters,
         sensors,
-        sourcesVisibility,
         features,
         selectedFeature,
         handleFeatureToggle,
-        openSenorDetails
+        openSenorDetails,
+        showLayers,
+        featuresFilter
     } = props;
 
     const classes = useStyles();
@@ -195,7 +198,7 @@ const Map = (props: Props) => {
     if (!cacheRef.current.initiated) {
         cacheRef.current = {
             initiated: true,
-            layers: prepareLayers(mapConfig.mapTileURL, mapConfig.geoserverUrl, mapConfig.layers),
+            layers: prepareLayers(mapConfig.mapTileURL, mapConfig.geoserverUrl, mapConfig.layers, showLayers),
             layersControl: new Control({
                 className: classes.layersControl
             }),
@@ -363,15 +366,10 @@ const Map = (props: Props) => {
         if (cluster) {
             const source = cluster.getSource();
             source.clear();
-            source.addFeatures(features.filter((feature) => {
-                const isVisible = sourcesVisibility[feature.get('properties').type.id];
-                if (!isVisible && selectedFeature && selectedFeature.idx === feature.get('idx')) {
-                    handleFeatureToggle();
-                }
-                return isVisible;
-            }));
+            source.addFeatures(features);
         }
-    }, [features, sourcesVisibility]);
+    }, [features]);
+    
 
     const handleMapClick = (event: MapBrowserEventType) => {
         if (mapRef.current) {
@@ -442,7 +440,7 @@ const Map = (props: Props) => {
                     }
                 /> : null}
 
-            {mapConfig.layers ?
+            {mapConfig.layers && showLayers ?
                 <LayersControl
                     el={cacheRef.current.layersControl.element}
                     layers={cacheRef.current.layers}
@@ -461,6 +459,10 @@ const Map = (props: Props) => {
             </div>
         </BaseMap>
     );
+};
+
+Map.defaultProps = {
+    showLayers: true
 };
 
 export default Map;
