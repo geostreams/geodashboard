@@ -86,6 +86,7 @@ const Explore = (props: Props) => {
 
     const [features, setFeatures] = useState<FeatureType[]>([]);
     const [filteredFeatures, setFilteredFeatures] = useState<FeatureType[]>([]);
+    const [drawMode, toggleDrawMode] = useState(false);
 
     // idx is the selected feature property. zoom indicated whether the map should zoom the selected feature.
     const [selectedFeature, updateSelectedFeature] = React.useState<?{ idx: number, zoom: boolean; }>();
@@ -142,9 +143,12 @@ const Explore = (props: Props) => {
         //             new Date(feature.get('max_end_time')) <= filters.time[1]);
         // }
         if(filters.locations.length > 0){
-            updatedFeatures = updatedFeatures.filter((feature => 
-                matchLocation(filters.locations[0], feature.get('properties').region, locations, feature.get('coordinates'))
-            ));
+            if(filters.locations[0] === 'custom')
+                toggleDrawMode(true);
+            else
+                updatedFeatures = updatedFeatures.filter((feature => 
+                    matchLocation(filters.locations[0], feature.get('properties').region, locations, feature.get('coordinates'))
+                ));
         }
 
         setFilteredFeatures(updatedFeatures);
@@ -181,6 +185,7 @@ const Explore = (props: Props) => {
                 zoomToSe={undefined}
                 openSenorDetails={() => updateShowSensorDetails(true)}
                 showLayers= {false}
+                drawMode={drawMode}
             />
 
             {showSensorDetails ?

@@ -30,6 +30,11 @@ const Sidebar = (props) => {
 
     console.log(sensors);
 
+    const getLocationsOptions = () => {
+        const loc = locations.map(({ properties: { title, id } }) => ({ label:title, id }));
+        return [{ label: 'Custom Location', id: 'custom' },...loc];
+    };
+
     return (
         <BaseSidebar
             toggleSidebar={toggleSidebar}
@@ -44,7 +49,8 @@ const Sidebar = (props) => {
                 value={filters.locations || []}
                 onChange={(query)=>dispatch(setFilter('locations', query))}
                 onReset={()=>dispatch(removeFilter('locations'))}
-                options={locations.map(({ properties: { title, id } }) => ({ label:title, id }))} 
+                options={getLocationsOptions()} 
+                action={{ title: 'Custom Location', action: ()=> dispatch(setFilter('locations', [{ label: 'Custom Location', id: 'custom' }])) }}
             />
             <Filter  
                 type="multiSelect"

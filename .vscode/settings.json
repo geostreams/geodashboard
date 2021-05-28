@@ -1,0 +1,12 @@
+{
+    "eslint.packageManager": "yarn",
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+    ],
+    "eslint.workingDirectories": [
+      { "directory": "packages/core", "changeProcessCWD": true },
+      { "directory": "packages/geostreaming", "changeProcessCWD": true },
+      { "directory": "packages/core__old", "changeProcessCWD": true }
+    ]
+  }

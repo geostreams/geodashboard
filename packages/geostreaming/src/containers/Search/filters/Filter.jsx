@@ -58,13 +58,14 @@ type Props = {
     value: string[],
     onReset: ()=>void,
     icon: any,
-    type: "multiSelect" | "dateRange" | "singleSelect" | "boolean"
+    type: "multiSelect" | "dateRange" | "singleSelect" | "boolean",
+    action?: any
 }
 
 
 
 function Filter(props: Props) {
-    const { title, options, value, defaultOpen, onChange, onReset, icon: TitleIcon, type } = props;
+    const { title, options, value, defaultOpen, onChange, onReset, icon: TitleIcon, type, action } = props;
     const classes = useStyles();
 
     const Input = type === 'dateRange' ? DateRangeFilter : SelectFilter;
@@ -74,6 +75,9 @@ function Filter(props: Props) {
         const temp = props.options.filter((o)=>o.id === id);
         return temp[0].label;
     };
+    console.log(value);
+
+    const actionItems = [action, { title: 'Reset', action: onReset }];
 
     const renderSelectedDate = () => {
         const startDate = value[0];
@@ -147,7 +151,15 @@ function Filter(props: Props) {
                 <Input {...inputProps} onChange={handleChange} value={value} options={options} />
 
                 <Divider />
-                <Button style={{ alignItem: 'flex-end' }} size="small" onClick={onReset}>Reset</Button>
+                {actionItems.map((item) => 
+                    <Button 
+                        style={{ alignItem: 'flex-end' }} 
+                        key={`actionItem-${item.title}-${title}`}
+                        size="small" 
+                        onClick={item.action}>
+                        {item.title}
+                    </Button>)}
+                
             </SidebarCategory>
 
             <Divider />
@@ -158,7 +170,8 @@ function Filter(props: Props) {
 Filter.defaultProps = {
     defaultOpen: false,
     type: 'multiSelect',
-    options: []
+    options: [],
+    action: {}
 };
 
 export default Filter;

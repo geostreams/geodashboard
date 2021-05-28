@@ -19,6 +19,8 @@ import Control from '@geostreams/core/src/components/ol/Control';
 import ClusterControl from '@geostreams/core/src/components/ol/ClusterControl';
 import FitViewControl from '@geostreams/core/src/components/ol/FitViewControl';
 import LayersControl from '@geostreams/core/src/components/ol/LayersControl';
+import DrawControl from '@geostreams/core/src/components/ol/DrawControl';
+
 import { entries } from '@geostreams/core/src/utils/array';
 
 import type { Feature as FeatureType, Map as MapType, MapBrowserEventType } from 'ol';
@@ -38,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
     fitViewControl: {
         bottom: '.5em',
         left: '.5em'
+    },
+    drawControl: {
+        top: '5em',
+        left: '0.5em'
     },
     clusterControl: {
         'display': 'flex',
@@ -76,7 +82,7 @@ interface Props {
     handleFeatureToggle: (feature: ?FeatureType) => void;
     openSenorDetails: () => void;
     showLayers?: boolean;
-    featuresFilter?: ()=> void;
+    drawMode?: boolean;
 }
 
 const getMarker = (fill: string, stroke: string) => encodeURIComponent(
@@ -169,7 +175,7 @@ const Map = (props: Props) => {
         handleFeatureToggle,
         openSenorDetails,
         showLayers,
-        featuresFilter
+        drawMode
     } = props;
 
     const classes = useStyles();
@@ -193,6 +199,7 @@ const Map = (props: Props) => {
         layersControl: Control;
         fitViewControl: Control;
         clusterControl: Control;
+        drawControl: Control;
     }>({});
 
     if (!cacheRef.current.initiated) {
@@ -207,6 +214,9 @@ const Map = (props: Props) => {
             }),
             clusterControl: new Control({
                 className: classes.clusterControl
+            }),
+            drawControl: new Control({
+                className: classes.drawControl
             })
         };
     }
@@ -320,6 +330,8 @@ const Map = (props: Props) => {
             };
 
             const getStyle = (feature) => {
+                if(!feature.getKeys().includes('features'))
+                    return null;
                 const size = feature.get('features').length;
 
                 if (size === 1 || !isClusterEnabled) {
@@ -369,10 +381,11 @@ const Map = (props: Props) => {
             source.addFeatures(features);
         }
     }, [features]);
+
     
 
     const handleMapClick = (event: MapBrowserEventType) => {
-        if (mapRef.current) {
+        if (mapRef.current && !drawMode) {
             const featuresAtPixel = mapRef.current.forEachFeatureAtPixel(event.pixel, (featureChange) => featureChange);
             if (featuresAtPixel && featuresAtPixel.attributes && featuresAtPixel.attributes.type === 'single') {
                 // Case when a feature is expanded
@@ -400,7 +413,8 @@ const Map = (props: Props) => {
             controls={[
                 cacheRef.current.fitViewControl,
                 cacheRef.current.clusterControl,
-                cacheRef.current.layersControl
+                cacheRef.current.layersControl,
+                cacheRef.current.drawControl
             ]}
             layers={Object.values(cacheRef.current.layers)}
             updateMap={(map) => {
@@ -411,7 +425,7 @@ const Map = (props: Props) => {
                 click: handleMapClick,
                 pointermove: (e) => {
                     // Show pointer when over a feature
-                    if (!e.dragging) {
+                    if (!e.dragging && !drawMode) {
                         const pixel = e.map.getEventPixel(e.originalEvent);
                         const hit = e.map.hasFeatureAtPixel(pixel);
                         e.map.getTarget().style.cursor = hit ? 'pointer' : '';
@@ -448,6 +462,15 @@ const Map = (props: Props) => {
                 /> :
                 null}
 
+            
+            {drawMode ? 
+                <DrawControl
+                    el={cacheRef.current.drawControl.element}
+                    center={mapConfig.center}
+                    zoom={mapConfig.zoom}
+                /> :
+                null}
+
             <div ref={popupContainerRef}>
                 {selectedFeature ?
                     <SensorPopup
@@ -462,7 +485,8 @@ const Map = (props: Props) => {
 };
 
 Map.defaultProps = {
-    showLayers: true
+    showLayers: true,
+    drawMode: false
 };
 
 export default Map;
