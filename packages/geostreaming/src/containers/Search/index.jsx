@@ -158,7 +158,9 @@ const Explore = (props: Props) => {
         updateSelectedFeature(idx || idx === 0 ? { idx, zoom } : undefined);
     };
 
-    const [sourcesVisibility, updateSourcesVisibility] = React.useState<{ [sourceId: string]: boolean; }>({});
+    const onStoreShape = (coord) => {
+        console.log(coord);
+    };
 
     if(!sensors.length || !parameters.length)
         return (<div className={classes.pageLoader}><CircularProgress thickness={5} size={100} /></div>);
@@ -170,7 +172,6 @@ const Explore = (props: Props) => {
                 sources={sources}
                 locations = {locations}
                 sourcesConfig={sourcesConfig}
-                toggleRegions={updateSourcesVisibility}
             />
             <Map
                 mapConfig={mapConfig}
@@ -178,14 +179,14 @@ const Explore = (props: Props) => {
                 displayOnlineStatus={displayOnlineStatus}
                 parameters={parameters}
                 sensors={sensors}
-                sourcesVisibility={sourcesVisibility}
                 features={filteredFeatures}
                 selectedFeature={selectedFeature}
                 handleFeatureToggle={handleFeatureToggle}
-                zoomToSe={undefined}
                 openSenorDetails={() => updateShowSensorDetails(true)}
                 showLayers= {false}
                 drawMode={drawMode}
+                drawControlProps={{ toggleDrawMode, onStoreShape }}
+
             />
 
             {showSensorDetails ?

@@ -83,6 +83,7 @@ interface Props {
     openSenorDetails: () => void;
     showLayers?: boolean;
     drawMode?: boolean;
+    drawControlProps?: Object;
 }
 
 const getMarker = (fill: string, stroke: string) => encodeURIComponent(
@@ -175,7 +176,8 @@ const Map = (props: Props) => {
         handleFeatureToggle,
         openSenorDetails,
         showLayers,
-        drawMode
+        drawMode,
+        drawControlProps
     } = props;
 
     const classes = useStyles();
@@ -382,6 +384,15 @@ const Map = (props: Props) => {
         }
     }, [features]);
 
+    React.useEffect(() => {
+        if(drawMode){
+            mapRef.current.addControl(cacheRef.current.drawControl);
+        }
+        if(!drawMode){
+            mapRef.current.removeControl(cacheRef.current.drawControl);
+        }
+    }, [drawMode]);
+
     
 
     const handleMapClick = (event: MapBrowserEventType) => {
@@ -413,8 +424,7 @@ const Map = (props: Props) => {
             controls={[
                 cacheRef.current.fitViewControl,
                 cacheRef.current.clusterControl,
-                cacheRef.current.layersControl,
-                cacheRef.current.drawControl
+                cacheRef.current.layersControl
             ]}
             layers={Object.values(cacheRef.current.layers)}
             updateMap={(map) => {
@@ -466,8 +476,7 @@ const Map = (props: Props) => {
             {drawMode ? 
                 <DrawControl
                     el={cacheRef.current.drawControl.element}
-                    center={mapConfig.center}
-                    zoom={mapConfig.zoom}
+                    {...drawControlProps}
                 /> :
                 null}
 
@@ -486,7 +495,8 @@ const Map = (props: Props) => {
 
 Map.defaultProps = {
     showLayers: true,
-    drawMode: false
+    drawMode: false,
+    drawControlProps: {}
 };
 
 export default Map;
