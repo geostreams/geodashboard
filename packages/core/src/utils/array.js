@@ -12,7 +12,7 @@ export const values = (obj: { [string]: any }): Array<any> => {
 };
 
 // Point in Polygon. same function from geodashboard
-// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html#Listing the Vertices
+// https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html the Vertices
 
 export const pnpoly = (x: any, y: number, coords: Object) => {
     const vert = [[0, 0]];

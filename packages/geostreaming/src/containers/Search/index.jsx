@@ -10,8 +10,8 @@ import { fetchParameters } from '../../actions/parameters';
 import { fetchSensors } from '../../actions/sensors';
 import Map from '../Map';
 import SensorDetail from '../Sensor/Detail';
-import { matchLocation } from '../../utils/sensors';
-import { setFilter as setFilterAction } from '../../actions/search';
+import { matchLocation, isLocationInPolygon } from '../../utils/search';
+import { setFilter as setFilterAction, addLocation as addLocationAction } from '../../actions/search';
 
 import type { MapConfig, ParameterType, SensorType, SourceConfig, SourceType, LocationType } from '../../utils/flowtype';
 
@@ -51,7 +51,9 @@ type Props = {
     fetchParameters: Function;
     setFilter: Function;
     displayOnlineStatus: boolean;
-    filters: []
+    filters: [],
+    addLocation: Function,
+    custom_location: Object
 }
 
 type Data = {
@@ -73,7 +75,9 @@ const Explore = (props: Props) => {
         locations,
         displayOnlineStatus,
         filters,
-        setFilter
+        setFilter,
+        addLocation, 
+        custom_location
     } = props;
 
     React.useEffect(() => {
@@ -143,23 +147,32 @@ const Explore = (props: Props) => {
         //             new Date(feature.get('max_end_time')) <= filters.time[1]);
         // }
         if(filters.locations.length > 0){
-            if(filters.locations[0] === 'custom')
+            if(filters.locations[0].id === 'custom'){
                 toggleDrawMode(true);
-            else
+            } else{
                 updatedFeatures = updatedFeatures.filter((feature => 
                     matchLocation(filters.locations[0], feature.get('properties').region, locations, feature.get('coordinates'))
                 ));
+            }
         }
 
         setFilteredFeatures(updatedFeatures);
     }, [filters]);
+
+    useEffect(()=> {
+        if('geometry' in custom_location){
+            const updatedFeatures = filteredFeatures.filter((feature) =>
+                isLocationInPolygon(feature.getGeometry().getCoordinates(), custom_location));
+            setFilteredFeatures(updatedFeatures);
+        }
+    },[custom_location]);
 
     const handleFeatureToggle = (idx: ?number, zoom = false) => {
         updateSelectedFeature(idx || idx === 0 ? { idx, zoom } : undefined);
     };
 
     const onStoreShape = (coord) => {
-        console.log(coord);
+        addLocation(coord);
     };
 
     if(!sensors.length || !parameters.length)
@@ -185,7 +198,7 @@ const Explore = (props: Props) => {
                 openSenorDetails={() => updateShowSensorDetails(true)}
                 showLayers= {false}
                 drawMode={drawMode}
-                drawControlProps={{ toggleDrawMode, onStoreShape }}
+                drawControlProps={{ toggleDrawMode, onStoreShape: addLocation }}
 
             />
 
@@ -203,6 +216,7 @@ const mapStateToProps = (state) => ({
     sourcesConfig: state.config.source,
     locations: state.config.locations,
     filters: state.__new_searchFilters.filters,
+    custom_location: state.__new_searchFilters.custom_location,
     displayOnlineStatus: state.config.sensors.displayOnlineStatus,
     sensors: state.__new_sensors.sensors.sort(
         (sensor1, sensor2) =>
@@ -215,7 +229,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
     fetchSensors,
     fetchParameters,
-    setFilter: setFilterAction
+    setFilter: setFilterAction,
+    addLocation: addLocationAction
 };
 
 export default connect(

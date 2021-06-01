@@ -28,8 +28,6 @@ const Sidebar = (props) => {
     let params = parameters.filter((param)=> param.search_view);
     params = sanitizeParameters(props.sensors, props.parameters);
 
-    console.log(sensors);
-
     const getLocationsOptions = () => {
         const loc = locations.map(({ properties: { title, id } }) => ({ label:title, id }));
         return [{ label: 'Custom Location', id: 'custom' },...loc];
@@ -49,7 +47,7 @@ const Sidebar = (props) => {
                 value={filters.locations || []}
                 onChange={(query)=>dispatch(setFilter('locations', query))}
                 onReset={()=>dispatch(removeFilter('locations'))}
-                options={getLocationsOptions()} 
+                options={locations.map(({ properties: { title, id } }) => ({ label:title, id }))} 
                 action={{ title: 'Custom Location', action: ()=> dispatch(setFilter('locations', [{ label: 'Custom Location', id: 'custom' }])) }}
             />
             <Filter  

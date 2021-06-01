@@ -73,9 +73,10 @@ function Filter(props: Props) {
 
     const getLabel = (id)=>{
         const temp = props.options.filter((o)=>o.id === id);
-        return temp[0].label;
+        if(temp.length > 0)
+            return temp[0].label;
+        return '';
     };
-    console.log(value);
 
     const actionItems = [action, { title: 'Reset', action: onReset }];
 

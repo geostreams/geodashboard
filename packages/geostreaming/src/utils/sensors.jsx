@@ -8,7 +8,7 @@ import { Icon, Style } from 'ol/style';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import SVGIcon from '@geostreams/core/src/components/SVGIcon';
-import { pnpoly } from '@geostreams/core/src/utils/array';
+
 
 import type { PropertiesType, SensorType, SourceConfig } from './flowtype';
 
@@ -74,23 +74,4 @@ export const getSensorMarker = (sensor: SensorType, sourceConfig: SourceConfig, 
     return sensorMarker;
 };
 
-export const matchLocation = (
-    selectedLocation: string, 
-    sensorRegion: string, 
-    locations: [], 
-    coordinates: []
-) => {
-    if (selectedLocation === sensorRegion)
-        return true;
 
-    function findLocation(location) {
-        return location.properties.id === selectedLocation;
-    }
-
-    const customLocation = locations.find(findLocation);
-    if (!customLocation)
-        return false;
-    return pnpoly( Number(coordinates[1]), 
-        Number(coordinates[0]), 
-        customLocation.geometry.coordinates);
-};

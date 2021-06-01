@@ -9,7 +9,9 @@ import StarIcon from '@material-ui/icons/StarOutline';
 import { Vector as VectorSource } from 'ol/source';
 import Draw, { createBox } from 'ol/interaction/Draw';
 import VectorLayer from 'ol/layer/Vector';
-import GeoJSON from 'ol/format/GeoJSON';
+import { fromCircle } from 'ol/geom/Polygon';
+
+
 import { METERS_PER_UNIT } from 'ol/proj/Units';
 
 import { MapContext } from './Map';
@@ -34,12 +36,7 @@ const DrawControl = ({ el, toggleDrawMode, onStoreShape }: Props) => {
 
     useEffect(()=> {
         if(vectorSource === null){
-            const vector = new VectorSource({
-                format: (new GeoJSON({
-                    dataProjection: 'EPSG:4326',
-                    featureProjection: 'EPSG:3857'
-                }))
-            });
+            const vector = new VectorSource();
             vector.on('addfeature', () => {
                 map.getView().fit(vector.getExtent(), { duration: 500 });
             });
@@ -88,15 +85,19 @@ const DrawControl = ({ el, toggleDrawMode, onStoreShape }: Props) => {
                 // (1) Get the Units for the Map Projection
                 const units = map.getView().getProjection().getUnits();
                 // (2) Get the Center Point of the Circle
-                const drawCenter = drawExtent.getCenter();
+                const center = drawExtent.getCenter();
                 // (3) Get the Radius of the Circle in Meters
-                const drawRadius = (drawExtent.getRadius() * METERS_PER_UNIT[units]) / 1000;
-                // Assemble the Coordinates for the API call
-                drawCoordinates = [drawCenter.concat(drawRadius)];
+                const radius = (drawExtent.getRadius() * METERS_PER_UNIT[units]) / 1000;
+
+                // Convert the circle to a polygon to get the coordinates
+                // Openlayers provides only the center and radius for circles, not coordinates
+                const coord = fromCircle(drawExtent).getCoordinates();
+                
+                onStoreShape(coord, 'Circle', { center, radius });
             } else{
                 drawCoordinates = feature.getGeometry().getCoordinates();
+                onStoreShape(drawCoordinates);
             }
-            onStoreShape(drawCoordinates);
         });
         map.addInteraction(drawEl);
         setDraw(drawEl);
