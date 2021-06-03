@@ -25,3 +25,24 @@ export const addLocation = (coordinates, type = 'Polygon', properties) => ({
         }
     }
 });
+
+export const COUNT_NUMBER_DATAPOINTS = 'COUNT_NUMBER_DATAPOINTS';
+export function fetchDataPointsCount(countLink: string) {
+    return (dispatch: Function) => {
+        const result = fetch(countLink).then(response => {
+            const json = response.json();
+            return json;
+        })
+            .then(json => {
+                if (json) {
+                    dispatch({
+                        type: COUNT_NUMBER_DATAPOINTS,
+                        number_datapoints: json.datapointsLength
+                    });
+                }
+            }).catch((error) => {
+                console.error(`An ERROR occurred! ${error}`);
+            });
+        return result;
+    };
+}

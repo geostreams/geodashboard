@@ -7,11 +7,9 @@ import SquareIcon from '@material-ui/icons/CropSquare';
 import CancelIcon from '@material-ui/icons/Cancel';
 import StarIcon from '@material-ui/icons/StarOutline';
 import { Vector as VectorSource } from 'ol/source';
-import Draw, { createBox } from 'ol/interaction/Draw';
 import VectorLayer from 'ol/layer/Vector';
+import Draw, { createBox } from 'ol/interaction/Draw';
 import { fromCircle } from 'ol/geom/Polygon';
-
-
 import { METERS_PER_UNIT } from 'ol/proj/Units';
 
 import { MapContext } from './Map';
@@ -32,11 +30,15 @@ const DrawControl = ({ el, toggleDrawMode, onStoreShape }: Props) => {
     const classes = useStyle();
     const { map } = React.useContext(MapContext);
     const [vectorSource, setVectorSource] = useState(null);
+    // contains the draw Object created for deleting interaction at end
     const [draw, setDraw] = useState(null);
 
+    // Create VectorSource and Layer on mounting 
+    // which contain the drawing features
     useEffect(()=> {
         if(vectorSource === null){
             const vector = new VectorSource();
+            // zooms to the selected shape
             vector.on('addfeature', () => {
                 map.getView().fit(vector.getExtent(), { duration: 500 });
             });
@@ -49,7 +51,7 @@ const DrawControl = ({ el, toggleDrawMode, onStoreShape }: Props) => {
             setVectorSource(vector);
         }
     }, []);
-
+    // Removes existing drawn shapes
     const clearDrawing = () => {
         if(draw){
             vectorSource.clear();
@@ -77,6 +79,12 @@ const DrawControl = ({ el, toggleDrawMode, onStoreShape }: Props) => {
             stopClick: true,
             ...options[type]
         });
+
+        setDraw(drawEl);
+
+        map.addInteraction(drawEl);
+        
+        // Extract coordinates and info of shape when drawing is completed
         drawEl.on('drawend', (event) => {
             const { feature } = event;
             let drawCoordinates;
@@ -99,8 +107,6 @@ const DrawControl = ({ el, toggleDrawMode, onStoreShape }: Props) => {
                 onStoreShape(drawCoordinates);
             }
         });
-        map.addInteraction(drawEl);
-        setDraw(drawEl);
     };
 
     return ReactDOM.createPortal(

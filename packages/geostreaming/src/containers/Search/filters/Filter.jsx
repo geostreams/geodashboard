@@ -1,8 +1,9 @@
 // @flow
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import SidebarCategory from '@geostreams/core/src/components/theme/SidebarCategory';
 import {
+    Avatar,
     Divider,
     Button, Box, Chip, Typography
 } from '@material-ui/core';
@@ -12,7 +13,8 @@ import DateRangeFilter from './DateRangeFilter';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        background: '#fff'
+        background: '#fff',
+        width: '100%'
     },
     categoryHeader: {
         lineHeight: 2,
@@ -38,14 +40,22 @@ const useStyles = makeStyles((theme) => ({
         padding: '8px 5px'
     },
     chip: {
-        margin: '4px 2px'
+        margin: '4px 4px'
+    },
+    summaryChips: {
+        marginLeft: '5px'
     },
     title: {
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     titleIcon: {
-        marginRight: '10px'
+        marginRight: '5px',
+        marginLeft: '5px',
+        height: '30px',
+        width: '30px',
+        backgroundColor: '#374a58'
     }
 
 }));
@@ -53,19 +63,24 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
     title: string,
     options?: array,
-    defaultOpen?: boolean,
     onChange: (q) => void,
     value: string[],
     onReset: ()=>void,
     icon: any,
     type: "multiSelect" | "dateRange" | "singleSelect" | "boolean",
-    action?: any
+    action?: [],
+    isExpanded?: boolean,
+    toggleExpandedState?: ()=> void
 }
 
 
 
 function Filter(props: Props) {
-    const { title, options, value, defaultOpen, onChange, onReset, icon: TitleIcon, type, action } = props;
+    const { 
+        title, options, value, onChange, 
+        onReset, icon: TitleIcon, type, action, 
+        isExpanded, toggleExpandedState
+    } = props;
     const classes = useStyles();
 
     const Input = type === 'dateRange' ? DateRangeFilter : SelectFilter;
@@ -78,13 +93,14 @@ function Filter(props: Props) {
         return '';
     };
 
-    const actionItems = [action, { title: 'Reset', action: onReset }];
+    // Info about Action Buttons 
+    const actionItems = [...action,{ title: 'Reset', action: onReset }];
 
     const renderSelectedDate = () => {
         const startDate = value[0];
         const endDate = value[1];
         return(
-            <>
+            <div className={classes.summaryChips}>
                 <Chip 
                     className={classes.chip} 
                     label={value.length > 0 ? `Start Date: ${date(startDate)}` : null} 
@@ -95,7 +111,7 @@ function Filter(props: Props) {
                     label={value.length > 1 ? `End Date: ${date(endDate)}` : null} 
                     size="small" 
                 />
-            </>
+            </div>
         );
     };
 
@@ -103,6 +119,7 @@ function Filter(props: Props) {
         onChange(val);
     };
 
+    // Trim and display selected options
     const renderSelected = () => {
         let output = [];
         let disableDelete = false;
@@ -119,6 +136,7 @@ function Filter(props: Props) {
         return(
             output.map((label, idx) => 
                 <Chip 
+                    key={`summary-${label}`}
                     className={classes.chip} 
                     label={label} 
                     size="small" 
@@ -128,7 +146,9 @@ function Filter(props: Props) {
 
     const renderTitle = () => (
         <Box className={classes.title}>
-            <TitleIcon className={classes.titleIcon} />
+            <Avatar className={classes.titleIcon}>
+                <TitleIcon fontSize="small" />
+            </Avatar>
             <Typography> {title}</Typography>
         </Box>
     );
@@ -138,7 +158,6 @@ function Filter(props: Props) {
             <Divider />
             <SidebarCategory
                 key="main"
-                defaultOpen={defaultOpen}
                 classes={{ 
                     header: classes.categoryHeader,
                     icon: classes.categoryDropDown,
@@ -147,9 +166,12 @@ function Filter(props: Props) {
                 }}
                 summary={type === 'dateRange' ? renderSelectedDate() : renderSelected()}
                 title={renderTitle()}
+                icon={TitleIcon}
                 backgroundColor="#fff"
+                value={isExpanded}
+                onChange={toggleExpandedState}
             >
-                <Input {...inputProps} onChange={handleChange} value={value} options={options} />
+                <Input key={`filter-${title}`}{...inputProps} onChange={handleChange} value={value} options={options} />
 
                 <Divider />
                 {actionItems.map((item) => 
@@ -169,10 +191,11 @@ function Filter(props: Props) {
 }
 
 Filter.defaultProps = {
-    defaultOpen: false,
     type: 'multiSelect',
     options: [],
-    action: {}
+    action: [],
+    isExpanded: undefined,
+    toggleExpandedState: undefined
 };
 
 export default Filter;

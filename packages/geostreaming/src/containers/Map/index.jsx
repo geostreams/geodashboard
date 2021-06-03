@@ -332,6 +332,7 @@ const Map = (props: Props) => {
             };
 
             const getStyle = (feature) => {
+                // Handled null error when click propagated from non-feature layers
                 if(!feature.getKeys().includes('features'))
                     return null;
                 const size = feature.get('features').length;
@@ -384,6 +385,7 @@ const Map = (props: Props) => {
         }
     }, [features]);
 
+    // Updates controls based on whether currently in draw mode
     React.useEffect(() => {
         if(drawMode){
             mapRef.current.addControl(cacheRef.current.drawControl);

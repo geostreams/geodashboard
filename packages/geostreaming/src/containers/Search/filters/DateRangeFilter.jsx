@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
@@ -33,6 +33,11 @@ function DateTimeFilter(props: Props){
     const { onChange, value } = props; 
     const classes = useStyles();
     const [date, setDate ] = useState(value);
+
+    useEffect(()=> {
+        if(value && value === date)
+            setDate(value);
+    },[value]);
 
     const handleStartChange = (newDate) => {
         setDate([newDate, date[1]]);

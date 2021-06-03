@@ -1,5 +1,5 @@
 // @flow
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     Box,
@@ -72,12 +72,28 @@ type Props = {
     title: React.Node,
     // eslint-disable-next-line react/no-unused-prop-types
     classes: Object,
-    summary?: React.Node
+    summary?: React.Node,
+    value?: boolean;
+    onChange?: () => void
+}
+
+// Takes values as input and if they are undefined, returns a useState hook
+function usePropState(stateVal, stateFunc, defaultValue) {
+    const state = useState(defaultValue);
+    if (stateVal === undefined && stateFunc === undefined) return state;
+    return [stateVal, stateFunc];
 }
 
 function SidebarCategories(props: Props) {
-    const classes = useStyles(props);
-    const [open, toggleOpen] = React.useState(props.defaultOpen);
+    const { title, children, summary, defaultOpen, value, onChange, ...rest } = props;
+    const classes = useStyles(rest);
+    const [open, toggleOpen] = usePropState(value, onChange, defaultOpen);
+
+    useEffect(() => {
+        if(value && open !== value)
+            toggleOpen(value);
+    }, [value]);
+
     return (
         <List
             className={`${classes.root} noPadding`}
@@ -90,7 +106,7 @@ function SidebarCategories(props: Props) {
                     className={classes.headerContainer}
                 >
                     <Grid container className={clsx(classes.header, { [classes.expandedHeader]: open })} justify="space-between" alignitems="center" >
-                        {props.title}
+                        {title}
                         {open ?
                             <ChevronDownIcon className={classes.icon} /> :
                             <ChevronRightIcon className={classes.icon} />}
@@ -98,11 +114,11 @@ function SidebarCategories(props: Props) {
                 </Box>
             }
         >
-            <Collapse in={open} className={classes.content} unmountOnExit timeout="auto">
-                {props.children}
+            <Collapse key="sidebarcategory-Children" in={open} className={classes.content} unmountOnExit timeout="auto">
+                {children}
             </Collapse>
-            <Collapse in={props.summary && !open} unmountOnExit timeout="auto">
-                {props.summary}
+            <Collapse key="sidebarcategory-summary"in={summary && !open} unmountOnExit timeout="auto">
+                {summary}
             </Collapse>
         </List>
     );
@@ -112,7 +128,9 @@ SidebarCategories.defaultProps = {
     defaultOpen: false,
     children: null,
     classes: null,
-    summary: null
+    summary: null,
+    value: undefined,
+    onChange: undefined
 };
 
 export default SidebarCategories;

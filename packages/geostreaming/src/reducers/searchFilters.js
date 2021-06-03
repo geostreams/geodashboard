@@ -25,7 +25,7 @@ export default function filterReducer(state = defaultState, action) {
             };
         case REMOVE_FILTER: {
             const { filters: { [payload.attribute]: omit, ...res } } = state;
-            return { ...state, filters: { ...res } };
+            return { ...state, filters: { ...res, [payload.attribute]: defaultState.filters[payload.attribute] } };
         }
         case ADD_CUSTOM_LOCATION:
             return { ...state, custom_location: payload };

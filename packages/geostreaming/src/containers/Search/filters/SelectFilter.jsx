@@ -8,11 +8,11 @@ import { Box
 
 const useStyles = makeStyles((theme) => ({
     content: {
-        maxHeight: '25vh',
+        maxHeight: '35vh',
         overflowY: 'scroll'
     },
     denseContent: {
-        maxHeight: '25vh',
+        maxHeight: '35vh',
         overflowY: 'scroll',
         display: 'flex',
         flexDirection: 'row',

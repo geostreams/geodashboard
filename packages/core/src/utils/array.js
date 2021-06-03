@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-plusplus */
 // @flow
 
@@ -11,7 +12,7 @@ export const values = (obj: { [string]: any }): Array<any> => {
     return keys.map(key => obj[key]);
 };
 
-// Point in Polygon. same function from geodashboard
+// Test Point in Polygon. same function from core__old
 // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html the Vertices
 
 export const pnpoly = (x: any, y: number, coords: Object) => {
@@ -34,3 +35,20 @@ export const pnpoly = (x: any, y: number, coords: Object) => {
 
     return inside;
 };
+
+export function serialize(obj: Object): string {
+    const str = [];
+    for (const p in obj)
+        // eslint-disable-next-line no-prototype-builtins
+        if (obj.hasOwnProperty(p)) {
+            if (Array.isArray(obj[p])) {
+                // eslint-disable-next-line guard-for-in
+                for (const a in obj[p]) {
+                    str.push(`${encodeURIComponent(p) }=${ encodeURIComponent(obj[p][a])}`);
+                }
+            } else {
+                str.push(`${encodeURIComponent(p) }=${ encodeURIComponent(obj[p])}`);
+            }
+        }
+    return str.join('&');
+}

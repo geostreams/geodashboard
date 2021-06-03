@@ -2,19 +2,24 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import type { Feature as FeatureType } from 'ol';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { fetchParameters } from '../../actions/parameters';
-import { fetchSensors } from '../../actions/sensors';
 import Map from '../Map';
 import SensorDetail from '../Sensor/Detail';
-import { matchLocation, isLocationInPolygon } from '../../utils/search';
 import { setFilter as setFilterAction, addLocation as addLocationAction } from '../../actions/search';
-
-import type { MapConfig, ParameterType, SensorType, SourceConfig, SourceType, LocationType } from '../../utils/flowtype';
-
+import { fetchParameters as fetchParametersAction } from '../../actions/parameters';
+import { fetchSensors as fetchSensorsAction } from '../../actions/sensors';
+import { matchLocation, isLocationInPolygon } from '../../utils/search';
+import type { 
+    MapConfig, 
+    ParameterType, 
+    SensorType, 
+    SourceConfig, 
+    SourceType, 
+    LocationType 
+} from '../../utils/flowtype';
 import Sidebar from './Sidebar';
 
 const useStyles = makeStyles({
@@ -56,49 +61,45 @@ type Props = {
     custom_location: Object
 }
 
-type Data = {
-    [sourceId: string]: {
-        sensorCount: number;
-        regions: {
-            [regionId: string]: SensorType[];
-        };
-    };
-}
-
-const Explore = (props: Props) => {
+const Search = (props: Props) => {
     const {
         mapConfig,
         parameters,
         sensors,
-        sources,
         sourcesConfig,
         locations,
         displayOnlineStatus,
         filters,
         setFilter,
         addLocation, 
-        custom_location
+        custom_location,
+        fetchSensors,
+        fetchParameters
     } = props;
-
-    React.useEffect(() => {
-        if (parameters.length === 0) {
-            props.fetchParameters();
-        }
-    }, []);
 
     const classes = useStyles();
 
     const [features, setFeatures] = useState<FeatureType[]>([]);
     const [filteredFeatures, setFilteredFeatures] = useState<FeatureType[]>([]);
+    // Handles whether draw controls should be visible or not
     const [drawMode, toggleDrawMode] = useState(false);
 
     // idx is the selected feature property. zoom indicated whether the map should zoom the selected feature.
-    const [selectedFeature, updateSelectedFeature] = React.useState<?{ idx: number, zoom: boolean; }>();
+    const [selectedFeature, updateSelectedFeature] = React.useState();
 
     const [showSensorDetails, updateShowSensorDetails] = React.useState(false);
+
+    React.useEffect(() => {
+        if (parameters.length === 0) {
+            fetchParameters();
+        }
+    }, []);
+
+    // Converts sensors to openlayers features whenever sensors props are updated
+    // Stores features in state
     useEffect(() => {
         if (!sensors.length) {
-            props.fetchSensors();
+            fetchSensors();
         } else {
             const newFeatures: FeatureType[] = [];
             sensors.forEach((sensor, idx) => {
@@ -113,7 +114,8 @@ const Explore = (props: Props) => {
                 });
                 newFeatures.push(feature);
             });
-
+            // Set minimum and maximum dates for filter selection based on
+            // recieved sensors data
             const defaultDates = sensors.reduce((dates, { min_start_time, max_end_time }) => {
                 dates[0] = 
             (dates[0] === undefined || new Date(min_start_time) < dates[0]) ? 
@@ -124,6 +126,7 @@ const Explore = (props: Props) => {
                 return dates;
             }, []);
             setFilter('time', defaultDates);
+
             setFeatures(newFeatures);
             setFilteredFeatures(newFeatures);
 
@@ -132,20 +135,10 @@ const Explore = (props: Props) => {
     }, [sensors]);
 
 
-
+    // UseEffect hook containing all filtering Logic
     useEffect(()=> {
         let updatedFeatures = features;
-        if(filters.parameters.length > 0){
-            updatedFeatures = updatedFeatures.filter((feature) => feature.get('parameters').some(param => filters.parameters.includes(param)));
-        }
-        if(filters.sources.length > 0){
-            updatedFeatures = updatedFeatures.filter((feature) => filters.sources.includes(feature.get('properties').type.id));
-        }
-        // if(filters.time.length > 0){
-        //     updatedFeatures = updatedFeatures.filter((feature) => 
-        //         new Date(feature.get('min_start_time')) >= filters.time[0] &&
-        //             new Date(feature.get('max_end_time')) <= filters.time[1]);
-        // }
+        // Location filter
         if(filters.locations.length > 0){
             if(filters.locations[0].id === 'custom'){
                 toggleDrawMode(true);
@@ -155,10 +148,25 @@ const Explore = (props: Props) => {
                 ));
             }
         }
+        // Parameters filter
+        if(filters.parameters.length > 0){
+            updatedFeatures = updatedFeatures.filter((feature) => feature.get('parameters').some(param => filters.parameters.includes(param)));
+        }
+        // Sources Filter
+        if(filters.sources.length > 0){
+            updatedFeatures = updatedFeatures.filter((feature) => filters.sources.includes(feature.get('properties').type.id));
+        }
+        // Time filter
+        if(filters.time.length > 0){
+            updatedFeatures = updatedFeatures.filter((feature) => 
+                new Date(feature.get('min_start_time')) >= filters.time[0] &&
+                    new Date(feature.get('max_end_time')) <= filters.time[1]);
+        }
 
         setFilteredFeatures(updatedFeatures);
     }, [filters]);
 
+    // useEffect hook for filtering based on the custom location drawn
     useEffect(()=> {
         if('geometry' in custom_location){
             const updatedFeatures = filteredFeatures.filter((feature) =>
@@ -171,20 +179,14 @@ const Explore = (props: Props) => {
         updateSelectedFeature(idx || idx === 0 ? { idx, zoom } : undefined);
     };
 
-    const onStoreShape = (coord) => {
-        addLocation(coord);
-    };
+ 
 
     if(!sensors.length || !parameters.length)
         return (<div className={classes.pageLoader}><CircularProgress thickness={5} size={100} /></div>);
     return (
         <div className={classes.root}>
             <Sidebar
-                parameters={parameters}
-                sensors={sensors}
-                sources={sources}
-                locations = {locations}
-                sourcesConfig={sourcesConfig}
+                sensorCount={filteredFeatures.length}
             />
             <Map
                 mapConfig={mapConfig}
@@ -227,8 +229,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-    fetchSensors,
-    fetchParameters,
+    fetchSensors: fetchSensorsAction,
+    fetchParameters: fetchParametersAction,
     setFilter: setFilterAction,
     addLocation: addLocationAction
 };
@@ -236,4 +238,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Explore);
+)(Search);
