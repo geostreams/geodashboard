@@ -114,18 +114,6 @@ const Search = (props: Props) => {
                 });
                 newFeatures.push(feature);
             });
-            // Set minimum and maximum dates for filter selection based on
-            // recieved sensors data
-            const defaultDates = sensors.reduce((dates, { min_start_time, max_end_time }) => {
-                dates[0] = 
-            (dates[0] === undefined || new Date(min_start_time) < dates[0]) ? 
-                new Date(min_start_time) : dates[0];
-                dates[1] = 
-            (dates[1] === undefined || new Date(max_end_time) > dates[1]) ? 
-                new Date(max_end_time) : dates[1];
-                return dates;
-            }, []);
-            setFilter('time', defaultDates);
 
             setFeatures(newFeatures);
             setFilteredFeatures(newFeatures);
@@ -140,8 +128,11 @@ const Search = (props: Props) => {
         let updatedFeatures = features;
         // Location filter
         if(filters.locations.length > 0){
-            if(filters.locations[0].id === 'custom'){
-                toggleDrawMode(true);
+            if(filters.locations[0] === 'custom_location'){
+                if(custom_location && 'geometry' in custom_location){
+                    updatedFeatures = updatedFeatures.filter((feature) =>
+                        isLocationInPolygon(feature.getGeometry().getCoordinates(), custom_location));
+                }
             } else{
                 updatedFeatures = updatedFeatures.filter((feature => 
                     matchLocation(filters.locations[0], feature.get('properties').region, locations, feature.get('coordinates'))
@@ -164,19 +155,26 @@ const Search = (props: Props) => {
         }
 
         setFilteredFeatures(updatedFeatures);
-    }, [filters]);
-
-    // useEffect hook for filtering based on the custom location drawn
-    useEffect(()=> {
-        if('geometry' in custom_location){
-            const updatedFeatures = filteredFeatures.filter((feature) =>
-                isLocationInPolygon(feature.getGeometry().getCoordinates(), custom_location));
-            setFilteredFeatures(updatedFeatures);
-        }
-    },[custom_location]);
+    }, [filters, custom_location]);
 
     const handleFeatureToggle = (idx: ?number, zoom = false) => {
         updateSelectedFeature(idx || idx === 0 ? { idx, zoom } : undefined);
+    };
+
+    // Set minimum and maximum dates for filter selection based on
+    // recieved sensors data
+    const getMinMaxDates = () => {
+        if(sensors.length > 0)
+            return sensors.reduce((dates, { min_start_time, max_end_time }) => {
+                dates[0] = 
+            (dates[0] === undefined || new Date(min_start_time) < dates[0]) ? 
+                new Date(min_start_time) : dates[0];
+                dates[1] = 
+            (dates[1] === undefined || new Date(max_end_time) > dates[1]) ? 
+                new Date(max_end_time) : dates[1];
+                return dates;
+            }, []);
+        return [new Date(1970,1), new Date()];
     };
 
  
@@ -187,6 +185,9 @@ const Search = (props: Props) => {
         <div className={classes.root}>
             <Sidebar
                 sensorCount={filteredFeatures.length}
+                toggleDrawMode={toggleDrawMode}
+                drawMode={drawMode}
+                minMaxDates={getMinMaxDates()}
             />
             <Map
                 mapConfig={mapConfig}

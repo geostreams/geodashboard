@@ -14,7 +14,7 @@ import TimeIcon from '@material-ui/icons/Timelapse';
 import OnlineIcon from '@material-ui/icons/OfflineBolt';
 import Filter from './filters/Filter';
 import sanitizeParameters from '../../utils/parameters';
-import { setFilter, removeFilter } from '../../actions/search';
+import { setFilter, removeFilter, resetCustomLocation } from '../../actions/search';
 import DownloadButtons from './DownloadButtons';
 import type { LocationType } from '../../utils/flowtype';
 
@@ -26,18 +26,24 @@ const useStyles = makeStyles(() => ({
         height: '90%',
         width: '100%',
         overflowY: 'scroll'
+    },
+    sidebarContainer: {
+        background: '#f5f7f9'
     }
 }));
 
 type Props = {
-    sensorCount: Number
+    sensorCount: Number,
+    drawMode: boolean,
+    toggleDrawMode: () => void,
+    minMaxDates: []
 }
 
 const Sidebar = (props: Props) => {
-    const { sensorCount } = props;
+    const { sensorCount, drawMode, toggleDrawMode, minMaxDates } = props;
     const [isSidebarOpen, toggleSidebar] = useState(true);
     const [currentFilter, setCurrentFilter] = useState('Locations');
-    const filters = useSelector(state => state.__new_searchFilters.filters);
+    const { filters, custom_location } = useSelector(state => state.__new_searchFilters);
     const locations: LocationType[] = useSelector(state => state.config.locations);
     const { sources, sensors } = useSelector(state => state.__new_sensors);
     const parameters = useSelector(state => state.__new_parameters.parameters.filter(param => param.search_view));
@@ -54,9 +60,30 @@ const Sidebar = (props: Props) => {
             setCurrentFilter(id);
         }
     };
+
+    const getAllLocations = () => {
+        let loc = locations;
+        if(Array.isArray(loc) && custom_location && 'properties' in custom_location){
+            loc = [custom_location, ...locations];
+        }
+        return loc.map(({ properties: { title, id } }) => ({ label:title, id }));
+    };
+
+    const customDrawButton = () => {
+        const title = 'New Custom Location';
+        const action = () => {
+            toggleDrawMode(true);
+            if(custom_location && 'geometry' in custom_location){
+                dispatch(resetCustomLocation());
+            }
+            dispatch(setFilter('locations', ['custom_location']));
+
+        };
+        return{ title, action, props: { disabled: drawMode } };
+    };
     return (
         <BaseSidebar
-            classes={{ content: classes.content }}
+            classes={{ drawerPaper: classes.sidebarContainer, content: classes.content }}
             toggleSidebar={toggleSidebar}
             expanded={isSidebarOpen}
             disableGutters
@@ -69,8 +96,8 @@ const Sidebar = (props: Props) => {
                     value={filters.locations || []}
                     onChange={(query)=>dispatch(setFilter('locations', query))}
                     onReset={()=>dispatch(removeFilter('locations'))}
-                    options={locations.map(({ properties: { title, id } }) => ({ label:title, id }))} 
-                    action={[{ title: 'Custom Location', action: ()=> dispatch(setFilter('locations', [{ label: 'Custom Location', id: 'custom' }])) }]}
+                    options={getAllLocations()} 
+                    action={[customDrawButton()]}
                     isExpanded={currentFilter === 'Locations' }
                     toggleExpandedState={(v)=> openFilter('Locations', v)}
                 />
@@ -115,7 +142,8 @@ const Sidebar = (props: Props) => {
                     onChange={(query)=>dispatch(setFilter('time', query))}
                     onReset={()=>dispatch(removeFilter('time'))}
                     isExpanded={currentFilter === 'Date' }
-                    toggleExpandedState={(v)=> openFilter('Date', v)}                  
+                    toggleExpandedState={(v)=> openFilter('Date', v)}  
+                    minMaxDates={minMaxDates}                
                 />
             </Box>
             <DownloadButtons

@@ -14,9 +14,10 @@ export const ADD_CUSTOM_LOCATION = 'ADD_CUSTOM_LOCATION';
 export const addLocation = (coordinates, type = 'Polygon', properties) => ({
     type: ADD_CUSTOM_LOCATION,
     payload: { 
+        type: 'Feature',
         properties: {
             title: 'Custom Location',
-            id: 'custom-location'
+            id: 'custom_location'
         },
         geometry: {
             coordinates,
@@ -24,6 +25,11 @@ export const addLocation = (coordinates, type = 'Polygon', properties) => ({
             properties
         }
     }
+});
+
+export const RESET_CUSTOM_LOCATION = 'ADD_CUSTOM_LOCATION';
+export const resetCustomLocation = () => ({
+    type: RESET_CUSTOM_LOCATION
 });
 
 export const COUNT_NUMBER_DATAPOINTS = 'COUNT_NUMBER_DATAPOINTS';

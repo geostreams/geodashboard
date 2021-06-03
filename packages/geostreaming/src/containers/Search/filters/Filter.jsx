@@ -70,7 +70,8 @@ type Props = {
     type: "multiSelect" | "dateRange" | "singleSelect" | "boolean",
     action?: [],
     isExpanded?: boolean,
-    toggleExpandedState?: ()=> void
+    toggleExpandedState?: ()=> void,
+    minMaxDates?: []
 }
 
 
@@ -79,12 +80,13 @@ function Filter(props: Props) {
     const { 
         title, options, value, onChange, 
         onReset, icon: TitleIcon, type, action, 
-        isExpanded, toggleExpandedState
+        isExpanded, toggleExpandedState,
+        minMaxDates
     } = props;
     const classes = useStyles();
 
     const Input = type === 'dateRange' ? DateRangeFilter : SelectFilter;
-    const inputProps = type !== 'dateRange' ? { type } : null;
+    const inputProps = type !== 'dateRange' ? { type } : { minMaxDates };
 
     const getLabel = (id)=>{
         const temp = props.options.filter((o)=>o.id === id);
@@ -97,20 +99,19 @@ function Filter(props: Props) {
     const actionItems = [...action,{ title: 'Reset', action: onReset }];
 
     const renderSelectedDate = () => {
-        const startDate = value[0];
-        const endDate = value[1];
+        let output = [];
+        if(value.length === 0)
+            output = ['All'];
+        else
+            output = [`Start Date: ${date(value[0])}`,`End Date: ${date(value[0])}`];
         return(
             <div className={classes.summaryChips}>
-                <Chip 
-                    className={classes.chip} 
-                    label={value.length > 0 ? `Start Date: ${date(startDate)}` : null} 
-                    size="small" 
-                />
-                <Chip 
-                    className={classes.chip} 
-                    label={value.length > 1 ? `End Date: ${date(endDate)}` : null} 
-                    size="small" 
-                />
+                {output.map((label, idx)=> 
+                    <Chip 
+                        className={classes.chip} 
+                        label={label} 
+                        size="small" 
+                    />)}
             </div>
         );
     };
@@ -123,7 +124,7 @@ function Filter(props: Props) {
     const renderSelected = () => {
         let output = [];
         let disableDelete = false;
-        if(options.length === value.length){
+        if(options.length === value.length || value.length === 0){
             output = ['All'];
             disableDelete = true;
         } else if(value.length > 4) {
@@ -134,14 +135,16 @@ function Filter(props: Props) {
             output = value.map(v => getLabel(v));
         }
         return(
-            output.map((label, idx) => 
-                <Chip 
-                    key={`summary-${label}`}
-                    className={classes.chip} 
-                    label={label} 
-                    size="small" 
-                    onDelete={disableDelete && idx === output.length - 1 ? undefined : () => {}} 
-                />));
+            <div className={classes.summaryChips}>
+                {output.map((label, idx) => 
+                    <Chip 
+                        key={`summary-${label}`}
+                        className={classes.chip} 
+                        label={label} 
+                        size="small" 
+                        onDelete={disableDelete && idx === output.length - 1 ? undefined : () => {}} 
+                    />)}
+            </div>);
     };
 
     const renderTitle = () => (
@@ -179,7 +182,9 @@ function Filter(props: Props) {
                         style={{ alignItem: 'flex-end' }} 
                         key={`actionItem-${item.title}-${title}`}
                         size="small" 
-                        onClick={item.action}>
+                        onClick={item.action}
+                        {...item.props}
+                    >
                         {item.title}
                     </Button>)}
                 
@@ -195,7 +200,8 @@ Filter.defaultProps = {
     options: [],
     action: [],
     isExpanded: undefined,
-    toggleExpandedState: undefined
+    toggleExpandedState: undefined,
+    minMaxDates: [new Date(1970,1), new Date()]
 };
 
 export default Filter;

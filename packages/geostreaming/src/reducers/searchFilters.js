@@ -1,4 +1,4 @@
-import { SET_FILTER, REMOVE_FILTER, ADD_CUSTOM_LOCATION } from '../actions/search';
+import { SET_FILTER, REMOVE_FILTER, ADD_CUSTOM_LOCATION, RESET_CUSTOM_LOCATION } from '../actions/search';
 
 const defaultState = {
     filters: {
@@ -29,7 +29,8 @@ export default function filterReducer(state = defaultState, action) {
         }
         case ADD_CUSTOM_LOCATION:
             return { ...state, custom_location: payload };
-
+        case RESET_CUSTOM_LOCATION:
+            return { ...state, custom_location: {} };
         default:
             return state;
     }

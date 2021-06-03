@@ -17,20 +17,27 @@ const useStyles = makeStyles((theme) => ({
         minHeight: '15vh',
         display: 'flex',
         flexDirection: 'column',
-        justify: 'space-evenly'
+        justifyContent: 'space-evenly',
+        marginLeft: '10px'
+
     },
     option: {
         fontSize: 'small !important'
+    },
+    datefield: {
+        marginLeft: 10,
+        width: '50%'
     }
 }));
 
 type Props = {
     onChange: (q) => void,
-    value: date[]
+    value: date[],
+    minMaxDates: date[]
 }
 
 function DateTimeFilter(props: Props){
-    const { onChange, value } = props; 
+    const { onChange, value, minMaxDates } = props; 
     const classes = useStyles();
     const [date, setDate ] = useState(value);
 
@@ -54,21 +61,26 @@ function DateTimeFilter(props: Props){
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <div className={classes.content} >
                 <DatePicker 
+                    className={classes.datefield}
                     disableFuture
                     openTo="year"
                     label="Start Date"
                     format="dd/MM/yyyy"
-                    value={date[0]} 
+                    value={date[0] || null} 
                     onChange={(newDate) => handleStartChange(newDate)} 
                     maxDate={date[1] || new Date()}
+                    minDate={minMaxDates[0]}
                 />
 
                 <DatePicker 
+                    className={classes.datefield}
                     disableFuture
                     openTo="year"
                     label="End Date"
                     format="dd/MM/yyyy"
-                    value={date[1] || new Date()} 
+                    value={date[1] || null} 
+                    minDate={date[0] || new Date(1970,1)}
+                    maxDate={minMaxDates[1]}
                     onChange={(newDate) => handleEndChange(newDate)} 
                 />
 

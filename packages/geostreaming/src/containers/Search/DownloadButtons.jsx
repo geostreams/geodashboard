@@ -68,7 +68,7 @@ const DownloadButtons = (props: Props) => {
         }
         if(filters.locations.length > 0){
             // If we have a defined custom location
-            if('geometry' in custom_location){
+            if(custom_location && 'geometry' in custom_location){
                 const{ geometry:{ type: shapeType, properties, coordinates } } = custom_location;
                 if(shapeType === 'Circle'){
                     // Add center and radius to geocode if circle
@@ -150,7 +150,7 @@ const DownloadButtons = (props: Props) => {
                 <Button 
                     startIcon={<LinkIcon />} 
                     variant="outlined" 
-                    color="primary" 
+                    color="secondary" 
                     size="large"
                     onClick={()=> onDownload()}
                 >

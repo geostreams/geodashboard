@@ -8,11 +8,11 @@ import { Box
 
 const useStyles = makeStyles((theme) => ({
     content: {
-        maxHeight: '35vh',
+        maxHeight: '30vh',
         overflowY: 'scroll'
     },
     denseContent: {
-        maxHeight: '35vh',
+        maxHeight: '30vh',
         overflowY: 'scroll',
         display: 'flex',
         flexDirection: 'row',
@@ -39,7 +39,7 @@ function SelectFilter(props: Props){
     const [selected, setSelected ] = useState(value);
 
     useEffect(()=> {
-        if(value && value !== selected)
+        if(value.length > 0 && value !== selected)
             setSelected(value);
     }, [value]);
 
