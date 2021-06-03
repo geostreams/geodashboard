@@ -158,7 +158,7 @@ const Explore = (props: Props) => {
                 selectedFeature={selectedFeature}
                 handleFeatureToggle={handleFeatureToggle}
                 zoomToSe={undefined}
-                openSenorDetails={() => updateShowSensorDetails(true)}
+                openSensorDetails={() => updateShowSensorDetails(true)}
             />
 
             {showSensorDetails ?

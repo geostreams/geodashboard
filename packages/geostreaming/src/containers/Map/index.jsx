@@ -80,7 +80,7 @@ interface Props {
     features: FeatureType[];
     selectedFeature: ?{ idx: number; zoom: boolean; };
     handleFeatureToggle: (feature: ?FeatureType) => void;
-    openSenorDetails: () => void;
+    openSensorDetails: () => void;
     showLayers?: boolean;
     drawMode?: boolean;
     drawControlProps?: Object;
@@ -174,7 +174,7 @@ const Map = (props: Props) => {
         features,
         selectedFeature,
         handleFeatureToggle,
-        openSenorDetails,
+        openSensorDetails,
         showLayers,
         drawMode,
         drawControlProps
@@ -228,7 +228,10 @@ const Map = (props: Props) => {
         if (map) {
             const popupOverlay = map.getOverlayById('popup');
             if (selectedFeature) {
-                const geometry = features[selectedFeature.idx].getGeometry();
+                console.log(features);
+                const feature = features.find(obj => obj.get('idx') === selectedFeature.idx);
+                if(!feature) return;
+                const geometry = feature.getGeometry();
                 if (selectedFeature.zoom) {
                     map.getView().fit(
                         geometry.getExtent(),
@@ -395,7 +398,7 @@ const Map = (props: Props) => {
         }
     }, [drawMode]);
 
-    
+    console.log(selectedFeature);
 
     const handleMapClick = (event: MapBrowserEventType) => {
         if (mapRef.current && !drawMode) {
@@ -488,7 +491,7 @@ const Map = (props: Props) => {
                         sensor={sensors[selectedFeature.idx]}
                         parameters={parameters}
                         handleClose={() => handleFeatureToggle()}
-                        handleDetailClick={openSenorDetails}
+                        handleDetailClick={openSensorDetails}
                     /> : null}
             </div>
         </BaseMap>

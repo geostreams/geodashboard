@@ -43,7 +43,7 @@ const Sidebar = (props: Props) => {
     const { sensorCount, drawMode, toggleDrawMode, minMaxDates } = props;
     const [isSidebarOpen, toggleSidebar] = useState(true);
     const [currentFilter, setCurrentFilter] = useState('Locations');
-    const { filters, custom_location } = useSelector(state => state.__new_searchFilters);
+    const { filters, custom_location } = useSelector(state => state.search);
     const locations: LocationType[] = useSelector(state => state.config.locations);
     const { sources, sensors } = useSelector(state => state.__new_sensors);
     const parameters = useSelector(state => state.__new_parameters.parameters.filter(param => param.search_view));
@@ -148,6 +148,7 @@ const Sidebar = (props: Props) => {
             </Box>
             <DownloadButtons
                 sensorCount={sensorCount}
+                locations={locations}
             />
         </BaseSidebar>
     );

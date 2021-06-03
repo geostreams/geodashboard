@@ -1,6 +1,8 @@
 // @flow
 import React, { useState } from 'react';
 import {
+    Backdrop,
+    CircularProgress,
     Typography,
     Button,
     Box,
@@ -10,8 +12,11 @@ import DownloadIcon from '@material-ui/icons/SystemUpdateAlt';
 import LinkIcon from '@material-ui/icons/Link';
 import { serialize } from '@geostreams/core/src/utils/array';
 import { useSelector, useDispatch } from 'react-redux';
+import { callAPI } from '@geostreams/core/src/utils/io';
+import logger from '@geostreams/core/src/utils/logger';
 import type { LocationType } from '../../utils/flowtype';
-import { fetchDataPointsCount } from '../../actions/search';
+import Alert from './Alert';
+
 
 
 const useStyles = makeStyles(() => ({
@@ -28,6 +33,11 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    backdrop: {
+        zIndex: 1,
+        display: 'flex',
+        flexDirection: 'column'
     }
 }));
 
@@ -40,8 +50,17 @@ const DownloadButtons = (props: Props) => {
     const { sensorCount, locations } = props;
     const classes = useStyles();
     const dispatch = useDispatch();
-    
-    const { filters, custom_location } = useSelector(state => state.__new_searchFilters);
+    const { filters, custom_location } = useSelector(state => state.search);
+    const config = useSelector(state => state.config);
+    const [downloadState, setDownloadState] = useState('ready');
+    const [alert, setAlert] = useState({ title: '', message: '' });
+
+    const setError = (message) =>{
+        setAlert({ 
+            title: 'Error', 
+            message
+        });
+    };
     
 
     const generateLink = (type: string) => {
@@ -49,11 +68,11 @@ const DownloadButtons = (props: Props) => {
         let downloadApi;
 
         const params = {};
-        if (type !== 'None') {
+        if (type !== 'count') {
             params.format = type;
-            downloadApi = '/geostreams/datapoints/download?';
+            downloadApi = '/api/datapoints/download?';
         } else {
-            downloadApi = '/geostreams/api/datapoints?';
+            downloadApi = '/api/datapoints?onlyCount=true&';
         }
         if (filters.time.length === 2) {
             params.since = filters.time[0].toISOString().slice(0, 10);
@@ -88,43 +107,65 @@ const DownloadButtons = (props: Props) => {
         }
 
         const link = serialize(params);
-        console.log(link);
 
         return downloadApi + link;
     };
 
-    const countDatapoints = () => {
-        const countLink = `${generateLink('None') }&onlyCount=true`;
+    const fetchDatapointsCount = (callback) => {
+        const link = generateLink('count');
 
-        dispatch(fetchDataPointsCount(countLink));
-        // props.onSelectDownload(countLink);
-
-        // return (
-        //     intervalCounts(
-        //         that.state.numDatapoints, that.props.show_spinner
-        //     )
-        // );
+        callAPI(
+            config.geostreamingEndpoint,
+            link,
+            callback,
+            logger.error,
+            dispatch
+        );
     };
 
     const onDownload = (type) => {
-        // setState({ downloadIsOpen: false, loading: true });
-        countDatapoints().then((datapointsCount) => {
-            if (datapointsCount <= 500) {
-                // Download the CSV File
-                try {
-                    const link = generateLink(type);
-                    window.open(link);
-                } catch (e) {
-                    setState({
-                        alertIsOpen: true,
-                        error_text: 'Some error occured.Could not download datapoints.'
-                    });
-                }
+        setDownloadState('count-initiated');
+        fetchDatapointsCount((datapointsCount)=> {
+            if(datapointsCount > 500){
+                setDownloadState('error');
+                setError(`${datapointsCount} datapoints selected. Please narrow down your selection.` );
             } else {
-                setState({
-                    alertIsOpen: true,
-                    error_text: 'Too many datapoints selected. Please narrow down your selection.'
-                });
+                try {
+                    if(downloadState === 'count-initiated'){
+                        const link = generateLink(type);
+                        window.open(link);
+                        setDownloadState('link-ready');
+                    }
+                } catch (e) {
+                    setDownloadState('error');
+                    setError('An error was encountered. Please try again.');
+                    logger.error(e);
+                }
+            }
+        });
+    };
+
+    const onPermaLink = () => {
+        setDownloadState('count-initiated');
+        fetchDatapointsCount((datapointsCount)=> {
+            if(datapointsCount > 500){
+                setDownloadState('error');
+                setError(`${datapointsCount} datapoints selected. Please narrow down your selection.` );
+            } else {
+                try {
+                    if(downloadState === 'count-initiated'){
+                        const link = generateLink('csv');
+                        setAlert({
+                            title: 'Download Link',
+                            message: link
+                        });
+                        setDownloadState('ready');
+                    }
+                } catch (e) {
+                    setDownloadState('error');
+                    setError('An error was encountered. Please try again.');
+                    logger.error(e);
+                }
             }
         });
     };
@@ -152,11 +193,21 @@ const DownloadButtons = (props: Props) => {
                     variant="outlined" 
                     color="secondary" 
                     size="large"
-                    onClick={()=> onDownload()}
+                    onClick={()=> onPermaLink()}
                 >
                     Get Permalink
                 </Button>
             </Box>
+            <Backdrop className={classes.backdrop} open={downloadState !== 'ready'} >
+                <CircularProgress color="inherit" />
+                <Button onClick={()=> setDownloadState('ready')}> Cancel </Button>
+            </Backdrop>
+            <Alert 
+                open={downloadState === 'error' || downloadState === 'link-ready'}
+                title="Error"
+                message={alert}
+                toggleState={() => setDownloadState('ready')}
+            />
         </>
     );
 };

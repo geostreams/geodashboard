@@ -198,11 +198,10 @@ const Search = (props: Props) => {
                 features={filteredFeatures}
                 selectedFeature={selectedFeature}
                 handleFeatureToggle={handleFeatureToggle}
-                openSenorDetails={() => updateShowSensorDetails(true)}
+                openSensorDetails={() => updateShowSensorDetails(true)}
                 showLayers= {false}
                 drawMode={drawMode}
                 drawControlProps={{ toggleDrawMode, onStoreShape: addLocation }}
-
             />
 
             {showSensorDetails ?
@@ -218,8 +217,8 @@ const mapStateToProps = (state) => ({
     mapConfig: state.config.map,
     sourcesConfig: state.config.source,
     locations: state.config.locations,
-    filters: state.__new_searchFilters.filters,
-    custom_location: state.__new_searchFilters.custom_location,
+    filters: state.search.filters,
+    custom_location: state.search.custom_location,
     displayOnlineStatus: state.config.sensors.displayOnlineStatus,
     sensors: state.__new_sensors.sensors.sort(
         (sensor1, sensor2) =>
