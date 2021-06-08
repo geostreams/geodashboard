@@ -5,13 +5,21 @@ import { makeStyles } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import Polygon from 'ol/geom/Polygon';
+import { Fill, Stroke, Style } from 'ol/style';
 import type { Feature as FeatureType } from 'ol';
+import DrawControl from '@geostreams/core/src/components/ol/DrawControl';
+
 import Map from '../Map';
 import SensorDetail from '../Sensor/Detail';
 import { setFilter as setFilterAction, addLocation as addLocationAction } from '../../actions/search';
 import { fetchParameters as fetchParametersAction } from '../../actions/parameters';
 import { fetchSensors as fetchSensorsAction } from '../../actions/sensors';
 import { matchLocation, isLocationInPolygon } from '../../utils/search';
+
+
 import type { 
     MapConfig, 
     ParameterType, 
@@ -54,7 +62,6 @@ type Props = {
     locations: LocationType[];
     fetchSensors: Function;
     fetchParameters: Function;
-    setFilter: Function;
     displayOnlineStatus: boolean;
     filters: [],
     addLocation: Function,
@@ -70,7 +77,6 @@ const Search = (props: Props) => {
         locations,
         displayOnlineStatus,
         filters,
-        setFilter,
         addLocation, 
         custom_location,
         fetchSensors,
@@ -78,6 +84,8 @@ const Search = (props: Props) => {
     } = props;
 
     const classes = useStyles();
+
+
 
     const [features, setFeatures] = useState<FeatureType[]>([]);
     const [filteredFeatures, setFilteredFeatures] = useState<FeatureType[]>([]);
@@ -88,6 +96,10 @@ const Search = (props: Props) => {
     const [selectedFeature, updateSelectedFeature] = React.useState();
 
     const [showSensorDetails, updateShowSensorDetails] = React.useState(false);
+
+    const [locationPolygonSource, setLocationPolygonSource] = React.useState(new VectorSource);
+
+
 
     React.useEffect(() => {
         if (parameters.length === 0) {
@@ -122,6 +134,14 @@ const Search = (props: Props) => {
         }
     }, [sensors]);
 
+    const addPolygonToSource = (polygon, source) => {
+        const feature = new Feature({
+            geometry: new Polygon(polygon.coordinates).transform('EPSG:4326', 'EPSG:3857')
+        });
+        source.clear();
+        source.addFeatures([feature]);
+    };
+
 
     // UseEffect hook containing all filtering Logic
     useEffect(()=> {
@@ -132,12 +152,16 @@ const Search = (props: Props) => {
                 if(custom_location && 'geometry' in custom_location){
                     updatedFeatures = updatedFeatures.filter((feature) =>
                         isLocationInPolygon(feature.getGeometry().getCoordinates(), custom_location));
+                    addPolygonToSource(custom_location.geometry, locationPolygonSource);
                 }
             } else{
                 updatedFeatures = updatedFeatures.filter((feature => 
-                    matchLocation(filters.locations[0], feature.get('properties').region, locations, feature.get('coordinates'))
-                ));
+                    matchLocation(filters.locations[0], feature.get('properties').region, locations, feature.get('coordinates'))));
+                addPolygonToSource(locations.find(location => 
+                    location.properties.id === filters.locations[0]).geometry, locationPolygonSource);
             }
+        } else{
+            locationPolygonSource.clear();
         }
         // Parameters filter
         if(filters.parameters.length > 0){
@@ -157,6 +181,8 @@ const Search = (props: Props) => {
         setFilteredFeatures(updatedFeatures);
     }, [filters, custom_location]);
 
+
+
     const handleFeatureToggle = (idx: ?number, zoom = false) => {
         updateSelectedFeature(idx || idx === 0 ? { idx, zoom } : undefined);
     };
@@ -175,6 +201,25 @@ const Search = (props: Props) => {
                 return dates;
             }, []);
         return [new Date(1970,1), new Date()];
+    };
+
+    const getCustomLayer = () => {
+        const layer = new VectorLayer({
+            id: 'locationPolygon',
+            source: locationPolygonSource,
+            style: [
+                new Style({
+                    stroke: new Stroke({
+                        color: 'rgba(0, 152, 254, 1)',
+                        width: 2
+                    }),
+                    fill: new Fill({
+                        color: 'rgba(254, 254, 254, 0.3)'
+                    })
+                })
+            ]
+        });
+        return layer;
     };
 
  
@@ -199,10 +244,15 @@ const Search = (props: Props) => {
                 selectedFeature={selectedFeature}
                 handleFeatureToggle={handleFeatureToggle}
                 openSensorDetails={() => updateShowSensorDetails(true)}
-                showLayers= {false}
-                drawMode={drawMode}
-                drawControlProps={{ toggleDrawMode, onStoreShape: addLocation }}
-            />
+                showExploreLayers= {false}
+                additionalLayer={getCustomLayer()}
+            >
+                <DrawControl
+                    enabled={drawMode}
+                    toggleDrawMode={toggleDrawMode}
+                    onStoreShape={addLocation}
+                />
+            </Map>
 
             {showSensorDetails ?
                 <div className={classes.sensorDetail}>
@@ -231,7 +281,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
     fetchSensors: fetchSensorsAction,
     fetchParameters: fetchParametersAction,
-    setFilter: setFilterAction,
     addLocation: addLocationAction
 };
 

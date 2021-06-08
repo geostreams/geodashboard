@@ -42,7 +42,7 @@ function DateTimeFilter(props: Props){
     const [date, setDate ] = useState(value);
 
     useEffect(()=> {
-        if(value && value === date)
+        if(value !== date)
             setDate(value);
     },[value]);
 

@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
         height: '100%'
     },
     filters: {
-        height: '90%',
+        height: '92%',
         width: '100%',
         overflowY: 'scroll'
     },

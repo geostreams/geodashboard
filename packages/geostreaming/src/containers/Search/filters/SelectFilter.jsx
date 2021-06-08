@@ -39,7 +39,7 @@ function SelectFilter(props: Props){
     const [selected, setSelected ] = useState(value);
 
     useEffect(()=> {
-        if(value.length > 0 && value !== selected)
+        if(value !== selected)
             setSelected(value);
     }, [value]);
 

@@ -22,7 +22,7 @@ import Alert from './Alert';
 const useStyles = makeStyles(() => ({
     controlpanel: {
         width: '100%',
-        height: '8%',
+        height: '7%',
         display: 'flex',
         justifyContent: 'space-evenly',
         alignItems: 'center'

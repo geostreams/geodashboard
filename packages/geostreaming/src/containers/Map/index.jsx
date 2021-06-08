@@ -19,7 +19,6 @@ import Control from '@geostreams/core/src/components/ol/Control';
 import ClusterControl from '@geostreams/core/src/components/ol/ClusterControl';
 import FitViewControl from '@geostreams/core/src/components/ol/FitViewControl';
 import LayersControl from '@geostreams/core/src/components/ol/LayersControl';
-import DrawControl from '@geostreams/core/src/components/ol/DrawControl';
 
 import { entries } from '@geostreams/core/src/utils/array';
 
@@ -40,10 +39,6 @@ const useStyles = makeStyles((theme) => ({
     fitViewControl: {
         bottom: '.5em',
         left: '.5em'
-    },
-    drawControl: {
-        top: '5em',
-        left: '0.5em'
     },
     clusterControl: {
         'display': 'flex',
@@ -81,9 +76,9 @@ interface Props {
     selectedFeature: ?{ idx: number; zoom: boolean; };
     handleFeatureToggle: (feature: ?FeatureType) => void;
     openSensorDetails: () => void;
-    showLayers?: boolean;
-    drawMode?: boolean;
-    drawControlProps?: Object;
+    showExploreLayers?: boolean;
+    additionalLayer: LayerType,
+    children: React.Node;
 }
 
 const getMarker = (fill: string, stroke: string) => encodeURIComponent(
@@ -97,7 +92,7 @@ const prepareLayers = (
     mapTileURL: string,
     geoserverUrl: string,
     layersConfig: { [group: string]: MapLayerConfig[] } = {},
-    showLayers: boolean
+    showExploreLayers: boolean
 ): { [layerName: string]: LayerType } => {
     let source = new OSM();
     if(mapTileURL)
@@ -117,7 +112,7 @@ const prepareLayers = (
             ]
         })
     };
-    if(showLayers)
+    if(showExploreLayers)
         entries(layersConfig).forEach(([group, groupLayersConfig]) => {
             const groupLayers = [];
             groupLayersConfig.forEach(({
@@ -175,9 +170,9 @@ const Map = (props: Props) => {
         selectedFeature,
         handleFeatureToggle,
         openSensorDetails,
-        showLayers,
-        drawMode,
-        drawControlProps
+        showExploreLayers,
+        additionalLayer: additionalLayerProp, 
+        children
     } = props;
 
     const classes = useStyles();
@@ -191,6 +186,8 @@ const Map = (props: Props) => {
 
     const [isClusterEnabled, toggleCluster] = React.useState(mapConfig.useCluster);
 
+    const [additionalLayer, setAdditionalLayer] = React.useState(additionalLayerProp);
+
     // This is used to cache map styles
     const mapStylesRef = React.useRef<{ [styleName: string]: Style }>({});
 
@@ -201,13 +198,12 @@ const Map = (props: Props) => {
         layersControl: Control;
         fitViewControl: Control;
         clusterControl: Control;
-        drawControl: Control;
     }>({});
 
     if (!cacheRef.current.initiated) {
         cacheRef.current = {
             initiated: true,
-            layers: prepareLayers(mapConfig.mapTileURL, mapConfig.geoserverUrl, mapConfig.layers, showLayers),
+            layers: prepareLayers(mapConfig.mapTileURL, mapConfig.geoserverUrl, mapConfig.layers, showExploreLayers),
             layersControl: new Control({
                 className: classes.layersControl
             }),
@@ -216,9 +212,6 @@ const Map = (props: Props) => {
             }),
             clusterControl: new Control({
                 className: classes.clusterControl
-            }),
-            drawControl: new Control({
-                className: classes.drawControl
             })
         };
     }
@@ -228,7 +221,6 @@ const Map = (props: Props) => {
         if (map) {
             const popupOverlay = map.getOverlayById('popup');
             if (selectedFeature) {
-                console.log(features);
                 const feature = features.find(obj => obj.get('idx') === selectedFeature.idx);
                 if(!feature) return;
                 const geometry = feature.getGeometry();
@@ -257,6 +249,10 @@ const Map = (props: Props) => {
                     dataProjection: 'EPSG:4326',
                     featureProjection: 'EPSG:3857'
                 }))
+            });
+
+            vectorSource.on('addfeature', () => {
+                mapRef.current.getView().fit(vectorSource.getExtent(), { duration: 500 });
             });
 
             const { useCluster, clusterDistance } = mapConfig;
@@ -380,28 +376,34 @@ const Map = (props: Props) => {
     }, []);
 
     React.useEffect(() => {
+        if(mapRef.current){
+            if(additionalLayer){
+                mapRef.current.removeLayer(additionalLayer);
+            }
+            if(additionalLayerProp){
+                const layerSource = additionalLayerProp.getSource();              
+                layerSource.on('addfeature', () => {
+                    mapRef.current.getView().fit(layerSource.getExtent(), { duration: 500 });
+                });
+                mapRef.current.addLayer(additionalLayerProp);
+            }
+            setAdditionalLayer(additionalLayerProp); 
+        }
+    }, [additionalLayerProp]);
+
+    React.useEffect(() => {
         const cluster = clusterRef.current;
         if (cluster) {
             const source = cluster.getSource();
             source.clear();
             source.addFeatures(features);
+            // if(mapRef)
+            //     mapRef.current.getView().fit(source.getExtent(), { duration: 500 });
         }
     }, [features]);
 
-    // Updates controls based on whether currently in draw mode
-    React.useEffect(() => {
-        if(drawMode){
-            mapRef.current.addControl(cacheRef.current.drawControl);
-        }
-        if(!drawMode){
-            mapRef.current.removeControl(cacheRef.current.drawControl);
-        }
-    }, [drawMode]);
-
-    console.log(selectedFeature);
-
     const handleMapClick = (event: MapBrowserEventType) => {
-        if (mapRef.current && !drawMode) {
+        if (mapRef.current) {
             const featuresAtPixel = mapRef.current.forEachFeatureAtPixel(event.pixel, (featureChange) => featureChange);
             if (featuresAtPixel && featuresAtPixel.attributes && featuresAtPixel.attributes.type === 'single') {
                 // Case when a feature is expanded
@@ -440,7 +442,7 @@ const Map = (props: Props) => {
                 click: handleMapClick,
                 pointermove: (e) => {
                     // Show pointer when over a feature
-                    if (!e.dragging && !drawMode) {
+                    if (!e.dragging) {
                         const pixel = e.map.getEventPixel(e.originalEvent);
                         const hit = e.map.hasFeatureAtPixel(pixel);
                         e.map.getTarget().style.cursor = hit ? 'pointer' : '';
@@ -469,19 +471,11 @@ const Map = (props: Props) => {
                     }
                 /> : null}
 
-            {mapConfig.layers && showLayers ?
+            {mapConfig.layers && showExploreLayers ?
                 <LayersControl
                     el={cacheRef.current.layersControl.element}
                     layers={cacheRef.current.layers}
                     exclude={['basemaps']}
-                /> :
-                null}
-
-            
-            {drawMode ? 
-                <DrawControl
-                    el={cacheRef.current.drawControl.element}
-                    {...drawControlProps}
                 /> :
                 null}
 
@@ -494,14 +488,14 @@ const Map = (props: Props) => {
                         handleDetailClick={openSensorDetails}
                     /> : null}
             </div>
+            {children}
         </BaseMap>
     );
 };
 
 Map.defaultProps = {
-    showLayers: true,
-    drawMode: false,
-    drawControlProps: {}
+    showExploreLayers: true,
+    additionalLayer: undefined
 };
 
 export default Map;
