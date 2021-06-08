@@ -11,46 +11,76 @@ import VectorLayer from 'ol/layer/Vector';
 import Draw, { createBox } from 'ol/interaction/Draw';
 import { fromCircle } from 'ol/geom/Polygon';
 import { METERS_PER_UNIT } from 'ol/proj/Units';
+import Control from './Control';
 
 import { MapContext } from './Map';
 
 const useStyle = makeStyles({
     button: {
         cursor: 'pointer'
-    }
+    },
+    drawControl: props => ({
+        top: '5em',
+        left: '0.5em',
+        ...props.drawControl
+    })
 });
 
 type Props = {
-    el: HTMLElement;
-    center: [number, number];
-    zoom: number;
+    enabled?: boolean,
+    onStoreShape: ()=> void,
+    toggleDrawMode: ()=> void,
+    classes?: Object
 }
 
-const DrawControl = ({ el, toggleDrawMode, onStoreShape }: Props) => {
-    const classes = useStyle();
+const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classes: classesProp }: Props) => {
+    const classes = useStyle(classesProp);
     const { map } = React.useContext(MapContext);
     const [vectorSource, setVectorSource] = useState(null);
     // contains the draw Object created for deleting interaction at end
     const [draw, setDraw] = useState(null);
 
-    // Create VectorSource and Layer on mounting 
-    // which contain the drawing features
-    useEffect(()=> {
-        if(vectorSource === null){
-            const vector = new VectorSource();
-            // zooms to the selected shape
-            vector.on('addfeature', () => {
-                map.getView().fit(vector.getExtent(), { duration: 500 });
-            });
-            const customLocationLayer = new VectorLayer({
-                source: vector,
-                name: 'drawlayer',
-                zIndex: Infinity
-            });
-            map.addLayer(customLocationLayer);
-            setVectorSource(vector);
+    // Caches the control
+    const cacheRef = React.useRef<{
+        initiated: boolean;
+        drawControl: Control
+    }>({});
+
+    if (!cacheRef.current.initiated) {
+        cacheRef.current = {
+            initiated: true,
+            drawControl: new Control({
+                className: classes.drawControl
+            })
+        };
+    }
+
+    // Updates controls based on whether currently in draw mode
+    React.useEffect(() => {
+        if(map){
+            if(enabled){
+                map.addControl(cacheRef.current.drawControl);
+                // Create VectorSource and Layer when enabled
+                // which contain the drawing features
+                const vector = new VectorSource();
+                // zooms to the selected shape
+                vector.on('addfeature', () => {
+                    map.getView().fit(vector.getExtent(), { duration: 500 });
+                });
+                const customLocationLayer = new VectorLayer({
+                    source: vector,
+                    name: 'drawlayer',
+                    zIndex: Infinity
+                });
+                map.addLayer(customLocationLayer);
+                setVectorSource(vector);
+            }
+            if(!enabled){
+                map.removeControl(cacheRef.current.drawControl);
+            }
         }
-    }, []);
+    }, [enabled]);
+
     // Removes existing drawn shapes
     const clearDrawing = () => {
         if(draw){
@@ -108,6 +138,8 @@ const DrawControl = ({ el, toggleDrawMode, onStoreShape }: Props) => {
             }
         });
     };
+    if(!enabled)
+        return null;
 
     return ReactDOM.createPortal(
         <div>
@@ -141,8 +173,13 @@ const DrawControl = ({ el, toggleDrawMode, onStoreShape }: Props) => {
             </button>
 
         </div>,
-        el
+        cacheRef.current.drawControl.element
     );
+};
+
+DrawControl.defaultProps = {
+    classes: {},
+    enabled: true
 };
 
 export default DrawControl;
