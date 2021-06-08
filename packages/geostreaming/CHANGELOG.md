@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## UNRELEASED
 
 ### Changed
+- Created Search page with filters to replace old search/download page
+- Updated Geostreaming Map
 - Finished refactoring of the explore view
   [Github-38](https://github.com/geostreams/geodashboard/issues/38)
 
