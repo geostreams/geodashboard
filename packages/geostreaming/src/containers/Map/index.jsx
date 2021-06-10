@@ -8,6 +8,7 @@ import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
 import ClusterSource from 'ol/source/Cluster';
 import ImageWMSSource from 'ol/source/ImageWMS';
+import XYZ from 'ol/source/XYZ';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import { Circle, Fill, Icon, Stroke, Style, Text } from 'ol/style';
@@ -85,9 +86,16 @@ const getMarker = (fill: string, stroke: string) => encodeURIComponent(
 );
 
 const prepareLayers = (
+    mapTileURL: string,
     geoserverUrl: string,
     layersConfig: { [group: string]: MapLayerConfig[] } = {}
 ): { [layerName: string]: LayerType } => {
+    let source = new OSM();
+    if(mapTileURL)
+        source = new XYZ({
+            url: mapTileURL
+        });
+
     const layers = {
         basemaps: new GroupLayer({
             title: 'Base Maps',
@@ -95,7 +103,7 @@ const prepareLayers = (
                 new TileLayer({
                     type: 'base',
                     title: 'OSM',
-                    source: new OSM()
+                    source
                 })
             ]
         })
@@ -187,7 +195,7 @@ const Map = (props: Props) => {
     if (!cacheRef.current.initiated) {
         cacheRef.current = {
             initiated: true,
-            layers: prepareLayers(mapConfig.geoserverUrl, mapConfig.layers),
+            layers: prepareLayers(mapConfig.mapTileURL, mapConfig.geoserverUrl, mapConfig.layers),
             layersControl: new Control({
                 className: classes.layersControl
             }),
@@ -210,6 +218,7 @@ const Map = (props: Props) => {
                     map.getView().fit(
                         geometry.getExtent(),
                         {
+                            maxZoom: mapConfig.maxZoom,
                             callback: () => popupOverlay.setPosition(geometry.getCoordinates())
                         }
                     );
@@ -388,6 +397,8 @@ const Map = (props: Props) => {
             className={classes.content}
             zoom={mapConfig.zoom}
             center={mapConfig.center}
+            minZoom={mapConfig.minZoom}
+            maxZoom = {mapConfig.maxZoom}
             controls={[
                 cacheRef.current.fitViewControl,
                 cacheRef.current.clusterControl,
