@@ -222,18 +222,19 @@ const Map = (props: Props) => {
             const popupOverlay = map.getOverlayById('popup');
             if (selectedFeature) {
                 const feature = features.find(obj => obj.get('idx') === selectedFeature.idx);
-                if(!feature) return;
-                const geometry = feature.getGeometry();
-                if (selectedFeature.zoom) {
-                    map.getView().fit(
-                        geometry.getExtent(),
-                        {
-                            maxZoom: mapConfig.maxZoom,
-                            callback: () => popupOverlay.setPosition(geometry.getCoordinates())
-                        }
-                    );
-                } else {
-                    popupOverlay.setPosition(geometry.getCoordinates());
+                if(feature){
+                    const geometry = feature.getGeometry();
+                    if (selectedFeature.zoom) {
+                        map.getView().fit(
+                            geometry.getExtent(),
+                            {
+                                maxZoom: mapConfig.maxZoom,
+                                callback: () => popupOverlay.setPosition(geometry.getCoordinates())
+                            }
+                        );
+                    } else {
+                        popupOverlay.setPosition(geometry.getCoordinates());
+                    }
                 }
             } else {
                 popupOverlay.setPosition();
@@ -381,9 +382,11 @@ const Map = (props: Props) => {
                 mapRef.current.removeLayer(additionalLayer);
             }
             if(additionalLayerProp){
-                const layerSource = additionalLayerProp.getSource();              
+                const layerSource = additionalLayerProp.getSource();          
+
                 layerSource.on('addfeature', () => {
-                    mapRef.current.getView().fit(layerSource.getExtent(), { duration: 500 });
+                    if(layerSource.getFeatures().length > 0)    
+                        mapRef.current.getView().fit(layerSource.getExtent(), { duration: 500 });
                 });
                 mapRef.current.addLayer(additionalLayerProp);
             }

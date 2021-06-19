@@ -65,7 +65,7 @@ function DateTimeFilter(props: Props){
                     disableFuture
                     openTo="year"
                     label="Start Date"
-                    format="dd/MM/yyyy"
+                    format="MM/dd/yyyy"
                     value={date[0] || null} 
                     onChange={(newDate) => handleStartChange(newDate)} 
                     maxDate={date[1] || new Date()}
@@ -77,7 +77,7 @@ function DateTimeFilter(props: Props){
                     disableFuture
                     openTo="year"
                     label="End Date"
-                    format="dd/MM/yyyy"
+                    format="MM/dd/yyyy"
                     value={date[1] || null} 
                     minDate={date[0] || new Date(1970,1)}
                     maxDate={minMaxDates[1]}

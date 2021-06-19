@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     denseContent: {
         maxHeight: '30vh',
         overflowY: 'scroll',
+        boxSizing: 'content-box',
         display: 'flex',
         flexDirection: 'row',
         width: '60%',
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
-    options: array,
+    options: Array<{id: string, label: string} >,
     onChange: (q) => void,
     value: string[],
     type?: "multiSelect" | "singleSelect" | "boolean"

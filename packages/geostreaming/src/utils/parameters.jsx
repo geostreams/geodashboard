@@ -8,6 +8,7 @@ export default function sanitizeParameters(sensorsData: SensorType[], parameters
             // check if parameters exists already_
             const found = params.some(e => e.id === p);
             if (p === null) {
+                // eslint-disable-next-line no-console
                 console.log(`Found sensor ${s.id} with null parameters`);
 
             } else if (!found) {
@@ -19,5 +20,5 @@ export default function sanitizeParameters(sensorsData: SensorType[], parameters
         });
     });
     // sorting alphabetically by title
-    return params.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0));
+    return params.sort((a,b) => a.label.localeCompare(b.label));
 }

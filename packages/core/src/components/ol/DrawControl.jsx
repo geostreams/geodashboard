@@ -30,30 +30,25 @@ type Props = {
     enabled?: boolean,
     onStoreShape: ()=> void,
     toggleDrawMode: ()=> void,
-    classes?: Object
+    classNames?: Object
 }
 
-const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classes: classesProp }: Props) => {
-    const classes = useStyle(classesProp);
+const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classNames }: Props) => {
+    const classes = useStyle(classNames);
     const { map } = React.useContext(MapContext);
-    const [vectorSource, setVectorSource] = useState(null);
     // contains the draw Object created for deleting interaction at end
     const [draw, setDraw] = useState(null);
 
     // Caches the control
     const cacheRef = React.useRef<{
-        initiated: boolean;
         drawControl: Control
-    }>({});
+    }>({ 
+        vectorSource: new VectorSource(),
+        drawControl: new Control({
+            className: classes.drawControl
+        }) 
+    });
 
-    if (!cacheRef.current.initiated) {
-        cacheRef.current = {
-            initiated: true,
-            drawControl: new Control({
-                className: classes.drawControl
-            })
-        };
-    }
 
     // Updates controls based on whether currently in draw mode
     React.useEffect(() => {
@@ -62,7 +57,7 @@ const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classes: classesPr
                 map.addControl(cacheRef.current.drawControl);
                 // Create VectorSource and Layer when enabled
                 // which contain the drawing features
-                const vector = new VectorSource();
+                const vector = cacheRef.current.vectorSource;
                 // zooms to the selected shape
                 vector.on('addfeature', () => {
                     map.getView().fit(vector.getExtent(), { duration: 500 });
@@ -73,9 +68,7 @@ const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classes: classesPr
                     zIndex: Infinity
                 });
                 map.addLayer(customLocationLayer);
-                setVectorSource(vector);
-            }
-            if(!enabled){
+            } else{
                 map.removeControl(cacheRef.current.drawControl);
             }
         }
@@ -84,7 +77,7 @@ const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classes: classesPr
     // Removes existing drawn shapes
     const clearDrawing = () => {
         if(draw){
-            vectorSource.clear();
+            cacheRef.current.vectorSource.clear();
             map.removeInteraction(draw);
         }
     };
@@ -105,7 +98,7 @@ const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classes: classesPr
         };
 
         const drawEl = new Draw({
-            source: vectorSource,
+            source: cacheRef.current.vectorSource,
             stopClick: true,
             ...options[type]
         });
@@ -178,7 +171,7 @@ const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classes: classesPr
 };
 
 DrawControl.defaultProps = {
-    classes: {},
+    classNames: {},
     enabled: true
 };
 

@@ -36,6 +36,7 @@ export const pnpoly = (x: any, y: number, coords: Object) => {
     return inside;
 };
 
+// Serializes object into query parameters
 export function serialize(obj: Object): string {
     const str = [];
     for (const p in obj)

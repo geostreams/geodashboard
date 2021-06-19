@@ -20,12 +20,13 @@ import type { LocationType } from '../../utils/flowtype';
 
 const useStyles = makeStyles(() => ({
     content: {
-        height: '100%'
+        height: '100%',
+        overflowY: 'hidden'
     },
     filters: {
-        height: '92%',
         width: '100%',
-        overflowY: 'scroll'
+        height: '92%',
+        boxSizing: 'content-box'
     },
     sidebarContainer: {
         background: '#f5f7f9'
