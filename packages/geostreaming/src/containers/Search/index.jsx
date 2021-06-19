@@ -129,17 +129,19 @@ const Search = (props: Props) => {
 
             setFeatures(newFeatures);
             setFilteredFeatures(newFeatures);
-
-
         }
     }, [sensors]);
 
-    const addPolygonToSource = (polygon, source) => {
-        const feature = new Feature({
-            geometry: new Polygon(polygon.coordinates).transform('EPSG:4326', 'EPSG:3857')
-        });
+    const addPolygonToSource = (polygon, source, projection = 'EPSG:3857') => {
         source.clear();
-        source.addFeatures([feature]);
+        const geom = new Polygon(polygon.coordinates);
+        if(projection !== 'EPSG:3857'){
+            geom.transform(projection, 'EPSG:3857');
+        }
+        const feature = new Feature({
+            geometry: geom
+        });
+        source.addFeature(feature);
     };
 
 
@@ -152,13 +154,13 @@ const Search = (props: Props) => {
                 if(custom_location && 'geometry' in custom_location){
                     updatedFeatures = updatedFeatures.filter((feature) =>
                         isLocationInPolygon(feature.getGeometry().getCoordinates(), custom_location));
-                    addPolygonToSource(custom_location.geometry, locationPolygonSource);
+                    addPolygonToSource(custom_location.geometry, locationPolygonSource, 'EPSG:3857');
                 }
             } else{
                 updatedFeatures = updatedFeatures.filter((feature => 
                     matchLocation(filters.locations[0], feature.get('properties').region, locations, feature.get('coordinates'))));
                 addPolygonToSource(locations.find(location => 
-                    location.properties.id === filters.locations[0]).geometry, locationPolygonSource);
+                    location.properties.id === filters.locations[0]).geometry, locationPolygonSource, 'EPSG:4326');
             }
         } else{
             locationPolygonSource.clear();
