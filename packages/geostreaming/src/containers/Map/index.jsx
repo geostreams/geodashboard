@@ -25,7 +25,7 @@ import type { Feature as FeatureType, Map as MapType, MapBrowserEventType } from
 import type { Layer as LayerType } from 'ol/layer';
 import type { MapLayerConfig } from '@geostreams/core/src/utils/flowtype';
 
-import { getSourceColor } from '../../utils/sensors';
+import { getSensorName, getSourceColor } from '../../utils/sensors';
 import SensorPopup from '../Sensor/Popup';
 
 import type { MapConfig, ParameterType, SensorType, SourceConfig } from '../../utils/flowtype';
@@ -75,7 +75,6 @@ interface Props {
     features: FeatureType[];
     selectedFeature: ?{ idx: number; zoom: boolean; };
     handleFeatureToggle: (feature: ?FeatureType) => void;
-    openSenorDetails: () => void;
 }
 
 const getMarker = (fill: string, stroke: string) => encodeURIComponent(
@@ -165,8 +164,7 @@ const Map = (props: Props) => {
         sourcesVisibility,
         features,
         selectedFeature,
-        handleFeatureToggle,
-        openSenorDetails
+        handleFeatureToggle
     } = props;
 
     const classes = useStyles();
@@ -392,6 +390,8 @@ const Map = (props: Props) => {
         }
     };
 
+    const selectedSensor = selectedFeature ? sensors[selectedFeature.idx] : null;
+
     return (
         <BaseMap
             className={classes.content}
@@ -451,12 +451,16 @@ const Map = (props: Props) => {
                 null}
 
             <div ref={popupContainerRef}>
-                {selectedFeature ?
+                {selectedSensor ?
                     <SensorPopup
+                        header={{
+                            title: getSensorName(selectedSensor.properties),
+                            color: getSourceColor(sourcesConfig[selectedSensor.properties.type.id.toLowerCase()])
+                        }}
                         sensor={sensors[selectedFeature.idx]}
                         parameters={parameters}
+                        detailsLink={`/explore/detail/location/${encodeURIComponent(selectedSensor.name)}/All/`}
                         handleClose={() => handleFeatureToggle()}
-                        handleDetailClick={openSenorDetails}
                     /> : null}
             </div>
         </BaseMap>

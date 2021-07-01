@@ -27,6 +27,7 @@ import type { Source as OLSourceType } from 'ol/source';
 
 import { fetchParameters as fetchParametersAction } from '../../actions/parameters';
 import { fetchSensors as fetchSensorsAction } from '../../actions/sensors';
+import { getSensorName, getSourceColor } from '../../utils/sensors';
 import SensorDetail from '../Sensor/Detail';
 import SensorPopup from '../Sensor/Popup';
 import Sidebar from './Sidebar';
@@ -457,8 +458,11 @@ class Download extends React.Component<Props, State> {
     }
 
     render() {
-        const { classes, sources } = this.props;
-        const { hasData } = this.state;
+        const { classes, sourcesConfig, sources, sensors, parameters } = this.props;
+        const { hasData, selectedFeatureIdx, showSensorDetail } = this.state;
+
+        const selectedSensor = sensors[selectedFeatureIdx];
+
         return (
             <>
                 <Map
@@ -490,7 +494,7 @@ class Download extends React.Component<Props, State> {
                                 <Sidebar
                                     data={this.data}
                                     sources={sources}
-                                    selectedFeature={this.state.selectedFeatureIdx}
+                                    selectedFeature={selectedFeatureIdx}
                                     addRegionsToMap={this.addRegionsToMap}
                                     removeRegionsFromMap={this.removeRegionsFromMap}
                                     handlePopupOpen={this.handlePopupOpen}
@@ -526,21 +530,25 @@ class Download extends React.Component<Props, State> {
                             fontSize="small"
                             onClick={this.handlePopupClose}
                         />
-                        {this.state.selectedFeatureIdx > -1 ?
+                        {selectedSensor ?
                             <SensorPopup
-                                sensor={this.props.sensors[this.state.selectedFeatureIdx]}
-                                parameters={this.props.parameters}
-                                handleDetailClick={() => this.setState({ showSensorDetail: true })}
+                                header={{
+                                    title: getSensorName(selectedSensor.properties),
+                                    color: getSourceColor(
+                                        sourcesConfig[selectedSensor.properties.type.id.toLowerCase()]
+                                    )
+                                }}
+                                sensor={selectedSensor}
+                                parameters={parameters}
+                                detailsLink={`/explore/detail/location/${encodeURIComponent(selectedSensor.name)}/All/`}
                             /> :
                             null}
                     </Paper>
                 </Map>
 
-                {this.state.showSensorDetail ?
+                {showSensorDetail ?
                     <div className={classes.sensorDetail}>
-                        <SensorDetail
-                            sensor={this.props.sensors[this.state.selectedFeatureIdx]}
-                        />
+                        <SensorDetail sensor={selectedSensor} />
                     </div> :
                     null}
             </>

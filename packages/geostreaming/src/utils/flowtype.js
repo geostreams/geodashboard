@@ -75,10 +75,10 @@ export type MapConfig = {
     geoserverUrl: string;
     zoom: number;
     center: [number, number];
-    minZoom: number,
-    maxZoom: number,
-    popupZoom: number,
-    mapTileURL: string
+    minZoom: number;
+    maxZoom: number;
+    popupZoom: number;
+    mapTileURL: string;
     useCluster: boolean;
     clusterDistance: number;
     clusterExpandCountThreshold: number;
@@ -109,6 +109,63 @@ export type SensorsConfig = {
     displayOnlineStatus: boolean;
 };
 
+export type TrendSeasonType = {
+    id: string;
+    title: string;
+};
+
+export type TrendParameterType = {
+    id: string;
+    title: string;
+};
+
+export type TrendValues = {
+    totalaverage: number;
+    tenyearsaverage: number;
+    lastaverage: number;
+    region_id: string;
+    trend: 'overThresholdUp' | 'overThresholdDown' | 'up' | 'down' | 'noChange' | 'noData';
+    percent_change: number;
+};
+
+export type TrendDetailValues = {
+    year: number;
+    average: number;
+    deviation: number;
+    lower: number;
+    upper: number;
+};
+
+export type TrendRegionBoundary = {
+    type: 'Feature';
+    properties: {
+        title: string;
+        region: string;
+        id: string;
+        sortOrder: number;
+        threshold: {
+            [parameter: string]: number;
+        };
+    };
+    geometry: {
+        type: 'Polygon',
+        coordinates: Array<Array<[number, number]>>;
+        region_coordinate: [number, number];
+    };
+};
+
+export type TrendsConfig = {
+    map: {
+        zoom: number;
+        center: [number, number];
+    };
+    boundaries: TrendRegionBoundary[];
+    seasons: TrendSeasonType[];
+    regions: {
+        parameters: TrendParameterType[];
+    };
+};
+
 export type Config = {
     geostreamingEndpoint: string;
 
@@ -119,4 +176,6 @@ export type Config = {
     source: {
         [k: string]: SourceConfig;
     };
+
+    trends: TrendsConfig;
 }

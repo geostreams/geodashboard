@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         borderRight: 'none',
         overflowX: 'hidden',
         justifyContent: 'space-between',
-        height: `calc(100% - ${theme.HEADER_HEIGHT ? theme.HEADER_HEIGHT : 55}px)`,
+        height: `calc(100% - ${theme.header.height ? theme.header.height : 55}px)`,
         top: theme.header ? theme.header.height : 55,
         paddingTop: 10
     },

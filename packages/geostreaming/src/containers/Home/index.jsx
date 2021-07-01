@@ -37,7 +37,7 @@ const Home = () => {
             </Typography>
 
             <Typography variant="body1" align="justify" paragraph>
-                Currently, GLTG<sup>SM</sup> includes sites with five or more years of discreet nutrient data
+                Currently, GLTG<sup>SM</sup> includes sites with five or more years of discreet nutrient data
                 in the main stem of the Mississippi River, continuous water quality monitoring sites in the
                 Mississippi River watershed with nutrient data, and selected small watersheds (HUC-8 or smaller).
                 GLTG will display additional parameters as they are available.
