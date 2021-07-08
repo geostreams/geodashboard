@@ -36,7 +36,8 @@ import type {
     ParameterMappingsType,
     ParameterType,
     SensorType,
-    SourceConfig
+    SourceConfig,
+    VisualizationsConfig
 } from '../../../utils/flowtype';
 
 const styles = (theme) => ({
@@ -57,6 +58,7 @@ type Props = {
     };
     geostreamingEndpoint: string;
     sourceConfig: SourceConfig;
+    visualizationsConfig: VisualizationsConfig;
     sensor: SensorType;
     displayOnlineStatus: boolean;
     allParameters: CategoryType[];
@@ -164,6 +166,8 @@ class SensorDetail extends React.Component<Props, State> {
     constructor(props) {
         super(props);
 
+        console.log(this.props.visualizationsConfig)
+
         this.state = {
             hasSensor: false,
             sensorMarkerLayer: null,
@@ -178,8 +182,8 @@ class SensorDetail extends React.Component<Props, State> {
             endDate: null,
             selectedSeason: '',
             displayLines: true,
-            startAtZero: false,
-            sameTimeScale: true,
+            startAtZero: this.props.visualizationsConfig.defaultStartAtZero,
+            sameTimeScale: this.props.visualizationsConfig.defaultSameTimeScale,
             selectAllDates: true,
             binType: null,
             showSeasonFilter: false,
@@ -487,6 +491,7 @@ class SensorDetail extends React.Component<Props, State> {
                                     startAtZero={startAtZero}
                                     sameTimeScale={sameTimeScale}
                                     showInfoDialog={this.showInfoDialog}
+                                    forceVega = {this.props.visualizationsConfig.forceVega}
                                 />
                             </Grid>
                         </Grid>
@@ -511,6 +516,7 @@ const mapStateToProps = (state, props) => {
     return {
         geostreamingEndpoint: state.config.geostreamingEndpoint,
         sourceConfig: sensor && state.config.source[sensor.properties.type.id],
+        visualizationsConfig: state.config.visualizations,
         sensor,
         displayOnlineStatus: state.config.displayOnlineStatus,
         allParameters: state.__new_parameters.parameters,

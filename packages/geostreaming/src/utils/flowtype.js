@@ -109,12 +109,20 @@ export type SensorsConfig = {
     displayOnlineStatus: boolean;
 };
 
+export type VisualizationsConfig = {
+    forceVega: boolean,
+    defaultStartAtZero: boolean,
+    defaultSameTimeScale: boolean
+};
+
 export type Config = {
     geostreamingEndpoint: string;
 
     map: MapConfig;
 
     sensors: SensorsConfig;
+
+    visualizations: VisualizationsConfig;
 
     source: {
         [k: string]: SourceConfig;
