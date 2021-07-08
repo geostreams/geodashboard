@@ -175,6 +175,12 @@ export type TrendsConfig = {
     regions: {
         parameters: TrendParameterType[];
     };
+}
+
+export type VisualizationsConfig = {
+    forceVega: boolean,
+    defaultStartAtZero: boolean,
+    defaultSameTimeScale: boolean
 };
 
 export type Config = {
@@ -183,6 +189,8 @@ export type Config = {
     map: MapConfig;
 
     sensors: SensorsConfig;
+
+    visualizations: VisualizationsConfig;
 
     source: {
         [k: string]: SourceConfig;
