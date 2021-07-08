@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## UNRELEASED
 
+## Added
+- New configuration options added for visualizations (forceVega, defaultStartAtZero, defaultSameTimeScale)
+- Vega Visualizations added (Multi-Line Chart, Line Chart, Box-Whisker Plot)
+
 ### Changed
 - Finished refactoring of the explore view
   [Github-38](https://github.com/geostreams/geodashboard/issues/38)
