@@ -11,6 +11,7 @@ import Polygon from 'ol/geom/Polygon';
 import { Fill, Stroke, Style } from 'ol/style';
 import type { Feature as FeatureType } from 'ol';
 import DrawControl from '@geostreams/core/src/components/ol/DrawControl';
+import { Circle } from 'ol/geom';
 
 import Map from '../Map';
 import SensorDetail from '../Sensor/Detail';
@@ -89,6 +90,7 @@ const Search = (props: Props) => {
 
     const [features, setFeatures] = useState<FeatureType[]>([]);
     const [filteredFeatures, setFilteredFeatures] = useState<FeatureType[]>([]);
+
     // Handles whether draw controls should be visible or not
     const [drawMode, toggleDrawMode] = useState(false);
 
@@ -134,7 +136,14 @@ const Search = (props: Props) => {
 
     const addPolygonToSource = (polygon, source, projection = 'EPSG:3857') => {
         source.clear();
-        const geom = new Polygon(polygon.coordinates);
+        let geom; 
+        if(polygon.type === 'Circle'){
+            const { properties: { trueCenter, trueRadius } } = polygon;
+            geom = new Circle(trueCenter, trueRadius);
+        } else{
+            geom = new Polygon(polygon.coordinates);
+        }
+
         if(projection !== 'EPSG:3857'){
             geom.transform(projection, 'EPSG:3857');
         }
@@ -216,7 +225,7 @@ const Search = (props: Props) => {
                         width: 2
                     }),
                     fill: new Fill({
-                        color: 'rgba(254, 254, 254, 0.3)'
+                        color: 'rgba(254, 254, 254, 0.2)'
                     })
                 })
             ]
@@ -253,6 +262,7 @@ const Search = (props: Props) => {
                     enabled={drawMode}
                     toggleDrawMode={toggleDrawMode}
                     onStoreShape={addLocation}
+                    source={locationPolygonSource}
                 />
             </Map>
 

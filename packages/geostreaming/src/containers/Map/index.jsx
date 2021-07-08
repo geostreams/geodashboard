@@ -345,7 +345,8 @@ const Map = (props: Props) => {
 
             const clusters = new AnimatedClusterLayer({
                 source: clusterSource,
-                style: getStyle
+                style: getStyle,
+                zIndex: Infinity
             });
 
             const selectCluster = new SelectClusterInteraction({

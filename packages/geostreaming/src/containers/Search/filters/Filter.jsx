@@ -120,6 +120,12 @@ function Filter(props: Props) {
         onChange(val);
     };
 
+    const removeSelectedItem = (id) => {
+        const val = value;
+        val.splice(id, 1);
+        onChange(val);
+    };
+
     // Trim and display selected options
     const renderSelected = () => {
         let output = [];
@@ -142,7 +148,11 @@ function Filter(props: Props) {
                         className={classes.chip} 
                         label={label} 
                         size="small" 
-                        onDelete={disableDelete && idx === output.length - 1 ? undefined : () => {}} 
+                        onDelete={
+                            disableDelete && idx === output.length - 1 ? 
+                                undefined : 
+                                () => removeSelectedItem(idx)
+                        } 
                     />)}
             </div>);
     };

@@ -33,12 +33,10 @@ type Props = {
     classNames?: Object
 }
 
-const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classNames }: Props) => {
+const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classNames, source }: Props) => {
     const classes = useStyle(classNames);
     const { map } = React.useContext(MapContext);
-    // contains the draw Object created for deleting interaction at end
-    const [draw, setDraw] = useState(null);
-
+    
     // Caches the control
     const cacheRef = React.useRef<{
         drawControl: Control
@@ -57,13 +55,13 @@ const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classNames }: Prop
                 map.addControl(cacheRef.current.drawControl);
                 // Create VectorSource and Layer when enabled
                 // which contain the drawing features
-                const vector = cacheRef.current.vectorSource;
-                // zooms to the selected shape
-                vector.on('addfeature', () => {
-                    map.getView().fit(vector.getExtent(), { duration: 500 });
-                });
+                // const vector = cacheRef.current.vectorSource;
+                // // zooms to the selected shape
+                // vector.on('addfeature', () => {
+                //     map.getView().fit(vector.getExtent(), { duration: 500 });
+                // });
                 const customLocationLayer = new VectorLayer({
-                    source: vector,
+                    source,
                     name: 'drawlayer',
                     zIndex: Infinity
                 });
@@ -76,10 +74,8 @@ const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classNames }: Prop
 
     // Removes existing drawn shapes
     const clearDrawing = () => {
-        if(draw){
-            cacheRef.current.vectorSource.clear();
-            map.removeInteraction(draw);
-        }
+        source.clear();
+        map.getInteractions().pop();
     };
 
     const clearDrawMode = () => {
@@ -98,12 +94,10 @@ const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classNames }: Prop
         };
 
         const drawEl = new Draw({
-            source: cacheRef.current.vectorSource,
+            source,
             stopClick: true,
             ...options[type]
         });
-
-        setDraw(drawEl);
 
         map.addInteraction(drawEl);
         
@@ -123,12 +117,14 @@ const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classNames }: Prop
                 // Convert the circle to a polygon to get the coordinates
                 // Openlayers provides only the center and radius for circles, not coordinates
                 const coord = fromCircle(drawExtent).getCoordinates();
-                
-                onStoreShape(coord, 'Circle', { center, radius });
+                clearDrawMode();
+                onStoreShape(coord, 'Circle', { center, radius, trueCenter: drawExtent.getCenter(), trueRadius: drawExtent.getRadius() });
             } else{
                 drawCoordinates = feature.getGeometry().getCoordinates();
                 onStoreShape(drawCoordinates);
+                clearDrawMode();
             }
+            return null;
         });
     };
     if(!enabled)
