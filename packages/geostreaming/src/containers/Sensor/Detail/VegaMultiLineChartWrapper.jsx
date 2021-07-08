@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Grid } from '@material-ui/core';
 import MultiLineChart from '@geostreams/core/src/components/vega/MultiLineChart'
-import StackedBoxWhisker from '@geostreams/core/src/components/vega/stackedBoxWhisker'
+import StackedBoxWhisker from '@geostreams/core/src/components/vega/StackedBoxWhisker'
 
 import type { ParameterValue } from '../../../utils/flowtype';
 
@@ -50,7 +50,6 @@ const MultiLineChartWrapper = (props: Props) => {
                     data={chartData}
                     attributes={attributes}
                     width={130}
-                    keyName={"depth"}
                     />
             </Grid>
         </>
