@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 3.8.0 - 2021-07-13
 ## Added
 - New configuration options added for visualizations (forceVega, defaultStartAtZero, defaultSameTimeScale)
-- Vega Visualizations added (Multi-Line Chart, Line Chart, Box-Whisker Plot)
+- Vega Visualizations added (Multi-Line Chart, Line Chart, Box-Whisker Plot, Stacked Box-Whisker Plot)
 
 ### Changed
 - Created Search page with filters to replace old search/download page

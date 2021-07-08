@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import { Grid } from '@material-ui/core';
-import MultiLineChart from '@geostreams/core/src/components/vega/MultiLineChart'
-import StackedBoxWhisker from '@geostreams/core/src/components/vega/StackedBoxWhisker'
+import MultiLineChart from '../../../components/vega/MultiLineChart'
+import StackedBoxWhisker from '../../../components/vega/StackedBoxWhisker'
 
 import type { ParameterValue } from '../../../utils/flowtype';
 

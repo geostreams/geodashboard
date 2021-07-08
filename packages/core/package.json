@@ -20,10 +20,7 @@
     "jspdf": "^2.3.1",
     "ol": "~6.5.0",
     "ol-ext": "~3.1.14",
-    "ol-layerswitcher": "~3.8.0",
-    "react-vega": "^7.4.3",
-    "vega": "^5.20.2",
-    "vega-lite": "^5.1.0"
+    "ol-layerswitcher": "~3.8.0"
   },
   "peerDependencies": {
     "@material-ui/core": "^4.11.2",

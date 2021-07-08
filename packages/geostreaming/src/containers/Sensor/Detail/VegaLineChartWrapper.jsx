@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import { Grid } from '@material-ui/core';
-import LineGraph from '@geostreams/core/src/components/vega/LineGraph'
-import BoxWhisker from '@geostreams/core/src/components/vega/BoxWhisker'
+import LineGraph from '../../../components/vega/LineGraph';
+import BoxWhisker from '../../../components/vega/BoxWhisker';
 
 import type { ParameterValue } from '../../../utils/flowtype';
 

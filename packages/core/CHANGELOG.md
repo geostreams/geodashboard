@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 3.8.0 - 2021-07-13
 
 ### Added
-- Added Vega Charts for BoxWhisker, LineGraph, MultiLineGraph, StackedBoxWhisker
 - Add htmlToPdf utility function
   [GEOD-1366](https://opensource.ncsa.illinois.edu/jira/browse/GEOD-1366)
   [GH-42](https://github.com/geostreams/geodashboard/issues/42)
