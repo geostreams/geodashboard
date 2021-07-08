@@ -63,7 +63,7 @@ const DrawControl = ({ enabled, toggleDrawMode, onStoreShape, classNames, source
                 const customLocationLayer = new VectorLayer({
                     source,
                     name: 'drawlayer',
-                    zIndex: Infinity
+                    zIndex: 1
                 });
                 map.addLayer(customLocationLayer);
             } else{
