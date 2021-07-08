@@ -31,7 +31,7 @@ function StackedBoxWhisker(props){
               "field": "value",
               "type": "quantitative",
               "scale": {"zero": false},
-              "title": "value"
+              "title": false
             }
           }
       }

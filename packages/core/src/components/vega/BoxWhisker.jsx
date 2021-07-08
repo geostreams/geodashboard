@@ -2,7 +2,7 @@ import React from 'react'
 import { VegaLite } from 'react-vega'
 
 function BoxWhisker(props){
-    const {data, width, height} = props;
+    const {data, width, height, yLabel} = props;
 
     const spec = {
         "width": width,
@@ -19,7 +19,8 @@ function BoxWhisker(props){
               "field": "average",
               "type": "quantitative",
               "scale": {"zero": false},
-              "axis": {"grid": false}
+              "axis": {"grid": false},
+              "title": false
             },
             "size": {
                   "value": width-20
