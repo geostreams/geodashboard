@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Added
 - New configuration options added for visualizations (forceVega, defaultStartAtZero, defaultSameTimeScale)
-- Vega Visualizations added (Multi-Line Chart, Line Chart, Box-Whisker Plot)
+- Vega Visualizations added (Multi-Line Chart, Line Chart, Box-Whisker Plot, Stacked Box-Whisker Plot)
 
 ### Changed
 - Finished refactoring of the explore view
