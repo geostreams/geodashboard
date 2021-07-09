@@ -75,10 +75,10 @@ export type MapConfig = {
     geoserverUrl: string;
     zoom: number;
     center: [number, number];
-    minZoom: number,
-    maxZoom: number,
-    popupZoom: number,
-    mapTileURL: string
+    minZoom: number;
+    maxZoom: number;
+    popupZoom: number;
+    mapTileURL: string;
     useCluster: boolean;
     clusterDistance: number;
     clusterExpandCountThreshold: number;
@@ -109,6 +109,17 @@ export type SensorsConfig = {
     displayOnlineStatus: boolean;
 };
 
+export type LocationConfig = {
+    type: string;
+    properties: {
+        region: string,
+        id: string,
+        sortOrder: number,
+        title: string
+    },
+    geometry: GeometryType
+}
+
 export type Config = {
     geostreamingEndpoint: string;
 
@@ -119,4 +130,6 @@ export type Config = {
     source: {
         [k: string]: SourceConfig;
     };
+
+    locations: LocationConfig[];
 }

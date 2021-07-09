@@ -19,6 +19,7 @@ import Control from '@geostreams/core/src/components/ol/Control';
 import ClusterControl from '@geostreams/core/src/components/ol/ClusterControl';
 import FitViewControl from '@geostreams/core/src/components/ol/FitViewControl';
 import LayersControl from '@geostreams/core/src/components/ol/LayersControl';
+
 import { entries } from '@geostreams/core/src/utils/array';
 
 import type { Feature as FeatureType, Map as MapType, MapBrowserEventType } from 'ol';
@@ -71,11 +72,13 @@ interface Props {
     displayOnlineStatus: boolean;
     parameters: ParameterType[];
     sensors: SensorType[];
-    sourcesVisibility: { [sourceId: string]: boolean; };
     features: FeatureType[];
     selectedFeature: ?{ idx: number; zoom: boolean; };
     handleFeatureToggle: (feature: ?FeatureType) => void;
-    openSenorDetails: () => void;
+    openSensorDetails: () => void;
+    showExploreLayers?: boolean;
+    additionalLayer: LayerType,
+    children: React.Node;
 }
 
 const getMarker = (fill: string, stroke: string) => encodeURIComponent(
@@ -88,7 +91,8 @@ const getMarker = (fill: string, stroke: string) => encodeURIComponent(
 const prepareLayers = (
     mapTileURL: string,
     geoserverUrl: string,
-    layersConfig: { [group: string]: MapLayerConfig[] } = {}
+    layersConfig: { [group: string]: MapLayerConfig[] } = {},
+    showExploreLayers: boolean
 ): { [layerName: string]: LayerType } => {
     let source = new OSM();
     if(mapTileURL)
@@ -108,49 +112,49 @@ const prepareLayers = (
             ]
         })
     };
-
-    entries(layersConfig).forEach(([group, groupLayersConfig]) => {
-        const groupLayers = [];
-        groupLayersConfig.forEach(({
-            title,
-            id,
-            type,
-            initialOpacity,
-            initialVisibility,
-            legend
-        }: MapLayerConfig) => {
-            let layer;
-            if (type === 'wms') {
-                layer = new ImageLayer({
-                    source: new ImageWMSSource({
-                        url: `${geoserverUrl}/wms`,
-                        params: { LAYERS: id },
-                        ratio: 1,
-                        serverType: 'geoserver'
-                    }),
-                    opacity: initialOpacity || 0.8,
-                    visible: initialVisibility || false
+    if(showExploreLayers)
+        entries(layersConfig).forEach(([group, groupLayersConfig]) => {
+            const groupLayers = [];
+            groupLayersConfig.forEach(({
+                title,
+                id,
+                type,
+                initialOpacity,
+                initialVisibility,
+                legend
+            }: MapLayerConfig) => {
+                let layer;
+                if (type === 'wms') {
+                    layer = new ImageLayer({
+                        source: new ImageWMSSource({
+                            url: `${geoserverUrl}/wms`,
+                            params: { LAYERS: id },
+                            ratio: 1,
+                            serverType: 'geoserver'
+                        }),
+                        opacity: initialOpacity || 0.8,
+                        visible: initialVisibility || false
+                    });
+                    layer.set('title', title);
+                    if (legend) {
+                        layer.set('legend', `${geoserverUrl}/${legend}`,);
+                    }
+                }
+                if (layer) {
+                    if (group) {
+                        groupLayers.push(layer);
+                    } else {
+                        layers[title] = layer;
+                    }
+                }
+            });
+            if (group) {
+                layers[group] = new GroupLayer({
+                    title: group,
+                    layers: groupLayers
                 });
-                layer.set('title', title);
-                if (legend) {
-                    layer.set('legend', `${geoserverUrl}/${legend}`,);
-                }
-            }
-            if (layer) {
-                if (group) {
-                    groupLayers.push(layer);
-                } else {
-                    layers[title] = layer;
-                }
             }
         });
-        if (group) {
-            layers[group] = new GroupLayer({
-                title: group,
-                layers: groupLayers
-            });
-        }
-    });
 
     return layers;
 };
@@ -162,11 +166,13 @@ const Map = (props: Props) => {
         displayOnlineStatus,
         parameters,
         sensors,
-        sourcesVisibility,
         features,
         selectedFeature,
         handleFeatureToggle,
-        openSenorDetails
+        openSensorDetails,
+        showExploreLayers,
+        additionalLayer: additionalLayerProp, 
+        children
     } = props;
 
     const classes = useStyles();
@@ -179,6 +185,8 @@ const Map = (props: Props) => {
     const clusterRef = React.useRef();
 
     const [isClusterEnabled, toggleCluster] = React.useState(mapConfig.useCluster);
+
+    const [additionalLayer, setAdditionalLayer] = React.useState(additionalLayerProp);
 
     // This is used to cache map styles
     const mapStylesRef = React.useRef<{ [styleName: string]: Style }>({});
@@ -195,7 +203,7 @@ const Map = (props: Props) => {
     if (!cacheRef.current.initiated) {
         cacheRef.current = {
             initiated: true,
-            layers: prepareLayers(mapConfig.mapTileURL, mapConfig.geoserverUrl, mapConfig.layers),
+            layers: prepareLayers(mapConfig.mapTileURL, mapConfig.geoserverUrl, mapConfig.layers, showExploreLayers),
             layersControl: new Control({
                 className: classes.layersControl
             }),
@@ -213,17 +221,20 @@ const Map = (props: Props) => {
         if (map) {
             const popupOverlay = map.getOverlayById('popup');
             if (selectedFeature) {
-                const geometry = features[selectedFeature.idx].getGeometry();
-                if (selectedFeature.zoom) {
-                    map.getView().fit(
-                        geometry.getExtent(),
-                        {
-                            maxZoom: mapConfig.maxZoom,
-                            callback: () => popupOverlay.setPosition(geometry.getCoordinates())
-                        }
-                    );
-                } else {
-                    popupOverlay.setPosition(geometry.getCoordinates());
+                const feature = features.find(obj => obj.get('idx') === selectedFeature.idx);
+                if(feature){
+                    const geometry = feature.getGeometry();
+                    if (selectedFeature.zoom) {
+                        map.getView().fit(
+                            geometry.getExtent(),
+                            {
+                                maxZoom: mapConfig.maxZoom,
+                                callback: () => popupOverlay.setPosition(geometry.getCoordinates())
+                            }
+                        );
+                    } else {
+                        popupOverlay.setPosition(geometry.getCoordinates());
+                    }
                 }
             } else {
                 popupOverlay.setPosition();
@@ -239,6 +250,10 @@ const Map = (props: Props) => {
                     dataProjection: 'EPSG:4326',
                     featureProjection: 'EPSG:3857'
                 }))
+            });
+
+            vectorSource.on('addfeature', () => {
+                mapRef.current.getView().fit(vectorSource.getExtent(), { duration: 500 });
             });
 
             const { useCluster, clusterDistance } = mapConfig;
@@ -317,6 +332,9 @@ const Map = (props: Props) => {
             };
 
             const getStyle = (feature) => {
+                // Handled null error when click propagated from non-feature layers
+                if(!feature.getKeys().includes('features'))
+                    return null;
                 const size = feature.get('features').length;
 
                 if (size === 1 || !isClusterEnabled) {
@@ -327,7 +345,8 @@ const Map = (props: Props) => {
 
             const clusters = new AnimatedClusterLayer({
                 source: clusterSource,
-                style: getStyle
+                style: getStyle,
+                zIndex: Infinity
             });
 
             const selectCluster = new SelectClusterInteraction({
@@ -359,19 +378,33 @@ const Map = (props: Props) => {
     }, []);
 
     React.useEffect(() => {
+        if(mapRef.current){
+            if(additionalLayer){
+                mapRef.current.removeLayer(additionalLayer);
+            }
+            if(additionalLayerProp){
+                const layerSource = additionalLayerProp.getSource();          
+
+                layerSource.on('addfeature', () => {
+                    if(layerSource.getFeatures().length > 0)    
+                        mapRef.current.getView().fit(layerSource.getExtent(), { duration: 500 });
+                });
+                mapRef.current.addLayer(additionalLayerProp);
+            }
+            setAdditionalLayer(additionalLayerProp); 
+        }
+    }, [additionalLayerProp]);
+
+    React.useEffect(() => {
         const cluster = clusterRef.current;
         if (cluster) {
             const source = cluster.getSource();
             source.clear();
-            source.addFeatures(features.filter((feature) => {
-                const isVisible = sourcesVisibility[feature.get('properties').type.id];
-                if (!isVisible && selectedFeature && selectedFeature.idx === feature.get('idx')) {
-                    handleFeatureToggle();
-                }
-                return isVisible;
-            }));
+            source.addFeatures(features);
+            // if(mapRef)
+            //     mapRef.current.getView().fit(source.getExtent(), { duration: 500 });
         }
-    }, [features, sourcesVisibility]);
+    }, [features]);
 
     const handleMapClick = (event: MapBrowserEventType) => {
         if (mapRef.current) {
@@ -442,7 +475,7 @@ const Map = (props: Props) => {
                     }
                 /> : null}
 
-            {mapConfig.layers ?
+            {mapConfig.layers && showExploreLayers ?
                 <LayersControl
                     el={cacheRef.current.layersControl.element}
                     layers={cacheRef.current.layers}
@@ -456,11 +489,17 @@ const Map = (props: Props) => {
                         sensor={sensors[selectedFeature.idx]}
                         parameters={parameters}
                         handleClose={() => handleFeatureToggle()}
-                        handleDetailClick={openSenorDetails}
+                        handleDetailClick={openSensorDetails}
                     /> : null}
             </div>
+            {children}
         </BaseMap>
     );
+};
+
+Map.defaultProps = {
+    showExploreLayers: true,
+    additionalLayer: undefined
 };
 
 export default Map;

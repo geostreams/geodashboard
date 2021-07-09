@@ -25,15 +25,6 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
         zIndex: theme.zIndex.drawer
     },
-    drawerPaper:{
-        width: drawerWidth,
-        borderRight: 'none',
-        overflowX: 'hidden',
-        justifyContent: 'space-between',
-        height: `calc(100% - ${theme.HEADER_HEIGHT ? theme.HEADER_HEIGHT : 55}px)`,
-        top: theme.header ? theme.header.height : 55,
-        paddingTop: 10
-    },
     drawerOpen: {
         width: drawerWidth,
         transition: theme.transitions.create('width', {
@@ -58,10 +49,20 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
         padding: '0 8px'
     },
+    drawerPaper: props => ({
+        width: drawerWidth,
+        borderRight: 'none',
+        overflowX: 'hidden',
+        justifyContent: 'space-between',
+        height: `calc(100% - ${theme.HEADER_HEIGHT ? theme.HEADER_HEIGHT : 55}px)`,
+        top: theme.header ? theme.header.height : 55,
+        paddingTop: 10,
+        ...props.classes.drawerPaper
+    }),
     content: props => ({
         alignItems: 'flex-start',
         padding:0,
-        width: drawerWidth - 15,
+        width: props.disableGutters ? drawerWidth : drawerWidth - 15,
         paddingBottom: 10,
         ...props.classes.content
     })
@@ -71,10 +72,12 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
     children?: React.Node,
     collapsible?: boolean,
+    // eslint-disable-next-line react/no-unused-prop-types
+    disableGutters?: boolean,
     toggleSidebar: Function,
     // eslint-disable-next-line react/no-unused-prop-types
     classes: Object,
-    expanded: boolean
+    expanded: boolean,
 }
 
 function BaseSidebar(props: Props) {
@@ -132,6 +135,7 @@ function BaseSidebar(props: Props) {
 BaseSidebar.defaultProps = {
     children: null,
     collapsible: false,
+    disableGutters: false,
     classes: {},
     expanded: true
 };

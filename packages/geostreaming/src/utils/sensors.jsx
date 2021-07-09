@@ -9,6 +9,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import SVGIcon from '@geostreams/core/src/components/SVGIcon';
 
+
 import type { PropertiesType, SensorType, SourceConfig } from './flowtype';
 
 export const getSensorName = ({ location, name, popupContent }: PropertiesType): string => (
@@ -72,3 +73,5 @@ export const getSensorMarker = (sensor: SensorType, sourceConfig: SourceConfig, 
 
     return sensorMarker;
 };
+
+
