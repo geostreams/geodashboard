@@ -109,6 +109,17 @@ export type SensorsConfig = {
     displayOnlineStatus: boolean;
 };
 
+export type LocationConfig = {
+    type: string;
+    properties: {
+        region: string,
+        id: string,
+        sortOrder: number,
+        title: string
+    },
+    geometry: GeometryType
+}
+
 export type TrendSeasonType = {
     id: string;
     title: string;
@@ -176,6 +187,8 @@ export type Config = {
     source: {
         [k: string]: SourceConfig;
     };
+
+    locations: LocationConfig[];
 
     trends: TrendsConfig;
 }

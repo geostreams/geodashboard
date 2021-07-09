@@ -1,52 +1,41 @@
 // @flow
-import React from 'react';
-import { renderToString } from 'react-dom/server';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Grid, Paper, withStyles } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import MarkerIcon from '@material-ui/icons/Room';
-import { scaleLinear } from 'd3';
+import { makeStyles } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Feature from 'ol/Feature';
-import GeoJSON from 'ol/format/GeoJSON';
 import Point from 'ol/geom/Point';
-import GroupLayer from 'ol/layer/Group';
-import TileLayer from 'ol/layer/Tile';
-import OSM, { ATTRIBUTION as OSM_ATTRIBUTION } from 'ol/source/OSM';
+import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import XYZ from 'ol/source/XYZ';
-import { Circle, Fill, Icon, Stroke, Style, Text } from 'ol/style';
-import { Map } from '@geostreams/core/src/components/ol';
-import Control from '@geostreams/core/src/components/ol/Control';
-import ClusterControl from '@geostreams/core/src/components/ol/ClusterControl';
-import SVGIcon from '@geostreams/core/src/components/SVGIcon';
-import { values } from '@geostreams/core/src/utils/array';
+import Polygon from 'ol/geom/Polygon';
+import { Fill, Stroke, Style } from 'ol/style';
+import DrawControl from '@geostreams/core/src/components/ol/DrawControl';
+import { Circle } from 'ol/geom';
+import type { Feature as FeatureType } from 'ol';
 
-import type { Feature as FeatureType, Map as MapType, MapBrowserEventType, Overlay as OverlayType } from 'ol';
-import type { Layer as LayerType } from 'ol/layer';
-import type { Source as OLSourceType } from 'ol/source';
-
+import Map from '../Map';
+import SensorDetail from '../Sensor/Detail';
+import { addLocation as addLocationAction } from '../../actions/search';
 import { fetchParameters as fetchParametersAction } from '../../actions/parameters';
 import { fetchSensors as fetchSensorsAction } from '../../actions/sensors';
-import { getSensorName, getSourceColor } from '../../utils/sensors';
-import SensorDetail from '../Sensor/Detail';
-import SensorPopup from '../Sensor/Popup';
+import { matchLocation, isLocationInPolygon } from '../../utils/search';
+
+
+import type {
+    MapConfig,
+    ParameterType,
+    SensorType,
+    SourceConfig,
+    SourceType,
+    LocationType
+} from '../../utils/flowtype';
 import Sidebar from './Sidebar';
 
-import type { MapConfig, ParameterType, SensorType, SourceConfig, SourceType } from '../../utils/flowtype';
-
-const INIT_ZOOM = 5.5;
-const INIT_CENTER = [-9972968, 4972295];
-const CLUSTER_DISTANCE = 45;
-
-const styles = (theme) => ({
-    mainContainer: {
-        position: 'absolute',
+const useStyles = makeStyles({
+    root: {
+        display: 'flex',
+        width: '100%',
         height: '100%'
-    },
-    sidebar: {
-        height: '100%',
-        overflowY: 'auto',
-        boxShadow: '1px 0 8px'
     },
     sensorDetail: {
         position: 'absolute',
@@ -56,519 +45,260 @@ const styles = (theme) => ({
         overflow: 'auto',
         background: '#fff'
     },
-    clusterControl: {
-        'display': 'flex',
-        'justifyContent': 'center',
-        'bottom': 20,
-        'width': '100%',
-        'background': 'transparent',
-        '&:hover': {
-            background: 'transparent'
-        },
-        '& > label': {
-            padding: '0 10px',
-            color: theme.palette.primary.contrastText,
-            backgroundColor: theme.palette.primary.main
-        }
-    },
-    popupClose: {
-        position: 'absolute',
-        top: 5,
-        right: 5,
-        zIndex: 1000,
-        cursor: 'pointer'
+    pageLoader: {
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 
 type Props = {
-    classes: {
-        mainContainer: string;
-        sidebar: string;
-        sensorDetail: string;
-        clusterControl: string;
-        popupClose: string;
-    };
     mapConfig: MapConfig;
     sourcesConfig: { [k: string]: SourceConfig; };
-    displayOnlineStatus: boolean;
     sensors: SensorType[];
     sources: SourceType[];
     parameters: ParameterType[];
+    locations: LocationType[];
     fetchSensors: Function;
     fetchParameters: Function;
+    displayOnlineStatus: boolean;
+    filters: [],
+    addLocation: Function,
+    custom_location: Object
 }
 
-type State = {
-    hasData: boolean;
-    enableCluster: boolean;
-    selectedFeatureIdx: number;
-    showSensorDetail: boolean;
-}
+const Search = (props: Props) => {
+    const {
+        mapConfig,
+        parameters,
+        sensors,
+        sourcesConfig,
+        locations,
+        displayOnlineStatus,
+        filters,
+        addLocation,
+        custom_location,
+        fetchSensors,
+        fetchParameters
+    } = props;
 
-class Download extends React.Component<Props, State> {
-    map: MapType
+    const classes = useStyles();
 
-    layers: {
-        [key: string]: LayerType
-    }
 
-    popupOverlay: OverlayType
 
-    mapStyles: {
-        [key: string]: Style
-    }
+    const [features, setFeatures] = useState<FeatureType[]>([]);
+    const [filteredFeatures, setFilteredFeatures] = useState<FeatureType[]>([]);
 
-    features: FeatureType[];
+    // Handles whether draw controls should be visible or not
+    const [drawMode, toggleDrawMode] = useState(false);
 
-    selectedFeature: ?FeatureType
+    // idx is the selected feature property. zoom indicated whether the map should zoom the selected feature.
+    const [selectedFeature, updateSelectedFeature] = React.useState();
 
-    clusterVectorSource: OLSourceType
+    const [showSensorDetails, updateShowSensorDetails] = React.useState(false);
 
-    clusterSource: OLSourceType
+    const locationPolygonSource = React.useRef(new VectorSource());
 
-    clusterControl: Control
 
-    popupOverlay: OverlayType
 
-    popupContainer: { current: null | HTMLDivElement } = React.createRef()
-
-    data: {
-        [sourceId: string]: {
-            sensorCount: number,
-            regions: {
-                [regionId: string]: SensorType[]
-            }
+    React.useEffect(() => {
+        if (parameters.length === 0) {
+            fetchParameters();
         }
-    }
+    }, []);
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            hasData: false,
-            enableCluster: true,
-            selectedFeatureIdx: -1,
-            showSensorDetail: false
-        };
-
-        this.features = [];
-
-        this.layers = {
-            basemaps: new GroupLayer({
-                title: 'Base Maps',
-                layers: [
-                    new TileLayer({
-                        type: 'base',
-                        visible: true,
-                        title: 'Carto',
-                        source: new XYZ({
-                            url: 'https://{a-d}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png',
-                            attributions: [
-                                '&#169; <a href="https://www.carto.com">Carto</a>,',
-                                OSM_ATTRIBUTION
-                            ]
-                        })
-                    }),
-                    new TileLayer({
-                        type: 'base',
-                        visible: false,
-                        title: 'OSM',
-                        source: new OSM()
-                    })
-                ]
-            })
-        };
-
-        const marker = renderToString(
-            <MarkerIcon
-                component={SVGIcon}
-                fill="green"
-                stroke="green"
-            />
-        );
-        this.mapStyles = {
-            linkedFeature: new Style({
-                image: new Icon({
-                    src: `data:image/svg+xml;utf-8,${marker}`,
-                    size: [10, 10]
-                }),
-                stroke: new Stroke({
-                    color: '#fff',
-                    width: 1
-                })
-            }),
-            selectedFeature: new Style({
-                image: new Icon({
-                    src: `data:image/svg+xml;utf-8,${marker}`
-                })
-            })
-        };
-
-        this.selectedFeature = null;
-
-        this.clusterControl = new Control({
-            className: this.props.classes.clusterControl
-        });
-    }
-
-    componentDidMount() {
-        if (this.props.sensors.length > 0) {
-            this.initComponent();
+    // Converts sensors to openlayers features whenever sensors props are updated
+    // Stores features in state
+    useEffect(() => {
+        if (!sensors.length) {
+            fetchSensors();
         } else {
-            this.props.fetchSensors();
-        }
-        if (this.props.parameters.length === 0) {
-            this.props.fetchParameters();
-        }
-    }
-
-    componentDidUpdate(prevProps: $ReadOnly<Props>, prevState: $ReadOnly<State>) {
-        if (!prevState.hasData && this.props.sensors.length > 0) {
-            this.initComponent();
-        }
-    }
-
-    initComponent = () => {
-        this.prepareData();
-        this.addClusters();
-        this.setState({ hasData: true });
-    }
-
-    prepareData = () => {
-        this.data = {};
-
-        this.props.sensors.forEach((d, idx) => {
-            d.idx = idx;
-            const sourceId = d.properties.type.id;
-            if (!this.data[sourceId]) {
-                this.data[sourceId] = {
-                    sensorCount: 0,
-                    regions: {}
-                };
-            }
-            const sourceAttrs = this.data[sourceId];
-            sourceAttrs.sensorCount += 1;
-            const regionId = d.properties.region;
-            if (!sourceAttrs.regions[regionId]) {
-                sourceAttrs.regions[regionId] = [];
-            }
-            const regionSensors = sourceAttrs.regions[regionId];
-            regionSensors.push(d);
-        });
-    }
-
-    getMarker = (fill: string, stroke: string) => encodeURIComponent(
-        renderToString(
-            <MarkerIcon
-                component={SVGIcon}
-                fill={fill}
-                stroke={stroke}
-            />
-        )
-    )
-
-    getMarkerColor = (feature) => {
-        if (feature.get('features')) {
-            const properties = feature.get('features')[0].get('properties');
-            const sourceAttrs = this.props.sourcesConfig[properties.type.id.toLowerCase()] || {};
-            const fillColor = sourceAttrs.color || 'black';
-            let strokeColor = 'black';
-            if (this.props.displayOnlineStatus) {
-                if (properties.online_status === 'online') {
-                    strokeColor = 'green';
-                }
-                if (properties.online_status === 'offline') {
-                    strokeColor = 'red';
-                }
-            }
-            return [fillColor, strokeColor];
-        }
-        return ['pink', 'pink'];
-    }
-
-    getClusteredStyle = (feature) => {
-        const { mapStyles } = this;
-        const { enableCluster } = this.state;
-
-        const size = feature.get('features').length;
-
-        if (size === 1 || !enableCluster) {
-            return this.getSelectedStyle(feature);
-        }
-
-        const radiusScale = scaleLinear().range([10, 20]).domain([0, 300]).clamp(true);
-
-        const styleName = `cluster-${size}`;
-        let style = mapStyles[styleName];
-        if (!style) {
-            style = new Style({
-                image: new Circle({
-                    radius: radiusScale(size),
-                    stroke: new Stroke({
-                        color: '#fff'
-                    }),
-                    fill: new Fill({
-                        color: '#3399CC'
-                    })
-                }),
-                text: new Text({
-                    text: size.toString(),
-                    fill: new Fill({
-                        color: '#fff'
-                    })
-                })
-            });
-        }
-
-        mapStyles[styleName] = style;
-        this.mapStyles = mapStyles;
-        return style;
-    }
-
-    getSelectedStyle = (feature) => {
-        const size = feature.get('features').length;
-        const { mapStyles } = this;
-        const { enableCluster } = this.state;
-
-        if (size > 1 && enableCluster) {
-            return this.getClusteredStyle(feature);
-        }
-
-        const [fillColor, strokeColor] = this.getMarkerColor(feature);
-        const styleName = `cluster-${strokeColor}`;
-        let style = mapStyles[styleName];
-        if (!style) {
-            style = new Style({
-                image: new Icon({
-                    src: `data:image/svg+xml;utf-8,${this.getMarker(fillColor, strokeColor)}`
-                })
-            });
-        }
-
-        mapStyles[styleName] = style;
-        this.mapStyles = mapStyles;
-        return style;
-    }
-
-    addClusters = () => {
-        this.clusterVectorSource = new VectorSource({
-            format: (new GeoJSON({
-                dataProjection: 'EPSG:4326',
-                featureProjection: 'EPSG:3857'
-            }))
-        });
-
-        this.features = [];
-        this.props.sensors.forEach((sensor) => {
-            const { geometry, ...attrs } = sensor;
-            const geom = new Point(geometry.coordinates);
-            geom.transform('EPSG:4326', 'EPSG:3857');
-            const feature = new Feature({
-                ...attrs,
-                geometry: geom
-            });
-            this.features.push(feature);
-            this.clusterVectorSource.addFeature(feature);
-        });
-
-        this.clusterSource = this.map.addClusterLayer({
-            source: this.clusterVectorSource,
-            distance: CLUSTER_DISTANCE,
-            styleClustered: this.getClusteredStyle,
-            styleSelected: this.getSelectedStyle,
-            styleFeature: (feature) => {
-                const [fillColor, strokeColor] = this.getMarkerColor(feature);
-                return new Style({
-                    image: new Icon({
-                        src: `data:image/svg+xml;utf-8,${this.getMarker(fillColor, strokeColor)}`
-                    }),
-                    // Draw a link between points (or not)
-                    stroke: new Stroke({
-                        color: '#fff',
-                        width: 1
-                    })
+            const newFeatures: FeatureType[] = [];
+            sensors.forEach((sensor, idx) => {
+                const { geometry, ...attrs } = sensor;
+                const geom = new Point(geometry.coordinates);
+                geom.transform('EPSG:4326', 'EPSG:3857');
+                const feature = new Feature({
+                    ...attrs,
+                    idx,
+                    geometry: geom,
+                    coordinates: geometry.coordinates
                 });
-            }
-        });
-    }
-
-    addRegionsToMap = (regions) => {
-        values(regions).forEach((sensors) => {
-            sensors.forEach((sensor) => {
-                this.clusterVectorSource.addFeature(this.features[sensor.idx]);
+                newFeatures.push(feature);
             });
-        });
-    }
 
-    removeRegionsFromMap = (regions) => {
-        values(regions).forEach((sensors) => {
-            sensors.forEach((sensor) => {
-                this.clusterVectorSource.removeFeature(this.features[sensor.idx]);
-            });
-        });
-    }
-
-    handleMapClick = (event: MapBrowserEventType) => {
-        const featuresAtPixel = this.map.forEachFeatureAtPixel(event.pixel, (featureChange) => featureChange);
-        if (featuresAtPixel && featuresAtPixel.attributes && featuresAtPixel.attributes.type === 'single') {
-            // Case when a feature is expanded
-        } else if (featuresAtPixel && featuresAtPixel.get('features') && featuresAtPixel.get('features').length === 1) {
-            // Case where a feature that wasn't clustered is expanded (there is just one element in the cluster)
-            this.handlePopupOpen(featuresAtPixel.get('features')[0]);
-        } else if (featuresAtPixel && featuresAtPixel.get('features') && featuresAtPixel.get('features').length > 1) {
-            // Zoom in the clicked cluster it has more than `clusterExpandCountThreshold` features
-            // and is in a zoom level lower than `clusterExpandZoomThreshold`
-            if (featuresAtPixel.get('features').length > this.props.mapConfig.clusterExpandCountThreshold && this.map.getView().getZoom() < this.props.mapConfig.clusterExpandZoomThreshold) {
-                this.map.getView().setCenter(featuresAtPixel.get('features')[0].getGeometry().getCoordinates());
-                this.map.getView().animate({ zoom: this.map.getView().getZoom() + 1, duration: 500 });
-            }
+            setFeatures(newFeatures);
+            setFilteredFeatures(newFeatures);
         }
-    }
+    }, [sensors]);
 
-    handlePopupClose = () => {
-        this.popupOverlay.setPosition(undefined);
-        this.map.getView().setZoom(INIT_ZOOM);
-        this.map.getView().setCenter(INIT_CENTER);
-        this.setState({
-            selectedFeatureIdx: -1,
-            showSensorDetail: false
+    const addPolygonToSource = (polygon, source, projection = 'EPSG:3857') => {
+        source.clear();
+        let geom;
+        if(polygon.type === 'Circle'){
+            const { properties: { trueCenter, trueRadius } } = polygon;
+            geom = new Circle(trueCenter, trueRadius);
+        } else{
+            geom = new Polygon(polygon.coordinates);
+        }
+
+        if(projection !== 'EPSG:3857'){
+            geom.transform(projection, 'EPSG:3857');
+        }
+        const feature = new Feature({
+            geometry: geom
         });
+        source.addFeature(feature);
+    };
+
+
+    // UseEffect hook containing all filtering Logic
+    useEffect(()=> {
+        let updatedFeatures = features;
+        // Location filter
+        if(filters.locations.length > 0){
+            if(filters.locations[0] === 'custom_location'){
+                if(custom_location && 'geometry' in custom_location){
+                    updatedFeatures = updatedFeatures.filter((feature) =>
+                        isLocationInPolygon(feature.getGeometry().getCoordinates(), custom_location));
+                    addPolygonToSource(custom_location.geometry, locationPolygonSource.current, 'EPSG:3857');
+                }
+            } else{
+                updatedFeatures = updatedFeatures.filter((feature =>
+                    matchLocation(filters.locations[0], feature.get('properties').region, locations, feature.get('coordinates'))));
+                addPolygonToSource(locations.find(location =>
+                    location.properties.id === filters.locations[0]).geometry, locationPolygonSource.current, 'EPSG:4326');
+            }
+        } else{
+            locationPolygonSource.current.clear();
+        }
+        // Parameters filter
+        if(filters.parameters.length > 0){
+            updatedFeatures = updatedFeatures.filter((feature) => feature.get('parameters').some(param => filters.parameters.includes(param)));
+        }
+        // Sources Filter
+        if(filters.sources.length > 0){
+            updatedFeatures = updatedFeatures.filter((feature) => filters.sources.includes(feature.get('properties').type.id));
+        }
+        // Time filter
+        if(filters.time.length > 0){
+            updatedFeatures = updatedFeatures.filter((feature) =>
+                new Date(feature.get('min_start_time')) >= filters.time[0] &&
+                    new Date(feature.get('max_end_time')) <= filters.time[1]);
+        }
+
+        setFilteredFeatures(updatedFeatures);
+    }, [filters, custom_location]);
+
+
+
+    const handleFeatureToggle = (idx: ?number, zoom = false) => {
+        updateSelectedFeature(idx || idx === 0 ? { idx, zoom } : undefined);
+    };
+
+    // Set minimum and maximum dates for filter selection based on
+    // recieved sensors data
+    const getMinMaxDates = () => {
+        if(sensors.length > 0)
+            return sensors.reduce((dates, { min_start_time, max_end_time }) => {
+                dates[0] =
+            (dates[0] === undefined || new Date(min_start_time) < dates[0]) ?
+                new Date(min_start_time) : dates[0];
+                dates[1] =
+            (dates[1] === undefined || new Date(max_end_time) > dates[1]) ?
+                new Date(max_end_time) : dates[1];
+                return dates;
+            }, []);
+        return [new Date(1970,1), new Date()];
+    };
+
+    const getCustomLayer = () => {
+        const layer = new VectorLayer({
+            id: 'locationPolygon',
+            source: locationPolygonSource.current,
+            style: [
+                new Style({
+                    stroke: new Stroke({
+                        color: 'rgba(0, 152, 254, 1)',
+                        width: 2
+                    }),
+                    fill: new Fill({
+                        color: 'rgba(254, 254, 254, 0.2)'
+                    })
+                })
+            ]
+        });
+        return layer;
+    };
+
+    const selectedSensor = selectedFeature ? sensors[selectedFeature.idx] : null;
+
+    if(!sensors.length || !parameters.length) {
+        return (<div className={classes.pageLoader}><CircularProgress thickness={5} size={100} /></div>);
     }
 
-    handlePopupOpen = (feature: FeatureType | number) => {
-        const f = typeof feature === 'number' ? this.features[feature] : feature;
-        this.map.getView().fit(f.getGeometry().getExtent());
-        this.popupOverlay.setPosition(f.getGeometry().getCoordinates());
-        this.setState({ selectedFeatureIdx: f.get('idx') });
-        // const properties = f.get('properties')
-        // const attributes = {
-        //     name: f.get('name'),
-        //     dataSource: getSourceName(sourcesConfig[properties.type.id], properties.type),
-        //     maxEndTime: f.get('max_end_time'),
-        //     minStartTime: f.get('min_start_time'),
-        //     latitude: f.get('geometry').getCoordinates()[1],
-        //     longitude: f.get('geometry').getCoordinates()[0],
-        //     location: f.get('properties').region,
-        //     parameters: f.get('parameters'),
-        //     color: getSourceColor(sourcesConfig[properties.type.id]),
-        //     type: 'single',
-        //     onlineStatus: properties.online_status ? properties.online_status : 'none',
-        //     id: f.get('id')
-        // }
-    }
+    return (
+        <div className={classes.root}>
+            <Sidebar
+                sensorCount={filteredFeatures.length}
+                toggleDrawMode={toggleDrawMode}
+                drawMode={drawMode}
+                minMaxDates={getMinMaxDates()}
+            />
+            <Map
+                mapConfig={mapConfig}
+                sourcesConfig={sourcesConfig}
+                displayOnlineStatus={displayOnlineStatus}
+                parameters={parameters}
+                sensors={sensors}
+                features={filteredFeatures}
+                selectedFeature={selectedFeature}
+                handleFeatureToggle={handleFeatureToggle}
+                openSensorDetails={() => updateShowSensorDetails(true)}
+                showExploreLayers= {false}
+                additionalLayer={getCustomLayer()}
+            >
+                <DrawControl
+                    enabled={drawMode}
+                    toggleDrawMode={toggleDrawMode}
+                    onStoreShape={addLocation}
+                    source={locationPolygonSource.current}
+                />
+            </Map>
 
-    render() {
-        const { classes, sourcesConfig, sources, sensors, parameters } = this.props;
-        const { hasData, selectedFeatureIdx, showSensorDetail } = this.state;
-
-        const selectedSensor = sensors[selectedFeatureIdx];
-
-        return (
-            <>
-                <Map
-                    className="fillContainer"
-                    zoom={INIT_ZOOM}
-                    center={INIT_CENTER}
-                    controls={[this.clusterControl]}
-                    layers={Object.values(this.layers)}
-                    updateMap={(map) => { this.map = map; }}
-                    updatePopup={(popupOverlay) => {
-                        popupOverlay.setElement(this.popupContainer.current);
-                        this.popupOverlay = popupOverlay;
-                    }}
-                    events={{
-                        click: this.handleMapClick
-                    }}
-                >
-                    <Grid
-                        className={classes.mainContainer}
-                        container
-                        alignItems="stretch"
-                    >
-                        <Grid
-                            className={classes.sidebar}
-                            item
-                            xs={4}
-                        >
-                            {hasData ?
-                                <Sidebar
-                                    data={this.data}
-                                    sources={sources}
-                                    selectedFeature={selectedFeatureIdx}
-                                    addRegionsToMap={this.addRegionsToMap}
-                                    removeRegionsFromMap={this.removeRegionsFromMap}
-                                    handlePopupOpen={this.handlePopupOpen}
-                                    handlePopupClose={this.handlePopupClose}
-                                /> :
-                                null}
-                        </Grid>
-                        <Grid
-                            className="fillContainer"
-                            mapcontainer={1}
-                            item
-                            xs={8}
-                        />
-                    </Grid>
-
-                    <ClusterControl
-                        el={this.clusterControl.element}
-                        cluster={this.clusterSource}
-                        defaultDistance={CLUSTER_DISTANCE}
-                        toggleCallback={
-                            (isClustered) => {
-                                this.setState({ enableCluster: isClustered });
-                                const zoom = this.map.getView().getZoom();
-                                this.map.getView().setZoom(zoom + 0.001);
-                                setTimeout(() => this.map.getView().setZoom(zoom), 100);
-                            }
-                        }
-                    />
-
-                    <Paper ref={this.popupContainer} elevation={0} square>
-                        <CloseIcon
-                            className={classes.popupClose}
-                            fontSize="small"
-                            onClick={this.handlePopupClose}
-                        />
-                        {selectedSensor ?
-                            <SensorPopup
-                                header={{
-                                    title: getSensorName(selectedSensor.properties),
-                                    color: getSourceColor(
-                                        sourcesConfig[selectedSensor.properties.type.id.toLowerCase()]
-                                    )
-                                }}
-                                sensor={selectedSensor}
-                                parameters={parameters}
-                                detailsLink={`/explore/detail/location/${encodeURIComponent(selectedSensor.name)}/All/`}
-                            /> :
-                            null}
-                    </Paper>
-                </Map>
-
-                {showSensorDetail ?
-                    <div className={classes.sensorDetail}>
-                        <SensorDetail sensor={selectedSensor} />
-                    </div> :
-                    null}
-            </>
-        );
-    }
-}
+            {showSensorDetails ?
+                <div className={classes.sensorDetail}>
+                    <SensorDetail sensor={selectedSensor} />
+                </div> :
+                null}
+        </div>
+    );
+};
 
 const mapStateToProps = (state) => ({
     mapConfig: state.config.map,
     sourcesConfig: state.config.source,
+    locations: state.config.locations,
+    filters: state.search.filters,
+    custom_location: state.search.custom_location,
     displayOnlineStatus: state.config.sensors.displayOnlineStatus,
-    sensors: state.__new_sensors.sensors,
+    sensors: state.__new_sensors.sensors.sort(
+        (sensor1, sensor2) =>
+            parseInt(sensor1.name, 10) > parseInt(sensor2.name, 10)
+    ),
     sources: state.__new_sensors.sources,
     parameters: state.__new_parameters.parameters
 });
 
+const mapDispatchToProps = {
+    fetchSensors: fetchSensorsAction,
+    fetchParameters: fetchParametersAction,
+    addLocation: addLocationAction
+};
+
 export default connect(
     mapStateToProps,
-    {
-        fetchSensors: fetchSensorsAction,
-        fetchParameters: fetchParametersAction
-    }
-)(withStyles(styles)(Download));
+    mapDispatchToProps
+)(Search);

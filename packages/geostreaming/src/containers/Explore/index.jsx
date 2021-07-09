@@ -129,6 +129,14 @@ const Explore = (props: Props) => {
 
     const [sourcesVisibility, updateSourcesVisibility] = React.useState<{ [sourceId: string]: boolean; }>({});
 
+    const filterFeatures = (features: FeaturesType[]) => features.filter((feature) => {
+        const isVisible = sourcesVisibility[feature.get('properties').type.id];
+        if (!isVisible && selectedFeature && selectedFeature.idx === feature.get('idx')) {
+            handleFeatureToggle();
+        }
+        return isVisible;
+    });
+
     return (
         <div className={classes.root}>
             <Sidebar
@@ -146,8 +154,7 @@ const Explore = (props: Props) => {
                 displayOnlineStatus={displayOnlineStatus}
                 parameters={parameters}
                 sensors={sensors}
-                sourcesVisibility={sourcesVisibility}
-                features={featuresRef.current}
+                features={filterFeatures(featuresRef.current)}
                 selectedFeature={selectedFeature}
                 handleFeatureToggle={handleFeatureToggle}
                 zoomToSe={undefined}

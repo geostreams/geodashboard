@@ -1,5 +1,5 @@
 // @flow
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     Box,
@@ -8,6 +8,7 @@ import {
     ListItem,
     Grid
 } from '@material-ui/core';
+import clsx from 'clsx';
 import ChevronDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import ChevronRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
@@ -24,8 +25,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: 'auto',
         overflowX: 'hidden',
-        overflowY: 'auto',
-        backgroundColor: theme.palette.background.paper
+        overflowY: 'auto'
     },
     open : {
         transform: 'rotate(180deg)'
@@ -39,7 +39,13 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 4,
         marginRight: 4,
         ...props.classes.header,
+        transition: theme.transitions.create(['padding'], {
+            duration: theme.transitions.duration.short
+        }),
         background: props.backgroundColor
+    }),
+    expandedHeader: props => ({
+        ...props.classes.expandedHeader
     }),
     icon: props => ({
         position: 'absolute',
@@ -52,7 +58,11 @@ const useStyles = makeStyles((theme) => ({
     }),
     content: props => ({
         paddingLeft: theme.spacing(1),
+        background: 'unset',
         ...props.classes.content
+    }),
+    headerContainer: props => ({
+        ...props.classes.headerContainer
     })
 }));
 
@@ -61,12 +71,29 @@ type Props = {
     children?: React.Node,
     title: React.Node,
     // eslint-disable-next-line react/no-unused-prop-types
-    classes: Object
+    classes: Object,
+    summary?: React.Node,
+    value?: boolean;
+    onChange?: () => void
+}
+
+// Takes values as input and if they are undefined, returns a useState hook
+function usePropState(stateVal, stateFunc, defaultValue) {
+    const state = useState(defaultValue);
+    if (stateVal === undefined && stateFunc === undefined) return state;
+    return [stateVal, stateFunc];
 }
 
 function SidebarCategories(props: Props) {
-    const classes = useStyles(props);
-    const [open, toggleOpen] = React.useState(props.defaultOpen);
+    const { title, children, summary, defaultOpen, value, onChange, ...rest } = props;
+    const classes = useStyles(rest);
+    const [open, toggleOpen] = usePropState(value, onChange, defaultOpen);
+
+    useEffect(() => {
+        if(value && open !== value)
+            toggleOpen(value);
+    }, [value]);
+
     return (
         <List
             className={`${classes.root} noPadding`}
@@ -76,9 +103,10 @@ function SidebarCategories(props: Props) {
                     borderRadius={4}
                     component={ListItem}
                     onClick={()=>toggleOpen(!open)}
+                    className={classes.headerContainer}
                 >
-                    <Grid container className={classes.header} justify="space-between" alignitems="center" >
-                        {props.title}
+                    <Grid container className={clsx(classes.header, { [classes.expandedHeader]: open })} justify="space-between" alignitems="center" >
+                        {title}
                         {open ?
                             <ChevronDownIcon className={classes.icon} /> :
                             <ChevronRightIcon className={classes.icon} />}
@@ -86,8 +114,11 @@ function SidebarCategories(props: Props) {
                 </Box>
             }
         >
-            <Collapse in={open} className={classes.content} unmountOnExit timeout="auto">
-                {props.children}
+            <Collapse key="sidebarcategory-Children" in={open} className={classes.content} unmountOnExit timeout="auto">
+                {children}
+            </Collapse>
+            <Collapse key="sidebarcategory-summary"in={summary && !open} unmountOnExit timeout="auto">
+                {summary}
             </Collapse>
         </List>
     );
@@ -96,7 +127,10 @@ function SidebarCategories(props: Props) {
 SidebarCategories.defaultProps = {
     defaultOpen: false,
     children: null,
-    classes: null
+    classes: null,
+    summary: null,
+    value: undefined,
+    onChange: undefined
 };
 
 export default SidebarCategories;
