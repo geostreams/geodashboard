@@ -8,7 +8,7 @@
   "author": "NCSA",
   "license": "ISC",
   "scripts": {
-    "start": "webpack serve --open --config webpack.dev.js",
+    "start": "webpack serve --config webpack.dev.js",
     "lint": "eslint -c .eslintrc --ext .js --ext .jsx --ignore-path .eslintignore ./",
     "lint:fix": "eslint -c .eslintrc --ext .js --ext .jsx --ignore-path .eslintignore --fix ./",
     "flow": "flow"

@@ -70,10 +70,9 @@ function InfoDialog(props: Props) {
                     id="scroll-dialog-description"
                     variant="body1"
                     tabIndex={-1}
-                    dangerouslySetInnerHTML={{
-                        __html: sourceInfo.description
-                    }}
-                />
+                >
+                    {sourceInfo.description}
+                </DialogContentText>
                 <DialogContentText>
                     {sourceInfo.qaqc}
                 </DialogContentText>

@@ -34,7 +34,7 @@ type Props = {
 }
 
 function SelectFilter(props: Props){
-    const { options, onChange, type, value } = props; 
+    const { options, onChange, type, value } = props;
     const classes = useStyles();
     const Select = type === 'multiSelect' ? Checkbox : Radio;
     const [selected, setSelected ] = useState(value);
@@ -60,8 +60,9 @@ function SelectFilter(props: Props){
     return(
         <div className={rootClass}>
             {options.map(option => (
-                <Box 
-                    className={classes.option} 
+                <Box
+                    key={option.id}
+                    className={classes.option}
                     onClick={(event)=> handleChange(event, option.id)}>
                     <Select
                         checked={selected.includes(option.id)}

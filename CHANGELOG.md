@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## UNRELEASED
 - Seperated project specific code from geodashboard repository and converted core, core__old and geostreaming to npm packages. 
 - Created an eslint-config package for sharing eslint config between projects.
+- Added regions trends views
+  [Issue-52](https://github.com/geostreams/geodashboard/issues/52)
 
 ## 3.6.0 - 2020-12-14
 See `gd-glm/CHANGELOG.md`, `gd-smartfarm/CHANGELOG.md`, `gd-gltg-bmp/CHANGELOG.md`, `gd-gltg/CHANGELOG.md`, 
