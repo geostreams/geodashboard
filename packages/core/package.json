@@ -1,6 +1,6 @@
 {
   "name": "@geostreams/core",
-  "version": "3.6.2",
+  "version": "3.7.0",
   "main": "src/index.jsx",
   "publishConfig": {
     "access": "public"
