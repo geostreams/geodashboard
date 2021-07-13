@@ -9,25 +9,25 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import Polygon from 'ol/geom/Polygon';
 import { Fill, Stroke, Style } from 'ol/style';
-import type { Feature as FeatureType } from 'ol';
 import DrawControl from '@geostreams/core/src/components/ol/DrawControl';
 import { Circle } from 'ol/geom';
+import type { Feature as FeatureType } from 'ol';
 
 import Map from '../Map';
 import SensorDetail from '../Sensor/Detail';
-import { setFilter as setFilterAction, addLocation as addLocationAction } from '../../actions/search';
+import { addLocation as addLocationAction } from '../../actions/search';
 import { fetchParameters as fetchParametersAction } from '../../actions/parameters';
 import { fetchSensors as fetchSensorsAction } from '../../actions/sensors';
 import { matchLocation, isLocationInPolygon } from '../../utils/search';
 
 
-import type { 
-    MapConfig, 
-    ParameterType, 
-    SensorType, 
-    SourceConfig, 
-    SourceType, 
-    LocationType 
+import type {
+    MapConfig,
+    ParameterType,
+    SensorType,
+    SourceConfig,
+    SourceType,
+    LocationType
 } from '../../utils/flowtype';
 import Sidebar from './Sidebar';
 
@@ -78,7 +78,7 @@ const Search = (props: Props) => {
         locations,
         displayOnlineStatus,
         filters,
-        addLocation, 
+        addLocation,
         custom_location,
         fetchSensors,
         fetchParameters
@@ -99,7 +99,7 @@ const Search = (props: Props) => {
 
     const [showSensorDetails, updateShowSensorDetails] = React.useState(false);
 
-    const [locationPolygonSource, setLocationPolygonSource] = React.useState(new VectorSource);
+    const locationPolygonSource = React.useRef(new VectorSource());
 
 
 
@@ -136,7 +136,7 @@ const Search = (props: Props) => {
 
     const addPolygonToSource = (polygon, source, projection = 'EPSG:3857') => {
         source.clear();
-        let geom; 
+        let geom;
         if(polygon.type === 'Circle'){
             const { properties: { trueCenter, trueRadius } } = polygon;
             geom = new Circle(trueCenter, trueRadius);
@@ -163,16 +163,16 @@ const Search = (props: Props) => {
                 if(custom_location && 'geometry' in custom_location){
                     updatedFeatures = updatedFeatures.filter((feature) =>
                         isLocationInPolygon(feature.getGeometry().getCoordinates(), custom_location));
-                    addPolygonToSource(custom_location.geometry, locationPolygonSource, 'EPSG:3857');
+                    addPolygonToSource(custom_location.geometry, locationPolygonSource.current, 'EPSG:3857');
                 }
             } else{
-                updatedFeatures = updatedFeatures.filter((feature => 
+                updatedFeatures = updatedFeatures.filter((feature =>
                     matchLocation(filters.locations[0], feature.get('properties').region, locations, feature.get('coordinates'))));
-                addPolygonToSource(locations.find(location => 
-                    location.properties.id === filters.locations[0]).geometry, locationPolygonSource, 'EPSG:4326');
+                addPolygonToSource(locations.find(location =>
+                    location.properties.id === filters.locations[0]).geometry, locationPolygonSource.current, 'EPSG:4326');
             }
         } else{
-            locationPolygonSource.clear();
+            locationPolygonSource.current.clear();
         }
         // Parameters filter
         if(filters.parameters.length > 0){
@@ -184,7 +184,7 @@ const Search = (props: Props) => {
         }
         // Time filter
         if(filters.time.length > 0){
-            updatedFeatures = updatedFeatures.filter((feature) => 
+            updatedFeatures = updatedFeatures.filter((feature) =>
                 new Date(feature.get('min_start_time')) >= filters.time[0] &&
                     new Date(feature.get('max_end_time')) <= filters.time[1]);
         }
@@ -203,11 +203,11 @@ const Search = (props: Props) => {
     const getMinMaxDates = () => {
         if(sensors.length > 0)
             return sensors.reduce((dates, { min_start_time, max_end_time }) => {
-                dates[0] = 
-            (dates[0] === undefined || new Date(min_start_time) < dates[0]) ? 
+                dates[0] =
+            (dates[0] === undefined || new Date(min_start_time) < dates[0]) ?
                 new Date(min_start_time) : dates[0];
-                dates[1] = 
-            (dates[1] === undefined || new Date(max_end_time) > dates[1]) ? 
+                dates[1] =
+            (dates[1] === undefined || new Date(max_end_time) > dates[1]) ?
                 new Date(max_end_time) : dates[1];
                 return dates;
             }, []);
@@ -217,7 +217,7 @@ const Search = (props: Props) => {
     const getCustomLayer = () => {
         const layer = new VectorLayer({
             id: 'locationPolygon',
-            source: locationPolygonSource,
+            source: locationPolygonSource.current,
             style: [
                 new Style({
                     stroke: new Stroke({
@@ -233,10 +233,12 @@ const Search = (props: Props) => {
         return layer;
     };
 
- 
+    const selectedSensor = selectedFeature ? sensors[selectedFeature.idx] : null;
 
-    if(!sensors.length || !parameters.length)
+    if(!sensors.length || !parameters.length) {
         return (<div className={classes.pageLoader}><CircularProgress thickness={5} size={100} /></div>);
+    }
+
     return (
         <div className={classes.root}>
             <Sidebar
@@ -262,13 +264,13 @@ const Search = (props: Props) => {
                     enabled={drawMode}
                     toggleDrawMode={toggleDrawMode}
                     onStoreShape={addLocation}
-                    source={locationPolygonSource}
+                    source={locationPolygonSource.current}
                 />
             </Map>
 
             {showSensorDetails ?
                 <div className={classes.sensorDetail}>
-                    <SensorDetail handleClose={() => updateShowSensorDetails(false)} />
+                    <SensorDetail sensor={selectedSensor} />
                 </div> :
                 null}
         </div>

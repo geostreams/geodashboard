@@ -32,8 +32,12 @@
     "access": "public"
   },
   "workspaces": {
-    "packages": ["packages/*"],
-    "nohoist": ["core__old/**"]
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "core__old/**"
+    ]
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",

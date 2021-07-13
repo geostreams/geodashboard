@@ -77,9 +77,9 @@ type Props = {
 
 
 function Filter(props: Props) {
-    const { 
-        title, options, value, onChange, 
-        onReset, icon: TitleIcon, type, action, 
+    const {
+        title, options, value, onChange,
+        onReset, icon: TitleIcon, type, action,
         isExpanded, toggleExpandedState,
         minMaxDates
     } = props;
@@ -95,7 +95,7 @@ function Filter(props: Props) {
         return '';
     };
 
-    // Info about Action Buttons 
+    // Info about Action Buttons
     const actionItems = [...action,{ title: 'Reset', action: onReset }];
 
     const renderSelectedDate = () => {
@@ -106,11 +106,12 @@ function Filter(props: Props) {
             output = [`Start Date: ${date(value[0])}`,`End Date: ${date(value[0])}`];
         return(
             <div className={classes.summaryChips}>
-                {output.map((label, idx)=> 
-                    <Chip 
-                        className={classes.chip} 
-                        label={label} 
-                        size="small" 
+                {output.map((label)=>
+                    <Chip
+                        key={label}
+                        className={classes.chip}
+                        label={label}
+                        size="small"
                     />)}
             </div>
         );
@@ -142,17 +143,17 @@ function Filter(props: Props) {
         }
         return(
             <div className={classes.summaryChips}>
-                {output.map((label, idx) => 
-                    <Chip 
+                {output.map((label, idx) =>
+                    <Chip
                         key={`summary-${label}`}
-                        className={classes.chip} 
-                        label={label} 
-                        size="small" 
+                        className={classes.chip}
+                        label={label}
+                        size="small"
                         onDelete={
-                            disableDelete && idx === output.length - 1 ? 
-                                undefined : 
+                            disableDelete && idx === output.length - 1 ?
+                                undefined :
                                 () => removeSelectedItem(idx)
-                        } 
+                        }
                     />)}
             </div>);
     };
@@ -171,7 +172,7 @@ function Filter(props: Props) {
             <Divider />
             <SidebarCategory
                 key="main"
-                classes={{ 
+                classes={{
                     header: classes.categoryHeader,
                     icon: classes.categoryDropDown,
                     expandedHeader: classes.expandedHeader,
@@ -187,17 +188,17 @@ function Filter(props: Props) {
                 <Input key={`filter-${title}`}{...inputProps} onChange={handleChange} value={value} options={options} />
 
                 <Divider />
-                {actionItems.map((item) => 
-                    <Button 
-                        style={{ alignItem: 'flex-end' }} 
+                {actionItems.map((item) =>
+                    <Button
+                        style={{ alignItem: 'flex-end' }}
                         key={`actionItem-${item.title}-${title}`}
-                        size="small" 
+                        size="small"
                         onClick={item.action}
                         {...item.props}
                     >
                         {item.title}
                     </Button>)}
-                
+
             </SidebarCategory>
 
             <Divider />

@@ -158,7 +158,6 @@ const Explore = (props: Props) => {
                 selectedFeature={selectedFeature}
                 handleFeatureToggle={handleFeatureToggle}
                 zoomToSe={undefined}
-                openSensorDetails={() => updateShowSensorDetails(true)}
             />
 
             {showSensorDetails ?
@@ -176,7 +175,7 @@ const mapStateToProps = (state) => ({
     displayOnlineStatus: state.config.sensors.displayOnlineStatus,
     sensors: state.__new_sensors.sensors.sort(
         (sensor1, sensor2) =>
-            parseInt(sensor1.name, 10) > parseInt(sensor2.name, 10)
+            parseInt(sensor1.name, 10) - parseInt(sensor2.name, 10)
     ),
     sources: state.__new_sensors.sources,
     parameters: state.__new_parameters.parameters

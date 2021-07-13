@@ -19,14 +19,13 @@ import Control from '@geostreams/core/src/components/ol/Control';
 import ClusterControl from '@geostreams/core/src/components/ol/ClusterControl';
 import FitViewControl from '@geostreams/core/src/components/ol/FitViewControl';
 import LayersControl from '@geostreams/core/src/components/ol/LayersControl';
-
 import { entries } from '@geostreams/core/src/utils/array';
 
 import type { Feature as FeatureType, Map as MapType, MapBrowserEventType } from 'ol';
 import type { Layer as LayerType } from 'ol/layer';
 import type { MapLayerConfig } from '@geostreams/core/src/utils/flowtype';
 
-import { getSourceColor } from '../../utils/sensors';
+import { getSensorName, getSourceColor } from '../../utils/sensors';
 import SensorPopup from '../Sensor/Popup';
 
 import type { MapConfig, ParameterType, SensorType, SourceConfig } from '../../utils/flowtype';
@@ -75,7 +74,6 @@ interface Props {
     features: FeatureType[];
     selectedFeature: ?{ idx: number; zoom: boolean; };
     handleFeatureToggle: (feature: ?FeatureType) => void;
-    openSensorDetails: () => void;
     showExploreLayers?: boolean;
     additionalLayer: LayerType,
     children: React.Node;
@@ -168,11 +166,10 @@ const Map = (props: Props) => {
         sensors,
         features,
         selectedFeature,
-        handleFeatureToggle,
-        openSensorDetails,
         showExploreLayers,
-        additionalLayer: additionalLayerProp, 
-        children
+        additionalLayer: additionalLayerProp,
+        children,
+        handleFeatureToggle
     } = props;
 
     const classes = useStyles();
@@ -383,15 +380,15 @@ const Map = (props: Props) => {
                 mapRef.current.removeLayer(additionalLayer);
             }
             if(additionalLayerProp){
-                const layerSource = additionalLayerProp.getSource();          
+                const layerSource = additionalLayerProp.getSource();
 
                 layerSource.on('addfeature', () => {
-                    if(layerSource.getFeatures().length > 0)    
+                    if(layerSource.getFeatures().length > 0)
                         mapRef.current.getView().fit(layerSource.getExtent(), { duration: 500 });
                 });
                 mapRef.current.addLayer(additionalLayerProp);
             }
-            setAdditionalLayer(additionalLayerProp); 
+            setAdditionalLayer(additionalLayerProp);
         }
     }, [additionalLayerProp]);
 
@@ -424,6 +421,8 @@ const Map = (props: Props) => {
             }
         }
     };
+
+    const selectedSensor = selectedFeature ? sensors[selectedFeature.idx] : null;
 
     return (
         <BaseMap
@@ -484,12 +483,16 @@ const Map = (props: Props) => {
                 null}
 
             <div ref={popupContainerRef}>
-                {selectedFeature ?
+                {selectedSensor ?
                     <SensorPopup
+                        header={{
+                            title: getSensorName(selectedSensor.properties),
+                            color: getSourceColor(sourcesConfig[selectedSensor.properties.type.id.toLowerCase()])
+                        }}
                         sensor={sensors[selectedFeature.idx]}
                         parameters={parameters}
+                        detailsLink={`/explore/detail/location/${encodeURIComponent(selectedSensor.name)}/All/`}
                         handleClose={() => handleFeatureToggle()}
-                        handleDetailClick={openSensorDetails}
                     /> : null}
             </div>
             {children}

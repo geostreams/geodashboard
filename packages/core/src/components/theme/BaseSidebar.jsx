@@ -25,6 +25,16 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
         zIndex: theme.zIndex.drawer
     },
+    drawerPaper: (props) => ({
+        width: drawerWidth,
+        borderRight: 'none',
+        overflowX: 'hidden',
+        justifyContent: 'space-between',
+        height: `calc(100% - ${theme.header?.height ? theme.header.height : 55}px)`,
+        top: theme.header?.height ? theme.header.height : 55,
+        paddingTop: 10,
+        ...props.classes.drawerPaper
+    }),
     drawerOpen: {
         width: drawerWidth,
         transition: theme.transitions.create('width', {
@@ -49,16 +59,6 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
         padding: '0 8px'
     },
-    drawerPaper: props => ({
-        width: drawerWidth,
-        borderRight: 'none',
-        overflowX: 'hidden',
-        justifyContent: 'space-between',
-        height: `calc(100% - ${theme.HEADER_HEIGHT ? theme.HEADER_HEIGHT : 55}px)`,
-        top: theme.header ? theme.header.height : 55,
-        paddingTop: 10,
-        ...props.classes.drawerPaper
-    }),
     content: props => ({
         alignItems: 'flex-start',
         padding:0,
@@ -77,7 +77,7 @@ type Props = {
     toggleSidebar: Function,
     // eslint-disable-next-line react/no-unused-prop-types
     classes: Object,
-    expanded: boolean,
+    expanded: boolean
 }
 
 function BaseSidebar(props: Props) {
