@@ -25,13 +25,16 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
         zIndex: theme.zIndex.drawer
     },
-    drawerPaper:{
+    drawerPaper: (props) => ({
         width: drawerWidth,
         borderRight: 'none',
-        paddingTop: 65,
         overflowX: 'hidden',
-        justifyContent: 'space-between'
-    },
+        justifyContent: 'space-between',
+        height: `calc(100% - ${theme.header?.height ? theme.header.height : 55}px)`,
+        top: theme.header?.height ? theme.header.height : 55,
+        paddingTop: 10,
+        ...props.classes.drawerPaper
+    }),
     drawerOpen: {
         width: drawerWidth,
         transition: theme.transitions.create('width', {
@@ -59,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     content: props => ({
         alignItems: 'flex-start',
         padding:0,
-        width: drawerWidth - 15,
+        width: props.disableGutters ? drawerWidth : drawerWidth - 15,
         paddingBottom: 10,
         ...props.classes.content
     })
@@ -69,6 +72,8 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
     children?: React.Node,
     collapsible?: boolean,
+    // eslint-disable-next-line react/no-unused-prop-types
+    disableGutters?: boolean,
     toggleSidebar: Function,
     // eslint-disable-next-line react/no-unused-prop-types
     classes: Object,
@@ -130,6 +135,7 @@ function BaseSidebar(props: Props) {
 BaseSidebar.defaultProps = {
     children: null,
     collapsible: false,
+    disableGutters: false,
     classes: {},
     expanded: true
 };

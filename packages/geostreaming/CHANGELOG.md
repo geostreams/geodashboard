@@ -4,9 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## UNRELEASED
+## 3.8.0 - 2021-07-13
 
 ### Changed
+- Created Search page with filters to replace old search/download page
+- Updated Geostreaming Map
 - Finished refactoring of the explore view
   [Github-38](https://github.com/geostreams/geodashboard/issues/38)
 

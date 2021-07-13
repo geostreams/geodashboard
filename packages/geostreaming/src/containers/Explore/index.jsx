@@ -129,6 +129,14 @@ const Explore = (props: Props) => {
 
     const [sourcesVisibility, updateSourcesVisibility] = React.useState<{ [sourceId: string]: boolean; }>({});
 
+    const filterFeatures = (features: FeaturesType[]) => features.filter((feature) => {
+        const isVisible = sourcesVisibility[feature.get('properties').type.id];
+        if (!isVisible && selectedFeature && selectedFeature.idx === feature.get('idx')) {
+            handleFeatureToggle();
+        }
+        return isVisible;
+    });
+
     return (
         <div className={classes.root}>
             <Sidebar
@@ -146,12 +154,10 @@ const Explore = (props: Props) => {
                 displayOnlineStatus={displayOnlineStatus}
                 parameters={parameters}
                 sensors={sensors}
-                sourcesVisibility={sourcesVisibility}
-                features={featuresRef.current}
+                features={filterFeatures(featuresRef.current)}
                 selectedFeature={selectedFeature}
                 handleFeatureToggle={handleFeatureToggle}
                 zoomToSe={undefined}
-                openSenorDetails={() => updateShowSensorDetails(true)}
             />
 
             {showSensorDetails ?
@@ -169,7 +175,7 @@ const mapStateToProps = (state) => ({
     displayOnlineStatus: state.config.sensors.displayOnlineStatus,
     sensors: state.__new_sensors.sensors.sort(
         (sensor1, sensor2) =>
-            parseInt(sensor1.name, 10) > parseInt(sensor2.name, 10)
+            parseInt(sensor1.name, 10) - parseInt(sensor2.name, 10)
     ),
     sources: state.__new_sensors.sources,
     parameters: state.__new_parameters.parameters

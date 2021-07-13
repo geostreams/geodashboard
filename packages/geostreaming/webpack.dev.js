@@ -13,6 +13,7 @@ module.exports = webpackMerge.merge(commonConfig, {
         host: 'localhost',
         port: 8080,
         inline: true,
+        watchContentBase: true,
         stats: { 'errors-only': true, 'colors': true },
         historyApiFallback: true,
         allowedHosts: JSON.parse(process.env.ALLOWED_HOSTS || '["localhost"]'),
