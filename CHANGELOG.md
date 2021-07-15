@@ -4,7 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## UNRELEASED
+## 3.8.0
+- See `packages/core/CHANGELOG.md` and `packages/geostreaming/CHANGELOG.md`
+
+## 3.7.0
 - Seperated project specific code from geodashboard repository and converted core, core__old and geostreaming to npm packages. 
 - Created an eslint-config package for sharing eslint config between projects.
 - Added regions trends views
