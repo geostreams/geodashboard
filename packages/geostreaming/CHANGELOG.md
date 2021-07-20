@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## UNRELEASED
+
+## Changed
+- Fixed location of sensor popup on the map
+  [Github-59](https://github.com/geostreams/geodashboard/issues/59)
+
 ## 3.8.0 - 2021-07-13
 
 ### Changed
