@@ -1,8 +1,22 @@
 import React from 'react'
 import { VegaLite } from 'react-vega'
+import type { ParameterValue } from '../../../utils/flowtype';
 
-function MultiLineChart(props){
-    const {data, width, height, attributes, startAtZero, keyName, yLabel, startDate, endDate} = props;
+
+type Props = {
+   data: ParameterValue[];
+   attributes: String[],
+   startAtZero?: Boolean,
+   attributesTitle?: String,
+   width?: Number,
+   height?: Number,
+   yLabel?: String,
+   startDate?: Date,
+   endDate?: Date
+ }
+
+function MultiLineChart(props: Props){
+    const {data, width, height, attributes, startAtZero, attributesTitle, yLabel, startDate, endDate} = props;
 
     const sortedAttr = attributes;
     const collator = new Intl.Collator([], {numeric: true});
@@ -25,7 +39,7 @@ function MultiLineChart(props){
         "data": { name: 'table' },
         "transform": [
             {"fold": attributes.map(a => `average[${a}]`)},
-            {"calculate": `${JSON.stringify(renameAttributesMap)}[datum.key]`, "as": keyName}
+            {"calculate": `${JSON.stringify(renameAttributesMap)}[datum.key]`, "as": attributesTitle}
         ],
         "encoding":{
             "x":{
@@ -42,7 +56,7 @@ function MultiLineChart(props){
                "encoding":{
       
                   "color":{
-                     "field":keyName,
+                     "field":attributesTitle,
                      "type":"nominal",
                      "sort": sortedAttr
                   },
@@ -57,7 +71,7 @@ function MultiLineChart(props){
                   {
                       "params": [{
                           "name": "dataSetVisibility",
-                          "select": {"type": "point", "fields": [keyName], "on": "click"},
+                          "select": {"type": "point", "fields": [attributesTitle], "on": "click"},
                           "bind": "legend"
                         }],
                     "mark": {
@@ -87,7 +101,7 @@ function MultiLineChart(props){
             {
                "transform":[
                   {
-                     "pivot":keyName,
+                     "pivot":attributesTitle,
                      "value":"value",
                      "groupby":[
                         "date"
@@ -136,8 +150,11 @@ function MultiLineChart(props){
 MultiLineChart.defaultProps = {
     width: 800,
     height: 300,
-    keyName: "key",
-    startAtZero: false
+    attributesTitle: "attributes",
+    yLabel: "value",
+    startAtZero: false,
+    startDate: null,
+    endDate: null
 }
 
 export default MultiLineChart;

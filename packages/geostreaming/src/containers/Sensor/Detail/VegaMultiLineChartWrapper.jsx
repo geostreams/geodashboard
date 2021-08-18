@@ -22,10 +22,8 @@ const MultiLineChartWrapper = (props: Props) => {
         data,
         attributes,
         label,
-        unit,
         startDate, 
         endDate, 
-        sameTimeScale,
         startAtZero
     } = props;
 
@@ -38,7 +36,6 @@ const MultiLineChartWrapper = (props: Props) => {
                     data={chartData}
                     attributes={attributes}
                     width={850}
-                    keyName={"depth"}
                     yLabel={label}
                     startDate={startDate}
                     endDate={endDate}

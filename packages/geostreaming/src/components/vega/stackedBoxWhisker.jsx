@@ -1,7 +1,15 @@
 import React from 'react'
 import { VegaLite } from 'react-vega'
+import type { ParameterValue } from '../../../utils/flowtype';
 
-function StackedBoxWhisker(props){
+type Props = {
+  data: ParameterValue[];
+  width: Number,
+  height: Number,
+  attributes: String[]
+}
+
+function StackedBoxWhisker(props: Props){
     const {data, width, height, attributes} = props;
 
     const sortedAttr = attributes;

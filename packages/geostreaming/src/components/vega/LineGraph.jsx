@@ -1,8 +1,19 @@
 import React from 'react'
 import { VegaLite } from 'react-vega'
+import type { ParameterValue } from '../../../utils/flowtype';
 
-function LineGraph(props){
-    const {data, width, height, startAtZero, parameterName, startDate, endDate, yLabel} = props;
+type Props = {
+   data: ParameterValue[];
+   width: Number,
+   height: Number,
+   startAtZero: Boolean,
+   startDate?: Date,
+   endDate?: Date
+ }
+ 
+
+function LineGraph(props: Props){
+    const {data, width, height, startAtZero, startDate, endDate, yLabel} = props;
 
     let dateRange = {}
     if(startDate && endDate){
@@ -95,7 +106,7 @@ function LineGraph(props){
                      {
                         "field":"value",
                         "type":"quantitative",
-                        "title": parameterName
+                        "title": yLabel
                      },
                      {
                         "field":"date",
@@ -129,7 +140,9 @@ LineGraph.defaultProps = {
     height: 300,
     keyName: "key",
     startAtZero: false,
-    parameterName: 'value'
+    yLabel: 'value',
+    startDate: undefined,
+    endDate: undefined
 }
 
 export default LineGraph;

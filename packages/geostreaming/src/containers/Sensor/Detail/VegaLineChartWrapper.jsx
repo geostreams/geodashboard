@@ -17,13 +17,12 @@ type Props = {
 }
 
 
-const GraphWrapper = (props : Props) => {
+const LineChartWrapper = (props : Props) => {
     const {
         data,
         label,
         startDate, 
         endDate, 
-        sameTimeScale,
         startAtZero
     } = props;
 
@@ -51,4 +50,4 @@ const GraphWrapper = (props : Props) => {
     );
 };
 
-export default GraphWrapper;
+export default LineChartWrapper;

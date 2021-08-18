@@ -1,8 +1,15 @@
 import React from 'react'
 import { VegaLite } from 'react-vega'
+import type { ParameterValue } from '../../../utils/flowtype';
 
-function BoxWhisker(props){
-    const {data, width, height, yLabel} = props;
+type Props = {
+  data: ParameterValue[];
+  width: Number,
+  height: Number
+}
+
+function BoxWhisker(props: Props){
+    const {data, width, height} = props;
 
     const spec = {
         "width": width,
