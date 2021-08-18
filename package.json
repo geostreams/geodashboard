@@ -25,6 +25,8 @@
     "start": "lerna run start --stream --scope",
     "postinstall": "lerna bootstrap --use-workspaces --force-local",
     "release": "lerna publish",
+    "release:version": "lerna version --exact --no-changelog --no-push --no-git-tag-version",
+    "release:publish": "lerna publish from-package --yes",
     "test": "lerna run test --stream --scope",
     "clean": "find . -name 'yarn.lock' -prune -exec rm '{}' + && find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
   },
