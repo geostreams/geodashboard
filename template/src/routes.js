@@ -1,18 +1,16 @@
 // @flow
 import hocs from '@geostreams/core/src/utils/hocs';
 import Routes from '@geostreams/core/src/routes';
-
+import ExplorePage from '@geostreams/geostreaming/src/containers/Explore';
+import SearchPage from '@geostreams/geostreaming/src/containers/Search';
 import SensorDetail from '@geostreams/geostreaming/src/containers/Sensor/Detail';
-// $FlowFixMe
-import __old_Explore from '@geostreams/core__old/app/pages/Explore';
-// $FlowFixMe
-import __old_Search from '@geostreams/core__old/app/pages/Search';
 
 import Layout from './containers/Layout';
 import Home from './containers/Home';
 import About from './containers/About';
 import Tests from './tests/Tests';
 
+// $FlowFixMe
 const routes = Object.assign(Routes, {
     '/': {
         component: hocs.withLayout(Layout, Home, { hasFooter: true }),
@@ -23,11 +21,11 @@ const routes = Object.assign(Routes, {
         component: hocs.withLayout(Layout, SensorDetail)
     },
     '/search': {
-        component: hocs.withLayout(Layout, __old_Search),
+        component: hocs.withLayout(Layout, SearchPage),
         exact: true
     },
     '/explore/:stations': {
-        component: hocs.withLayout(Layout, __old_Explore),
+        component: hocs.withLayout(Layout, ExplorePage),
         exact: true
     }
 });
