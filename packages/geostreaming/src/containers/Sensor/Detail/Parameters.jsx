@@ -14,6 +14,7 @@ import D3LineChart from './LineChartWrapper';
 import D3StackedBarChart from './StackedBarChartWrapper';
 import VegaMultiLineChart from './VegaMultiLineChartWrapper';
 import VegaLineChart from './VegaLineChartWrapper';
+import VegaLineChartWithError from './VegaLineChartWithError'
 
 const useStyle = makeStyles({
     chartContainer: {
@@ -168,6 +169,12 @@ const Parameters = (props: Props) => {
                     break;
                 case 'stacked_line':
                     content = <VegaMultiLineChart
+                        attributes={scale_names}
+                        {...chartProps}
+                    />;
+                    break;
+                case 'stacked-line-with-error':
+                    content = <VegaLineChartWithError
                         attributes={scale_names}
                         {...chartProps}
                     />;
