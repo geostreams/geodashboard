@@ -166,6 +166,9 @@ module.exports = {
     },
 
     plugins: [
+        new Webpack.ProvidePlugin({
+            process: 'process/browser'
+        }),
         new Webpack.DefinePlugin({
             'process.env.VERSION': JSON.stringify(
                 dependencies['@geostreams/core']
