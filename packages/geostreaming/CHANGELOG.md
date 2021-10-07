@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 3.9.0 - 2021-10-07
 
 ## Added
-- Added types
+- Added Vega visualizations
 - Automatically publish to NPM on release
 
 ## Changed
