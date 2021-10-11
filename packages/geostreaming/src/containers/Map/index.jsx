@@ -225,7 +225,6 @@ const Map = (props: Props) => {
                         map.getView().fit(
                             geometry.getExtent(),
                             {
-                                maxZoom: mapConfig.maxZoom,
                                 callback: () => popupOverlay.setPosition(geometry.getCoordinates())
                             }
                         );
@@ -247,10 +246,6 @@ const Map = (props: Props) => {
                     dataProjection: 'EPSG:4326',
                     featureProjection: 'EPSG:3857'
                 }))
-            });
-
-            vectorSource.on('addfeature', () => {
-                mapRef.current.getView().fit(vectorSource.getExtent(), { duration: 500 });
             });
 
             const { useCluster, clusterDistance } = mapConfig;

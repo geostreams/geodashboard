@@ -10,8 +10,11 @@ import logger from '@geostreams/core/src/utils/logger';
 
 import type { ParameterType, ParameterValue } from '../../../utils/flowtype';
 
-import LineChartWrapper from './LineChartWrapper';
-import StackedBarChartWrapper from './StackedBarChartWrapper';
+import D3LineChart from './LineChartWrapper';
+import D3StackedBarChart from './StackedBarChartWrapper';
+import VegaMultiLineChart from './VegaMultiLineChartWrapper';
+import VegaLineChart from './VegaLineChartWrapper';
+import VegaLineChartWithError from './VegaLineChartWithError'
 
 const useStyle = makeStyles({
     chartContainer: {
@@ -71,7 +74,8 @@ const Parameters = (props: Props) => {
         endDate,
         startAtZero,
         sameTimeScale,
-        showInfoDialog
+        showInfoDialog,
+        forceVega
     } = props;
 
     const [originalData, updateOriginalData] = React.useState<{ [key: string]: ParameterValue[] } | null>(null);
@@ -106,6 +110,8 @@ const Parameters = (props: Props) => {
             }
         }
     }, [season, originalData]);
+    if(filteredData)
+    console.log('soil-moisture' in filteredData? filteredData['soil-moisture']: filteredData)
 
     const renderCharts = () => {
         if (!filteredData) {
@@ -117,41 +123,60 @@ const Parameters = (props: Props) => {
                 return null;
             }
 
+            const timeRange = sameTimeScale? {startDate, endDate} : {}
+
+
             const label = `${title}${unit ? ` (${unit})` : ''}`;
+
+            const chartProps = {
+                label,
+                unit,
+                data: filteredData[name],
+                startAtZero,
+                sameTimeScale,
+                ...timeRange
+            }
+
 
             let content;
             switch (visualization) {
                 case 'time':
-                    content = (
-                        <LineChartWrapper
-                            classes={{
-                                chartContainer: classes.chartContainer,
-                                chartDownloadIcon: classes.chartDownloadIcon
-                            }}
-                            label={label}
-                            unit={unit}
-                            startDate={startDate}
-                            endDate={endDate}
-                            data={filteredData[name]}
-                            startAtZero={startAtZero}
-                            sameTimeScale={sameTimeScale}
-                            tooltipContainerRef={tooltipContainerRef}
-                        />
-                    );
+                    content = forceVega ? 
+                            <VegaLineChart
+                                {...chartProps} /> 
+                            :
+                            <D3LineChart
+                                {...chartProps}
+                                classes={{
+                                    chartContainer: classes.chartContainer,
+                                    chartDownloadIcon: classes.chartDownloadIcon
+                                }}
+                                tooltipContainerRef={tooltipContainerRef}
+                            />
                     break;
                 case 'stacked_bar':
-                    content = <StackedBarChartWrapper
+                    content = <D3StackedBarChart
                         classes={{
                             chartContainer: classes.chartContainer,
                             chartDownloadIcon: classes.chartDownloadIcon
                         }}
+                        categories={scale_names}
                         label={label}
-                        unit={unit}
                         season={season}
                         data={filteredData[name]}
-                        categories={scale_names}
-                        colors={scale_colors}
-                        tooltipContainerRef={tooltipContainerRef}
+                        startAtZero={startAtZero}
+                    />;
+                    break;
+                case 'stacked_line':
+                    content = <VegaMultiLineChart
+                        attributes={scale_names}
+                        {...chartProps}
+                    />;
+                    break;
+                case 'stacked-line-with-error':
+                    content = <VegaLineChartWithError
+                        attributes={scale_names}
+                        {...chartProps}
                     />;
                     break;
                 default:

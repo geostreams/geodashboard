@@ -15,6 +15,9 @@ import LogoApp from '../../images/favicon.png';
 export const HEADERS_HEIGHT = 61;
 
 const useStyles = makeStyles((theme) => ({
+    appbar: {
+        zIndex: theme.zIndex.drawer + 1
+    },
     mainHeader: {
         'background': theme.palette.primary.main,
         'color': theme.palette.primary.contrastText,
@@ -60,7 +63,7 @@ const Header = ({ location }: Props) => {
     const classes = useStyles();
 
     return (
-        <AppBar position="fixed">
+        <AppBar position="fixed" className={classes.appbar}>
             <Toolbar className={classes.mainHeader}>
                 <Avatar
                     variant="square"

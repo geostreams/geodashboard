@@ -4,7 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.9.0 - 2021-10-07
+
+## Added
+- Added Vega visualizations
+- Automatically publish to NPM on release
+
+## Changed
+- Fixed location of sensor popup on the map
+  [Github-59](https://github.com/geostreams/geodashboard/issues/59)
+
 ## 3.8.0 - 2021-07-13
+## Added
+- New configuration options added for visualizations (forceVega, defaultStartAtZero, defaultSameTimeScale)
+- Vega Visualizations added (Multi-Line Chart, Line Chart, Box-Whisker Plot, Stacked Box-Whisker Plot)
 
 ### Changed
 - Created Search page with filters to replace old search/download page
