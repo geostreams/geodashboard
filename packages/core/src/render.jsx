@@ -37,7 +37,7 @@ const render = (
     if (root) {
         ReactDOM.render(
             <Provider store={store}>
-                <Router>
+                <Router basename={process.env.CONTEXT || '/'}>
                     <App routes={routes} theme={theme} />
                 </Router>
             </Provider>,

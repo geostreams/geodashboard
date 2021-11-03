@@ -14,7 +14,7 @@ type Props = {
 const App = ({ routes, theme = defaultTheme }: Props) => (
     <ThemeProvider theme={theme}>
         {entries(routes).map(([path, props]) => (
-            <Route key={path} path={`${process.env.CONTEXT || ''}${path}`} {...props} />
+            <Route key={path} path={path} {...props} />
         ))}
     </ThemeProvider>
 );
