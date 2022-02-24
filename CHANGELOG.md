@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Fixed
+- Use `basename` attribute of Router to set the context path for the app.
+- In template, deploy app at context path when using webpack dev server.
+
 ## 3.9.0
 - Updated template folder to latest version of geostreaming explore and download page
 

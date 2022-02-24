@@ -344,7 +344,7 @@ const Map = (props: Props) => {
             const selectCluster = new SelectClusterInteraction({
                 pointRadius: 17,
                 animate: true,
-                spiral: false,
+                spiral: true,
                 // Feature style when it springs apart
                 featureStyle: (feature) => {
                     const [fillColor, strokeColor] = getMarkerColor(feature);
