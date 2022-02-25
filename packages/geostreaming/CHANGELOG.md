@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.9.2 - 2022-02-24
+
+### Fixed
+- Switched Map SelectClusterInteraction from flat to spiral. Solves a problem
+  with cluster whose locations have the same lat/lon.
+
 ## 3.9.1
 - Fix filename for Vega StackedBoxWhisker.
 
