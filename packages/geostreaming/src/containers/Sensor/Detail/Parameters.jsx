@@ -15,6 +15,7 @@ import D3StackedBarChart from './StackedBarChartWrapper';
 import VegaMultiLineChart from './VegaMultiLineChartWrapper';
 import VegaLineChart from './VegaLineChartWrapper';
 import VegaLineChartWithError from './VegaLineChartWithError'
+import VegaScatterChartWrapper from "./VegaScatterChartWrapper";
 
 const useStyle = makeStyles({
     chartContainer: {
@@ -141,18 +142,24 @@ const Parameters = (props: Props) => {
             let content;
             switch (visualization) {
                 case 'time':
-                    content = forceVega ? 
-                            <VegaLineChart
-                                {...chartProps} /> 
-                            :
-                            <D3LineChart
-                                {...chartProps}
-                                classes={{
-                                    chartContainer: classes.chartContainer,
-                                    chartDownloadIcon: classes.chartDownloadIcon
-                                }}
-                                tooltipContainerRef={tooltipContainerRef}
-                            />
+                    content = forceVega ?
+                        <VegaLineChart
+                            {...chartProps} />
+                        :
+                        <D3LineChart
+                            {...chartProps}
+                            classes={{
+                                chartContainer: classes.chartContainer,
+                                chartDownloadIcon: classes.chartDownloadIcon
+                            }}
+                            tooltipContainerRef={tooltipContainerRef}
+                        />
+                    break;
+                case 'scatter':
+                    content = <VegaScatterChartWrapper {...chartProps} />;
+                    break;
+                case 'scatter_with_regression':
+                    content = <VegaScatterChartWrapper {...chartProps} regressionLine />;
                     break;
                 case 'stacked_bar':
                     content = <D3StackedBarChart
