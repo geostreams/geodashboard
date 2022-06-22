@@ -1,6 +1,6 @@
 {
   "name": "@geostreams/geostreaming",
-  "version": "3.9.3",
+  "version": "3.9.4",
   "main": "src/index.jsx",
   "author": "NCSA",
   "publishConfig": {

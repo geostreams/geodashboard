@@ -4,18 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 3.9.3 - 2022-03-07
+## 3.9.4 - 2022-06-22
+### Added
+- New scatter plot visualization.
 
+## 3.9.3 - 2022-03-07
 ### Fixed
 - Search page would not show sensor markers on first render.
 
 ## 3.9.2 - 2022-02-24
-
 ### Fixed
 - Switched Map SelectClusterInteraction from flat to spiral. Solves a problem
   with cluster whose locations have the same lat/lon.
 
 ## 3.9.1
+### Fixed
 - Fix filename for Vega StackedBoxWhisker.
 
 ## 3.9.0 - 2021-10-07
