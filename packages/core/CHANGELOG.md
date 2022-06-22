@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.9.2 - 2022-02-24
+
+### Fixed
+- Use `basename` attribute of Router to set the context path for the app.
+- In template, deploy app at context path when using webpack dev server.
+
 ## 3.9.0 - 2021-10-07
 
 ### Added

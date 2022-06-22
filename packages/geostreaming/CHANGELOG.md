@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - New scatter plot visualization.
 
+## 3.9.3 - 2022-03-07
+### Fixed
+- Search page would not show sensor markers on first render.
+
 ## 3.9.2 - 2022-02-24
 ### Fixed
 - Switched Map SelectClusterInteraction from flat to spiral. Solves a problem

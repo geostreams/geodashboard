@@ -190,7 +190,7 @@ const Search = (props: Props) => {
         }
 
         setFilteredFeatures(updatedFeatures);
-    }, [filters, custom_location]);
+    }, [features, filters, custom_location]);
 
 
 

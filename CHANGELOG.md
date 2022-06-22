@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Use `basename` attribute of Router to set the context path for the app.
 - In template, deploy app at context path when using webpack dev server.
+- Switched Map SelectClusterInteraction from flat to spiral. Solves a problem
+    with cluster whose locations have the same lat/lon.
 
 ## 3.9.0
 - Updated template folder to latest version of geostreaming explore and download page
