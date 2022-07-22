@@ -176,7 +176,6 @@ const Parameters = (props: Props) => {
                     break;
                 case 'stacked_line':
                     content = <VegaMultiLineChart
-                        attributes={scale_names}
                         {...chartProps}
                     />;
                     break;
