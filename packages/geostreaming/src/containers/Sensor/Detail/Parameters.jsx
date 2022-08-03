@@ -111,8 +111,6 @@ const Parameters = (props: Props) => {
             }
         }
     }, [season, originalData]);
-    if(filteredData)
-    console.log('soil-moisture' in filteredData? filteredData['soil-moisture']: filteredData)
 
     const renderCharts = () => {
         if (!filteredData) {
@@ -136,7 +134,7 @@ const Parameters = (props: Props) => {
                 startAtZero,
                 sameTimeScale,
                 ...timeRange
-            }
+            };
 
 
             let content;
@@ -153,7 +151,7 @@ const Parameters = (props: Props) => {
                                 chartDownloadIcon: classes.chartDownloadIcon
                             }}
                             tooltipContainerRef={tooltipContainerRef}
-                        />
+                        />;
                     break;
                 case 'scatter':
                     content = <VegaScatterChartWrapper {...chartProps} />;
