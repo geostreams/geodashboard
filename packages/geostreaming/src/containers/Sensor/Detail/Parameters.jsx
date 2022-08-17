@@ -16,6 +16,7 @@ import VegaMultiLineChart from './VegaMultiLineChartWrapper';
 import VegaLineChart from './VegaLineChartWrapper';
 import VegaLineChartWithError from './VegaLineChartWithError'
 import VegaScatterChartWrapper from "./VegaScatterChartWrapper";
+import VegaSelectLineChartWrapper from "./VegaSelectLineChartWrapper";
 
 const useStyle = makeStyles({
     chartContainer: {
@@ -179,9 +180,14 @@ const Parameters = (props: Props) => {
                         {...chartProps}
                     />;
                     break;
-                case 'stacked-line-with-error':
+                case 'line-with-error':
                     content = <VegaLineChartWithError
                         attributes={scale_names}
+                        {...chartProps}
+                    />;
+                    break;
+                case 'stacked_select_line':
+                    content = <VegaSelectLineChartWrapper
                         {...chartProps}
                     />;
                     break;
