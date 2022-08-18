@@ -1,8 +1,7 @@
 // @flow
 import * as React from 'react';
-import { Grid } from '@material-ui/core';
-import SelectLineChart from '../../../components/vega/SelectLineChart';
-import StackedBoxWhisker from '../../../components/vega/StackedBoxWhisker';
+import { Grid, Select, MenuItem, InputLabel, makeStyles } from '@material-ui/core';
+import VegaLineChart from './VegaLineChartWrapper';
 
 import type { ParameterValue } from '../../../utils/flowtype';
 
@@ -16,6 +15,12 @@ type Props = {
     endDate: Date
 }
 
+const useStyles = makeStyles((theme) => ({
+    selectStyle: {
+        marginTop: '1em'
+    }
+}));
+
 const SelectLineChartWrapper = (props: Props) => {
     const {
         data,
@@ -25,31 +30,46 @@ const SelectLineChartWrapper = (props: Props) => {
         startAtZero
     } = props;
 
-    const chartData = data.map(({ date, average, count })=> ({ average, date, count }));
-    let attributes = [];
-    if (0 in Object.keys(data))
-        if ('average' in data[0])
-            attributes = Object.keys(data[0].average);
+    const formattedData = data.map(({ date, average, count })=> ({ average, date, count }));
+    const selections = Object.keys(formattedData[0]["average"]).sort()
+    const menuItems = selections.map((item,index) => (
+        <MenuItem key={item} value={item}>{item}</MenuItem>
+    ));
+
+    const [selection, setSelection] = React.useState(selections[0]);
+    const fillData = (value) => {
+        const pointData =  formattedData.map(point => ({count:1, average: parseFloat(point.average[value].toFixed(6)), date: point.date  }))
+        return {
+            "data": pointData,
+            "label": `${label} for Wavelength ${value}`,
+            startDate,
+            endDate,
+            startAtZero
+        }
+    }
+    const[chartData, setChartData] = React.useState(fillData(selections[0]))
+    const handleChange = (event) => {
+        setSelection(event.target.value);
+        setChartData(fillData(event.target.value))
+
+    };
+    const classes = useStyles();
+
     return (
         <>
-            <Grid item xs={10}>
-                <SelectLineChart
-                    data={chartData}
-                    attributes={attributes}
-                    width={850}
-                    yLabel={label}
-                    startDate={startDate}
-                    endDate={endDate}
-                    startAtZero={startAtZero}
-                />
+            <VegaLineChart
+                {...chartData} />
+            <Grid item xs={6} className={classes.selectStyle}>
+                <InputLabel id="graph-selection">Wavelength</InputLabel>
+                <Select
+                    labelId="graph-selection"
+                    value={selection}
+                    onChange={handleChange}
+                    label="Wavelength"
+                >
+                    {menuItems}
+                </Select>
             </Grid>
-            {/*<Grid item xs={2}>*/}
-            {/*    <StackedBoxWhisker*/}
-            {/*        data={chartData}*/}
-            {/*        attributes={attributes}*/}
-            {/*        width={130}*/}
-            {/*    />*/}
-            {/*</Grid>*/}
         </>
     );
 };

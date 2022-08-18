@@ -26,8 +26,6 @@ const LineChartWrapper = (props : Props) => {
         startAtZero
     } = props;
 
-    console.log(data)
-
     const chartData = data.map(({date, average, count})=> ({ci0: average.value-average.error, ci1: average.value+average.error, value: average.value, error: average.error, date, count }))
 
     return (

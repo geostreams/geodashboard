@@ -112,8 +112,6 @@ const Parameters = (props: Props) => {
             }
         }
     }, [season, originalData]);
-    if(filteredData)
-    console.log('soil-moisture' in filteredData? filteredData['soil-moisture']: filteredData)
 
     const renderCharts = () => {
         if (!filteredData) {
