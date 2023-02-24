@@ -97,6 +97,8 @@ const Map = (props: Props) => {
                     map.un(event, handler);
                 });
             }
+
+            map.setTarget(undefined)
         };
     }, []);
 
