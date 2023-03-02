@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { makeStyles } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -21,6 +21,7 @@ import Typography from '@material-ui/core/Typography';
 import ChevronDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import ChevronRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import CloseIcon from '@material-ui/icons/Close';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 import type { Layer as LayerType } from 'ol/layer';
 
@@ -83,9 +84,11 @@ type Props = {
     exclude: string[];
 }
 
+
 const LayersControl = ({ el, layers, exclude }: Props) => {
     const classes = useStyle();
 
+    const [infoDialogControl, toggleInfoDialog] = React.useState(false);
     const [showLayers, updateShowLayers] = React.useState(false);
 
     const [openGroups, updateOpenGroups] = React.useState<{ [groupName: string]: boolean; }>({});
@@ -93,6 +96,12 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
     const [layersVisibility, updateLayersVisibility] = React.useState<{
         [layerName: string]: { isVisible: boolean; opacity: number; }
     }>({});
+
+    const handleInfoDialog = (e) => {
+        e.stopPropagation();
+        // setSourceId(id);
+        toggleInfoDialog(true);
+    };
 
     const renderLayer = (layer: LayerType) => {
         const title = layer.get('title');
@@ -192,7 +201,17 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
                     })}
                 >
                     <ListItemText primary={groupName} />
-                    {isOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                    {isOpen ? <Grid><ChevronDownIcon /> </Grid> : <Grid><ChevronRightIcon /></Grid>}
+                    <IconButton
+                        style={{ alignSelf: 'flex-start', backgroundColor: 'transparent', color: '#213541', left: '1em' }}
+                        onClick={(e) => handleInfoDialog(e)}
+                        edge="right"
+                        size="small"
+                        // id={`info-icon-${classes.sourceCheckbox} `}
+                        // color="secondary"
+                    >
+                        <InfoOutlinedIcon id={`info-icon-${classes.sourceCheckbox} `} />
+                    </IconButton>
                 </ListItem>
                 <Collapse in={isOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
