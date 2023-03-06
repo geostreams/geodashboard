@@ -23,10 +23,10 @@ import ChevronRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import CloseIcon from '@material-ui/icons/Close';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
+import InfoDialog from '@geostreams/geostreaming/src/containers/Explore/InfoDialog';
 import type { Layer as LayerType } from 'ol/layer';
 
 import { entries } from '../../utils/array';
-import InfoDialog from "@geostreams/geostreaming/src/containers/Explore/InfoDialog";
 
 const useStyle = makeStyles((theme) => ({
     button: {
@@ -100,13 +100,20 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
         [layerName: string]: { isVisible: boolean; opacity: number; }
     }>({});
 
-    const handleLayerGroupInfoDialog = (e, layerName) => {
+
+    const handleLayerGroupInfoDialog = (e, layerGroupName) => {
         e.stopPropagation();
-        setDialogInfo({ label:layerName, description: layersInfo[layerName][0] });
+        setDialogInfo({ label:layerGroupName, description: layersInfo[layerGroupName][0] });
         toggleInfoDialog(true);
     };
 
-    const renderLayer = (layer: LayerType) => {
+    const handleLayerInfoDialog = (e, layerGroupName, layerName) => {
+        e.stopPropagation();
+        setDialogInfo({ label:layerName, description: layersInfo[layerGroupName]?.[1][layerName] });
+        toggleInfoDialog(true);
+    };
+
+    const renderLayer = (layer: LayerType, groupName:string) => {
         const title = layer.get('title');
         const { isVisible, opacity } = layersVisibility[title] || {
             isVisible: layer.getVisible(),
@@ -114,7 +121,6 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
         };
 
         const legend = layer.get('legend');
-
         return (
             <React.Fragment key={title}>
                 <ListItem dense>
@@ -140,6 +146,16 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
                             variant: 'body2'
                         }}
                     />
+                    {(groupName in layersInfo) ? (title in layersInfo[groupName]?.[1]) &&
+                        <IconButton
+                            style={{ alignSelf: 'flex-start', backgroundColor: 'transparent', color: '#213541', left: '1em' }}
+                            onClick={(e) => handleLayerInfoDialog(e, groupName, title)}
+                            edge="right"
+                            size="small"
+                        >
+                            <InfoOutlinedIcon id={`info-icon-${classes.sourceCheckbox} `} />
+                        </IconButton> :
+                        null}
                 </ListItem>
                 {legend ?
                     <ListItem dense>
@@ -247,7 +263,7 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
                                 }}
                             />
                         </ListItem>
-                        {groupLayers.map((subLayer) => renderLayer(subLayer))}
+                        {groupLayers.map((subLayer) => renderLayer(subLayer,groupName))}
                     </List>
                 </Collapse>
             </React.Fragment>
