@@ -26,6 +26,7 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import type { Layer as LayerType } from 'ol/layer';
 
 import { entries } from '../../utils/array';
+import InfoDialog from "@geostreams/geostreaming/src/containers/Explore/InfoDialog";
 
 const useStyle = makeStyles((theme) => ({
     button: {
@@ -82,14 +83,16 @@ type Props = {
     el: HTMLElement;
     layers: { [layerName: string]: LayerType };
     exclude: string[];
+    layersInfo: { [groupName: string]: [string,{[layerName:string]:string}]; };
 }
 
 
-const LayersControl = ({ el, layers, exclude }: Props) => {
+const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
     const classes = useStyle();
 
     const [infoDialogControl, toggleInfoDialog] = React.useState(false);
     const [showLayers, updateShowLayers] = React.useState(false);
+    const [dialogInfo, setDialogInfo] = React.useState({ label:'',description:'' });
 
     const [openGroups, updateOpenGroups] = React.useState<{ [groupName: string]: boolean; }>({});
 
@@ -97,9 +100,9 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
         [layerName: string]: { isVisible: boolean; opacity: number; }
     }>({});
 
-    const handleInfoDialog = (e) => {
+    const handleLayerGroupInfoDialog = (e, layerName) => {
         e.stopPropagation();
-        // setSourceId(id);
+        setDialogInfo({ label:layerName, description: layersInfo[layerName][0] });
         toggleInfoDialog(true);
     };
 
@@ -202,16 +205,15 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
                 >
                     <ListItemText primary={groupName} />
                     {isOpen ? <Grid><ChevronDownIcon /> </Grid> : <Grid><ChevronRightIcon /></Grid>}
+                    {(groupName in layersInfo) &&
                     <IconButton
                         style={{ alignSelf: 'flex-start', backgroundColor: 'transparent', color: '#213541', left: '1em' }}
-                        onClick={(e) => handleInfoDialog(e)}
+                        onClick={(e) => handleLayerGroupInfoDialog(e,groupName)}
                         edge="right"
                         size="small"
-                        // id={`info-icon-${classes.sourceCheckbox} `}
-                        // color="secondary"
                     >
                         <InfoOutlinedIcon id={`info-icon-${classes.sourceCheckbox} `} />
-                    </IconButton>
+                    </IconButton>}
                 </ListItem>
                 <Collapse in={isOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
@@ -285,6 +287,11 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
                     </List>
                 </CardContent>
             </Card>
+            <InfoDialog
+                dialogControl={infoDialogControl}
+                sourceInfo={dialogInfo}
+                toggleDialog={toggleInfoDialog}
+            />
         </>,
         el
     );
