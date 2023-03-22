@@ -86,6 +86,9 @@ export type MapConfig = {
     layers: {
         [groupName: string]: MapLayerConfig[];
     };
+    layersInfo: {
+        [groupName: string]: [string,{[layerName:string]:string}];
+    };
 }
 
 export type SourceType = {

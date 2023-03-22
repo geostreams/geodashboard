@@ -18,7 +18,8 @@ import { Map as BaseMap } from '@geostreams/core/src/components/ol';
 import Control from '@geostreams/core/src/components/ol/Control';
 import ClusterControl from '@geostreams/core/src/components/ol/ClusterControl';
 import FitViewControl from '@geostreams/core/src/components/ol/FitViewControl';
-import LayersControl from '@geostreams/core/src/components/ol/LayersControl';
+// import LayersControl from '@geostreams/core/src/components/ol/LayersControl';
+import LayersControl from '../../../../core/src/components/ol/LayersControl'
 import { entries } from '@geostreams/core/src/utils/array';
 
 import type { Feature as FeatureType, Map as MapType, MapBrowserEventType } from 'ol';
@@ -474,6 +475,7 @@ const Map = (props: Props) => {
                     el={cacheRef.current.layersControl.element}
                     layers={cacheRef.current.layers}
                     exclude={['basemaps']}
+                    layersInfo = { (typeof mapConfig.layersInfo === 'undefined') ? {} : mapConfig.layersInfo}
                 /> :
                 null}
 

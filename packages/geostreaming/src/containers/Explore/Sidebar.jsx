@@ -18,10 +18,10 @@ import BaseSidebar from '@geostreams/core/src/components/theme/BaseSidebar';
 import SidebarCategory from '@geostreams/core/src/components/theme/SidebarCategory';
 import { entries } from '@geostreams/core/src/utils/array';
 
+// import InfoDialog from '../../../../core/src/components/ol/infoDialog';
 import { getSourceColor } from '../../utils/sensors';
 
 import type { SensorType, SourceConfig } from '../../utils/flowtype';
-
 import InfoDialog from './InfoDialog';
 
 const useStyles = makeStyles(() => ({

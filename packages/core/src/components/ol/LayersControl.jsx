@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { makeStyles } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -21,7 +21,9 @@ import Typography from '@material-ui/core/Typography';
 import ChevronDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import ChevronRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import CloseIcon from '@material-ui/icons/Close';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
+import InfoDialog from '@geostreams/geostreaming/src/containers/Explore/InfoDialog';
 import type { Layer as LayerType } from 'ol/layer';
 
 import { entries } from '../../utils/array';
@@ -81,12 +83,16 @@ type Props = {
     el: HTMLElement;
     layers: { [layerName: string]: LayerType };
     exclude: string[];
+    layersInfo: { [groupName: string]: [string,{[layerName:string]:string}]; };
 }
 
-const LayersControl = ({ el, layers, exclude }: Props) => {
+
+const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
     const classes = useStyle();
 
+    const [infoDialogControl, toggleInfoDialog] = React.useState(false);
     const [showLayers, updateShowLayers] = React.useState(false);
+    const [dialogInfo, setDialogInfo] = React.useState({ label:'',description:'' });
 
     const [openGroups, updateOpenGroups] = React.useState<{ [groupName: string]: boolean; }>({});
 
@@ -94,7 +100,20 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
         [layerName: string]: { isVisible: boolean; opacity: number; }
     }>({});
 
-    const renderLayer = (layer: LayerType) => {
+
+    const handleLayerGroupInfoDialog = (e, layerGroupName) => {
+        e.stopPropagation();
+        setDialogInfo({ label:layerGroupName, description: layersInfo[layerGroupName][0] });
+        toggleInfoDialog(true);
+    };
+
+    const handleLayerInfoDialog = (e, layerGroupName, layerName) => {
+        e.stopPropagation();
+        setDialogInfo({ label:layerName, description: layersInfo[layerGroupName]?.[1][layerName] });
+        toggleInfoDialog(true);
+    };
+
+    const renderLayer = (layer: LayerType, groupName:string) => {
         const title = layer.get('title');
         const { isVisible, opacity } = layersVisibility[title] || {
             isVisible: layer.getVisible(),
@@ -102,7 +121,6 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
         };
 
         const legend = layer.get('legend');
-
         return (
             <React.Fragment key={title}>
                 <ListItem dense>
@@ -128,6 +146,16 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
                             variant: 'body2'
                         }}
                     />
+                    {(groupName in layersInfo) ? (title in layersInfo[groupName]?.[1]) &&
+                        <IconButton
+                            style={{ alignSelf: 'flex-start', backgroundColor: 'transparent', color: '#213541', left: '1em' }}
+                            onClick={(e) => handleLayerInfoDialog(e, groupName, title)}
+                            edge="right"
+                            size="small"
+                        >
+                            <InfoOutlinedIcon id={`info-icon-${classes.sourceCheckbox} `} />
+                        </IconButton> :
+                        null}
                 </ListItem>
                 {legend ?
                     <ListItem dense>
@@ -192,7 +220,16 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
                     })}
                 >
                     <ListItemText primary={groupName} />
-                    {isOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                    {isOpen ? <Grid><ChevronDownIcon /> </Grid> : <Grid><ChevronRightIcon /></Grid>}
+                    {(groupName in layersInfo) &&
+                    <IconButton
+                        style={{ alignSelf: 'flex-start', backgroundColor: 'transparent', color: '#213541', left: '1em' }}
+                        onClick={(e) => handleLayerGroupInfoDialog(e,groupName)}
+                        edge="right"
+                        size="small"
+                    >
+                        <InfoOutlinedIcon id={`info-icon-${classes.sourceCheckbox} `} />
+                    </IconButton>}
                 </ListItem>
                 <Collapse in={isOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
@@ -226,7 +263,7 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
                                 }}
                             />
                         </ListItem>
-                        {groupLayers.map((subLayer) => renderLayer(subLayer))}
+                        {groupLayers.map((subLayer) => renderLayer(subLayer,groupName))}
                     </List>
                 </Collapse>
             </React.Fragment>
@@ -266,6 +303,11 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
                     </List>
                 </CardContent>
             </Card>
+            <InfoDialog
+                dialogControl={infoDialogControl}
+                sourceInfo={dialogInfo}
+                toggleDialog={toggleInfoDialog}
+            />
         </>,
         el
     );
