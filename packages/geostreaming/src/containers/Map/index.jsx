@@ -190,7 +190,12 @@ const Map = (props: Props) => {
         showExploreSources,
         additionalLayer: additionalLayerProp,
         children,
-        handleFeatureToggle
+        handleFeatureToggle,
+        data,
+        sources,
+        toggleRegions,
+        handlePopupClose,
+        handlePopupOpen
     } = props;
 
     const classes = useStyles();
