@@ -104,13 +104,14 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
     const handleLayerGroupInfoDialog = (e, layerGroupName) => {
         e.stopPropagation();
         setDialogInfo({ label:layerGroupName, description: layersInfo[layerGroupName][0].description, link: layersInfo[layerGroupName][0].link,
-            more_info:layersInfo[layerGroupName][0].link});
+            more_info:layersInfo[layerGroupName][0].link });
         toggleInfoDialog(true);
     };
 
     const handleLayerInfoDialog = (e, layerGroupName, layerName) => {
         e.stopPropagation();
-        setDialogInfo({ label:layerName, description: layersInfo[layerGroupName]?.[1][layerName].description, link: layersInfo[layerGroupName]?.[1][layerName].link });
+        setDialogInfo({ label:layerName, description: layersInfo[layerGroupName]?.[1][layerName].description, link: layersInfo[layerGroupName]?.[1][layerName].link,
+            more_info:layersInfo[layerGroupName]?.[1][layerName].link });
         toggleInfoDialog(true);
     };
 
