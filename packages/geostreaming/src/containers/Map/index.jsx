@@ -19,6 +19,8 @@ import Control from '@geostreams/core/src/components/ol/Control';
 import ClusterControl from '@geostreams/core/src/components/ol/ClusterControl';
 import FitViewControl from '@geostreams/core/src/components/ol/FitViewControl';
 import LayersControl from '@geostreams/core/src/components/ol/LayersControl';
+import SourcesControl from '@geostreams/core/src/components/ol/SourcesControl';
+
 import { entries } from '@geostreams/core/src/utils/array';
 
 import type { Feature as FeatureType, Map as MapType, MapBrowserEventType } from 'ol';
@@ -62,6 +64,10 @@ const useStyles = makeStyles((theme) => ({
     layersControl: {
         top: '.5em',
         right: '.5em'
+    },
+    sourcesControl:{
+        top: '.5em',
+        left: '.5em'
     }
 }));
 
@@ -75,8 +81,22 @@ interface Props {
     selectedFeature: ?{ idx: number; zoom: boolean; };
     handleFeatureToggle: (feature: ?FeatureType) => void;
     showExploreLayers?: boolean;
-    additionalLayer: LayerType,
+    showExploreSources?: boolean;
+    additionalLayer: LayerType;
     children: React.Node;
+    data:?{
+        [sourceId: string]: {
+          sensorCount: number,
+          regions: {
+            [regionId: string]: SensorType[],
+          },
+        },
+      };
+  sources:Object;
+  toggleRegions: (sourcesVisibility: { [sourceId: string]: boolean }) => void;
+  handlePopupOpen: (feature: number) => void;
+  handlePopupClose: () => void;
+    
 }
 
 const getMarker = (fill: string, stroke: string) => encodeURIComponent(
@@ -167,6 +187,7 @@ const Map = (props: Props) => {
         features,
         selectedFeature,
         showExploreLayers,
+        showExploreSources,
         additionalLayer: additionalLayerProp,
         children,
         handleFeatureToggle
@@ -203,6 +224,9 @@ const Map = (props: Props) => {
             layers: prepareLayers(mapConfig.mapTileURL, mapConfig.geoserverUrl, mapConfig.layers, showExploreLayers),
             layersControl: new Control({
                 className: classes.layersControl
+            }),
+            sourcesControl: new Control({
+                className: classes.sourcesControl
             }),
             fitViewControl: new Control({
                 className: classes.fitViewControl
@@ -468,7 +492,17 @@ const Map = (props: Props) => {
                         }
                     }
                 /> : null}
-
+     {showExploreSources ?
+                <SourcesControl
+                data={data}
+                sourcesConfig={sourcesConfig}
+                sources={sources}
+                selectedFeature={selectedFeature}
+                toggleRegions={toggleRegions}
+                handlePopupOpen={handlePopupOpen}
+                handlePopupClose={handlePopupClose}
+                /> :
+                null}
             {mapConfig.layers && showExploreLayers ?
                 <LayersControl
                     el={cacheRef.current.layersControl.element}
@@ -497,6 +531,7 @@ const Map = (props: Props) => {
 
 Map.defaultProps = {
     showExploreLayers: true,
+    showExploreSources: true,
     additionalLayer: undefined
 };
 

@@ -244,7 +244,7 @@ const LayersControl = ({ el, layers, exclude }: Props) => {
             <Card className={`${classes.card} ${showLayers ? '' : 'hidden'}`} square>
                 <CardContent className={classes.cardHeader}>
                     <Typography gutterBottom variant="h6">
-                        Explore Layers
+                        Explore Layers 
                     </Typography>
                     <IconButton
                         className={classes.closeButton}

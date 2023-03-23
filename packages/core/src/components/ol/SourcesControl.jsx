@@ -145,7 +145,7 @@ type Props = {
   handlePopupClose: () => void,
 };
 
-const Sidebar = ({
+const SourcesControl = ({
   data,
   sourcesConfig,
   sources,
@@ -283,7 +283,7 @@ const Sidebar = ({
                           {source.label}
                         </Grid>
                         <Grid className="centeredText" item xs={3}>
-                          ({data[source.id].sensorCount})
+                          (data?{data[source.id].sensorCount}:{})
                         </Grid>
                         <IconButton
                           style={{ alignSelf: "flex-start" }}
@@ -358,4 +358,4 @@ const Sidebar = ({
   );
 };
 
-export default Sidebar;
+export default SourcesControl;
