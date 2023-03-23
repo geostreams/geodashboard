@@ -92,7 +92,7 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
 
     const [infoDialogControl, toggleInfoDialog] = React.useState(false);
     const [showLayers, updateShowLayers] = React.useState(false);
-    const [dialogInfo, setDialogInfo] = React.useState({ label:'',description:'' });
+    const [dialogInfo, setDialogInfo] = React.useState({ label:'',description:'', link:'', more_info:'' });
 
     const [openGroups, updateOpenGroups] = React.useState<{ [groupName: string]: boolean; }>({});
 
@@ -103,13 +103,14 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
 
     const handleLayerGroupInfoDialog = (e, layerGroupName) => {
         e.stopPropagation();
-        setDialogInfo({ label:layerGroupName, description: layersInfo[layerGroupName][0] });
+        setDialogInfo({ label:layerGroupName, description: layersInfo[layerGroupName][0].description, link: layersInfo[layerGroupName][0].link,
+            more_info:layersInfo[layerGroupName][0].link});
         toggleInfoDialog(true);
     };
 
     const handleLayerInfoDialog = (e, layerGroupName, layerName) => {
         e.stopPropagation();
-        setDialogInfo({ label:layerName, description: layersInfo[layerGroupName]?.[1][layerName] });
+        setDialogInfo({ label:layerName, description: layersInfo[layerGroupName]?.[1][layerName].description, link: layersInfo[layerGroupName]?.[1][layerName].link });
         toggleInfoDialog(true);
     };
 
