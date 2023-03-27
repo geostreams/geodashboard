@@ -120,7 +120,7 @@ const Explore = (props: Props) => {
 
             featuresRef.current = features;
             updateData(newData);
-            console.log("--THIS IS DATA",data);
+           
         }
     }, [sensors]);
 

@@ -30,6 +30,18 @@ const useStyles = makeStyles((theme) => ({
   button: {
     width: "10em !important",
     height: "2em !important",
+    display: "block",
+    margin: "1px",
+    padding: "0",
+    color: "white",
+    fontSize: "1.14em",
+    fontWeight: "bold",
+    textDecoration: "none",
+    textAlign: "center",
+    lineHeight: ".4em",
+    backgroundColor: "rgba(0,60,136,0.5)",
+    border: "none",
+    borderRadius: "2px"
   },
   card: {
     width: 320,
@@ -46,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
   closeButton: {
     position: "absolute",
-    left: theme.spacing(1.5),
+    right: theme.spacing(1.5),
     top: theme.spacing(1),
     background: "none !important",
   },
@@ -283,7 +295,7 @@ const SourcesControl = ({
                           {source.label}
                         </Grid>
                         <Grid className="centeredText" item xs={3}>
-                          (data?{data[source.id].sensorCount}:{})
+                          {data[source.id].sensorCount}
                         </Grid>
                         <IconButton
                           style={{ alignSelf: "flex-start" }}
