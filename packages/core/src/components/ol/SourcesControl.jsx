@@ -41,7 +41,8 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: ".4em",
     backgroundColor: "rgba(0,60,136,0.5)",
     border: "none",
-    borderRadius: "2px"
+    borderRadius: "2px",
+    
   },
   card: {
     width: 320,
@@ -141,6 +142,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
+  el: HTMLElement,
   data: ?{
     [sourceId: string]: {
       sensorCount: number,
@@ -158,6 +160,7 @@ type Props = {
 };
 
 const SourcesControl = ({
+  el,
   data,
   sourcesConfig,
   sources,
@@ -228,7 +231,7 @@ const SourcesControl = ({
     }
   };
 
-  return (
+  return ReactDOM.createPortal(
     <>
       <Button
         className={`${classes.button} ${showSensors ? "hidden" : ""}`}
@@ -366,7 +369,7 @@ const SourcesControl = ({
           </List>
         </CardContent>
       </Card>
-    </>
+    </>, el
   );
 };
 
