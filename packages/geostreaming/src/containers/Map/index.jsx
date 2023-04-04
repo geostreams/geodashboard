@@ -576,7 +576,7 @@ const Map = (props: Props) => {
           el={cacheRef.current.layersControl.element}
           layers={cacheRef.current.layers}
           exclude={["basemaps"]}
-          layersInfo={mapConfig.layersInfo}
+          layersInfo = { (typeof mapConfig.layersInfo === 'undefined') ? {} : mapConfig.layersInfo}
         />
       ) : null}
 
