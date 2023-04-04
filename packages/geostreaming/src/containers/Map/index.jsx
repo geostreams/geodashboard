@@ -20,6 +20,7 @@ import ClusterControl from "@geostreams/core/src/components/ol/ClusterControl";
 import FitViewControl from "@geostreams/core/src/components/ol/FitViewControl";
 import LayersControl from "@geostreams/core/src/components/ol/LayersControl";
 import SourcesControl from "@geostreams/core/src/components/ol/SourcesControl";
+import { entries } from '@geostreams/core/src/utils/array';
 
 import { entries } from "@geostreams/core/src/utils/array";
 
