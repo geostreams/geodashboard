@@ -120,6 +120,7 @@ const Explore = (props: Props) => {
 
             featuresRef.current = features;
             updateData(newData);
+           
         }
     }, [sensors]);
 
@@ -139,15 +140,7 @@ const Explore = (props: Props) => {
 
     return (
         <div className={classes.root}>
-            <Sidebar
-                data={data}
-                sources={sources}
-                sourcesConfig={sourcesConfig}
-                selectedFeature={selectedFeature}
-                toggleRegions={updateSourcesVisibility}
-                handlePopupOpen={(idx) => handleFeatureToggle(idx, true)}
-                handlePopupClose={() => handleFeatureToggle()}
-            />
+         
             <Map
                 mapConfig={mapConfig}
                 sourcesConfig={sourcesConfig}
@@ -158,6 +151,11 @@ const Explore = (props: Props) => {
                 selectedFeature={selectedFeature}
                 handleFeatureToggle={handleFeatureToggle}
                 zoomToSe={undefined}
+                data={data}
+                sources={sources}
+                toggleRegions={updateSourcesVisibility}
+                handlePopupOpen={(idx) => handleFeatureToggle(idx, true)}
+                handlePopupClose={() => handleFeatureToggle()}
             />
 
             {showSensorDetails ?

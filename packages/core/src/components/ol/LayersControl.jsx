@@ -31,7 +31,8 @@ import { entries } from '../../utils/array';
 const useStyle = makeStyles((theme) => ({
     button: {
         width: '10em !important',
-        height: '2em !important'
+        height: '2em !important',
+        
     },
     card: {
         width: 320
@@ -283,7 +284,7 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
             <Card className={`${classes.card} ${showLayers ? '' : 'hidden'}`} square>
                 <CardContent className={classes.cardHeader}>
                     <Typography gutterBottom variant="h6">
-                        Explore Layers
+                        Explore Layers 
                     </Typography>
                     <IconButton
                         className={classes.closeButton}
