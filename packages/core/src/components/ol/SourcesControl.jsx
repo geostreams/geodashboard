@@ -270,31 +270,33 @@ const SourcesControl = ({
                 </CardContent>
                 <CardContent className={classes.cardContent}>
                     <List>
+                        <Grid
+                            container
+                            alignContent="center"
+                            alignItems="center"
+                            wrap="nowrap"
+                        >
                             <Grid
-                                container
-                                alignContent="center"
-                                alignItems="center"
-                                wrap="nowrap"
+                                className={`${classes.sourceCheckbox} centeredText`}
+                                item
+                                xs={2}
+                                style={{ background: '#143849' }}
+                                onClick={(e) => toggleAllSources(e)}
                             >
-                                <Grid
-                                    className={`${classes.sourceCheckbox} centeredText`}
-                                    item
-                                    xs={2}
-                                    style={{ background: '#143849' }}
-                                    onClick={(e) => toggleAllSources(e)}
-                                >
-                                    <Checkbox
-                                        checked={allSourcesVisibility}
-                                        icon={<CircleUncheckedIcon htmlColor="white" />}
-                                        checkedIcon={
-                                            <CircleCheckedFilledIcon htmlColor="white" />
-                                        }
-                                    />
-                                </Grid>
-                                    <Grid className={classes.sourceLabel} item xs={12}>
-                                            Switch on/off all sources
-                                    </Grid>
+                                <Checkbox
+                                    checked={allSourcesVisibility}
+                                    icon={<CircleUncheckedIcon htmlColor="white" />}
+                                    checkedIcon={
+                                        <CircleCheckedFilledIcon htmlColor="white" />
+                                    }
+                                />
                             </Grid>
+                            <Grid className={classes.sourceLabel} item xs={12}>
+                                <Typography gutterBottom variant="subtitle1">
+                                            Switch on/off all sources
+                                </Typography>
+                            </Grid>
+                        </Grid>
                         {sources.map((source) => {
                             const primaryColor = getSourceColor(sourcesConfig[source.id]);
                             const secondaryColor = interpolateRgb(primaryColor, '#FFF')(0.8);
