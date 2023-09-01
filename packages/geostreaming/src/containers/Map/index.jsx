@@ -20,7 +20,7 @@ import ClusterControl from "@geostreams/core/src/components/ol/ClusterControl";
 import FitViewControl from "@geostreams/core/src/components/ol/FitViewControl";
 import LayersControl from "@geostreams/core/src/components/ol/LayersControl";
 import SourcesControl from "@geostreams/core/src/components/ol/SourcesControl";
-import { entries } from '@geostreams/core/src/utils/array';
+import { entries } from "@geostreams/core/src/utils/array";
 
 import type {
   Feature as FeatureType,
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     height: "100%",
     flexGrow: 1,
-    position:"relative"
+    position: "relative",
   },
   fitViewControl: {
     bottom: ".5em",
@@ -121,6 +121,7 @@ const prepareLayers = (
   layersConfig: { [group: string]: MapLayerConfig[] } = {},
   showExploreLayers: boolean
 ): { [layerName: string]: LayerType } => {
+  // console.log('--I AM PREPARING LAYERS ON 124--');
   let source = new OSM();
   if (mapTileURL)
     source = new XYZ({
@@ -140,51 +141,140 @@ const prepareLayers = (
     }),
   };
   if (showExploreLayers)
+    // console.log("--THIS IS SHOW EXPLORE LAYERS---", entries(layersConfig));
     entries(layersConfig).forEach(([group, groupLayersConfig]) => {
       const groupLayers = [];
-      groupLayersConfig.forEach(
-        ({
-          title,
-          id,
-          type,
-          initialOpacity,
-          initialVisibility,
-          legend,
-        }: MapLayerConfig) => {
-          let layer;
-          if (type === "wms") {
-            layer = new ImageLayer({
-              source: new ImageWMSSource({
-                url: `${geoserverUrl}/wms`,
-                params: { LAYERS: id },
-                ratio: 1,
-                serverType: "geoserver",
-              }),
-              opacity: initialOpacity || 0.8,
-              visible: initialVisibility || false,
-            });
-            layer.set("title", title);
-            if (legend) {
-              layer.set("legend", `${geoserverUrl}/${legend}`);
+      console.log("--THIS IS on 147---", group, groupLayersConfig);
+      if (
+        typeof groupLayersConfig === "object" &&
+        !Array.isArray(groupLayersConfig)
+      ) {
+        console.log("--GROUP LAYERS CONFIG IS AN OBJECT--", groupLayersConfig);
+        let layerTitle;
+        let time = groupLayersConfig?.time;
+        console.log("---THESE ARE TIME ENTRIES", time);
+        layerTitle = groupLayersConfig?.title;
+        //check if it is list
+        // grouplayers already EXISTING SO WE CANNOT MODIFY and it will be complicated
+        time?.forEach(
+          ({
+            title,
+            id,
+            type,
+            initialOpacity,
+            initialVisibility,
+            legend,
+            year
+            
+          }: MapLayerConfig) => {
+            // console.log("--THIS IS TITLE ON 158---", title);
+            let layer;
+            if (groupLayersConfig?.type === "wms") {
+              layer = new ImageLayer({
+                source: new ImageWMSSource({
+                  url: `${geoserverUrl}/wms`,
+                  params: { LAYERS: id },
+                  ratio: 1,
+                  serverType: "geoserver",
+                }),
+                opacity: initialOpacity || 0.8,
+                visible: initialVisibility || false,
+               
+              });
+              console.log("--I AM SETTING TITLE ON 170--------",groupLayersConfig?.title);
+              layer.set("title", title);
+              layer.set("year",year);
+             
+
+              if (legend) {
+                layer.set("legend", `${geoserverUrl}/${legend}`);
+              }
+            }
+            console.log("---PRINTING LAYERS WHEN OBJECT--", layer);
+            if (layer) {
+              if (group) {
+                groupLayers.push(layer);
+              } else {
+                layers[title] = layer;
+              }
+              console.log("--PUSHING INTO GROUP LAYERS IN CASE IT IS AN OBJECT---", groupLayers);
             }
           }
-          if (layer) {
-            if (group) {
-              groupLayers.push(layer);
-            } else {
-              layers[title] = layer;
-            }
-          }
+        );
+
+        if (group) {
+          // console.log("--I AM IN GROUP AND SETTING TITLE---",group );
+          console.log("--I AM PRINTING LAYERTITLE----",layerTitle );
+          layers[group] = new GroupLayer({
+            title: layerTitle, //Change here
+            layers: groupLayers,
+            timeEntries: time
+          });
         }
-      );
-      if (group) {
-        layers[group] = new GroupLayer({
-          title: group,
-          layers: groupLayers,
-        });
+        
+
+      } else {
+        let layerTitle;
+        //check if it is list
+        // grouplayers already EXISTING SO WE CANNOT MODIFY and it will be complicated
+        groupLayersConfig.forEach(
+          ({
+            title,
+            id,
+            type,
+            initialOpacity,
+            initialVisibility,
+            legend,
+            time,
+          }: MapLayerConfig) => {
+            // console.log("--THIS IS TITLE ON 158---", title);
+            let layer;
+            if (type === "wms") {
+              layer = new ImageLayer({
+                source: new ImageWMSSource({
+                  url: `${geoserverUrl}/wms`,
+                  params: { LAYERS: id },
+                  ratio: 1,
+                  serverType: "geoserver",
+                }),
+                opacity: initialOpacity || 0.8,
+                visible: initialVisibility || false,
+                time: time,
+              });
+              // console.log("--I AM SETTING TITLE ON 170--------", title);
+              layer.set("title", title);
+              layerTitle = title;
+              if (time) {
+                layer.set("time", time);
+              }
+
+              if (legend) {
+                layer.set("legend", `${geoserverUrl}/${legend}`);
+              }
+            }
+            console.log("---PRINTING LAYERS WHEN NOT AN OBJECT--", layer);
+            if (layer) {
+              if (group) {
+                groupLayers.push(layer);
+              } else {
+                layers[title] = layer;
+              }
+            }
+            console.log("--PUSHING INTO GROUP LAYERS---", groupLayers);
+          }
+        );
+
+        if (group) {
+          // console.log("--I AM IN GROUP AND SETTING TITLE---",group );
+          // console.log("--I AM IN GROUP LAYERS----",groupLayers );
+          layers[group] = new GroupLayer({
+            title: layerTitle, //Change here
+            layers: groupLayers,
+          });
+        }
       }
     });
-
+  console.log("--THESE ARE LAYERS ON 198--", layers);
   return layers;
 };
 
@@ -496,12 +586,10 @@ const Map = (props: Props) => {
             .setCenter(
               featuresAtPixel.get("features")[0].getGeometry().getCoordinates()
             );
-          mapRef.current
-            .getView()
-            .animate({
-              zoom: mapRef.current.getView().getZoom() + 1,
-              duration: 500,
-            });
+          mapRef.current.getView().animate({
+            zoom: mapRef.current.getView().getZoom() + 1,
+            duration: 500,
+          });
         }
       }
     }
@@ -560,7 +648,7 @@ const Map = (props: Props) => {
       ) : null}
       {showExploreSources ? (
         <SourcesControl
-        el={cacheRef.current.sourcesControl.element}
+          el={cacheRef.current.sourcesControl.element}
           data={data}
           sourcesConfig={sourcesConfig}
           sources={sources}
@@ -576,7 +664,11 @@ const Map = (props: Props) => {
           el={cacheRef.current.layersControl.element}
           layers={cacheRef.current.layers}
           exclude={["basemaps"]}
-          layersInfo = { (typeof mapConfig.layersInfo === 'undefined') ? {} : mapConfig.layersInfo}
+          layersInfo={
+            typeof mapConfig.layersInfo === "undefined"
+              ? {}
+              : mapConfig.layersInfo
+          }
         />
       ) : null}
 
