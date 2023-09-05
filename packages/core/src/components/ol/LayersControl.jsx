@@ -120,7 +120,6 @@ type Props = {
 };
 
 const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
-  console.log("---THESE ARE LAYERS ON 92---", layers);
   const [selectedYear, setSelectedYear] = React.useState(null);
   const [selectedOpacity, setSelectedOpacity] = React.useState(null);
   const [selectedLegend, setSelectedLegend] = React.useState(null);
@@ -170,16 +169,8 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
     groupName: string,
     timeEntries: Array
   ) => {
-    console.log("--I AM IN RENDER LAYER ON 169---", layer);
-
     const title = layer.get("title");
     const time = timeEntries;
-    console.log("--THIS IS TIME ON 174--", time);
-    console.log(
-      "--THIS IS LAYERVISIBILITY ON 175--",
-      layersVisibility[title],
-      title
-    );
     const { isVisible, opacity } = layersVisibility[title] || {
       isVisible: layer.getVisible(),
       opacity: layer.getOpacity(),
@@ -188,6 +179,25 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
     return (
       <React.Fragment key={title}>
         <ListItem dense>
+          {time?.length > 0 ? null : (
+            <ListItemIcon className={classes.checkbox}>
+              <Checkbox
+                checked={isVisible}
+                disableRipple
+                onChange={() => {
+                  layer.setVisible(!isVisible);
+                  updateLayersVisibility({
+                    ...layersVisibility,
+                    [title]: {
+                      opacity,
+                      isVisible: !isVisible,
+                    },
+                  });
+                }}
+              />
+            </ListItemIcon>
+          )}
+
           <ListItemText
             primary={title}
             primaryTypographyProps={{
@@ -262,54 +272,61 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
     const isOpen = openGroups[groupName];
     const groupLayers = layer.getLayersArray();
     // console.log("--THESE ARE GROUP LAYERS--", groupLayers,groupName);
-   
+    
     let timeEntries = layer.get("timeEntries");
     const title = layer.get("title");
     const time = timeEntries;
-    // console.log("--THIS IS TIME ON 174--", time);
-    // console.log(
-    //   "--THIS IS LAYERVISIBILITY ON 175--",
-    //   layersVisibility[title],
-    //   title
-    // );
     const { isVisible, opacity } = layersVisibility[title] || {
       isVisible: layer.getVisible(),
       opacity: layer.getOpacity(),
     };
+
     const legend = layer.get("legend");
 
-    const handleYearChange = (event) => {
+    const handleYearChange = async (event) => {
       const year = parseInt(event.target.value);
-      setSelectedYear(year);
-      console.log("--THIS IS SELECTED YEAR--", selectedYear);
+      await setSelectedYear(year);
       const selectedTimeEntry = time?.find((item) => item.year === year);
       setSelectedLegend(selectedTimeEntry?.legend);
-      console.log("--THIS IS SELECTED TITLE--", layer.get("title"));
-      console.log("--THIS IS VISIBILITY--", layer.getVisible());
-      console.log("--THESE ARE GROUP LAYERS--", groupLayers);
-     
-      groupLayers.forEach((layer)=>{
-        console.log("--THIS IS INSIDE FOR LOOP--", layer.get("year"));
-
-        if(layer.get("year").toString()==selectedYear.toString()){
-          console.log("this is layer on 293--", layer);
-          
-          layer.setVisible(!isVisible);
-          
+      groupLayers.forEach((layer) => {
+        
+        if (layer.get("year").toString() === year.toString()) {
+          const { isVisible, opacity } = layersVisibility[
+            layer.get("title")
+          ] || {
+            isVisible: layer.getVisible(),
+            opacity: layer.getOpacity(),
+          };
+          layer.setVisible(true);
           updateLayersVisibility({
             ...layersVisibility,
             [title]: {
               opacity,
-              isVisible: !isVisible,
+              isVisible: true,
             },
           });
-
+        }else{
+          const { isVisible, opacity } = layersVisibility[
+            layer.get("title")
+          ] || {
+            isVisible: layer.getVisible(),
+            opacity: layer.getOpacity(),
+          };
+          layer.setVisible(false);
+          updateLayersVisibility({
+            ...layersVisibility,
+            [title]: {
+              opacity,
+              isVisible: false,
+            },
+          });
         }
-      })
-     
+      });
     };
     const years = time?.map((item) => item.year);
     years?.sort((a, b) => a - b);
+
+    
     const areLayersVisible = !groupLayers.find(
       (groupLayer) =>
         !(
@@ -394,7 +411,7 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
                 <Grid container spacing={2}>
                   <Grid item>
                     <div>
-                      <label sx>{selectedYear}</label>
+                      <label sx>This is selected year: {selectedYear}</label>
                     </div>
                     <div className={classes.sliderContainer}>
                       <input
