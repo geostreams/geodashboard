@@ -1,319 +1,499 @@
 // @flow
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Grid, makeStyles } from '@material-ui/core';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Checkbox from '@material-ui/core/Checkbox';
-import Collapse from '@material-ui/core/Collapse';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
-import ChevronDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import ChevronRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import CloseIcon from '@material-ui/icons/Close';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Grid, makeStyles } from "@material-ui/core";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Checkbox from "@material-ui/core/Checkbox";
+import Collapse from "@material-ui/core/Collapse";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Slider from "@material-ui/core/Slider";
+import Typography from "@material-ui/core/Typography";
+import ChevronDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import ChevronRightIcon from "@material-ui/icons/KeyboardArrowRight";
+import CloseIcon from "@material-ui/icons/Close";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 
-import InfoDialog from '@geostreams/geostreaming/src/containers/Explore/InfoDialog';
-import type { Layer as LayerType } from 'ol/layer';
+import InfoDialog from "@geostreams/geostreaming/src/containers/Explore/InfoDialog";
+import type { Layer as LayerType } from "ol/layer";
 
-import { entries } from '../../utils/array';
+import { entries } from "../../utils/array";
 
 const useStyle = makeStyles((theme) => ({
-    button: {
-        width: '10em !important',
-        height: '2em !important',
-        
+  button: {
+    width: "10em !important",
+    height: "2em !important",
+  },
+  card: {
+    width: 320,
+  },
+  cardContent: {
+    padding: 6,
+    height: "calc(100vh - 12em)",
+    overflowY: "auto",
+  },
+  cardHeader: {
+    background: "#467a9e",
+    color: "#fff",
+    padding: 6,
+  },
+  closeButton: {
+    position: "absolute",
+    right: theme.spacing(0.5),
+    top: theme.spacing(1),
+    background: "none !important",
+  },
+  checkbox: {
+    minWidth: 0,
+  },
+  legendLabelRoot: {
+    minHeight: 0,
+    flexDirection: "row-reverse",
+  },
+  legendLabelContent: {
+    margin: 0,
+    padding: 0,
+  },
+  legendImage: {
+    width: "90%",
+  },
+  opacitySlider: {
+    width: "220px",
+  },
+  divider: {
+    width: "80%",
+    margin: "auto",
+    "&:last-child": {
+      display: "none",
     },
-    card: {
-        width: 320
+  },
+  sliderContainer: {
+    width: "300px",
+    marginLeft: "2%",
+    display: "flex",
+    alignItems: "center",
+  },
+  styledInput: {
+    "-webkit-appearance": "none",
+    width: "70%",
+    height: "2px",
+    borderRadius: "4px",
+    background: "#d3d3d3",
+    outline: "none",
+    opacity: "1",
+    transition: "opacity 0.2s",
+    "&::-webkit-slider-thumb": {
+      "-webkit-appearance": "none",
+      appearance: "none",
+      width: "12px",
+      height: "12px",
+      borderRadius: "50%",
+      background: "#283d4b", // Change this color
+      cursor: "pointer",
     },
-    cardContent: {
-        padding: 6,
-        height: 'calc(100vh - 12em)',
-        overflowY: 'auto'
+    "&::-moz-range-thumb": {
+      width: "16px",
+      height: "16px",
+      borderRadius: "50%",
+      background: "#283d4b", // Change this color
+      cursor: "pointer",
     },
-    cardHeader: {
-        background: '#467a9e',
-        color: '#fff',
-        padding: 6
-    },
-    closeButton: {
-        position: 'absolute',
-        right: theme.spacing(0.5),
-        top: theme.spacing(1),
-        background: 'none !important'
-    },
-    checkbox: {
-        minWidth: 0
-    },
-    legendLabelRoot: {
-        minHeight: 0,
-        flexDirection: 'row-reverse'
-    },
-    legendLabelContent: {
-        margin: 0,
-        padding: 0
-    },
-    legendImage: {
-        width: '90%'
-    },
-    opacitySlider: {
-        width: '80%',
-        margin: 'auto'
-    },
-    divider: {
-        'width': '80%',
-        'margin': 'auto',
-        '&:last-child': {
-            display: 'none'
-        }
-    }
+  },
 }));
 
 type Props = {
-    el: HTMLElement;
-    layers: { [layerName: string]: LayerType };
-    exclude: string[];
-    layersInfo: { [groupName: string]: [string,{[layerName:string]:string}]; };
-}
-
+  el: HTMLElement,
+  layers: { [layerName: string]: LayerType },
+  exclude: string[],
+  layersInfo: {
+    [groupName: string]: [string, { [layerName: string]: string }],
+  },
+};
 
 const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
-    const classes = useStyle();
+  // const [selectedYear, setSelectedYear] = React.useState(null);
+  const [selectedOpacity, setSelectedOpacity] = React.useState(null);
+  const [selectedLegend, setSelectedLegend] = React.useState(null);
+  const classes = useStyle();
 
-    const [infoDialogControl, toggleInfoDialog] = React.useState(false);
-    const [showLayers, updateShowLayers] = React.useState(false);
-    const [dialogInfo, setDialogInfo] = React.useState({ label:'',description:'', link:'', more_info:'' });
+  const [infoDialogControl, toggleInfoDialog] = React.useState(false);
+  const [showLayers, updateShowLayers] = React.useState(false);
+  const [dialogInfo, setDialogInfo] = React.useState({
+    label: "",
+    description: "",
+    link: "",
+    more_info: "",
+  });
 
-    const [openGroups, updateOpenGroups] = React.useState<{ [groupName: string]: boolean; }>({});
+  const [openGroups, updateOpenGroups] = React.useState<{
+    [groupName: string]: boolean,
+  }>({});
 
-    const [layersVisibility, updateLayersVisibility] = React.useState<{
-        [layerName: string]: { isVisible: boolean; opacity: number; }
-    }>({});
+  const [layersVisibility, updateLayersVisibility] = React.useState<{
+    [layerName: string]: { isVisible: boolean, opacity: number },
+  }>({});
 
+  const handleLayerGroupInfoDialog = (e, layerGroupName) => {
+    e.stopPropagation();
+    setDialogInfo({
+      label: layerGroupName,
+      description: layersInfo[layerGroupName][0].description,
+      link: layersInfo[layerGroupName][0].link,
+      more_info: layersInfo[layerGroupName][0].link,
+    });
+    toggleInfoDialog(true);
+  };
 
-    const handleLayerGroupInfoDialog = (e, layerGroupName) => {
-        e.stopPropagation();
-        setDialogInfo({ label:layerGroupName, description: layersInfo[layerGroupName][0].description, link: layersInfo[layerGroupName][0].link,
-            more_info:layersInfo[layerGroupName][0].link });
-        toggleInfoDialog(true);
+  const handleLayerInfoDialog = (e, layerGroupName, layerName) => {
+    e.stopPropagation();
+    setDialogInfo({
+      label: layerName,
+      description: layersInfo[layerGroupName]?.[1][layerName].description,
+      link: layersInfo[layerGroupName]?.[1][layerName].link,
+      more_info: layersInfo[layerGroupName]?.[1][layerName].link,
+    });
+    toggleInfoDialog(true);
+  };
+
+  const renderLayer = (
+    layer: LayerType,
+    groupName: string,
+    timeEntries: Array
+  ) => {
+    const title = layer.get("title");
+    const time = timeEntries;
+    const { isVisible, opacity } = layersVisibility[title] || {
+      isVisible: layer.getVisible(),
+      opacity: layer.getOpacity(),
     };
+    const legend = layer.get("legend");
+    return (
+      <React.Fragment key={title}>
+        <ListItem dense>
+          {time?.length > 0 ? null : (
+            <ListItemIcon className={classes.checkbox}>
+              <Checkbox
+                checked={isVisible}
+                disableRipple
+                onChange={() => {
+                  layer.setVisible(!isVisible);
+                  updateLayersVisibility({
+                    ...layersVisibility,
+                    [title]: {
+                      opacity,
+                      isVisible: !isVisible,
+                    },
+                  });
+                }}
+              />
+            </ListItemIcon>
+          )}
 
-    const handleLayerInfoDialog = (e, layerGroupName, layerName) => {
-        e.stopPropagation();
-        setDialogInfo({ label:layerName, description: layersInfo[layerGroupName]?.[1][layerName].description, link: layersInfo[layerGroupName]?.[1][layerName].link,
-            more_info:layersInfo[layerGroupName]?.[1][layerName].link });
-        toggleInfoDialog(true);
+          <ListItemText
+            primary={title}
+            primaryTypographyProps={{
+              variant: "body2",
+            }}
+          />
+          {groupName in layersInfo
+            ? title in layersInfo[groupName]?.[1] && (
+                <IconButton
+                  style={{
+                    alignSelf: "flex-start",
+                    backgroundColor: "transparent",
+                    color: "#213541",
+                    left: "1em",
+                  }}
+                  onClick={(e) => handleLayerInfoDialog(e, groupName, title)}
+                  edge="right"
+                  size="small"
+                >
+                  <InfoOutlinedIcon
+                    id={`info-icon-${classes.sourceCheckbox} `}
+                  />
+                </IconButton>
+              )
+            : null}
+        </ListItem>
+        <ListItem dense>
+          <Slider
+            className={classes.opacitySlider}
+            min={0}
+            max={1}
+            step={0.1}
+            value={opacity}
+            onChange={(e, value) => {
+              layer.setOpacity(value);
+              updateLayersVisibility({
+                ...layersVisibility,
+                [title]: {
+                  opacity: value,
+                  isVisible,
+                },
+              });
+            }}
+          />
+        </ListItem>
+        {legend ? (
+          <ListItem dense>
+            <Accordion elevation={0}>
+              <AccordionSummary
+                classes={{
+                  root: classes.legendLabelRoot,
+                  content: classes.legendLabelContent,
+                  expandIcon: classes.legendLabelContent,
+                }}
+                expandIcon={<ChevronDownIcon />}
+              >
+                <Typography variant="body2">Legend</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <img className={classes.legendImage} src={legend} alt={title} />
+              </AccordionDetails>
+            </Accordion>
+          </ListItem>
+        ) : null}
+
+        <Divider className={classes.divider} />
+      </React.Fragment>
+    );
+  };
+
+  const renderLayerGroup = (layer: LayerType, groupName: string) => {
+    const [selectedYear, setSelectedYear] = React.useState(
+      layer.get("min_year")
+    );
+    const [isChecked, setIsChecked] = React.useState(false);
+    const isOpen = openGroups[groupName];
+    const min_year = layer.get("min_year");
+    const groupLayers = layer.getLayersArray();
+    let timeEntries = layer.get("timeEntries");
+    const title = layer.get("title");
+    const time = timeEntries;
+    const { isVisible, opacity } = layersVisibility[title] || {
+      isVisible: layer.getVisible(),
+      opacity: layer.getOpacity(),
     };
+    const legend = layer.get("legend");
 
-    const renderLayer = (layer: LayerType, groupName:string) => {
-        const title = layer.get('title');
-        const { isVisible, opacity } = layersVisibility[title] || {
-            isVisible: layer.getVisible(),
-            opacity: layer.getOpacity()
+    const handleYearChange = (event) => {
+      const year = parseInt(event.target.value);
+      setSelectedYear(year);
+      const selectedTimeEntry = time?.find((item) => item.year === year);
+      setSelectedLegend(selectedTimeEntry?.legend);
+      groupLayers.forEach((layer) => {
+        const { isVisible, opacity } = layersVisibility[layer.get("title")] || {
+          isVisible: layer.getVisible(),
+          opacity: layer.getOpacity(),
         };
+        if (layer.get("year").toString() === year.toString()) {
+          layer.setVisible(true);
+          updateLayersVisibility({
+            ...layersVisibility,
+            [title]: {
+              opacity,
+              isVisible: true,
+            },
+          });
+        } else {
+          layer.setVisible(false);
+          updateLayersVisibility({
+            ...layersVisibility,
+            [title]: {
+              opacity,
+              isVisible: false,
+            },
+          });
+        }
+      });
+    };
+    const years = time?.map((item) => item.year);
+    years?.sort((a, b) => a - b);
 
-        const legend = layer.get('legend');
-        return (
-            <React.Fragment key={title}>
-                <ListItem dense>
-                    <ListItemIcon className={classes.checkbox}>
-                        <Checkbox
-                            checked={isVisible}
-                            disableRipple
-                            onChange={() => {
-                                layer.setVisible(!isVisible);
-                                updateLayersVisibility({
-                                    ...layersVisibility,
-                                    [title]: {
-                                        opacity,
-                                        isVisible: !isVisible
-                                    }
-                                });
-                            }}
-                        />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary={title}
-                        primaryTypographyProps={{
-                            variant: 'body2'
-                        }}
-                    />
-                    {(groupName in layersInfo) ? (title in layersInfo[groupName]?.[1]) &&
-                        <IconButton
-                            style={{ alignSelf: 'flex-start', backgroundColor: 'transparent', color: '#213541', left: '1em' }}
-                            onClick={(e) => handleLayerInfoDialog(e, groupName, title)}
-                            edge="right"
-                            size="small"
-                        >
-                            <InfoOutlinedIcon id={`info-icon-${classes.sourceCheckbox} `} />
-                        </IconButton> :
-                        null}
-                </ListItem>
-                {legend ?
-                    <ListItem dense>
-                        <Accordion elevation={0}>
-                            <AccordionSummary
-                                classes={{
-                                    root: classes.legendLabelRoot,
-                                    content: classes.legendLabelContent,
-                                    expandIcon: classes.legendLabelContent
-                                }}
-                                expandIcon={<ChevronDownIcon />}
-                            >
-                                <Typography variant="body2">Legend</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <img className={classes.legendImage} src={legend} alt={title} />
-                            </AccordionDetails>
-                        </Accordion>
-                    </ListItem> :
-                    null}
-                <ListItem dense>
-                    <Slider
+    const areLayersVisible = !groupLayers.find(
+      (groupLayer) =>
+        !(
+          layersVisibility[groupLayer.get("title")] || {
+            isVisible: groupLayer.getVisible(),
+          }
+        ).isVisible
+    );
+
+    return (
+      <React.Fragment key={groupName}>
+        <ListItem
+          button
+          onClick={() =>
+            updateOpenGroups({
+              ...openGroups,
+              [groupName]: !isOpen,
+            })
+          }
+        >
+          <ListItemText primary={groupName} />
+          {isOpen ? (
+            <Grid>
+              <ChevronDownIcon />{" "}
+            </Grid>
+          ) : (
+            <Grid>
+              <ChevronRightIcon />
+            </Grid>
+          )}
+          {groupName in layersInfo && (
+            <IconButton
+              style={{
+                alignSelf: "flex-start",
+                backgroundColor: "transparent",
+                color: "#213541",
+                left: "1em",
+              }}
+              onClick={(e) => handleLayerGroupInfoDialog(e, groupName)}
+              edge="right"
+              size="small"
+            >
+              <InfoOutlinedIcon id={`info-icon-${classes.sourceCheckbox} `} />
+            </IconButton>
+          )}
+        </ListItem>
+        <Collapse in={isOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem>
+              <ListItemIcon className={classes.checkbox}>
+                <Checkbox
+                  checked={isChecked}
+                  disableRipple
+                  onChange={() => {
+                    setIsChecked((prevIsChecked) => {
+                      const newIsChecked = !prevIsChecked;
+
+                      if (newIsChecked === false) {
+                        groupLayers.forEach((layer) => {
+                          layer.setVisible(false);
+                        });
+                      } else {
+                        let minYearLayer = groupLayers.filter(
+                          (layer) => layer.get("year") === min_year
+                        );
+                        minYearLayer[0].setVisible(true);
+                      }
+
+                      return newIsChecked;
+                    });
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText
+                primary="Visible"
+                primaryTypographyProps={{
+                  variant: "body2",
+                }}
+              />
+            </ListItem>
+            {timeEntries?.length > 0 && isChecked ? (
+              <ListItem dense>
+                <Grid container spacing={2}>
+                  <Grid item>
+                    <div>
+                      <label sx>{selectedYear}</label>
+                    </div>
+                    <div className={classes.sliderContainer}>
+                      <input
+                        type="range"
+                        className={classes.styledInput}
+                        min={layer.get("min_year")}
+                        max={years[years.length - 1]}
+                        step={1}
+                        value={selectedYear}
+                        onChange={handleYearChange}
+                      />
+                    </div>
+                  </Grid>
+                  <Grid item>
+                    <div>
+                      <label>Opacity Slider</label>
+                      <Slider
                         className={classes.opacitySlider}
                         min={0}
                         max={1}
                         step={0.1}
                         value={opacity}
                         onChange={(e, value) => {
-                            layer.setOpacity(value);
-                            updateLayersVisibility({
-                                ...layersVisibility,
-                                [title]: {
-                                    opacity: value,
-                                    isVisible
-                                }
-                            });
+                          layer.setOpacity(value);
+                          updateLayersVisibility({
+                            ...layersVisibility,
+                            [title]: {
+                              opacity: value,
+                              isVisible,
+                            },
+                          });
                         }}
-                    />
-                </ListItem>
-                <Divider className={classes.divider} />
-            </React.Fragment>
-        );
-    };
-
-    const renderLayerGroup = (layer: LayerType, groupName: string) => {
-        const isOpen = openGroups[groupName];
-
-        const groupLayers = layer.getLayersArray();
-        const areLayersVisible = !groupLayers.find(
-            (groupLayer) => !(
-                layersVisibility[groupLayer.get('title')] || { isVisible: groupLayer.getVisible() }
-            ).isVisible
-        );
-
-        return (
-            <React.Fragment key={groupName}>
-                <ListItem
-                    button
-                    onClick={() => updateOpenGroups({
-                        ...openGroups,
-                        [groupName]: !isOpen
-                    })}
-                >
-                    <ListItemText primary={groupName} />
-                    {isOpen ? <Grid><ChevronDownIcon /> </Grid> : <Grid><ChevronRightIcon /></Grid>}
-                    {(groupName in layersInfo) &&
-                    <IconButton
-                        style={{ alignSelf: 'flex-start', backgroundColor: 'transparent', color: '#213541', left: '1em' }}
-                        onClick={(e) => handleLayerGroupInfoDialog(e,groupName)}
-                        edge="right"
-                        size="small"
-                    >
-                        <InfoOutlinedIcon id={`info-icon-${classes.sourceCheckbox} `} />
-                    </IconButton>}
-                </ListItem>
-                <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <ListItem>
-                            <ListItemIcon className={classes.checkbox}>
-                                <Checkbox
-                                    checked={areLayersVisible}
-                                    disableRipple
-                                    onChange={() => updateLayersVisibility({
-                                        ...layersVisibility,
-                                        ...groupLayers.reduce((visibility, groupLayer) => {
-                                            const groupLayerTitle = groupLayer.get('title');
-                                            const opacity = (
-                                                layersVisibility[groupLayerTitle] ||
-                                                { opacity: groupLayer.getOpacity() }
-                                            );
-                                            groupLayer.setVisible(!areLayersVisible);
-                                            visibility[groupLayerTitle] = {
-                                                opacity,
-                                                isVisible: !areLayersVisible
-                                            };
-                                            return visibility;
-                                        }, {})
-                                    })}
-                                />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary="Select all"
-                                primaryTypographyProps={{
-                                    variant: 'body2'
-                                }}
-                            />
-                        </ListItem>
-                        {groupLayers.map((subLayer) => renderLayer(subLayer,groupName))}
-                    </List>
-                </Collapse>
-            </React.Fragment>
-        );
-    };
-
-    return ReactDOM.createPortal(
-        <>
-            <Button
-                className={`${classes.button} ${showLayers ? 'hidden' : ''}`}
-                onClick={() => updateShowLayers(true)}
-            >
-                Explore Layers
-            </Button>
-            <Card className={`${classes.card} ${showLayers ? '' : 'hidden'}`} square>
-                <CardContent className={classes.cardHeader}>
-                    <Typography gutterBottom variant="h6">
-                        Explore Layers 
-                    </Typography>
-                    <IconButton
-                        className={classes.closeButton}
-                        size="small"
-                        onClick={() => updateShowLayers(false)}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </CardContent>
-                <CardContent className={classes.cardContent}>
-                    <List>
-                        {entries(layers)
-                            .filter(([layerName]) => !exclude.includes(layerName))
-                            .map(([layerName, layer]) => (
-                                layer.getLayersArray().length > 1 ?
-                                    renderLayerGroup(layer, layerName) :
-                                    renderLayer(layer)
-                            ))}
-                    </List>
-                </CardContent>
-            </Card>
-            <InfoDialog
-                dialogControl={infoDialogControl}
-                sourceInfo={dialogInfo}
-                toggleDialog={toggleInfoDialog}
-            />
-        </>,
-        el
+                      />
+                    </div>
+                  </Grid>
+                </Grid>
+              </ListItem>
+            ) : timeEntries?.length > 0 ? null : (
+              groupLayers.map((subLayer) =>
+                renderLayer(subLayer, groupName, timeEntries)
+              )
+            )}
+          </List>
+        </Collapse>
+      </React.Fragment>
     );
+  };
+
+  return ReactDOM.createPortal(
+    <>
+      <Button
+        className={`${classes.button} ${showLayers ? "hidden" : ""}`}
+        onClick={() => updateShowLayers(true)}
+      >
+        Explore Layers
+      </Button>
+      <Card className={`${classes.card} ${showLayers ? "" : "hidden"}`} square>
+        <CardContent className={classes.cardHeader}>
+          <Typography gutterBottom variant="h6">
+            Explore Layers
+          </Typography>
+          <IconButton
+            className={classes.closeButton}
+            size="small"
+            onClick={() => updateShowLayers(false)}
+          >
+            <CloseIcon />
+          </IconButton>
+        </CardContent>
+        <CardContent className={classes.cardContent}>
+          <List>
+            {entries(layers)
+              .filter(([layerName]) => !exclude.includes(layerName))
+              .map(([layerName, layer]) =>
+                layer.getLayersArray().length > 0
+                  ? renderLayerGroup(layer, layerName, layer.get("min_year"))
+                  : renderLayer(layer)
+              )}
+          </List>
+        </CardContent>
+      </Card>
+      <InfoDialog
+        dialogControl={infoDialogControl}
+        sourceInfo={dialogInfo}
+        toggleDialog={toggleInfoDialog}
+      />
+    </>,
+    el
+  );
 };
 
 export default LayersControl;

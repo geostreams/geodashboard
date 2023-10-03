@@ -56,4 +56,9 @@ export type MapLayerConfig = {
     legend: ?string;
     initialVisibility: ?boolean;
     initialOpacity: ?number;
+    time: [];
+    year: number;
+    min_year: number;
+    
+    
 };

@@ -20,7 +20,7 @@ import ClusterControl from "@geostreams/core/src/components/ol/ClusterControl";
 import FitViewControl from "@geostreams/core/src/components/ol/FitViewControl";
 import LayersControl from "@geostreams/core/src/components/ol/LayersControl";
 import SourcesControl from "@geostreams/core/src/components/ol/SourcesControl";
-import { entries } from '@geostreams/core/src/utils/array';
+import { entries } from "@geostreams/core/src/utils/array";
 
 import type {
   Feature as FeatureType,
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     height: "100%",
     flexGrow: 1,
-    position:"relative"
+    position: "relative",
   },
   fitViewControl: {
     bottom: ".5em",
@@ -142,49 +142,126 @@ const prepareLayers = (
   if (showExploreLayers)
     entries(layersConfig).forEach(([group, groupLayersConfig]) => {
       const groupLayers = [];
-      groupLayersConfig.forEach(
-        ({
-          title,
-          id,
-          type,
-          initialOpacity,
-          initialVisibility,
-          legend,
-        }: MapLayerConfig) => {
-          let layer;
-          if (type === "wms") {
-            layer = new ImageLayer({
-              source: new ImageWMSSource({
-                url: `${geoserverUrl}/wms`,
-                params: { LAYERS: id },
-                ratio: 1,
-                serverType: "geoserver",
-              }),
-              opacity: initialOpacity || 0.8,
-              visible: initialVisibility || false,
-            });
-            layer.set("title", title);
-            if (legend) {
-              layer.set("legend", `${geoserverUrl}/${legend}`);
+      if (
+        typeof groupLayersConfig === "object" &&
+        !Array.isArray(groupLayersConfig)
+      ) {
+       
+        let layerTitle;
+        let time = groupLayersConfig?.time;       
+        layerTitle = groupLayersConfig?.title;
+        let min_year = groupLayersConfig?.min_year;
+        time?.forEach(
+          ({
+            title,
+            id,
+            type,
+            initialOpacity,
+            initialVisibility,
+            legend,
+            year,
+            min_year
+            
+          }: MapLayerConfig) => {
+            
+            let layer;
+            if (groupLayersConfig?.type === "wms") {
+              layer = new ImageLayer({
+                source: new ImageWMSSource({
+                  url: `${geoserverUrl}/wms`,
+                  params: { LAYERS: id },
+                  ratio: 1,
+                  serverType: "geoserver",
+                }),
+                opacity: initialOpacity || 0.8,
+                visible: initialVisibility || false,
+               
+              });
+              layer.set("title", title);
+              layer.set("year",year);
+              layer.set("min_year",min_year);             
+
+              if (legend) {
+                layer.set("legend", `${geoserverUrl}/${legend}`);
+              }
+            }
+            if (layer) {
+              if (group) {
+                groupLayers.push(layer);
+              } else {
+                layers[title] = layer;
+              }
             }
           }
-          if (layer) {
-            if (group) {
-              groupLayers.push(layer);
-            } else {
-              layers[title] = layer;
-            }
-          }
+        );
+
+        if (group) {
+        
+          layers[group] = new GroupLayer({
+            title: layerTitle, 
+            layers: groupLayers,
+            timeEntries: time,
+            min_year: min_year,
+            opacity:0.8
+            
+          });
         }
-      );
-      if (group) {
-        layers[group] = new GroupLayer({
-          title: group,
-          layers: groupLayers,
-        });
+        
+
+      } else {
+        let layerTitle;
+        groupLayersConfig.forEach(
+          ({
+            title,
+            id,
+            type,
+            initialOpacity,
+            initialVisibility,
+            legend,
+            time,
+          }: MapLayerConfig) => {
+            let layer;
+            if (type === "wms") {
+              layer = new ImageLayer({
+                source: new ImageWMSSource({
+                  url: `${geoserverUrl}/wms`,
+                  params: { LAYERS: id },
+                  ratio: 1,
+                  serverType: "geoserver",
+                }),
+                opacity: initialOpacity || 0.8,
+                visible: initialVisibility || false,
+                time: time,
+              });
+              layer.set("title", title);
+              layerTitle = title;
+              if (time) {
+                layer.set("time", time);
+              }
+
+              if (legend) {
+                layer.set("legend", `${geoserverUrl}/${legend}`);
+              }
+            }
+            if (layer) {
+              if (group) {
+                groupLayers.push(layer);
+              } else {
+                layers[title] = layer;
+              }
+            }
+          }
+        );
+
+        if (group) {
+         
+          layers[group] = new GroupLayer({
+            title: layerTitle,
+            layers: groupLayers,
+          });
+        }
       }
     });
-
   return layers;
 };
 
@@ -496,12 +573,10 @@ const Map = (props: Props) => {
             .setCenter(
               featuresAtPixel.get("features")[0].getGeometry().getCoordinates()
             );
-          mapRef.current
-            .getView()
-            .animate({
-              zoom: mapRef.current.getView().getZoom() + 1,
-              duration: 500,
-            });
+          mapRef.current.getView().animate({
+            zoom: mapRef.current.getView().getZoom() + 1,
+            duration: 500,
+          });
         }
       }
     }
@@ -560,7 +635,7 @@ const Map = (props: Props) => {
       ) : null}
       {showExploreSources ? (
         <SourcesControl
-        el={cacheRef.current.sourcesControl.element}
+          el={cacheRef.current.sourcesControl.element}
           data={data}
           sourcesConfig={sourcesConfig}
           sources={sources}
@@ -576,7 +651,11 @@ const Map = (props: Props) => {
           el={cacheRef.current.layersControl.element}
           layers={cacheRef.current.layers}
           exclude={["basemaps"]}
-          layersInfo = { (typeof mapConfig.layersInfo === 'undefined') ? {} : mapConfig.layersInfo}
+          layersInfo={
+            typeof mapConfig.layersInfo === "undefined"
+              ? {}
+              : mapConfig.layersInfo
+          }
         />
       ) : null}
 
