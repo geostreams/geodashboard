@@ -67,7 +67,7 @@ const useStyle = makeStyles((theme) => ({
     width: "90%",
   },
   opacitySlider: {
-    width: "80%",
+    width: "220px",
   },
   divider: {
     width: "80%",
@@ -78,13 +78,13 @@ const useStyle = makeStyles((theme) => ({
   },
   sliderContainer: {
     width: "300px",
-    marginLeft: "10%",
+    marginLeft: "2%",
     display: "flex",
     alignItems: "center",
   },
   styledInput: {
     "-webkit-appearance": "none",
-    width: "30%",
+    width: "70%",
     height: "2px",
     borderRadius: "4px",
     background: "#d3d3d3",
@@ -120,7 +120,7 @@ type Props = {
 };
 
 const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
-  const [selectedYear, setSelectedYear] = React.useState(null);
+  // const [selectedYear, setSelectedYear] = React.useState(null);
   const [selectedOpacity, setSelectedOpacity] = React.useState(null);
   const [selectedLegend, setSelectedLegend] = React.useState(null);
   const classes = useStyle();
@@ -269,10 +269,13 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
   };
 
   const renderLayerGroup = (layer: LayerType, groupName: string) => {
+    const [selectedYear, setSelectedYear] = React.useState(
+      layer.get("min_year")
+    );
+    const [isChecked, setIsChecked] = React.useState(false);
     const isOpen = openGroups[groupName];
+    const min_year = layer.get("min_year");
     const groupLayers = layer.getLayersArray();
-    // console.log("--THESE ARE GROUP LAYERS--", groupLayers,groupName);
-    
     let timeEntries = layer.get("timeEntries");
     const title = layer.get("title");
     const time = timeEntries;
@@ -280,23 +283,19 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
       isVisible: layer.getVisible(),
       opacity: layer.getOpacity(),
     };
-
     const legend = layer.get("legend");
 
-    const handleYearChange = async (event) => {
+    const handleYearChange = (event) => {
       const year = parseInt(event.target.value);
-      await setSelectedYear(year);
+      setSelectedYear(year);
       const selectedTimeEntry = time?.find((item) => item.year === year);
       setSelectedLegend(selectedTimeEntry?.legend);
       groupLayers.forEach((layer) => {
-        
+        const { isVisible, opacity } = layersVisibility[layer.get("title")] || {
+          isVisible: layer.getVisible(),
+          opacity: layer.getOpacity(),
+        };
         if (layer.get("year").toString() === year.toString()) {
-          const { isVisible, opacity } = layersVisibility[
-            layer.get("title")
-          ] || {
-            isVisible: layer.getVisible(),
-            opacity: layer.getOpacity(),
-          };
           layer.setVisible(true);
           updateLayersVisibility({
             ...layersVisibility,
@@ -305,13 +304,7 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
               isVisible: true,
             },
           });
-        }else{
-          const { isVisible, opacity } = layersVisibility[
-            layer.get("title")
-          ] || {
-            isVisible: layer.getVisible(),
-            opacity: layer.getOpacity(),
-          };
+        } else {
           layer.setVisible(false);
           updateLayersVisibility({
             ...layersVisibility,
@@ -326,7 +319,6 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
     const years = time?.map((item) => item.year);
     years?.sort((a, b) => a - b);
 
-    
     const areLayersVisible = !groupLayers.find(
       (groupLayer) =>
         !(
@@ -378,46 +370,47 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
             <ListItem>
               <ListItemIcon className={classes.checkbox}>
                 <Checkbox
-                  checked={areLayersVisible}
+                  checked={isChecked}
                   disableRipple
-                  onChange={() =>
-                    updateLayersVisibility({
-                      ...layersVisibility,
-                      ...groupLayers.reduce((visibility, groupLayer) => {
-                        const groupLayerTitle = groupLayer.get("title");
-                        const opacity = layersVisibility[groupLayerTitle] || {
-                          opacity: groupLayer.getOpacity(),
-                        };
-                        groupLayer.setVisible(!areLayersVisible);
-                        visibility[groupLayerTitle] = {
-                          opacity,
-                          isVisible: !areLayersVisible,
-                        };
-                        return visibility;
-                      }, {}),
-                    })
-                  }
+                  onChange={() => {
+                    setIsChecked((prevIsChecked) => {
+                      const newIsChecked = !prevIsChecked;
+
+                      if (newIsChecked === false) {
+                        groupLayers.forEach((layer) => {
+                          layer.setVisible(false);
+                        });
+                      } else {
+                        let minYearLayer = groupLayers.filter(
+                          (layer) => layer.get("year") === min_year
+                        );
+                        minYearLayer[0].setVisible(true);
+                      }
+
+                      return newIsChecked;
+                    });
+                  }}
                 />
               </ListItemIcon>
               <ListItemText
-                primary="Select all"
+                primary="Visible"
                 primaryTypographyProps={{
                   variant: "body2",
                 }}
               />
             </ListItem>
-            {timeEntries?.length > 0 ? (
+            {timeEntries?.length > 0 && isChecked ? (
               <ListItem dense>
                 <Grid container spacing={2}>
                   <Grid item>
                     <div>
-                      <label sx>This is selected year: {selectedYear}</label>
+                      <label sx>{selectedYear}</label>
                     </div>
                     <div className={classes.sliderContainer}>
                       <input
                         type="range"
                         className={classes.styledInput}
-                        min={years[0]}
+                        min={layer.get("min_year")}
                         max={years[years.length - 1]}
                         step={1}
                         value={selectedYear}
@@ -449,7 +442,7 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
                   </Grid>
                 </Grid>
               </ListItem>
-            ) : (
+            ) : timeEntries?.length > 0 ? null : (
               groupLayers.map((subLayer) =>
                 renderLayer(subLayer, groupName, timeEntries)
               )
@@ -487,7 +480,7 @@ const LayersControl = ({ el, layers, exclude, layersInfo }: Props) => {
               .filter(([layerName]) => !exclude.includes(layerName))
               .map(([layerName, layer]) =>
                 layer.getLayersArray().length > 0
-                  ? renderLayerGroup(layer, layerName)
+                  ? renderLayerGroup(layer, layerName, layer.get("min_year"))
                   : renderLayer(layer)
               )}
           </List>

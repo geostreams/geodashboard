@@ -121,7 +121,6 @@ const prepareLayers = (
   layersConfig: { [group: string]: MapLayerConfig[] } = {},
   showExploreLayers: boolean
 ): { [layerName: string]: LayerType } => {
-  // console.log('--I AM PREPARING LAYERS ON 124--');
   let source = new OSM();
   if (mapTileURL)
     source = new XYZ({
@@ -141,21 +140,17 @@ const prepareLayers = (
     }),
   };
   if (showExploreLayers)
-    // console.log("--THIS IS SHOW EXPLORE LAYERS---", entries(layersConfig));
     entries(layersConfig).forEach(([group, groupLayersConfig]) => {
       const groupLayers = [];
-      console.log("--THIS IS on 147---", group, groupLayersConfig);
       if (
         typeof groupLayersConfig === "object" &&
         !Array.isArray(groupLayersConfig)
       ) {
-        console.log("--GROUP LAYERS CONFIG IS AN OBJECT--", groupLayersConfig);
+       
         let layerTitle;
-        let time = groupLayersConfig?.time;
-        console.log("---THESE ARE TIME ENTRIES", time);
+        let time = groupLayersConfig?.time;       
         layerTitle = groupLayersConfig?.title;
-        //check if it is list
-        // grouplayers already EXISTING SO WE CANNOT MODIFY and it will be complicated
+        let min_year = groupLayersConfig?.min_year;
         time?.forEach(
           ({
             title,
@@ -164,10 +159,11 @@ const prepareLayers = (
             initialOpacity,
             initialVisibility,
             legend,
-            year
+            year,
+            min_year
             
           }: MapLayerConfig) => {
-            // console.log("--THIS IS TITLE ON 158---", title);
+            
             let layer;
             if (groupLayersConfig?.type === "wms") {
               layer = new ImageLayer({
@@ -181,42 +177,39 @@ const prepareLayers = (
                 visible: initialVisibility || false,
                
               });
-              console.log("--I AM SETTING TITLE ON 170--------",groupLayersConfig?.title);
               layer.set("title", title);
               layer.set("year",year);
-             
+              layer.set("min_year",min_year);             
 
               if (legend) {
                 layer.set("legend", `${geoserverUrl}/${legend}`);
               }
             }
-            console.log("---PRINTING LAYERS WHEN OBJECT--", layer);
             if (layer) {
               if (group) {
                 groupLayers.push(layer);
               } else {
                 layers[title] = layer;
               }
-              console.log("--PUSHING INTO GROUP LAYERS IN CASE IT IS AN OBJECT---", groupLayers);
             }
           }
         );
 
         if (group) {
-          // console.log("--I AM IN GROUP AND SETTING TITLE---",group );
-          console.log("--I AM PRINTING LAYERTITLE----",layerTitle );
+        
           layers[group] = new GroupLayer({
-            title: layerTitle, //Change here
+            title: layerTitle, 
             layers: groupLayers,
-            timeEntries: time
+            timeEntries: time,
+            min_year: min_year,
+            opacity:0.8
+            
           });
         }
         
 
       } else {
         let layerTitle;
-        //check if it is list
-        // grouplayers already EXISTING SO WE CANNOT MODIFY and it will be complicated
         groupLayersConfig.forEach(
           ({
             title,
@@ -227,7 +220,6 @@ const prepareLayers = (
             legend,
             time,
           }: MapLayerConfig) => {
-            // console.log("--THIS IS TITLE ON 158---", title);
             let layer;
             if (type === "wms") {
               layer = new ImageLayer({
@@ -241,7 +233,6 @@ const prepareLayers = (
                 visible: initialVisibility || false,
                 time: time,
               });
-              // console.log("--I AM SETTING TITLE ON 170--------", title);
               layer.set("title", title);
               layerTitle = title;
               if (time) {
@@ -252,7 +243,6 @@ const prepareLayers = (
                 layer.set("legend", `${geoserverUrl}/${legend}`);
               }
             }
-            console.log("---PRINTING LAYERS WHEN NOT AN OBJECT--", layer);
             if (layer) {
               if (group) {
                 groupLayers.push(layer);
@@ -260,21 +250,18 @@ const prepareLayers = (
                 layers[title] = layer;
               }
             }
-            console.log("--PUSHING INTO GROUP LAYERS---", groupLayers);
           }
         );
 
         if (group) {
-          // console.log("--I AM IN GROUP AND SETTING TITLE---",group );
-          // console.log("--I AM IN GROUP LAYERS----",groupLayers );
+         
           layers[group] = new GroupLayer({
-            title: layerTitle, //Change here
+            title: layerTitle,
             layers: groupLayers,
           });
         }
       }
     });
-  console.log("--THESE ARE LAYERS ON 198--", layers);
   return layers;
 };
 

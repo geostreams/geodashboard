@@ -58,6 +58,7 @@ export type MapLayerConfig = {
     initialOpacity: ?number;
     time: [];
     year: number;
+    min_year: number;
     
     
 };
