@@ -86,7 +86,7 @@ const Parameters = (props: Props) => {
     React.useEffect(() => {
         callAPI(
             geostreamingEndpoint,
-            `/api/cache/${binType}/${sensorId}?${queryParams}`,
+            `/api/cache/${binType}/?sensor_id=${sensorId}&${queryParams}`,
             ({ properties }) => {
                 updateOriginalData(properties);
             },
