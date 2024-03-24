@@ -139,8 +139,9 @@ const Parameters = (props: Props) => {
 
 
             let content;
+
             switch (visualization) {
-                case 'time':
+                case 'line':
                     content = forceVega ?
                         <VegaLineChart
                             {...chartProps} />

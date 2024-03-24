@@ -118,7 +118,6 @@ class SensorDetail extends React.Component<Props, State> {
                                 parameters.push({
                                     ...parameter,
                                     category: category.name,
-                                    visualization: category.detail_type,
                                     isSelected: (
                                         selectedParameters.length === 0 ||
                                         selectedParameters.indexOf(parameter.name) > -1
