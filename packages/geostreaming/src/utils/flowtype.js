@@ -33,7 +33,7 @@ export type ParameterType = {
 export type ParameterCategoryType = {
     id: number;
     name: string;
-    detail_type: string;
+    description: string;
 }
 
 export type ParameterMappingsType = {
