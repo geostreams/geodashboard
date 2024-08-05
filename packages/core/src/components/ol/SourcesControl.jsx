@@ -164,6 +164,7 @@ const SourcesControl = ({
     data,
     sourcesConfig,
     sources,
+    filterSources,
     selectedFeature,
     toggleRegions,
     handlePopupOpen,
@@ -247,6 +248,13 @@ const SourcesControl = ({
         }
     };
 
+    let filteredSources = sources;
+    // Filter sources by id checking if it is in sourcesConfig
+    if (filterSources) {
+        filteredSources = sources.filter((source) => sourcesConfig[source.id]);
+    }
+
+
     return ReactDOM.createPortal(
         <>
             <Button
@@ -297,7 +305,7 @@ const SourcesControl = ({
                                 </Typography>
                             </Grid>
                         </Grid>
-                        {sources.map((source) => {
+                        {filteredSources.map((source) => {
                             const primaryColor = getSourceColor(sourcesConfig[source.id]);
                             const secondaryColor = interpolateRgb(primaryColor, '#FFF')(0.8);
                             if (!data)

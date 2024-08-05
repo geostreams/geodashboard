@@ -58,6 +58,7 @@ const Explore = (props: Props) => {
         parameters,
         sensors,
         sources,
+        filterSources,
         sourcesConfig,
         displayOnlineStatus
     } = props;
@@ -153,6 +154,7 @@ const Explore = (props: Props) => {
                 zoomToSe={undefined}
                 data={data}
                 sources={sources}
+                filterSources={filterSources}
                 toggleRegions={updateSourcesVisibility}
                 handlePopupOpen={(idx) => handleFeatureToggle(idx, true)}
                 handlePopupClose={() => handleFeatureToggle()}
@@ -170,6 +172,7 @@ const Explore = (props: Props) => {
 const mapStateToProps = (state) => ({
     mapConfig: state.config.map,
     sourcesConfig: state.config.source,
+    filterSources:state.config.filterSources,
     displayOnlineStatus: state.config.sensors.displayOnlineStatus,
     sensors: state.__new_sensors.sensors.sort(
         (sensor1, sensor2) =>

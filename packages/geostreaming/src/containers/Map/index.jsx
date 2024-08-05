@@ -83,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   mapConfig: MapConfig;
   sourcesConfig: { [k: string]: SourceConfig };
+  filterSources: boolean;
   displayOnlineStatus: boolean;
   parameters: ParameterType[];
   sensors: SensorType[];
@@ -204,6 +205,7 @@ const Map = (props: Props) => {
     handleFeatureToggle,
     data,
     sources,
+    filterSources,
     toggleRegions,
     handlePopupClose,
     handlePopupOpen,
@@ -569,6 +571,7 @@ const Map = (props: Props) => {
           handlePopupOpen={handlePopupOpen}
           handlePopupClose={handlePopupClose}
           className={classes.sourcesControl}
+          filterSources={filterSources}
         />
       ) : null}
       {mapConfig.layers && showExploreLayers ? (
