@@ -188,6 +188,10 @@ const SourcesControl = ({
                 (regionsVisibility, sourceId) => {
                     if (sourcesConfig[sourceId] && sourcesConfig[sourceId].hasOwnProperty('defaultVisibility') ){
                         regionsVisibility[sourceId] = sourcesConfig[sourceId].defaultVisibility;
+                        // Set allSources to false if one of the sources is by default off
+                        if (!sourcesConfig[sourceId].defaultVisibility && allSourcesVisibility){
+                            updateAllSourcesVisibility(false)
+                        }
                     } else {
                         regionsVisibility[sourceId] = true;
                     }
