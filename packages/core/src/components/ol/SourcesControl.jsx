@@ -182,11 +182,15 @@ const SourcesControl = ({
     const [showSensors, updateShowSensors] = React.useState(false);
 
     React.useEffect(() => {
-    // When new data comes in, make all sources visible.
+    // When new data comes in, sets sources to visible unless config sources has parameter defaultVisibility
         if (data) {
             const updatedSourcesVisibility = Object.keys(data).reduce(
                 (regionsVisibility, sourceId) => {
-                    regionsVisibility[sourceId] = true;
+                    if (sourcesConfig[sourceId] && sourcesConfig[sourceId].hasOwnProperty('defaultVisibility') ){
+                        regionsVisibility[sourceId] = sourcesConfig[sourceId].defaultVisibility;
+                    } else {
+                        regionsVisibility[sourceId] = true;
+                    }
                     return regionsVisibility;
                 },
                 {}
