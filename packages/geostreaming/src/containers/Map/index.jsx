@@ -84,6 +84,7 @@ interface Props {
   mapConfig: MapConfig;
   sourcesConfig: { [k: string]: SourceConfig };
   filterSources: boolean;
+  defaultDisableCluster:boolean;
   displayOnlineStatus: boolean;
   parameters: ParameterType[];
   sensors: SensorType[];
@@ -206,6 +207,7 @@ const Map = (props: Props) => {
         data,
         sources,
         filterSources,
+        defaultDisableCluster,
         toggleRegions,
         handlePopupClose,
         handlePopupOpen
@@ -571,6 +573,7 @@ const Map = (props: Props) => {
                             map.getView().setZoom(map.getView().getZoom() + 0.001);
                         }
                     }}
+                    defaultDisableCluster={defaultDisableCluster}
                 />
             ) : null}
             {showExploreSources ? (

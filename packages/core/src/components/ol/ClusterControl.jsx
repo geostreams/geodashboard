@@ -17,15 +17,43 @@ type Props = {
     cluster: SourceType;
     defaultDistance: number;
     toggleCallback: ?Function;
+    defaultDisableCluster: boolean;
 }
 
 const ClusterControl = ({
     el,
     cluster,
     defaultDistance,
-    toggleCallback
+    toggleCallback,
+    defaultDisableCluster
 }: Props) => {
     const classes = useStyle();
+
+    // This block helps set the clustering off during the initial render
+    React.useEffect(() => {
+        if (cluster && defaultDisableCluster){
+            cluster.setDistance(0);
+        }
+    }, [cluster]);
+
+    if (defaultDisableCluster){
+        return ReactDOM.createPortal(
+            <FormControlLabel
+                className={classes.label}
+                control={<Checkbox
+                    onChange={(e, isChecked) => {
+                        cluster.setDistance(isChecked ? defaultDistance : 0 );
+                        if (toggleCallback) {
+                            toggleCallback(!isChecked);
+                        }
+                    }}
+                />}
+                label="Enable Map Clustering"
+            />,
+            el
+        );
+    }
+    
     return ReactDOM.createPortal(
         <FormControlLabel
             className={classes.label}
@@ -41,6 +69,7 @@ const ClusterControl = ({
         />,
         el
     );
+    
 };
 
 export default ClusterControl;
