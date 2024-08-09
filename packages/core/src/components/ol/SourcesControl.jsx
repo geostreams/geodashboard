@@ -399,7 +399,10 @@ const SourcesControl = ({
                                     selectedFeature.idx === sensor.idx ?
                                         primaryColor :
                                         secondaryColor,
-                                                                    border: getStatusStyle(sensor)
+                                                                    border: getStatusStyle(sensor),
+                                                                    width: 'auto',
+                                                                    padding: '6px 6px',
+                                                                    overflow: 'ellipsis'
                                                                 }}
                                                                 size="small"
                                                                 disabled={!sourcesVisibility[source.id]}
