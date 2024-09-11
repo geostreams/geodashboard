@@ -179,7 +179,7 @@ class ExploreSourcesTab extends Component {
                                     this.clickedSourcesAccordion()
                                 }}
                     >
-                        Explore Sources
+                        Monitoring Locations
                         <Icon className={"material-icons " + exploreStyles.accordionIcon}
                               name={this.state.accordion_icon ? 'expand_more' : 'chevron_right'}
                         />

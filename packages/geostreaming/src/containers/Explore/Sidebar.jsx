@@ -223,12 +223,12 @@ const Sidebar = ({
         className={`${classes.button} ${showSensors ? "hidden" : ""}`}
         onClick={() => updateShowSensors(true)}
       >
-        Explore Sources
+        Monitoring Locations
       </Button>
       <Card className={`${classes.card} ${showSensors ? "" : "hidden"}`} square>
         <CardContent className={classes.cardHeader}>
           <Typography gutterBottom variant="h6">
-            Explore Sources
+            Monitoring Locations
           </Typography>
           <IconButton
             className={classes.closeButton}

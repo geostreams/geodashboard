@@ -41,6 +41,8 @@ type Props = {
     fetchSensors: Function;
     fetchParameters: Function;
     displayOnlineStatus: boolean;
+    filterSources:boolean;
+    defaultDisableCluster:boolean;
 }
 
 type Data = {
@@ -58,6 +60,8 @@ const Explore = (props: Props) => {
         parameters,
         sensors,
         sources,
+        filterSources,
+        defaultDisableCluster,
         sourcesConfig,
         displayOnlineStatus
     } = props;
@@ -153,6 +157,8 @@ const Explore = (props: Props) => {
                 zoomToSe={undefined}
                 data={data}
                 sources={sources}
+                filterSources={filterSources}
+                defaultDisableCluster={defaultDisableCluster}
                 toggleRegions={updateSourcesVisibility}
                 handlePopupOpen={(idx) => handleFeatureToggle(idx, true)}
                 handlePopupClose={() => handleFeatureToggle()}
@@ -170,6 +176,8 @@ const Explore = (props: Props) => {
 const mapStateToProps = (state) => ({
     mapConfig: state.config.map,
     sourcesConfig: state.config.source,
+    filterSources:state.config.filterSources,
+    defaultDisableCluster:state.config.defaultDisableCluster,
     displayOnlineStatus: state.config.sensors.displayOnlineStatus,
     sensors: state.__new_sensors.sensors.sort(
         (sensor1, sensor2) =>

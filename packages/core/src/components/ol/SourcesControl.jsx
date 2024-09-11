@@ -28,7 +28,7 @@ import InfoDialog from './InfoDialog';
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        width: '10em !important',
+        width: '15em !important',
         height: '2em !important',
         display: 'block',
         margin: '1px',
@@ -164,6 +164,7 @@ const SourcesControl = ({
     data,
     sourcesConfig,
     sources,
+    filterSources,
     selectedFeature,
     toggleRegions,
     handlePopupOpen,
@@ -181,11 +182,19 @@ const SourcesControl = ({
     const [showSensors, updateShowSensors] = React.useState(false);
 
     React.useEffect(() => {
-    // When new data comes in, make all sources visible.
+    // When new data comes in, sets sources to visible unless config sources has parameter defaultVisibility
         if (data) {
             const updatedSourcesVisibility = Object.keys(data).reduce(
                 (regionsVisibility, sourceId) => {
-                    regionsVisibility[sourceId] = true;
+                    if (sourcesConfig[sourceId] && sourcesConfig[sourceId].hasOwnProperty('defaultVisibility') ){
+                        regionsVisibility[sourceId] = sourcesConfig[sourceId].defaultVisibility;
+                        // Set allSources to false if one of the sources is by default off
+                        if (!sourcesConfig[sourceId].defaultVisibility && allSourcesVisibility){
+                            updateAllSourcesVisibility(false)
+                        }
+                    } else {
+                        regionsVisibility[sourceId] = true;
+                    }
                     return regionsVisibility;
                 },
                 {}
@@ -247,18 +256,25 @@ const SourcesControl = ({
         }
     };
 
+    let filteredSources = sources;
+    // Filter sources by id checking if it is in sourcesConfig
+    if (filterSources) {
+        filteredSources = sources.filter((source) => sourcesConfig[source.id]);
+    }
+
+
     return ReactDOM.createPortal(
         <>
             <Button
                 className={`${classes.button} ${showSensors ? 'hidden' : ''}`}
                 onClick={() => updateShowSensors(true)}
             >
-        Explore Sources
+        Monitoring Locations
             </Button>
             <Card className={`${classes.card} ${showSensors ? '' : 'hidden'}`} square>
                 <CardContent className={classes.cardHeader}>
                     <Typography gutterBottom variant="h6">
-            Explore Sources
+            Monitoring Locations
                     </Typography>
                     <IconButton
                         className={classes.closeButton}
@@ -297,7 +313,7 @@ const SourcesControl = ({
                                 </Typography>
                             </Grid>
                         </Grid>
-                        {sources.map((source) => {
+                        {filteredSources.map((source) => {
                             const primaryColor = getSourceColor(sourcesConfig[source.id]);
                             const secondaryColor = interpolateRgb(primaryColor, '#FFF')(0.8);
                             if (!data)
@@ -391,7 +407,10 @@ const SourcesControl = ({
                                     selectedFeature.idx === sensor.idx ?
                                         primaryColor :
                                         secondaryColor,
-                                                                    border: getStatusStyle(sensor)
+                                                                    border: getStatusStyle(sensor),
+                                                                    width: 'auto',
+                                                                    padding: '6px 6px',
+                                                                    overflow: 'ellipsis'
                                                                 }}
                                                                 size="small"
                                                                 disabled={!sourcesVisibility[source.id]}
