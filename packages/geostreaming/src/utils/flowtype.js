@@ -24,10 +24,7 @@ export type ParameterType = {
     name: string;
     title: string;
     unit: string;
-    search_view: boolean;
-    explore_view: boolean;
-    scale_names: string[];
-    scale_colors: string[];
+    visualisation: string;
 }
 
 export type ParameterCategoryType = {
