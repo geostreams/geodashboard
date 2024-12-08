@@ -111,7 +111,7 @@ interface Props {
 
 const getMarker = (fill: string, stroke: string) =>
     encodeURIComponent(
-        `<svg width="15" height="25" xmlns="http://www.w3.org/2000/svg" style="cursor: pointer">
+        `<svg width="10" height="17" xmlns="http://www.w3.org/2000/svg" style="cursor: pointer">
         <path d="M 1 11 A 7 7.5 0 1 1 14 11 L 7.5 25 z" stroke="${stroke}" stroke-width="1" fill="white" />
         <ellipse cx="7.5" cy="8.5" rx="4.5" ry="5.5" fill="${fill}" />
     </svg>`
