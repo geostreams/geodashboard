@@ -14,7 +14,7 @@ import SensorDetail from '../Sensor/Detail';
 
 import type { MapConfig, ParameterType, SensorType, SourceConfig, SourceType } from '../../utils/flowtype';
 
-import Dialog from "../../components/Dialog";
+import Sidebar from './Sidebar';
 
 const useStyles = makeStyles({
     root: {
@@ -43,11 +43,6 @@ type Props = {
     displayOnlineStatus: boolean;
     filterSources:boolean;
     defaultDisableCluster:boolean;
-    dialogInfo: {
-        title: string;
-        content: React.Node;
-        cookieId: string;
-    }
 }
 
 type Data = {
@@ -68,8 +63,7 @@ const Explore = (props: Props) => {
         filterSources,
         defaultDisableCluster,
         sourcesConfig,
-        displayOnlineStatus,
-        dialogInfo
+        displayOnlineStatus
     } = props;
 
     React.useEffect(() => {
@@ -174,16 +168,6 @@ const Explore = (props: Props) => {
                 <div className={classes.sensorDetail}>
                     <SensorDetail handleClose={() => updateShowSensorDetails(false)} />
                 </div> :
-                null}
-
-            {dialogInfo && dialogInfo.title && dialogInfo.content && dialogInfo.cookieId ?
-                <Dialog
-                    open
-                    onClose={() => {}}
-                    title={dialogInfo.title}
-                    children={dialogInfo.content}
-                    cookieId={dialogInfo.cookieId}
-                /> :
                 null}
         </div>
     );
