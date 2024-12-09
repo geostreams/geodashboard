@@ -14,7 +14,7 @@ import SensorDetail from '../Sensor/Detail';
 
 import type { MapConfig, ParameterType, SensorType, SourceConfig, SourceType } from '../../utils/flowtype';
 
-import Sidebar from './Sidebar';
+import Dialog from "../../components/Dialog";
 
 const useStyles = makeStyles({
     root: {
@@ -83,6 +83,61 @@ const Explore = (props: Props) => {
 
     const [showSensorDetails, updateShowSensorDetails] = React.useState(false);
 
+	const [openFirstLoadDialog, setOpenFirstLoadDialog] = React.useState(true);
+
+    // Dialog for first load of Explore page - GLTG only
+
+    const exploreDialog = (
+        <Dialog
+            open={openFirstLoadDialog}
+            onClose={() => setOpenFirstLoadDialog(false)}
+            title="Explore Data Dashboard"
+            cookieId="explore-dialog"
+        >
+            <h2>We present nutrient and water quality data from:</h2>
+      <ol>
+        <li>
+          <strong>Water Quality Portal (WQP):</strong> The Water Quality Portal (WQP) is 
+          the premiere source of discrete water-quality data in the United States and includes 
+          publicly available water-quality data from the United States Geological Survey (USGS), 
+          the Environmental Protection Agency (EPA), and over 400 state, federal, tribal, and 
+          local agencies. We have done the work of distilling the nitrogen and phosphorus data 
+          for you so that you may more easily conduct your own analyses. The data is updated 
+          once a year.
+        </li>
+        <li>
+          <strong>USGS:</strong> This data provides multiple parameters of water quality such 
+          as dissolved oxygen, turbidity, water temperature, nutrient data, and more.
+        </li>
+        <li>
+          <strong>USGS Super Gage Network:</strong> 
+          <a href="https://www.usgs.gov/centers/oki-water/science/super-gage-network">
+            https://www.usgs.gov/centers/oki-water/science/super-gage-network
+          </a>
+        </li>
+        <li>
+          <strong>Upper Mississippi River Restoration (UMMRR):</strong>
+          <a href="https://www.umesc.usgs.gov/data_library/water_quality/water_quality_page.html">
+            https://www.umesc.usgs.gov/data_library/water_quality/water_quality_page.html
+          </a>
+        </li>
+        <li>
+          <strong>Fox River Study Group:</strong> The Fox River Study Group is a diverse 
+          coalition of stakeholders using science to guide the region toward a cleaner, safer 
+          and more beautiful Fox River. They have data accessible at:
+          <br />
+          <a href="https://waterdata.usgs.gov/monitoring-location/05549500/#parameterCode=00065&period=P7D&showMedian=false">
+            https://waterdata.usgs.gov/monitoring-location/05549500/#parameterCode=00065&period=P7D&showMedian=false
+          </a>
+          <br />
+          <a href="http://ilrdss.sws.uiuc.edu/fox/">
+            http://ilrdss.sws.uiuc.edu/fox/
+          </a>
+        </li>
+      </ol>
+            </Dialog>
+    );
+
     React.useEffect(() => {
         if (!sensors.length) {
             props.fetchSensors();
@@ -144,7 +199,7 @@ const Explore = (props: Props) => {
 
     return (
         <div className={classes.root}>
-         
+         {exploreDialog}
             <Map
                 mapConfig={mapConfig}
                 sourcesConfig={sourcesConfig}

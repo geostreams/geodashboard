@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 		alignItems: "center",
 	},
 	dialogPaper: {
-		width: "70vw",
+		width: "60vw",
 		maxWidth: "1200px",
 		height: "auto",
 		maxHeight: "800px",
@@ -63,7 +63,9 @@ const Dialog = ({
 		<MuiDialog
 			open={open}
 			onClose={handleClose}
-			classes={classes.dialogPaper}
+			classes={{
+				paper: classes.dialogPaper
+			  }}			
 		>
 			<DialogTitle>
 				{title}
