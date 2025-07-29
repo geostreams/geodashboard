@@ -83,6 +83,8 @@ const SensorPopup = ({
                         variant="contained"
                         onClick={(e) => e.stopPropagation()}
                         component={Link}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         to={detailsLink}
                     >
                         View Data
