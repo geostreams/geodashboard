@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -82,8 +81,10 @@ const SensorPopup = ({
                         size="small"
                         variant="contained"
                         onClick={(e) => e.stopPropagation()}
-                        component={Link}
-                        to={detailsLink}
+                        component="a"
+                        href={detailsLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         View Data
                     </Button>

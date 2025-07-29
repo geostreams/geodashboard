@@ -3,6 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import {
     Checkbox,
+    CircularProgress,
     FormControlLabel,
     Grid,
     List,
@@ -279,7 +280,7 @@ class SensorDetail extends React.Component<Props, State> {
                     state.startDate = state.minStartTime;
                     state.endDate = state.maxEndTime;
                 }
-                if (state. startDate && state.endDate) {
+                if (state.startDate && state.endDate) {
                     state.binType = getBinType(state.startDate, state.endDate);
                 }
                 return state;
@@ -506,7 +507,11 @@ class SensorDetail extends React.Component<Props, State> {
                 </>
             );
         }
-        return null;
+        return (
+            <Grid container justify="center" alignItems="center" style={{ minHeight: '200px' }}>
+                <CircularProgress />
+            </Grid>
+        );
     }
 }
 

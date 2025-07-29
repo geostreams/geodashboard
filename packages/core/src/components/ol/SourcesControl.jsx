@@ -179,7 +179,7 @@ const SourcesControl = ({
     const [isSidebarOpen, toggleSidebar] = React.useState(true);
     const [infoDialogControl, toggleInfoDialog] = React.useState(false);
     const [selectedSourceId, setSourceId] = React.useState('');
-    const [showSensors, updateShowSensors] = React.useState(false);
+    const [showSensors, updateShowSensors] = React.useState(true);
 
     React.useEffect(() => {
     // When new data comes in, sets sources to visible unless config sources has parameter defaultVisibility
