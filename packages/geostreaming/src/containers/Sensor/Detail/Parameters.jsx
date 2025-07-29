@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Typography, makeStyles, CircularProgress } from '@material-ui/core';
+import { Grid, Typography, makeStyles } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 
 import { entries } from '@geostreams/core/src/utils/array';
@@ -115,11 +115,7 @@ const Parameters = (props: Props) => {
 
     const renderCharts = () => {
         if (!filteredData) {
-            return (
-                <Grid item xs={12} align="center">
-                    <CircularProgress />
-                </Grid>
-            );
+            return null;
         }
 
         return parameters.map(({ name, title, unit, visualization, scale_names, scale_colors }) => {
